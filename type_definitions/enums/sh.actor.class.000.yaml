@@ -1,0 +1,39 @@
+# enums/actor.class.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.gridworks.energy/enums/actor.class"
+
+title: "actor.class"
+description: |
+  Software actor classes available in GridWorks SpaceHeat systems.
+  Defines the behavior and capabilities of nodes with associated actors.
+
+type: string
+enum:
+  - "NoActor"
+  - "Scada"
+  - "HomeAlone"
+  - "PowerMeter"
+  - "I2cRelayMultiplexer"
+  - "Relay"
+  - "Admin"
+  - "Parentless"
+  - "Hubitat"
+  - "HoneywellThermostat"
+  - "ApiTankModule"
+  - "ApiFlowModule"
+  - "PicoCycler"
+  - "I2cDfrMultiplexer"
+  - "ZeroTenOutputer"
+  - "AtomicAlly"
+  - "SynthGenerator"
+  - "PumpDoctor"
+  - "SiegLoop"
+  - "HpBoss"
+
+default: "NoActor"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  stability: "stable"
+  use_cases: ["Node actor assignment", "Command tree hierarchy"]

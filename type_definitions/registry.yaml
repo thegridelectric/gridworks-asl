@@ -1,0 +1,126 @@
+# type_definitions/registry.yaml
+metadata:
+  registry_version: "1.0"
+  last_updated: "2025-06-24T10:30:00Z"
+  maintainer: "gridworks-energy"
+
+formats:
+  left_right_dot:
+    current_version: "000"
+    schema_file: "formats/left_right_dot"
+
+  spaceheat_name:
+    current_version: "000"
+    schema_file: "formats/spaceheat_name.yaml"
+  
+  
+enums:
+  actor.class:
+    current_version: "007"
+    owner: gridworks-energy
+    description: "Software actor classes for GridWorks SpaceHeat systems"
+    
+    versions:
+      "007":
+        schema_file: "enums/actor.class.007.yaml"
+        created: "2024-06-24T08:00:00Z"
+        stable: true
+        changes_from_previous:
+          - "Added SiegLoop, HpBoss"
+
+types:
+  channel.config:
+    current_version: "001"
+    owner: gridworks-energy
+    stable: true
+    versioning_strategy: "string"
+    description: Configuration data used to articulate how time series data is polled and captured for a particular channel.
+
+    versions:
+      "000":
+        schema_file: schemas/channel.config.000.yaml
+        created: "2024-06-01T00:00:00Z"
+        dependencies: [] # TODO: add property format SpaceheatName and enum Unit
+        stable: true # used in production
+      "001":
+        schema_file: schemas/channel.config.001.yaml
+        created: "2024-06-24T07:00:00Z"
+        dependencies: [] # TODO: add property format SpaceheatName
+        breaking_changes_from_previous:
+          - "Removed Unit field and Exponent field - duplicates info in DataChannel"
+        stable: true # used in production
+
+  channel.readings:
+    current_version: "002"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: A list of timestamped readings (values) for a data channel. This is meant to be reported for non-local consumption (AtomicTNode, other) by a SCADA. Therefore, the data channel is referenced by its globally unique identifier. The receiver needs to reference this idea against a list of the data channels used by the SCADA for accurate parsing.
+
+    versions:
+      "002": 
+         schema_file: schemas/channel.readings.002.yaml
+         dependencies: [] #property formats spaceheat.name, utc.milliseconds
+         
+
+  component.gt:
+    current_version: "002"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description:  Authority about components in GridWorks systems belongs to GridWorks Backoffice suite used for managing relational device data .  The Id and DeviceTypeId are immutable.   HwUid is optional but once it is set to a non-null value that is also immutable - it is meant to be an immutable identifier associated to a specific physical device, ideally one that can be read remotely by the SCADA and also by the naked eye. The DisplayName is mutable, with its current value in time governed by the WorldRegistry.
+    
+    versions:
+      "002":
+        schema_file: schema/component.gt.002.yaml
+        created: "2025-06-24T01:00:00Z"
+        dependencies: 
+          - "channel.config:001"
+          - "UUID4Str"
+        stable: false # dev
+      "001":
+        schema_file: schema/component.gt.001.yaml
+        created: "2024-06-01T00:00:00Z"
+        dependencies: 
+          - "channel.config:001"
+          - "UUID4Str"
+        stable: true # dev
+
+  data.channel.gt:
+    current_version: "001"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: Core mechanism for identifying a stream of telemetry data. Everything but the DisplayName and StartS are meant to be immutable. The Name is meant to be unique per TerminalAssetAlias.
+
+    versions:
+      "001":
+        schema_file: schemas/data.channel.gt.001
+        created: "2024-06-01T00:00:00Z"
+        dependencies: [] # SpaceheatName, TelemetryName UTCSeconds, UUID4Str
+        stable: true # Used in production
+  
+  power.watts:
+    current_version: "000"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: Real-time power measurement in watts. Used by a SCADA -> Atn or Atn -> AggregatedTNode to report real-time power of their TerminalAsset. Positive number means WITHDRAWAL from the grid - so generating electricity creates a negative number. This message is considered worse than useless to send after the first attempt, and does not require an ack. 
+    
+    versions:
+      "000": 
+        schema_file: schemas/power.watts.000.yaml
+        created: "2024-06-01T00:00:00Z"
+        dependencies: []
+        stable: true  # used in production
+
+  report:
+    current_version: "003"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: "Primary telemetry and state reporting message"
+
+    versions:
+      "003":
+        schema_file: schemas/report.003.yaml
+        created: "2024-06-24T06:00:00Z"
+        dependencies:
+          - "channel.readings:001"
+          - "machine.states:001"
+        

@@ -1,0 +1,31 @@
+# formats/handle.name.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.gridworks.energy/formats/handle.name"
+
+title: "handle.name"
+description: |
+  Handle names for user-friendly identifiers.
+  Words separated by periods, where words are lowercase alphanumeric plus hyphens.
+  Must start with an alphabetic character.
+  This is useful for establishing hierarchies with the dot while also allowing
+  for more human readable words (tank1-depth1)
+  
+type: string
+pattern: ^[a-z][a-z0-9-]*(\.[a-z0-9-]+)*$
+
+examples:
+  - "main-tank"
+  - "sensor-1"
+  - "hp-odu.pump-relay"
+
+
+counterexamples:
+  - "1st-floor" # cannot start with number
+  - "Main-Tank" # cannot have uppercase
+  - "sensor_1" # underscores not allowed
+  - "tank." # cannot end with period
+  - "a..b" # cannot have double periods
+
+x-gridworks:
+  owner: "gridworks-energy"
+  use_cases: ["SpaceheatNode Handles", "Human-readable identifiers"]

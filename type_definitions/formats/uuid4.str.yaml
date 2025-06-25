@@ -1,0 +1,29 @@
+# formats/uuid4.str.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.gridworks.energy/formats/uuid4.str"
+
+title: "uuid4.str"
+description: |
+  UUID4 (Universally Unique Identifier version 4) string representation.
+  Standard hyphenated format: 8-4-4-4-12 hex characters.
+  Version 4 UUIDs are randomly generated.
+  
+type: string
+pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
+
+examples:
+  - "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+  - "4e5a6b1c-2d3e-4f5a-8b9c-1d2e3f4a5b6c"
+  - "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+
+counterexamples:
+  - "not-a-uuid"                              # invalid format
+  - "6ba7b810-9dad-11d1-80b4-00c04fd430c"     # too short
+  - "6ba7b810-9dad-11d1-80b4-00c04fd430c88"   # too long
+  - "6ba7b810-9dad-21d1-80b4-00c04fd430c8"    # wrong version (2 instead of 4)
+  - "6BA7B810-9DAD-11D1-80B4-00C04FD430C8"    # uppercase not allowed
+
+x-gridworks:
+  owner: "gridworks-energy"
+  use_cases: ["Component IDs", "Message IDs", "Unique identifiers"]
+  notes: "Lowercase only for consistency across implementations"

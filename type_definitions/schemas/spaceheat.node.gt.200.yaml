@@ -1,0 +1,122 @@
+# schemas/spaceheat.node.gt.200.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.gridworks.energy/schemas/spaceheat.node.gt.200"
+
+title: "spaceheat.node.gt"
+description: |
+  GridWorks SpaceHeat Node representation.
+  
+  Nodes represent logical entities in a thermal storage heating system - they can be
+  physical devices (like heat pumps, sensors), logical groupings (like zones), or 
+  software actors that manage system behavior.
+
+type: object
+
+properties:
+  Name:
+    type: string
+    format: spaceheat.name
+    description: "Unique name for this node within the system"
+    
+  ActorHierarchyName:
+    type: string
+    format: handle.name
+    description: |
+      Hierarchical name in the actor command tree.
+      Used when this node has an associated software actor.
+      
+  Handle:
+    type: string
+    format: handle.name
+    description: "Handle for actor-to-actor communication"
+    
+  ActorClass:
+    type: string
+    description: |
+      Class name of the software actor associated with this node.
+      Examples: 'PowerMeter', 'HoneywellThermostat', 'NoActor'
+      
+  DisplayName:
+    type: string
+    description: "Human-readable display name for this node"
+    
+  ComponentId:
+    type: string
+    format: uuid4.str
+    description: |
+      UUID of the physical component associated with this node.
+      Links to component definitions in the hardware layout.
+      
+  NameplatePowerW:
+    type: integer
+    minimum: 0
+    description: "Nameplate power rating in watts"
+    
+  InPowerMetering:
+    type: boolean
+    description: |
+      Whether this node's power consumption should be metered.
+      When true, NameplatePowerW must be specified (see Axiom 1).
+      
+  ShNodeId:
+    type: string
+    format: uuid4.str
+    description: "Immutable unique identifier for this SpaceHeat node"
+    
+  TypeName:
+    type: string
+    const: "spaceheat.node.gt"
+    description: "Fixed type identifier"
+    
+  Version:
+    type: string
+    const: "200"
+    description: "Schema version"
+
+required:
+  - Name
+  - ActorClass  
+  - ShNodeId
+  - TypeName
+  - Version
+
+additionalProperties: true
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - id: 1
+      name: "InPowerMetering requirements"
+      description: |
+        If InPowerMetering exists and is true, then NameplatePowerW must exist.
+      implementation_note: |
+        This axiom ensures that nodes requiring power metering have their
+        power characteristics properly specified for energy calculations.
+  examples:
+    home_alone_node:
+      Name: "h"
+      ActorClass: "HomeAlone"
+      DisplayName: "HomeAlone"
+      Handle: "auto.h"
+      ShNodeId: "cf5fbc9e-9cba-4e0e-ba60-479dc026be3c"
+      "Strategy": "ShoulderTou"
+      TypeName: "spaceheat.node.gt"
+      Version: "200"
+    heat_pump_outdoor_unit:
+      Name: "hp-odu" 
+      ActorClass: "NoActor"
+      DisplayName: "Hp Odu"
+      InPowerMetering: true
+      NameplatePowerW: 6000
+      ShNodeId: "457499a7-7fec-41fd-bac5-d7e7d9c47dda"
+      TypeName: "spaceheat.node.gt"  
+      Version: "200"
+    power_meter:
+      Name: "power-meter"
+      ActorClass: "PowerMeter"
+      ActorHierarchyName: "s2.power-meter"
+      ComponentId: "9633adef-2373-422d-8a0e-dfbd16ae081c"
+      DisplayName: "Primary Power Meter"
+      ShNodeId: "6c0563b7-5171-4b1c-bba3-de156bea4b95"
+      TypeName: "spaceheat.node.gt"
+      Version: "200"

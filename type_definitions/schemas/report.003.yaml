@@ -1,0 +1,64 @@
+# schemas/report.v003.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/report/003"
+
+title: "GridWorks Report"
+description: "Primary telemetry and state reporting message"
+type: object
+properties:
+  FromGNodeAlias:
+    type: string
+    format: left.right.dot
+    description:  |
+    GNode alias of the entity sending this report.
+    
+    GNodes represent participants in the GridWorks ecosystem.
+    See: https://gridworks.readthedocs.io/en/latest/g-node.html
+      
+  SlotStartUnixS:
+    type: integer
+    format: utc.seconds
+    description: "Start time of reporting period"
+
+  SlotDurationS: 
+    type: integer
+
+  ChannelReadingList:
+    type: array
+    description: "Telemetry readings for this period"
+    items:
+      $ref: "https://schemas.electricity.works/schemas/channel.readings.002.yaml" 
+      
+  StateList:
+    type: array
+    description: "State machine states"
+    items:
+      $ref:  "https://schemas.electricity.works/machine.states.001.yaml"
+
+  MessageCreatedMs:
+    type: integer
+    format: utc.milliseconds
+    description: "The time the report was created by the SCADA device
+
+  Id:
+    type: string
+    format: uuid4.str
+    description: "Unique identifier, UUID4Str" 
+
+  TypeName:
+    const: "report"
+    
+  Version:
+    const: "003"
+
+required:
+  - FromGNodeAlias
+  - SlotStartUnixS
+  - SlotDurationS
+  - ChannelReadingList
+  - StateList
+  - MessageCreatedMs
+  - Id
+  - TypeName
+  - Version
+
