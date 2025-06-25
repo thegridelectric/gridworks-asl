@@ -1,0 +1,16 @@
+# schemas/spaceheat.node.gt.200.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.gridworks.energy/schemas/spaceheat.node.gt.200"
+
+title: "spaceheat.node.gt"
+description: Real-time power measurement in watts. Used by a SCADA -> Atn or Atn -> AggregatedTNode to report real-time power of their TerminalAsset. Positive number means WITHDRAWAL from the grid - so generating electricity creates a negative number. This message is considered worse than useless to send after the first attempt, and does not require an ack. 
+
+properties:
+  Watts:
+    type: integer
+
+  TypeName:
+    const: "power.watts"
+
+  Version:
+    const: "000"

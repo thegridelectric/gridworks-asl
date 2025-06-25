@@ -20,10 +20,10 @@ Commuunication patterns in distributed systems are evolving:
 
 ### Why ASL Works
 
-  -  **Coding Language neutral** - Generate clean code in Python, Go, JavaScript, C, whatever your team uses
+  -  **Language neutral** - Generate clean code in Python, Go, JavaScript, C, whatever your team uses
   -  **Granular evolution** - Change one type without breaking everyone else's implementations
   - **True collaboration** - Organizations stay autonomous while sharing vocabulary
-  - **Clear boundaries** - ASL is designed as a horizontal formalism - the named_types, enums, and properties are meant to be first-class citizens in repositories using them, not wrapper types or secondary abstractions. Generated seed repositories use CamelCase for ASL types, creating intentional cognitive friction that reminds developers when they're working with shared protocol data versus internal application state. This boundary marker helps prevent accidental mixing of organizational vocabularies. The granular evolution supports developing the appropriate level of structural complexity for the scenario, and doing a better job of sharing the meaning of words with each other.
+  - **Clear boundaries** - Machine-readable specifications that encode the meaning of shared words provide the backbone of the ASL. These can be used to rapidly generate code in a way that supports shared contexts. ASL is designed as a horizontal formalism - the named types, enums, and properties generated in the appropriate language are designed to be first-class citizens (representing shared boundary contexts) in repositories using them.
 
 
 ## Getting Started
