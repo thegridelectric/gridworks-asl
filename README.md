@@ -15,11 +15,13 @@ Things you can do:
 
 ## api/
 
-  This will deploy to its own api (`api.gridworks-asl.com). It has its own `requirements.txt` and is deployed in its own Docker container. This is the api that people can validate messages against.
+  This will deploy to its own api (`api.electricity.works). It has its own `requirements.txt` and is deployed in its own Docker container. This is the api that people can validate messages against.
 
 ## ui/
 
-This is a React/Vue app deployed to `gridworks-asl.com`. It has a separate build process and calls the API service. 
+This is a app deployed to `electricity.works`. It has a separate build process and calls the API service. 
+
+```
 gridworks-asl/
 ├── type_definitions/  # Source of truth ()
 │   ├── registry.yaml  
@@ -45,3 +47,4 @@ gridworks-asl/
     ├── motivation.md
     ├── rules.md
     └── examples/
+```
