@@ -270,10 +270,26 @@
         
         // Embedded dependency file contents
         const dependencyFiles = {
-    "gwasl/named_types/channel_config.py": "\"\"\"Type channel.config, version 001\"\"\"\n\nfrom typing import Optional\n\nfrom pydantic import BaseModel, ConfigDict, PositiveInt, StrictInt, model_validator\nfrom typing_extensions import Self\n\nfrom gwasl.property_format import (\n    SpaceheatName,\n)\n\n\nclass ChannelConfig(BaseModel):\n    ChannelName: SpaceheatName\n    PollPeriodMs: Optional[PositiveInt] = None\n    CapturePeriodS: PositiveInt\n    AsyncCapture: bool\n    AsyncCaptureDelta: Optional[PositiveInt] = None\n    TypeName: str = \"channel.config\"\n    Version: str = \"001\"\n\n    model_config = ConfigDict(use_enum_values=True)\n\n    def __hash__(self) -> int:\n        return hash(self.ChannelName)\n\n    @model_validator(mode=\"after\")\n    def check_axiom_1(self) -> Self:\n        \"\"\"\n        Axiom 1: Capture and Polling Consistency.\n        CapturePeriodMs (CapturePeriodS * 1000) must be larger than PollPeriodMs. If CapturePeriodMs < 10 * PollPeriodMs then CapturePeriodMs must be a multiple of PollPeriodMs.\n        \"\"\"\n        # Implement check for axiom 2\"\n        return self\n",
     "gwasl/named_types/channel_readings.py": "\"\"\"Type channel.readings, version 002\"\"\"\n\nfrom typing import Literal\n\nfrom pydantic import BaseModel, StrictInt, model_validator  # Count:true\nfrom typing_extensions import Self\n\nfrom gwasl.property_format import (\n    SpaceheatName,\n    UTCMilliseconds,\n)\n\n\nclass ChannelReadings(BaseModel):\n    \"\"\"\n    A list of timestamped readings (values) for a data channel. This is meant to be reported\n    for non-local consumption (AtomicTNode, other) by a SCADA. Therefore, the data channel is\n    referenced by its globally unique identifier. The receiver needs to reference this idea\n    against a list of the data channels used by the SCADA for accurate parsing.\n    \"\"\"\n\n    ChannelName: SpaceheatName\n    ValueList: list[StrictInt]\n    ScadaReadTimeUnixMsList: list[UTCMilliseconds]\n    TypeName: Literal[\"channel.readings\"] = \"channel.readings\"\n    Version: str = \"002\"\n\n    @model_validator(mode=\"after\")\n    def check_axiom_1(self) -> Self:\n        \"\"\"\n        Axiom 1: ListLengthConsistency.\n        ValueList and ScadaReadTimeUnixMsList must have the same length.\n        \"\"\"\n        # Implement check for axiom 1\"\n        return self\n",
+    "gwasl/named_types/machine_states.py": "\"\"\"Type machine.states, version 000\"\"\"\n\nfrom typing import Literal\n\nfrom pydantic import BaseModel, model_validator\nfrom typing_extensions import Self\n\nfrom gwasl.property_format import (\n    HandleName,\n    LeftRightDotStr,\n    UTCMilliseconds,\n)\n\n\nclass MachineStates(BaseModel):\n    \"\"\" \"\"\"\n\n    MachineHandle: HandleName\n    StateEnum: LeftRightDotStr\n    StateList: list[str]\n    UnixMsList: list[UTCMilliseconds]\n    TypeName: Literal[\"machine.states\"] = \"machine.states\"\n    Version: str = \"000\"\n\n    @model_validator(mode=\"after\")\n    def check_axiom_1(self) -> Self:\n        \"\"\"\n        Axiom 1: list Length Consistency.\n        StateList and UnixMsList must have the same length\n        \"\"\"\n        # Implement check for axiom 1\"\n        return self\n\n    @model_validator(mode=\"after\")\n    def check_axiom_2(self) -> Self:\n        \"\"\"\n        Axiom 2: If StateEnum is a recognized GridWorks enum, then the StateList elements are all values of that enum..\n\n        \"\"\"\n        # Implement check for axiom 2\"\n        return self\n",
     "gwasl/property_format.py": "# ruff: noqa: ANN401\nimport re\nimport uuid\nfrom datetime import datetime, timezone\nfrom typing import Annotated\n\nfrom gw.enums import MarketTypeName\nfrom pydantic import BeforeValidator, Field\n\nUTC_2000_01_01_TIMESTAMP = datetime(2000, 1, 1, tzinfo=timezone.utc).timestamp()\nUTC_3000_01_01_TIMESTAMP = datetime(3000, 1, 1, tzinfo=timezone.utc).timestamp()\n\n\ndef check_is_log_style_date_with_millis(v: str) -> None:\n    \"\"\"Checks LogStyleDateWithMillis format\n\n    LogStyleDateWithMillis format:  YYYY-MM-DDTHH:mm:ss.SSS\n\n    Args:\n        v (str): the candidate\n\n    Raises:\n        ValueError: if v is not LogStyleDateWithMillis format.\n        In particular the milliseconds must have exactly 3 digits.\n    \"\"\"\n    correct_millisecond_part_length = 3\n    try:\n        datetime.fromisoformat(v)\n    except ValueError as e:\n        raise ValueError(f\"{v} is not in LogStyleDateWithMillis format\") from e\n    # The python fromisoformat allows for either 3 digits (milli) or 6 (micro)\n    # after the final period. Make sure its 3\n    milliseconds_part = v.split(\".\")[1]\n    if len(milliseconds_part) != correct_millisecond_part_length:\n        raise ValueError(\n            f\"{v} is not in LogStyleDateWithMillis format.\"\n            \" Milliseconds must have exactly 3 digits\"\n        )\n\n\ndef is_handle_name(v: str) -> str:\n    \"\"\"\n    HandleName format: words separated by periods, where the worlds are lowercase\n    alphanumeric plus hyphens\n    \"\"\"\n    try:\n        x = v.split(\".\")\n    except Exception as e:\n        raise ValueError(f\"Failed to seperate <{v}> into words with split'.'\") from e\n    first_word = x[0]\n    first_char = first_word[0]\n    if not first_char.isalpha():\n        raise ValueError(\n            f\"Most significant word of <{v}> must start with alphabet char.\"\n        )\n    for word in x:\n        for char in word:\n            if not (char.isalnum() or char == \"-\"):\n                raise ValueError(\n                    f\"words of <{v}> split by by '.' must be alphanumeric or hyphen.\"\n                )\n    if not v.islower():\n        raise ValueError(f\" <{v}> must be lowercase.\")\n    return v\n\n\ndef is_hex_char(v: str) -> str:\n    \"\"\"Checks HexChar format\n\n    HexChar format: single-char string in '0123456789abcdefABCDEF'\n\n    Args:\n        v (str): the candidate\n\n    Raises:\n        ValueError: if v is not HexChar format\n    \"\"\"\n    if not isinstance(v, str):\n        raise ValueError(f\"<{v}> must be string. Got type <{type(v)}\")  # noqa: TRY004\n    if len(v) > 1:\n        raise ValueError(f\"<{v}> must be a hex char, but not of len 1\")\n    if v not in \"0123456789abcdefABCDEF\":\n        raise ValueError(f\"<{v}> must be one of '0123456789abcdefABCDEF'\")\n    return v\n\n\ndef is_int(v: int) -> int:\n    if not isinstance(v, int):\n        raise TypeError(\"Not an integer!\")\n    return v\n\n\ndef is_left_right_dot(candidate: str) -> str:\n    \"\"\"Lowercase AlphanumericStrings separated by dots (i.e. periods), with most\n    significant word to the left.  I.e. `d1.ne` is the child of `d1`.\n    Checking the format cannot verify the significance of words. All\n    words must be alphanumeric. Most significant word must start with\n    an alphabet charecter\n\n\n    Raises:\n        ValueError: if candidate is not of lrd format (e.g. d1.iso.me.apple)\n    \"\"\"\n    try:\n        x: list[str] = candidate.split(\".\")\n    except Exception as e:\n        raise ValueError(\"Failed to seperate into words with split'.'\") from e\n    first_word = x[0]\n    first_char = first_word[0]\n    if not first_char.isalpha():\n        raise ValueError(\n            f\"Most significant word must start with alphabet char. Got '{first_word}'\"\n        )\n    for word in x:\n        if not word.isalnum():\n            raise ValueError(\n                f\"words seperated by dots must be alphanumeric. Got '{word}'\"\n            )\n    if not candidate.islower():\n        raise ValueError(f\"alias must be lowercase. Got '{candidate}'\")\n    return candidate\n\n\nMAC_REGEX = re.compile(\"[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\\\1[0-9a-f]{2}){4}$\")\n\n\ndef has_mac_address_format(mac_str: str) -> bool:\n    return bool(MAC_REGEX.match(mac_str.lower()))\n\n\ndef is_spaceheat_name(v: str) -> str:\n    \"\"\"\n    SpaceheatName format: Lowercase alphanumeric words separated by hypens\n    \"\"\"\n    try:\n        x = v.split(\"-\")\n    except Exception as e:\n        raise ValueError(\n            f\"<{v}>: Fails SpaceheatName format! Failed to seperate into words with split'-'\"\n        ) from e\n    first_word = x[0]\n    first_char = first_word[0]\n    if not first_char.isalpha():\n        raise ValueError(\n            f\"<{v}>: Fails SpaceheatName format! Most significant word  must start with alphabet char.\"\n        )\n    for word in x:\n        if not word.isalnum():\n            raise ValueError(\n                f\"<{v}>: Fails SpaceheatName format! words of split by by '-' must be alphanumeric.\"\n            )\n    if not v.islower():\n        raise ValueError(\n            f\"<{v}>: Fails SpaceheatName format! All characters of  must be lowercase.\"\n        )\n    return v\n\n\ndef is_uuid4_str(v: str) -> str:\n    v = str(v)\n    try:\n        u = uuid.UUID(v)\n    except Exception as e:\n        raise ValueError(f\"Invalid UUID4: <{v}  <{e}>\") from e\n    if u.version != 4:\n        raise ValueError(f\"{v} is valid uid, but of version {u.version}, not 4\")\n    return str(u)\n\n\ndef is_world_instance_name_format(candidate: str) -> bool:\n    try:\n        words = candidate.split(\"__\")\n    except:  # noqa\n        return False\n    if len(words) != 2:\n        return False\n    try:\n        int(words[1])\n    except:  # noqa\n        return False\n    try:\n        root_g_node_alias_words = words[0].split(\".\")\n    except:  # noqa\n        return False\n    return not len(root_g_node_alias_words) > 1\n\n\ndef check_is_ads1115_i2c_address(v: int) -> None:\n    \"\"\"\n    Ads1115I2cAddress: v [0x48, 0x49, 0x4a, 0x4b].\n\n    One of the 4 allowable I2C addresses for Texas Instrument Ads1115 chips.\n\n    Raises:\n        ValueError: if not Ads1115I2cAddress format\n    \"\"\"\n    if v not in [0x48, 0x49, 0x4A, 0x4B]:\n        raise ValueError(f\"Not Ads1115I2cAddress: <{hex(v)}>\")\n\n\ndef check_is_near5(v: str | float) -> None:\n    \"\"\"\n    4.5  <= v  <= 5.5\n    \"\"\"\n    v = float(v)\n    min_pi_voltage = 4.5\n    max_pi_voltage = 5.5\n    if v < min_pi_voltage or v > max_pi_voltage:\n        raise ValueError(f\"<{v}> is not between 4.5 and 5.5, not Near5\")\n\n\ndef is_bit(candidate: int) -> int:\n    if candidate not in (0, 1):\n        raise ValueError(f\"Candidate must be 0 or 1, Got {candidate}\")\n    return candidate\n\n\ndef is_market_name(v: str) -> str:\n    try:\n        x = v.split(\".\")\n    except AttributeError as e:\n        raise ValueError(f\"{v} failed to split on '.'\") from e\n    if len(x) < 3:\n        raise ValueError(\"MarketNames need at least 3 words\")\n    if x[0] not in {\"e\", \"r\", \"d\"}:\n        raise ValueError(\n            f\"{v} first word must be e,r or d (energy, regulation, distribution)\"\n        )\n    if x[1] not in MarketTypeName.values():\n        raise ValueError(f\"{v} not recognized MarketType\")\n    g_node_alias = \".\".join(x[2:])\n    is_left_right_dot(g_node_alias)\n    return v\n\n\nMarketMinutes: dict[MarketTypeName, int] = {\n    MarketTypeName.da60: 60,\n    MarketTypeName.rt15gate5: 15,\n    MarketTypeName.rt30gate5: 30,\n    MarketTypeName.rt5gate5: 5,\n    MarketTypeName.rt60gate30: 60,\n    MarketTypeName.rt60gate30b: 60,\n    MarketTypeName.rt60gate5: 60,\n}\n\n\ndef is_market_slot_name(v: str) -> str:\n    \"\"\"\n    MaketSlotNameLrdFormat: the format of a MarketSlotName.\n      - First word must be e, r or d (energy, regulation, distribution)\n      - The second word must be a MarketTypeName\n      - The last word (unix time of market slot start) must\n      be a 10-digit integer divisible by 300 (i.e. all MarketSlots\n      start at the top of 5 minutes)\n      - More strictly, the last word must be the start of a\n      MarketSlot for that MarketType (i.e. divisible by 3600\n      for hourly markets)\n      - The middle words have LeftRightDot format (GNodeAlias\n      of the MarketMaker)\n    Example: e.rt60gate5.d1.isone.ver.keene.1673539200\n\n    \"\"\"\n    try:\n        x = v.split(\".\")\n    except AttributeError:\n        raise ValueError(f\"{v} failed to split on '.'\")\n    slot_start_str = x[-1]\n    if len(slot_start_str) != 10:\n        raise ValueError(f\"slot start {slot_start_str} not of length 10\")\n    try:\n        slot_start = int(slot_start_str)\n    except ValueError:\n        raise ValueError(f\"slot start {slot_start_str} not an int\")\n    is_market_name(\".\".join(x[:-1]))\n    market_type_name = MarketTypeName(x[1])\n    market_duration_minutes = MarketMinutes[market_type_name]\n    if not slot_start % (market_duration_minutes * 60) == 0:\n        raise ValueError(\n            f\"market_slot_start_s mod {market_duration_minutes * 60} must be 0\"\n        )\n    return v\n\n\nBit = Annotated[int, BeforeValidator(is_bit)]\nHandleName = Annotated[str, BeforeValidator(is_handle_name)]\nHexChar = Annotated[str, BeforeValidator(is_hex_char)]\nLeftRightDotStr = Annotated[str, BeforeValidator(is_left_right_dot)]\nMarketName = Annotated[str, BeforeValidator(is_market_name)]\nMarketSlotName = Annotated[str, BeforeValidator(is_market_slot_name)]\nSpaceheatName = Annotated[str, BeforeValidator(is_spaceheat_name)]\nUUID4Str = Annotated[str, BeforeValidator(is_uuid4_str)]\nUTCSeconds = Annotated[\n    int, Field(ge=UTC_2000_01_01_TIMESTAMP, le=UTC_3000_01_01_TIMESTAMP)\n]\nUTCMilliseconds = Annotated[\n    int, Field(ge=UTC_2000_01_01_TIMESTAMP * 1000, le=UTC_3000_01_01_TIMESTAMP * 1000)\n]\n",
-    "gwasl/named_types/machine_states.py": "\"\"\"Type machine.states, version 000\"\"\"\n\nfrom typing import Literal\n\nfrom pydantic import BaseModel, model_validator\nfrom typing_extensions import Self\n\nfrom gwasl.property_format import (\n    HandleName,\n    LeftRightDotStr,\n    UTCMilliseconds,\n)\n\n\nclass MachineStates(BaseModel):\n    \"\"\" \"\"\"\n\n    MachineHandle: HandleName\n    StateEnum: LeftRightDotStr\n    StateList: list[str]\n    UnixMsList: list[UTCMilliseconds]\n    TypeName: Literal[\"machine.states\"] = \"machine.states\"\n    Version: str = \"000\"\n\n    @model_validator(mode=\"after\")\n    def check_axiom_1(self) -> Self:\n        \"\"\"\n        Axiom 1: list Length Consistency.\n        StateList and UnixMsList must have the same length\n        \"\"\"\n        # Implement check for axiom 1\"\n        return self\n\n    @model_validator(mode=\"after\")\n    def check_axiom_2(self) -> Self:\n        \"\"\"\n        Axiom 2: If StateEnum is a recognized GridWorks enum, then the StateList elements are all values of that enum..\n\n        \"\"\"\n        # Implement check for axiom 2\"\n        return self\n"
+    "gwasl/named_types/channel_config.py": "\"\"\"Type channel.config, version 001\"\"\"\n\nfrom typing import Optional\n\nfrom pydantic import BaseModel, ConfigDict, PositiveInt, StrictInt, model_validator\nfrom typing_extensions import Self\n\nfrom gwasl.property_format import (\n    SpaceheatName,\n)\n\n\nclass ChannelConfig(BaseModel):\n    ChannelName: SpaceheatName\n    PollPeriodMs: Optional[PositiveInt] = None\n    CapturePeriodS: PositiveInt\n    AsyncCapture: bool\n    AsyncCaptureDelta: Optional[PositiveInt] = None\n    TypeName: str = \"channel.config\"\n    Version: str = \"001\"\n\n    model_config = ConfigDict(use_enum_values=True)\n\n    def __hash__(self) -> int:\n        return hash(self.ChannelName)\n\n    @model_validator(mode=\"after\")\n    def check_axiom_1(self) -> Self:\n        \"\"\"\n        Axiom 1: Capture and Polling Consistency.\n        CapturePeriodMs (CapturePeriodS * 1000) must be larger than PollPeriodMs. If CapturePeriodMs < 10 * PollPeriodMs then CapturePeriodMs must be a multiple of PollPeriodMs.\n        \"\"\"\n        # Implement check for axiom 2\"\n        return self\n"
+};
+        
+        // Embedded registry dependencies
+        const registryDependencies = {
+    "channel.config": [],
+    "channel.readings": [],
+    "component.gt": ["channel.config:001", "UUID4Str"],
+    "data.channel.gt": [],
+    "device.type": [],
+    "gw.channel.config": [],
+    "gw.device.type": [],
+    "machine.states": [],
+    "node.gt": [],
+    "power.watts": [],
+    "report": ["channel.readings:001", "machine.states:001"],
+    "spaceheat.node.gt": []
 };
         
         function updateSelection() {
@@ -365,6 +381,34 @@
             return Array.from(dependencies);
         }
         
+        function findNamedTypeDependencies(selectedTypes) {
+            const allDeps = new Set(selectedTypes);
+            const toProcess = [...selectedTypes];
+            
+            while (toProcess.length > 0) {
+                const currentType = toProcess.shift();
+                const deps = registryDependencies[currentType] || [];
+                
+                for (const dep of deps) {
+                    // Check if it's a named type dependency (format: "type.name:version" or just "type.name")
+                    let depType;
+                    if (dep.includes(':')) {
+                        depType = dep.split(':')[0];
+                    } else {
+                        depType = dep;
+                    }
+                    
+                    // Only include if it's a named type (not formats, enums, etc.)
+                    if (registryDependencies[depType] !== undefined && !allDeps.has(depType)) {
+                        allDeps.add(depType);
+                        toProcess.push(depType);
+                    }
+                }
+            }
+            
+            return Array.from(allDeps);
+        }
+        
         async function downloadZip() {
             const downloadBtn = document.getElementById('download-btn');
             if (downloadBtn.disabled) {
@@ -386,8 +430,11 @@
                 const gwaslFolder = zip.folder('gwasl');
                 const namedTypesFolder = gwaslFolder.folder('named_types');
                 
-                // For each selected type, add its Python file
-                for (const typeName of selectedTypes) {
+                // Find all named type dependencies (including registry dependencies)
+                const allNamedTypes = findNamedTypeDependencies(selectedTypes);
+                
+                // For each named type (selected + dependencies), add its Python file
+                for (const typeName of allNamedTypes) {
                     const pythonFileName = typeName.replace(/\./g, '_') + '.py';
                     
                     // Get the Python file content from the embedded data
@@ -398,8 +445,8 @@
                     namedTypesFolder.file(pythonFileName, fileContent);
                 }
                 
-                // Get dependencies for selected types
-                const dependencies = getDependenciesForTypes(selectedTypes);
+                // Get Python import dependencies for all named types
+                const dependencies = getDependenciesForTypes(allNamedTypes);
                 
                 // Add dependency files
                 for (const dep of dependencies) {
@@ -422,10 +469,6 @@
                         // Also add __init__.py
                         const initContent = dependencyFiles['gwasl/type_helpers/__init__.py'] || `# File not found: gwasl/type_helpers/__init__.py`;
                         zip.file('gwasl/type_helpers/__init__.py', initContent);
-                    } else if (dep.startsWith('named_types.')) {
-                        const typeName = dep.split('.')[1];
-                        const typeContent = dependencyFiles[`gwasl/named_types/${{typeName}}.py`] || `# File not found: gwasl/named_types/${{typeName}}.py`;
-                        namedTypesFolder.file(`${{typeName}}.py`, typeContent);
                     }
                 }
                 
@@ -440,7 +483,7 @@
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
                 
-                console.log(`Downloaded zip with ${selectedTypes.length} selected types and their dependencies`);
+                console.log(`Downloaded zip with ${allNamedTypes.length} named types (selected + dependencies) and their Python dependencies`);
             } catch (error) {
                 console.error('Error creating zip file:', error);
                 alert('Error creating zip file. Please try again.');

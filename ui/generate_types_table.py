@@ -94,6 +94,45 @@ def get_dependency_files(dependencies):
     
     return files
 
+def get_registry_dependencies(registry):
+    """Get all dependencies from registry for each type"""
+    dependencies = {}
+    types = registry.get('types', {})
+    
+    for type_name, type_data in types.items():
+        current_version = type_data.get('current_version', '000')
+        versions = type_data.get('versions', {})
+        
+        if current_version in versions:
+            version_data = versions[current_version]
+            deps = version_data.get('dependencies', [])
+            dependencies[type_name] = deps
+    
+    return dependencies
+
+def find_named_type_dependencies(selected_types, registry_dependencies):
+    """Recursively find all named type dependencies"""
+    all_deps = set(selected_types)
+    to_process = list(selected_types)
+    
+    while to_process:
+        current_type = to_process.pop(0)
+        deps = registry_dependencies.get(current_type, [])
+        
+        for dep in deps:
+            # Check if it's a named type dependency (format: "type.name:version" or just "type.name")
+            if ':' in dep:
+                dep_type = dep.split(':')[0]
+            else:
+                dep_type = dep
+            
+            # Only include if it's a named type (not formats, enums, etc.)
+            if dep_type in registry_dependencies and dep_type not in all_deps:
+                all_deps.add(dep_type)
+                to_process.append(dep_type)
+    
+    return list(all_deps)
+
 def generate_html():
     """Generate HTML table of types"""
     registry = load_registry()
@@ -116,6 +155,12 @@ def generate_html():
     # Get all possible dependencies for all types
     all_dependencies = get_all_dependencies(type_names)
     dependency_files = get_dependency_files(all_dependencies)
+    
+    # Get registry dependencies
+    registry_dependencies = get_registry_dependencies(registry)
+    
+    # Find named type dependencies
+    named_type_dependencies = find_named_type_dependencies(type_names, registry_dependencies)
     
     # Generate HTML
     html_content = f"""<!DOCTYPE html>
@@ -313,6 +358,13 @@ def generate_html():
         dependency_files_js += f'    "{file_path}": "{escaped_content}",\n'
     dependency_files_js = dependency_files_js.rstrip(',\n') + "\n}"
     
+    # Convert registry dependencies to JavaScript object
+    registry_deps_js = "{\n"
+    for type_name, deps in registry_dependencies.items():
+        deps_str = '[' + ', '.join(f'"{dep}"' for dep in deps) + ']'
+        registry_deps_js += f'    "{type_name}": {deps_str},\n'
+    registry_deps_js = registry_deps_js.rstrip(',\n') + "\n}"
+    
     html_content += f"""            </tbody>
         </table>
     </div>
@@ -323,6 +375,9 @@ def generate_html():
         
         // Embedded dependency file contents
         const dependencyFiles = {dependency_files_js};
+        
+        // Embedded registry dependencies
+        const registryDependencies = {registry_deps_js};
         
         function updateSelection() {{
             const stableCheckboxes = document.querySelectorAll('.stable-checkbox');
@@ -413,6 +468,34 @@ def generate_html():
             return Array.from(dependencies);
         }}
         
+        function findNamedTypeDependencies(selectedTypes) {{
+            const allDeps = new Set(selectedTypes);
+            const toProcess = [...selectedTypes];
+            
+            while (toProcess.length > 0) {{
+                const currentType = toProcess.shift();
+                const deps = registryDependencies[currentType] || [];
+                
+                for (const dep of deps) {{
+                    // Check if it's a named type dependency (format: "type.name:version" or just "type.name")
+                    let depType;
+                    if (dep.includes(':')) {{
+                        depType = dep.split(':')[0];
+                    }} else {{
+                        depType = dep;
+                    }}
+                    
+                    // Only include if it's a named type (not formats, enums, etc.)
+                    if (registryDependencies[depType] !== undefined && !allDeps.has(depType)) {{
+                        allDeps.add(depType);
+                        toProcess.push(depType);
+                    }}
+                }}
+            }}
+            
+            return Array.from(allDeps);
+        }}
+        
         async function downloadZip() {{
             const downloadBtn = document.getElementById('download-btn');
             if (downloadBtn.disabled) {{
@@ -434,9 +517,12 @@ def generate_html():
                 const gwaslFolder = zip.folder('gwasl');
                 const namedTypesFolder = gwaslFolder.folder('named_types');
                 
-                // For each selected type, add its Python file
-                for (const typeName of selectedTypes) {{
-                    const pythonFileName = typeName.replace(/\./g, '_') + '.py';
+                // Find all named type dependencies (including registry dependencies)
+                const allNamedTypes = findNamedTypeDependencies(selectedTypes);
+                
+                // For each named type (selected + dependencies), add its Python file
+                for (const typeName of allNamedTypes) {{
+                    const pythonFileName = typeName.replace(/\\./g, '_') + '.py';
                     
                     // Get the Python file content from the embedded data
                     const fileContent = pythonFiles[typeName] || `# Type ${{typeName}} - Python file not found: ${{pythonFileName}}
@@ -446,8 +532,8 @@ def generate_html():
                     namedTypesFolder.file(pythonFileName, fileContent);
                 }}
                 
-                // Get dependencies for selected types
-                const dependencies = getDependenciesForTypes(selectedTypes);
+                // Get Python import dependencies for all named types
+                const dependencies = getDependenciesForTypes(allNamedTypes);
                 
                 // Add dependency files
                 for (const dep of dependencies) {{
@@ -470,10 +556,6 @@ def generate_html():
                         // Also add __init__.py
                         const initContent = dependencyFiles['gwasl/type_helpers/__init__.py'] || `# File not found: gwasl/type_helpers/__init__.py`;
                         zip.file('gwasl/type_helpers/__init__.py', initContent);
-                    }} else if (dep.startsWith('named_types.')) {{
-                        const typeName = dep.split('.')[1];
-                        const typeContent = dependencyFiles[`gwasl/named_types/${{{{typeName}}}}.py`] || `# File not found: gwasl/named_types/${{{{typeName}}}}.py`;
-                        namedTypesFolder.file(`${{{{typeName}}}}.py`, typeContent);
                     }}
                 }}
                 
@@ -488,7 +570,7 @@ def generate_html():
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
                 
-                console.log(`Downloaded zip with ${{selectedTypes.length}} selected types and their dependencies`);
+                console.log(`Downloaded zip with ${{allNamedTypes.length}} named types (selected + dependencies) and their Python dependencies`);
             }} catch (error) {{
                 console.error('Error creating zip file:', error);
                 alert('Error creating zip file. Please try again.');
