@@ -1,61 +1,60 @@
-# GridWorks Application Shared Languages
+# GridWorks Application Shared Language
 
 Imagine a grid where abundant renewable energy flows naturally to where it's needed. By coordinating flexible loads like heat pumps and thermal storage in real-time, we can consume energy when solar and wind are producing plenty and reduce consumption when they're not. This transformation replaces fossil fuel balancing with community-centered, open source grid management that creates more ease and flow in our relationship with energy. [Learn more about the GridWorks vision](https://gridworks.readthedocs.io/).
 
+A coordinated electric grid works when devices share a common language. Not one imposed from the center, but an open, versioned vocabulary anyone can adopt and extend. GridWorks ASL is that language layer: it defines words (types, enums, property formats) with stable meaning and clear axioms, then generates idiomatic code so teams can interoperate with an appropriate level of precision and articulation for each circumstance. For more on why we built the GridWorks ASL,  see [motivation.md](docsmotivation.md).
+
+## Humans + AI, working from the same words
+
+Because ASL is machine‑readable end to end, AI tools can participate as first‑class collaborators—drafting, validating, and mediating messages grounded in your exact words rather than guesses. In practice, this enables:
+
+* copilots that propose valid messages and code stubs on the first try,
+* agents that reason against your types and enums instead of hallucinating,
+* automated validation that keeps human/AI workflows inside known‑good boundaries.
 
 
-**GridWorks ASL is the communication infrastructure for this energy transformation** - a polyglot code generation platform that enables peer-to-peer shared vocabulary between all the actors in this new energy ecosystem.
 
-ASLs are the next step in message passing evolution: more powerful, flexible and expressive than APIs. Instead of rigid client/server relationships, ASL enables true collaboration where organizations maintain autonomy while sharing vocabulary.
+## How it works
 
-## Why This Matters
+ASL defines constitutional, language‑neutral schemas with explicit axioms and versions each “word” so evolution is local and safe. Generators produce idiomatic code in your target language; validators enforce the same semantics everywhere.
 
-Ever been in that meeting where another team needs "just one small API change" that turns into months of breaking change management? ASL solves this by letting teams evolve vocabulary granularly - change one type without breaking everyone else's implementations.
+**Example**
 
-**Read [Why GridWorks ASL Exists](docs/motivation.md)** for the full story of API pain and how peer-to-peer shared vocabulary offers a better way.
+A simple power measurement:
 
-## Quick Start
-
-**Ready to explore?**
-
-1. **Browse the registry** [registry.yaml](type_definitions/registry.yaml) to see real vocabulary in action
-2. **Understand the rules** - Read [Rules and Guidelines](docs/rules_and_guidelines.md) for technical specifications
-3. **Try building** - Generate a seed project and experiment with your own types
-
-**Want to contribute vocabulary?** See the [simple registration process](docs/rules_and_guidelines.md#vocabulary-registration-process).
-
-## What You Can Do
-
-**No one depends on gridworks-asl as a package**, but everyone can:
-
-- **Generate exactly what they need** - Clean code in Python, Go, JavaScript, C, whatever your team uses
-- **Validate messages live** - Submit samples to our API endpoint for validation  
-- **Get working examples** - Browse our schema catalog for real-world vocabulary
-- **Share vocabulary** - Submit PRs to add your schemas to the shared registry
-
-## How It Works
-
-GridWorks ASL builds constitutional foundations on top of JSON Schema in YAML:
-
-- **Language neutral** - Generates idiomatic code in any language
-- **Granular evolution** - Change one type without breaking others
-- **Words have meaning** - The language evolves as meanings change
-- **True collaboration** - Organizations stay autonomous while sharing vocabulary
-
-**Example**: A simple power measurement gets sent as this json
-```
+```json
 {"Watts": 1500, "TypeName": "power.watts", "Version": "000"}
 ```
-If you selected python as your language of choice, you would have created the message by
-serializing a pydantic-based class object PowerWatts like this:
+
+Python usage (Pydantic-style):
 
 ```python
 power = PowerWatts(
     Value=1500,
     TypeName="power.watts",
-    Version="000"
+    Version="000",
 )
 ```
+
+## Where to go next
+
+* Read the **[rules and guidelines](rules_and_guidelines.md)** for authoring types and axioms.
+* Explore existing message categories in this repo to see how versions evolve safely.
+* Start a small pilot: model two or three words your system already uses, generate code, and validate in CI.
+
+## How this differs from traditional standards (e.g., OpenADR)
+
+ASL doesn’t replace domain protocols. Standards like OpenADR define roles, behaviors, and message flows; ASL defines shared words with exact meaning and machine‑checked validity. Consensus emerges because the words are useful: you adopt them, your integrations get easier, and your systems interoperate—without waiting for a committee cycle.
+
+**Scope**: Standards specify end‑to‑end behavior; ASL specifies the vocabulary and axioms behind the payloads.
+
+**Governance**: Standards converge via committees; ASL evolves in an open registry where any party can propose, version, and adopt words.
+
+**Adoption speed**: Standards often require certification and coordinated rollouts; ASL ships schemas and codegen so teams can copy, validate, and ship today.
+
+**Change model**: Standards revise infrequently; ASL versions each word so change is explicit, local, and safe.
+
+**Coexistence**: You can map ASL types to OpenADR events or other protocols. When a standard is required, ASL keeps your internal semantics clean and your adapters thin.
 
 ## Project Structure
 
@@ -83,7 +82,6 @@ gridworks-asl/
 └── ui/                     # À la carte selection interface
 
 ```
-
 
 ## Services
 
