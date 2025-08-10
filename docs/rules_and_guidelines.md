@@ -155,7 +155,19 @@ type: "string"                                            # Required - enums are
 description: "Clear description"                          # Required
 enum: ["Value1", "Value2", "DefaultValue"]               # Required - array of values
 default: "DefaultValue"                                   # Required - must be one of enum values
+
+x-gridworks:
+  owner: "gridworks-energy"        # Required
+  version: "007"                   # Required  
+  value_descriptions:              # Optional but recommended
+    "Value1": "Description..."
 ```
+
+**Evolution Rules:**
+- **Additive only** - New enum versions can only add values, never change or remove existing values
+- **Immutable default** - The default value cannot change across versions
+
+*These constraints enable backwards compatibility in distributed systems: the static default value provides a safe fallback for unknown enum values, while never removing values ensures older code continues to work with newer vocabularies.*
 
 ### 3. Types (Schemas)
 
