@@ -9,3 +9,8 @@ wheels/
 scratch.*
 # Virtual environments
 .venv
+.ssotme
+
+
+*.zfs
+code_gen/GridworksCore/SMQL/*

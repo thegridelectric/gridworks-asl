@@ -73,6 +73,7 @@ gridworks-asl/
 │         ├── property_format.py
 │         └── codec.py
 │
+├── tests/
 ├── type_definitions/          # Source of truth
 │   ├── registry.yaml         # Vocabulary registry
 │   ├── owners.yaml          # Organization registry  
