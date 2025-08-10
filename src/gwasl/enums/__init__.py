@@ -1,5 +1,5 @@
 """
-GridWorks Enums used in Application Shared Languages (ASL)
+Enums available in the GridWorks Application Shared Languages (ASL)
 
 GridWorks ASL enables peer-to-peer shared vocabulary between energy system actors like 
 SCADA devices, trading nodes, and market makers. Enums serve as the "controlled vocabulary" 
