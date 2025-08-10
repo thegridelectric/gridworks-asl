@@ -1,0 +1,22 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.gridworks.energy/enums/recognized.currency.unit"
+
+# For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
+title: "recognized.currency.unit"
+type: "string"
+description: "Unit of currency"
+
+enum:
+  - "Unknown"
+  - "USD"
+  - "GBP"
+
+default: "Unknown"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+    "Unknown": "Unknown value"
+    "USD": "US Dollar"
+    "GBP": "Pounds sterling"

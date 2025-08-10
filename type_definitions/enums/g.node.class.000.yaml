@@ -1,0 +1,30 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.gridworks.energy/enums/g.node.class"
+
+# For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
+title: "g.node.class"
+type: "string"
+description: "GNode classification used to support message passing based on function."
+
+enum:
+  - "GNode"
+  - "TerminalAsset"
+  - "Scada"
+  - "LeafTransactiveNode"
+  - "MarketMaker"
+  - "PriceService"
+  - "WeatherService"
+
+default: "GNode"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+    "GNode": "GNode with unspecified action."
+    "TerminalAsset": "GNode representing the actual physical transactive asset. Can be simulated."
+    "Scada": "GNode responsible for local data acquisition and control of a TerminalAsset."
+    "LeafTransactiveNode": "The transactive agent for a TerminalAsset, with authority to enter into Dispatch Contracts with the SCADA."
+    "MarketMaker": "Manages local constraints and "trues up" existing ISO-level market mechanisms to allow for natural market structures (like sub-metering)."
+    "PriceService": "Service providing price forecasts as a service to LTNs."
+    "WeatherService": "Service providing weather forecasts as a servivec to LTNs"
