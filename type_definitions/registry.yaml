@@ -52,6 +52,7 @@ types:
 
   channel.readings:
     current_version: "002"
+    stable: true
     owner: gridworks-energy
     contact: gridworks@gridworks-consulting.com
     description: A list of timestamped readings (values) for a data channel. This is meant to be reported for non-local consumption (AtomicTNode, other) by a SCADA. Therefore, the data channel is referenced by its globally unique identifier. The receiver needs to reference this idea against a list of the data channels used by the SCADA for accurate parsing.
@@ -96,6 +97,72 @@ types:
         created: "2024-06-01T00:00:00Z"
         dependencies: [] # SpaceheatName, TelemetryName UTCSeconds, UUID4Str
         stable: true # Used in production
+
+  device.type:
+    current_version: "000"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: ""
+
+    versions:
+      "000":
+        schema_file: schemas/device.type.000.yaml
+        created: "2024-06-01T00:00:00Z"
+        dependencies: []
+        stable: false
+  
+  gw.channel.config:
+    current_version: "001"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: ""
+
+    versions:
+      "001":
+        schema_file: schemas/gw.channel.config.001.yaml
+        created: "2024-06-01T00:00:00Z"
+        dependencies: []
+        stable: true
+
+  gw.device.type:
+    current_version: "000"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: ""
+
+    versions:
+      "000":
+        schema_file: schemas/gw.device.type.000.yaml
+        created: "2024-06-01T00:00:00Z"
+        dependencies: []
+        stable: false
+
+  machine.states:
+    current_version: "001"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: ""
+
+    versions:
+      "001":
+        schema_file: schemas/machine.states.001.yaml
+        created: "2024-06-01T00:00:00Z"
+        dependencies: []
+        stable: false
+
+  node.gt:
+    current_version: "000"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: ""
+
+    versions:
+      "000":
+        schema_file: schemas/node.gt.000.yaml
+        created: "2024-06-01T00:00:00Z"
+        dependencies: []
+        stable: false
+    
   
   power.watts:
     current_version: "000"
@@ -123,4 +190,16 @@ types:
         dependencies:
           - "channel.readings:001"
           - "machine.states:001"
-        
+
+  spaceheat.node.gt:
+    current_version: "000"
+    owner: gridworks-energy
+    contact: gridworks@gridworks-consulting.com
+    description: ""
+
+    versions:
+      "000":
+        schema_file: schemas/spaceheat.node.gt.000.yaml
+        created: "2024-06-01T00:00:00Z"
+        dependencies: []
+        stable: false
