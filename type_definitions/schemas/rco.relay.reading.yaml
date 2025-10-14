@@ -1,0 +1,30 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.gridworks.energy/schemas/rco.relay.reading"
+
+title: "rco.relay.reading"
+description: |
+  Single-pole relay state reading using the RelayOpen/RelayClosed enumeration.
+  The 'rco' prefix indicates this uses the Relay Closed/Open state model.
+type: object
+required:
+  - Name
+  - Value
+  - TypeName
+properties:
+  Name:
+    type: string
+    format: spaceheat.name
+    description: The channel name identifying the relay
+  Value:
+    type: string
+    enum: ["RelayClosed", "RelayOpen"]
+    $ref: "https://schemas.electricity.works/enums/relay.open.or.closed"
+    description: The current contact state of the relay
+  TypeName:
+    type: string
+    const: "rco.relay.reading"
+    description: Type identifier for RCO relay readings
+additionalProperties: false
+x-gridworks:
+  owner: "gridworks-energy"
+  local_name: RelayReading

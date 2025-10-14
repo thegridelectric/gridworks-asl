@@ -1,4 +1,4 @@
-"""Type data.channel.gt, version 002"""
+"""Type data.channel.gt, version 010"""
 
 from typing import Literal, Optional
 
@@ -21,8 +21,9 @@ class DataChannelGt(BaseModel):
     InPowerMetering: Optional[bool] = None
     StartS: Optional[UTCSeconds] = None
     Id: UUID4Str
+    ChannelVersion: Optional[str] = None
     TypeName: Literal["data.channel.gt"] = "data.channel.gt"
-    Version: str = "002"
+    Version: Literal["010"] = "010"
 
 
     model_config = ConfigDict(use_enum_values=True)

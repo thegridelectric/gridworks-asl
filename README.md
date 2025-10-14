@@ -4,6 +4,30 @@ Imagine a grid where abundant renewable energy flows naturally to where it's nee
 
 A coordinated electric grid works when devices share a common language. Not one imposed from the center, but an open, versioned vocabulary anyone can adopt and extend. GridWorks ASL is that language layer: it defines words (types, enums, property formats) with stable meaning and clear axioms, then generates idiomatic code so teams can interoperate with an appropriate level of precision and articulation for each circumstance. For more on why we built the GridWorks ASL,  see [motivation.md](docsmotivation.md).
 
+## ASL Generator and Registry ##
+
+This repository is the single source of truth for the GridWorks ASL that:
+
+  - Contains all available types/enums (the complete "menu")
+  - Generates self-contained asl/ directories for other repos
+  - Handles dependency resolution (if type A needs enum B, it includes both)
+  - Provides selection interfaces (CLI, API,  web UI)
+
+Gridworks-asl doesn't provide a package that other repos import - instead it generates a **complete, self-contained `asl/` directory that gets copied into each repository.**
+
+Think of it like a "cookie cutter" or template system:
+
+  - Users select what they want from the menu
+  - GridWorks-ASL generates a complete `asl/` directory
+  - That directory is self-contained with no dependencies back to gridworks-asl
+
+This way:
+
+  - Each repo is independent
+  - No version conflicts between repos
+  - Easy to understand (everything is local)
+
+
 ## Humans + AI, working from the same words
 
 Because ASL is machine‑readable end to end, AI tools can participate as first‑class collaborators—drafting, validating, and mediating messages grounded in your exact words rather than guesses. In practice, this enables:
@@ -11,6 +35,7 @@ Because ASL is machine‑readable end to end, AI tools can participate as first�
 * copilots that propose valid messages and code stubs on the first try,
 * agents that reason against your types and enums instead of hallucinating,
 * automated validation that keeps human/AI workflows inside known‑good boundaries.
+
 
 
 
@@ -60,18 +85,33 @@ ASL doesn’t replace domain protocols. Standards like OpenADR define roles, beh
 
 ```
 gridworks-asl/
+├── src/gwasl/
+|         ├── __init__.py
+|         ├──registry/        # The complete ASL registry (the "menu")
+│         │      ├── enums/
+│         │      ├── types/
+│         │      └── property_format.py
+│         ├── templates/                # Templates for generated code
+│         │   ├── __init__.py
+│         │   ├── codec.py.jinja2      # Template for asl/codec.py
+│         │   ├── property_format.py   # Static file to copy
+│         │   ├── utils.py             # Static file to copy
+│         │   └── init.py.jinja2       # Template for asl/__init__.py
+│         │
+│         ├── generator/                # Code generation logic
+│         │   ├── __init__.py
+│         │   ├── seed_builder.py      # Main generator class
+│         │   ├── dependency_resolver.py # Resolve type dependencies
+│         │   └── validators.py        # Validate selections
+│         │
+│         └── cli.py                   # CLI interface  
+│
 ├── api/                    # FastAPI validation service
 ├── code_gen/               # Seed project generators
 │   └── python/
 ├── docs/
 │   ├── motivation.md       # Why ASL exists
 │   └── rules_and_guidelines.md  # Technical specifications
-├── src/gwasl/
-│         ├── enums/
-│         ├── named_types/
-│         ├── property_format.py
-│         └── codec.py
-│
 ├── tests/
 ├── type_definitions/          # Source of truth
 │   ├── registry.yaml         # Vocabulary registry

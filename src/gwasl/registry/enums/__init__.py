@@ -28,25 +28,29 @@ For more information:
  - [GridWorks ASL Overview](https://gridworks-asl.readthedocs.io/)
 """
 
-from gwasl.enums.actor_class import ActorClass
-from gwasl.enums.g_node_class import GNodeClass
-from gwasl.enums.make_model import MakeModel
-from gwasl.enums.market_quantity_unit import MarketQuantityUnit
-from gwasl.enums.market_type_name import MarketTypeName
-from gwasl.enums.message_category import MessageCategory
-from gwasl.enums.message_category_symbol import MessageCategorySymbol
-from gwasl.enums.recognized_currency_unit import RecognizedCurrencyUnit
-from gwasl.enums.telemetry_name import TelemetryName
+from gwasl.registry.enums.actor_class import ActorClass
+from gwasl.registry.enums.g_node_class import GNodeClass
+from gwasl.registry.enums.gw0_representation_status import Gw0RepresentationStatus
+from gwasl.registry.enums.make_model import MakeModel
+from gwasl.registry.enums.market_quantity_unit import MarketQuantityUnit
+from gwasl.registry.enums.market_type_name import MarketTypeName
+from gwasl.registry.enums.message_category import MessageCategory
+from gwasl.registry.enums.message_category_symbol import MessageCategorySymbol
+from gwasl.registry.enums.recognized_currency_unit import RecognizedCurrencyUnit
+from gwasl.registry.enums.relay_closed_or_open import RelayClosedOrOpen
+from gwasl.registry.enums.telemetry_name import TelemetryName
 
 
 __all__ = [
     "ActorClass",
     "GNodeClass",
+    "Gw0RepresentationStatus",
     "MakeModel",
     "MarketQuantityUnit",
     "MarketTypeName",
     "MessageCategory",
     "MessageCategorySymbol",
     "RecognizedCurrencyUnit",
+    "RelayClosedOrOpen",
     "TelemetryName",
 ]

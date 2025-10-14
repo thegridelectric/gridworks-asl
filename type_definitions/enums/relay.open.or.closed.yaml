@@ -1,0 +1,34 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/relay.open.or.closed"
+
+# For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
+title: "relay.open.or.closed"
+type: "string"
+description: | 
+  Binary state of a single-pole relay contact. Describes whether the relay 
+  contact is open (not conducting) or closed (conducting), regardless of 
+  coil energization state.
+
+  Note 1: The coil energization required to achieve a contact state depends 
+  on relay type:
+  - Normally Open (NO) relay: energized coil → closed contact
+  - Normally Closed (NC) relay: de-energized coil → closed contact
+
+  Note 2: This enum is specifically for single-pole relays with binary states.
+  Other relay configurations (double-throw, multi-position, latching, etc.) 
+  require different state enumerations that capture their specific switching 
+  patterns.
+
+enum:
+  - "RelayClosed"
+  - "RelayOpen"
+
+default: "RelayClosed"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  immutable: true
+  value_descriptions:
+    "RelayClosed": "Relay contact is closed (conducting)"
+    "RelayOpen": "Relay contact is open (not conducting)"
+

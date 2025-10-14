@@ -4,7 +4,7 @@ from typing import Literal
 
 from pydantic import BaseModel, PositiveInt, field_validator
 
-from gwasl.named_types.channel_readings import ChannelReadings
+from gwasl.registry.types.channel_readings import ChannelReadings
 from gwasl.named_types.machine_states import MachineStates
 from gwasl.property_format import (
     LeftRightDotStr,

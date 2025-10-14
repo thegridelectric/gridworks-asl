@@ -5,7 +5,7 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict, PositiveInt, StrictInt, model_validator
 from typing_extensions import Self
 
-from gwasl.property_format import (
+from gwasl.registry.property_format import (
     SpaceheatName,
 )
 

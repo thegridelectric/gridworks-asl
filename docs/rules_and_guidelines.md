@@ -242,9 +242,38 @@ properties:
     $ref: "https://schemas.gridworks.energy/enums/sh.actor.role.000"
 ```
 
+## Special Patterns and Reserved Namespaces
+
+### Event Type Namespace: `gridworks.event.*`
+
+The namespace `gridworks.event.*` is reserved for event types that require special handling in message processing systems. This pattern enables forward compatibility - systems can recognize and handle unknown event types gracefully rather than failing.
+
+**Why this matters:**
+- Distributed systems evolve at different rates
+- New event types shouldn't break older deployments  
+- Events often carry diagnostic or monitoring data that can be safely ignored if not understood
+
+**Implementation requirements:**
+When a decoder encounters an unknown type name starting with `gridworks.event.`:
+1. It MUST NOT raise an error
+2. It SHOULD decode the message as a generic event container (e.g., `AnyEvent`)
+3. It SHOULD preserve all fields for potential logging or pass-through
+
+**Example:**
+```python
+# System A sends a new event type
+{"TypeName": "gridworks.event.battery.soc", "MessageId": "...", "StateOfCharge": 0.85}
+
+# System B (older) doesn't know this type but handles it gracefully:
+# - Decodes as AnyEvent
+# - Logs the unknown event
+# - Continues processing other messages
+```
+**Note** This pattern is specific to `gridworks.event.*`. Other type names like `report.event` do not receive this special treatment. If you're creating monitoring, diagnostic, or system events that should be forward-compatible, use the `gridworks.event.*` namespace.
+
 ## Vocabulary Registration Process
 
- You can certainly use these ideas on your own within your organization (or fork this repo). If you are in the electric grid balancing eco-system, we strongly encourage you to contribute your words to this ASL ... let's see what we can build together!!
+ You can certainly use these ideas on your own within your organization (or fork this repo). If you are in the electric grid balancing eco-system, we strongly encourage you to contribute your words to this ASL.
 
 ### How to Add New Vocabulary
 
