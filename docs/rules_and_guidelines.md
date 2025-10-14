@@ -232,14 +232,14 @@ properties:
   ChannelReadings:
     type: array
     items:
-      $ref: "https://schemas.gridworks.energy/schemas/channel.readings.002"
+      $ref: "https://schemas.electricity.works/schemas/channel.readings.002"
 ```
 
 **Enum references:**
 ```yaml
 properties:
   ActorRole:
-    $ref: "https://schemas.gridworks.energy/enums/sh.actor.role.000"
+    $ref: "https://schemas.electricity.works/enums/sh.actor.role.000"
 ```
 
 ## Special Patterns and Reserved Namespaces

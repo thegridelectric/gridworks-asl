@@ -1,6 +1,6 @@
 # formats/handle.name.yaml
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.gridworks.energy/formats/handle.name"
+$id: "https://schemas.electricity.works/formats/handle.name"
 
 title: "handle.name"
 description: |

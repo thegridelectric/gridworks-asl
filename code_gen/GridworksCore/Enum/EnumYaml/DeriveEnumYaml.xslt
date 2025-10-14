@@ -38,7 +38,7 @@
                         <xsl:element name="FileContents">
 
 <xsl:text>$schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.gridworks.energy/enums/</xsl:text><xsl:value-of select="$enum-name"/><xsl:text>"
+$id: "https://schemas.electricity.works/enums/</xsl:text><xsl:value-of select="$enum-name"/><xsl:text>"
 
 # For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
 title: "</xsl:text><xsl:value-of select="$enum-name"/><xsl:text>"

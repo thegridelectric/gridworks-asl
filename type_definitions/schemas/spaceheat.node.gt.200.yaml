@@ -1,6 +1,6 @@
 # schemas/spaceheat.node.gt.200.yaml
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.gridworks.energy/schemas/spaceheat.node.gt.200"
+$id: "https://schemas.electricity.works/schemas/spaceheat.node.gt.200"
 
 title: "spaceheat.node.gt"
 description: |
@@ -9,8 +9,13 @@ description: |
   Nodes represent logical entities in a thermal storage heating system - they can be
   physical devices (like heat pumps, sensors), logical groupings (like zones), or 
   software actors that manage system behavior.
-
 type: object
+required:
+  - Name
+  - ActorClass  
+  - ShNodeId
+  - TypeName
+  - Version
 
 properties:
   Name:
@@ -72,13 +77,6 @@ properties:
     type: string
     const: "200"
     description: "Schema version"
-
-required:
-  - Name
-  - ActorClass  
-  - ShNodeId
-  - TypeName
-  - Version
 
 additionalProperties: true
 

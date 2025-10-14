@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.gridworks.energy/schemas/rco.relay.reading"
+$id: "https://schemas.electricity.works/schemas/rco.relay.reading"
 
 title: "rco.relay.reading"
 description: |

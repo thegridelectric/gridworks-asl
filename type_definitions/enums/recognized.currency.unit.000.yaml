@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.gridworks.energy/enums/recognized.currency.unit"
+$id: "https://schemas.electricity.works/enums/recognized.currency.unit"
 
 # For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
 title: "recognized.currency.unit"

@@ -1,6 +1,6 @@
 # formats/utc.seconds.yaml
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.gridworks.energy/formats/utc.seconds"
+$id: "https://schemas.electricity.works/formats/utc.seconds"
 
 title: "utc.seconds"
 description: |

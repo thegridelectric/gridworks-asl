@@ -1,6 +1,6 @@
 # formats/left_right_dot.yaml
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.gridworks.energy/formats/left-right-dot"
+$id: "https://schemas.electricity.works/formats/left-right-dot"
 
 title: "left.right.dot"
 description: |
