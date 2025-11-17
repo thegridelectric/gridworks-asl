@@ -1,8 +1,8 @@
 # GridWorks Application Shared Language
 
-Imagine a grid where abundant renewable energy flows naturally to where it's needed. By coordinating flexible loads like heat pumps and thermal storage in real-time, we can consume energy when solar and wind are producing plenty and reduce consumption when they're not. This transformation replaces fossil fuel balancing with community-centered, open source grid management that creates more ease and flow in our relationship with energy. [Learn more about the GridWorks vision](https://gridworks.readthedocs.io/).
+Imagine a grid where abundant renewable energy flows naturally to where it's needed. Imagine flexible loads like heat pumps and thermal storage balancing in real-time the power produced by wind and solar. This transformation replaces fossil fuel balancing with community-centered, open source grid management that creates more ease and flow in our relationship with energy. [Learn more about the GridWorks vision](https://gridworks.readthedocs.io/).
 
-A coordinated electric grid works when devices share a common language. Not one imposed from the center, but an open, versioned vocabulary anyone can adopt and extend. GridWorks ASL is that language layer: it defines words (types, enums, property formats) with stable meaning and clear axioms, then generates idiomatic code so teams can interoperate with an appropriate level of precision and articulation for each circumstance. For more on why we built the GridWorks ASL,  see [motivation.md](docsmotivation.md).
+A coordinated electric grid works when devices share a common language. Not one imposed from the center, but an open, versioned vocabulary anyone can adopt and extend. GridWorks ASL is that language layer: it defines words (types, enums, property formats) with stable meaning and clear axioms, then generates idiomatic code so teams can interoperate with an appropriate level of precision and articulation for each circumstance. For more on why we built the GridWorks ASL,  see [motivation.md](docs/motivation.md).
 
 ## ASL Generator and Registry ##
 
@@ -63,7 +63,7 @@ power = PowerWatts(
 
 ## Where to go next
 
-* Read the **[rules and guidelines](rules_and_guidelines.md)** for authoring types and axioms.
+* Read the **[rules and guidelines](docs/rules-and-guidelines.md)** for authoring types and axioms.
 * Explore existing message categories in this repo to see how versions evolve safely.
 * Start a small pilot: model two or three words your system already uses, generate code, and validate in CI.
 

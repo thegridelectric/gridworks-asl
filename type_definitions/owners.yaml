@@ -7,7 +7,7 @@ gridworks-energy:
   github: https://github.com/thegridelectric
   support_policy: "Community support via GitHub issues"
   license: "MIT"
-  # governance_doc: "https://gridworks.energy/governance"
+  # governance_doc: "https://electricity.works/governance"
 
 microerapower:  
   contact: smb@microerapower.com # Stephanie Benson

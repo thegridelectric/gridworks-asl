@@ -1,0 +1,58 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/schemas/scada.snapshot.event"
+
+title: "scada.snapshot.event"
+description: |
+  Event wrapper for SCADA snapshots, designed for reliable upload and 
+  persistence through the distributed telemetry pipeline architecture 
+  developed by Andrew Schweitzer at Smooth Stone Computing. This event 
+  type follows the pattern of wrapping data types with '.event' suffix 
+  to indicate they should be persisted and tracked.
+  
+  For complete architecture documentation, see:
+  https://gridworks.readthedocs.io/en/latest/persistence-mechanism.html
+  
+  The src field (from EventBase) must be the Scada's GNodeAlias in 
+  LeftRightDot format, identifying the source SCADA's position in 
+  the grid topology.
+type: object
+required:
+  - MessageId
+  - TimeCreatedMs
+  - Src
+  - ScadaSnapshot
+  - TypeName
+properties:
+  MessageId:
+    type: string
+    format: uuid4
+    description: Unique identifier for message tracking and deduplication
+  TimeCreatedMs:
+    type: integer
+    format: utc.milliseconds
+    description: When this event was created (not necessarily when measurements were taken)
+  Src:
+    type: string
+    format: left.right.dot
+    description: |
+      GNodeAlias of the source SCADA (must be LeftRightDot format).
+      This identifies the SCADA's position in the grid topology.
+      See: https://gridworks.readthedocs.io/en/latest/g-node-alias.html
+  ScadaSnapshot:
+    $ref: "https://schemas.electricity.works/schemas/scada.snapshot"
+    description: The actual SCADA snapshot data
+  TypeName:
+    type: string
+    const: "scada.snapshot.event"
+    description: Type identifier for SCADA snapshot events
+additionalProperties: false
+x-gridworks:
+  owner: "MicroEraPower"
+  axioms:
+    - number: 1
+      description: |
+        Src must equal ScadaSnapshot.GNodeAlias to ensure consistent 
+        identification of the source SCADA throughout the message hierarchy.
+  properties:
+    - name: g_node_alias
+      description: Convenience property that returns the Src field as GNodeAlias

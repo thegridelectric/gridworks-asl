@@ -79,7 +79,7 @@ the appropriate sub-folder:
 ```yaml
 gridworks-energy:
   contact: gridworks@gridworks-consulting.com
-  website: https://gridworks.energy
+  website: https://electricity.works
   organization: "GridWorks Energy LLC"
   description: "Transactive energy infrastructure and thermal storage systems"
 
