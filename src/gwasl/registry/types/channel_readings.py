@@ -1,17 +1,16 @@
-"""Type channel.readings, version 002"""
-
 from typing import Literal
 
-from pydantic import BaseModel, StrictInt, model_validator  # Count:true
+from gwasl.registry.base import AslType
+from pydantic import StrictInt, model_validator  # Count:true
 from typing_extensions import Self
 
-from gwasl.property_format import (
+from gwasl.registry.property_format import (
     SpaceheatName,
     UTCMilliseconds,
 )
 
 
-class ChannelReadings(BaseModel):
+class ChannelReadings(AslType):
     """
     A list of timestamped readings (values) for a data channel. This is meant to be reported
     for non-local consumption (AtomicTNode, other) by a SCADA. Therefore, the data channel is

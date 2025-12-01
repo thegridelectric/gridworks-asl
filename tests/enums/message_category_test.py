@@ -2,7 +2,7 @@
 Tests for enum message.category.000
 """
 
-from gwasl.enums import MessageCategory
+from gwasl.registry.enums import MessageCategory
 
 
 def test_message_category() -> None:

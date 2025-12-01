@@ -2,7 +2,7 @@
 Tests for enum spaceheat.make.model.004
 """
 
-from gwasl.enums import MakeModel
+from gwasl.registry.enums import MakeModel
 
 
 def test_make_model() -> None:

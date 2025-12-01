@@ -1,11 +1,9 @@
-"""Type power.watts, version 000"""
-
 from typing import Literal
 
-from pydantic import BaseModel
+from gwasl.registry.base import AslType
 
 
-class PowerWatts(BaseModel):
+class PowerWatts(AslType):
     """
     Real-time power of TerminalAsset in Watts.
 

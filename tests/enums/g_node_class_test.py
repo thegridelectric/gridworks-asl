@@ -2,7 +2,7 @@
 Tests for enum g.node.class.000
 """
 
-from gwasl.enums import GNodeClass
+from gwasl.registry.enums import GNodeClass
 
 
 def test_g_node_class() -> None:

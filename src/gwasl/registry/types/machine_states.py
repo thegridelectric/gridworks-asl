@@ -1,22 +1,21 @@
-"""Type machine.states, version 000"""
-
 from typing import Literal
 
-from pydantic import BaseModel, model_validator
+from gwasl.registry.base import AslType
+from pydantic import model_validator
 from typing_extensions import Self
 
-from gwasl.property_format import (
+from gwasl.registry.property_format import (
     HandleName,
-    LeftRightDotStr,
+    LeftRightDot,
     UTCMilliseconds,
 )
 
 
-class MachineStates(BaseModel):
+class MachineStates(AslType):
     """ """
 
     MachineHandle: HandleName
-    StateEnum: LeftRightDotStr
+    StateEnum: LeftRightDot
     StateList: list[str]
     UnixMsList: list[UTCMilliseconds]
     TypeName: Literal["machine.states"] = "machine.states"

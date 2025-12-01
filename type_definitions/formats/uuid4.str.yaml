@@ -3,16 +3,17 @@ $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "https://schemas.electricity.works/formats/uuid4.str"
 
 title: "uuid4.str"
-description: |
-  UUID4 (Universally Unique Identifier version 4) string representation.
-  Standard hyphenated format: 8-4-4-4-12 hex characters.
-  Version 4 UUIDs are randomly generated.
-  
+description: >
+  Canonical lowercase UUIDv4 (Universally Unique Identifier, version 4)
+  string in standard hyphenated format 8-4-4-4-12. Used for globally unique,
+  immutable identifiers throughout GridWorks ASL types. Enforces lowercase
+  for consistency across organizations.
+
 type: string
 pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
 
 examples:
-  - "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+  - "9cff2689-eadc-4577-94ea-6d86d0d23e9e"
   - "4e5a6b1c-2d3e-4f5a-8b9c-1d2e3f4a5b6c"
   - "f47ac10b-58cc-4372-a567-0e02b2c3d479"
 
@@ -26,4 +27,7 @@ counterexamples:
 x-gridworks:
   owner: "gridworks-energy"
   use_cases: ["Component IDs", "Message IDs", "Unique identifiers"]
-  notes: "Lowercase only for consistency across implementations"
+  semantics: >
+    Identifiers must be globally unique, stable for the lifetime of the
+    referenced entity, and never reused. UUIDv4 provides strong randomness
+    and cross-system compatibility.

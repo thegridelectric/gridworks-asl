@@ -1,0 +1,67 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/position.point.gt.000"
+
+title: "position.point.gt"
+type: object
+description: >
+  A geographic position for a physical Grid Node. Coordinates are stored in
+  microdegrees (integer values). This type is conceptually aligned with the 
+  IEC 61970/61968 CIM `PositionPoint` class, but simplified for GridWorks 
+  use cases, which require only a single latitude/longitude point (not polylines 
+  or coordinate transformations).
+
+properties:
+  Id:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      UUID for this PositionPoint. Serves as the primary key in the
+      Grid Node Registry.
+
+  LatitudeMicroDeg:
+    type: integer
+    description: >
+      Latitude in microdegrees. Must be between -90,000,000 and +90,000,000
+      (corresponding to -90.0° to +90.0° in WGS84 coordinates).
+
+  LongitudeMicroDeg:
+    type: integer
+    description: >
+      Longitude in microdegrees. Must be between -180,000,000 and +180,000,000
+      (corresponding to -180.0° to +180.0° in WGS84 coordinates).
+
+required:
+  - Id
+  - LatitudeMicroDeg
+  - LongitudeMicroDeg
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+
+  axioms:
+    - number: 1
+      description: >
+        Coordinates must be valid Earth locations.
+        Latitude must fall within physical Earth limits: -90 to +90 degrees.
+        Longitude must fall within valid Earth limits: -180 to +180 degrees.
+
+  properties:
+    = name: lat
+      description: returns LatitudeMicroDeg/10^6
+    = name: lon
+      description: returns LongidudeMicroDeg/10^6
+
+  description_extended: >
+    PositionPoint represents the physical location of a GNode that has spatial
+    meaning on the electric grid, such as TerminalAssets, LeafTransactiveNodes,
+    MarketMaker constraint points, and ConnectivityNodes. Coordinates are stored
+    in WGS84 (EPSG:4326), the standard global geodetic system used by GPS and
+    widely adopted in utility GIS, mapping, and DERMS integrations.
+    
+    This type corresponds to a simplified form of the `PositionPoint`
+    class defined in the IEC CIM (Common Information Model) standards
+    IEC 61970/61968, which normally supports elevation, coordinate-system
+    definitions, and collections of points for geometric shapes. Future
+    versions of this type may extend to include optional fields such as
+    Elevation, Accuracy, or alternate coordinate systems.
+

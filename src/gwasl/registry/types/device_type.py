@@ -1,19 +1,22 @@
-"""Type gw.device.type, version 000"""
-
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict
-from gwasl.property_format import UUID4Str
+from gwasl.registry.base import AslType, snake_to_pascal
+from pydantic import ConfigDict
+from gwasl.registry.property_format import UUID4Str
 
 
-
-class DeviceType(BaseModel):
+class DeviceType(AslType):
     Id: UUID4Str
     DisplayName: Optional[str] = None
     Name: str
     TypeName: str = "device.type"
     Version: str = "000"
 
-    model_config = ConfigDict(use_enum_values=True, extra="allow")
+    model_config = ConfigDict(
+        alias_generator=snake_to_pascal,
+        frozen=True,
+        populate_by_name=True,
+        extra="allow",
+    )
 
     

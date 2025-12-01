@@ -1,16 +1,15 @@
-"""Type gw.device.type, version 000"""
-
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, PositiveInt, model_validator
+from gwasl.registry.base import AslType
+from pydantic import ConfigDict, PositiveInt, model_validator
 from typing_extensions import Self
 
-from gwasl.enums import MakeModel
-from gwasl.property_format import UUID4Str
-from gwasl.type_helpers import DEVICE_BY_MAKE_MODEL
+from gwasl.registry.enums import MakeModel
+from gwasl.registry.property_format import UUID4Str
+from gwasl.registry.type_helpers.device_by_make_model import DEVICE_BY_MAKE_MODEL
 
 
-class GwDeviceType(BaseModel):
+class GwDeviceType(AslType):
     Id: UUID4Str
     DisplayName: Optional[str] = None
     Name: MakeModel
@@ -32,7 +31,7 @@ class GwDeviceType(BaseModel):
         """
         if (
             self.Name not in DEVICE_BY_MAKE_MODEL
-            and self.Nameis not MakeModel.default().value
+            and self.Name is not MakeModel.default().value
         ):
             raise ValueError(
                 "Axiom 1 violated! If MakeModel not in this list, "

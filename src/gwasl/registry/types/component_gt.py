@@ -1,15 +1,14 @@
-"""Type component.gt, version 001"""
-
 from collections.abc import Sequence
 from typing import Optional
 
-from pydantic import BaseModel, field_validator
+from gwasl.registry.base import AslType
+from pydantic import field_validator
 
-from gwasl.named_types.channel_config import ChannelConfig
-from gwasl.property_format import UUID4Str
+from gwasl.registry.types.channel_config import ChannelConfig
+from gwasl.registry.property_format import UUID4Str
 
 
-class ComponentGt(BaseModel):
+class ComponentGt(AslType):
     Id: UUID4Str
     DeviceTypeId: UUID4Str
     ConfigList: Sequence[ChannelConfig]

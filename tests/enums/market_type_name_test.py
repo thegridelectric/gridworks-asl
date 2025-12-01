@@ -2,7 +2,7 @@
 Tests for enum market.type.name.000
 """
 
-from gwasl.enums import MarketTypeName
+from gwasl.registry.enums import MarketTypeName
 
 
 def test_market_type_name() -> None:

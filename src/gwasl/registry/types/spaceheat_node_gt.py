@@ -1,14 +1,13 @@
-"""Type spaceheat.node.gt, version 110"""
-
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, StrictInt, model_validator
+from gwasl.registry.base import AslType, snake_to_pascal
+from pydantic import ConfigDict, StrictInt, model_validator
 from typing_extensions import Self
 
-from gwasl.property_format import HandleName, SpaceheatName, UUID4Str
-from gwasl.enums import ActorClass
+from gwasl.registry.property_format import HandleName, SpaceheatName, UUID4Str
+from gwasl.registry.enums import ActorClass
 
-class SpaceheatNodeGt(BaseModel):
+class SpaceheatNodeGt(AslType):
     Name: SpaceheatName
     ActorHierarchyName: Optional[HandleName] = None
     Handle: Optional[HandleName] = None
@@ -34,4 +33,9 @@ class SpaceheatNodeGt(BaseModel):
             )
         return self
 
-    model_config = ConfigDict(extra="allow", use_enum_values=True)
+    model_config = ConfigDict(
+        alias_generator=snake_to_pascal,
+        frozen=True,
+        populate_by_name=True,
+        extra="allow",
+    )

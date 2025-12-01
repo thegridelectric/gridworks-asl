@@ -2,7 +2,7 @@
 Tests for enum market.quantity.unit.000
 """
 
-from gwasl.enums import MarketQuantityUnit
+from gwasl.registry.enums import MarketQuantityUnit
 
 
 def test_market_quantity_unit() -> None:

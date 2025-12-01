@@ -1,29 +1,24 @@
-"""Type data.channel.gt, version 010"""
-
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict
-from gwasl.property_format import (
-    LeftRightDotStr,
+from gwasl.registry.base import AslType
+from gwasl.registry.property_format import (
+    LeftRightDot,
     SpaceheatName,
     UTCSeconds,
     UUID4Str,
 )
 
 
-class DataChannelGt(BaseModel):
+class DataChannelGt(AslType):
     Name: SpaceheatName
     DisplayName: str
     AboutNodeName: SpaceheatName
     CapturedByNodeName: SpaceheatName
     TelemetryName: str
-    TerminalAssetAlias: LeftRightDotStr
+    TerminalAssetAlias: LeftRightDot
     InPowerMetering: Optional[bool] = None
     StartS: Optional[UTCSeconds] = None
     Id: UUID4Str
     ChannelVersion: Optional[str] = None
     TypeName: Literal["data.channel.gt"] = "data.channel.gt"
     Version: Literal["010"] = "010"
-
-
-    model_config = ConfigDict(use_enum_values=True)

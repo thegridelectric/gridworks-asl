@@ -1,5 +1,3 @@
-"""Type tank.module.params, version 100"""
-
 from typing import Literal, Optional
 from gwasl.registry.codec import AslType
 from pydantic import PositiveInt, field_validator

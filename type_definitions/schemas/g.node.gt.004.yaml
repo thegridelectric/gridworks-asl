@@ -1,0 +1,126 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/g.node.gt/004"
+
+title: "g.node.gt"
+description: >
+  A GNode (“Grid Node”) is the fundamental identity object in the GridWorks 
+  ecosystem. Every physical location, metered unit, device, service, or actor 
+  interacting with the transactive system is represented as a GNode. 
+  See the GridWorks Ontology documentation:
+  https://gridworks.readthedocs.io/en/latest/ontology/universal/g-node.html
+
+type: object
+
+properties:
+  GNodeId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this GNode. Immutable for the lifetime
+      of the GNode.
+
+  Alias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Human-readable hierarchical identifier. Forms the basis of the
+      GNodeTree topology. Alias may change over time as the physical
+      or conceptual topology is refined.
+
+  BaseClass:
+    $ref: "https://schemas.electricity.works/enums/base.g.node.class/000"
+    description: >
+      Universal physical ontology classification for the GNode. Determines
+      the physical subset in the Copper Tree.
+
+  GNodeClass:
+    type: string
+    description: >
+      Functional or role-based classification for the GNode. Interpreted
+      according to the namespace of the registering organization (e.g.,
+      'gw.MarketMaker', 'gw.Scada', 'acme.EVController'). This field is a
+      free-form string, not a universal enum.
+
+  Status:
+    $ref: "https://schemas.electricity.works/enums/g.node.status/000"
+
+  PrevAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    nullable: true
+    description: >
+      Previous Alias value during alias transitions. Required only when
+      Alias changes. Must be null if Alias has not changed.
+
+  PositionPointId:
+    type: string
+    format: uuid
+    nullable: true
+    description: >
+      Reference to a PositionPoint GT type giving physical location
+      (WGS84 microdegrees). Required for physical GNodes; null for
+      logical/service nodes.
+
+  DisplayName:
+    type: string
+    nullable: true
+    description: >
+      Optional human-friendly label for UI or documentation.
+
+  TypeName:
+    const: "g.node.gt"
+
+  Version:
+    const: "004"
+
+required:
+  - GNodeId
+  - Alias
+  - BaseClass
+  - GNodeClass
+  - Status
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "004"
+
+  axioms:
+    - number: 1
+      summary: "Physical class alignment"
+      description: >
+        For physical GNodes (BaseClass != Logical), 
+        GNodeClass must match the BaseClass name exactly.
+    - number: 2
+      summary: "Physical GNodes have locations"
+      description: "If BaseClass != Logical, PositionPointId must not be null."
+
+  description_extended: >
+    Grid Nodes (GNodes) enable the construction of a shared, universal map of
+    the electric grid. Each GNode participates in a hierarchical alias
+    structure that encodes the physical copper topology, GPS-grounded location,
+    metering boundaries, and constraint inheritance used for OPF and power-flow
+    reasoning.
+
+    Beyond physical representation, GNodes also support logical and
+    service-level roles that participate in decentralized coordination
+    (e.g. SCADA agents, forecasting services, transactive aggregators). This
+    unified structure allows transactive-energy organizations to collaborate
+    across boundaries while maintaining a consistent ontology for routing,
+    registry queries, rights validation, market participation, and system
+    balancing.
+
+    By providing common identity, location, and topology semantics, GNodes
+    form the backbone for new mechanisms for balancing the grid — supporting
+    continuous, always-on coordination rather than traditional event-based
+    demand response.
+
+    GNodeGt is the **message-oriented, serialized representation** of a GNode. It 
+    corresponds directly to the durable GNode record stored in the registry database, 
+    but each instance of this type is a **snapshot**: an immutable ASL message reflecting
+    the state of the GNode at a particular moment in time. Any change to a GNode (Alias
+    updates, status changes, relocations, class changes) is represented through the creation
+    of a new GNodeGt message, never by mutating an existing one.
+
+    For more information:
+    https://gridworks.readthedocs.io/en/latest/ontology/universal/g-node.html

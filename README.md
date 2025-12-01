@@ -90,6 +90,8 @@ gridworks-asl/
 |         ├──registry/        # The complete ASL registry (the "menu")
 │         │      ├── enums/
 │         │      ├── types/
+│         |      ├── base.py
+│         |      ├── codec.py
 │         │      └── property_format.py
 │         ├── templates/                # Templates for generated code
 │         │   ├── __init__.py
@@ -107,8 +109,18 @@ gridworks-asl/
 │         └── cli.py                   # CLI interface  
 │
 ├── api/                    # FastAPI validation service
-├── code_gen/               # Seed project generators
-│   └── python/
+├── code_gen/GridWorksCore/     # Generates a lot of this repo.
+│                  ├── aicapture.json
+│                  ├── ODXML/
+│                  │    └── DataSchema.odxml
+│                  ├── SSoT/
+│                  │    ├── Airtable.xml
+│                  │    └── Entities.json
+│                  ├── Types/
+│                  │    ├── TypeInit/
+│                  │    │     └── DeriveTypeInit.xslt/
+│                  │    └── DeriveTypes.xslt
+│                  └── python/
 ├── docs/
 │   ├── motivation.md       # Why ASL exists
 │   └── rules_and_guidelines.md  # Technical specifications

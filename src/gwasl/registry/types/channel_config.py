@@ -1,8 +1,7 @@
-"""Type channel.config, version 001"""
-
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, PositiveInt, StrictInt, model_validator
+from gwasl.registry.base import AslType
+from pydantic import PositiveInt, model_validator
 from typing_extensions import Self
 
 from gwasl.registry.property_format import (
@@ -10,7 +9,7 @@ from gwasl.registry.property_format import (
 )
 
 
-class ChannelConfig(BaseModel):
+class ChannelConfig(AslType):
     ChannelName: SpaceheatName
     PollPeriodMs: Optional[PositiveInt] = None
     CapturePeriodS: PositiveInt
@@ -18,11 +17,6 @@ class ChannelConfig(BaseModel):
     AsyncCaptureDelta: Optional[PositiveInt] = None
     TypeName: str = "channel.config"
     Version: str = "001"
-
-    model_config = ConfigDict(use_enum_values=True)
-
-    def __hash__(self) -> int:
-        return hash(self.ChannelName)
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> Self:

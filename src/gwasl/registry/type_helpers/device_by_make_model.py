@@ -1,4 +1,4 @@
-from gwasl.enums import MakeModel
+from gwasl.registry.enums import MakeModel
 
 DEVICE_BY_MAKE_MODEL: dict[str, str] = {
     MakeModel.EGAUGE__4030.value: "739a6e32-bb9c-43bc-a28d-fb61be665522",

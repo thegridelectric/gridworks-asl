@@ -1,0 +1,43 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/g.node.status"
+
+title: "g.node.status"
+description: >
+  Lifecycle status of a Grid Node (GNode) as represented in the GridWorks
+  Application Shared Language (ASL). These statuses describe the operational
+  state of the GNode within the registry and determine whether it participates
+  in the active topology, routing, and coordination processes.
+
+type: string
+
+enum:
+  - "Pending"
+  - "Active"
+  - "Suspended"
+  - "PermanentlyDeactivated"
+
+default: "Pending"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+
+  value_descriptions:
+    "Pending": >
+      The GNode has been created but is not yet active. All new GNodes begin in
+      this state. Transition to Active occurs when the registry authorizes full
+      participation in the system.
+
+    "Active": >
+      The GNode is fully operational and participates in the topology, routing,
+      market coordination, rights validation, and all other functional behaviors.
+
+    "Suspended": >
+      The GNode is temporarily disabled. A Suspended node retains its identity
+      and topology position but does not actively participate in coordination.
+      It may return to Active or progress to PermanentDeactivation.
+
+    "PermanentlyDeactivated": >
+      The GNode has been permanently retired. It remains in the registry for
+      historical and audit purposes but no longer participates in any active
+      processes or appear in current topology views.
