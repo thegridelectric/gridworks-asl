@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/enums/g.node.status"
+$id: "https://schemas.electricity.works/enums/g.node.status/000"
 
 title: "g.node.status"
 description: >

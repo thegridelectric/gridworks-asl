@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/enums/message.category.symbol"
+$id: "https://schemas.electricity.works/enums/message.category.symbol/000"
 
 # For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
 title: "message.category.symbol"

@@ -1,6 +1,6 @@
 # schemas/spaceheat.node.gt.200.yaml
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/schemas/spaceheat.node.gt.200"
+$id: "https://schemas.electricity.works/schemas/spaceheat.node.gt/200"
 
 title: "spaceheat.node.gt"
 description: |
