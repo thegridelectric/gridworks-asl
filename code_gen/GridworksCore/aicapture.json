@@ -2,33 +2,14 @@
   "ShowHidden": false,
   "ShowAllFiles": false,
   "CurrentPath": "",
-  "Name": "gridworks",
+  "Name": "gwasl",
   "ProjectSettings": [
     {
       "Name": "project-name",
-      "Value": "gridworks"
-    },
-    {
-      "Name": "amqps",
-      "Value": "amqps://smqPublic:smqPublic@effortlessapi-rmq.ssot.me/jmillar-scada"
-    },
-    {
-      "Name": "dataclasses-namespace",
-      "Value": "gridworks.Lib.DataClasses"
+      "Value": "gwasl"
     }
   ],
   "ProjectTranspilers": [
-    {
-      "MatchedTranspiler": {
-        "Name": "SSoT",
-        "Description": "SSoT"
-      },
-      "IsSSoTTranspiler": false,
-      "Name": "SSoT",
-      "RelativePath": "",
-      "CommandLine": "effortless/ssot -p ssot-key=IuUqkLn41mZ8TS",
-      "IsDisabled": true
-    },
     {
       "MatchedTranspiler": {
         "Name": "AirtableToODXML",

@@ -8,7 +8,8 @@ import json
 import logging
 from typing import Any, Optional, TypeVar
 from collections import defaultdict
-from pydantic import BaseModel, ConfigDict, ValidationError
+from gwasl.registry.base import AslType
+from pydantic import ConfigDict, ValidationError
 
 
 logger = logging.getLogger(__name__)
