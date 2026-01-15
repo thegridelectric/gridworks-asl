@@ -4,10 +4,10 @@
 from enum import auto
 from typing import List
 
-from gw.enums import GwStrEnum
+from gwasl.registry.enums.gw_str_enum import AslEnum
 
 
-class Gw0RepresentationStatus(GwStrEnum):
+class Gw0RepresentationStatus(AslEnum):
 
     Unknown = auto()
     ListeningToAtn = auto()

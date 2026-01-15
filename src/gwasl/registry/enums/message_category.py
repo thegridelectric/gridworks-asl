@@ -1,10 +1,10 @@
 from enum import auto
 from typing import List
 
-from gw.enums import GwStrEnum
+from gwasl.registry.enums.gw_str_enum import AslEnum
 
 
-class MessageCategory(GwStrEnum):
+class MessageCategory(AslEnum):
     """
     Categorizes message delivery patterns for ASL types. See [Message Delivery 
         Architecture](https://gridworks.readthedocs.io/message-delivery-architecture/) 

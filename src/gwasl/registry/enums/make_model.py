@@ -1,10 +1,10 @@
 from enum import auto
 from typing import List
 
-from gw.enums import GwStrEnum
+from gwasl.registry.enums.gw_str_enum import AslEnum
 
 
-class MakeModel(GwStrEnum):
+class MakeModel(AslEnum):
     """
     Determines Make/Model of device associated to a Spaceheat Node supervised 
         by SCADA

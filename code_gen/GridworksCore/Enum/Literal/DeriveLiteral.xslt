@@ -49,7 +49,7 @@ from gridworks.enums import GwStrEnum
 
 
 class </xsl:text><xsl:value-of select="$enum-class-name"/>
-<xsl:text>(GwStrEnum):
+<xsl:text>(AslEnum):
     """
     </xsl:text>
     <!-- Enum description, wrapped, if it exists -->

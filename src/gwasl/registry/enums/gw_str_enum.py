@@ -10,7 +10,7 @@ class GwStrEnum(StrEnum):
 
     Specifically (re difference with python StrEnum) if
 
-    class Foo(GwStrEnum):
+    class Foo(AslEnum):
         Bar = auto()
 
     then
@@ -44,7 +44,20 @@ class GwStrEnum(StrEnum):
         return default
 
 
-class SymbolizedEnum(GwStrEnum):
+class AslEnum(GwStrEnum):
+    """
+    Base for enums published in the ASL registry.
+    Requires enum_name(). Version is optional (return None for stable enums).
+    """
+
+    @classmethod
+    def enum_name(cls) -> str:
+        """ASL registry identifier (e.g., 'gw1.relay.state')"""
+        raise NotImplementedError(
+            f"{cls.__name__} must implement enum_name() for ASL registry"
+        )
+
+class SymbolizedEnum(AslEnum):
     @classmethod
     def symbol_to_value(cls, symbol: str) -> str:
         raise NotImplementedError

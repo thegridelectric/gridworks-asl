@@ -53,7 +53,6 @@
                         <xsl:element name="FileContents">
 
 
-<xsl:text>"""Type </xsl:text><xsl:value-of select="$type-name"/><xsl:text>, version </xsl:text>
 <xsl:value-of select="Version"/><xsl:text>"""
 from gw.named_types import GwBase</xsl:text>
 <xsl:if test="count(PropertyFormatsUsed)>0">
@@ -184,7 +183,7 @@ from gwproto.property_format import (</xsl:text>
 </xsl:when>
 <xsl:when test="normalize-space(Name) = 'LeftRightDot'">
 <xsl:text>
-    LeftRightDotStr,</xsl:text>
+    LeftRightDot,</xsl:text>
 </xsl:when>
 <xsl:when test="normalize-space(Name) = 'HandleName'">
 <xsl:text>
@@ -304,7 +303,7 @@ class </xsl:text>
         <xsl:text>SpaceheatName</xsl:text>
         </xsl:when>
         <xsl:when test="PrimitiveFormat = 'LeftRightDot'">
-        <xsl:text>LeftRightDotStr</xsl:text>
+        <xsl:text>LeftRightDot</xsl:text>
         </xsl:when>
         <xsl:when test="PrimitiveFormat = 'HandleName'">
         <xsl:text>HandleName</xsl:text>

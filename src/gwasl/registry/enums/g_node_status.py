@@ -1,10 +1,10 @@
 from enum import auto
 from typing import List
 
-from gw.enums import GwStrEnum
+from gwasl.registry.enums.gw_str_enum import AslEnum
 
 
-class GNodeStatus(GwStrEnum):
+class GNodeStatus(AslEnum):
     """
     ASL enum schema:
     [https://schemas.electricity.works/enums/g.node.class/000](https://schemas.electricity.works/enums/g.node.status/000)

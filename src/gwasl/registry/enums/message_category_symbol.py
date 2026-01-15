@@ -1,10 +1,10 @@
 from enum import auto
 from typing import List
 
-from gw.enums import GwStrEnum
+from gwasl.registry.enums.gw_str_enum import AslEnum
 
 
-class MessageCategorySymbol(GwStrEnum):
+class MessageCategorySymbol(AslEnum):
     """
     Shorthand symbols used as the first element in GridWorks routing keys. 
         See [Message Delivery Architecture](https://gridworks.readthedocs.io/message-delivery-architecture/) 
