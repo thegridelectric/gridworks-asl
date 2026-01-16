@@ -7,11 +7,10 @@ For GridWorks, **semantic authority lives in the Application Shared Language (AS
 
 More precisely: **ASL is the authority over meaning,** while a small, stable, slowly-changing canonical seed database is the authority over **which ASL-typed facts are currently asserted.** The database does not define what things mean; it records facts that are already defined by the language. The two are tightly and deliberately coupled, but they do not play the same role.
 
-If there is ever a disagreement between a database representation and the ASL definition, **the ASL definition wins.**
 
 ## ASL and the Canonical Seed
 
-The canonical seed database holds the core relational facts of the GridWorks universe—grid nodes, layouts, identities, and other foundational relationships that change slowly and matter everywhere. It is **ASL-correct by construction**: rows reference ASL types, versions, and identities explicitly, so facts cannot silently drift from their declared meaning.
+The canonical seed database holds the core relational facts of the GridWorks universe — grid nodes, layouts, identities, and other foundational relationships that change slowly and matter everywhere. It is **ASL-correct by construction**: rows reference ASL types, versions, and identities explicitly, so facts cannot silently drift from their declared meaning.
 
 This is a case of **tight and careful semantic coupling.** Meaning is declared once, in ASL. Facts are asserted once, in the seed database. Other databases, caches, and analytics systems consume projections of that truth rather than redefining it. Those downstream systems are free to optimize for their own needs. Being “ASL-aware” does not require using ASL types directly in code: developers may reference the declarative definitions informally or use full ASL-typed models; both are acceptable. What matters is that meaning remains explicit and externally defined - personally, I find the typed approach clearer and more durable, but the system does not require it.
 
@@ -20,6 +19,18 @@ This approach:
   - Does not require a bijection between all tables and ASL types
   - Allows ASL to continue evolving in production
   - Treats ASL as the semantic contract of the system
+
+## Semantic Snapshots and Meaning-Preserving Exports
+
+The canonical seed can be exported periodically as semantic snapshots: versioned, checksummed representations of the asserted ASL-typed facts (for example as JSON, Parquet, or Avro).
+
+These snapshots are not required for day-to-day operation, and they do not replace Postgres, replication, or standard database exports. Instead, they serve a different purpose: preserving meaning across time, teams, and systems. A semantic snapshot captures not just the data values, but the ASL types, versions, and identities that give those values their interpretation.
+
+Because the seed database is ASL-correct by construction, conventional exports such as pg_dump, logical replication, or backup syncs remain valid and useful. Semantic snapshots simply make the semantic layer explicit and portable. They provide a stable, auditable artifact that can be replayed, validated, or consumed by downstream systems without requiring shared tribal knowledge or implicit assumptions.
+
+This mirrors the role already played by the S3 persistent store for message history: operational systems run on live infrastructure, while meaning-preserving artifacts ensure long-term coherence and interpretability.
+
+I’m happy to help design or implement this export layer if it’s useful. The goal is not to constrain how other systems are built, but to make it easy for them to know exactly what the data means, even as schemas, pipelines, and use cases evolve.
 
 ## Is This a Common Pattern?
 
