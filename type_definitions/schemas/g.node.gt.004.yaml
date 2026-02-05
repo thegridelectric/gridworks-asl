@@ -35,9 +35,8 @@ properties:
     type: string
     description: >
       Functional or role-based classification for the GNode. Interpreted
-      according to the namespace of the registering organization (e.g.,
-      'gw.MarketMaker', 'gw.Scada', 'acme.EVController'). This field is a
-      free-form string, not a universal enum.
+      according to the namespace of the registering organization. This field is a
+      free-form string, not a universal enum. 
 
   Status:
     $ref: "https://schemas.electricity.works/enums/g.node.status/000"
