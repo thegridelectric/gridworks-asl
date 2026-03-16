@@ -1,7 +1,8 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/schemas/scada.snapshot"
+$id: "https://schemas.electricity.works/schemas/scada.snapshot/000"
 
 title: "scada.snapshot"
+type: object
 description: |
   Point-in-time telemetry snapshot from a SCADA system containing both
   analog channel readings and relay states. The snapshot is expected to 
@@ -9,39 +10,45 @@ description: |
   individual measurements may have been collected earlier. This "best 
   available data" approach handles sensors with different sampling rates 
   and communication delays.
-type: object
+
+properties:
+
+  GNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: |
+      Identifier mapping this SCADA into the electric grid topology.
+      See: https://gridworks.readthedocs.io/en/latest/g-node-alias.html
+
+  ScadaUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: Unix timestamp in milliseconds when the snapshot was taken
+
+  ChannelReadings:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/schemas/channel.reading"
+    description: List of analog channel measurements
+
+  RelayReadings:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/schemas/rco.relay.reading"
+    description: List of relay state readings
+
+  TypeName:
+    const: "scada.snapshot"
+
+  Version:
+    const: "000"
+
 required:
   - GNodeAlias
   - ScadaUnixMs
   - ChannelReadings
   - RelayReadings
   - TypeName
-properties:
-  GNodeAlias:
-    type: string
-    format: left.right.dot
-    description: |
-      Identifier mapping this SCADA into the electric grid topology.
-      See: https://gridworks.readthedocs.io/en/latest/g-node-alias.html
 
-  ScadaUnixMs:
-    type: integer
-    format: utc.milliseconds
-    description: Unix timestamp in milliseconds when the snapshot was taken
-  ChannelReadings:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/schemas/channel.reading"
-    description: List of analog channel measurements
-  RelayReadings:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/schemas/rco.relay.reading"
-    description: List of relay state readings
-  TypeName:
-    type: string
-    const: "scada.snapshot"
-    description: Type identifier for SCADA snapshots
 additionalProperties: false
+
 x-gridworks:
   owner: "MicroEraPower"
