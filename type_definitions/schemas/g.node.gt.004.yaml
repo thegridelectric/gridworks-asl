@@ -34,10 +34,9 @@ properties:
   GNodeClass:
     type: string
     description: >
-      Functional or service-level classification for the GNode.
-      Intentionally namespace-scoped and organization-defined.
-      Does not alter structural interoperability, which is governed
-      by BaseClass.
+      Functional or role-based classification for the GNode. Interpreted
+      according to the namespace of the registering organization. This field is a
+      free-form string, not a universal enum. 
 
   Status:
     $ref: "https://schemas.electricity.works/enums/g.node.status/000"
