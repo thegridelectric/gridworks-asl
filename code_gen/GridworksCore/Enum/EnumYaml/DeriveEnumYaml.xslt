@@ -20,7 +20,7 @@
     <xsl:template match="/">
         <FileSet>
             <FileSetFiles>
-                <xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='gwasl') and not (NoVersions = 'true')]">
+                <xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='sema') and not (NoVersions = 'true')]">
                 <xsl:variable name="enum-id" select="GtEnumId"/>
                 <xsl:variable name="enum-version" select="EnumVersion"/>
                 <xsl:variable name="enum-name" select="EnumName"/>
@@ -40,7 +40,7 @@
 <xsl:text>$schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "https://schemas.electricity.works/enums/</xsl:text><xsl:value-of select="$enum-name"/><xsl:text>"
 
-# For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
+# For comprehensive Sema documentation, see: https://sema.readthedocs.io/
 title: "</xsl:text><xsl:value-of select="$enum-name"/><xsl:text>"
 type: "string"
 description: "</xsl:text>

@@ -285,7 +285,7 @@
       <Default>rec5svAkkfOVVivwp</Default>
       <DefaultSymbol>7bb394b3</DefaultSymbol>
       <DefaultEnumValue>Unknown</DefaultEnumValue>
-      <Description>Categorizes message delivery patterns for ASL types.
+      <Description>Categorizes message delivery patterns for Sema types.
 See [Message Delivery Architecture](https://gridworks.readthedocs.io/message-delivery-architecture/) for details.</Description>
       <VersionedEnums>recpcXHKmq6eR4RwL</VersionedEnums>
       <AirtableId>rec7pzii3dy9m3jCe</AirtableId>
@@ -2622,7 +2622,7 @@ See [Message Delivery Architecture](https://gridworks.readthedocs.io/message-del
       <EnumType>UpperPython</EnumType>
       <DefaultEnumValue>Unknown</DefaultEnumValue>
       <GtEnumId>rec7pzii3dy9m3jCe</GtEnumId>
-      <Description>Categorizes message delivery patterns for ASL types.
+      <Description>Categorizes message delivery patterns for Sema types.
 See [Message Delivery Architecture](https://gridworks.readthedocs.io/message-delivery-architecture/) for details.</Description>
       <ProtocolEnums>recNmqSEf7jl4AsqG</ProtocolEnums>
       <ProtocolEnums>recg8e1DnzER2kCNi</ProtocolEnums>
@@ -7175,7 +7175,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
     </TypeAttribute>
     <TypeAttribute json:Array="true">
       <TypeAttributeId>rec0AFxprybFFfPgz</TypeAttributeId>
-      <Value>ScadaAliasList</Value>
+      <Value>ScadaAliSemaist</Value>
       <IsRequired>true</IsRequired>
       <IsPrimitive>true</IsPrimitive>
       <IsList>true</IsList>
@@ -7227,7 +7227,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
     </TypeAttribute>
     <TypeAttribute json:Array="true">
       <TypeAttributeId>rec0CcV18jeIt4AII</TypeAttributeId>
-      <Value>OldChildAliasList</Value>
+      <Value>OldChildAliSemaist</Value>
       <IsRequired>true</IsRequired>
       <IsPrimitive>true</IsPrimitive>
       <IsList>true</IsList>
@@ -7289,7 +7289,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
     </TypeAttribute>
     <TypeAttribute json:Array="true">
       <TypeAttributeId>rec0EFbgjuaALp5xv</TypeAttributeId>
-      <Value>AboutNodeAliasList</Value>
+      <Value>AboutNodeAliSemaist</Value>
       <IsRequired>true</IsRequired>
       <IsPrimitive>true</IsPrimitive>
       <IsList>true</IsList>
@@ -7303,7 +7303,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
       <VersionedType>rec93KBYcwiqJ6OQy</VersionedType>
       <Description>List of aliases of the SpaceHeat Nodes getting measured</Description>
       <Idx>1</Idx>
-      <Title>AboutNodeAliasList</Title>
+      <Title>AboutNodeAliSemaist</Title>
       <TypeInPayload>String</TypeInPayload>
       <Format>LeftRightDot</Format>
       <PreValidateFormat />
@@ -7432,7 +7432,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
     </TypeAttribute>
     <TypeAttribute json:Array="true">
       <TypeAttributeId>rec0W9aExBJ7Kueom</TypeAttributeId>
-      <Value>AtomicTNodeAliasList</Value>
+      <Value>AtomicTNodeAliSemaist</Value>
       <IsRequired>true</IsRequired>
       <IsPrimitive>true</IsPrimitive>
       <IsList>true</IsList>
@@ -8268,7 +8268,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
     </TypeAttribute>
     <TypeAttribute json:Array="true">
       <TypeAttributeId>rec2EuDcLlLMuM7C5</TypeAttributeId>
-      <Value>ChildAliasList</Value>
+      <Value>ChildAliSemaist</Value>
       <IsRequired>true</IsRequired>
       <IsPrimitive>true</IsPrimitive>
       <IsList>true</IsList>
@@ -15907,7 +15907,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
     </TypeAttribute>
     <TypeAttribute json:Array="true">
       <TypeAttributeId>recHYSlx2bkFlTrmH</TypeAttributeId>
-      <Value>AboutNodeAliasList</Value>
+      <Value>AboutNodeAliSemaist</Value>
       <IsRequired>true</IsRequired>
       <IsPrimitive>true</IsPrimitive>
       <IsList>true</IsList>
@@ -25456,7 +25456,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
       <VersionedSubTypeName>gt.sh.status.snapshot.110</VersionedSubTypeName>
       <IsEnum>false</IsEnum>
       <IsType>true</IsType>
-      <TestValue>{"TelemetryNameList": ["90495d90"], "AboutNodeAliasList": ["a.elt1.relay"], "ReportTimeUnixMs": 1656363448000, "ValueList": [1], "TypeAlias": "gt.sh.status.snapshot.110"}</TestValue>
+      <TestValue>{"TelemetryNameList": ["90495d90"], "AboutNodeAliSemaist": ["a.elt1.relay"], "ReportTimeUnixMs": 1656363448000, "ValueList": [1], "TypeAlias": "gt.sh.status.snapshot.110"}</TestValue>
       <VersionedType>reccy0CAc6XAa6fGb</VersionedType>
       <VersionedSubType>recauOuVBqhRdNWcN</VersionedSubType>
       <TypeInPayload>gt.sh.status.snapshot.110</TypeInPayload>
@@ -28169,7 +28169,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
     </TypeAttribute>
     <TypeAttribute json:Array="true">
       <TypeAttributeId>rechYoiSzlYAU1ZWD</TypeAttributeId>
-      <Value>AboutNodeAliasList</Value>
+      <Value>AboutNodeAliSemaist</Value>
       <IsRequired>true</IsRequired>
       <IsPrimitive>true</IsPrimitive>
       <IsList>true</IsList>
@@ -29184,7 +29184,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
       <VersionedSubTypeName>gt.sh.status.snapshot.110</VersionedSubTypeName>
       <IsEnum>false</IsEnum>
       <IsType>true</IsType>
-      <TestValue>{"TelemetryNameList": ["90495d90"], "AboutNodeAliasList": ["a.elt1.relay"], "ReportTimeUnixMs": 1656363448000, "ValueList": [1], "TypeAlias": "gt.sh.status.snapshot.110"}</TestValue>
+      <TestValue>{"TelemetryNameList": ["90495d90"], "AboutNodeAliSemaist": ["a.elt1.relay"], "ReportTimeUnixMs": 1656363448000, "ValueList": [1], "TypeAlias": "gt.sh.status.snapshot.110"}</TestValue>
       <VersionedType>recVIr500A203gkcH</VersionedType>
       <VersionedSubType>recauOuVBqhRdNWcN</VersionedSubType>
       <TypeInPayload>gt.sh.status.snapshot.110</TypeInPayload>
@@ -35880,7 +35880,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
       <IsType>false</IsType>
       <TestValue>["ad19e79c"]</TestValue>
       <VersionedType>rec93KBYcwiqJ6OQy</VersionedType>
-      <Description>List of the TelemetryNames. The nth name in this list indicates the TelemetryName of the nth alias in the AboutNodeAliasList.</Description>
+      <Description>List of the TelemetryNames. The nth name in this list indicates the TelemetryName of the nth alias in the AboutNodeAliSemaist.</Description>
       <DefaultEnumValue>Unknown</DefaultEnumValue>
       <Idx>2</Idx>
       <EnumType>UpperPython</EnumType>
@@ -36012,7 +36012,7 @@ The A Tariff is their standard residential tariff. Look for rate A in Versant
       <VersionedSubTypeName>telemetry.snapshot.spaceheat.000</VersionedSubTypeName>
       <IsEnum>false</IsEnum>
       <IsType>true</IsType>
-      <TestValue>{"TelemetryNameList": ["5a71d4b3"], "AboutNodeAliasList": ["a.elt1.relay"], "ReportTimeUnixMs": 1656363448000, "ValueList": [1], "TypeName": "telemetry.snapshot.spaceheat", "Version": "000"}</TestValue>
+      <TestValue>{"TelemetryNameList": ["5a71d4b3"], "AboutNodeAliSemaist": ["a.elt1.relay"], "ReportTimeUnixMs": 1656363448000, "ValueList": [1], "TypeName": "telemetry.snapshot.spaceheat", "Version": "000"}</TestValue>
       <VersionedType>recrnRklRws6Txbqr</VersionedType>
       <VersionedSubType>recdNEAMkZeOLS8Vo</VersionedSubType>
       <Idx>2</Idx>
@@ -36989,7 +36989,7 @@ bool(MAC_REGEX.match(mac_str.lower()))</Description>
     <TypeAxiom json:Array="true">
       <TypeAxiomId>recEnG4y5Q19QVq6H</TypeAxiomId>
       <Name>gt.sh.telemetry.from.multipurpose.sensor.100 Type Axiom 1</Name>
-      <Description>AboutNodeAliasList, ValueList and TelemetryNameList must all have the same length.</Description>
+      <Description>AboutNodeAliSemaist, ValueList and TelemetryNameList must all have the same length.</Description>
       <AxiomNumber>1</AxiomNumber>
       <Title>ListLengthConsistency</Title>
       <MultiPropertyAxiom>rec93KBYcwiqJ6OQy</MultiPropertyAxiom>
@@ -41942,7 +41942,7 @@ PowerOut = Alpha + Beta * OutsideTempF
       <ProtocolTypes>rec5PIhUgZ2tDEixj</ProtocolTypes>
       <ProtocolTypes>reclvyYWb3M5DdYrC</ProtocolTypes>
       <ProtocolTypes>recW2QiKUo7ogRffl</ProtocolTypes>
-      <ProtocolTypes>recCzQgCHDhaslOGa</ProtocolTypes>
+      <ProtocolTypes>recCzQgCHDhSemaOGa</ProtocolTypes>
       <ProtocolTypes>reciPlqxbwegMoV1O</ProtocolTypes>
       <ProtocolTypes>recCwivTs3Kuf8s0O</ProtocolTypes>
       <ProtocolTypes>recQU7S3BNhLEl8CZ</ProtocolTypes>
@@ -42103,7 +42103,7 @@ PowerOut = Alpha + Beta * OutsideTempF
     </Protocol>
     <Protocol json:Array="true">
       <ProtocolId>recMtuD0FitFdKlRY</ProtocolId>
-      <Name>gwasl</Name>
+      <Name>sema</Name>
       <Description>Gridworks Application Shared Langauge</Description>
       <ProtocolEnums>recbgkycUOXpAA3QA</ProtocolEnums>
       <ProtocolEnums>recbj7gUbd0R32qQG</ProtocolEnums>
@@ -43019,7 +43019,7 @@ PowerOut = Alpha + Beta * OutsideTempF
       <TypeStatus>Active</TypeStatus>
     </ProtocolType>
     <ProtocolType json:Array="true">
-      <ProtocolTypeId>recCzQgCHDhaslOGa</ProtocolTypeId>
+      <ProtocolTypeId>recCzQgCHDhSemaOGa</ProtocolTypeId>
       <Name>gwatn machine.states.000</Name>
       <Protocol>rec3nJaxOMLIKJoNY</Protocol>
       <ProtocolName>gwatn</ProtocolName>
@@ -46532,7 +46532,7 @@ Shares the same purpose as gs.pwr, but is not designed to minimize bytes so come
       <ProtocolTypes>recirMC1QMmhYnHr4</ProtocolTypes>
       <ProtocolTypes>recauvd56nDLaFV21</ProtocolTypes>
       <ProtocolTypes>recu9RJy4WVdeQzJI</ProtocolTypes>
-      <ProtocolTypes>recCzQgCHDhaslOGa</ProtocolTypes>
+      <ProtocolTypes>recCzQgCHDhSemaOGa</ProtocolTypes>
       <PropertyFormatsUsed>recqBUbLnGTR2lb2J</PropertyFormatsUsed>
       <PropertyFormatsUsed>recb9fI4kRkTYXDzA</PropertyFormatsUsed>
       <PropertyFormatsUsed>recqSXVzLo8RtEjlH</PropertyFormatsUsed>
@@ -53268,9 +53268,9 @@ PowerOut = Alpha + Beta * OutsideTempF
     </ProtocolEnum>
     <ProtocolEnum json:Array="true">
       <ProtocolEnumId>recCwYbMCv6CJmXNH</ProtocolEnumId>
-      <Name>gwasl recognized.currency.unit.000</Name>
+      <Name>sema recognized.currency.unit.000</Name>
       <Protocol>recMtuD0FitFdKlRY</Protocol>
-      <ProtocolName>gwasl</ProtocolName>
+      <ProtocolName>sema</ProtocolName>
       <LocalEnumName>recognized.currency.unit</LocalEnumName>
       <EnumVersion>000</EnumVersion>
       <VersionedEnum>recQGl3epb56fSYrW</VersionedEnum>
@@ -53403,9 +53403,9 @@ PowerOut = Alpha + Beta * OutsideTempF
     </ProtocolEnum>
     <ProtocolEnum json:Array="true">
       <ProtocolEnumId>recHvWWZCR8DgwoSz</ProtocolEnumId>
-      <Name>gwasl g.node.class.000</Name>
+      <Name>sema g.node.class.000</Name>
       <Protocol>recMtuD0FitFdKlRY</Protocol>
-      <ProtocolName>gwasl</ProtocolName>
+      <ProtocolName>sema</ProtocolName>
       <LocalEnumName>g.node.class</LocalEnumName>
       <EnumVersion>000</EnumVersion>
       <VersionedEnum>recWkEqKyAcQ2Bnsf</VersionedEnum>
@@ -53714,9 +53714,9 @@ PowerOut = Alpha + Beta * OutsideTempF
     </ProtocolEnum>
     <ProtocolEnum json:Array="true">
       <ProtocolEnumId>recSPj8MLTWUSs6he</ProtocolEnumId>
-      <Name>gwasl sh.actor.class.007</Name>
+      <Name>sema sh.actor.class.007</Name>
       <Protocol>recMtuD0FitFdKlRY</Protocol>
-      <ProtocolName>gwasl</ProtocolName>
+      <ProtocolName>sema</ProtocolName>
       <LocalEnumName>actor.class</LocalEnumName>
       <EnumVersion>007</EnumVersion>
       <VersionedEnum>rec9RBLuVI4Ndi7vy</VersionedEnum>
@@ -53759,9 +53759,9 @@ PowerOut = Alpha + Beta * OutsideTempF
     </ProtocolEnum>
     <ProtocolEnum json:Array="true">
       <ProtocolEnumId>recSfQ8nUwyTprKyK</ProtocolEnumId>
-      <Name>gwasl spaceheat.make.model.004</Name>
+      <Name>sema spaceheat.make.model.004</Name>
       <Protocol>recMtuD0FitFdKlRY</Protocol>
-      <ProtocolName>gwasl</ProtocolName>
+      <ProtocolName>sema</ProtocolName>
       <LocalEnumName>make.model</LocalEnumName>
       <EnumVersion>004</EnumVersion>
       <VersionedEnum>recqXVWxN4bZFv5Om</VersionedEnum>
@@ -53928,9 +53928,9 @@ PowerOut = Alpha + Beta * OutsideTempF
     </ProtocolEnum>
     <ProtocolEnum json:Array="true">
       <ProtocolEnumId>recW8fRM8IGTpkbpM</ProtocolEnumId>
-      <Name>gwasl message.category.symbol.000</Name>
+      <Name>sema message.category.symbol.000</Name>
       <Protocol>recMtuD0FitFdKlRY</Protocol>
-      <ProtocolName>gwasl</ProtocolName>
+      <ProtocolName>sema</ProtocolName>
       <LocalEnumName>message.category.symbol</LocalEnumName>
       <EnumVersion>000</EnumVersion>
       <VersionedEnum>recfXEZ6IRZTnqbXw</VersionedEnum>
@@ -54067,9 +54067,9 @@ PowerOut = Alpha + Beta * OutsideTempF
     </ProtocolEnum>
     <ProtocolEnum json:Array="true">
       <ProtocolEnumId>recbgkycUOXpAA3QA</ProtocolEnumId>
-      <Name>gwasl market.quantity.unit.000</Name>
+      <Name>sema market.quantity.unit.000</Name>
       <Protocol>recMtuD0FitFdKlRY</Protocol>
-      <ProtocolName>gwasl</ProtocolName>
+      <ProtocolName>sema</ProtocolName>
       <LocalEnumName>market.quantity.unit</LocalEnumName>
       <EnumVersion>000</EnumVersion>
       <VersionedEnum>recorEllo55G3HvAU</VersionedEnum>
@@ -54082,9 +54082,9 @@ PowerOut = Alpha + Beta * OutsideTempF
     </ProtocolEnum>
     <ProtocolEnum json:Array="true">
       <ProtocolEnumId>recbj7gUbd0R32qQG</ProtocolEnumId>
-      <Name>gwasl market.type.name.000</Name>
+      <Name>sema market.type.name.000</Name>
       <Protocol>recMtuD0FitFdKlRY</Protocol>
-      <ProtocolName>gwasl</ProtocolName>
+      <ProtocolName>sema</ProtocolName>
       <LocalEnumName>market.type.name</LocalEnumName>
       <EnumVersion>000</EnumVersion>
       <VersionedEnum>rectXw5yprhnQbh5X</VersionedEnum>
@@ -54266,9 +54266,9 @@ PowerOut = Alpha + Beta * OutsideTempF
     </ProtocolEnum>
     <ProtocolEnum json:Array="true">
       <ProtocolEnumId>recg8e1DnzER2kCNi</ProtocolEnumId>
-      <Name>gwasl message.category.000</Name>
+      <Name>sema message.category.000</Name>
       <Protocol>recMtuD0FitFdKlRY</Protocol>
-      <ProtocolName>gwasl</ProtocolName>
+      <ProtocolName>sema</ProtocolName>
       <LocalEnumName>message.category</LocalEnumName>
       <EnumVersion>000</EnumVersion>
       <VersionedEnum>recpcXHKmq6eR4RwL</VersionedEnum>
@@ -54760,9 +54760,9 @@ PowerOut = Alpha + Beta * OutsideTempF
     </ProtocolEnum>
     <ProtocolEnum json:Array="true">
       <ProtocolEnumId>recydVnayuniYnL63</ProtocolEnumId>
-      <Name>gwasl spaceheat.telemetry.name.005</Name>
+      <Name>sema spaceheat.telemetry.name.005</Name>
       <Protocol>recMtuD0FitFdKlRY</Protocol>
-      <ProtocolName>gwasl</ProtocolName>
+      <ProtocolName>sema</ProtocolName>
       <LocalEnumName>telemetry.name</LocalEnumName>
       <EnumVersion>005</EnumVersion>
       <VersionedEnum>recn9sMB3Hi3GfBC8</VersionedEnum>

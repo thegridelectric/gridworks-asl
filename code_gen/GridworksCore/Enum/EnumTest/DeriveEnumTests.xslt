@@ -19,7 +19,7 @@
     <xsl:template match="/">
         <FileSet>
             <FileSetFiles>
-                <xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='gwasl')]">
+                <xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='sema')]">
                 <xsl:variable name="enum-id" select="GtEnumId"/>
                 <xsl:variable name="version" select="EnumVersion"/>
                 <xsl:variable name="enum-name" select="EnumName"/>
@@ -43,7 +43,7 @@ Tests for enum </xsl:text><xsl:value-of select="Name"/><xsl:text>.</xsl:text><xs
     <xsl:text>
 """
 
-from gwasl.registry.enums import </xsl:text><xsl:value-of select="$local-class-name"/><xsl:text>
+from sema.registry.enums import </xsl:text><xsl:value-of select="$local-class-name"/><xsl:text>
 
 
 def test_</xsl:text> <xsl:value-of select="translate(LocalName,'.','_')"/>

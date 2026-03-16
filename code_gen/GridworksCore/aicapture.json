@@ -2,11 +2,11 @@
   "ShowHidden": false,
   "ShowAllFiles": false,
   "CurrentPath": "",
-  "Name": "gwasl",
+  "Name": "sema",
   "ProjectSettings": [
     {
       "Name": "project-name",
-      "Value": "gwasl"
+      "Value": "sema"
     }
   ],
   "ProjectTranspilers": [

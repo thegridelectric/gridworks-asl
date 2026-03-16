@@ -19,7 +19,7 @@
     <xsl:template match="/">
         <FileSet>
             <FileSetFiles>
-                <xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='gwasl') and not (NoVersions = 'true')]">
+                <xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='sema') and not (NoVersions = 'true')]">
                 <xsl:variable name="enum-id" select="GtEnumId"/>
                 <xsl:variable name="enum-version" select="EnumVersion"/>
                 <xsl:variable name="enum-name" select="EnumName"/>
@@ -32,7 +32,7 @@
                         </xsl:call-template>
                     </xsl:variable>
                     <FileSetFile>
-                                <xsl:element name="RelativePath"><xsl:text>../../../src/gwasl/enums/</xsl:text>
+                                <xsl:element name="RelativePath"><xsl:text>../../../src/sema/enums/</xsl:text>
                                 <xsl:value-of select="translate(LocalName,'.','_')"/><xsl:text>.py</xsl:text></xsl:element>
 
                         <OverwriteMode>Always</OverwriteMode>
@@ -42,11 +42,11 @@
 <xsl:text>from enum import auto
 from typing import List
 
-from gwasl.registry.enums.gw_str_enum import AslEnum
+from sema.registry.enums.gw_str_enum import SemaEnum
 
 
 class </xsl:text><xsl:value-of select="$enum-class-name"/>
-<xsl:text>(AslEnum):
+<xsl:text>(SemaEnum):
     """
     </xsl:text>
     <!-- Enum description, wrapped, if it exists -->
@@ -87,10 +87,10 @@ class </xsl:text><xsl:value-of select="$enum-class-name"/>
     <xsl:text>
 
     For more information:
-        - [ASL Definition](https://raw.githubusercontent.com/thegridelectric/gridworks-asl/refs/heads/dev/type_definitions/enums/</xsl:text>
+        - [Sema Definition](https://raw.githubusercontent.com/thegridelectric/sema/refs/heads/dev/type_definitions/enums/</xsl:text>
        <xsl:value-of select="$enum-name"/> <xsl:text>.</xsl:text>
        <xsl:value-of select="$enum-version"/><xsl:text>.yaml)
-        - [GridWorks ASL Docs](https://gridworks-asl.readthedocs.io)</xsl:text>
+        - [Sema Docs](https://sema.readthedocs.io)</xsl:text>
 
     <xsl:if test="(normalize-space(Url)!='')">
     <xsl:text>

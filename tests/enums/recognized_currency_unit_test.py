@@ -2,7 +2,7 @@
 Tests for enum recognized.currency.unit.000
 """
 
-from gwasl.registry.enums import RecognizedCurrencyUnit
+from sema.registry.enums import RecognizedCurrencyUnit
 
 
 def test_recognized_currency_unit() -> None:

@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 import yaml
 
-app = FastAPI(title="GridWorks ASL Schema Server")
+app = FastAPI(title="Sema Server")
 
 # Enable CORS for browser access
 app.add_middleware(
@@ -251,9 +251,9 @@ async def list_formats():
 async def root():
     """API root with documentation."""
     return {
-        "name": "GridWorks ASL Schema Server",
+        "name": "SemaServer",
         "description": "JSON Schema definitions for GridWorks Application Shared Language",
-        "documentation": "https://gridworks-asl.readthedocs.io/",
+        "documentation": "https://sema.readthedocs.io/",
         "endpoints": {
             "types": {
                 "get_schema": "/types/{name}/{version}",

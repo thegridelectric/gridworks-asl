@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
-from gwasl.generator.seed_builder import SeedBuilder
+from sema.generator.seed_builder import SeedBuilder
 import tempfile
 import shutil
 
 app = FastAPI()
 
 @app.post("/api/generate")
-async def generate_asl(request: GenerateRequest):
+async def generate_sema(request: GenerateRequest):
     """
     request contains:
     - selected_types: ["power.watts", "channel.readings"]
@@ -30,11 +30,11 @@ async def generate_asl(request: GenerateRequest):
             output_path=output_path
         )
         
-        # Zip the asl/ directory
-        zip_path = shutil.make_archive(f"{tmpdir}/asl", 'zip', output_path / "asl")
+        # Zip the sema/ directory
+        zip_path = shutil.make_archive(f"{tmpdir}/sema", 'zip', output_path / "sema")
         
         return FileResponse(
             zip_path,
             media_type='application/zip',
-            filename=f"{request.repo_name}_asl.zip"
+            filename=f"{request.repo_name}_sema.zip"
         )

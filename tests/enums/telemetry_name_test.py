@@ -2,7 +2,7 @@
 Tests for enum spaceheat.telemetry.name.005
 """
 
-from gwasl.registry.enums import TelemetryName
+from sema.registry.enums import TelemetryName
 
 
 def test_telemetry_name() -> None:

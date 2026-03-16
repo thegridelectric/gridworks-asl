@@ -1,10 +1,9 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "https://schemas.electricity.works/enums/message.category/000"
 
-# For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
 title: "message.category"
 type: "string"
-description: "Categorizes message delivery patterns for ASL types. See [Message Delivery Architecture](https://gridworks.readthedocs.io/message-delivery-architecture/) for details."
+description: "Categorizes message delivery patterns for Sema types. See [Message Delivery Architecture](https://gridworks.readthedocs.io/message-delivery-architecture/) for details."
 
 enum:
   - "Unknown"

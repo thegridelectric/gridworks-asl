@@ -1,7 +1,7 @@
 # api/Dockerfile
 FROM python:3.11
 COPY api/ /app
-COPY src/gridworks_asl/ /app/gridworks_asl
+COPY src/sema/ /app/sema
 # Deploy API independently
 
 # ui/Dockerfile  

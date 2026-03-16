@@ -20,7 +20,7 @@ def type_name_to_python_file(type_name):
 def get_named_type_content(type_name):
     """Get the content of a named type Python file"""
     python_file = type_name_to_python_file(type_name)
-    file_path = f"src/gwasl/named_types/{python_file}"
+    file_path = f"src/sema/named_types/{python_file}"
     
     try:
         with open(file_path, 'r') as file:
@@ -37,13 +37,13 @@ def get_file_content(file_path):
         return f"# File not found: {file_path}"
 
 def find_dependencies(python_content):
-    """Find all gwasl imports in Python content"""
+    """Find all sema imports in Python content"""
     import re
     dependencies = set()
     
-    # Find all gwasl imports
-    gwasl_imports = re.findall(r'from gwasl\.([^\s]+)', python_content)
-    for import_path in gwasl_imports:
+    # Find all sema imports
+    sema_imports = re.findall(r'from sema\.([^\s]+)', python_content)
+    for import_path in sema_imports:
         dependencies.add(import_path)
     
     return dependencies
@@ -55,7 +55,7 @@ def get_all_dependencies(selected_types):
     for type_name in selected_types:
         # Get the named type content
         python_file = type_name_to_python_file(type_name)
-        file_path = f"src/gwasl/named_types/{python_file}"
+        file_path = f"src/sema/named_types/{python_file}"
         
         try:
             with open(file_path, 'r') as file:
@@ -74,23 +74,23 @@ def get_dependency_files(dependencies):
     for dep in dependencies:
         if dep == 'property_format':
             # Single file
-            files[f'gwasl/{dep}.py'] = get_file_content(f'src/gwasl/{dep}.py')
+            files[f'sema/{dep}.py'] = get_file_content(f'src/sema/{dep}.py')
         elif dep.startswith('enums.'):
             # Enum file
             enum_name = dep.split('.')[1]
-            files[f'gwasl/enums/{enum_name}.py'] = get_file_content(f'src/gwasl/enums/{enum_name}.py')
+            files[f'sema/enums/{enum_name}.py'] = get_file_content(f'src/sema/enums/{enum_name}.py')
             # Also include __init__.py
-            files[f'gwasl/enums/__init__.py'] = get_file_content(f'src/gwasl/enums/__init__.py')
+            files[f'sema/enums/__init__.py'] = get_file_content(f'src/sema/enums/__init__.py')
         elif dep.startswith('type_helpers.'):
             # Type helper file
             helper_name = dep.split('.')[1]
-            files[f'gwasl/type_helpers/{helper_name}.py'] = get_file_content(f'src/gwasl/type_helpers/{helper_name}.py')
+            files[f'sema/type_helpers/{helper_name}.py'] = get_file_content(f'src/sema/type_helpers/{helper_name}.py')
             # Also include __init__.py
-            files[f'gwasl/type_helpers/__init__.py'] = get_file_content(f'src/gwasl/type_helpers/__init__.py')
+            files[f'sema/type_helpers/__init__.py'] = get_file_content(f'src/sema/type_helpers/__init__.py')
         elif dep.startswith('named_types.'):
             # Another named type file
             type_name = dep.split('.')[1]
-            files[f'gwasl/named_types/{type_name}.py'] = get_file_content(f'src/gwasl/named_types/{type_name}.py')
+            files[f'sema/named_types/{type_name}.py'] = get_file_content(f'src/sema/named_types/{type_name}.py')
     
     return files
 
@@ -168,7 +168,7 @@ def generate_html():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GridWorks ASL Types</title>
+    <title>Sema Types</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         body {{
@@ -302,7 +302,7 @@ def generate_html():
 </head>
 <body>
     <div class="container">
-        <h2 style="text-align: center; margin-bottom: 40px;">GridWorks ASL Types</h2>
+        <h2 style="text-align: center; margin-bottom: 40px;">Sema Types</h2>
         
         <table>
             <thead>
@@ -455,10 +455,10 @@ def generate_html():
             
             for (const typeName of selectedTypes) {{
                 const content = pythonFiles[typeName] || '';
-                const gwaslImports = content.match(/from gwasl\\.([^\\s]+)/g) || [];
+                const semaImports = content.match(/from sema\\.([^\\s]+)/g) || [];
                 
-                for (const importStatement of gwaslImports) {{
-                    const match = importStatement.match(/from gwasl\\.([^\\s]+)/);
+                for (const importStatement of semaImports) {{
+                    const match = importStatement.match(/from sema\\.([^\\s]+)/);
                     if (match) {{
                         dependencies.add(match[1]);
                     }}
@@ -513,9 +513,9 @@ def generate_html():
             try {{
                 const zip = new JSZip();
                 
-                // Create gwasl/named_types directory and add Python files
-                const gwaslFolder = zip.folder('gwasl');
-                const namedTypesFolder = gwaslFolder.folder('named_types');
+                // Create sema/named_types directory and add Python files
+                const semaFolder = zip.folder('sema');
+                const namedTypesFolder = semaFolder.folder('named_types');
                 
                 // Find all named type dependencies (including registry dependencies)
                 const allNamedTypes = findNamedTypeDependencies(selectedTypes);
@@ -527,7 +527,7 @@ def generate_html():
                     // Get the Python file content from the embedded data
                     const fileContent = pythonFiles[typeName] || `# Type ${{typeName}} - Python file not found: ${{pythonFileName}}
 # This file should contain the Python implementation for the ${{typeName}} type.
-# Please check the src/gwasl/named_types/ directory for the correct implementation.`;
+# Please check the src/sema/named_types/ directory for the correct implementation.`;
                     
                     namedTypesFolder.file(pythonFileName, fileContent);
                 }}
@@ -538,24 +538,24 @@ def generate_html():
                 // Add dependency files
                 for (const dep of dependencies) {{
                     if (dep === 'property_format') {{
-                        const content = dependencyFiles['gwasl/property_format.py'] || `# File not found: gwasl/property_format.py`;
-                        zip.file('gwasl/property_format.py', content);
+                        const content = dependencyFiles['sema/property_format.py'] || `# File not found: sema/property_format.py`;
+                        zip.file('sema/property_format.py', content);
                     }} else if (dep.startsWith('enums.')) {{
                         const enumName = dep.split('.')[1];
-                        const enumContent = dependencyFiles[`gwasl/enums/${{enumName}}.py`] || `# File not found: gwasl/enums/${{enumName}}.py`;
-                        zip.file(`gwasl/enums/${{enumName}}.py`, enumContent);
+                        const enumContent = dependencyFiles[`sema/enums/${{enumName}}.py`] || `# File not found: sema/enums/${{enumName}}.py`;
+                        zip.file(`sema/enums/${{enumName}}.py`, enumContent);
                         
                         // Also add __init__.py
-                        const initContent = dependencyFiles['gwasl/enums/__init__.py'] || `# File not found: gwasl/enums/__init__.py`;
-                        zip.file('gwasl/enums/__init__.py', initContent);
+                        const initContent = dependencyFiles['sema/enums/__init__.py'] || `# File not found: sema/enums/__init__.py`;
+                        zip.file('sema/enums/__init__.py', initContent);
                     }} else if (dep.startsWith('type_helpers.')) {{
                         const helperName = dep.split('.')[1];
-                        const helperContent = dependencyFiles[`gwasl/type_helpers/${{helperName}}.py`] || `# File not found: gwasl/type_helpers/${{helperName}}.py`;
-                        zip.file(`gwasl/type_helpers/${{helperName}}.py`, helperContent);
+                        const helperContent = dependencyFiles[`sema/type_helpers/${{helperName}}.py`] || `# File not found: sema/type_helpers/${{helperName}}.py`;
+                        zip.file(`sema/type_helpers/${{helperName}}.py`, helperContent);
                         
                         // Also add __init__.py
-                        const initContent = dependencyFiles['gwasl/type_helpers/__init__.py'] || `# File not found: gwasl/type_helpers/__init__.py`;
-                        zip.file('gwasl/type_helpers/__init__.py', initContent);
+                        const initContent = dependencyFiles['sema/type_helpers/__init__.py'] || `# File not found: sema/type_helpers/__init__.py`;
+                        zip.file('sema/type_helpers/__init__.py', initContent);
                     }}
                 }}
                 

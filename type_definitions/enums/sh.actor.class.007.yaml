@@ -1,7 +1,6 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "https://schemas.electricity.works/enums/sh.actor.class/007"
 
-# For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
 title: "sh.actor.class"
 type: "string"
 description: "Determines the code running Spaceheat Nodes supervised by Spaceheat SCADA software"

@@ -2,7 +2,7 @@
 Tests for enum sh.actor.class.007
 """
 
-from gwasl.registry.enums import ActorClass
+from sema.registry.enums import ActorClass
 
 
 def test_actor_class() -> None:

@@ -20,14 +20,14 @@
         <FileSet>
 
             <FileSetFile>
-                    <xsl:element name="RelativePath"><xsl:text>../../../../src/gwasl/enums/__init__.py</xsl:text></xsl:element>
+                    <xsl:element name="RelativePath"><xsl:text>../../../../src/sema/enums/__init__.py</xsl:text></xsl:element>
 
                 <OverwriteMode>Always</OverwriteMode>
                 <xsl:element name="FileContents">
 <xsl:text>"""
-Enums available in the GridWorks Application Shared Languages (ASL)
+Enums available in Sema
 
-GridWorks ASL enables peer-to-peer shared vocabulary between energy system actors like 
+Sema enables peer-to-peer shared vocabulary between energy system actors like 
 SCADA devices, trading nodes, and market makers. Enums serve as the "controlled vocabulary" 
 foundation that ensures everyone speaks the same language.
 
@@ -38,27 +38,27 @@ Key characteristics:
  - Organizational autonomy: Each organization can build exactly the sophistication they need
    on top of shared foundations
  - Constitutional governance: Follow naming conventions (left.right.dot format) and 
-   ownership rules defined in the ASL registry
+   ownership rules defined in the Sema registry
 
 Enums are the semantic building blocks that enable organizations to collaborate without 
 compromising their independence. Unlike APIs where one party controls the vocabulary, 
-ASL enums evolve through community governance while maintaining stability.
+Sema enums evolve through community governance while maintaining stability.
 
 Application Shared Languages represent an evolution beyond traditional APIs - enabling 
 true peer-to-peer collaboration where organizations maintain autonomy while sharing 
 vocabulary, rather than client/server relationships where one party dictates the interface.
 
 For more information:
- - [Why GridWorks ASL Exists](https://gridworks-asl.readthedocs.io/motivation/)
- - [ASL Rules and Guidelines](https://gridworks-asl.readthedocs.io/rules-and-guidelines/) 
- - [GridWorks ASL Overview](https://gridworks-asl.readthedocs.io/)
+ - [Why Sema exists](https://sema.readthedocs.io/motivation.md)
+ - [Sema Specifications](https://sema.readthedocs.io/sema-specifications.md) 
+ - [Where meaning lives in gridworks](https://sema.readthedocs.io/where-meaing-lives-in-gridworks)
 """
 </xsl:text>
 
-<xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='gwasl') and not(normalize-space(EnumName)='')]">
+<xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='sema') and not(normalize-space(EnumName)='')]">
 <xsl:sort select="LocalEnumName" data-type="text"/>
 <xsl:text>
-from gwasl.registry.enums.</xsl:text>
+from sema.registry.enums.</xsl:text>
 <xsl:value-of select="translate(LocalEnumName,'.','_')"/>
 <xsl:text> import </xsl:text>
 <xsl:call-template name="nt-case">
@@ -71,7 +71,7 @@ from gwasl.registry.enums.</xsl:text>
 
 
 __all__ = [</xsl:text>
-<xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='gwasl')]">
+<xsl:for-each select="$airtable//ProtocolEnums/ProtocolEnum[(normalize-space(ProtocolName) ='sema')]">
 <xsl:sort select="LocalEnumName" data-type="text"/>
 <xsl:variable name="gt-enum-id" select="GtEnumId"/>
 

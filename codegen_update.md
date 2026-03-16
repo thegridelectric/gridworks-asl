@@ -53,7 +53,7 @@ class TypeIR:
  ### Minimal Jinja2 example
  ```
  class {{ ir.class_name }}(GwBase):
-    """ASL schema of record [{{ ir.type_name }} v{{ ir.version }}](...)"""
+    """Sema schema of record [{{ ir.type_name }} v{{ ir.version }}](...)"""
     {% for a in ir.attributes -%}
     {{ a.name_py }}: {{ a.py_annotation }}
     {% endfor %}
