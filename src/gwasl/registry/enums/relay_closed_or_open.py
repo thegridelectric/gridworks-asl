@@ -1,9 +1,9 @@
 from enum import auto
 
-from gwasl.registry.enums.gw_str_enum import AslEnum
+from gwasl.registry.enums.gw_str_enum import SemaEnum
 
 
-class RelayClosedOrOpen(AslEnum):
+class RelayClosedOrOpen(SemaEnum):
     RelayClosed = auto()
     RelayOpen = auto()
 

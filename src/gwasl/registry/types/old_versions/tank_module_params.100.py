@@ -1,5 +1,5 @@
 from typing import Literal, Optional
-from gwasl.registry.codec import AslType
+from gwasl.registry.codec import SemaType
 from pydantic import PositiveInt, field_validator
 
 from gwasl.registry.property_format import (
@@ -7,7 +7,7 @@ from gwasl.registry.property_format import (
 )
 from gwasl.registry.types import TankModuleParams
 
-class TankModuleParams100(AslType):
+class TankModuleParams100(SemaType):
     """
     Parameters expected by a GridWorks TankModule2
     """

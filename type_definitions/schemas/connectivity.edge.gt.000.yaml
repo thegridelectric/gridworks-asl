@@ -1,0 +1,143 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/connectivity.edge.gt/000"
+
+title: "connectivity.edge.gt"
+type: object
+description: >
+  Directed topological edge connecting two Grid Nodes (GNodes) in the
+  physical electric network. This type encodes copper-level adjacency
+  used for graph-based modeling, Kirchhoff power flow calculations,
+  and constraint propagation.
+
+  A ConnectivityEdge represents an oriented structural relationship
+  between two distinct GNodes. Direction SHALL be interpreted as the
+  positive reference direction for flow modeling and graph traversal.
+  Physical power MAY flow in either direction subject to system
+  conditions.
+
+  For a given pair of GNodes, only one structural ConnectivityEdge
+  SHALL exist. Reverse flow SHALL be represented by sign conventions
+  in power quantities and SHALL NOT be modeled by introducing a secondConnectivityEdge reversing the same GNode pair.
+
+  ConnectivityEdge does not encode electrical impedance, capacity,
+  or switching state. It defines structural topology only.
+
+properties:
+
+  Id:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this ConnectivityEdge.
+
+  FromGNodeId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier of the upstream GNode in the directed relationship.
+      This node is the source of the positive reference direction.
+
+  ToGNodeId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier of the downstream GNode in the directed relationship.
+      This node is the target of the positive reference direction.
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Canonical alias of the upstream GNode. Provided for readability,
+      registry lookup, and human interpretability. MUST correspond to
+      FromGNodeId.
+
+  ToGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Canonical alias of the downstream GNode. Provided for readability,
+      registry lookup, and human interpretability. MUST correspond to
+      ToGNodeId.
+
+  Status:
+    $ref: "https://schemas.electricity.works/enums/g.node.status/000"
+    description: >
+      Lifecycle status of this ConnectivityEdge within the registry and
+      coordination system. An edge with Status "Active" participates in
+      topology modeling and graph-based computations. Edges with Status
+      "Suspended" or "PermanentlyDeactivated" SHALL be excluded from
+      active coordination and SHALL NOT be included in topology or
+      power-flow graph construction.
+
+      Status represents administrative lifecycle state only and SHALL
+      NOT be used to represent operational switching state (e.g.,
+      breaker open or closed).
+
+  TypeName:
+    const: "connectivity.edge.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - Id
+  - FromGNodeId
+  - ToGNodeId
+  - FromGNodeAlias
+  - ToGNodeAlias
+  - Status
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Id": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+      "FromGNodeId": "86f3c021-e217-4197-b55f-547a7ab88c30",
+      "ToGNodeId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "FromGNodeAlias": "d1.isone.me.versant.keene",
+      "ToGNodeAlias": "d1.isone.me.versant.keene.beech",
+      "Status": "Active",
+      "TypeName": "connectivity.edge.gt",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "NoSelfLoop"
+      statement: >
+        FromGNodeId SHALL NOT equal ToGNodeId.
+
+  extended_description: >
+    ConnectivityEdge represents structural conductor adjacency only.
+    Most edges correspond directly to parent–child relationships in the
+    GNode hierarchy (for example, substation to feeder or feeder to
+    downstream connectivity node). In these cases, the directed edge
+    makes explicit the physical copper relationship already implied by
+    the structural topology.
+
+    However, real distribution systems may contain tie-lines, loops,
+    and alternate routing paths. The graph formed by ConnectivityEdge
+    objects MAY therefore contain cycles. Acyclicity is not assumed.
+
+    The directed orientation of a ConnectivityEdge establishes a
+    positive reference direction for flow modeling and graph traversal.
+    It does NOT restrict physical power flow to a single direction.
+    Reverse flow SHALL be represented by sign conventions in power
+    quantities rather than by duplicating edges in the opposite
+    direction.
+
+    Status expresses lifecycle participation of the edge in the
+    registry and coordination system. It SHALL NOT be interpreted
+    as operational switching state (e.g., breaker open or closed).
+    Operational configuration of the active network graph MUST be
+    modeled using separate types designed for dynamic topology state.
+
+    Conceptually, ConnectivityEdge aligns with the conductor adjacency
+    relationships represented in IEC 61970/61968 CIM (Common Information
+    Model), where network topology is derived from connections between
+    ConnectivityNodes through conducting equipment. ConnectivityEdge
+    provides a simplified, distribution-level abstraction suitable for
+    graph-based modeling and transactive coordination without adopting
+    the full CIM equipment hierarchy.

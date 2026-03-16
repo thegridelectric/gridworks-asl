@@ -49,27 +49,25 @@ def snake_to_pascal(word: str) -> str:
 
 
 
-class AslError(Exception):
-    """Base exception for ASL-related errors."""
+class SemaError(Exception):
+    """Base exception for Sema-related errors."""
 
 
-T = TypeVar("T", bound="AslType")
+T = TypeVar("T", bound="SemaType")
 
-class AslType(BaseModel):
+class SemaType(BaseModel):
     """
-    Base class for the Application Shared Language Types
+    Base class for Sema
 
     Notes:
         - `type_name`: Must follow left-right-dot (LRD) format. Subclasses
         are expected to overwrite this with a literal. The format is enforced
-        by the ASL Type Registry , which is the source of truth
+        by  Sema.
         - `version`: Must be  a three-digit string (e.g. "000", "001"), or None.
         Subclasses are expected to overwrite this with either a literal or a
         string, with the literal (strict versioning) being the default. The
-        format is enforced by the ASL Type Registry, which is the source of truth.
+        format is enforced by the Sema.
 
-    For more information:
-      - [GridWorks ASL Docs](https://gridworks-asl.readthedocs.io)
     """
 
     type_name: str
@@ -86,28 +84,27 @@ class AslType(BaseModel):
         return self.model_dump_json(exclude_none=True, by_alias=True).encode()
 
     def to_dict(self) -> dict[str, Any]:
-        json_bytes = self.model_dump_json(exclude_none=True, by_alias=True)
-        return json.loads(json_bytes)
+        return self.model_dump(exclude_none=True, by_alias=True)
 
     @classmethod
     def from_bytes(cls, json_bytes: bytes) -> Self:
         try:
             d = json.loads(json_bytes)
         except TypeError as e:
-            raise AslError("Type must be string or bytes!") from e
+            raise SemaError("Type must be string or bytes!") from e
         return cls.from_dict(d)
 
     @classmethod
     def from_dict(cls, d: dict) -> Self:
         if not recursively_pascal(d):
-            raise AslError(
+            raise SemaError(
                 f"Dictionary keys must be recursively PascalCase. "
                 f"Found: {d}. Consider checking nested structures."
             )
         try:
             t = cls.model_validate(d)
         except ValidationError as e:
-            raise AslError(f"Validation failed for {cls.__name__}: {e}") from e
+            raise SemaError(f"Validation failed for {cls.__name__}: {e}") from e
         return t
 
     @classmethod
@@ -129,7 +126,7 @@ class AslType(BaseModel):
         # return the Version defined in the subclass
         return cls.model_fields["version"].default
 
-    def to_latest(self) -> "AslType":
+    def to_latest(self) -> "SemaType":
         """
         Convert to the latest version of this type.
 

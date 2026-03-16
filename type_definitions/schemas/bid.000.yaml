@@ -50,13 +50,13 @@ properties:
       by the associated MarketType.
 
   PriceUnit:
-    $ref: "https://schemas.electricity.works/enums/market.price.unit"
+    $ref: "https://schemas.electricity.works/enums/market.price.unit/000"
     description: >
       Unit of the price axis for this bid. MUST match the PriceUnit declared by
       the MarketType associated with the MarketSlot.
 
   QuantityUnit:
-    $ref: "https://schemas.electricity.works/enums/market.quantity.unit"
+    $ref: "https://schemas.electricity.works/enums/market.quantity.unit/000"
     description: >
       Unit of the quantity axis for this bid. MUST match the QuantityUnit
       declared by the MarketType associated with the MarketSlot.
@@ -74,6 +74,13 @@ properties:
       any, are established by clearing, dispatch, and settlement processes
       external to this message.
 
+  # Identity Fields
+  TypeName:
+    const: "bid"
+
+  Version:
+    const: "000"
+
 required:
   - BidderAlias
   - MarketSlotName
@@ -82,39 +89,42 @@ required:
   - PriceUnit
   - QuantityUnit
   - SignedMarketFeeTxn
+  - TypeName
+  - Version
+
+additionalProperties: false
 
 x-gridworks:
   owner: "gridworks-energy"
-  version: "000"
 
   axioms:
     - number: 1
-      description: >
-        Market normalization anchor.
-        The first price of the first PriceQuantity pair in PqPairs SHALL equal
-        the PriceMax defined by the MarketType associated with MarketSlotName.
+      name: "MarketNormalizationAnchor"
+      statement: >
+        The price of the first element in PqPairs SHALL equal the PriceMax
+        defined by the MarketType associated with MarketSlotName.
 
     - number: 2
-      description: >
-        Unit consistency.
+      name: "UnitConsistency"
+      statement: >
         PriceUnit and QuantityUnit SHALL match the units declared by the
         MarketType associated with MarketSlotName.
 
     - number: 3
-      description: >
-        Curve admissibility.
+      name: "CurveAdmissibility"
+      statement: >
         The structure, ordering, and cardinality of PqPairs SHALL conform to
         the admissibility rules of the MarketType associated with MarketSlotName
         (including any constraints on price ordering, monotonicity, tick size,
         or maximum number of segments).
 
     - number: 4
+      name: "EconomicAdmission"
       description: >
-        Economic admission.
         SignedMarketFeeTxn MUST be verifiable under the market’s fee and
         admission policy for the specified MarketSlot.
 
-  description_extended: >
+  extended_description: >
     The bid type is the foundational economic message of the GridWorks market
     architecture. By enforcing strict normalization against MarketType-defined
     price and quantity domains, bids enable a self-scaling market maker

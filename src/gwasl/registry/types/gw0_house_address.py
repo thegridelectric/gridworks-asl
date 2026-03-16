@@ -1,9 +1,9 @@
 from typing import Literal
 from pydantic import model_validator
 from typing_extensions import Self
-from gwasl.registry.codec import AslType
+from gwasl.registry.codec import SemaType
 
-class Gw0HouseAddress(AslType):
+class Gw0HouseAddress(SemaType):
     street: str
     city: str
     state: str

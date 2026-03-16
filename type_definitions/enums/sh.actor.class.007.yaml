@@ -48,7 +48,8 @@ x-gridworks:
   version: "007"
   value_descriptions:
     "NoActor": "A SpaceheatNode that does not have any code running on its behalf within the SCADA, but is instead only a reference object (for example, a tank of hot water or a resistive element) that can be discussed (for example, the power drawn by the resistive element can be measured) or evaluated (for example, a set of 5 different temperatures in different places on the tank can be used to estimate total thermal energy in the tank)."
-    "Scada": "The SCADA actor is the prime piece of code running and supervising other ProActors within the SCADA code. It is also responsible for managing the state of TalkingWith the AtomicTNode, as well maintaining and reporting a boolean state variable that indicates whether it is following dispatch commands from the AtomicTNode XOR following dispatch commands from its own HomeAlone actor."
+    "PrimaryScada": "Main GridWorks runtime responsible for system control"
+    "SecondaryScada": "Auxiliary runtime that can monitor, recover, and extend the primary runtime (watchdog, OTA recovery, integrations, etc.)."
     "HomeAlone": "HomeAlone is an abstract Spaceheat Actor responsible for dispatching the SCADA when it is not talking with the AtomicTNode."
     "BooleanActuator": "A SpaceheatNode representing a generic boolean actuator capable of turning on (closing a circuit) or turning off (opening a circuit). If the device is a relay that can be directly energized or de-energized, recommend using Relay actor instead."
     "PowerMeter": "A SpaceheatNode representing the power meter that is used to settle financial transactions with the TerminalAsset. That is, this is the power meter whose accuracy is certified in the creation of the TerminalAsset GNode via creation of the TaDeed."

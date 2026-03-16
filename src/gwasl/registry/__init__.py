@@ -1,15 +1,15 @@
 from gwasl.registry.base import (
-    AslError,
-    AslType,
+    SemaError,
+    SemaType,
 )
 from gwasl.registry.codec import (
-    AslCodec,
+    SemaCodec,
     get_current_types,
 )
 
 __all__ = [
-    "AslType",
-    "AslCodec",
-    "AslError",
+    "SemaType",
+    "SemaCodec",
+    "SemaError",
     "get_current_types",
 ]

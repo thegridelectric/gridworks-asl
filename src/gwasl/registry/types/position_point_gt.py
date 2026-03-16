@@ -1,13 +1,13 @@
 from typing import Literal
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from pydantic import StrictInt, model_validator
 from typing_extensions import Self
 
 from gwasl.registry.property_format import UUID4Str
 
 
-class PositionPointGt(AslType):
+class PositionPointGt(SemaType):
     """
     ASL type schema:
     [https://schemas.electricity.works/types/position.point.gt/000](https://schemas.electricity.works/types/position.point.gt/000)

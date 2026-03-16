@@ -1,14 +1,14 @@
 from collections.abc import Sequence
 from typing import Optional
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from pydantic import field_validator
 
 from gwasl.registry.types.channel_config import ChannelConfig
 from gwasl.registry.property_format import UUID4Str
 
 
-class ComponentGt(AslType):
+class ComponentGt(SemaType):
     Id: UUID4Str
     DeviceTypeId: UUID4Str
     ConfigList: Sequence[ChannelConfig]

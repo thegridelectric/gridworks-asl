@@ -1,10 +1,10 @@
 from enum import auto
 from typing import List
 
-from gwasl.registry.enums.gw_str_enum import AslEnum
+from gwasl.registry.enums.gw_str_enum import SemaEnum
 
 
-class RecognizedCurrencyUnit(AslEnum):
+class RecognizedCurrencyUnit(SemaEnum):
     """
     Unit of currency
     Values:

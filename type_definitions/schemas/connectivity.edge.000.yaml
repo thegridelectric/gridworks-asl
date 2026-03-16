@@ -49,7 +49,7 @@ additionalProperties: false
 x-gridworks:
   owner: "gridworks-energy"
   version: "000"
-  description_extended: >
+  extended_description: >
     ConnectivityEdges define the directed edges of the GNode topology graph.
     For every hierarchical relationship implied by the GNode alias structure
     (the Copper Tree), the registry MUST include exactly one ConnectivityEdge.

@@ -1,9 +1,9 @@
 from enum import auto
 
-from gwasl.registry.enums.gw_str_enum import AslEnum
+from gwasl.registry.enums.gw_str_enum import SemaEnum
 
 
-class MarketPriceUnit(AslEnum):
+class MarketPriceUnit(SemaEnum):
     """
     Price unit assigned to MarketMaker MarketType
     Values:

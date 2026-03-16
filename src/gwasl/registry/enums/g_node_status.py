@@ -1,12 +1,12 @@
 from enum import auto
 from typing import List
 
-from gwasl.registry.enums.gw_str_enum import AslEnum
+from gwasl.registry.enums.gw_str_enum import SemaEnum
 
 
-class GNodeStatus(AslEnum):
+class GNodeStatus(SemaEnum):
     """
-    ASL enum schema:
+    Sema:
     [https://schemas.electricity.works/enums/g.node.class/000](https://schemas.electricity.works/enums/g.node.status/000)
     """
     Pending = auto()

@@ -1,10 +1,10 @@
 from enum import auto
 from typing import List
 
-from gwasl.registry.enums.gw_str_enum import AslEnum
+from gwasl.registry.enums.gw_str_enum import SemaEnum
 
 
-class TelemetryName(AslEnum):
+class TelemetryName(SemaEnum):
     """
     Specifies the name of sensed data reported by a Spaceheat SCADA
     Values:

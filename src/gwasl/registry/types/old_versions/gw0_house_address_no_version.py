@@ -1,8 +1,8 @@
 from typing import Literal
-from gwasl.registry.codec import AslType
+from gwasl.registry.codec import SemaType
 from gwasl.registry.types import Gw0HouseAddress
 
-class Gw0HouseAddressNoVersion(AslType):
+class Gw0HouseAddressNoVersion(SemaType):
     street: str
     city: str
     state: str

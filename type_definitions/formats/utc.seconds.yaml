@@ -1,12 +1,11 @@
-# formats/utc.seconds.yaml
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "https://schemas.electricity.works/formats/utc.seconds"
 
 title: "utc.seconds"
 description: |
-  UTC timestamp as seconds since Unix epoch (1970-01-01T00:00:00Z).
-  Supports both integer and floating-point representations.
-  Must be between year 2000 and year 3000 for practical GridWorks usage.
+  UTC timestamp expressed as whole seconds since the Unix epoch
+  (1970-01-01T00:00:00Z). Value is restricted to the range
+  2000-01-01T00:00:00Z through 3000-01-01T00:00:00Z.
   
 type: integer
 minimum: 946684800    # 2000-01-01T00:00:00Z

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from pydantic import PositiveInt,  model_validator
 from typing_extensions import Self
 
@@ -10,7 +10,7 @@ from gwasl.registry.property_format import (
 )
 
 
-class ChannelConfig(AslType):
+class ChannelConfig(SemaType):
     ChannelName: SpaceheatName
     PollPeriodMs: Optional[PositiveInt] = None
     CapturePeriodS: PositiveInt

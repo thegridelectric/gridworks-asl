@@ -1,9 +1,9 @@
 from typing import Literal
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 
 
-class PowerWatts(AslType):
+class PowerWatts(SemaType):
     """
     Real-time power of TerminalAsset in Watts.
 

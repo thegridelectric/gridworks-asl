@@ -1,27 +1,27 @@
-# formats/left_right_dot.yaml
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/formats/left-right-dot"
+$id: "https://schemas.electricity.works/formats/left.right.dot"
 
 title: "left.right.dot"
 description: |
-  Hierarchical identifiers with dots separating levels.
-  Most significant component on the left.
+  Dot-separated hierarchical identifier composed of lowercase
+  alphanumeric segments. The first segment must begin with a
+  lowercase alphabetic character. Subsequent segments may begin
+  with either a lowercase letter or digit. Hierarchy is expressed
+  from left to right, with the most significant component appearing first.
   
 type: string
-pattern: ^[a-z][a-z0-9]*(\.[a-z0-9]+)*$
-# first character must be a lowercase letter
-# followed by zero or more lowercase letters or digits to complete the first word
-# followed by zero or more dot-separated groups of lowercase letters or digits
+minLength: 1
+pattern: "^[a-z][a-z0-9]*(\.[a-z0-9]+)*$"
 
 examples:
-  - "hw1"
+  - "beech.1"
   - "hw1.isone.me.versant.keene.beech"
   
 counterexamples:
-  - "scada.multipurpose-sensor" # ;-' is an illegal character
-  - "2be.or.not" # cannot start with a number
-  - "a..b" # the second segment starts with a dot followed by ONE OR MORE alphanumerics
+  - "scada.multipurpose-sensor" # hyphen not allowed
+  - "2be.or.not"                # cannot start with a number
+  - "a..b"                      # empty segment not allowed
+  - ""                          # empty string invalid
 
 x-gridworks:
   owner: "gridworks-energy"
-  use_cases: ["GNodeAlias", "TypeName"]

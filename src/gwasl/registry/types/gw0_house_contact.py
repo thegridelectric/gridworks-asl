@@ -1,7 +1,7 @@
 from typing import Literal, Optional
-from gwasl.registry.codec import AslType
+from gwasl.registry.codec import SemaType
 
-class Gw0HouseContact(AslType):
+class Gw0HouseContact(SemaType):
     first_name: str
     last_name: Optional[str] = None
     phone: Optional[str] = None

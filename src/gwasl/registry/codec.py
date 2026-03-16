@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from pydantic import ValidationError
 
-from gwasl.registry.base import AslError, AslType, pascal_to_snake, snake_to_pascal
+from gwasl.registry.base import SemaError, SemaType, pascal_to_snake, snake_to_pascal
 
 logger = logging.getLogger(__name__)
 
@@ -14,9 +14,9 @@ logger = logging.getLogger(__name__)
 # CODEC CLASS
 # ============================================================================
 
-class AslCodec:
+class SemaCodec:
     """
-    Codec for this repository's ASL types.
+    Codec for this repository's Sema types.
     Handles version flexibility and naming convention conversion.
     """
 
@@ -35,8 +35,8 @@ class AslCodec:
                     f"Old versions: {list(self.old_versions[type_name].keys())}"
                 )
 
-    def from_dict(self, data: dict) -> AslType:
-        """Decode a dictionary to the appropriate AslType."""
+    def from_dict(self, data: dict) -> SemaType:
+        """Decode a dictionary to the appropriate SemaType."""
         type_name = data.get("TypeName")
         if not type_name:
             raise ValueError("Missing TypeName field")
@@ -80,25 +80,25 @@ class AslCodec:
         data["Version"] = current_version
         try:
             return current_cls.from_dict(data)
-        except (ValidationError, AslError):
+        except (ValidationError, SemaError):
             logger.warning("Stripping unknown fields and retrying")
             data = self._strip_unknown_fields(data, current_cls)
             return current_cls.from_dict(data)
 
 
-    def from_bytes(self, data: bytes) -> AslType:
-        """Decode JSON bytes to the appropriate AslType"""
+    def from_bytes(self, data: bytes) -> SemaType:
+        """Decode JSON bytes to the appropriate SemaType"""
         try:
             d = json.loads(data.decode("utf-8"))
         except (json.JSONDecodeError, UnicodeDecodeError) as e:
             raise ValueError(f"Invalid JSON data: {e}") from e
         return self.from_dict(d)
 
-    def to_bytes(self, msg: AslType) -> bytes:
-        """Encode an AslType to JSON bytes"""
+    def to_bytes(self, msg: SemaType) -> bytes:
+        """Encode an SemaType to JSON bytes"""
         return msg.to_bytes()
 
-    def _strip_unknown_fields(self, data: dict, cls: type[AslType]) -> dict:
+    def _strip_unknown_fields(self, data: dict, cls: type[SemaType]) -> dict:
         """Remove fields not recognized by the target class."""
         valid_fields = set()
         for field_name, field_info in cls.model_fields.items():
@@ -119,9 +119,9 @@ class AslCodec:
 # AUTO-DISCOVERY OF TYPES IN THIS REPO
 # ============================================================================
 
-def get_current_types() -> dict[str, type[AslType]]:
+def get_current_types() -> dict[str, type[SemaType]]:
     """
-    Returns the types declared in `asl/types/__init__.py`
+    Returns the types declared in `sema/types/__init__.py`
     """
     from gwasl.registry import types # noqa PLC0415
     registry = {}
@@ -132,7 +132,7 @@ def get_current_types() -> dict[str, type[AslType]]:
 
     return registry
 
-def get_old_versions() -> dict[str, dict[str | None, type[AslType]]]:
+def get_old_versions() -> dict[str, dict[str | None, type[SemaType]]]:
     """
      Returns a registry of old versions organized by type_name and version.
     Structure: {type_name: {version: class}}
@@ -140,7 +140,7 @@ def get_old_versions() -> dict[str, dict[str | None, type[AslType]]]:
     from gwasl.registry.types import old_versions # noqa PLC0415
     old_types = [getattr(old_versions, name) for name in old_versions.__all__]
 
-    old_registry: dict[str, dict[str | None, type[AslType]]] = defaultdict(dict)
+    old_registry: dict[str, dict[str | None, type[SemaType]]] = defaultdict(dict)
 
     for cls in old_types:
         type_name = cls.type_name_value()
@@ -163,4 +163,4 @@ def get_old_versions() -> dict[str, dict[str | None, type[AslType]]]:
 # ============================================================================
 
 # Create a default codec instance that can be imported
-default_codec = AslCodec()
+default_codec = SemaCodec()

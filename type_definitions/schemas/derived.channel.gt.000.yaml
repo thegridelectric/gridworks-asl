@@ -1,0 +1,103 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/derived.channel.gt/000"
+
+title: "derived.channel.gt"
+type: object
+description: >
+  Canonical definition of a derived telemetry channel within a GridWorks system.
+
+  A derived channel declares a computed telemetry stream whose values are
+  produced from a named computation strategy rather than from direct
+  physical measurement. Derived channels represent transformations,
+  aggregations, or model-based computations over other telemetry streams.
+
+  In the GridWorks SCADA lexicon, channels define the semantic identity
+  of telemetry streams. data.channel.gt defines directly observed
+  measurements, while derived.channel.gt defines computed streams.
+
+properties:
+
+  Id:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this derived channel definition.
+
+  Name:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Short identifier of the derived channel within the terminal asset
+      or SCADA context.
+
+  CreatedByNodeName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Name of the node responsible for computing this derived channel.
+
+  Strategy:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Identifier of the computation strategy used to produce this channel.
+
+  OutputUnit:
+    $ref: "https://schemas.electricity.works/enums/gw1.unit/000"
+    description: >
+      Measurement unit of the derived output values.
+
+  DisplayName:
+    type: string
+    description: >
+      Human-readable name for display and UI purposes.
+
+  TerminalAssetAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Canonical alias of the terminal asset within which this derived channel exists.
+
+  TypeName:
+    const: "derived.channel.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - Id
+  - Name
+  - CreatedByNodeName
+  - Strategy
+  - DisplayName
+  - TerminalAssetAlias
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "CreatedByNodeName": "derived-generator",
+      "DisplayName": "Usable Energy Wh",
+      "Id": "23bf86b8-266a-4244-9b72-914179ab85aa",
+      "Name": "usable-energy",
+      "OutputUnit": "WattHours",
+      "Strategy": "layer-by-layer",
+      "TerminalAssetAlias": "d1.isone.ct.newhaven.orange1.ta",
+      "TypeName": "derived.channel.gt",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  extended_description: >
+    derived.channel.gt defines computed telemetry channels produced from
+    other telemetry streams. These channels represent transformations,
+    aggregations, or model-based computations rather than directly observed
+    measurements.
+
+    Instances of channel.readings referencing a derived channel SHALL be
+    interpreted by resolving ChannelName against derived.channel.gt.Name
+    within the relevant terminal asset / SCADA context.
+
+    Together, data.channel.gt and derived.channel.gt form the semantic
+    backbone for telemetry reporting. channel.readings transports values,
+    and report aggregates those readings for transmission from SCADA nodes.

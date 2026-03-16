@@ -1,13 +1,13 @@
 from typing import Literal
 
-from gwasl.registry.base import AslType, snake_to_pascal
+from gwasl.registry.base import SemaType, snake_to_pascal
 from pydantic import ConfigDict, StrictInt, model_validator
 from typing_extensions import Self
 
 from gwasl.registry.property_format import HandleName, SpaceheatName, UUID4Str
 
 
-class NodeGt(AslType):
+class NodeGt(SemaType):
     name: SpaceheatName
     actor_hierarchy_name: HandleName | None = None
     handle: HandleName | None = None

@@ -1,10 +1,10 @@
 from enum import auto
 from typing import List
 
-from gwasl.registry.enums.gw_str_enum import AslEnum
+from gwasl.registry.enums.gw_str_enum import SemaEnum
 
 
-class MarketTypeName(AslEnum):
+class MarketTypeName(SemaEnum):
     """
     Categorizes different markets run by MarketMaker
     Values:

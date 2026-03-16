@@ -1,8 +1,8 @@
 from typing import Literal, Optional
-from gwasl.registry.codec import AslType
+from gwasl.registry.codec import SemaType
 from gwasl.registry.enums import Gw0RepresentationStatus
 
-class Gw0HouseStatus(AslType):
+class Gw0HouseStatus(SemaType):
     status: Gw0RepresentationStatus
     message: Optional[str] = None
     acked: Optional[bool] = None

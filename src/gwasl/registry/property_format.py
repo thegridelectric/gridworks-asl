@@ -1,4 +1,5 @@
 import uuid
+import re
 from datetime import UTC, datetime
 from typing import Annotated
 
@@ -6,43 +7,21 @@ from pydantic import BeforeValidator
 
 from gwasl.registry.enums import MarketTypeName
 
-def is_algo_address(v: str) -> str:
-    """
-    AlgoAddressStringFormat format: The public key of a private/public Ed25519
-    key pair, transformed into an  Algorand address, by adding a 4-byte checksum
-    to the end of the public key and then encoding in base32.
+_LEFT_RIGHT_DOT_PATTERN = re.compile(
+    r"^[a-z][a-z0-9]*(?:\.[a-z0-9]+)*$"
+)
 
-    Raises:
-        ValueError: if not AlgoAddressStringFormat format
-    """
-    return v
-    # import algosdk
-    # at = algosdk.abi.AddressType()
-    # try:
-    #     at.decode(at.encode(v))
-    # except Exception as e:
-    #     raise ValueError(f"Not AlgoAddressStringFormat: {e}") from e
-    # return v
+_SPACEHEAT_NAME_PATTERN = re.compile(
+    r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+)
 
 
-def is_hex_char(v: str) -> str:
-    """Checks HexChar format
+_HANDLE_PATTERN = re.compile(
+    r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)*$"
+)
 
-    HexChar format: single-char string in '0123456789abcdefABCDEF'
 
-    Args:
-        v (str): the candidate
 
-    Raises:
-        ValueError: if v is not HexChar format
-    """
-    if not isinstance(v, str):
-        raise ValueError(f"<{v}> must be string. Got type <{type(v)}")  # noqa: TRY004
-    if len(v) > 1:
-        raise ValueError(f"<{v}> must be a hex char, but not of len 1")
-    if v not in "0123456789abcdefABCDEF":
-        raise ValueError(f"<{v}> must be one of '0123456789abcdefABCDEF'")
-    return v
 
 
 def is_utc_milliseconds(v: int) -> int:
@@ -85,84 +64,72 @@ def is_utc_seconds(v: int) -> int:
 
 def is_handle_name(v: str) -> str:
     """
-    HandleName format: words separated by periods, where the worlds are lowercase
-    alphanumeric plus hyphens
+    HandleName format:
+    Dot-separated hierarchical identifier composed of lowercase
+    alphanumeric segments with optional internal hyphen-separated words.
+
+    Rules:
+      - Each segment must start with a lowercase letter
+      - Hyphens may appear only between alphanumeric characters
+      - No trailing or leading hyphens in any segment
+      - No empty segments
+      - Entire string must be lowercase
     """
-    try:
-        x = v.split(".")
-    except Exception as e:
-        raise ValueError(f"Failed to seperate <{v}> into words with split'.'") from e
-    first_word = x[0]
-    first_char = first_word[0]
-    if not first_char.isalpha():
-        raise ValueError(
-            f"Most significant word of <{v}> must start with alphabet char."
-        )
-    for word in x:
-        for char in word:
-            if not (char.isalnum() or char == "-"):
-                raise ValueError(
-                    f"words of <{v}> split by by '.' must be alphanumeric or hyphen."
-                )
-    if not v.islower():
-        raise ValueError(f" <{v}> must be lowercase.")
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: HandleName must be a string.")
+
+    if not _HANDLE_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails HandleName format.")
+
     return v
 
 
 def is_left_right_dot(v: str) -> str:
     """
-    LeftRightDot format: Lowercase alphanumeric words separated by periods, with
-    the most significant word (on the left) starting with an alphabet character.
+    Validate the LeftRightDot format.
+
+    Rules:
+      - Must be a string
+      - Dot-separated segments
+      - First segment must start with a lowercase letter
+      - All segments must be lowercase alphanumeric
+      - No empty segments
+      - No leading or trailing dots
+      - No hyphens or underscores
     """
-    try:
-        x = v.split(".")
-    except Exception as e:
-        raise ValueError(
-            f"<{v}>: Fails LeftRightDot format! Failed to seperate into words with split'.'"
-        ) from e
-    first_word = x[0]
-    first_char = first_word[0]
-    if not first_char.isalpha():
-        raise ValueError(
-            f"<{v}>: Fails LeftRightDot format! Most significant word of  must start with alphabet char."
-        )
-    for word in x:
-        if not word.isalnum():
-            raise ValueError(
-                f"<{v}>: Fails LeftRightDot format! words split by by '.' must be alphanumeric."
-            )
-    if not v.islower():
-        raise ValueError(
-            f"<{v}>: Fails LeftRightDot format! All characters must be lowercase."
-        )
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: LeftRightDot must be a string.")
+
+    if not _LEFT_RIGHT_DOT_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails LeftRightDot format.")
+
     return v
 
 
 def is_spaceheat_name(v: str) -> str:
     """
-    SpaceheatName format: Lowercase alphanumeric words separated by hypens
+    Validate the SpaceheatName format.
+
+    Rules:
+      - Must be a string
+      - Single segment (no dots)
+      - Must start with a lowercase alphabetic character
+      - May contain lowercase alphanumeric characters
+      - Hyphens allowed only between alphanumeric characters
+      - No leading or trailing hyphens
+      - No consecutive hyphens
+      - Entire string must be lowercase
+      - Maximum length 64 characters
     """
-    try:
-        x = v.split("-")
-    except Exception as e:
-        raise ValueError(
-            f"<{v}>: Fails SpaceheatName format! Failed to seperate into words with split'-'"
-        ) from e
-    first_word = x[0]
-    first_char = first_word[0]
-    if not first_char.isalpha():
-        raise ValueError(
-            f"<{v}>: Fails SpaceheatName format! Most significant word  must start with alphabet char."
-        )
-    for word in x:
-        if not word.isalnum():
-            raise ValueError(
-                f"<{v}>: Fails SpaceheatName format! words of split by by '-' must be alphanumeric."
-            )
-    if not v.islower():
-        raise ValueError(
-            f"<{v}>: Fails SpaceheatName format! All characters of  must be lowercase."
-        )
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: SpaceheatName must be a string.")
+    
+    if len(v) > 64:
+        raise ValueError(f"<{v}>: SpaceheatName exceeds maximum length of 64.")
+
+    if not _SPACEHEAT_NAME_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails SpaceheatName format.")
+
     return v
 
 
@@ -250,7 +217,6 @@ def is_market_slot_name(v: str) -> str:
 
 
 HandleName = Annotated[str, BeforeValidator(is_handle_name)]
-HexChar = Annotated[str, BeforeValidator(is_hex_char)]
 LeftRightDot = Annotated[str, BeforeValidator(is_left_right_dot)]
 MarketName = Annotated[str, BeforeValidator(is_market_name)]
 MarketSlotName = Annotated[str, BeforeValidator(is_market_slot_name)]
@@ -258,4 +224,3 @@ SpaceheatName = Annotated[str, BeforeValidator(is_spaceheat_name)]
 UTCMilliseconds = Annotated[int, BeforeValidator(is_utc_milliseconds)]
 UTCSeconds = Annotated[int, BeforeValidator(is_utc_seconds)]
 UUID4Str = Annotated[str, BeforeValidator(is_uuid4_str)]
-AlgoAddress = Annotated[str, BeforeValidator(is_algo_address)]

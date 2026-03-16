@@ -1,0 +1,58 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/house0.scada.policy/000"
+
+title: "house0.scada.policy"
+type: object
+description: >
+  House0-specific operational policy directives issued by an LTN to a SCADA.
+  This message expresses long-lived control policy that applies across
+  multiple dispatch contracts. Authority is tied to a specific terminal
+  asset (GNodeAlias) and a specific running LTN instance
+  (GNodeInstanceId), and is cryptographically attestable.
+
+properties:
+
+  # ---- Authority / provenance envelope ----
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Alias of the terminal Grid Node (House0 topology) for which this policy
+      applies. Used to bind the policy to a specific registered asset.
+
+  FromGNodeInstanceId:
+    $ref: "https://schemas.electricity.works/formats/uuid4"
+    description: >
+      Identifier of the running LTN application instance asserting
+      this policy. Used to validate that the sender is an authorized
+      and current instance per the GridNodeRegistry.
+
+  MessageCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Time at which this policy message was created. Used for ordering,
+      freshness checks, and replay protection.
+
+  SignedProof:
+    type: string
+    description: >
+      Cryptographic attestation proving that the identified LTN instance
+      is authorized to assert this policy for the specified GNodeAlias.
+      The exact signing mechanism is defined outside this schema.
+
+  # ---- Policy payload (House0 semantics) ----
+
+  BufferRegulationMode:
+    $ref: "https://schemas.electricity.works/enums/buffer.regulation.mode"
+    description: >
+      Governs how the House0 buffer tank is operated.
+
+
+required:
+  - GNodeAlias
+  - GNodeInstanceId
+  - MessageCreatedMs
+  - SignedProof
+  - BufferRegulationMode
+
+additionalProperties: false

@@ -1,6 +1,6 @@
 from typing import Literal
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from pydantic import PositiveInt
 
 from gwasl.registry.types.channel_readings import ChannelReadings
@@ -13,7 +13,7 @@ from gwasl.registry.property_format import (
 )
 
 
-class Report(AslType):
+class Report(SemaType):
     FromGNodeAlias: LeftRightDot
     SlotStartUnixS: UTCSeconds
     SlotDurationS: PositiveInt

@@ -1,6 +1,6 @@
 from typing import Literal
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from pydantic import StrictInt, model_validator  # Count:true
 from typing_extensions import Self
 
@@ -10,7 +10,7 @@ from gwasl.registry.property_format import (
 )
 
 
-class ChannelReadings(AslType):
+class ChannelReadings(SemaType):
     """
     A list of timestamped readings (values) for a data channel. This is meant to be reported
     for non-local consumption (AtomicTNode, other) by a SCADA. Therefore, the data channel is

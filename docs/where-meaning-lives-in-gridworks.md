@@ -3,30 +3,30 @@
 In any distributed system, there are only three possible places meaning can live:
 the observed behavior of the running system, the database schema, or a declared language.
 
-For GridWorks, **semantic authority lives in the Application Shared Language (ASL).**
+For GridWorks, **semantic authority lives in Sema.**
 
-More precisely: **ASL is the authority over meaning,** while a small, stable, slowly-changing canonical seed database is the authority over **which ASL-typed facts are currently asserted.** The database does not define what things mean; it records facts that are already defined by the language. The two are tightly and deliberately coupled, but they do not play the same role.
+More precisely: **Sema is the authority over meaning,** while a small, stable, slowly-changing canonical seed database is the authority over **which Sema-typed facts are currently asserted.** The database does not define what things mean; it records facts that are already defined by the language. The two are tightly and deliberately coupled, but they do not play the same role.
 
 
-## ASL and the Canonical Seed
+## Sema and the Canonical Seed
 
-The canonical seed database holds the core relational facts of the GridWorks universe — grid nodes, layouts, identities, and other foundational relationships that change slowly and matter everywhere. It is **ASL-correct by construction**: rows reference ASL types, versions, and identities explicitly, so facts cannot silently drift from their declared meaning.
+The canonical seed database holds the core relational facts of the GridWorks universe — grid nodes, layouts, identities, and other foundational relationships that change slowly and matter everywhere. It is **Sema-correct by construction**: rows reference Sema types, versions, and identities explicitly, so facts cannot silently drift from their declared meaning.
 
-This is a case of **tight and careful semantic coupling.** Meaning is declared once, in ASL. Facts are asserted once, in the seed database. Other databases, caches, and analytics systems consume projections of that truth rather than redefining it. Those downstream systems are free to optimize for their own needs. Being “ASL-aware” does not require using ASL types directly in code: developers may reference the declarative definitions informally or use full ASL-typed models; both are acceptable. What matters is that meaning remains explicit and externally defined - personally, I find the typed approach clearer and more durable, but the system does not require it.
+This is a case of **tight and careful semantic coupling.** Meaning is declared once, in Sema. Facts are asserted once, in the seed database. Other databases, caches, and analytics systems consume projections of that truth rather than redefining it. Those downstream systems are free to optimize for their own needs. Being “Sema-aware” does not require using Sema types directly in code: developers may reference the declarative definitions informally or use full Sema-typed models; both are acceptable. What matters is that meaning remains explicit and externally defined - personally, I find the typed approach clearer and more durable, but the system does not require it.
 
 This approach:
   - Does not block multi-reader architectures
-  - Does not require a bijection between all tables and ASL types
-  - Allows ASL to continue evolving in production
-  - Treats ASL as the semantic contract of the system
+  - Does not require a bijection between all tables and Sema types
+  - Allows Sema to continue evolving in production
+  - Treats Sema as the semantic contract of the system
 
 ## Semantic Snapshots and Meaning-Preserving Exports
 
-The canonical seed can be exported periodically as semantic snapshots: versioned, checksummed representations of the asserted ASL-typed facts (for example as JSON, Parquet, or Avro).
+The canonical seed can be exported periodically as semantic snapshots: versioned, checksummed representations of the asserted Sema-typed facts (for example as JSON, Parquet, or Avro).
 
-These snapshots are not required for day-to-day operation, and they do not replace Postgres, replication, or standard database exports. Instead, they serve a different purpose: preserving meaning across time, teams, and systems. A semantic snapshot captures not just the data values, but the ASL types, versions, and identities that give those values their interpretation.
+These snapshots are not required for day-to-day operation, and they do not replace Postgres, replication, or standard database exports. Instead, they serve a different purpose: preserving meaning across time, teams, and systems. A semantic snapshot captures not just the data values, but the Sema types, versions, and identities that give those values their interpretation.
 
-Because the seed database is ASL-correct by construction, conventional exports such as pg_dump, logical replication, or backup syncs remain valid and useful. Semantic snapshots simply make the semantic layer explicit and portable. They provide a stable, auditable artifact that can be replayed, validated, or consumed by downstream systems without requiring shared tribal knowledge or implicit assumptions.
+Because the seed is Sema-correct by construction, conventional exports such as pg_dump, logical replication, or backup syncs remain valid and useful. Semantic snapshots simply make the semantic layer explicit and portable. They provide a stable, auditable artifact that can be replayed, validated, or consumed by downstream systems without requiring shared tribal knowledge or implicit assumptions.
 
 This mirrors the role already played by the S3 persistent store for message history: operational systems run on live infrastructure, while meaning-preserving artifacts ensure long-term coherence and interpretability.
 
@@ -48,6 +48,10 @@ At any moment in time, our understanding of a system is incomplete, imprecise, a
 
 This is especially true on the electric grid, where distribution-level infrastructure is often poorly mapped, field conditions differ from documentation, and behavior emerges from the interaction of many independent actors.
 
-ASL exists to support this mode of operation. By making meaning explicit, versioned, and checkable, ASL allows the system to incorporate new perceptions, new data, and new perspectives without collapsing into implicit assumptions or brittle, ad-hoc behavior. It enables taking the next right step—even when models are partial, forecasts are uncertain, or conditions are changing—while avoiding failure modes caused by silent semantic drift.
+Sema exists to support this mode of operation. By making meaning explicit, versioned, and checkable, Sema allows the system to incorporate new perceptions, new data, and new perspectives without collapsing into implicit assumptions or brittle, ad-hoc behavior. It enables taking the next right step—even when models are partial, forecasts are uncertain, or conditions are changing—while avoiding failure modes caused by silent semantic drift.
 
-In this way, ASL allows for emergence and evolution without chaos.
+In this way, Sema allows for emergence and evolution without chaos.
+
+A key discipline that follows from this is that **any semantic fact that matters for validation or composition must be explicit in the Sema schema**. Meaning is not inferred from naming conventions or implementation details; it is declared once, versioned, and made visible in serialized artifacts.
+
+This is why GridWorks schemas often separate *encoding* from *meaning* (for example, units from quantities), and why new semantic requirements result in schema version increments rather than silent inference.

@@ -1,10 +1,10 @@
 from enum import auto
 from typing import List
 
-from gwasl.registry.enums.gw_str_enum import AslEnum
+from gwasl.registry.enums.gw_str_enum import SemaEnum
 
 
-class MarketQuantityUnit(AslEnum):
+class MarketQuantityUnit(SemaEnum):
     """
     Quantity unit assigned to MarketMaker MarketType
     Values:

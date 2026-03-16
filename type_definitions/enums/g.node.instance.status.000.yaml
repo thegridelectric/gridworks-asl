@@ -1,0 +1,38 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/g.node.instance.status/000"
+
+title: "g.node.instance.status"
+type: "string"
+description: >
+  Lifecycle state of a runtime instance representing a durable Grid Node.
+  This enum describes the authority status of a specific GNodeInstanceId
+  as tracked by the GridWorks Fleet Index Service (FIS).
+
+  Each GNodeInstanceId SHALL be in exactly one status at any given time.
+
+enum:
+  - "Active"
+  - "Revoked"
+  - "Ended"
+
+default: "Active"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+
+    "Active": >
+      This runtime instance currently holds authoritative execution rights
+      for the associated GNodeId. At most one instance per GNodeId may be
+      Active at any time.
+
+    "Revoked": >
+      This runtime instance previously held authority but was superseded
+      or explicitly revoked. A Revoked instance SHALL NOT regain authority
+      without generating a new GNodeInstanceId.
+
+    "Ended": >
+      This runtime instance terminated cleanly and voluntarily relinquished
+      authority. Ended indicates normal shutdown rather than conflict
+      resolution or forced revocation.

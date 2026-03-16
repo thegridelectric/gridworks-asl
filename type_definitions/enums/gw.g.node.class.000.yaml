@@ -1,16 +1,17 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/enums/g.node.class/000"
+$id: "https://schemas.electricity.works/enums/gw.g.node.class/000"
 
-# For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
-title: "g.node.class"
+title: "gw.g.node.class"
 type: "string"
 description: >
-  **Ontology class for Grid Nodes (GNodes), both physical and logical.**
-  This classification defines what kind of entity a GNode represents within 
-  the GridWorks ecosystem—including physical components such as TerminalAssets 
-  and ConnectivityNodes, as well as logical or service-oriented actors such as Scada, 
-  LeafTransactiveNodes, MarketMakers, and forecast services. GNodeClass provides the universal 
-  taxonomy used for routing, orchestration, simulation, and cross-grid coordination.
+  GridWorks functional classification for Grid Nodes (GNodes).
+  Defines the operational or service-level role a GNode performs
+  within the GridWorks ecosystem.
+
+  This enum is specific to GridWorks. Other organizations MAY define
+  their own functional taxonomies under separate namespaces (e.g.,
+  acme.g.node.class). Structural interoperability across organizations
+  is governed by base.g.node.class, not by this enum.
 
 enum:
   - "Unknown"
@@ -31,7 +32,7 @@ x-gridworks:
   value_descriptions:
     "Unknown": "A GNode whose class has not yet been assigned."
     "TerminalAsset": >
-      A physical transactive asset such as a heat pump, hot water heater,residential battery, 
+      A physical transactive asset such as a heat pump, hot water heater, residential battery, 
       electric vehicle, or any other end-use device located behind an atomic metered point.
 
     "ConnectivityNode": >
@@ -54,6 +55,14 @@ x-gridworks:
 
     "Scada": >
       A GNode responsible for local telemetry, data acquisition, and control of a TerminalAsset.
-    "PriceForecastService": "A service that provides weather forecasts to LTNs or other actors."
-    "WeatherForecastService": "A service that provides weather forecasts to LTNs or other actors."
-    "TimeCoordinator": "A service responsible for maintaining simulation time or orchestrated test time across actors."
+
+    "PriceForecastService": >
+      A service that provides forward price projections for planning,
+      bidding, or dispatch optimization.
+
+    "WeatherForecastService": >
+      A service that provides meteorological forecasts used for load and generation prediction.
+
+    "TimeCoordinator": >
+      A service responsible for maintaining simulation time or orchestrated 
+      test time across actors.

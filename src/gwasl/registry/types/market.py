@@ -3,7 +3,7 @@ from typing import Literal, Self
 import pendulum
 from pydantic import model_validator
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from gwasl.registry.enums import MarketCategory, MarketPriceUnit, MarketTypeName
 from gwasl.registry.property_format import (
     LeftRightDot,
@@ -11,7 +11,7 @@ from gwasl.registry.property_format import (
 )
 
 
-class Market(AslType):
+class Market(SemaType):
     name: MarketName
     market_type_name: MarketTypeName
     p_node_alias: LeftRightDot

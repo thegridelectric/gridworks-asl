@@ -1,6 +1,6 @@
 from typing import Literal
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from pydantic import model_validator
 from typing_extensions import Self
 
@@ -11,7 +11,7 @@ from gwasl.registry.property_format import (
 )
 
 
-class MachineStates(AslType):
+class MachineStates(SemaType):
     """ """
 
     MachineHandle: HandleName

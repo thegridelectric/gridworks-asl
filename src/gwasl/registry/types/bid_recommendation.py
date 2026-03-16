@@ -2,13 +2,13 @@ from typing import Literal, Self
 
 from pydantic import model_validator
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from gwasl.registry.enums import MarketPriceUnit, MarketQuantityUnit
 from gwasl.registry.property_format import LeftRightDot, MarketSlotName
 from gwasl.registry.types.price_quantity_unitless import PriceQuantityUnitless
 
 
-class BidRecommendation(AslType):
+class BidRecommendation(SemaType):
     bidder_alias: LeftRightDot
     market_slot_name: MarketSlotName
     pq_pairs: list[PriceQuantityUnitless]

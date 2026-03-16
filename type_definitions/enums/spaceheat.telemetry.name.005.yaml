@@ -1,7 +1,6 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/005"
 
-# For comprehensive ASL documentation, see: https://gridworks-asl.readthedocs.io/
 title: "spaceheat.telemetry.name"
 type: "string"
 description: "Specifies the name of sensed data reported by a Spaceheat SCADA"

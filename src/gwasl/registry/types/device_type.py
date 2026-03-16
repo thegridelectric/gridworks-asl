@@ -1,11 +1,11 @@
 from typing import Optional
 
-from gwasl.registry.base import AslType, snake_to_pascal
+from gwasl.registry.base import SemaType, snake_to_pascal
 from pydantic import ConfigDict
 from gwasl.registry.property_format import UUID4Str
 
 
-class DeviceType(AslType):
+class DeviceType(SemaType):
     Id: UUID4Str
     DisplayName: Optional[str] = None
     Name: str

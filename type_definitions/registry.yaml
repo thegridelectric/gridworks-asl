@@ -5,201 +5,430 @@ metadata:
   maintainer: "gridworks-energy"
 
 formats:
-  left_right_dot:
-    current_version: "000"
-    schema_file: "formats/left_right_dot"
+  handle.name:
+    owner: gridworks-energy
+    schema_url: "https://schemas.electricity.works/formats/handle.name"
+    created: "2026-02-22T16:43:00Z"
+    description: "Dot-separated hierarchical identifier with hyphen-friendly lowercase segments"
 
-  spaceheat_name:
-    current_version: "000"
-    schema_file: "formats/spaceheat_name.yaml"
-  
+  left.right.dot:
+    owner: gridworks-energy
+    schema_url: "https://schemas.electricity.works/formats/left.right.dot"
+    created: "2026-02-22T16:43:00Z"
+    description: "Dot-separated hierarchical identifier composed of lowercase alphanumeric segments"
+
+  spaceheat.name:
+    owner: gridworks-energy
+    schema_url: "https://schemas.electricity.works/formats/spaceheat.name"
+    created: "2026-02-22T16:43:00Z"
+    description: "Single-segment lowercase identifier with optional internal hyphen-separated words"
+
+  utc.milliseconds:
+    owner: gridworks-energy
+    schema_url: "https://schemas.electricity.works/formats/utc.milliseconds"
+    created: "2026-02-22T16:43:00Z"
+    description:  "UTC timestamp in whole milliseconds since Unix epoch (2000–3000 range)"
+
+  utc.seconds:
+    owner: gridworks-energy
+    schema_url: "https://schemas.electricity.works/formats/utc.seconds"
+    created: "2026-02-22T16:43:00Z"
+    description:  "UTC timestamp in whole seconds since Unix epoch (2000–3000 range)"
+
+  uuid4.str:
+    owner: gridworks-energy
+    schema_url: "https://schemas.electricity.works/formats/uuid4.str"
+    created: "2026-02-22T16:43:00Z"
+    description: "Canonical lowercase UUIDv4 string (RFC 4122) in 8-4-4-4-12 format"
   
 enums:
-  actor.class:
-    current_version: "007"
+    base.g.node.class:
+    latest_version: "000"
     owner: gridworks-energy
-    description: "Software actor classes for GridWorks SpaceHeat systems"
-    
+    description: "Universal physical ontology classification for Grid Nodes"
+
     versions:
-      "007":
-        schema_file: "enums/actor.class.007.yaml"
-        created: "2024-06-24T08:00:00Z"
-        stable: true
-        changes_from_previous:
-          - "Added SiegLoop, HpBoss"
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/base.g.node.class/000"
+        created: "2026-02-22T16:43:00Z"
+
+  g.node.instance.status:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "Lifecycle state of a runtime instance tracked by FIS"
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/g.node.instance.status/000"
+        created: "2026-03-04T17:00:00Z"
+
+  g.node.instance.transport:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "Transport protocol used by a runtime instance"
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/g.node.instance.transport/000"
+        created: "2026-03-03T17:00:00Z"
+
+  g.node.status:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "Lifecycle status of a Grid Node within the registry"
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/g.node.status/000"
+        created: "2026-02-22T16:43:00Z"
+
+  gw.g.node.class:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "GridWorks-specific functional classification for GNodes"
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw.g.node.class/000"
+        created: "2026-02-23T17:08:00Z"
+
 
 types:
-  channel.config:
-    current_version: "001"
+
+   derived.channel.gt:
+    latest_version: "002"
     owner: gridworks-energy
-    stable: true
-    versioning_strategy: "string"
-    description: Configuration data used to articulate how time series data is polled and captured for a particular channel.
+    versioning_strategy: "literal"
+    description: "Canonical definition of computed telemetry channels within a GridWorks system."
 
-    versions:
-      "000":
-        schema_file: schemas/channel.config.000.yaml
-        created: "2024-06-01T00:00:00Z"
-        dependencies: [] # TODO: add property format SpaceheatName and enum Unit
-        stable: true # used in production
-      "001":
-        schema_file: schemas/channel.config.001.yaml
-        created: "2024-06-24T07:00:00Z"
-        dependencies: [] # TODO: add property format SpaceheatName
-        breaking_changes_from_previous:
-          - "Removed Unit field and Exponent field - duplicates info in DataChannel"
-        stable: true # used in production
-
-  channel.readings:
-    current_version: "002"
-    stable: true
-    owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: A list of timestamped readings (values) for a data channel. This is meant to be reported for non-local consumption (AtomicTNode, other) by a SCADA. Therefore, the data channel is referenced by its globally unique identifier. The receiver needs to reference this idea against a list of the data channels used by the SCADA for accurate parsing.
-
-    versions:
-      "002": 
-         schema_file: schemas/channel.readings.002.yaml
-         dependencies: [] #property formats spaceheat.name, utc.milliseconds
-         
-
-  component.gt:
-    current_version: "002"
-    owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description:  Authority about components in GridWorks systems belongs to GridWorks Backoffice suite used for managing relational device data .  The Id and DeviceTypeId are immutable.   HwUid is optional but once it is set to a non-null value that is also immutable - it is meant to be an immutable identifier associated to a specific physical device, ideally one that can be read remotely by the SCADA and also by the naked eye. The DisplayName is mutable, with its current value in time governed by the WorldRegistry.
-    
     versions:
       "002":
-        schema_file: schema/component.gt.002.yaml
-        created: "2025-06-24T01:00:00Z"
-        dependencies: 
-          - "channel.config:001"
-          - "UUID4Str"
-        stable: false # dev
+        schema_url: "https://schemas.electricity.works/types/derived.channel.gt/002"
+        created: "2026-03-04T19:00:00Z"
+        summary: "Made OutputUnit required, added OutputQuantity, and enforced dimensional consistency via projection."
+        dependencies:
+          direct:
+            - "emission.method:000"
+            - "gw1.quantity:000"
+            - "gw1.unit:000"
+            - "gw1.unit.quantity.projection:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "uuid4.str"
+          all:
+            - "emission.method:000"
+            - "gw1.quantity:000"
+            - "gw1.unit:000"
+            - "gw1.unit.quantity.projection:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "uuid4.str"
+
       "001":
-        schema_file: schema/component.gt.001.yaml
-        created: "2024-06-01T00:00:00Z"
-        dependencies: 
-          - "channel.config:001"
-          - "UUID4Str"
-        stable: true # dev
+        schema_url: "https://schemas.electricity.works/types/derived.channel.gt/001"
+        created: "2026-02-02T23:00:00Z"
+        summary: "Added emission semantics, input channel references, and strategy parameters."
+        dependencies:
+          direct:
+            - "emission.method:000"
+            - "gw1.unit:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "uuid4.str"
+          all:
+            - "emission.method:000"
+            - "gw1.unit:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "uuid4.str"
+
+      "000":
+        schema_url: "https://schemas.electricity.works/types/derived.channel.gt/000"
+        created: "2025-01-01T00:00:00Z"
+        summary: "Initial commit."
+        dependencies:
+          direct:
+            - "gw1.unit:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "uuid4.str"
+          all:
+            - "gw1.unit:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "uuid4.str"
+
+  connectivity.edge.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Directed topological edge connecting two Grid Nodes in the physical electric network"
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/connectivity.edge.gt/000"
+        created: "2026-02-23T00:00:00Z"
+        summary: "Initial definition of structural copper adjacency between two GNodes"
+        dependencies:
+          direct:
+            - "uuid4.str"
+            - "left.right.dot"
+            - "g.node.status:000"
+          all:
+            - "uuid4.str"
+            - "left.right.dot"
+            - "g.node.status:000"
 
   data.channel.gt:
-    current_version: "001"
+    latest_version: "003"
     owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: Core mechanism for identifying a stream of telemetry data. Everything but the DisplayName and StartS are meant to be immutable. The Name is meant to be unique per TerminalAssetAlias.
+    versioning_strategy: "literal"
+    description: "Canonical definition of a telemetry channel representing directly captured measurements"
 
     versions:
-      "001":
-        schema_file: schemas/data.channel.gt.001
-        created: "2024-06-01T00:00:00Z"
-        dependencies: [] # SpaceheatName, TelemetryName UTCSeconds, UUID4Str
-        stable: true # Used in production
 
-  device.type:
-    current_version: "000"
-    owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: ""
-
-    versions:
-      "000":
-        schema_file: schemas/device.type.000.yaml
-        created: "2024-06-01T00:00:00Z"
-        dependencies: []
-        stable: false
-  
-  gw.channel.config:
-    current_version: "001"
-    owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: ""
-
-    versions:
-      "001":
-        schema_file: schemas/gw.channel.config.001.yaml
-        created: "2024-06-01T00:00:00Z"
-        dependencies: []
-        stable: true
-
-  gw.device.type:
-    current_version: "000"
-    owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: ""
-
-    versions:
-      "000":
-        schema_file: schemas/gw.device.type.000.yaml
-        created: "2024-06-01T00:00:00Z"
-        dependencies: []
-        stable: false
-
-  machine.states:
-    current_version: "001"
-    owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: ""
-
-    versions:
-      "001":
-        schema_file: schemas/machine.states.001.yaml
-        created: "2024-06-01T00:00:00Z"
-        dependencies: []
-        stable: false
-
-  node.gt:
-    current_version: "000"
-    owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: ""
-
-    versions:
-      "000":
-        schema_file: schemas/node.gt.000.yaml
-        created: "2024-06-01T00:00:00Z"
-        dependencies: []
-        stable: false
-    
-  
-  power.watts:
-    current_version: "000"
-    owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: Real-time power measurement in watts. Used by a SCADA -> Atn or Atn -> AggregatedTNode to report real-time power of their TerminalAsset. Positive number means WITHDRAWAL from the grid - so generating electricity creates a negative number. This message is considered worse than useless to send after the first attempt, and does not require an ack. 
-    
-    versions:
-      "000": 
-        schema_file: schemas/power.watts.000.yaml
-        created: "2024-06-01T00:00:00Z"
-        dependencies: []
-        stable: true  # used in production
-
-  report:
-    current_version: "003"
-    owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: "Primary telemetry and state reporting message"
-
-    versions:
       "003":
-        schema_file: schemas/report.003.yaml
-        created: "2024-06-24T06:00:00Z"
+        schema_url: "https://schemas.electricity.works/types/data.channel.gt/003"
+        created: "2026-02-22T00:00:00Z"
+        summary: "Removed StartS"
         dependencies:
-          - "channel.readings:001"
-          - "machine.states:001"
+          direct:
+            - "gw1.quantity:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:006"
+            - "uuid4.str"
+          all:
+            - "gw1.quantity:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:006"
+            - "uuid4.str"
 
-  spaceheat.node.gt:
-    current_version: "000"
+      "002":
+        schema_url: "https://schemas.electricity.works/types/data.channel.gt/002"
+        created: "2026-02-22T00:00:00Z"
+        summary: "Added Quantity field and TelemetryQuantityConsistency axiom."
+        dependencies:
+          direct:
+            - "gw1.quantity:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:006"
+            - "uuid4.str"
+          all:
+            - "gw1.quantity:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:006"
+            - "uuid4.str"
+    
+      "001":
+        schema_url: "https://schemas.electricity.works/types/data.channel.gt/001"
+        created: "2026-02-22T00:00:00Z"
+        summary: "Add TerminalAssetAlias, InPowerMetering, and PowerMeteringConstraint axiom"
+        dependencies:
+          direct:
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:001"
+            - "utc.seconds"
+            - "uuid4.str"
+          all:
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:001"
+            - "utc.seconds"
+            - "uuid4.str"
+
+      "000":
+        schema_url: "https://schemas.electricity.works/types/data.channel.gt/000"
+        created: "2026-02-22T00:00:00Z"
+        summary: "Initial version."
+        dependencies:
+          direct:
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:001"
+            - "utc.seconds"
+            - "uuid4.str"
+          all:
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:001"
+            - "utc.seconds"
+            - "uuid4.str"
+
+  g.node.gt:
+    latest_version: "004"
     owner: gridworks-energy
-    contact: gridworks@gridworks-consulting.com
-    description: ""
+    versioning_strategy: "literal"
+    description: "Fundamental identity object representing physical and logical grid nodes"
+
+    versions:
+      "004":
+        schema_url: "https://schemas.electricity.works/types/g.node.gt/004"
+        created: "2026-02-24T14:00:00Z"
+        summary: "Clarified architectural description, strengthened axioms, and formalized composability model"
+        dependencies:
+          direct:
+            - "base.g.node.class:000"
+            - "g.node.status:000"
+            - "left.right.dot"
+            - "uuid4.str"
+          all:
+            - "base.g.node.class:000"
+            - "g.node.status:000"
+            - "left.right.dot"
+            - "uuid4.str"
+  
+  g.node.instance.gt:
+    latest_version: "000"
+    owner: "gridworks-energy"
+    versioning_strategy: "literal"
+    description: "Runtime execution instance of a GNode identity"
 
     versions:
       "000":
-        schema_file: schemas/spaceheat.node.gt.000.yaml
-        created: "2024-06-01T00:00:00Z"
-        dependencies: []
-        stable: false
+        schema_url: "https://schemas.electricity.works/types/g.node.instance.gt/000"
+        created: "2026-03-04T17:00:00Z"
+        summary: "Initial version"
+        dependencies:
+          direct:
+            - "g.node.instance.status"
+            - "g.node.instance.transport"
+            - "utc.seconds"
+            - "uuid4.str"
+          all:
+            - "g.node.instance.status"
+            - "g.node.instance.transport"
+            - "utc.seconds"
+            - "uuid4.str"
+
+  gw1.unit.quantity.projection:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Canonical projection from gw1.unit to gw1.quantity."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw1.unit.quantity.projection/000"
+        created: "2026-03-04T19:00:00Z"
+        summary: "Initial publication of deterministic Unit → Quantity projection."
+        dependencies:
+          direct:
+            - "gw1.quantity:000"
+            - "gw1.unit:000"
+          all:
+            - "gw1.quantity:000"
+            - "gw1.unit:000"
+
+  position.point.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Geographic position expressed in integer microdegrees (WGS84)"
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/position.point.gt/000"
+        created: "2026-02-24T15:00:00Z"
+        summary: "Initial version"
+        dependencies:
+          direct:
+            - "uuid4.str"
+          all:
+            - "uuid4.str"
+
+  scada.control.capabilities:
+  latest_version: "000"
+  owner: gridworks-energy
+  versioning_strategy: "literal"
+  description: "Projection of the SCADA control surface including controllable nodes, state channels, and relay semantic configuration."
+
+  versions:
+    "000":
+      schema_url: "https://schemas.electricity.works/types/scada.control.capabilities/000"
+      created: "2026-03-02T18:00:00Z"
+      summary: "Initial publication defining relay and DAC control surface projection derived from layout.lite."
+      dependencies:
+        direct:
+          - "i2c.multichannel.dt.relay.component.gt:002"
+          - "left.right.dot"
+          - "sh.actor.class:000"
+          - "spaceheat.name:000"
+          - "utc.milliseconds"
+        all:
+          - "i2c.multichannel.dt.relay.component.gt:002"
+          - "left.right.dot"
+          - "sh.actor.class:000"
+          - "spaceheat.name:000"
+          - "utc.milliseconds"
+
+  send.control.capabilities:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Request message asking a SCADA actor to publish its scada.control.capabilities projection."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/send.control.capabilities/000"
+        created: "2026-03-02T18:15:00Z"
+        summary: "Initial publication defining request for SCADA control capability projection."
+        dependencies:
+          direct:
+            - "left.right.dot"
+            - "utc.milliseconds"
+          all:
+            - "left.right.dot"
+            - "utc.milliseconds"
+
+  send.layout:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Request message asking a SCADA actor to send its current layout.lite."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/send.layout/001"
+        created: "2026-03-02T17:00:00Z"
+        summary: "Replace FromName/ToName routing fields with MessageCreatedMs."
+        dependencies:
+          direct:
+            - "left.right.dot"
+            - "utc.milliseconds"
+          all:
+            - "left.right.dot"
+            - "utc.milliseconds"
+
+      "000":
+        schema_url: "https://schemas.electricity.works/types/send.layout/000"
+        created: "2024-12-09T15:00:00Z"
+        summary: "Initial version."
+        dependencies:
+          direct:
+            - "left.right.dot"
+            - "spaceheat.name:000"
+          all:
+            - "left.right.dot"
+            - "spaceheat.name:000"
+
+  telemetry.name.quantity.projection:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Canonical projection from legacy TelemetryName encodings to gw1.quantity."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/spaceheat.telemetry.name.quantity.projection/000"
+        created: "2026-03-04T19:00:00Z"
+        summary: "Initial publication of deterministic TelemetryName → Quantity projection."
+        dependencies:
+          direct:
+            - "gw1.quantity:000"
+            - "spaceheat.telemetry.name:006"
+          all:
+            - "gw1.quantity:000"
+            - "spaceheat.telemetry.name:006"

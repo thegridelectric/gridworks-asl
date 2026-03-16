@@ -1,6 +1,6 @@
 from typing import Optional
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from pydantic import ConfigDict, PositiveInt, model_validator
 from typing_extensions import Self
 
@@ -9,7 +9,7 @@ from gwasl.registry.property_format import UUID4Str
 from gwasl.registry.type_helpers.device_by_make_model import DEVICE_BY_MAKE_MODEL
 
 
-class GwDeviceType(AslType):
+class GwDeviceType(SemaType):
     Id: UUID4Str
     DisplayName: Optional[str] = None
     Name: MakeModel

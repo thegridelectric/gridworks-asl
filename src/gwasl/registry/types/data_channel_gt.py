@@ -1,6 +1,6 @@
 from typing import Literal, Optional
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from gwasl.registry.property_format import (
     LeftRightDot,
     SpaceheatName,
@@ -9,7 +9,7 @@ from gwasl.registry.property_format import (
 )
 
 
-class DataChannelGt(AslType):
+class DataChannelGt(SemaType):
     Name: SpaceheatName
     DisplayName: str
     AboutNodeName: SpaceheatName

@@ -1,7 +1,7 @@
 from typing import Literal
 from typing_extensions import Self
 
-from gwasl.registry.base import AslType
+from gwasl.registry.base import SemaType
 from pydantic import model_validator
 
 from gwasl.registry.enums import BaseGNodeClass, GNodeStatus
@@ -11,10 +11,9 @@ from gwasl.registry.property_format import (
 )
 
 
-class GNodeGt(AslType):
+class GNodeGt(SemaType):
     """
-    ASL type schema:
-    [https://schemas.electricity.works/types/g.node.gt/004](https://schemas.electricity.works/types/g.node.gt/004)
+    Sema: https://schemas.electricity.works/types/g.node.gt/004
     """
     g_node_id: UUID4Str
     alias: LeftRightDot
