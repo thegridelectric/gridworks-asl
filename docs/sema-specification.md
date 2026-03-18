@@ -1,6 +1,6 @@
 # Sema Specification
 
-Version 1.0.0
+Version 1.0
 
 
 A Shared Vocabulary for Distributed Coordination
