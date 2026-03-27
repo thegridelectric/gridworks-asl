@@ -166,6 +166,15 @@ x-gridworks:
           - Parameters.Calibration SHALL be a valid
             linear.one.dimensional.calibration instance.
 
+    - number: 4
+      name: "SystemModelRequiresParameters"
+      statement: >
+        If Strategy equals "system-model", then:
+          - Parameters SHALL be present.
+          - Parameters SHALL contain a key "EnergyModel".
+          - Parameters.EnergyModel SHALL include:
+              - TypeName
+              - Version
 
   extended_description: >
     derived.channel.gt defines computed telemetry channels produced from

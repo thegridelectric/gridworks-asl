@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/enums/gw1.unit/000"
+$id: "https://schemas.electricity.works/enums/gw1.unit/001"
 
 title: "gw1.unit"
 type: "string"
@@ -17,6 +17,7 @@ enum:
   - "WattHours"
   - "Gallons"
   - "GpmX100"
+  
 
 default: "Unknown"
 

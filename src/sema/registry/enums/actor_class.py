@@ -1,58 +1,47 @@
 from enum import auto
-from typing import List
 
 from sema.registry.enums.gw_str_enum import SemaEnum
 
 
 class ActorClass(SemaEnum):
-    """ Sema: https://schemas.electricity.works/enums/sh.actor.class/007"""
+    """Sema: https://schemas.electricity.works/enums/gw1.actor.class.010"""
 
     NoActor = auto()
-    Scada = auto()
-    HomeAlone = auto()
-    BooleanActuator = auto()
-    PowerMeter = auto()
-    Atn = auto()
-    SimpleSensor = auto()
-    MultipurposeSensor = auto()
-    Thermostat = auto()
-    HubitatTelemetryReader = auto()
-    HubitatTankModule = auto()
-    HubitatPoller = auto()
+    PrimaryScada = auto()
+    SecondaryScada = auto()
+    PowerMeter = auto()  # Primary power meter
+    LocalControl = auto()
+    LeafAlly = auto()
+    DerivedGenerator = auto()
+    PicoCycler = auto()
+    HpBoss = auto()
     I2cRelayMultiplexer = auto()
-    FlowTotalizer = auto()
-    Relay = auto()
-    Admin = auto()
-    Fsm = auto()
-    Parentless = auto()
+    I2cZeroTenMultiplexer = auto()
     Hubitat = auto()
+    Relay = auto()
+    MultipurposeSensor = auto()
     HoneywellThermostat = auto()
     ApiTankModule = auto()
     ApiFlowModule = auto()
-    PicoCycler = auto()
-    I2cDfrMultiplexer = auto()
     ZeroTenOutputer = auto()
-    AtomicAlly = auto()
-    SynthGenerator = auto()
-    FakeAtn = auto()
-    PumpDoctor = auto()
-    StratBoss = auto()
-    HpRelayBoss = auto()
+    ApiBtuMeter = auto()
     SiegLoop = auto()
-    HpBoss = auto()
+    GpioSensor = auto()
+    I2cBus = auto()
+    I2cRelayBoard = auto()
 
     @classmethod
     def default(cls) -> "ActorClass":
         return cls.NoActor
 
     @classmethod
-    def values(cls) -> List[str]:
+    def values(cls) -> list[str]:
         return [elt.value for elt in cls]
 
     @classmethod
     def enum_name(cls) -> str:
-        return "sh.actor.class"
+        return "gw1.actor.class"
 
     @classmethod
     def enum_version(cls) -> str:
-        return "007"
+        return "010"

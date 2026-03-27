@@ -115,10 +115,10 @@ x-gridworks:
   axioms:
 
     - number: 1
-      name: "PhysicalClassAlignment"
+      name: "ClassConsistency"
       statement: >
-        For physical GNodes (BaseClass != Logical), GNodeClass SHALL equal
-        the string value of BaseClass.
+        If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass.
+        If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
 
     - number: 2
       name: "PhysicalGNodeLocations"
@@ -135,6 +135,12 @@ x-gridworks:
       name: "GNodeClassNamespacing"
       statement: >
         GNodeClass SHALL be a non-empty string. It SHALL NOT contain whitespace.
+
+    - number: 5
+      name: "AliasSuffixSemantics"
+      statement: >
+        Alias SHALL end with ".ta" if and only if GNodeClass is "TerminalAsset".
+        Alias SHALL end with ".scada" if and only if GNodeClass is "Scada".
 
   extended_description: >
     Grid Nodes (GNodes) provide the stable identity layer for distributed

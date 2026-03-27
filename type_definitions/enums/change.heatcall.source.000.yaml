@@ -1,0 +1,25 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/heatcall.source/000"
+
+title: "heatcall.source"
+type: "string"
+description: >
+  Source responsible for issuing the heat call signal to a zone.
+  Used to represent control authority in systems where a relay
+  selects between SCADA and a local wall thermostat.
+
+enum:
+  - "WallThermostat"
+  - "Scada"
+
+default: "WallThermostat"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+    "WallThermostat": >
+      Heat call is controlled by the local wall thermostat.
+
+    "Scada": >
+      Heat call is controlled by the SCADA system.

@@ -859,12 +859,30 @@ All required declarations MUST be explicitly listed under `required`.
 
 #### `additionalProperties` Rule
 
-As a default, schemas SHALL declare:
+The preferred default for Sema types is 
 
 ```
 additionalProperties: false
 ```
-This prevents silent semantic drift.
+
+This prevents unintended schema drift and enforces explicit semantic contracts.
+
+However, types under active schema evolution, or types that serve as flexible
+aggregation or embedding layers, MAY declare:
+
+```
+additionalProperties: true
+```
+Such types MUST document this behavior in their description or
+extended_description, including the intended purpose of additional fields.
+
+Over time, as schemas stabilize, types SHOULD transition toward:
+
+
+```
+additionalProperties: false
+```
+
 
 #### Examples (Optional)
 Types MAY include an examples field.

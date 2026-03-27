@@ -1,0 +1,140 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/synced.readings.bundle/000"
+
+title: "synced.readings.bundle"
+type: object
+description: >
+  Time-aligned sequence of synchronized multi-channel readings with embedded
+  channel semantics sufficient for independent interpretation.
+
+  For each channel, values in its associated ValueList are ordered to align
+  by index with TimestampList, such that the value at index i corresponds
+  to TimestampList[i].
+
+  ChannelDefinitions provides the measurement unit required to interpret
+  values for each channel.
+
+properties:
+
+  AboutGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  Start:
+    $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
+
+  End:
+    $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
+
+  TimestampList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
+
+  ChannelReadingsList:
+    type: array
+    items:
+      type: object
+      properties:
+        ChannelName:
+          $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+        ValueList:
+          type: array
+          items:
+            type: integer
+
+      required:
+        - ChannelName
+        - ValueList
+    
+  ChannelDefinitions:
+    type: array
+    description: >
+      Minimal semantic definitions for each channel sufficient to interpret
+      values without reference to external layout.
+    items:
+      type: object
+      properties:
+        Name:
+          $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+        Unit:
+          type: string
+
+      required:
+        - Name
+        - Unit
+      additionalProperties: false
+
+  TypeName:
+    const: "synced.readings.bundle"
+
+  Version:
+    const: "000"
+
+required:
+  - AboutGNodeAlias
+  - Start
+  - End
+  - TimestampList
+  - ChannelReadingsList
+  - ChannelDefinitions
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+
+    - number: 1
+      name: "TerminalAssetAliasConstraint"
+      statement: >
+        AboutGNodeAlias SHALL identify a TerminalAsset and therefore
+        SHALL end with the suffix ".ta".
+
+    - number: 2
+      name: "ChannelDefinitionBijection"
+      statement: >
+        ChannelName values SHALL be unique across ChannelReadingsList, and
+        Name values SHALL be unique across ChannelDefinitions. Furthermore,
+        the set of ChannelName values appearing in ChannelReadingsList SHALL
+        equal the set of Name values appearing in ChannelDefinitions.
+
+
+    - number: 3
+      name: "TimestampAlignment"
+      statement: >
+        For each entry in ChannelReadingsList, the length of ValueList SHALL
+        be equal to len(TimestampList).
+  
+    - number: 4
+      name: "UnitVocabularyConstraint"
+      statement: >
+        For each entry in ChannelDefinitions, Unit SHALL be a valid enum value
+        from either spaceheat.telemetry.name version 006 or gw1.unit version 001.
+
+  extended_description: >
+
+    synced.readings.bundle represents a rectangular, time-aligned dataset
+    across multiple channels.
+
+    ChannelName values are identifiers defined within a GridWorks SCADA layout
+    context (e.g. layout.lite or gw.nolan.layout). They are not globally
+    standardized vocabulary and SHALL be interpreted only within the context
+    in which they were produced.
+
+    ChannelDefinitions provides a minimal projection of channel semantics,
+    including Unit, sufficient to interpret the numeric values in this bundle
+    without requiring access to the full layout.
+
+    In GridWorks systems, full channel definitions are typically available in
+    layout artifacts such as layout.lite, which include additional information
+    such as AboutNodeName, CapturedByNodeName, and derivation strategy. Those
+    details are intentionally omitted here to keep this type lightweight and
+    focused on boundary interpretation.
+
+    All channels share a common TimestampList. For any index i, values across
+    all channels correspond to the same point in time.

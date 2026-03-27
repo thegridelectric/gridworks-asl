@@ -92,6 +92,16 @@ enums:
         schema_url: "https://schemas.electricity.works/enums/gw.g.node.class/000"
         created: "2026-02-23T17:08:00Z"
 
+  relay.wiring.config:
+  latest_version: "000"
+  owner: gridworks-energy
+  description: "Defines how a relay’s COM, NO, and NC terminals are wired into a circuit."
+
+  versions:
+    "000":
+      schema_url: "https://schemas.electricity.works/enums/relay.wiring.config/000"
+      created: "2026-03-20T14:00:00Z"
+
 
 types:
 
@@ -339,6 +349,29 @@ types:
           all:
             - "uuid4.str"
 
+  relay.actor.config:
+  latest_version: "002"
+  owner: gridworks-energy
+  description: "Configuration for a relay-backed actor controlling a physical or logical switching device."
+
+  versions:
+    "002":
+      schema_url: "https://schemas.electricity.works/types/relay.actor.config/002"
+      created: "2026-03-17T00:00:00Z"
+
+      dependencies:
+        direct:
+          - "spaceheat.name"
+          - "left.right.dot"
+          - "relay.wiring.config:000"
+          - "gw1.unit:001"
+
+        all:
+          - "spaceheat.name"
+          - "left.right.dot"
+          - "relay.wiring.config:000"
+          - "gw1.unit:001"
+  
   scada.control.capabilities:
   latest_version: "000"
   owner: gridworks-energy

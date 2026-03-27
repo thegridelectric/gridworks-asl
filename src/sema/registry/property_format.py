@@ -21,9 +21,6 @@ _HANDLE_PATTERN = re.compile(
 )
 
 
-
-
-
 def is_utc_milliseconds(v: int) -> int:
     """
     UTCMilliseconds format: unix milliseconds between Jan 1 2000 and Jan 1 3000
