@@ -28,7 +28,7 @@ properties:
       the specified TelemetryName.
 
   TypeName:
-    const: "spaceheat.telemetry.name.quantity.projection"
+    const: "telemetry.name.quantity.projection"
 
   Version:
     const: "000"
@@ -46,7 +46,7 @@ examples:
     {
       "TelemetryName": "PowerW",
       "Quantity": "Power",
-      "TypeName": "spaceheat.telemetry.name.quantity.projection",
+      "TypeName": "telemetry.name.quantity.projection",
       "Version": "000"
     }
 

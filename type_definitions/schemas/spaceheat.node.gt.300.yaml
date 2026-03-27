@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/schemas/spaceheat.node.gt/200"
+$id: "https://schemas.electricity.works/schemas/spaceheat.node.gt/300"
 
 title: "spaceheat.node.gt"
 type: object
@@ -9,7 +9,7 @@ description: |
 properties:
   Name:
     $ref: "https://schemas.electricity.works/formats/spaceheat.name"
-    description: "Unique name for this node within the system"
+    description: "Unique name for this node within the system."
     
   ActorHierarchyName:
     $ref: "https://schemas.electricity.works/formats/handle.name"

@@ -127,3 +127,11 @@ x-gridworks:
     report messages aggregate channel.readings (ChannelReadingList) along
     with state transitions and FSM outputs for transmission from SCADA nodes
     associated with terminal assets.
+
+    TelemetryName is a legacy field retained for compatibility with existing
+    systems and tooling. Over time, semantics currently encoded in TelemetryName
+    (including unit conventions and scaling) are expected to be represented
+    explicitly using gw1.unit and gw1.quantity.
+
+    Future versions of data.channel.gt may reduce or eliminate reliance on
+    TelemetryName in favor of explicit unit- and quantity-based semantics.

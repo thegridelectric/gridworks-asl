@@ -21,7 +21,47 @@ _HANDLE_PATTERN = re.compile(
 )
 
 
+UTC_SECONDS_PATTERN = re.compile(
+    r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T"
+    r"[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+)
 
+UTC_MILLIS_PATTERN = re.compile(
+    r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T"
+    r"[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$"
+)
+
+
+def is_utc_iso8601_seconds(v: str) -> str:
+    """
+    utc.iso8601.seconds format:
+    UTC timestamp in ISO 8601 format with second precision (no fractional seconds)
+    and a 'Z' suffix.
+    Example: 2025-02-26T00:00:00Z
+    """
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: utc.iso8601.seconds must be a string.")
+
+    if not UTC_SECONDS_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails utc.iso8601.seconds format.")
+
+    return v
+
+
+def is_utc_iso8601_millis(v: str) -> str:
+    """
+    utc.iso8601.millis format:
+    UTC timestamp in ISO 8601 format with exactly three digits of fractional
+    seconds and a 'Z' suffix.
+    Example: 2025-02-26T00:00:00.000Z
+    """
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: utc.iso8601.millis must be a string.")
+
+    if not UTC_MILLIS_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails utc.iso8601.millis format.")
+
+    return v
 
 
 def is_utc_milliseconds(v: int) -> int:
@@ -224,3 +264,5 @@ SpaceheatName = Annotated[str, BeforeValidator(is_spaceheat_name)]
 UTCMilliseconds = Annotated[int, BeforeValidator(is_utc_milliseconds)]
 UTCSeconds = Annotated[int, BeforeValidator(is_utc_seconds)]
 UUID4Str = Annotated[str, BeforeValidator(is_uuid4_str)]
+UtcIso8601Seconds = Annotated[str, BeforeValidator(is_utc_iso8601_seconds)]
+UtcIso8601Millis = Annotated[str, BeforeValidator(is_utc_iso8601_millis)]
