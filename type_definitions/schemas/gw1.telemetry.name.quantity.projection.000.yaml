@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/telemetry.name.quantity.projection/000"
+$id: "https://schemas.electricity.works/types/gw1.telemetry.name.quantity.projection/000"
 
 title: "telemetry.name.quantity.projection"
 type: object
@@ -28,7 +28,7 @@ properties:
       the specified TelemetryName.
 
   TypeName:
-    const: "telemetry.name.quantity.projection"
+    const: "gw1.telemetry.name.quantity.projection"
 
   Version:
     const: "000"
@@ -46,7 +46,7 @@ examples:
     {
       "TelemetryName": "PowerW",
       "Quantity": "Power",
-      "TypeName": "telemetry.name.quantity.projection",
+      "TypeName": "gw1.telemetry.name.quantity.projection",
       "Version": "000"
     }
 

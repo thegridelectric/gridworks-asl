@@ -41,7 +41,7 @@ properties:
         ValueList:
           type: array
           items:
-            type: integer
+            type: number
 
       required:
         - ChannelName
@@ -61,9 +61,15 @@ properties:
         Unit:
           type: string
 
+        UnitType:
+          $ref: "https://schemas.electricity.works/formats/left.right.dot"
+          description: >
+            Name of the Sema vocabulary from which Unit is drawn.
+
       required:
         - Name
         - Unit
+        - UnitType
       additionalProperties: false
 
   TypeName:
@@ -86,46 +92,59 @@ additionalProperties: false
 
 
 examples:
-  - |{
-  "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
-  "Start": "2025-02-26T00:00:00Z",
-  "End": "2025-02-26T00:02:00Z",
-  "TimestampList": [
-    "2025-02-26T00:00:00Z",
-    "2025-02-26T00:01:00Z",
-    "2025-02-26T00:02:00Z"
-  ],
-  "ChannelReadingsList": [
-    {
-      "ChannelName": "buffer-depth1",
-      "ValueList": [4973, 4966, 4979]
-    },
-    {
-      "ChannelName": "hp-ewt",
-      "ValueList": [18234, 18179, 18157]
-    },
-    {
-      "ChannelName": "hp-idu-pwr",
-      "ValueList": [14, 14, 14]
-    },
-  ],
-  "ChannelDefinitions": [
-    {
-      "Name": "buffer-depth1",
-      "Unit": "FahrenheitX100"
-    },
-    {
-      "Name": "hp-ewt",
-      "Unit": "WaterTempCTimes1000"
-    },
-    {
-      "Name": "hp-idu-pwr",
-      "Unit": "Watts"
-    },
-  ],
-  "TypeName": "synced.readings.bundle",
-  "Version": "000"
-}
+  - |
+  {
+    "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
+    "Start": "2025-02-26T00:00:00Z",
+    "End": "2025-02-26T00:02:00Z",
+    "TimestampList": [
+      "2025-02-26T00:00:00Z",
+      "2025-02-26T00:01:00Z",
+      "2025-02-26T00:02:00Z"
+    ],
+    "ChannelReadingsList": [
+      {
+        "ChannelName": "buffer-depth1",
+        "ValueList": [4973, 4966, 4979]
+      },
+      {
+        "ChannelName": "hp-ewt",
+        "ValueList": [18234, 18179, 18157]
+      },
+      {
+        "ChannelName": "hp-idu-pwr",
+        "ValueList": [14, 14, 14]
+      },
+      {
+        "ChannelName": "persistence-delay",
+        "ValueList": [0.231, 0.102, 3650.238]
+      }
+    ],
+    "ChannelDefinitions": [
+      {
+        "Name": "buffer-depth1",
+        "Unit": "FahrenheitX100",
+        "UnitType": "gw1.unit"
+      },
+      {
+        "Name": "hp-ewt",
+        "Unit": "WaterTempCTimes1000",
+        "UnitType": "spaceheat.telemetry.name"
+      },
+      {
+        "Name": "hp-idu-pwr",
+        "Unit": "Watts",
+        "UnitType": "gw1.unit"
+      },
+      {
+        "Name": "persistence-delay",
+        "Unit": "Seconds",
+        "UnitType": "gw1.float.unit"
+      }
+    ],
+    "TypeName": "synced.readings.bundle",
+    "Version": "000"
+  }
 
 x-gridworks:
   owner: "gridworks-energy"
@@ -152,12 +171,29 @@ x-gridworks:
       statement: >
         For each entry in ChannelReadingsList, the length of ValueList SHALL
         be equal to len(TimestampList).
-  
+
     - number: 4
-      name: "UnitVocabularyConstraint"
+      name: "UnitTypeAndValueRepresentationConsistency"
       statement: >
-        For each entry in ChannelDefinitions, Unit SHALL be a valid enum value
-        from either spaceheat.telemetry.name version 006 or gw1.unit version 001.
+        For each entry in ChannelDefinitions:
+
+          - UnitType SHALL equal one of:
+              gw1.unit
+              gw1.float.unit
+              spaceheat.telemetry.name
+
+          - Unit SHALL be a valid value from the specified UnitType version:
+
+            gw1.unit → version 001
+            gw1.float.unit → version 000
+            spaceheat.telemetry.name → version 007
+
+          - If UnitType equals gw1.float.unit, values in ValueList SHALL be
+            interpreted as floating point numbers.
+
+          - If UnitType equals gw1.unit or spaceheat.telemetry.name, values in
+            ValueList are intended to be represented as integers, with any
+            required scaling encoded in the Unit.
 
   extended_description: >
 
@@ -170,8 +206,8 @@ x-gridworks:
     in which they were produced.
 
     ChannelDefinitions provides a minimal projection of channel semantics,
-    including Unit, sufficient to interpret the numeric values in this bundle
-    without requiring access to the full layout.
+    including Unit and UnitType, sufficient to interpret the numeric values
+    in this bundle without requiring access to the full layout.
 
     In GridWorks systems, full channel definitions are typically available in
     layout artifacts such as layout.lite, which include additional information

@@ -1,0 +1,129 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/analytics.channel.gt/000"
+
+title: "analytics.channel.gt"
+type: object
+description: >
+  Canonical definition of a computed telemetry channel scoped to a single
+  terminal asset and produced outside SCADA systems.
+
+  An analytics.channel.gt declares a computation over message streams,
+  telemetry, or system behavior associated with a specific terminal asset.
+  These channels represent analytics-derived signals such as persistence delay,
+  heartbeat-based health, or other observational metrics.
+
+  Unlike derived.channel.gt, analytics.channel.gt is not computed by a GridWorks
+  GNode. Its semantic authority lies in external analytics systems.
+
+properties:
+
+  Id:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this analytics channel definition.
+
+  Name:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Identifier of the channel within the terminal asset context.
+
+  DisplayName:
+    type: string
+    description: >
+      Human-readable name for UI and visualization.
+
+  TerminalAssetAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Canonical alias of the terminal asset whose behavior this channel
+      characterizes.
+
+  ProducedBy:
+    $ref: "https://schemas.electricity.works/enums/analytics.producer/000"
+    description: >
+      Declares the system responsible for producing this channel.
+
+  Strategy:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Identifier of the computation strategy used to produce this channel.
+
+  OutputUnit:
+    $ref: "https://schemas.electricity.works/enums/gw1.float.unit/000"
+    description: >
+      Measurement unit of the output values.
+
+  OutputQuantity:
+    $ref: "https://schemas.electricity.works/enums/gw1.quantity/000"
+    description: >
+      Canonical quantity of the output.
+
+  Parameters:
+    type: object
+    additionalProperties: true
+    description: >
+      Optional strategy-specific configuration.
+
+      Parameters define:
+        - which message types are consumed
+        - filtering conditions (e.g. requires CreatedTimestamp)
+        - aggregation windows or thresholds
+        - any other computation-specific inputs
+
+  TypeName:
+    const: "analytics.channel.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - Id
+  - Name
+  - DisplayName
+  - TerminalAssetAlias
+  - ProducedBy
+  - Strategy
+  - OutputUnit
+  - OutputQuantity
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Id": "9c2f2a3a-6f5a-4f9d-8e4b-1b7c2d1e6a11",
+      "Name": "persistence-delay",
+      "DisplayName": "Persistence Delay Orange1",
+      "TerminalAssetAlias": "d1.isone.ct.newhaven.orange1.ta",
+      "ProducedBy": "GridWorksData",
+      "Strategy": "persistence-delay",
+      "OutputUnit": "Seconds",
+      "OutputQuantity": "Time",
+      "TypeName": "analytics.channel.gt",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+
+    - number: 1
+      name: "OutputUnitQuantityConsistency"
+      statement: >
+        OutputQuantity SHALL equal the Quantity defined by the canonical
+        gw1.float.unit.quantity.projection/000 instance for the specified OutputUnit.
+
+  extended_description: >
+    `analytics.channel.gt` defines computed telemetry channels whose semantic
+    authority lies outside SCADA systems and whose scope is a single
+    terminal asset.
+
+    Values associated with `analytics.channel.gt` SHALL be represented as
+    floating point numbers, with the unit defined by OutputUnit.
+
+    Multi-terminal-asset computations (e.g. aggregation across assets or
+    GNode-based selection) are intentionally excluded from this type and
+    should be represented by a separate aggregation type.
