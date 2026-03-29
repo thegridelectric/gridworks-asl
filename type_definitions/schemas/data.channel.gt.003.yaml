@@ -110,12 +110,22 @@ x-gridworks:
         for the specified TelemetryName.
 
   extended_description: >
-    data.channel.gt defines primary telemetry channels corresponding to
+    `data.channel.gt` defines primary telemetry channels corresponding to
     directly observed measurements from physical devices or sensors.
 
-    In contrast, derived.channel.gt defines computed channels whose values
+    In contrast, `derived.channel.gt` defines computed channels whose values
     are produced from one or more input channels according to a declared
     strategy.
+
+    Telemetry values associated with data.channel.gt are intended to be
+    represented as integers, with any required scaling encoded in the
+    TelemetryName (e.g., Times100, Times1000). 
+
+    This convention supports deterministic and efficient serialization while
+    preserving mechanical interpretability of values. Alternative
+    representations (e.g., floating point values) are expected to be introduced
+    through separate vocabularies rather than modifying the semantics of
+    data.channel.gt.
 
     Telemetry is transported using channel.readings, which includes a
     ChannelName and aligned lists of values and timestamps. channel.readings
@@ -124,7 +134,7 @@ x-gridworks:
     set for the relevant SCADA / terminal asset context (data.channel.gt and
     derived.channel.gt), typically by Name equality.
 
-    report messages aggregate channel.readings (ChannelReadingList) along
+    `report` messages aggregate `channel.readings` (ChannelReadingList) along
     with state transitions and FSM outputs for transmission from SCADA nodes
     associated with terminal assets.
 

@@ -219,6 +219,8 @@ Enum versions:
   - MAY add values.
   - SHALL NOT remove existing values.
 
+Existing values SHALL retain their original ordering.
+
 ### Type Entries
 
 Types may use one of three versioning strategies. 

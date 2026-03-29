@@ -177,15 +177,25 @@ x-gridworks:
               - Version
 
   extended_description: >
-    derived.channel.gt defines computed telemetry channels produced from
+    `derived.channel.gt` defines computed telemetry channels produced from
     other telemetry streams. These channels represent transformations,
     aggregations, or model-based computations rather than directly observed
     measurements.
 
-    Instances of channel.readings referencing a derived channel SHALL be
-    interpreted by resolving ChannelName against derived.channel.gt.Name
+    Telemetry values associated with `derived.channel.gt` are intended to be
+    represented as integers, with any required scaling encoded in the
+    OutputUnit.
+
+    This convention supports deterministic and efficient serialization while
+    preserving mechanical interpretability of values. Alternative
+    representations (e.g., floating point values) are expected to be introduced
+    through separate vocabularies rather than modifying the semantics of
+    `derived.channel.gt`.
+
+    Instances of `channel.readings` referencing a derived channel SHALL be
+    interpreted by resolving ChannelName against `derived.channel.gt`.Name
     within the relevant terminal asset / SCADA context.
 
-    Together, data.channel.gt and derived.channel.gt form the semantic
-    backbone for telemetry reporting. channel.readings transports values,
-    and report aggregates those readings for transmission from SCADA nodes.
+    Together, `data.channel.gt` and `derived.channel.gt` form the semantic
+    backbone for telemetry reporting. `channel.readings` transports values,
+    and `report` aggregates those readings for transmission from SCADA nodes.
