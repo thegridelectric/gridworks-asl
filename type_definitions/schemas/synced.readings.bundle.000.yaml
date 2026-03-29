@@ -84,6 +84,49 @@ required:
 
 additionalProperties: false
 
+
+examples:
+  - |{
+  "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
+  "Start": "2025-02-26T00:00:00Z",
+  "End": "2025-02-26T00:02:00Z",
+  "TimestampList": [
+    "2025-02-26T00:00:00Z",
+    "2025-02-26T00:01:00Z",
+    "2025-02-26T00:02:00Z"
+  ],
+  "ChannelReadingsList": [
+    {
+      "ChannelName": "buffer-depth1",
+      "ValueList": [4973, 4966, 4979]
+    },
+    {
+      "ChannelName": "hp-ewt",
+      "ValueList": [18234, 18179, 18157]
+    },
+    {
+      "ChannelName": "hp-idu-pwr",
+      "ValueList": [14, 14, 14]
+    },
+  ],
+  "ChannelDefinitions": [
+    {
+      "Name": "buffer-depth1",
+      "Unit": "FahrenheitX100"
+    },
+    {
+      "Name": "hp-ewt",
+      "Unit": "WaterTempCTimes1000"
+    },
+    {
+      "Name": "hp-idu-pwr",
+      "Unit": "Watts"
+    },
+  ],
+  "TypeName": "synced.readings.bundle",
+  "Version": "000"
+}
+
 x-gridworks:
   owner: "gridworks-energy"
 
