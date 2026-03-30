@@ -79,7 +79,7 @@ properties:
   DataChannels:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/data.channel.gt/001"
+      $ref: "https://schemas.electricity.works/types/data.channel.gt/002"
     description: >
       Raw telemetry channel definitions used to interpret channel names appearing
       in reports and snapshots.
@@ -114,7 +114,7 @@ properties:
       Active HA1 parameter set used by the running deployment.
 
   I2cRelayComponent:
-    $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002"
+    $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/000"
     description: >
       Optional relay component configuration used by the running deployment.
 

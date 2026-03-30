@@ -160,64 +160,49 @@ types:
             - "uuid4.str"
 
   data.channel.gt:
-    latest_version: "003"
+    latest_version: "002"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Canonical definition of a telemetry channel representing directly captured measurements"
 
     versions:
 
-      "003":
-        schema_url: "https://schemas.electricity.works/types/data.channel.gt/003"
-        created: "2026-02-22T00:00:00Z"
-        summary: "Removed StartS"
-        dependencies:
-          structural_direct:
-            - "gw1.quantity:000"
-            - "left.right.dot"
-            - "spaceheat.name"
-            - "spaceheat.telemetry.name:006"
-            - "uuid4.str"
-          all:
-            - "gw1.quantity:000"
-            - "left.right.dot"
-            - "spaceheat.name"
-            - "spaceheat.telemetry.name:006"
-            - "uuid4.str"
-
       "002":
         schema_url: "https://schemas.electricity.works/types/data.channel.gt/002"
-        created: "2026-02-22T00:00:00Z"
-        summary: "Added Quantity field and TelemetryQuantityConsistency axiom."
+        created: "2026-03-30T21:27:05Z"
+        summary: "Added Quantity field, updated TelemetryName to version 007, and added TelemetryQuantityConsistency axiom."
         dependencies:
           structural_direct:
             - "gw1.quantity:000"
             - "left.right.dot"
             - "spaceheat.name"
-            - "spaceheat.telemetry.name:006"
+            - "spaceheat.telemetry.name:007"
             - "uuid4.str"
+          axiom_direct:
+            - "spaceheat.telemetry.quantity.projection:000"
           all:
             - "gw1.quantity:000"
             - "left.right.dot"
             - "spaceheat.name"
-            - "spaceheat.telemetry.name:006"
+            - "spaceheat.telemetry.name:007"
+            - "spaceheat.telemetry.quantity.projection:000"
             - "uuid4.str"
     
       "001":
         schema_url: "https://schemas.electricity.works/types/data.channel.gt/001"
-        created: "2026-02-22T00:00:00Z"
+        created: "2024-09-22T22:17:00Z"
         summary: "Add TerminalAssetAlias, InPowerMetering, and PowerMeteringConstraint axiom"
         dependencies:
           structural_direct:
             - "left.right.dot"
             - "spaceheat.name"
-            - "spaceheat.telemetry.name:001"
+            - "spaceheat.telemetry.name:006"
             - "utc.seconds"
             - "uuid4.str"
           all:
             - "left.right.dot"
             - "spaceheat.name"
-            - "spaceheat.telemetry.name:001"
+            - "spaceheat.telemetry.name:006"
             - "utc.seconds"
             - "uuid4.str"
 
@@ -272,13 +257,13 @@ types:
         summary: "Added emission semantics, input channel references, and strategy parameters."
         dependencies:
           structural_direct:
-            - "emission.method:000"
+            - "gw1.emission.method:000"
             - "gw1.unit:000"
             - "left.right.dot"
             - "spaceheat.name"
             - "uuid4.str"
           all:
-            - "emission.method:000"
+            - "gw1.emission.method:000"
             - "gw1.unit:000"
             - "left.right.dot"
             - "spaceheat.name"
@@ -286,7 +271,7 @@ types:
 
       "000":
         schema_url: "https://schemas.electricity.works/types/derived.channel.gt/000"
-        created: "2025-01-01T00:00:00Z"
+        created: "2026-01-03T14:27:00Z"
         summary: "Initial commit."
         dependencies:
           structural_direct:
@@ -515,13 +500,13 @@ types:
         summary: "Change derived.channel.gt:000 to derived.channel.gt:001 and make I2cRelayComponent optional."
         dependencies:
           structural_direct:
-            - "data.channel.gt:001"
+            - "data.channel.gt:002"
             - "derived.channel.gt:001"
             - "gw1.seasonal.storage.mode:000"
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:006"
-            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "i2c.multichannel.dt.relay.component.gt:000"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
@@ -530,13 +515,13 @@ types:
             - "utc.milliseconds"
             - "uuid4.str"
           all:
-            - "data.channel.gt:001"
+            - "data.channel.gt:002"
             - "derived.channel.gt:001"
             - "gw1.seasonal.storage.mode:000"
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:006"
-            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "i2c.multichannel.dt.relay.component.gt:000"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
@@ -557,12 +542,12 @@ types:
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:006"
-            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "i2c.multichannel.dt.relay.component.gt:000"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
             - "sim.pico.tank.module.component.gt:000"
-            - "spaceheat.node.gt:301"
+            - "spaceheat.node.gt:300"
             - "utc.milliseconds"
             - "uuid4.str"
           all:
@@ -572,19 +557,19 @@ types:
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:006"
-            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "i2c.multichannel.dt.relay.component.gt:000"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
             - "sim.pico.tank.module.component.gt:000"
-            - "spaceheat.node.gt:301"
+            - "spaceheat.node.gt:300"
             - "utc.milliseconds"
             - "uuid4.str"
 
       "010":
         schema_url: "https://schemas.electricity.works/types/layout.lite/010"
         created: "2026-02-18T16:34:00Z"
-        summary: "Runtime layout projection aligned to main/dev behavior before the later 011 change."
+        summary: "Latest known recent runtime"
         dependencies:
           structural_direct:
             - "data.channel.gt:001"
@@ -593,12 +578,12 @@ types:
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:005"
-            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "i2c.multichannel.dt.relay.component.gt:000"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:000"
             - "sim.pico.tank.module.component.gt:000"
-            - "spaceheat.node.gt:301"
+            - "spaceheat.node.gt:300"
             - "utc.milliseconds"
             - "uuid4.str"
           all:
@@ -608,12 +593,12 @@ types:
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:005"
-            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "i2c.multichannel.dt.relay.component.gt:000"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:000"
             - "sim.pico.tank.module.component.gt:000"
-            - "spaceheat.node.gt:301"
+            - "spaceheat.node.gt:300"
             - "utc.milliseconds"
             - "uuid4.str"
 
@@ -911,6 +896,45 @@ types:
             - "utc.milliseconds"
             - "uuid4.str"
 
+  spaceheat.node.gt:
+    latest_version: "301"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A Spaceheat node representing a named element in the SCADA system."
+
+    versions:
+      "301":
+        schema_url: "https://schemas.electricity.works/types/spaceheat.node.gt/301"
+        created: "2026-01-23T19:42:00Z"
+        summary: "Current runtime-aligned Spaceheat node definition."
+        dependencies:
+          structural_direct:
+            - "gw1.actor.class:011"
+            - "handle.name"
+            - "spaceheat.name"
+            - "uuid4.str"
+          all:
+            - "gw1.actor.class:011"
+            - "handle.name"
+            - "spaceheat.name"
+            - "uuid4.str"
+
+      "300":
+        schema_url: "https://schemas.electricity.works/types/spaceheat.node.gt/300"
+        created: "2026-01-14T18:04:00Z"
+        summary: "Initial publication without BoardComponentId and with the earlier ActorClass enum version."
+        dependencies:
+          structural_direct:
+            - "gw1.actor.class:009"
+            - "handle.name"
+            - "spaceheat.name"
+            - "uuid4.str"
+          all:
+            - "gw1.actor.class:009"
+            - "handle.name"
+            - "spaceheat.name"
+            - "uuid4.str"
+
   synced.readings:
     latest_version: "000"
     owner: gridworks-energy
@@ -960,7 +984,7 @@ types:
             - "utc.iso8601.seconds"
             - "uuid4.str"
 
-  telemetry.name.quantity.projection:
+  spaceheat.telemetry.quantity.projection:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
@@ -968,13 +992,13 @@ types:
 
     versions:
       "000":
-        schema_url: "https://schemas.electricity.works/types/spaceheat.telemetry.name.quantity.projection/000"
+        schema_url: "https://schemas.electricity.works/types/spaceheat.telemetry.quantity.projection/000"
         created: "2026-03-04T19:00:00Z"
         summary: "Initial publication of deterministic TelemetryName → Quantity projection."
         dependencies:
           structural_direct:
             - "gw1.quantity:000"
-            - "spaceheat.telemetry.name:006"
+            - "spaceheat.telemetry.name:007"
           all:
             - "gw1.quantity:000"
-            - "spaceheat.telemetry.name:006"
+            - "spaceheat.telemetry.name:007"
