@@ -38,7 +38,7 @@ properties:
       Name of the node responsible for observing and reporting this telemetry.
 
   TelemetryName:
-    $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/006"
+    $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/007"
     description: >
       Legacy semantic identifier describing what is measured and how it is
       encoded. TelemetryName values may include unit conventions and scaling
@@ -67,7 +67,6 @@ properties:
     description: >
       Indicates whether this channel participates in power metering calculations.
       If true, TelemetryName SHALL equal PowerW.
-    default: false
 
   StartS:
     $ref: "https://schemas.electricity.works/formats/utc.seconds"

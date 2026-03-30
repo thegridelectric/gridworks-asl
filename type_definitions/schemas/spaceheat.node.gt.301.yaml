@@ -28,7 +28,7 @@ properties:
       the addressable identity of the node within the actor messaging layer.
 
   ActorClass:
-    $ref: "https://schemas.electricity.works/enums/gw1.actor.class/010"
+    $ref: "https://schemas.electricity.works/enums/gw1.actor.class/011"
     description: >
       Class of the software actor associated with this node. This determines
       the behavior, capabilities, and runtime role of the node within the SCADA.
@@ -88,21 +88,22 @@ additionalProperties: true
 examples:
   - |
     {
-      "Name": "primary-scada",
+      "Name": "s",
       "ActorClass": "PrimaryScada",
-      "DisplayName": "Primary SCADA",
-      "ShNodeId": "11111111-1111-4111-8111-111111111111",
+      "DisplayName": "Spruce Scada",
+      "ShNodeId": "8f3c27de-6a41-4bb0-9df2-51b7ac94e203",
       "TypeName": "spaceheat.node.gt",
       "Version": "301"
     }
   - |
     {
-      "Name": "relay-1",
       "ActorClass": "Relay",
-      "BoardComponentId": "22222222-2222-4222-8222-222222222222",
-      "InPowerMetering": true,
-      "NameplatePowerW": 100,
-      "ShNodeId": "33333333-3333-4333-8333-333333333333",
+      "ActorHierarchyName": "s.relay1",
+      "ComponentId": "7a2f6d84-9cb1-4e73-b8a6-3f1d52ce8049",
+      "DisplayName": "5VDC Relay",
+      "Handle": "auto.pico-cycler.relay1",
+      "Name": "relay1",
+      "ShNodeId": "d84f1ab6-73ce-4b92-8f45-1ea769c2053d",
       "TypeName": "spaceheat.node.gt",
       "Version": "301"
     }
@@ -119,20 +120,17 @@ x-gridworks:
     - number: 2
       name: "ActorHierarchyConstraints"
       statement: >
-        - If ActorClass is "NoActor", ActorHierarchyName MUST be None.
-        - If ActorClass is not "NoActor" and ActorHierarchyName is None,
-          then ActorClass MUST be "PrimaryScada" or "SecondaryScada".
-        - If ActorHierarchyName is present:
-            - The final segment SHALL equal Name.
-            - All segments SHALL be unique.
-  
+        If ActorClass is "NoActor", ActorHierarchyName SHALL be absent.
+        If ActorClass is not "NoActor" and ActorHierarchyName is absent,
+        then ActorClass SHALL be "PrimaryScada" or "SecondaryScada".
+        If ActorHierarchyName is present, its final segment SHALL equal Name
+        and all segments SHALL be unique.
+
     - number: 3
       name: "HandleConstraints"
       statement: >
-        - If Handle is present:
-          - The final segment SHALL equal Name.
-          - All segments SHALL be unique.
-
+        If Handle is present, its final segment SHALL equal Name and all
+        segments SHALL be unique.
 
   extended_description: >
     Spaceheat nodes are the fundamental building blocks of an agent-based

@@ -6,7 +6,7 @@ type: object
 description: >
   Canonical projection from spaceheat.telemetry.name to gw1.quantity.
   This type defines the authoritative dimensional abstraction associated
-  with each telemetry semantic category in version 006 of
+  with each telemetry semantic category in version 007 of
   spaceheat.telemetry.name.
 
   This projection exists to make dimensional semantics explicit at the
@@ -15,7 +15,7 @@ description: >
 properties:
 
   TelemetryName:
-    $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/006"
+    $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/007"
 
   Quantity:
     $ref: "https://schemas.electricity.works/enums/gw1.quantity/000"
@@ -71,6 +71,7 @@ x-gridworks:
           RelayState → Unitless
           ThermostatState → Unitless
           StorageLayer → Unitless
+          BinaryState → Unitless
 
           PercentKeep → Percent
 

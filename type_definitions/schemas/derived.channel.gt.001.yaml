@@ -48,7 +48,7 @@ properties:
       Measurement unit of the derived output values.
 
   EmissionMethod:
-    $ref: "https://schemas.electricity.works/enums/emission.method/000"
+    $ref: "https://schemas.electricity.works/enums/gw1.emission.method/000"
     description: >
       Defines how and when derived values are emitted
       (e.g., OnTrigger, Periodic, AsyncAndPeriodic).
