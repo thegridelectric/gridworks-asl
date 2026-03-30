@@ -1,5 +1,5 @@
 """
-Tests for enum sh.actor.class.007
+Tests for enum gw1.actor.class.010
 """
 
 from sema.registry.enums import ActorClass
@@ -8,41 +8,30 @@ from sema.registry.enums import ActorClass
 def test_actor_class() -> None:
     assert set(ActorClass.values()) == {
         "NoActor",
-        "Scada",
-        "HomeAlone",
-        "BooleanActuator",
+        "PrimaryScada",
+        "SecondaryScada",
         "PowerMeter",
-        "Atn",
-        "SimpleSensor",
-        "MultipurposeSensor",
-        "Thermostat",
-        "HubitatTelemetryReader",
-        "HubitatTankModule",
-        "HubitatPoller",
+        "LocalControl",
+        "LeafAlly",
+        "DerivedGenerator",
+        "PicoCycler",
+        "HpBoss",
         "I2cRelayMultiplexer",
-        "FlowTotalizer",
-        "Relay",
-        "Admin",
-        "Fsm",
-        "Parentless",
+        "I2cZeroTenMultiplexer",
         "Hubitat",
+        "Relay",
+        "MultipurposeSensor",
         "HoneywellThermostat",
         "ApiTankModule",
         "ApiFlowModule",
-        "PicoCycler",
-        "I2cDfrMultiplexer",
         "ZeroTenOutputer",
-        "AtomicAlly",
-        "SynthGenerator",
-        "FakeAtn",
-        "PumpDoctor",
-        "StratBoss",
-        "HpRelayBoss",
+        "ApiBtuMeter",
         "SiegLoop",
-        "HpBoss",
+        "GpioSensor",
+        "I2cBus",
+        "I2cRelayBoard",
     }
 
     assert ActorClass.default() == ActorClass.NoActor
-    assert ActorClass.enum_name() == "sh.actor.class"
-    assert ActorClass.enum_version() == "007"
-
+    assert ActorClass.enum_name() == "gw1.actor.class"
+    assert ActorClass.enum_version() == "010"

@@ -313,6 +313,142 @@ types:
             - "utc.seconds"
             - "uuid4.str"
 
+  ha1.params:
+    latest_version: "005"
+    owner: gridworks-energy
+    versioning_strategy: "string"
+    description: "Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model."
+
+    versions:
+      "005":
+        schema_url: "https://schemas.electricity.works/types/ha1.params/005"
+        created: "2026-02-25T19:23:00Z"
+        summary: "Adds COP model coefficients and minimum operating COP parameters to the HA1 parameter set."
+        dependencies:
+          direct: []
+          all: []
+      "004":
+        schema_url: "https://schemas.electricity.works/types/ha1.params/004"
+        created: "2025-12-04T15:54:00Z"
+        summary: "Initial publication of the HA1 parameter set used by deployed runtime logic."
+        dependencies:
+          direct: []
+          all: []
+
+  layout.lite:
+    latest_version: "012"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Runtime projection of the active SCADA context used to interpret reports, snapshots, and control-adjacent messages."
+
+    versions:
+      "012":
+        schema_url: "https://schemas.electricity.works/types/layout.lite/012"
+        created: "2026-03-30T17:52:00Z"
+        summary: "Change derived.channel.gt:000 to derived.channel.gt.001"
+        dependencies:
+          direct:
+            - "data.channel.gt:001"
+            - "derived.channel.gt:001"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "ha1.params:006"
+            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:011"
+            - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.node.gt:301"
+            - "gw1.tank.temp.calibration.map:000"
+            - "utc.milliseconds"
+            - "uuid4.str"
+          all:
+            - "data.channel.gt:001"
+            - "derived.channel.gt:001"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "ha1.params:006"
+            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:011"
+            - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.node.gt:301"
+            - "gw1.tank.temp.calibration.map:000"
+            - "utc.milliseconds"
+            - "uuid4.str"
+      "011":
+        schema_url: "https://schemas.electricity.works/types/layout.lite/011"
+        created: "2026-02-25T14:23:00Z"
+        summary: "Updated pico.tank.module.component.gt from 000 to 001."
+        dependencies:
+          direct:
+            - "data.channel.gt:001"
+            - "derived.channel.gt:000"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "ha1.params:006"
+            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:011"
+            - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.node.gt:301"
+            - "gw1.tank.temp.calibration.map:000"
+            - "utc.milliseconds"
+            - "uuid4.str"
+          all:
+            - "data.channel.gt:001"
+            - "derived.channel.gt:000"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "ha1.params:006"
+            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:011"
+            - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.node.gt:301"
+            - "gw1.tank.temp.calibration.map:000"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
+      "010":
+        schema_url: "https://schemas.electricity.works/types/layout.lite/010"
+        created: "2026-02-18T16:34:00Z"
+        summary: "Runtime layout projection aligned to main/dev behavior before the later 011 change."
+        dependencies:
+          direct:
+            - "data.channel.gt:001"
+            - "derived.channel.gt:000"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "ha1.params:005"
+            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:000"
+            - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.node.gt:301"
+            - "gw1.tank.temp.calibration.map:000"
+            - "utc.milliseconds"
+            - "uuid4.str"
+          all:
+            - "data.channel.gt:001"
+            - "derived.channel.gt:000"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "ha1.params:005"
+            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:000"
+            - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.node.gt:301"
+            - "gw1.tank.temp.calibration.map:000"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
   gw1.unit.quantity.projection:
     latest_version: "000"
     owner: gridworks-energy

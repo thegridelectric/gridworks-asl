@@ -9,7 +9,8 @@ from sema.registry.property_format import (
     LeftRightDot,
     UTCMilliseconds,
 )
-from sema.registry.types import GNodeGt, GNodeInstanceGt
+from sema.registry.types.g_node_gt import GNodeGt
+from sema.registry.types.g_node_instance_gt import GNodeInstanceGt
 from sema.registry.enums import GNodeInstanceStatus
 
 

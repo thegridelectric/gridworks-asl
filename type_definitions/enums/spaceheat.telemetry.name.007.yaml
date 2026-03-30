@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/006"
+$id: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/007"
 
 title: "spaceheat.telemetry.name"
 type: "string"
@@ -49,7 +49,7 @@ default: "Unknown"
 
 x-gridworks:
   owner: "gridworks-energy"
-  version: "006"
+  version: "007"
   value_descriptions:
     "Unknown": "Default Value - unknown telemetry name."
     "PowerW": "Power in Watts."
