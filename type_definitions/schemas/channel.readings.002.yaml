@@ -1,20 +1,10 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/channel.readings.002"
+$id: "https://schemas.electricity.works/types/channel.readings/002"
 
-title: "channel.readings.002"
-description: |
-  Timestamped readings for a single data channel, intended for non-local
-  consumption. Values and timestamps are reported as parallel arrays.
-  Axiom: ValueList and ScadaReadTimeUnixMsList have identical length.
-
+title: "channel.readings"
 type: object
-additionalProperties: false
-required:
-  - ChannelName
-  - ValueList
-  - ScadaReadTimeUnixMsList
-  - TypeName
-  - Version
+description: >
+  Timestamped integer readings for one channel within a SCADA reporting context.
 
 properties:
   ChannelName:
@@ -38,6 +28,15 @@ properties:
   Version:
     const: "002"
 
+required:
+  - ChannelName
+  - ValueList
+  - ScadaReadTimeUnixMsList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
 examples:
   - ChannelName: "hp-odu-pwr"
     ValueList: [3215, 3315, 4200]
@@ -49,19 +48,9 @@ x-gridworks:
   owner: "gridworks-energy"
   axioms:
     - number: 1
-      name: "NonEmptyLists"
-      statement: >
-        ValueList SHALL be non-empty.
-
-    - number: 2
       name: "ListLengthConsistency"
       statement: >
         len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
-
-    - number: 3
-      name: "MonotonicTimestamps"
-      statement: >
-        ScadaReadTimeUnixMsList SHALL be monotonic non-decreasing.
   
   extended_description: >
     ChannelName SHALL reference a channel definition known to both the

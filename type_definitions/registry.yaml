@@ -105,6 +105,39 @@ enums:
 
 types:
 
+  channel.readings:
+    latest_version: "002"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Timestamped integer readings for one channel within a SCADA reporting context."
+
+    versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/channel.readings/002"
+        created: "2024-10-12T17:43:00Z"
+        summary: "Remove ChannelId and keep channel identity contextual to the SCADA channel-definition set. Set additionalProperties to false"
+        dependencies:
+          structural_direct:
+            - "spaceheat.name"
+            - "utc.milliseconds"
+          all:
+            - "spaceheat.name"
+            - "utc.milliseconds"
+
+      "001":
+        schema_url: "https://schemas.electricity.works/types/channel.readings/001"
+        created: "2024-09-01T00:00:00Z"
+        summary: "Initial publication including both ChannelName and ChannelId."
+        dependencies:
+          structural_direct:
+            - "spaceheat.name"
+            - "utc.milliseconds"
+            - "uuid4.str"
+          all:
+            - "spaceheat.name"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
   connectivity.edge.gt:
     latest_version: "000"
     owner: gridworks-energy
@@ -267,6 +300,82 @@ types:
             - "spaceheat.name"
             - "uuid4.str"
 
+  fsm.atomic.report:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Single atomic FSM report item representing either an event or an action."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/fsm.atomic.report/001"
+        created: "2026-01-23T19:42:00Z"
+        summary: "Replace ActionType plus scalar Action with structured action payload variants."
+        dependencies:
+          structural_direct:
+            - "handle.name"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "utc.milliseconds"
+            - "uuid4.str"
+          all:
+            - "handle.name"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
+      "000":
+        schema_url: "https://schemas.electricity.works/types/fsm.atomic.report/000"
+        created: "2024-10-08T17:41:00Z"
+        summary: "Initial publication using ActionType plus scalar Action."
+        dependencies:
+          structural_direct:
+            - "handle.name"
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "uuid4.str"
+          all:
+            - "handle.name"
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
+  fsm.full.report:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Full FSM report emitted for one trigger, including its ordered atomic report items."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/fsm.full.report/001"
+        created: "2026-01-23T19:42:00Z"
+        summary: "Update AtomicList item type from fsm.atomic.report:000 to fsm.atomic.report:001."
+        dependencies:
+          structural_direct:
+            - "fsm.atomic.report:001"
+            - "spaceheat.name"
+            - "uuid4.str"
+          all:
+            - "fsm.atomic.report:001"
+            - "spaceheat.name"
+            - "uuid4.str"
+
+      "000":
+        schema_url: "https://schemas.electricity.works/types/fsm.full.report/000"
+        created: "2024-10-08T17:41:00Z"
+        summary: "Initial publication using fsm.atomic.report:000."
+        dependencies:
+          structural_direct:
+            - "fsm.atomic.report:000"
+            - "spaceheat.name"
+            - "uuid4.str"
+          all:
+            - "fsm.atomic.report:000"
+            - "spaceheat.name"
+            - "uuid4.str"
+
   g.node.gt:
     latest_version: "004"
     owner: gridworks-energy
@@ -332,16 +441,55 @@ types:
             - "gw1.quantity:000"
             - "gw1.unit:000"
 
+  gw1.tank.temp.calibration:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Linear calibration coefficients for converting raw tank probe readings into calibrated temperatures."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw1.tank.temp.calibration/000"
+        created: "2025-12-25T22:18:00Z"
+        summary: "Initial publication aligned to current runtime tank temperature calibration coefficients."
+        dependencies:
+          structural_direct: []
+          all: []
+
+  gw1.tank.temp.calibration.map:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Buffer and per-tank calibration map for converting raw probe readings into calibrated temperatures."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw1.tank.temp.calibration.map/000"
+        created: "2025-12-25T22:18:00Z"
+        summary: "Initial publication aligned to current runtime calibration map shape and tank-index axiom."
+        dependencies:
+          structural_direct:
+            - "gw1.tank.temp.calibration:000"
+          all:
+            - "gw1.tank.temp.calibration:000"
+
   ha1.params:
-    latest_version: "005"
+    latest_version: "006"
     owner: gridworks-energy
     versioning_strategy: "string"
     description: "Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model."
 
     versions:
+      "006":
+        schema_url: "https://schemas.electricity.works/types/ha1.params/006"
+        created: "2026-02-25T14:23:00Z"
+        summary: "Rename HpMaxKwTh to HpMaxKwEl and add optional HpTurnOnMinutes."
+        dependencies:
+          structural_direct: []
+          all: []
       "005":
         schema_url: "https://schemas.electricity.works/types/ha1.params/005"
-        created: "2026-02-25T19:23:00Z"
+        created: "2026-02-18T06:07:00Z"
         summary: "Adds COP model coefficients and minimum operating COP parameters to the HA1 parameter set."
         dependencies:
           structural_direct: []
@@ -396,6 +544,7 @@ types:
             - "spaceheat.node.gt:301"
             - "utc.milliseconds"
             - "uuid4.str"
+
       "011":
         schema_url: "https://schemas.electricity.works/types/layout.lite/011"
         created: "2026-02-25T14:23:00Z"
@@ -467,6 +616,27 @@ types:
             - "spaceheat.node.gt:301"
             - "utc.milliseconds"
             - "uuid4.str"
+
+  machine.states:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Sequence of machine states observed for one state machine during a reporting interval."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/machine.states/000"
+        created: "2026-01-03T14:27:00Z"
+        summary: "Initial publication aligned to current runtime machine state list structure."
+        dependencies:
+          structural_direct:
+            - "handle.name"
+            - "left.right.dot"
+            - "utc.milliseconds"
+          all:
+            - "handle.name"
+            - "left.right.dot"
+            - "utc.milliseconds"
 
   position.point.gt:
     latest_version: "000"
