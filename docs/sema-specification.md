@@ -372,49 +372,66 @@ For versioned types:
   - Historical schemas MUST NOT be altered in ways that change validation behavior.
 
 ### Dependency Model
-Versioned types SHALL declare dependencies. Dependencies describe other Sema vocabulary words (types, enums, or formats) referenced by the schema.
+Versioned types SHALL declare dependencies. Dependencies describe the Sema vocabulary required both to validate the schema structurally and to implement any axioms attached to that specific type version.
 
-Dependencies are expressed as two ordered lists:
+Dependencies are expressed as ordered lists:
 
 dependencies:
-  direct:
+  structural_direct:
     - "<word-name>:<version>"   # for versioned types or enums
     - "<format-name>"           # for versionless formats
+  axiom_direct:
+    - "<word-name>:<version>"
+    - "<format-name>"
   all:
     - "<word-name>:<version>"
     - "<format-name>"
 
 **Rules**
 
-1. **direct**
+1. **structural_direct**
     - SHALL include every vocabulary word explicitly referenced in the schema via `$ref` (all formats, enums, and types).
     - SHALL use the canonical identifier format:
       - `name:###` for versioned types and enums (3-digit numeric version)
       - `name` for versionless formats or versionless types
     - SHALL NOT include transitive dependencies.
 
-2. **all**
-    - SHALL include the full transitive closure of direct.
-    - SHALL be a strict superset or equal to direct.
+2. **axiom_direct**
+    - SHALL include every Sema vocabulary word whose value set, structure, or specific version is normatively required to implement one or more axioms for that type version.
+    - SHALL be used when an axiom depends on a specific enum, type, or format even if that vocabulary is not referenced via `$ref`.
+    - SHALL use the same canonical identifier rules as `structural_direct`.
+    - SHALL NOT include transitive dependencies.
+    - MAY be omitted entirely if the type version has no axiom-level dependency on external Sema vocabulary.
 
-3. **Ordering and Structure**
-    - Both `direct` and `all` SHALL:
+3. **all**
+    - SHALL include the full transitive closure of `structural_direct` together with `axiom_direct`.
+    - SHALL be a strict superset or equal to the union of `structural_direct` and `axiom_direct`.
+
+4. **Ordering and Structure**
+    - `structural_direct`, `axiom_direct` (if present), and `all` SHALL:
       - Be alphabetically sorted (lexicographically by full identifier string)
       - Contain no duplicates
       - Be declared as block lists (one entry per line)
     - Dependency references SHALL NOT include URL prefixes or file paths.
     - When computing dependencies, tooling SHALL extract the vocabulary word from the $ref URL path and omit the domain prefix.
-    - If no dependencies exist, both lists SHALL be explicitly declared as empty:
+    - If no dependencies exist, the dependency block SHALL be:
 ```
 dependencies:
-  direct: []
+  structural_direct: []
   all: []
 ```
+    - If structural dependencies exist but no axiom-level dependencies exist, `axiom_direct` SHOULD be omitted.
+    - If structural dependencies do not exist but axiom-level dependencies do exist, `structural_direct` SHALL be declared as `[]`.
 
-4. **Version Rules**
+5. **Version Rules**
     - Versioned words MUST be referenced as `name:###` where `###` is a 3-digit numeric string.
     - Versionless words MUST NOT include a version suffix.
     - Mixing formats (e.g., including a colon for versionless words or omitting a version for versioned words) is invalid.
+
+6. **Axiom Implementability**
+    - Dependency declaration SHALL be sufficient to implement validation for the full contract of the type version, including its axioms.
+    - If an axiom normatively names a specific Sema vocabulary word or version, that word SHALL appear in `axiom_direct` unless it already appears in `structural_direct`.
+    - A type version SHALL NOT rely on undeclared external Sema vocabulary to make its axioms mechanically implementable.
 
 
 ### `owners.yaml` - Vocabulary Ownership Registry
@@ -790,7 +807,16 @@ Types with strategy `none`:
 **Strategy:**  `string`
 
   - For `string`: 
-    - The `Version field MUST be declared as a `string`
+    - The `Version` field MUST be declared as `type: string`
+    - The `Version` field MUST include `default: "<3-digit>"`
+    - The `default` value MUST equal the published version for that schema file
+    - Example:
+
+```
+Version:
+  type: string
+  default: "002"
+```
 
 
 #### Required Top-Level Order
@@ -1192,7 +1218,7 @@ properties:
     description: >
       Finite state machine reports generated during this slot.
     items:
-      $ref: "https://schemas.electricity.works/types/fsm.full.report/000"
+      $ref: "https://schemas.electricity.works/types/fsm.full.report/001"
 
   MessageCreatedMs:
     $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
@@ -1208,7 +1234,7 @@ properties:
     const: "report"
 
   Version:
-    const: "002"
+    const: "003"
 
 required:
   - FromGNodeAlias
@@ -1248,7 +1274,7 @@ examples:
               "Version": "002"
           }],
       "StateList": [{
-              "MachineHandle": "a.aa.relay6",
+              "MachineHandle": "ltn.la.relay6",
               "StateEnum": "relay.closed.or.open",
               "StateList": [
                   "RelayOpen"

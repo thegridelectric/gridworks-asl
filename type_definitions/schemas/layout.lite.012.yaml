@@ -116,7 +116,7 @@ properties:
   I2cRelayComponent:
     $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002"
     description: >
-      Relay component configuration used by the running deployment.
+      Optional relay component configuration used by the running deployment.
 
   TMap:
     $ref: "https://schemas.electricity.works/types/gw1.tank.temp.calibration.map/000"
@@ -146,7 +146,6 @@ required:
   - TankModuleComponents
   - FlowModuleComponents
   - Ha1Params
-  - I2cRelayComponent
   - TypeName
   - Version
 

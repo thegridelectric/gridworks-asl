@@ -72,7 +72,8 @@ properties:
     const: "report"
 
   Version:
-    const: "002"
+    type: string
+    default: "002"
 
 required:
   - FromGNodeAlias
@@ -112,7 +113,7 @@ examples:
               "Version": "002"
           }],
       "StateList": [{
-              "MachineHandle": "a.aa.relay6",
+              "MachineHandle": "ltn.la.relay6",
               "StateEnum": "relay.closed.or.open",
               "StateList": [
                   "RelayOpen"
@@ -128,7 +129,7 @@ examples:
       "Id": "7499defd-c54a-4061-a37a-17f3c84f88a2",
       "TypeName": "report",
       "Version": "002"
-} 
+    }
 
 x-gridworks:
   owner: "gridworks-energy"
