@@ -23,6 +23,12 @@ formats:
     created: "2026-02-22T16:43:00Z"
     description: "Single-segment lowercase identifier with optional internal hyphen-separated words"
 
+  utc.iso8601.seconds:
+    owner: gridworks-energy
+    schema_url: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
+    created: "2026-02-22T16:43:00Z"
+    description: "UTC timestamp in ISO 8601 format with second precision and Z suffix"
+
   utc.milliseconds:
     owner: gridworks-energy
     schema_url: "https://schemas.electricity.works/formats/utc.milliseconds"
@@ -50,7 +56,7 @@ enums:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/enums/change.relay.state/000"
-        created: "??"
+        created: "2026-01-03T14:27:00Z"
         enum_type: "literal"
 
   base.g.node.class:

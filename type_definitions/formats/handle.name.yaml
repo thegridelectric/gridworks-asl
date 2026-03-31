@@ -10,7 +10,7 @@ description: |
   with the most significant component appearing first.
   
 type: string
-pattern: "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)*$"
+pattern: "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)*$"
 
 examples:
   - "main-tank"
