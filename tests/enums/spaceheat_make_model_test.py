@@ -1,16 +1,16 @@
 """
-Tests for enum spaceheat.make.model.004
+Tests for enum spaceheat.make.model.007
 """
 
-from sema.registry.enums import MakeModel
+from sema.registry.enums import SpaceheatMakeModel
 
 
-def test_make_model() -> None:
-    assert set(MakeModel.values()) == {
-        "UNKNOWNMAKE__UNKNOWNMODEL",
+def test_spaceheat_make_model() -> None:
+    assert set(SpaceheatMakeModel.values()) == {
+        "UnknownMake__UnknownModel",
         "EGAUGE__4030",
         "NCD__PR814SPST",
-        "ADAFRUIT__642",
+        "Adafruit__642",
         "GRIDWORKS__TSNAP1",
         "GRIDWORKS__WATERTEMPHIGHPRECISION",
         "GRIDWORKS__SIMPM1",
@@ -49,9 +49,13 @@ def test_make_model() -> None:
         "GRIDWORKS__PICOFLOWREED",
         "SAIER__SENHZG1WA",
         "DFROBOT__DFR0971_TIMES2",
+        "GRIDWORKS__TANKMODULE3",
+        "GRIDWORKS__GW101",
+        "GRIDWORKS__SCADA_GW108",
     }
-
-    assert MakeModel.default() == MakeModel.UNKNOWNMAKE__UNKNOWNMODEL
-    assert MakeModel.enum_name() == "spaceheat.make.model"
-    assert MakeModel.enum_version() == "004"
-
+    assert (
+        SpaceheatMakeModel.default()
+        == SpaceheatMakeModel.UnknownMake__UnknownModel
+    )
+    assert SpaceheatMakeModel.enum_name() == "spaceheat.make.model"
+    assert SpaceheatMakeModel.enum_version() == "007"

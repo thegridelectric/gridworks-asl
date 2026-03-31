@@ -1,16 +1,15 @@
 from enum import auto
-from typing import List
 
 from sema.registry.enums.gw_str_enum import SemaEnum
 
 
-class MakeModel(SemaEnum):
-    """ Sema: https://schemas.electricity.works/enums/spaceheat.make.model/004"""
+class SpaceheatMakeModel(SemaEnum):
+    """Sema: https://schemas.electricity.works/enums/spaceheat.make.model/007"""
 
-    UNKNOWNMAKE__UNKNOWNMODEL = auto()
+    UnknownMake__UnknownModel = auto()
     EGAUGE__4030 = auto()
     NCD__PR814SPST = auto()
-    ADAFRUIT__642 = auto()
+    Adafruit__642 = auto()
     GRIDWORKS__TSNAP1 = auto()
     GRIDWORKS__WATERTEMPHIGHPRECISION = auto()
     GRIDWORKS__SIMPM1 = auto()
@@ -49,13 +48,16 @@ class MakeModel(SemaEnum):
     GRIDWORKS__PICOFLOWREED = auto()
     SAIER__SENHZG1WA = auto()
     DFROBOT__DFR0971_TIMES2 = auto()
+    GRIDWORKS__TANKMODULE3 = auto()
+    GRIDWORKS__GW101 = auto()
+    GRIDWORKS__SCADA_GW108 = auto()
 
     @classmethod
-    def default(cls) -> "MakeModel":
-        return cls.UNKNOWNMAKE__UNKNOWNMODEL
+    def default(cls) -> "SpaceheatMakeModel":
+        return cls.UnknownMake__UnknownModel
 
     @classmethod
-    def values(cls) -> List[str]:
+    def values(cls) -> list[str]:
         return [elt.value for elt in cls]
 
     @classmethod
@@ -64,4 +66,4 @@ class MakeModel(SemaEnum):
 
     @classmethod
     def enum_version(cls) -> str:
-        return "004"
+        return "007"

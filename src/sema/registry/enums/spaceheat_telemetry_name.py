@@ -1,13 +1,10 @@
 from enum import auto
-from typing import List
 
 from sema.registry.enums.gw_str_enum import SemaEnum
 
 
-class TelemetryName(SemaEnum):
-    """
-    Sema: https://schemas.electricity.works/enums/spaceheat.telemetry.name/005
-    """
+class SpaceheatTelemetryName(SemaEnum):
+    """Sema: https://schemas.electricity.works/enums/spaceheat.telemetry.name/007"""
 
     Unknown = auto()
     PowerW = auto()
@@ -28,13 +25,17 @@ class TelemetryName(SemaEnum):
     WattHours = auto()
     StorageLayer = auto()
     PercentKeep = auto()
+    CelsiusTimes100 = auto()
+    VoltsTimes100 = auto()
+    HzTimes100 = auto()
+    BinaryState = auto()
 
     @classmethod
-    def default(cls) -> "TelemetryName":
+    def default(cls) -> "SpaceheatTelemetryName":
         return cls.Unknown
 
     @classmethod
-    def values(cls) -> List[str]:
+    def values(cls) -> list[str]:
         return [elt.value for elt in cls]
 
     @classmethod
@@ -43,4 +44,4 @@ class TelemetryName(SemaEnum):
 
     @classmethod
     def enum_version(cls) -> str:
-        return "005"
+        return "007"

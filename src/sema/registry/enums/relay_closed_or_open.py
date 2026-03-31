@@ -25,3 +25,7 @@ class RelayClosedOrOpen(SemaEnum):
     @classmethod
     def enum_name(cls) -> str:
         return "relay.closed.or.open"
+
+    @classmethod
+    def enum_version(cls) -> str:
+        return "000"

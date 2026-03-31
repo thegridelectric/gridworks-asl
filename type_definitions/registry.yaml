@@ -1,7 +1,7 @@
 # type_definitions/registry.yaml
 metadata:
   registry_version: "1.0"
-  last_updated: "2025-06-24T10:30:00Z"
+  last_updated: "2026-03-31T18:00:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -130,7 +130,12 @@ enums:
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/011"
         created: "2026-03-27T16:56:00Z"
         enum_type: "versioned"
-        summary: "Add GpioSensor, I2cBus, I2cRelayBoard, and I2cThermistorReader."
+        summary: "Add I2cThermistorReader."
+      "010":
+        schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/010"
+        created: "2026-03-27T16:55:00Z"
+        enum_type: "versioned"
+        summary: "Add GpioSensor, I2cBus, and I2cRelayBoard."
       "009":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/009"
         created: "2026-01-03T14:27:00Z"

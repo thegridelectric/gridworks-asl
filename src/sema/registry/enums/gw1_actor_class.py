@@ -3,13 +3,13 @@ from enum import auto
 from sema.registry.enums.gw_str_enum import SemaEnum
 
 
-class ActorClass(SemaEnum):
-    """Sema: https://schemas.electricity.works/enums/gw1.actor.class.010"""
+class Gw1ActorClass(SemaEnum):
+    """Sema: https://schemas.electricity.works/enums/gw1.actor.class/011"""
 
     NoActor = auto()
     PrimaryScada = auto()
     SecondaryScada = auto()
-    PowerMeter = auto()  # Primary power meter
+    PowerMeter = auto()
     LocalControl = auto()
     LeafAlly = auto()
     DerivedGenerator = auto()
@@ -29,9 +29,10 @@ class ActorClass(SemaEnum):
     GpioSensor = auto()
     I2cBus = auto()
     I2cRelayBoard = auto()
+    I2cThermistorReader = auto()
 
     @classmethod
-    def default(cls) -> "ActorClass":
+    def default(cls) -> "Gw1ActorClass":
         return cls.NoActor
 
     @classmethod
@@ -44,4 +45,4 @@ class ActorClass(SemaEnum):
 
     @classmethod
     def enum_version(cls) -> str:
-        return "010"
+        return "011"
