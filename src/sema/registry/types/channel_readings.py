@@ -1,34 +1,24 @@
 from typing import Literal
 
-from sema.registry.base import SemaType
-from pydantic import StrictInt, model_validator  # Count:true
-from typing_extensions import Self
+from pydantic import model_validator
 
-from sema.registry.property_format import (
-    SpaceheatName,
-    UTCMilliseconds,
-)
+from sema.registry.base import SemaType
+from sema.registry.property_format import SpaceheatName, UTCMilliseconds
 
 
 class ChannelReadings(SemaType):
-    """
-    A list of timestamped readings (values) for a data channel. This is meant to be reported
-    for non-local consumption (AtomicTNode, other) by a SCADA. Therefore, the data channel is
-    referenced by its globally unique identifier. The receiver needs to reference this idea
-    against a list of the data channels used by the SCADA for accurate parsing.
-    """
+    """Sema: https://schemas.electricity.works/types/channel.readings/002"""
 
-    ChannelName: SpaceheatName
-    ValueList: list[StrictInt]
-    ScadaReadTimeUnixMsList: list[UTCMilliseconds]
-    TypeName: Literal["channel.readings"] = "channel.readings"
-    Version: str = "002"
+    channel_name: SpaceheatName
+    value_list: list[int]
+    scada_read_time_unix_ms_list: list[UTCMilliseconds]
+    type_name: Literal["channel.readings"] = "channel.readings"
+    version: Literal["002"] = "002"
 
     @model_validator(mode="after")
-    def check_axiom_1(self) -> Self:
-        """
-        Axiom 1: ListLengthConsistency.
-        ValueList and ScadaReadTimeUnixMsList must have the same length.
-        """
-        # Implement check for axiom 1"
+    def check_axiom_1(self) -> "ChannelReadings":
+        if len(self.value_list) != len(self.scada_read_time_unix_ms_list):
+            raise ValueError(
+                "Axiom 1 failed: value_list and scada_read_time_unix_ms_list must have equal length."
+            )
         return self

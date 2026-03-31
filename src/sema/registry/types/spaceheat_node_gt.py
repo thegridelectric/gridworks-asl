@@ -1,105 +1,76 @@
 from typing import Literal
-from pydantic import BaseModel, ConfigDict, StrictInt, model_validator
-from typing_extensions import Self
 
-from sema.registry.enums import ActorClass
+from pydantic import ConfigDict, model_validator
+
+from sema.registry.base import SemaType
+from sema.registry.enums.gw1_actor_class import Gw1ActorClass
 from sema.registry.property_format import HandleName, SpaceheatName, UUID4Str
 
 
-class SpaceheatNodeGt(BaseModel):
-    Name: SpaceheatName
-    ActorHierarchyName: HandleName | None = None
-    Handle: HandleName | None = None
-    ActorClass: ActorClass
-    DisplayName: str | None = None
-    ComponentId: UUID4Str | None = None
-    BoardComponentId: UUID4Str | None = None
-    NameplatePowerW: StrictInt | None = None
-    InPowerMetering: bool | None = None
-    ShNodeId: UUID4Str
-    TypeName: Literal["spaceheat.node.gt"] = "spaceheat.node.gt"
-    Version: Literal["301"] = "301"
+class SpaceheatNodeGt(SemaType):
+    """Sema: https://schemas.electricity.works/types/spaceheat.node.gt/301"""
+
+    name: SpaceheatName
+    actor_hierarchy_name: HandleName | None = None
+    handle: HandleName | None = None
+    actor_class: Gw1ActorClass
+    display_name: str | None = None
+    component_id: UUID4Str | None = None
+    board_component_id: UUID4Str | None = None
+    nameplate_power_w: int | None = None
+    in_power_metering: bool | None = None
+    sh_node_id: UUID4Str
+    type_name: Literal["spaceheat.node.gt"] = "spaceheat.node.gt"
+    version: Literal["301"] = "301"
+
+    model_config = ConfigDict(
+        alias_generator=SemaType.model_config.get("alias_generator"),
+        frozen=True,
+        populate_by_name=True,
+        extra="allow",
+    )
 
     @model_validator(mode="after")
-    def check_axiom_1(self) -> Self:
-        """
-        Axiom 1: InPowerMetering requirements.
-        If InPowerMetering exists and is true, then NameplatePowerW must exist
-        """
-        if self.InPowerMetering and self.NameplatePowerW is None:
+    def check_axiom_1(self) -> "SpaceheatNodeGt":
+        if self.in_power_metering and self.nameplate_power_w is None:
             raise ValueError(
-                "Axiom 1 failed! "
-                "If InPowerMetering exists and is true, then NameplatePowerW must exist"
+                "Axiom 1 failed: nameplate_power_w is required when in_power_metering is true."
             )
         return self
 
-    model_config = ConfigDict(extra="allow", use_enum_values=True)
-
     @model_validator(mode="after")
-    def check_axiom_2(self) -> Self:
-        """
-        Axiom 2: ActorHierarchy constraints.
-
-        - If ActorClass is "NoActor", ActorHierarchyName MUST be None.
-        - If ActorClass is not "NoActor" and ActorHierarchyName is None,
-        then ActorClass MUST be "PrimaryScada" or "SecondaryScada".
-        - If ActorHierarchyName is present:
-            - The final segment SHALL equal Name.
-            - All segments SHALL be unique.
-        """
-        if self.ActorClass == "NoActor":
-            if self.ActorHierarchyName is not None:
+    def check_axiom_2(self) -> "SpaceheatNodeGt":
+        if self.actor_class == Gw1ActorClass.NoActor:
+            if self.actor_hierarchy_name is not None:
                 raise ValueError(
-                    "Axiom 2 failed! "
-                    "Nodes with ActorClass 'NoActor' MUST NOT have ActorHierarchyName"
+                    "Axiom 2 failed: actor_hierarchy_name must be absent when actor_class is NoActor."
                 )
+            return self
 
-        else:
-            if self.ActorHierarchyName is None:
-                if self.ActorClass not in [ActorClass.PrimaryScada, ActorClass.SecondaryScada]:
-                    raise ValueError(
-                        "Axiom 2 failed! "
-                        "Only PrimaryScada or SecondaryScada may omit ActorHierarchyName"
-                    )
-            else:
-                segments = self.ActorHierarchyName.split(".")
+        if self.actor_hierarchy_name is None:
+            if self.actor_class not in {
+                Gw1ActorClass.PrimaryScada,
+                Gw1ActorClass.SecondaryScada,
+            }:
+                raise ValueError(
+                    "Axiom 2 failed: only PrimaryScada or SecondaryScada may omit actor_hierarchy_name."
+                )
+            return self
 
-                if segments[-1] != self.Name:
-                    raise ValueError(
-                        "Axiom 2 failed! "
-                        "Final segment of ActorHierarchyName MUST equal Name"
-                    )
-
-                if len(set(segments)) != len(segments):
-                    raise ValueError(
-                        "Axiom 2 failed! "
-                        "ActorHierarchyName segments MUST be unique"
-                    )
-
+        segments = self.actor_hierarchy_name.split(".")
+        if segments[-1] != self.name or len(set(segments)) != len(segments):
+            raise ValueError(
+                "Axiom 2 failed: actor_hierarchy_name must end with name and have unique segments."
+            )
         return self
 
     @model_validator(mode="after")
-    def check_axiom_3(self) -> Self:
-        """
-        Axiom 3: Handle constraints.
-
-        - If Handle is present:
-            - The final segment SHALL equal Name.
-            - All segments SHALL be unique.
-        """
-        if self.Handle is not None:
-            segments = self.Handle.split(".")
-
-            if segments[-1] != self.Name:
-                raise ValueError(
-                    "Axiom 3 failed! "
-                    "Final segment of Handle MUST equal Name"
-                )
-
-            if len(set(segments)) != len(segments):
-                raise ValueError(
-                    "Axiom 3 failed! "
-                    "Handle segments MUST be unique"
-                )
-
+    def check_axiom_3(self) -> "SpaceheatNodeGt":
+        if self.handle is None:
+            return self
+        segments = self.handle.split(".")
+        if segments[-1] != self.name or len(set(segments)) != len(segments):
+            raise ValueError(
+                "Axiom 3 failed: handle must end with name and have unique segments."
+            )
         return self
