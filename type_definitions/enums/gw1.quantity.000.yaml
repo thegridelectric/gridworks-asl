@@ -26,6 +26,7 @@ default: "Unknown"
 x-gridworks:
   owner: "gridworks-energy"
   version: "000"
+  enum_type: "versioned"
   value_descriptions:
     "Unknown": >
       Quantity classification has not been specified.

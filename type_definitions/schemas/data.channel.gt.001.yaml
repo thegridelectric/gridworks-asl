@@ -38,7 +38,7 @@ properties:
       Name of the node responsible for observing and reporting this telemetry.
 
   TelemetryName:
-    $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/001"
+    $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/006"
     description: >
       Semantic category of measurement represented by this channel.
 

@@ -21,6 +21,7 @@ default: "Heating"
 x-gridworks:
   owner: "gridworks-energy"
   version: "000"
+  enum_type: "versioned"
 
   value_descriptions:
     "Heating": >

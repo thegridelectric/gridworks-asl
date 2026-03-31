@@ -114,7 +114,7 @@ properties:
       Active HA1 parameter set used by the running deployment.
 
   I2cRelayComponent:
-    $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/000"
+    $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002"
     description: >
       Relay component configuration used by the running deployment.
 

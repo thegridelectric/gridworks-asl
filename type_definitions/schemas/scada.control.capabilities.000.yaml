@@ -35,11 +35,11 @@ properties:
         Minimal projection of a relay ShNode required for control operations.
       properties:
         Name:
-          $ref: "https://schemas.electricity.works/enums/spaceheat.name/000"
+          $ref: "https://schemas.electricity.works/formats/spaceheat.name"
           description: >
             Canonical node name of the relay.
         ActorClass:
-          $ref: "https://schemas.electricity.works/enums/sh.actor.class/000"
+          $ref: "https://schemas.electricity.works/enums/gw1.actor.class/009"
           description: >
             Actor class of the node. SHALL be Relay.
         DisplayName:
@@ -62,11 +62,11 @@ properties:
         Minimal projection of a DAC ShNode required for control operations.
       properties:
         Name:
-          $ref: "https://schemas.electricity.works/enums/spaceheat.name/000"
+          $ref: "https://schemas.electricity.works/formats/spaceheat.name"
           description: >
             Canonical node name of the DAC output.
         ActorClass:
-          $ref: "https://schemas.electricity.works/enums/sh.actor.class/000"
+          $ref: "https://schemas.electricity.works/enums/gw1.actor.class/009"
           description: >
             Actor class of the node. SHALL be ZeroTenOutputer.
         DisplayName:
@@ -96,7 +96,7 @@ properties:
           description: >
             Name of the telemetry channel.
         AboutNodeName:
-          $ref: "https://schemas.electricity.works/enums/spaceheat.name/000"
+          $ref: "https://schemas.electricity.works/formats/spaceheat.name"
           description: >
             Node name whose state is represented by this channel.
       required:

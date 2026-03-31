@@ -1,7 +1,8 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/gw1.float.unit/000"
 
 title: "gw1.float.unit"
-type: string
+type: "string"
 description: >
   Measurement units whose values SHALL be represented using floating point numbers.
 
@@ -9,21 +10,30 @@ description: >
   without scaling or integer encoding.
 
 enum:
-  - Seconds
-  - Milliseconds
-  - Fahrenheit
-  - Celsius
-  - Watts
-  - WattHours
-  - Gallons
-  - GallonsPerMinute
+  - "Seconds"
+  - "Milliseconds"
+  - "Fahrenheit"
+  - "Celsius"
+  - "Watts"
+  - "WattHours"
+  - "Gallons"
+  - "GallonsPerMinute"
 
-default: Watts
+default: "Watts"
 
 x-gridworks:
   owner: "gridworks-energy"
   version: "000"
-
+  enum_type: "versioned"
+  value_descriptions:
+    "Seconds": "Elapsed or absolute time measured in seconds."
+    "Milliseconds": "Elapsed or absolute time measured in milliseconds."
+    "Fahrenheit": "Temperature measured in degrees Fahrenheit."
+    "Celsius": "Temperature measured in degrees Celsius."
+    "Watts": "Power measured in watts."
+    "WattHours": "Energy measured in watt-hours."
+    "Gallons": "Volume measured in gallons."
+    "GallonsPerMinute": "Flow rate measured in gallons per minute."
 
   extended_description: >
     For applications requiring integer-based representations, use

@@ -191,6 +191,8 @@ Formats are immutable and unversioned. Each format entry MUST include:
 ```
 
 For all vocabulary entries (formats, enums, and types), schema_url SHALL equal the $id declared in the referenced schema file.
+For enums, the registry SHALL also record `enum_type` for each published version, and that value SHALL match `x-gridworks.enum_type` in the corresponding enum schema file.
+The enum schema file remains authoritative; the registry copy exists for compact tooling and validation.
 
 Formats SHALL NOT include any version related information.
 
@@ -209,10 +211,23 @@ Each enum entry MUST include:
     "001":
       schema_url: "https://schemas.electricity.works/enums/<enum-name>/001"
       created: "<RFC 3339 timestamp>"
+      enum_type: "versioned" | "literal"
     "000":
       schema_url: "https://schemas.electricity.works/enums/<enum-name>/000"
       created: "<RFC 3339 timestamp>"
+      enum_type: "versioned" | "literal"
 ```
+
+Enum versions MAY also include:
+
+```
+summary: "<one-line changelog summary>"
+```
+
+If summary is provided:
+  - It SHOULD be a brief one-line description of what changed in that enum version.
+  - For versioned enums, it will typically name the appended enum values.
+  - It is changelog metadata only and MUST NOT be treated as normative semantics.
 
 Enum versions: 
   - MUST be three-digit numeric strings.
@@ -644,17 +659,28 @@ The `x-gridworks` block MUST include:
 x-gridworks:
   owner: "<owner-id>"
   version: "<3-digit version>"
+  enum_type: "versioned" | "literal"
 ```
 
 Optional: 
 ```
 value_descriptions:
   "<EnumValue>": "<Description>"
+
+extended_description: >
+  ...
 ```
 
 If value_descriptions is provided:
   - Every enum value SHOULD have a description.
   - Descriptions SHOULD explain semantic meaning, not restate the name.
+
+If extended_description is provided:
+  - It SHOULD appear after value_descriptions for readability.
+  - It MAY provide additional architectural or migration context.
+  - References to other Sema words SHOULD appear in extended_description, not description.
+  - It MUST NOT introduce new normative constraints.
+  - It MUST NOT change the semantic meaning of any enum value.
 
 
 #### Evolution Rules
@@ -662,17 +688,28 @@ If value_descriptions is provided:
 Enums are versioned. These versions SHALL match the pattern `000`, `001`, `002` etc (i.e. three-digit numeric strings). For enums, these
 versions SHALL increase with each published version. 
 
-New versions MAY append new values to the end of the `enum` list. New versions SHALL NOT
-  - Remove existing values
-  - Reorder existing values
-  - Change the semantic meaning of existing values
-  - Change the `default` value
+Enum schemas SHALL declare one of two enum types:
+  - `versioned`
+  - `literal`
+
+For `versioned` enums:
+  - New versions MAY append new values to the end of the `enum` list.
+  - New versions SHALL NOT remove existing values, reorder existing values, change the semantic meaning of existing values, or change the `default` value.
+
+For `literal` enums:
+  - The enum version SHALL be `000`.
+  - New values SHALL NOT be added.
+  - Existing values SHALL NOT be removed, reordered, or reinterpreted.
+  - The `default` value SHALL NOT change.
+
+In both cases, semantic stability is required across publication.
 
 ####  Description Evolution
 
 In new enum versions, the following MAY be modified for clarity:
   - description
   - value_descriptions
+  - extended_description
 
 Such modifications:
   - MUST NOT change the semantic meaning of any enum value
@@ -717,6 +754,7 @@ default: "Logical"
 x-gridworks:
   owner: "gridworks-energy"
   version: "000"
+  enum_type: "versioned"
   value_descriptions:
     "TerminalAsset": >
       A physical transactive asset such as a heat pump, hot water heater, residential battery, 

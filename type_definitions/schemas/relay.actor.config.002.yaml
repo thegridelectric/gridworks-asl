@@ -50,7 +50,7 @@ properties:
       Base-10 exponent applied to the channel value representation.
 
   Unit:
-    $ref: "https://schemas.electricity.works/enums/gw1.unit/001"
+    $ref: "https://schemas.electricity.works/enums/spaceheat.unit/001"
     description: >
       Unit associated with the channel represented by this relay actor config.
 

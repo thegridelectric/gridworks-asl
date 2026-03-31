@@ -42,6 +42,17 @@ formats:
     description: "Canonical lowercase UUIDv4 string (RFC 4122) in 8-4-4-4-12 format"
   
 enums:
+  change.relay.state:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "FSM events for changing a simple relay between open and closed states."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/change.relay.state/000"
+        created: "??"
+        enum_type: "literal"
+
   base.g.node.class:
     latest_version: "000"
     owner: gridworks-energy
@@ -82,6 +93,17 @@ enums:
         schema_url: "https://schemas.electricity.works/enums/g.node.status/000"
         created: "2026-02-22T16:43:00Z"
 
+  gpm.from.hz.method:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "Method used to convert measured pulse frequency into gallons per minute."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gpm.from.hz.method/000"
+        created: "2026-01-03T14:27:00Z"
+        enum_type: "versioned"
+
   gw.g.node.class:
     latest_version: "000"
     owner: gridworks-energy
@@ -92,6 +114,120 @@ enums:
         schema_url: "https://schemas.electricity.works/enums/gw.g.node.class/000"
         created: "2026-02-23T17:08:00Z"
 
+  gw1.actor.class:
+    latest_version: "011"
+    owner: gridworks-energy
+    description: "Classification of actors in the GridWorks SCADA system."
+
+    versions:
+      "011":
+        schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/011"
+        created: "2026-03-27T16:56:00Z"
+        enum_type: "versioned"
+        summary: "Add GpioSensor, I2cBus, I2cRelayBoard, and I2cThermistorReader."
+      "009":
+        schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/009"
+        created: "2026-01-03T14:27:00Z"
+        enum_type: "versioned"
+
+  gw1.emission.method:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "Method by which a derived or computed channel emits values."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.emission.method/000"
+        created: "2026-02-02T22:17:00Z"
+        enum_type: "versioned"
+
+  gw1.float.unit:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "Measurement-unit vocabulary for quantities serialized as floating point values."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.float.unit/000"
+        created: "2026-03-31T09:18:00Z"
+        enum_type: "versioned"
+
+  gw1.quantity:
+    latest_version: "001"
+    owner: gridworks-energy
+    description: "High-level physical or semantic quantity classification for telemetry values."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/enums/gw1.quantity/001"
+        created: "2026-03-31T09:18:00Z"
+        enum_type: "versioned"
+        summary: "Add Time."
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.quantity/000"
+        created: "2026-02-17T19:54:00Z"
+        enum_type: "versioned"
+
+  gw1.seasonal.storage.mode:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "Seasonal storage operating mode for layouts that distinguish all-tank from buffer-only operation."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.seasonal.storage.mode/000"
+        created: "2026-01-14T18:04:00Z"
+        enum_type: "versioned"
+
+  gw1.system.mode:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "System operational mode for HVAC control."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.system.mode/000"
+        created: "2026-01-14T18:04:00Z"
+        enum_type: "versioned"
+
+  gw1.unit:
+    latest_version: "001"
+    owner: gridworks-energy
+    description: "Measurement-unit vocabulary used for derived channels."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/enums/gw1.unit/001"
+        created: "2026-03-04T20:35:00Z"
+        enum_type: "versioned"
+        summary: "Add Seconds and SecondsX10."
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.unit/000"
+        created: "2025-12-25T22:18:00Z"
+        enum_type: "versioned"
+
+  hz.calc.method:
+    latest_version: "001"
+    owner: gridworks-energy
+    description: "Method used to estimate signal frequency from pulse timing data."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/enums/hz.calc.method/001"
+        created: "2026-01-03T14:27:00Z"
+        enum_type: "versioned"
+
+  relay.closed.or.open:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "FSM states for a simple relay with open and closed positions."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/relay.closed.or.open/000"
+        created: "2026-01-03T14:27:00Z"
+        enum_type: "literal"
+
   relay.wiring.config:
     latest_version: "000"
     owner: gridworks-energy
@@ -100,10 +236,79 @@ enums:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/enums/relay.wiring.config/000"
-        created: "2026-03-20T14:00:00Z"
+        created: "2026-01-03T14:27:00Z"
+        enum_type: "versioned"
+
+  spaceheat.make.model:
+    latest_version: "007"
+    owner: gridworks-energy
+    description: "Make and model taxonomy used by Spaceheat SCADA for physical and simulated devices."
+
+    versions:
+      "007":
+        schema_url: "https://schemas.electricity.works/enums/spaceheat.make.model/007"
+        created: "2026-01-03T14:27:00Z"
+        enum_type: "versioned"
+
+  spaceheat.unit:
+    latest_version: "001"
+    owner: gridworks-energy
+    description: "Legacy Spaceheat measurement-unit vocabulary used in channel configuration and telemetry payloads."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/enums/spaceheat.unit/001"
+        created: "2026-01-03T14:27:00Z"
+        enum_type: "versioned"
+
+  spaceheat.telemetry.name:
+    latest_version: "007"
+    owner: gridworks-energy
+    description: "Legacy Spaceheat telemetry-name vocabulary for raw channels."
+
+    versions:
+      "007":
+        schema_url: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/007"
+        created: "2026-03-30T17:12:00Z"
+        enum_type: "versioned"
+        summary: "Add BinaryState."
+      "006":
+        schema_url: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/006"
+        created: "2026-01-03T14:27:00Z"
+        enum_type: "versioned"
+
+  temp.calc.method:
+    latest_version: "000"
+    owner: gridworks-energy
+    description: "Method used to calculate temperature from thermistor voltage measurements."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/temp.calc.method/000"
+        created: "2026-01-03T14:27:00Z"
+        enum_type: "versioned"
 
 
 types:
+
+  channel.config:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Base configuration for a component telemetry channel, including sampling cadence, async reporting, scaling exponent, and serialized unit."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/channel.config/000"
+        created: "2024-09-22T11:32:00Z"
+        summary: "Initial publication."
+        dependencies:
+          structural_direct:
+            - "spaceheat.name"
+            - "spaceheat.unit:001"
+          all:
+            - "spaceheat.name"
+            - "spaceheat.unit:001"
 
   channel.readings:
     latest_version: "002"
@@ -159,6 +364,31 @@ types:
             - "left.right.dot"
             - "uuid4.str"
 
+  i2c.multichannel.dt.relay.component.gt:
+    latest_version: "002"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Configuration for a multi-channel I2C relay board component."
+
+    versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002"
+        created: "2026-01-03T14:27:00Z"
+        summary: "Initial registered version."
+        dependencies:
+          structural_direct:
+            - "relay.actor.config:002"
+            - "uuid4.str"
+          all:
+            - "change.relay.state:000"
+            - "left.right.dot"
+            - "relay.closed.or.open:000"
+            - "relay.actor.config:002"
+            - "relay.wiring.config:000"
+            - "spaceheat.name"
+            - "spaceheat.unit:001"
+            - "uuid4.str"
+
   data.channel.gt:
     latest_version: "002"
     owner: gridworks-energy
@@ -203,22 +433,6 @@ types:
             - "left.right.dot"
             - "spaceheat.name"
             - "spaceheat.telemetry.name:006"
-            - "utc.seconds"
-            - "uuid4.str"
-
-      "000":
-        schema_url: "https://schemas.electricity.works/types/data.channel.gt/000"
-        created: "2026-02-22T00:00:00Z"
-        summary: "Initial version."
-        dependencies:
-          structural_direct:
-            - "spaceheat.name"
-            - "spaceheat.telemetry.name:001"
-            - "utc.seconds"
-            - "uuid4.str"
-          all:
-            - "spaceheat.name"
-            - "spaceheat.telemetry.name:001"
             - "utc.seconds"
             - "uuid4.str"
 
@@ -506,7 +720,7 @@ types:
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:006"
-            - "i2c.multichannel.dt.relay.component.gt:000"
+            - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
@@ -515,18 +729,25 @@ types:
             - "utc.milliseconds"
             - "uuid4.str"
           all:
+            - "channel.config:000"
+            - "change.relay.state:000"
             - "data.channel.gt:002"
             - "derived.channel.gt:001"
             - "gw1.seasonal.storage.mode:000"
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:006"
-            - "i2c.multichannel.dt.relay.component.gt:000"
+            - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
+            - "relay.actor.config:002"
+            - "relay.closed.or.open:000"
+            - "relay.wiring.config:000"
             - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.name"
             - "spaceheat.node.gt:301"
+            - "spaceheat.unit:001"
             - "utc.milliseconds"
             - "uuid4.str"
 
@@ -542,7 +763,7 @@ types:
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:006"
-            - "i2c.multichannel.dt.relay.component.gt:000"
+            - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
@@ -551,18 +772,25 @@ types:
             - "utc.milliseconds"
             - "uuid4.str"
           all:
+            - "channel.config:000"
+            - "change.relay.state:000"
             - "data.channel.gt:001"
             - "derived.channel.gt:000"
             - "gw1.seasonal.storage.mode:000"
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:006"
-            - "i2c.multichannel.dt.relay.component.gt:000"
+            - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
+            - "relay.actor.config:002"
+            - "relay.closed.or.open:000"
+            - "relay.wiring.config:000"
             - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.name"
             - "spaceheat.node.gt:300"
+            - "spaceheat.unit:001"
             - "utc.milliseconds"
             - "uuid4.str"
 
@@ -578,7 +806,7 @@ types:
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:005"
-            - "i2c.multichannel.dt.relay.component.gt:000"
+            - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:000"
@@ -587,18 +815,25 @@ types:
             - "utc.milliseconds"
             - "uuid4.str"
           all:
+            - "channel.config:000"
+            - "change.relay.state:000"
             - "data.channel.gt:001"
             - "derived.channel.gt:000"
             - "gw1.seasonal.storage.mode:000"
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:005"
-            - "i2c.multichannel.dt.relay.component.gt:000"
+            - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:000"
+            - "relay.actor.config:002"
+            - "relay.closed.or.open:000"
+            - "relay.wiring.config:000"
             - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.name"
             - "spaceheat.node.gt:300"
+            - "spaceheat.unit:001"
             - "utc.milliseconds"
             - "uuid4.str"
 
@@ -622,6 +857,58 @@ types:
             - "handle.name"
             - "left.right.dot"
             - "utc.milliseconds"
+
+  pico.flow.module.component.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Configuration for a Pico-based flow module component."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/pico.flow.module.component.gt/000"
+        created: "2026-03-30T23:25:06Z"
+        summary: "Initial registered version."
+        dependencies:
+          structural_direct:
+            - "channel.config:000"
+            - "gpm.from.hz.method:000"
+            - "hz.calc.method:001"
+            - "spaceheat.make.model:007"
+            - "spaceheat.name"
+            - "uuid4.str"
+          all:
+            - "channel.config:000"
+            - "gpm.from.hz.method:000"
+            - "hz.calc.method:001"
+            - "spaceheat.make.model:007"
+            - "spaceheat.name"
+            - "spaceheat.unit:001"
+            - "uuid4.str"
+
+  pico.tank.module.component.gt:
+    latest_version: "011"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Configuration for a Pico-based tank temperature module component."
+
+    versions:
+      "011":
+        schema_url: "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"
+        created: "2026-03-30T23:25:06Z"
+        summary: "Initial registered version."
+        dependencies:
+          structural_direct:
+            - "channel.config:000"
+            - "spaceheat.name"
+            - "temp.calc.method:000"
+            - "uuid4.str"
+          all:
+            - "channel.config:000"
+            - "spaceheat.name"
+            - "spaceheat.unit:001"
+            - "temp.calc.method:000"
+            - "uuid4.str"
 
   position.point.gt:
     latest_version: "000"
@@ -648,20 +935,25 @@ types:
     versions:
       "002":
         schema_url: "https://schemas.electricity.works/types/relay.actor.config/002"
-        created: "2026-03-17T00:00:00Z"
+        created: "2026-01-03T14:27:00Z"
 
         dependencies:
           structural_direct:
-            - "gw1.unit:001"
+            - "spaceheat.unit:001"
             - "left.right.dot"
             - "relay.wiring.config:000"
             - "spaceheat.name"
+          axiom_direct:
+            - "change.relay.state:000"
+            - "relay.closed.or.open:000"
 
           all:
-            - "gw1.unit:001"
+            - "change.relay.state:000"
             - "left.right.dot"
+            - "relay.closed.or.open:000"
             - "relay.wiring.config:000"
             - "spaceheat.name"
+            - "spaceheat.unit:001"
 
   report:
     latest_version: "003"
@@ -768,14 +1060,14 @@ types:
           structural_direct:
             - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
-            - "sh.actor.class:000"
-            - "spaceheat.name:000"
+            - "gw1.actor.class:009"
+            - "spaceheat.name"
             - "utc.milliseconds"
           all:
             - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
-            - "sh.actor.class:000"
-            - "spaceheat.name:000"
+            - "gw1.actor.class:009"
+            - "spaceheat.name"
             - "utc.milliseconds"
 
   send.control.capabilities:
@@ -823,10 +1115,34 @@ types:
         dependencies:
           structural_direct:
             - "left.right.dot"
-            - "spaceheat.name:000"
+            - "spaceheat.name"
           all:
             - "left.right.dot"
-            - "spaceheat.name:000"
+            - "spaceheat.name"
+
+  sim.pico.tank.module.component.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Simulation configuration corresponding to pico.tank.module.component.gt."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"
+        created: "2026-03-30T23:25:06Z"
+        summary: "Initial registered version."
+        dependencies:
+          structural_direct:
+            - "channel.config:000"
+            - "spaceheat.name"
+            - "temp.calc.method:000"
+            - "uuid4.str"
+          all:
+            - "channel.config:000"
+            - "spaceheat.name"
+            - "spaceheat.unit:001"
+            - "temp.calc.method:000"
+            - "uuid4.str"
 
   single.machine.state:
     latest_version: "000"

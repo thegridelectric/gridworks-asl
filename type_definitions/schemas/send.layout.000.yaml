@@ -13,12 +13,12 @@ properties:
       GNode alias of the actor issuing the request.
 
   FromName:
-    $ref: "https://schemas.electricity.works/enums/spaceheat.name/000"
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
     description: >
       Spaceheat actor name of the requester (legacy routing/addressing field).
 
   ToName:
-    $ref: "https://schemas.electricity.works/enums/spaceheat.name/000"
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
     description: >
       Spaceheat actor name of the intended recipient (legacy routing/addressing field).
 

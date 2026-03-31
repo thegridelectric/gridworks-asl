@@ -50,6 +50,7 @@ default: "Unknown"
 x-gridworks:
   owner: "gridworks-energy"
   version: "007"
+  enum_type: "versioned"
   value_descriptions:
     "Unknown": "Default Value - unknown telemetry name."
     "PowerW": "Power in Watts."
