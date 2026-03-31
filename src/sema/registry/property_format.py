@@ -5,8 +5,6 @@ from typing import Annotated
 
 from pydantic import BeforeValidator
 
-from sema.registry.enums import MarketTypeName
-
 _LEFT_RIGHT_DOT_PATTERN = re.compile(
     r"^[a-z][a-z0-9]*(?:\.[a-z0-9]+)*$"
 )
@@ -191,6 +189,7 @@ def is_uuid4_str(v: str) -> str:
 
 
 def is_market_name(v: str) -> str:
+    market_type_name_enum = _market_type_name_enum()
     try:
         x = v.split(".")
     except AttributeError as e:
@@ -201,22 +200,30 @@ def is_market_name(v: str) -> str:
         raise ValueError(
             f"{v} first word must be e,r or d (energy, regulation, distribution)"
         )
-    if x[1] not in MarketTypeName.values():
+    if x[1] not in market_type_name_enum.values():
         raise ValueError(f"{v} not recognized MarketType")
     g_node_alias = ".".join(x[2:])
     is_left_right_dot(g_node_alias)
     return v
 
 
-MarketMinutes: dict[MarketTypeName, int] = {
-    MarketTypeName.da60: 60,
-    MarketTypeName.rt15gate5: 15,
-    MarketTypeName.rt30gate5: 30,
-    MarketTypeName.rt5gate5: 5,
-    MarketTypeName.rt60gate30: 60,
-    MarketTypeName.rt60gate30b: 60,
-    MarketTypeName.rt60gate5: 60,
-}
+def _market_type_name_enum():
+    from sema.registry.enums import MarketTypeName  # noqa: PLC0415
+
+    return MarketTypeName
+
+
+def _market_minutes() -> dict:
+    market_type_name_enum = _market_type_name_enum()
+    return {
+        market_type_name_enum.da60: 60,
+        market_type_name_enum.rt15gate5: 15,
+        market_type_name_enum.rt30gate5: 30,
+        market_type_name_enum.rt5gate5: 5,
+        market_type_name_enum.rt60gate30: 60,
+        market_type_name_enum.rt60gate30b: 60,
+        market_type_name_enum.rt60gate5: 60,
+    }
 
 
 def is_market_slot_name(v: str) -> str:
@@ -247,8 +254,8 @@ def is_market_slot_name(v: str) -> str:
     except ValueError as e:
         raise ValueError(f"slot start {slot_start} not an int") from e
     is_market_name(".".join(x[:-1]))
-    market_type_name = MarketTypeName(x[1])
-    market_duration_minutes = MarketMinutes[market_type_name]
+    market_type_name = _market_type_name_enum()(x[1])
+    market_duration_minutes = _market_minutes()[market_type_name]
     if not slot_start % (market_duration_minutes * 60) == 0:
         raise ValueError(
             f"market_slot_start_s mod {market_duration_minutes * 60} must be 0"

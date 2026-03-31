@@ -22,7 +22,7 @@ def recursively_pascal(d: dict) -> bool:
     if isinstance(d, dict):
         # Check if all keys in the dictionary are in PascalCase
         for key, value in d.items():
-            if not is_pascal_case(key):
+            if key and key[0].isalpha() and not is_pascal_case(key):
                 return False
             if not recursively_pascal(value):
                 return False

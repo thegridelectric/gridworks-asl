@@ -36,3 +36,13 @@ class ReportEvent002(SemaType):
         if self.src != self.report.from_g_node_alias:
             raise ValueError("Axiom 3 failed: src must equal report.from_g_node_alias.")
         return self
+
+    def to_latest(self) -> "ReportEvent":
+        from sema.registry.types.report_event import ReportEvent  # noqa: PLC0415
+
+        return ReportEvent(
+            message_id=self.message_id,
+            time_created_ms=self.time_created_ms,
+            src=self.src,
+            report=self.report.to_latest(),
+        )

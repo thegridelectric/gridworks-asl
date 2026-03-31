@@ -16,3 +16,12 @@ class FsmFullReport000(SemaType):
 
     model_config = dict(SemaType.model_config)
     model_config["extra"] = "allow"
+
+    def to_latest(self) -> "FsmFullReport":
+        from sema.registry.types.fsm_full_report import FsmFullReport  # noqa: PLC0415
+
+        return FsmFullReport(
+            from_name=self.from_name,
+            trigger_id=self.trigger_id,
+            atomic_list=[atomic.to_latest() for atomic in self.atomic_list],
+        )

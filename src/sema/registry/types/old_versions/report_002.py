@@ -24,3 +24,19 @@ class Report002(SemaType):
     id: UUID4Str
     type_name: Literal["report"] = "report"
     version: str = "002"
+
+    def to_latest(self) -> "Report":
+        from sema.registry.types.report import Report  # noqa: PLC0415
+
+        return Report(
+            from_g_node_alias=self.from_g_node_alias,
+            from_g_node_instance_id=self.from_g_node_instance_id,
+            about_g_node_alias=self.about_g_node_alias,
+            slot_start_unix_s=self.slot_start_unix_s,
+            slot_duration_s=self.slot_duration_s,
+            channel_reading_list=self.channel_reading_list,
+            state_list=self.state_list,
+            fsm_report_list=[fsm_report.to_latest() for fsm_report in self.fsm_report_list],
+            message_created_ms=self.message_created_ms,
+            id=self.id,
+        )
