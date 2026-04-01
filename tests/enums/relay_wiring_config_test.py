@@ -2,7 +2,7 @@
 Tests for enum relay.wiring.config.000
 """
 
-from sema.registry.enums import RelayWiringConfig
+from sema.runtime.enums import RelayWiringConfig
 
 
 def test_relay_wiring_config() -> None:

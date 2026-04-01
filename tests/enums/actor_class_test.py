@@ -2,8 +2,8 @@
 Tests for enum gw1.actor.class latest and old versions.
 """
 
-from sema.registry.enums import Gw1ActorClass
-from sema.registry.enums.old_versions import Gw1ActorClass009, Gw1ActorClass010
+from sema.runtime.enums import Gw1ActorClass
+from sema.runtime.enums.old_versions import Gw1ActorClass009, Gw1ActorClass010
 
 
 def test_gw1_actor_class_latest() -> None:

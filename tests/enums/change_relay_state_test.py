@@ -2,7 +2,7 @@
 Tests for enum change.relay.state.000
 """
 
-from sema.registry.enums import ChangeRelayState
+from sema.runtime.enums import ChangeRelayState
 
 
 def test_change_relay_state() -> None:

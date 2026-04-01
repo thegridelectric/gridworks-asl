@@ -1,6 +1,6 @@
 from pydantic import ValidationError
 
-from sema.registry.types.spaceheat_telemetry_quantity_projection import (
+from sema.runtime.types.spaceheat_telemetry_quantity_projection import (
     SpaceheatTelemetryQuantityProjection,
 )
 

@@ -2,8 +2,8 @@
 Tests for enum gw1.quantity latest and old versions.
 """
 
-from sema.registry.enums import Gw1Quantity
-from sema.registry.enums.old_versions import Gw1Quantity000
+from sema.runtime.enums import Gw1Quantity
+from sema.runtime.enums.old_versions import Gw1Quantity000
 
 
 def test_gw1_quantity_latest() -> None:

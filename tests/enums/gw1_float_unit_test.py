@@ -2,7 +2,7 @@
 Tests for enum gw1.float.unit.000
 """
 
-from sema.registry.enums import Gw1FloatUnit
+from sema.runtime.enums import Gw1FloatUnit
 
 
 def test_gw1_float_unit() -> None:

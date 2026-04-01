@@ -10,6 +10,7 @@ scratch.*
 # Virtual environments
 .venv
 .ssotme
+output/
 
 
 *.zfs

@@ -1,0 +1,121 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"
+
+title: "sim.pico.tank.module.component.gt"
+type: object
+description: >
+  Simulation configuration corresponding to pico.tank.module.component.gt.
+
+properties:
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.config/000"
+    description: >
+      Channel configuration entries inherited from ComponentGt.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  Enabled:
+    type: boolean
+
+  PicoHwUid:
+    type: string
+
+  PicoAHwUid:
+    type: string
+
+  PicoBHwUid:
+    type: string
+
+  TempCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/temp.calc.method/000"
+
+  ThermistorBeta:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+
+  SendMicroVolts:
+    type: boolean
+
+  Samples:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+
+  NumSampleAverages:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+
+  PicoKOhms:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+
+  SerialNumber:
+    type: string
+
+  AsyncCaptureDeltaMicroVolts:
+    type: integer
+
+  SensorOrder:
+    type: array
+    items:
+      type: integer
+
+  SimulatesTypeName:
+    const: "pico.tank.module.component.gt"
+
+  SimulatesVersion:
+    const: "011"
+
+  TypeName:
+    const: "sim.pico.tank.module.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - ComponentAttributeClassId
+  - ConfigList
+  - Enabled
+  - TempCalcMethod
+  - ThermistorBeta
+  - SendMicroVolts
+  - Samples
+  - NumSampleAverages
+  - SerialNumber
+  - AsyncCaptureDeltaMicroVolts
+  - SimulatesTypeName
+  - SimulatesVersion
+  - TypeName
+  - Version
+
+additionalProperties: true
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "PicoHardwareIdentityXor"
+      statement: >
+        Exactly one of the following SHALL hold:
+          - PicoHwUid is present
+          - both PicoAHwUid and PicoBHwUid are present
+
+    - number: 2
+      name: "PicoKOhmsConsistency"
+      statement: >
+        PicoKOhms SHALL be present if and only if TempCalcMethod equals
+        SimpleBetaForPico.
+
+    - number: 3
+      name: "SensorOrderPermutation"
+      statement: >
+        If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].

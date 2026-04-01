@@ -2,7 +2,7 @@
 Tests for enum gw1.seasonal.storage.mode.000
 """
 
-from sema.registry.enums import Gw1SeasonalStorageMode
+from sema.runtime.enums import Gw1SeasonalStorageMode
 
 
 def test_gw1_seasonal_storage_mode() -> None:

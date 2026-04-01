@@ -2,7 +2,7 @@
 Tests for enum spaceheat.unit.001
 """
 
-from sema.registry.enums import SpaceheatUnit
+from sema.runtime.enums import SpaceheatUnit
 
 
 def test_spaceheat_unit() -> None:

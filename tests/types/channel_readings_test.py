@@ -1,6 +1,6 @@
 from pydantic import ValidationError
 
-from sema.registry.types.channel_readings import ChannelReadings
+from sema.runtime.types.channel_readings import ChannelReadings
 
 
 def test_channel_readings_length_validator() -> None:

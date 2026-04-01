@@ -1,0 +1,26 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gridworks.ping"
+
+title: "gridworks.ping"
+type: object
+description: >
+  Versionless message used for liveness and heartbeat checks between
+  GridWorks components.
+
+properties:
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier for this ping message.
+
+  TypeName:
+    const: "gridworks.ping"
+
+required:
+  - MessageId
+  - TypeName
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

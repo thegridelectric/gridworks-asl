@@ -2,7 +2,7 @@
 Tests for enum hz.calc.method.001
 """
 
-from sema.registry.enums import HzCalcMethod
+from sema.runtime.enums import HzCalcMethod
 
 
 def test_hz_calc_method() -> None:

@@ -1,9 +1,9 @@
 from pydantic import ValidationError
 
-from sema.registry.types.i2c_multichannel_dt_relay_component_gt import (
+from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
-from sema.registry.types.relay_actor_config import RelayActorConfig
+from sema.runtime.types.relay_actor_config import RelayActorConfig
 
 
 def test_i2c_multichannel_dt_relay_component_gt_uniqueness() -> None:

@@ -2,8 +2,8 @@
 Tests for enum gw1.unit latest and old versions.
 """
 
-from sema.registry.enums import Gw1Unit
-from sema.registry.enums.old_versions import Gw1Unit000
+from sema.runtime.enums import Gw1Unit
+from sema.runtime.enums.old_versions import Gw1Unit000
 
 
 def test_gw1_unit_latest() -> None:

@@ -1,6 +1,6 @@
 from pydantic import ValidationError
 
-from sema.registry.types.channel_config import ChannelConfig
+from sema.runtime.types.channel_config import ChannelConfig
 
 
 def test_channel_config_serializes_pascal_case() -> None:
@@ -19,10 +19,21 @@ def test_channel_config_serializes_pascal_case() -> None:
 
 
 def test_channel_config_async_capture_requires_delta() -> None:
+    cfg = ChannelConfig(
+        channel_name="zone1-relay-state",
+        capture_period_s=60,
+        async_capture=True,
+        exponent=0,
+        unit="Unitless",
+    )
+    assert cfg.async_capture_delta is None
+
+
+def test_channel_config_rejects_float_for_integer_field() -> None:
     try:
         ChannelConfig(
             channel_name="zone1-relay-state",
-            capture_period_s=60,
+            capture_period_s=60.0,
             async_capture=True,
             exponent=0,
             unit="Unitless",

@@ -2,7 +2,7 @@
 Tests for enum gw1.system.mode.000
 """
 
-from sema.registry.enums import Gw1SystemMode
+from sema.runtime.enums import Gw1SystemMode
 
 
 def test_gw1_system_mode() -> None:

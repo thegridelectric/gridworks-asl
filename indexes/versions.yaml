@@ -1,0 +1,474 @@
+# GENERATED FILE — DO NOT EDIT
+# Generated from definitions/registry.yaml
+
+
+types:
+  analytics.channel.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  channel.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  channel.readings:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: >
+          - ChannelId: remove
+          - additionalProperties: true -> false
+      "001":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  connectivity.edge.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  i2c.multichannel.dt.relay.component.gt:
+    latest_version: "004"
+    versioning_strategy: "literal"
+    versions:
+      "004":
+        summary: "- ConfigList[]: relay.actor.config:002 -> 003"
+      "003":
+        summary: "- Add I2cBus"
+      "002":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  data.channel.gt:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: >
+          - Quantity: add
+          - TelemetryName: spaceheat.telemetry.name:006 -> 007
+          - TelemetryQuantityConsistency axiom: add
+      "001":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  derived.channel.gt:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: >
+          - OutputUnit: required
+          - OutputQuantity: add
+          - OutputUnitQuantityConsistency axiom: add
+      "001":
+        summary: >
+          - InputChannelNames[]: add
+          - EmissionMethod: add
+          - Parameters: add
+      "000":
+        summary: "Initial Sema version"
+
+  fsm.atomic.report:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: >
+          - Remove ActionType
+          - Action: scalar → structured variants (oneOf)
+      "000":
+        summary: "Initial Sema version"
+
+  fsm.full.report:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Update AtomicList item type from fsm.atomic.report:000 to fsm.atomic.report:001."
+      "000":
+        summary: "Initial Sema version"
+
+  g.node.gt:
+    latest_version: "004"
+    versioning_strategy: "literal"
+    versions:
+      "004":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  g.node.instance.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gridworks.ping:
+    versioning_strategy: "none"
+    summary: "Versionless message used for liveness/heartbeat checks."
+
+  gw1.unit.quantity.projection:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.tank.temp.calibration:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.tank.temp.calibration.map:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  ha1.params:
+    latest_version: "006"
+    versioning_strategy: "string"
+    versions:
+      "006":
+        summary: >
+          - HpMaxKwTh -> HpMaxKwEl
+          - HpTurnOnMinutes: add
+      "005":
+        summary: >
+          - CopModelCoefficients: add
+          - MinimumOperatingCopParameters: add
+      "004":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  layout.lite:
+    latest_version: "013"
+    versioning_strategy: "literal"
+    versions:
+      "013":
+        summary: "- I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004"
+      "012":
+        summary: >
+          - DerivedChannels[]: derived.channel.gt:000 -> 001
+          - DataChannels[]: data.channel.gt:001 -> 002
+          - ShNodes[]: spaceheat.node.gt:300 -> 301
+          - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> 003
+          - I2cRelayComponent: optional (was required)
+      "011":
+        summary: "- Ha1Params: ha1.params:005 -> 006"
+      "010":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  machine.states:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  pico.flow.module.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  pico.tank.module.component.gt:
+    latest_version: "011"
+    versioning_strategy: "literal"
+    versions:
+      "011":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  position.point.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  relay.actor.config:
+    latest_version: "003"
+    versioning_strategy: "literal"
+    versions:
+      "003":
+        summary: "- AsyncCaptureDelta: conditionally required when AsyncCapture is true (was optional)"
+      "002":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  report:
+    latest_version: "003"
+    versioning_strategy: "literal"
+    versions:
+      "003":
+        summary: "- FsmReportList[]: fsm.full.report:000 -> 001"
+      "002":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  report.event:
+    latest_version: "003"
+    versioning_strategy: "literal"
+    versions:
+      "003":
+        summary: "- Report: report:002 -> 003"
+      "002":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  scada.control.capabilities:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  send.control.capabilities:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  send.layout:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: >
+          - Remove FromName
+          - Remove ToName
+          - MessageCreatedMs: add
+      "000":
+        summary: "Initial Sema version"
+
+  sim.pico.tank.module.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  single.machine.state:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  single.reading:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  snapshot.spaceheat:
+    latest_version: "003"
+    versioning_strategy: "literal"
+    versions:
+      "003":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  spaceheat.node.gt:
+    latest_version: "301"
+    versioning_strategy: "literal"
+    versions:
+      "301":
+        summary: >
+          - BoardComponentId: add
+          - ActorClass: gw1.actor.class:009 -> 011
+      "300":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  synced.readings:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  synced.readings.bundle:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  spaceheat.telemetry.quantity.projection:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+enums:
+  change.relay.state:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  fsm.report.type:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  base.g.node.class:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  g.node.instance.status:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  g.node.instance.transport:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  g.node.status:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gpm.from.hz.method:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw.g.node.class:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.actor.class:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "011":
+        summary: "Add I2cThermistorReader."
+      "010":
+        summary: "Add GpioSensor, I2cBus, and I2cRelayBoard."
+      "009":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  gw1.emission.method:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.quantity:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001":
+        summary: "Add Time."
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.seasonal.storage.mode:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.system.mode:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.unit:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001":
+        summary: "Add Seconds and SecondsX10."
+      "000":
+        summary: "Initial Sema version"
+
+  hz.calc.method:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  relay.closed.or.open:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  relay.energization.state:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  relay.wiring.config:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  spaceheat.make.model:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "007":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  spaceheat.unit:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  spaceheat.telemetry.name:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "007":
+        summary: "Add BinaryState."
+      "006":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  temp.calc.method:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000":
+        summary: "Initial Sema version"

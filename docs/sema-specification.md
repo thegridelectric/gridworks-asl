@@ -56,6 +56,14 @@ All serialized JSON field names MUST use CamelCase, recursively through nested s
 
 This ensures uniform structure across systems and prevents semantic drift caused by naming inconsistencies. It also helps signal Sema.
 
+**2a. Primitive Types Are Validated at the Serialized Boundary**
+
+Sema validation applies to the serialized JSON artifact as transmitted, not to a permissively coerced in-memory approximation.
+
+If a schema says a value is an `integer`, then the serialized value MUST itself be an integer.
+
+Implementations SHALL reject floats, strings, or other values that would only satisfy the schema after coercion or truncation.
+
 **3. Types Declare Their Identity**:
 
 Every type MUST include a TypeName field whose value equals the registered vocabulary name.
@@ -123,6 +131,10 @@ Systems may adopt Sema incrementally - as a single format, a single type, or an 
 
 The goal is simple: shared meaning should be explicit and verifiable. Everything else builds on that.
 
+For the purposes of immutability and version governance, a vocabulary definition is considered **published** when it is available at `https://schemas.electricity.works`.
+
+Before publication, a schema MAY be revised in place to correct mistakes or to better align the initial Sema contract with demonstrated runtime behavior. After publication, historical versions are immutable and any semantic or validation change SHALL be expressed through a new version.
+
 ## Registry Structure
 
 The `registry.yaml` file is the authoritative index of all Sema vocabulary components.  It defines:
@@ -135,6 +147,17 @@ The `registry.yaml` file is the authoritative index of all Sema vocabulary compo
 The registry is the canonical source of vocabulary identity and lifecycle state. 
 
 Vocabulary components fall into three categories: **formats**, **enums** and **types**. 
+
+### Registry Status Field
+
+Registry entries MAY include a `status` field indicating lifecycle state.
+
+Allowed values:
+- `"draft"`: type is under active development and not yet stable
+- `"active"`: type is stable and intended for production use (default if omitted)
+- `"deprecated"`: type is no longer recommended for new use
+
+If `status` is omitted, it SHALL be interpreted as `"active"`.
 
 ### Top-Level Structure
 
@@ -255,13 +278,12 @@ What the Registry should look like
       schema_url: "https://schemas.electricity.works/types/<type-name>/<latest_version>"
       created: "<RFC 3339 timestamp>"
       summary: "<concise description of change>"
-      dependencies:
-        direct: 
-         - "sh.actor.class:000"
-         - "spaceheat.name:000"
-        all: 
-         - "sh.actor.class:000"
-         - "spaceheat.name:000"
+      direct_dependencies:
+        structural:
+          - "sh.actor.class:000"
+          - "spaceheat.name"
+        axiom:
+          - "projection.example:000"
     [..] # earlier versions
 
 ```
@@ -276,10 +298,8 @@ What the Registry should look like
   schema_url: "https://schemas.electricity.works/types/<type-name>"
   created: "<RFC 3339 timestamp>"
   summary: "<concise description of change>"
-  dependencies:
-    direct:
-      - "uuid4.str"
-    all:
+  direct_dependencies:
+    structural:
       - "uuid4.str"
   ```
 
@@ -297,10 +317,10 @@ versions:
     schema_url: "https://schemas.electricity.works/types/<type-name>/004"
     created: "<RFC 3339 timestamp>"
     summary: "<concise description of change>"
-    dependencies:
-      direct:
+    direct_dependencies:
+      structural:
         - ...
-      all:
+      axiom:
         - ...
 ```
 
@@ -387,43 +407,38 @@ For versioned types:
   - Historical schemas MUST NOT be altered in ways that change validation behavior.
 
 ### Dependency Model
-Versioned types SHALL declare dependencies. Dependencies describe the Sema vocabulary required both to validate the schema structurally and to implement any axioms attached to that specific type version.
+Versioned types SHALL declare direct dependencies. These identify the Sema vocabulary required both to validate the schema structurally and to implement any axioms attached to that specific type version.
 
-Dependencies are expressed as ordered lists:
+Dependencies are expressed in `registry.yaml` as:
 
-dependencies:
-  structural_direct:
+```
+direct_dependencies:
+  structural:
     - "<word-name>:<version>"   # for versioned types or enums
     - "<format-name>"           # for versionless formats
-  axiom_direct:
+  axiom:
     - "<word-name>:<version>"
     - "<format-name>"
-  all:
-    - "<word-name>:<version>"
-    - "<format-name>"
+```
 
 **Rules**
 
-1. **structural_direct**
+1. **structural**
     - SHALL include every vocabulary word explicitly referenced in the schema via `$ref` (all formats, enums, and types).
     - SHALL use the canonical identifier format:
       - `name:###` for versioned types and enums (3-digit numeric version)
       - `name` for versionless formats or versionless types
     - SHALL NOT include transitive dependencies.
 
-2. **axiom_direct**
+2. **axiom**
     - SHALL include every Sema vocabulary word whose value set, structure, or specific version is normatively required to implement one or more axioms for that type version.
     - SHALL be used when an axiom depends on a specific enum, type, or format even if that vocabulary is not referenced via `$ref`.
-    - SHALL use the same canonical identifier rules as `structural_direct`.
+    - SHALL use the same canonical identifier rules as `structural`.
     - SHALL NOT include transitive dependencies.
     - MAY be omitted entirely if the type version has no axiom-level dependency on external Sema vocabulary.
 
-3. **all**
-    - SHALL include the full transitive closure of `structural_direct` together with `axiom_direct`.
-    - SHALL be a strict superset or equal to the union of `structural_direct` and `axiom_direct`.
-
-4. **Ordering and Structure**
-    - `structural_direct`, `axiom_direct` (if present), and `all` SHALL:
+3. **Ordering and Structure**
+    - `structural` and `axiom` (if present) SHALL:
       - Be alphabetically sorted (lexicographically by full identifier string)
       - Contain no duplicates
       - Be declared as block lists (one entry per line)
@@ -431,21 +446,20 @@ dependencies:
     - When computing dependencies, tooling SHALL extract the vocabulary word from the $ref URL path and omit the domain prefix.
     - If no dependencies exist, the dependency block SHALL be:
 ```
-dependencies:
-  structural_direct: []
-  all: []
+direct_dependencies:
+  structural: []
 ```
-    - If structural dependencies exist but no axiom-level dependencies exist, `axiom_direct` SHOULD be omitted.
-    - If structural dependencies do not exist but axiom-level dependencies do exist, `structural_direct` SHALL be declared as `[]`.
+    - If structural dependencies exist but no axiom-level dependencies exist, `axiom` SHOULD be omitted.
+    - If structural dependencies do not exist but axiom-level dependencies do exist, `structural` SHALL be declared as `[]`.
 
-5. **Version Rules**
+4. **Version Rules**
     - Versioned words MUST be referenced as `name:###` where `###` is a 3-digit numeric string.
     - Versionless words MUST NOT include a version suffix.
     - Mixing formats (e.g., including a colon for versionless words or omitting a version for versioned words) is invalid.
 
-6. **Axiom Implementability**
+5. **Axiom Implementability**
     - Dependency declaration SHALL be sufficient to implement validation for the full contract of the type version, including its axioms.
-    - If an axiom normatively names a specific Sema vocabulary word or version, that word SHALL appear in `axiom_direct` unless it already appears in `structural_direct`.
+    - If an axiom normatively names a specific Sema vocabulary word or version, that word SHALL appear in `axiom` unless it already appears in `structural`.
     - A type version SHALL NOT rely on undeclared external Sema vocabulary to make its axioms mechanically implementable.
 
 

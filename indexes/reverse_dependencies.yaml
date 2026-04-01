@@ -1,0 +1,404 @@
+# GENERATED FILE — DO NOT EDIT
+# Generated from definitions/registry.yaml
+
+types:
+  gw1.unit.quantity.projection:
+    '000':
+      used_by:
+      - analytics.channel.gt:000
+      - derived.channel.gt:002
+  relay.actor.config:
+    '003':
+      used_by:
+      - i2c.multichannel.dt.relay.component.gt:004
+    '002':
+      used_by:
+      - i2c.multichannel.dt.relay.component.gt:002
+      - i2c.multichannel.dt.relay.component.gt:003
+  spaceheat.telemetry.quantity.projection:
+    '000':
+      used_by:
+      - data.channel.gt:002
+  fsm.atomic.report:
+    '001':
+      used_by:
+      - fsm.full.report:001
+    '000':
+      used_by:
+      - fsm.full.report:000
+  gw1.tank.temp.calibration:
+    '000':
+      used_by:
+      - gw1.tank.temp.calibration.map:000
+  gw1.tank.temp.calibration.map:
+    '000':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+      - layout.lite:012
+      - layout.lite:013
+  ha1.params:
+    '006':
+      used_by:
+      - layout.lite:011
+      - layout.lite:012
+      - layout.lite:013
+    '005':
+      used_by:
+      - layout.lite:010
+  pico.tank.module.component.gt:
+    '011':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+      - layout.lite:012
+      - layout.lite:013
+  spaceheat.node.gt:
+    '301':
+      used_by:
+      - layout.lite:012
+      - layout.lite:013
+    '300':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+  derived.channel.gt:
+    '001':
+      used_by:
+      - layout.lite:012
+      - layout.lite:013
+    '000':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+  pico.flow.module.component.gt:
+    '000':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+      - layout.lite:012
+      - layout.lite:013
+  data.channel.gt:
+    '002':
+      used_by:
+      - layout.lite:012
+      - layout.lite:013
+    '001':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+  sim.pico.tank.module.component.gt:
+    '000':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+      - layout.lite:012
+      - layout.lite:013
+  i2c.multichannel.dt.relay.component.gt:
+    '004':
+      used_by:
+      - layout.lite:013
+    '003':
+      used_by:
+      - layout.lite:012
+    '002':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+      - scada.control.capabilities:000
+  channel.config:
+    '000':
+      used_by:
+      - pico.flow.module.component.gt:000
+      - pico.tank.module.component.gt:011
+      - sim.pico.tank.module.component.gt:000
+  fsm.full.report:
+    '001':
+      used_by:
+      - report:003
+    '000':
+      used_by:
+      - report:002
+  channel.readings:
+    '002':
+      used_by:
+      - report:002
+      - report:003
+  machine.states:
+    '000':
+      used_by:
+      - report:002
+      - report:003
+  report:
+    '003':
+      used_by:
+      - report.event:003
+    '002':
+      used_by:
+      - report.event:002
+  single.reading:
+    '000':
+      used_by:
+      - snapshot.spaceheat:003
+  single.machine.state:
+    '000':
+      used_by:
+      - snapshot.spaceheat:003
+enums:
+  gw1.unit:
+    '001':
+      used_by:
+      - analytics.channel.gt:000
+      - synced.readings.bundle:000
+    '000':
+      used_by:
+      - derived.channel.gt:000
+      - derived.channel.gt:001
+      - derived.channel.gt:002
+      - gw1.unit.quantity.projection:000
+  gw1.quantity:
+    '000':
+      used_by:
+      - analytics.channel.gt:000
+      - data.channel.gt:002
+      - derived.channel.gt:002
+      - gw1.unit.quantity.projection:000
+      - spaceheat.telemetry.quantity.projection:000
+  spaceheat.unit:
+    '001':
+      used_by:
+      - channel.config:000
+      - relay.actor.config:002
+      - relay.actor.config:003
+  g.node.status:
+    '000':
+      used_by:
+      - connectivity.edge.gt:000
+      - g.node.gt:004
+  spaceheat.telemetry.name:
+    '007':
+      used_by:
+      - data.channel.gt:002
+      - spaceheat.telemetry.quantity.projection:000
+      - synced.readings.bundle:000
+    '006':
+      used_by:
+      - data.channel.gt:001
+  gw1.emission.method:
+    '000':
+      used_by:
+      - derived.channel.gt:001
+      - derived.channel.gt:002
+  relay.energization.state:
+    '000':
+      used_by:
+      - fsm.atomic.report:001
+  fsm.report.type:
+    '000':
+      used_by:
+      - fsm.atomic.report:000
+      - fsm.atomic.report:001
+  base.g.node.class:
+    '000':
+      used_by:
+      - g.node.gt:004
+  g.node.instance.status:
+    '000':
+      used_by:
+      - g.node.instance.gt:000
+  g.node.instance.transport:
+    '000':
+      used_by:
+      - g.node.instance.gt:000
+  gw1.seasonal.storage.mode:
+    '000':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+      - layout.lite:012
+      - layout.lite:013
+  gw1.system.mode:
+    '000':
+      used_by:
+      - layout.lite:010
+      - layout.lite:011
+      - layout.lite:012
+      - layout.lite:013
+  gpm.from.hz.method:
+    '000':
+      used_by:
+      - pico.flow.module.component.gt:000
+  hz.calc.method:
+    '001':
+      used_by:
+      - pico.flow.module.component.gt:000
+  spaceheat.make.model:
+    '007':
+      used_by:
+      - pico.flow.module.component.gt:000
+  temp.calc.method:
+    '000':
+      used_by:
+      - pico.tank.module.component.gt:011
+      - sim.pico.tank.module.component.gt:000
+  relay.wiring.config:
+    '000':
+      used_by:
+      - relay.actor.config:002
+      - relay.actor.config:003
+  change.relay.state:
+    '000':
+      used_by:
+      - relay.actor.config:002
+      - relay.actor.config:003
+  relay.closed.or.open:
+    '000':
+      used_by:
+      - relay.actor.config:002
+      - relay.actor.config:003
+      - single.machine.state:000
+  gw1.actor.class:
+    009:
+      used_by:
+      - scada.control.capabilities:000
+      - spaceheat.node.gt:300
+    '011':
+      used_by:
+      - spaceheat.node.gt:301
+formats:
+  uuid4.str:
+    used_by:
+    - analytics.channel.gt:000
+    - channel.readings:001
+    - connectivity.edge.gt:000
+    - data.channel.gt:001
+    - data.channel.gt:002
+    - derived.channel.gt:000
+    - derived.channel.gt:001
+    - derived.channel.gt:002
+    - fsm.atomic.report:000
+    - fsm.atomic.report:001
+    - fsm.full.report:000
+    - fsm.full.report:001
+    - g.node.gt:004
+    - g.node.instance.gt:000
+    - i2c.multichannel.dt.relay.component.gt:002
+    - i2c.multichannel.dt.relay.component.gt:003
+    - i2c.multichannel.dt.relay.component.gt:004
+    - layout.lite:010
+    - layout.lite:011
+    - layout.lite:012
+    - layout.lite:013
+    - pico.flow.module.component.gt:000
+    - pico.tank.module.component.gt:011
+    - position.point.gt:000
+    - report.event:002
+    - report.event:003
+    - report:002
+    - report:003
+    - sim.pico.tank.module.component.gt:000
+    - snapshot.spaceheat:003
+    - spaceheat.node.gt:300
+    - spaceheat.node.gt:301
+    - synced.readings.bundle:000
+  left.right.dot:
+    used_by:
+    - analytics.channel.gt:000
+    - connectivity.edge.gt:000
+    - data.channel.gt:001
+    - data.channel.gt:002
+    - derived.channel.gt:000
+    - derived.channel.gt:001
+    - derived.channel.gt:002
+    - fsm.atomic.report:000
+    - fsm.atomic.report:001
+    - g.node.gt:004
+    - layout.lite:010
+    - layout.lite:011
+    - layout.lite:012
+    - layout.lite:013
+    - machine.states:000
+    - relay.actor.config:002
+    - relay.actor.config:003
+    - report.event:002
+    - report.event:003
+    - report:002
+    - report:003
+    - scada.control.capabilities:000
+    - send.control.capabilities:000
+    - send.layout:000
+    - send.layout:001
+    - single.machine.state:000
+    - snapshot.spaceheat:003
+    - synced.readings.bundle:000
+  spaceheat.name:
+    used_by:
+    - analytics.channel.gt:000
+    - channel.config:000
+    - channel.readings:001
+    - channel.readings:002
+    - data.channel.gt:001
+    - data.channel.gt:002
+    - derived.channel.gt:000
+    - derived.channel.gt:001
+    - derived.channel.gt:002
+    - fsm.atomic.report:001
+    - fsm.full.report:000
+    - fsm.full.report:001
+    - i2c.multichannel.dt.relay.component.gt:003
+    - i2c.multichannel.dt.relay.component.gt:004
+    - pico.flow.module.component.gt:000
+    - pico.tank.module.component.gt:011
+    - relay.actor.config:002
+    - relay.actor.config:003
+    - scada.control.capabilities:000
+    - send.layout:000
+    - sim.pico.tank.module.component.gt:000
+    - single.reading:000
+    - spaceheat.node.gt:300
+    - spaceheat.node.gt:301
+    - synced.readings.bundle:000
+    - synced.readings:000
+  utc.milliseconds:
+    used_by:
+    - channel.readings:001
+    - channel.readings:002
+    - fsm.atomic.report:000
+    - fsm.atomic.report:001
+    - g.node.instance.gt:000
+    - layout.lite:010
+    - layout.lite:011
+    - layout.lite:012
+    - layout.lite:013
+    - machine.states:000
+    - report.event:002
+    - report.event:003
+    - report:002
+    - report:003
+    - scada.control.capabilities:000
+    - send.control.capabilities:000
+    - send.layout:001
+    - single.machine.state:000
+    - single.reading:000
+    - snapshot.spaceheat:003
+    - synced.readings:000
+  utc.seconds:
+    used_by:
+    - data.channel.gt:001
+    - report:002
+    - report:003
+  handle.name:
+    used_by:
+    - fsm.atomic.report:000
+    - fsm.atomic.report:001
+    - machine.states:000
+    - single.machine.state:000
+    - spaceheat.node.gt:300
+    - spaceheat.node.gt:301
+  positive.int:
+    used_by:
+    - layout.lite:013
+    - relay.actor.config:003
+  utc.iso8601.seconds:
+    used_by:
+    - synced.readings.bundle:000

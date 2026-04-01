@@ -1,7 +1,7 @@
 from pydantic import ValidationError
 
-from sema.registry.types.report import Report
-from sema.registry.types.report_event import ReportEvent
+from sema.runtime.types.report import Report
+from sema.runtime.types.report_event import ReportEvent
 
 
 def test_report_event_propagation_axioms() -> None:

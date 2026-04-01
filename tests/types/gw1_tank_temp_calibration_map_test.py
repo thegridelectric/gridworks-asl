@@ -1,7 +1,7 @@
 from pydantic import ValidationError
 
-from sema.registry.types.gw1_tank_temp_calibration import Gw1TankTempCalibration
-from sema.registry.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
+from sema.runtime.types.gw1_tank_temp_calibration import Gw1TankTempCalibration
+from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
 
 
 def test_calibration_map_requires_contiguous_tanks() -> None:

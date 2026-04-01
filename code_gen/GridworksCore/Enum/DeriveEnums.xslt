@@ -42,7 +42,7 @@
 <xsl:text>from enum import auto
 from typing import List
 
-from sema.registry.enums.gw_str_enum import SemaEnum
+from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
 class </xsl:text><xsl:value-of select="$enum-class-name"/>

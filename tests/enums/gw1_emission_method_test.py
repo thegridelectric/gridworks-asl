@@ -2,7 +2,7 @@
 Tests for enum gw1.emission.method.000
 """
 
-from sema.registry.enums import Gw1EmissionMethod
+from sema.runtime.enums import Gw1EmissionMethod
 
 
 def test_gw1_emission_method() -> None:

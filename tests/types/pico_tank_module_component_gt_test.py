@@ -1,6 +1,6 @@
 from pydantic import ValidationError
 
-from sema.registry.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
+from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 
 
 def test_pico_tank_module_component_gt_xor() -> None:

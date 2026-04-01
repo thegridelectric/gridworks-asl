@@ -2,8 +2,8 @@
 Tests for enum spaceheat.telemetry.name latest and old versions.
 """
 
-from sema.registry.enums import SpaceheatTelemetryName
-from sema.registry.enums.old_versions import SpaceheatTelemetryName006
+from sema.runtime.enums import SpaceheatTelemetryName
+from sema.runtime.enums.old_versions import SpaceheatTelemetryName006
 
 
 LATEST_VALUES = {

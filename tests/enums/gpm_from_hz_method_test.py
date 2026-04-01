@@ -2,7 +2,7 @@
 Tests for enum gpm.from.hz.method.000
 """
 
-from sema.registry.enums import GpmFromHzMethod
+from sema.runtime.enums import GpmFromHzMethod
 
 
 def test_gpm_from_hz_method() -> None:

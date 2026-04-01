@@ -2,7 +2,7 @@
 Tests for enum temp.calc.method.000
 """
 
-from sema.registry.enums import TempCalcMethod
+from sema.runtime.enums import TempCalcMethod
 
 
 def test_temp_calc_method() -> None:

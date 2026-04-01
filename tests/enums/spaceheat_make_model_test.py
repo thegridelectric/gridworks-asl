@@ -2,7 +2,7 @@
 Tests for enum spaceheat.make.model.007
 """
 
-from sema.registry.enums import SpaceheatMakeModel
+from sema.runtime.enums import SpaceheatMakeModel
 
 
 def test_spaceheat_make_model() -> None:

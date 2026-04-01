@@ -1,6 +1,6 @@
 from pydantic import ValidationError
 
-from sema.registry.types.single_machine_state import SingleMachineState
+from sema.runtime.types.single_machine_state import SingleMachineState
 
 
 def test_single_machine_state_known_enum_validation() -> None:
