@@ -1,0 +1,55 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/report.event/002"
+
+title: "report.event"
+type: object
+description: >
+  Event wrapper for a report payload with message tracking metadata.
+
+properties:
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  TimeCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  Src:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  Report:
+    $ref: "https://schemas.electricity.works/types/report/002"
+
+  TypeName:
+    const: "report.event"
+
+  Version:
+    type: string
+    default: "002"
+
+
+required:
+  - MessageId
+  - TimeCreatedMs
+  - Src
+  - Report
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "ReportIdentityPropagation"
+      statement: >
+        MessageId SHALL equal Report.Id.
+    - number: 2
+      name: "ReportCreatedTimePropagation"
+      statement: >
+        TimeCreatedMs SHALL equal Report.MessageCreatedMs.
+    - number: 3
+      name: "ReportSourcePropagation"
+      statement: >
+        Src SHALL equal Report.FromGNodeAlias.

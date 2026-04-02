@@ -1,0 +1,67 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/003"
+
+title: "i2c.multichannel.dt.relay.component.gt"
+type: object
+description: >
+  Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
+
+  This includes relay-actor configuration fields specific to the I2C relay
+  board together with the logical I2C bus name used to address it at runtime.
+
+properties:
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/relay.actor.config/002"
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  I2cBus:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Spaceheat node name of the I2C bus actor that hosts this relay board.
+
+  I2cAddressList:
+    type: array
+    items:
+      type: integer
+    description: >
+      Integer I2C addresses used by the relay board hardware.
+
+  TypeName:
+    const: "i2c.multichannel.dt.relay.component.gt"
+
+  Version:
+    const: "003"
+
+required:
+  - ComponentId
+  - ComponentAttributeClassId
+  - ConfigList
+  - I2cBus
+  - I2cAddressList
+  - TypeName
+  - Version
+
+additionalProperties: true
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "ActorAndRelayIndexUniqueness"
+      statement: >
+        ConfigList SHALL NOT contain duplicate ActorName values or duplicate
+        RelayIdx values.

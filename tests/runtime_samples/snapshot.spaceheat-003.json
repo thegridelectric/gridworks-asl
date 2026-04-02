@@ -1,0 +1,378 @@
+{
+  "Header": {
+    "Src": "hw1.isone.me.versant.keene.spruce.scada",
+    "Dst": "ltn",
+    "MessageType": "snapshot.spaceheat",
+    "MessageId": "",
+    "AckRequired": false,
+    "TypeName": "gridworks.header",
+    "Version": "001"
+  },
+  "Payload": {
+    "FromGNodeAlias": "hw1.isone.me.versant.keene.spruce.scada",
+    "FromGNodeInstanceId": "9024e45e-f49e-42fa-b863-b3b951ec80f6",
+    "SnapshotTimeUnixMs": 1774956630004,
+    "LatestReadingList": [
+      {
+        "ChannelName": "buffer-depth1-device",
+        "Value": 74470,
+        "ScadaReadTimeUnixMs": 1774956603045,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "buffer-depth2-device",
+        "Value": 74420,
+        "ScadaReadTimeUnixMs": 1774956603045,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "buffer-depth3-device",
+        "Value": 46390,
+        "ScadaReadTimeUnixMs": 1774956629032,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "buffer-depth1-micro-v",
+        "Value": 690655,
+        "ScadaReadTimeUnixMs": 1774956603045,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "buffer-depth2-micro-v",
+        "Value": 691561,
+        "ScadaReadTimeUnixMs": 1774956603045,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "buffer-depth3-micro-v",
+        "Value": 1386086,
+        "ScadaReadTimeUnixMs": 1774956629032,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "dist-flow",
+        "Value": 49,
+        "ScadaReadTimeUnixMs": 1774956599973,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "dist-swt",
+        "Value": 66130,
+        "ScadaReadTimeUnixMs": 1774956599973,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "dist-rwt",
+        "Value": 28470,
+        "ScadaReadTimeUnixMs": 1774956599973,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "pipes1-depth1-device",
+        "Value": 42510,
+        "ScadaReadTimeUnixMs": 1774956603178,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "pipes1-depth2-device",
+        "Value": 29670,
+        "ScadaReadTimeUnixMs": 1774956623215,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "pipes1-depth1-micro-v",
+        "Value": 1510259,
+        "ScadaReadTimeUnixMs": 1774956603178,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "pipes1-depth2-micro-v",
+        "Value": 1947952,
+        "ScadaReadTimeUnixMs": 1774956623215,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "pipes1-depth3-micro-v",
+        "Value": 3300029,
+        "ScadaReadTimeUnixMs": 1774956603178,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "floor1-depth1-device",
+        "Value": 19300,
+        "ScadaReadTimeUnixMs": 1774956603144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "floor1-depth2-device",
+        "Value": 18050,
+        "ScadaReadTimeUnixMs": 1774956603144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "floor1-depth3-device",
+        "Value": 19060,
+        "ScadaReadTimeUnixMs": 1774956603144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "floor1-depth1-micro-v",
+        "Value": 2298778,
+        "ScadaReadTimeUnixMs": 1774956603144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "floor1-depth2-micro-v",
+        "Value": 2339115,
+        "ScadaReadTimeUnixMs": 1774956603144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "floor1-depth3-micro-v",
+        "Value": 2306444,
+        "ScadaReadTimeUnixMs": 1774956603144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "elt-buffer-top-pwr",
+        "Value": 0,
+        "ScadaReadTimeUnixMs": 1774956563889,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "elt-buffer-bottom-pwr",
+        "Value": 0,
+        "ScadaReadTimeUnixMs": 1774956392855,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "elt-store-top-pwr",
+        "Value": 0,
+        "ScadaReadTimeUnixMs": 1774956563889,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "elt-store-bottom-pwr",
+        "Value": 0,
+        "ScadaReadTimeUnixMs": 1774956563889,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "dist-pump-pwr",
+        "Value": 29,
+        "ScadaReadTimeUnixMs": 1774956400856,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone1-bedrooms-opto-input",
+        "Value": 1,
+        "ScadaReadTimeUnixMs": 1774956600144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone2-living-rm-opto-input",
+        "Value": 0,
+        "ScadaReadTimeUnixMs": 1774956600145,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone4-garage-opto-input",
+        "Value": 1,
+        "ScadaReadTimeUnixMs": 1774956600149,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone1-bedrooms-gw-temp",
+        "Value": 1946,
+        "ScadaReadTimeUnixMs": 1774956600083,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone1-bedrooms-gw-microvolts",
+        "Value": 2304250,
+        "ScadaReadTimeUnixMs": 1774956600083,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone2-living-rm-gw-temp",
+        "Value": 1964,
+        "ScadaReadTimeUnixMs": 1774956600083,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone2-living-rm-gw-microvolts",
+        "Value": 2298500,
+        "ScadaReadTimeUnixMs": 1774956600083,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "buffer-depth1",
+        "Value": 16604,
+        "ScadaReadTimeUnixMs": 1774956603045,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "buffer-depth2",
+        "Value": 16595,
+        "ScadaReadTimeUnixMs": 1774956603045,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "buffer-depth3",
+        "Value": 11550,
+        "ScadaReadTimeUnixMs": 1774956629032,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "floor-swt",
+        "Value": 10851,
+        "ScadaReadTimeUnixMs": 1774956603178,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "floor-rwt",
+        "Value": 8540,
+        "ScadaReadTimeUnixMs": 1774956623215,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone1-bedrooms-floor-temp",
+        "Value": 6674,
+        "ScadaReadTimeUnixMs": 1774956603144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone2-living-rm-floor-temp",
+        "Value": 6449,
+        "ScadaReadTimeUnixMs": 1774956603144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone4-garage-floor-temp",
+        "Value": 6630,
+        "ScadaReadTimeUnixMs": 1774956603144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone1-bedrooms-heat-call",
+        "Value": 0,
+        "ScadaReadTimeUnixMs": 1774956600144,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone2-living-rm-heat-call",
+        "Value": 1,
+        "ScadaReadTimeUnixMs": 1774956600145,
+        "TypeName": "single.reading",
+        "Version": "000"
+      },
+      {
+        "ChannelName": "zone4-garage-heat-call",
+        "Value": 0,
+        "ScadaReadTimeUnixMs": 1774956600149,
+        "TypeName": "single.reading",
+        "Version": "000"
+      }
+    ],
+    "LatestStateList": [
+      {
+        "MachineHandle": "s",
+        "StateEnum": "top.state",
+        "State": "Auto",
+        "UnixMs": 1774956598802,
+        "Cause": null,
+        "TypeName": "single.machine.state",
+        "Version": "000"
+      },
+      {
+        "MachineHandle": "ltn.la",
+        "StateEnum": "gw1.leaf.ally.all.tanks.state",
+        "State": "Dormant",
+        "UnixMs": 1774954463046,
+        "Cause": null,
+        "TypeName": "single.machine.state",
+        "Version": "000"
+      },
+      {
+        "MachineHandle": "s",
+        "StateEnum": "gw1.lc.top.state",
+        "State": "Normal",
+        "UnixMs": 1774954463046,
+        "Cause": null,
+        "TypeName": "single.machine.state",
+        "Version": "000"
+      },
+      {
+        "MachineHandle": "auto.pico-cycler.vdc-relay-gpio-23",
+        "StateEnum": "relay.closed.or.open",
+        "State": "RelayClosed",
+        "UnixMs": 1774956598001,
+        "Cause": null,
+        "TypeName": "single.machine.state",
+        "Version": "000"
+      },
+      {
+        "MachineHandle": "auto.pico-cycler",
+        "StateEnum": "pico.cycler.state",
+        "State": "PicosLive",
+        "UnixMs": 1774956598003,
+        "Cause": null,
+        "TypeName": "single.machine.state",
+        "Version": "000"
+      },
+      {
+        "MachineHandle": "auto",
+        "StateEnum": "gw1.main.auto.state",
+        "State": "LocalControl",
+        "UnixMs": 1774956598802,
+        "Cause": null,
+        "TypeName": "single.machine.state",
+        "Version": "000"
+      }
+    ],
+    "TypeName": "snapshot.spaceheat",
+    "Version": "003"
+  },
+  "TypeName": "gw"
+}

@@ -56,6 +56,14 @@ All serialized JSON field names MUST use CamelCase, recursively through nested s
 
 This ensures uniform structure across systems and prevents semantic drift caused by naming inconsistencies. It also helps signal Sema.
 
+**2a. Primitive Types Are Validated at the Serialized Boundary**
+
+Sema validation applies to the serialized JSON artifact as transmitted, not to a permissively coerced in-memory approximation.
+
+If a schema says a value is an `integer`, then the serialized value MUST itself be an integer.
+
+Implementations SHALL reject floats, strings, or other values that would only satisfy the schema after coercion or truncation.
+
 **3. Types Declare Their Identity**:
 
 Every type MUST include a TypeName field whose value equals the registered vocabulary name.
@@ -123,6 +131,10 @@ Systems may adopt Sema incrementally - as a single format, a single type, or an 
 
 The goal is simple: shared meaning should be explicit and verifiable. Everything else builds on that.
 
+For the purposes of immutability and version governance, a vocabulary definition is considered **published** when it is available at `https://schemas.electricity.works`.
+
+Before publication, a schema MAY be revised in place to correct mistakes or to better align the initial Sema contract with demonstrated runtime behavior. After publication, historical versions are immutable and any semantic or validation change SHALL be expressed through a new version.
+
 ## Registry Structure
 
 The `registry.yaml` file is the authoritative index of all Sema vocabulary components.  It defines:
@@ -135,6 +147,17 @@ The `registry.yaml` file is the authoritative index of all Sema vocabulary compo
 The registry is the canonical source of vocabulary identity and lifecycle state. 
 
 Vocabulary components fall into three categories: **formats**, **enums** and **types**. 
+
+### Registry Status Field
+
+Registry entries MAY include a `status` field indicating lifecycle state.
+
+Allowed values:
+- `"draft"`: type is under active development and not yet stable
+- `"active"`: type is stable and intended for production use (default if omitted)
+- `"deprecated"`: type is no longer recommended for new use
+
+If `status` is omitted, it SHALL be interpreted as `"active"`.
 
 ### Top-Level Structure
 
@@ -191,6 +214,8 @@ Formats are immutable and unversioned. Each format entry MUST include:
 ```
 
 For all vocabulary entries (formats, enums, and types), schema_url SHALL equal the $id declared in the referenced schema file.
+For enums, the registry SHALL also record `enum_type` for each published version, and that value SHALL match `x-gridworks.enum_type` in the corresponding enum schema file.
+The enum schema file remains authoritative; the registry copy exists for compact tooling and validation.
 
 Formats SHALL NOT include any version related information.
 
@@ -209,10 +234,23 @@ Each enum entry MUST include:
     "001":
       schema_url: "https://schemas.electricity.works/enums/<enum-name>/001"
       created: "<RFC 3339 timestamp>"
+      enum_type: "versioned" | "literal"
     "000":
       schema_url: "https://schemas.electricity.works/enums/<enum-name>/000"
       created: "<RFC 3339 timestamp>"
+      enum_type: "versioned" | "literal"
 ```
+
+Enum versions MAY also include:
+
+```
+summary: "<one-line changelog summary>"
+```
+
+If summary is provided:
+  - It SHOULD be a brief one-line description of what changed in that enum version.
+  - For versioned enums, it will typically name the appended enum values.
+  - It is changelog metadata only and MUST NOT be treated as normative semantics.
 
 Enum versions: 
   - MUST be three-digit numeric strings.
@@ -240,13 +278,12 @@ What the Registry should look like
       schema_url: "https://schemas.electricity.works/types/<type-name>/<latest_version>"
       created: "<RFC 3339 timestamp>"
       summary: "<concise description of change>"
-      dependencies:
-        direct: 
-         - "sh.actor.class:000"
-         - "spaceheat.name:000"
-        all: 
-         - "sh.actor.class:000"
-         - "spaceheat.name:000"
+      direct_dependencies:
+        structural:
+          - "sh.actor.class:000"
+          - "spaceheat.name"
+        axiom:
+          - "projection.example:000"
     [..] # earlier versions
 
 ```
@@ -261,10 +298,8 @@ What the Registry should look like
   schema_url: "https://schemas.electricity.works/types/<type-name>"
   created: "<RFC 3339 timestamp>"
   summary: "<concise description of change>"
-  dependencies:
-    direct:
-      - "uuid4.str"
-    all:
+  direct_dependencies:
+    structural:
       - "uuid4.str"
   ```
 
@@ -282,10 +317,10 @@ versions:
     schema_url: "https://schemas.electricity.works/types/<type-name>/004"
     created: "<RFC 3339 timestamp>"
     summary: "<concise description of change>"
-    dependencies:
-      direct:
+    direct_dependencies:
+      structural:
         - ...
-      all:
+      axiom:
         - ...
 ```
 
@@ -372,49 +407,60 @@ For versioned types:
   - Historical schemas MUST NOT be altered in ways that change validation behavior.
 
 ### Dependency Model
-Versioned types SHALL declare dependencies. Dependencies describe other Sema vocabulary words (types, enums, or formats) referenced by the schema.
+Versioned types SHALL declare direct dependencies. These identify the Sema vocabulary required both to validate the schema structurally and to implement any axioms attached to that specific type version.
 
-Dependencies are expressed as two ordered lists:
+Dependencies are expressed in `registry.yaml` as:
 
-dependencies:
-  direct:
+```
+direct_dependencies:
+  structural:
     - "<word-name>:<version>"   # for versioned types or enums
     - "<format-name>"           # for versionless formats
-  all:
+  axiom:
     - "<word-name>:<version>"
     - "<format-name>"
+```
 
 **Rules**
 
-1. **direct**
+1. **structural**
     - SHALL include every vocabulary word explicitly referenced in the schema via `$ref` (all formats, enums, and types).
     - SHALL use the canonical identifier format:
       - `name:###` for versioned types and enums (3-digit numeric version)
       - `name` for versionless formats or versionless types
     - SHALL NOT include transitive dependencies.
 
-2. **all**
-    - SHALL include the full transitive closure of direct.
-    - SHALL be a strict superset or equal to direct.
+2. **axiom**
+    - SHALL include every Sema vocabulary word whose value set, structure, or specific version is normatively required to implement one or more axioms for that type version.
+    - SHALL be used when an axiom depends on a specific enum, type, or format even if that vocabulary is not referenced via `$ref`.
+    - SHALL use the same canonical identifier rules as `structural`.
+    - SHALL NOT include transitive dependencies.
+    - MAY be omitted entirely if the type version has no axiom-level dependency on external Sema vocabulary.
 
 3. **Ordering and Structure**
-    - Both `direct` and `all` SHALL:
+    - `structural` and `axiom` (if present) SHALL:
       - Be alphabetically sorted (lexicographically by full identifier string)
       - Contain no duplicates
       - Be declared as block lists (one entry per line)
     - Dependency references SHALL NOT include URL prefixes or file paths.
     - When computing dependencies, tooling SHALL extract the vocabulary word from the $ref URL path and omit the domain prefix.
-    - If no dependencies exist, both lists SHALL be explicitly declared as empty:
+    - If no dependencies exist, the dependency block SHALL be:
 ```
-dependencies:
-  direct: []
-  all: []
+direct_dependencies:
+  structural: []
 ```
+    - If structural dependencies exist but no axiom-level dependencies exist, `axiom` SHOULD be omitted.
+    - If structural dependencies do not exist but axiom-level dependencies do exist, `structural` SHALL be declared as `[]`.
 
 4. **Version Rules**
     - Versioned words MUST be referenced as `name:###` where `###` is a 3-digit numeric string.
     - Versionless words MUST NOT include a version suffix.
     - Mixing formats (e.g., including a colon for versionless words or omitting a version for versioned words) is invalid.
+
+5. **Axiom Implementability**
+    - Dependency declaration SHALL be sufficient to implement validation for the full contract of the type version, including its axioms.
+    - If an axiom normatively names a specific Sema vocabulary word or version, that word SHALL appear in `axiom` unless it already appears in `structural`.
+    - A type version SHALL NOT rely on undeclared external Sema vocabulary to make its axioms mechanically implementable.
 
 
 ### `owners.yaml` - Vocabulary Ownership Registry
@@ -627,17 +673,28 @@ The `x-gridworks` block MUST include:
 x-gridworks:
   owner: "<owner-id>"
   version: "<3-digit version>"
+  enum_type: "versioned" | "literal"
 ```
 
 Optional: 
 ```
 value_descriptions:
   "<EnumValue>": "<Description>"
+
+extended_description: >
+  ...
 ```
 
 If value_descriptions is provided:
   - Every enum value SHOULD have a description.
   - Descriptions SHOULD explain semantic meaning, not restate the name.
+
+If extended_description is provided:
+  - It SHOULD appear after value_descriptions for readability.
+  - It MAY provide additional architectural or migration context.
+  - References to other Sema words SHOULD appear in extended_description, not description.
+  - It MUST NOT introduce new normative constraints.
+  - It MUST NOT change the semantic meaning of any enum value.
 
 
 #### Evolution Rules
@@ -645,17 +702,28 @@ If value_descriptions is provided:
 Enums are versioned. These versions SHALL match the pattern `000`, `001`, `002` etc (i.e. three-digit numeric strings). For enums, these
 versions SHALL increase with each published version. 
 
-New versions MAY append new values to the end of the `enum` list. New versions SHALL NOT
-  - Remove existing values
-  - Reorder existing values
-  - Change the semantic meaning of existing values
-  - Change the `default` value
+Enum schemas SHALL declare one of two enum types:
+  - `versioned`
+  - `literal`
+
+For `versioned` enums:
+  - New versions MAY append new values to the end of the `enum` list.
+  - New versions SHALL NOT remove existing values, reorder existing values, change the semantic meaning of existing values, or change the `default` value.
+
+For `literal` enums:
+  - The enum version SHALL be `000`.
+  - New values SHALL NOT be added.
+  - Existing values SHALL NOT be removed, reordered, or reinterpreted.
+  - The `default` value SHALL NOT change.
+
+In both cases, semantic stability is required across publication.
 
 ####  Description Evolution
 
 In new enum versions, the following MAY be modified for clarity:
   - description
   - value_descriptions
+  - extended_description
 
 Such modifications:
   - MUST NOT change the semantic meaning of any enum value
@@ -700,6 +768,7 @@ default: "Logical"
 x-gridworks:
   owner: "gridworks-energy"
   version: "000"
+  enum_type: "versioned"
   value_descriptions:
     "TerminalAsset": >
       A physical transactive asset such as a heat pump, hot water heater, residential battery, 
@@ -790,7 +859,16 @@ Types with strategy `none`:
 **Strategy:**  `string`
 
   - For `string`: 
-    - The `Version field MUST be declared as a `string`
+    - The `Version` field MUST be declared as `type: string`
+    - The `Version` field MUST include `default: "<3-digit>"`
+    - The `default` value MUST equal the published version for that schema file
+    - Example:
+
+```
+Version:
+  type: string
+  default: "002"
+```
 
 
 #### Required Top-Level Order
@@ -1192,7 +1270,7 @@ properties:
     description: >
       Finite state machine reports generated during this slot.
     items:
-      $ref: "https://schemas.electricity.works/types/fsm.full.report/000"
+      $ref: "https://schemas.electricity.works/types/fsm.full.report/001"
 
   MessageCreatedMs:
     $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
@@ -1208,7 +1286,7 @@ properties:
     const: "report"
 
   Version:
-    const: "002"
+    const: "003"
 
 required:
   - FromGNodeAlias
@@ -1248,7 +1326,7 @@ examples:
               "Version": "002"
           }],
       "StateList": [{
-              "MachineHandle": "a.aa.relay6",
+              "MachineHandle": "ltn.la.relay6",
               "StateEnum": "relay.closed.or.open",
               "StateList": [
                   "RelayOpen"

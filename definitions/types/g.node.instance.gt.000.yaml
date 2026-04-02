@@ -1,0 +1,117 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/g.node.instance.gt/000"
+
+title: "g.node.instance.gt"
+type: object
+description: >
+  Durable snapshot of a runtime instance representing a Grid Node.
+  Each instance record corresponds bijectively to a persistent FIS
+  database record tracking runtime authority and transport connection state.
+
+properties:
+
+  GNodeId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Durable identifier of the Grid Node whose runtime instance
+      is represented by this record.
+
+  GNodeInstanceId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier for this runtime process instance.
+
+  Status:
+    $ref: "https://schemas.electricity.works/enums/g.node.instance.status/000"
+    description: >
+      Current lifecycle state of this runtime instance.
+
+  Transport:
+    $ref: "https://schemas.electricity.works/enums/g.node.instance.transport/000"
+    description: >
+      Messaging transport through which this instance connected.
+
+  ConnectedAtUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Timestamp when this runtime instance was authorized.
+
+  RevokedAtUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Timestamp when authority was revoked or ended.
+      MUST be absent if Status is Active.
+
+  ConnectionHandle:
+    type: string
+    minLength: 1
+    description: >
+      Opaque transport-level connection identifier as reported
+      by the broker (e.g., RabbitMQ connection name).
+
+  ObservedPeerAddress:
+    type: string
+    minLength: 1
+    description: >
+      Remote address as observed by the broker at connection time.
+
+  TypeName:
+    const: "g.node.instance.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - GNodeId
+  - GNodeInstanceId
+  - Status
+  - Transport
+  - ConnectedAtUnixMs
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "GNodeId": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+      "GNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+      "Status": "Active",
+      "Transport": "RabbitAmqp",
+      "ConnectedAtUnixMs": 1762634100033,
+      "ConnectionHandle": "142.202.11.202:49085 -> 172.19.0.2:5671",
+      "ObservedPeerAddress": "142.202.11.202",
+      "TypeName": "g.node.instance.gt",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+  - number: 1
+    name: "RevocationTimestampConsistency"
+    statement: >
+      RevokedAtUnixMs SHALL be present if and only if
+      Status is Revoked or Ended.
+
+  extended_description: >
+    The g.node.instance.gt type represents a durable record of runtime
+    authority for a Grid Node. It is maintained by the Fleet Index Service
+    (FIS) and serves as an auditable snapshot of instance lifecycle events.
+
+    While this type represents a single runtime instance, the broader system
+    enforces a single-writer authority model: at most one instance per
+    GNodeId is permitted to hold Status = Active at any time. That invariant
+    is enforced at the runtime and database layer and is not validated
+    within this schema itself.
+
+    The distinction between Active, Revoked, and Ended enables audit
+    differentiation between normal shutdown, supersession by a newer
+    instance, and forced authority revocation.
+
+    ConnectionHandle and ObservedPeerAddress are transport-observed
+    values used for operational diagnostics and forensic analysis.
+    Their structure is transport-specific and intentionally opaque
+    to preserve neutrality across messaging systems.

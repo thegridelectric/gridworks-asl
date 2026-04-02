@@ -1,0 +1,171 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/scada.control.capabilities/000"
+
+title: "scada.control.capabilities"
+type: object
+description: >
+  Projection of the control surface exposed by a SCADA node.
+  This type declares controllable relay and DAC nodes, the telemetry
+  channels that represent their observed state, and the relay semantic
+  configuration required for dispatch construction.
+
+  This is a control-focused projection derived from layout.lite and does
+  not represent the full system topology.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the SCADA actor publishing this capability projection.
+
+  MessageCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Timestamp at which this projection was created.
+
+  RelayNodes:
+    type: array
+    description: >
+      List of nodes representing controllable relays exposed by this SCADA.
+      Each corresponds to a ShNode in layout.lite whose ActorClass is Relay.
+    items:
+      type: object
+      description: >
+        Minimal projection of a relay ShNode required for control operations.
+      properties:
+        Name:
+          $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+          description: >
+            Canonical node name of the relay.
+        ActorClass:
+          $ref: "https://schemas.electricity.works/enums/gw1.actor.class/009"
+          description: >
+            Actor class of the node. SHALL be Relay.
+        DisplayName:
+          type: string
+          description: >
+            Human-readable label suitable for administrative interfaces.
+      required:
+        - Name
+        - ActorClass
+      additionalProperties: false
+
+  DacNodes:
+    type: array
+    description: >
+      List of nodes representing controllable 0–10V outputs exposed by this SCADA.
+      Each corresponds to a ShNode in layout.lite whose ActorClass is ZeroTenOutputer.
+    items:
+      type: object
+      description: >
+        Minimal projection of a DAC ShNode required for control operations.
+      properties:
+        Name:
+          $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+          description: >
+            Canonical node name of the DAC output.
+        ActorClass:
+          $ref: "https://schemas.electricity.works/enums/gw1.actor.class/009"
+          description: >
+            Actor class of the node. SHALL be ZeroTenOutputer.
+        DisplayName:
+          type: string
+          description: >
+            Human-readable label suitable for administrative interfaces.
+      required:
+        - Name
+        - ActorClass
+      additionalProperties: false
+
+  ControlChannels:
+    type: array
+    description: >
+      Telemetry channels corresponding to controllable nodes.
+
+      Each entry is a projection of a DataChannel from layout.lite whose
+      AboutNodeName references a node listed in RelayNodes or DacNodes.
+      These channels represent the observed state of the corresponding control.
+    items:
+      type: object
+      description: >
+        Minimal projection of a DataChannel required for observing control state.
+      properties:
+        Name:
+          type: string
+          description: >
+            Name of the telemetry channel.
+        AboutNodeName:
+          $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+          description: >
+            Node name whose state is represented by this channel.
+      required:
+        - Name
+        - AboutNodeName
+      additionalProperties: false
+
+  I2cRelayComponent:
+    $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002"
+    description: >
+      Relay semantic configuration component providing event and state
+      mappings required for dispatch construction.
+
+  TypeName:
+    const: "scada.control.capabilities"
+
+  Version:
+    const: "000"
+
+required:
+  - FromGNodeAlias
+  - MessageCreatedMs
+  - RelayNodes
+  - DacNodes
+  - ControlChannels
+  - I2cRelayComponent
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "RelayNodeClassConsistency"
+      statement: >
+        All nodes in RelayNodes SHALL have ActorClass equal to Relay.
+
+    - number: 2
+      name: "DacNodeClassConsistency"
+      statement: >
+        All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.
+
+    - number: 3
+      name: "UniqueRelayNodeNames"
+      statement: >
+        Name values in RelayNodes SHALL be unique.
+
+    - number: 4
+      name: "UniqueDacNodeNames"
+      statement: >
+        Name values in DacNodes SHALL be unique.
+
+    - number: 5
+      name: "UniqueControlChannelAboutNames"
+      statement: >
+        AboutNodeName values in ControlChannels SHALL be unique.
+
+    - number: 6
+      name: "ControlNodeChannelBijection"
+      statement: >
+        The set of node names defined by the union of RelayNodes.Name
+        and DacNodes.Name SHALL equal exactly the set of
+        ControlChannels.AboutNodeName values.
+
+    - number: 7
+      name: "RelayConfigNodeBijection"
+      statement: >
+        The set of ActorName values in I2cRelayComponent.ConfigList
+        SHALL equal exactly the set of RelayNodes.Name values.

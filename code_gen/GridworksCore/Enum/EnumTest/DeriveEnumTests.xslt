@@ -43,7 +43,7 @@ Tests for enum </xsl:text><xsl:value-of select="Name"/><xsl:text>.</xsl:text><xs
     <xsl:text>
 """
 
-from sema.registry.enums import </xsl:text><xsl:value-of select="$local-class-name"/><xsl:text>
+from sema.runtime.enums import </xsl:text><xsl:value-of select="$local-class-name"/><xsl:text>
 
 
 def test_</xsl:text> <xsl:value-of select="translate(LocalName,'.','_')"/>

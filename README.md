@@ -74,39 +74,14 @@ https://schemas.electricity.works/types/report/002
 
 These URLs serve as the globally stable identifiers for Sema vocabulary and are used directly in `$ref` links within schemas and generated code.
 
-From the registry, Sema tooling generates language bindings and validation helpers.
+## Vocabulary Snapshots
 
-Instead of distributing a shared runtime package, Sema produces **self-contained vocabulary snapshots** that can be copied into individual repositories.
+Instead of distributing a shared runtime package, Sema produces **self-contained vocabulary snapshots**.
 
-A generated snapshot includes:
+A snapshot is a `sema/` directory committed into a repository. It contains a fully resolved subset of the Sema vocabulary — including all types, enums, formats, and their dependencies — along with the tooling needed to work with them locally.
 
- - schemas for the selected vocabulary
- - generated language bindings
- - validation helpers
- - dependency-resolved vocabulary definitions (types, enums, and formats)
- - `sema.snapshot.json`, which contains schema metadata, descriptions and version information
+Example structure:
 
-Example generated structure:
-```
-repo/
-  sema/
-    enums/
-    types/
-    codec.py
-    property_format.py
-    sema.snapshot.json
-```
-
-The `sema.snapshot.json` file contains a normalized JSON representation of the selected vocabulary and its dependency graph. It includes schema metadata, descriptions, and version information in a single machine-readable document. Because it is self-contained, the snapshot allows tooling, validation systems, and development environments to reason about the vocabulary locally without needing to fetch remote schemas. This can be useful for automated analysis, AI-assisted tooling, and offline development.
-
-Projects commit the generated `sema/` directory directly into their repository.
-
-This approach provides:
- - **repository independence** — each project carries its own validated vocabulary snapshot
- - **no shared runtime dependency conflicts**
- - **local visibility of message contracts**
-
-Vocabulary dependencies are resolved automatically. If a selected type references other types, enums, or formats, those dependencies are included in the generated snapshot.
 
 ## Example
 
@@ -138,12 +113,82 @@ power = PowerWatts(
 ```
 Because the contracts are explicit and versioned, systems can evolve their message vocabularies without breaking existing integrations.
 
+## CLI and Local Tooling
 
-## Tooling (Work in Progress)
+Sema includes a CLI for working with vocabulary definitions, dependency graphs, and snapshot generation.
+
+Run:
+```
+uv run sema info
+```
+
+Example output:
+```
+Sema CLI
+Interface: textual
+Subcommands: reverse, seed, info
+```
+
+### Reverse Dependency Analysis
+
+The `reverse` command returns the **transitive reverse dependency closure** for a vocabulary word.
+```
+uv run sema reverse relay.actor.config 003
+uv run sema reverse gw1.unit 001
+uv run sema reverse left.right.dot
+```
+
+Rules:
+- Types and enums MUST include a version
+- Formats do not include a version
+
+This is useful for:
+- understanding impact of changes
+- identifying downstream dependencies
+- reasoning about schema evolution
+
+---
+
+### Seed and Snapshot Generation
+
+Sema supports generating **self-contained vocabulary snapshots** from a small set of initial targets.
+
+A seed request defines the starting vocabulary:
+
+```yaml
+initial_targets:
+  - "analytics.channel.gt:000"
+  - "synced.readings.bundle:000"
+```
+From this, Sema tooling:
+ 1. Computes the **transitive dependency closure**
+ 2. Resolves all required formats, enums, and types
+ 3. Produces a complete, self-contained vocabulary snapshot
+
+TODO: ELEVATE THE EXPLANATION OF WHAT THE sema/ folder IS IN A WORKING DIRECTORY
+
+### Local Reasoning and AI Support
+
+Sema is designed to support local semantic reasoning.
+
+All vocabulary definitions, metadata, and dependency graphs are available locally:
+
+  - schemas
+  - registry metadata
+  - dependency closure
+  - reverse dependency relationships
+
+This enables:
+
+  - offline validation
+  - code generation
+  - AI-assisted reasoning over schema semantics
+
+## Web Tooling
 Sema is designed to be used with automated tooling that manages vocabulary selection, validation, and code generation.
 
 Planned tools include:
- - **CLI** — select vocabulary and generate a sema/ snapshot for a repository
+ - **CLI** - a global version of the local CLI
  - **Validation API** — validate serialized messages against the Sema schemas
  - **Registry tools** — dependency analysis, version diffing, and registry consistency checks
  - **Web UI** — browse vocabulary and select types à la carte
