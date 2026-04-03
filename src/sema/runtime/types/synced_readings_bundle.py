@@ -8,7 +8,7 @@ from sema.runtime.property_format import LeftRightDot, SpaceheatName, UtcIso8601
 
 class ChannelReadingsListItem(BaseModel):
     channel_name: SpaceheatName
-    value_list: List[StrictInt]
+    value_list: List[StrictInt | None]
     unit: str
     unit_type: LeftRightDot
 
