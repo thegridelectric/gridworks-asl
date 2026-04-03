@@ -17,6 +17,8 @@ def test_gw1_unit_latest() -> None:
         "GpmX100",
         "Seconds",
         "SecondsX10",
+        "Microseconds",
+        "Milliseconds",
     }
     assert Gw1Unit.default() == Gw1Unit.Unknown
     assert Gw1Unit.enum_name() == "gw1.unit"
