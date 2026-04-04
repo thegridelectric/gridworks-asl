@@ -34,6 +34,12 @@ def fallback_summary(version: str, version_info: dict, latest_version: str) -> s
     return f"Version {version}."
 
 
+def append_added_values(lines: list[str], indent: str, values: list[str]) -> None:
+    lines.append(f"{indent}added_values:")
+    for value in values:
+        lines.append(f"{indent}  - {quote(value)}")
+
+
 def quote(value: str) -> str:
     escaped = value.replace("\\", "\\\\").replace('"', '\\"')
     return f'"{escaped}"'
@@ -104,22 +110,29 @@ def build() -> None:
     lines.append("enums:")
 
     for enum_name, enum_def in registry["enums"].items():
-        latest_version = enum_def["latest_version"]
-        latest_info = enum_def["versions"][latest_version]
-        top_enum_type = latest_info["enum_type"]
+        top_enum_type = enum_def["enum_type"]
 
         lines.append(f"  {enum_name}:")
         lines.append(f'    enum_type: "{top_enum_type}"')
         lines.append(f"    note: {quote(enum_note(top_enum_type))}")
         lines.append("    versions:")
 
+        if top_enum_type == "literal":
+            lines.append('      "000": {}')
+            lines.append("")
+            continue
+
+        version_keys = list(enum_def.get("versions", {}).keys())
+        initial_version = version_keys[-1] if version_keys else "000"
+
         for version, version_info in enum_def.get("versions", {}).items():
+            if version == initial_version and "added_values" not in version_info:
+                lines.append(f'      "{version}": {{}}')
+                continue
+
             lines.append(f'      "{version}":')
-            append_summary(
-                lines,
-                "        ",
-                fallback_summary(version, version_info, latest_version),
-            )
+            if "added_values" in version_info:
+                append_added_values(lines, "        ", version_info["added_values"])
 
         lines.append("")
 

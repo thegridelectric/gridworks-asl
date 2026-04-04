@@ -10,6 +10,8 @@ https://schemas.electricity.works/enums/
 """
 
 from sema.runtime.enums.base_g_node_class import BaseGNodeClass
+from sema.runtime.enums.buffer_regulation_mode import BufferRegulationMode
+from sema.runtime.enums.change_heatcall_source import ChangeHeatcallSource
 from sema.runtime.enums.change_relay_state import ChangeRelayState
 from sema.runtime.enums.fsm_report_type import FsmReportType
 from sema.runtime.enums.fis_authorization_decision import FisAuthorizationDecision
@@ -20,21 +22,24 @@ from sema.runtime.enums.g_node_instance_transport import GNodeInstanceTransport
 from sema.runtime.enums.g_node_status import GNodeStatus
 from sema.runtime.enums.gpm_from_hz_method import GpmFromHzMethod
 from sema.runtime.enums.gw0_representation_status import Gw0RepresentationStatus
+from sema.runtime.enums.gw_g_node_class import GwGNodeClass
 from sema.runtime.enums.gw1_actor_class import Gw1ActorClass
 from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
+from sema.runtime.enums.gw1_heat_call_interpretation import Gw1HeatCallInterpretation
 from sema.runtime.enums.gw1_quantity import Gw1Quantity
 from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode
 from sema.runtime.enums.gw1_system_mode import Gw1SystemMode
 from sema.runtime.enums.gw1_unit import Gw1Unit
+from sema.runtime.enums.heatcall_source import HeatcallSource
 from sema.runtime.enums.hz_calc_method import HzCalcMethod
 from sema.runtime.enums.message_category import MessageCategory
 from sema.runtime.enums.message_category_symbol import MessageCategorySymbol
 from sema.runtime.enums.market_quantity_unit import MarketQuantityUnit
 from sema.runtime.enums.market_price_unit import MarketPriceUnit
 from sema.runtime.enums.market_type_name import MarketTypeName
-from sema.runtime.enums.recognized_currency_unit import RecognizedCurrencyUnit
 from sema.runtime.enums.relay_closed_or_open import RelayClosedOrOpen
 from sema.runtime.enums.relay_energization_state import RelayEnergizationState
+from sema.runtime.enums.relay_open_or_closed import RelayOpenOrClosed
 from sema.runtime.enums.relay_wiring_config import RelayWiringConfig
 from sema.runtime.enums.spaceheat_make_model import SpaceheatMakeModel
 from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
@@ -44,6 +49,8 @@ from sema.runtime.enums.temp_calc_method import TempCalcMethod
 
 __all__ = [
     "BaseGNodeClass",
+    "BufferRegulationMode",
+    "ChangeHeatcallSource",
     "ChangeRelayState",
     "FsmReportType",
     "FisAuthorizationDecision",
@@ -54,21 +61,24 @@ __all__ = [
     "GNodeStatus",
     "GpmFromHzMethod",
     "Gw0RepresentationStatus",
+    "GwGNodeClass",
     "Gw1ActorClass",
     "Gw1EmissionMethod",
+    "Gw1HeatCallInterpretation",
     "Gw1Quantity",
     "Gw1SeasonalStorageMode",
     "Gw1SystemMode",
     "Gw1Unit",
+    "HeatcallSource",
     "HzCalcMethod",
     "MessageCategory",
     "MessageCategorySymbol",
     "MarketPriceUnit",
     "MarketQuantityUnit",
     "MarketTypeName",
-    "RecognizedCurrencyUnit",
     "RelayClosedOrOpen",
     "RelayEnergizationState",
+    "RelayOpenOrClosed",
     "RelayWiringConfig",
     "SpaceheatMakeModel",
     "SpaceheatTelemetryName",

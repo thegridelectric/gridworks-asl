@@ -4,24 +4,27 @@ from pydantic import model_validator
 
 from sema.runtime.base import SemaType
 from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
+from sema.runtime.enums.gw1_quantity import Gw1Quantity
 from sema.runtime.enums.gw1_unit import Gw1Unit
 from sema.runtime.property_format import (
     LeftRightDot,
-    SpaceheatName,
     PositiveInt,
+    SpaceheatName,
     UUID4Str,
 )
+from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProjection
 
 
 class DerivedChannelGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/derived.channel.gt/001"""
+    """Sema: https://schemas.electricity.works/types/derived.channel.gt/002"""
 
     id: UUID4Str
     name: SpaceheatName
     created_by_node_name: SpaceheatName
     strategy: SpaceheatName
     input_channel_names: list[SpaceheatName]
-    output_unit: Gw1Unit | None = None
+    output_unit: Gw1Unit
+    output_quantity: Gw1Quantity
     emission_method: Gw1EmissionMethod
     async_emit_delta: PositiveInt | None = None
     emit_period_s: PositiveInt | None = None
@@ -29,10 +32,19 @@ class DerivedChannelGt(SemaType):
     display_name: str
     terminal_asset_alias: LeftRightDot
     type_name: Literal["derived.channel.gt"] = "derived.channel.gt"
-    version: Literal["001"] = "001"
+    version: Literal["002"] = "002"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "DerivedChannelGt":
+        """
+        Axiom 1: EmissionSemanticsConsistency
+        EmissionMethod SHALL determine the presence of EmitPeriodS and
+        AsyncEmitDelta as follows:
+
+          OnTrigger -> neither EmitPeriodS nor AsyncEmitDelta present
+          Periodic -> EmitPeriodS present, AsyncEmitDelta absent
+          AsyncAndPeriodic -> both EmitPeriodS and AsyncEmitDelta present
+        """
         if self.emission_method == Gw1EmissionMethod.OnTrigger:
             if self.emit_period_s is not None or self.async_emit_delta is not None:
                 raise ValueError(
@@ -47,5 +59,64 @@ class DerivedChannelGt(SemaType):
             if self.emit_period_s is None or self.async_emit_delta is None:
                 raise ValueError(
                     "Axiom 1 failed: AsyncAndPeriodic requires both emit_period_s and async_emit_delta."
+                )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "DerivedChannelGt":
+        """
+        Axiom 2: OutputUnitQuantityConsistency
+        OutputQuantity SHALL equal the Quantity defined by the canonical
+        gw1.unit.quantity.projection:000 instance for the specified OutputUnit.
+        """
+        expected = Gw1UnitQuantityProjection.project(self.output_unit)
+        if self.output_quantity != expected:
+            raise ValueError(
+                "Axiom 2 failed: output_quantity must match the canonical quantity "
+                "for output_unit."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "DerivedChannelGt":
+        """
+        Axiom 3: AffineStrategyRequiresCalibration
+        If Strategy equals "affine", then:
+
+          - Parameters SHALL contain a key "Calibration".
+          - Parameters.Calibration SHALL be a valid
+            linear.one.dimensional.calibration instance.
+        """
+        if self.strategy == "affine":
+            if self.parameters is None or "Calibration" not in self.parameters:
+                raise ValueError(
+                    "Axiom 3 failed: affine strategy requires Parameters.Calibration."
+                )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_4(self) -> "DerivedChannelGt":
+        """
+        Axiom 4: SystemModelRequiresParameters
+        If Strategy equals "system-model", then:
+          - Parameters SHALL be present.
+          - Parameters SHALL contain a key "EnergyModel".
+          - Parameters.EnergyModel SHALL include:
+              - TypeName
+              - Version
+        """
+        if self.strategy == "system-model":
+            if self.parameters is None:
+                raise ValueError(
+                    "Axiom 4 failed: system-model strategy requires Parameters."
+                )
+            energy_model = self.parameters.get("EnergyModel")
+            if not isinstance(energy_model, dict):
+                raise ValueError(
+                    "Axiom 4 failed: system-model strategy requires Parameters.EnergyModel."
+                )
+            if "TypeName" not in energy_model or "Version" not in energy_model:
+                raise ValueError(
+                    "Axiom 4 failed: Parameters.EnergyModel must include TypeName and Version."
                 )
         return self

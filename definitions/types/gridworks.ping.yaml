@@ -23,4 +23,4 @@ required:
 additionalProperties: false
 
 x-gridworks:
-  owner: "gridworks-energy"
+  owner: "smoothstone-computing"

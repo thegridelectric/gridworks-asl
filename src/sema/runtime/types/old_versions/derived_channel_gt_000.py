@@ -2,9 +2,9 @@ from typing import Any, Literal
 
 from sema.runtime.base import SemaType
 from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
-from sema.runtime.enums.gw1_unit import Gw1Unit
+from sema.runtime.enums.old_versions.gw1_unit_000 import Gw1Unit000
 from sema.runtime.property_format import LeftRightDot, SpaceheatName, UUID4Str
-from sema.runtime.types.derived_channel_gt import DerivedChannelGt
+from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
 
 
 class DerivedChannelGt000(SemaType):
@@ -14,13 +14,13 @@ class DerivedChannelGt000(SemaType):
     name: SpaceheatName
     created_by_node_name: SpaceheatName
     strategy: SpaceheatName
-    output_unit: Gw1Unit | None = None
+    output_unit: Gw1Unit000 | None = None
     display_name: str
     terminal_asset_alias: LeftRightDot
     type_name: Literal["derived.channel.gt"] = "derived.channel.gt"
     version: Literal["000"] = "000"
 
-    def upgrade(self) -> DerivedChannelGt:
+    def upgrade(self) -> DerivedChannelGt001:
         """000 -> 001: add InputChannelNames, EmissionMethod, and Parameters."""
 
         data = self.model_dump()
@@ -28,4 +28,4 @@ class DerivedChannelGt000(SemaType):
         data["emission_method"] = Gw1EmissionMethod.OnTrigger
         data["parameters"] = None
         data["version"] = "001"
-        return DerivedChannelGt.model_validate(data)
+        return DerivedChannelGt001.model_validate(data)

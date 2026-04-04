@@ -1,0 +1,99 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/fsm.atomic.report/000"
+
+title: "fsm.atomic.report"
+type: object
+description: >
+  Single atomic FSM report item representing either an event or an action
+  emitted by a state machine transition.
+
+properties:
+
+  MachineHandle:
+    $ref: "https://schemas.electricity.works/formats/handle.name"
+
+  StateEnum:
+    type: string
+
+  ReportType:
+    $ref: "https://schemas.electricity.works/enums/fsm.report.type/000"
+
+  ActionType:
+    type: string
+    description: >
+      Optional identifier describing the type of action. Not constrained
+      by an enum in version 000.
+
+  Action:
+    type: integer
+    description: >
+      Scalar value associated with the action.
+
+  EventEnum:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  Event:
+    type: string
+
+  FromState:
+    type: string
+
+  ToState:
+    type: string
+
+  UnixTimeMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  TriggerId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  TypeName:
+    const: "fsm.atomic.report"
+
+  Version:
+    const: "000"
+
+required:
+  - MachineHandle
+  - StateEnum
+  - ReportType
+  - UnixTimeMs
+  - TriggerId
+  - TypeName
+  - Version
+
+additionalProperties: true
+
+examples:
+  - |
+    {
+      "MachineHandle": "auto.pico-cycler.vdc-relay-gpio-23",
+      "StateEnum": "relay.closed.or.open",
+      "ReportType": "Action",
+      "ActionType": "RelayPinSet",
+      "Action": 1,
+      "UnixTimeMs": 1774956898001,
+      "TriggerId": "2f18a5a0-cdf9-4782-95a9-5fbb44d3512f",
+      "TypeName": "fsm.atomic.report",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "ActionPresenceConsistency"
+      statement: >
+        Action and ActionType SHALL be present if and only if ReportType equals Action.
+
+    - number: 2
+      name: "ActionTypeConsistency"
+      statement: >
+        If Action is present, ActionType SHALL also be present.
+
+    - number: 3
+      name: "EventPresenceConsistency"
+      statement: >
+        EventEnum, Event, FromState, and ToState SHALL be present if and only
+        if ReportType equals Event.

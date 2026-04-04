@@ -3,9 +3,11 @@ from typing import Literal
 from pydantic import StrictInt
 
 from sema.runtime.base import SemaType
+from sema.runtime.enums.fsm_report_type import FsmReportType
+from sema.runtime.enums.relay_energization_state import RelayEnergizationState
 from sema.runtime.property_format import HandleName, LeftRightDot, UTCMilliseconds, UUID4Str
 from sema.runtime.types.fsm_atomic_report import (  # noqa: PLC0415
-            FsmAtomicReport,
+            FsmAtomicReport as FsmAtomicReport001,
             FsmAtomicReportSimpleAction,
         )
 
@@ -14,7 +16,7 @@ class FsmAtomicReport000(SemaType):
 
     machine_handle: HandleName
     state_enum: str
-    report_type: str
+    report_type: FsmReportType
     action_type: str | None = None
     action: StrictInt | None = None
     event_enum: LeftRightDot | None = None
@@ -26,29 +28,23 @@ class FsmAtomicReport000(SemaType):
     type_name: Literal["fsm.atomic.report"] = "fsm.atomic.report"
     version: Literal["000"] = "000"
 
-    def upgrade(self) -> FsmAtomicReport:
-        """ TODO: ADD DOCSTRING"""
+    def upgrade(self) -> FsmAtomicReport001:
+        """
+        000 -> 001:
+        - Remove ActionType
+        - Action: scalar → structured variants (oneOf)
+        """
+        data = self.model_dump()
+        data.pop("action_type", None)
 
-        action = None
-        report_type = "Other"
-        if self.report_type == "Action" and self.action is not None:
-            report_type = "Action"
-            if self.action == 0:
-                action = FsmAtomicReportSimpleAction(value=0)
-            else:
-                action = FsmAtomicReportSimpleAction(value=1)
-        elif self.report_type == "Event":
-            report_type = "Event"
+        if self.report_type == FsmReportType.Action and self.action is not None:
+            if self.action_type != "RelayPinSet":
+                raise ValueError(
+                    "FsmAtomicReport000.upgrade() only supports ActionType 'RelayPinSet'."
+                )
+            data["action"] = FsmAtomicReportSimpleAction(
+                value=RelayEnergizationState(self.action)
+            )
 
-        return FsmAtomicReport(
-            machine_handle=self.machine_handle,
-            state_enum=self.state_enum,
-            report_type=report_type,
-            action=action,
-            event_enum=self.event_enum,
-            event=self.event,
-            from_state=self.from_state,
-            to_state=self.to_state,
-            unix_time_ms=self.unix_time_ms,
-            trigger_id=self.trigger_id,
-        )
+        data["version"] = "001"
+        return FsmAtomicReport001.model_validate(data)

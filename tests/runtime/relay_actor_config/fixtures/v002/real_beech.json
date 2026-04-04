@@ -1,0 +1,19 @@
+{
+  "ActorName": "relay1",
+  "AsyncCapture": true,
+  "CapturePeriodS": 300,
+  "ChannelName": "vdc-relay1",
+  "DeEnergizedState": "RelayClosed",
+  "DeEnergizingEvent": "CloseRelay",
+  "EnergizedState": "RelayOpen",
+  "EnergizingEvent": "OpenRelay",
+  "EventType": "change.relay.state",
+  "Exponent": 0,
+  "PollPeriodMs": 200,
+  "RelayIdx": 1,
+  "StateType": "relay.closed.or.open",
+  "TypeName": "relay.actor.config",
+  "Unit": "Unitless",
+  "Version": "002",
+  "WiringConfig": "NormallyClosed"
+}

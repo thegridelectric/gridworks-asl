@@ -11,7 +11,7 @@ from sema.runtime.property_format import (
 from sema.runtime.types.channel_readings import ChannelReadings
 from sema.runtime.types.machine_states import MachineStates
 from sema.runtime.types.old_versions.fsm_full_report_000 import FsmFullReport000
-from sema.runtime.types.report import Report 
+from sema.runtime.types.report import Report as Report003
 
 class Report002(SemaType):
     """Sema: https://schemas.electricity.works/types/report/002"""
@@ -29,17 +29,13 @@ class Report002(SemaType):
     type_name: Literal["report"] = "report"
     version: str = "002"
 
-    def to_latest(self) -> "Report":
-
-        return Report(
-            from_g_node_alias=self.from_g_node_alias,
-            from_g_node_instance_id=self.from_g_node_instance_id,
-            about_g_node_alias=self.about_g_node_alias,
-            slot_start_unix_s=self.slot_start_unix_s,
-            slot_duration_s=self.slot_duration_s,
-            channel_reading_list=self.channel_reading_list,
-            state_list=self.state_list,
-            fsm_report_list=[fsm_report.to_latest() for fsm_report in self.fsm_report_list],
-            message_created_ms=self.message_created_ms,
-            id=self.id,
-        )
+    def upgrade(self) -> Report003:
+        """
+        002 -> 003: FsmReportList[]: fsm.full.report:000 -> 001
+        """
+        data = self.model_dump()
+        data["fsm_report_list"] = [
+            fsm_report.upgrade() for fsm_report in self.fsm_report_list
+        ]
+        data["version"] = "003"
+        return Report003.model_validate(data)

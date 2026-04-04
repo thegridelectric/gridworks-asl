@@ -5,7 +5,7 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import LeftRightDot, UTCMilliseconds, UUID4Str
 from sema.runtime.types.old_versions.report_002 import Report002
-from sema.runtime.types import ReportEvent
+from sema.runtime.types.report_event import ReportEvent as ReportEvent003
 
 
 class ReportEvent002(SemaType):
@@ -38,12 +38,11 @@ class ReportEvent002(SemaType):
             raise ValueError("Axiom 3 failed: src must equal report.from_g_node_alias.")
         return self
 
-    def to_latest(self) -> "ReportEvent":
-        from sema.runtime.types.report_event import ReportEvent  # noqa: PLC0415
-
-        return ReportEvent(
-            message_id=self.message_id,
-            time_created_ms=self.time_created_ms,
-            src=self.src,
-            report=self.report.to_latest(),
-        )
+    def upgrade(self) -> ReportEvent003:
+        """
+        002 -> 003: Report: report:002 -> 003
+        """
+        data = self.model_dump()
+        data["report"] = self.report.upgrade()
+        data["version"] = "003"
+        return ReportEvent003.model_validate(data)

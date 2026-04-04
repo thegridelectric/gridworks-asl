@@ -9,10 +9,13 @@ from sema.runtime.property_format import (
     UTCMilliseconds,
     UUID4Str,
 )
+from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
 from sema.runtime.types.ha1_params import Ha1Params
-from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import I2cMultichannelDtRelayComponentGt
 from sema.runtime.types.old_versions.data_channel_gt_001 import DataChannelGt001
 from sema.runtime.types.old_versions.derived_channel_gt_000 import DerivedChannelGt000
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
+    I2cMultichannelDtRelayComponentGt002,
+)
 from sema.runtime.types.old_versions.spaceheat_node_gt_300 import SpaceheatNodeGt300
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
@@ -39,13 +42,14 @@ class LayoutLite011(SemaType):
     tank_module_components: list[PicoTankModuleComponentGt | SimPicoTankModuleComponentGt]
     flow_module_components: list[PicoFlowModuleComponentGt]
     ha1_params: Ha1Params
-    i2c_relay_component: I2cMultichannelDtRelayComponentGt
-    t_map: object | None = None
+    i2c_relay_component: I2cMultichannelDtRelayComponentGt002
+    t_map: Gw1TankTempCalibrationMap | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
     version: Literal["011"] = "011"
 
     def upgrade(self) -> LayoutLite012:
         """
+        011 -> 012:
         - DerivedChannels[]: derived.channel.gt:000 → 001
         - DataChannels[]: data.channel.gt:001 → 002
         - ShNodes[]: spaceheat.node.gt:300 → 301
@@ -55,35 +59,12 @@ class LayoutLite011(SemaType):
 
         data = self.model_dump()
 
-        # ------------------------------------------------------------------
-        # Apply only the required version transitions
-        # ------------------------------------------------------------------
+        data["derived_channels"] = [ch.upgrade()for ch in self.derived_channels]
+        data["data_channels"] = [ch.upgrade() for ch in self.data_channels]
+        data["sh_nodes"] = [node.upgrade() for node in self.sh_nodes]
 
-        # DerivedChannels[]
-        data["derived_channels"] = [
-            ch.upgrade()
-            for ch in self.data_channels
-        ]
-
-        # DataChannels[]
-        data["data_channels"] = [
-            ch.upgrade()
-            for ch in self.data_channels
-        ]
-
-        # ShNodes[]
-        data["sh_nodes"] = [
-            node.upgrade()
-            for node in self.sh_nodes
-        ]
-
-        # I2cRelayComponent
-        if self.i2c_relay_component is not None:
-            data["i2c_relay_component"] = self.i2c_relay_component.upgrade()
-
-        # ------------------------------------------------------------------
-        # Version bump
-        # ------------------------------------------------------------------
+        # v011 must have an i2c_relay_comonent
+        data["i2c_relay_component"] = self.i2c_relay_component.upgrade()
 
         data["version"] = "012"
 

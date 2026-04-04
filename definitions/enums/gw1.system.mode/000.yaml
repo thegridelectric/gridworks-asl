@@ -1,0 +1,47 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/gw1.system.mode/000"
+
+title: "gw1.system.mode"
+type: "string"
+
+description: >
+  **SCADA system operational mode.**
+  This enum declares the degree of physical actuation authority exercised
+  by SCADA over connected hardware. It is communicated to other actors
+  (e.g. LTN, admin tools, analytics) to establish shared expectations about
+  whether and how physical control actions may occur.
+
+enum:
+  - "Heating"
+  - "Standby"
+  - "MonitorOnly"
+
+default: "Heating"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+
+  value_descriptions:
+    "Heating": >
+      Normal operational mode.
+      SCADA may actively energize and de-energize actuators in order to provide
+      heating or cooling services. In this mode, SCADA may accept and execute
+      Dispatch Contracts originating from the Leaf Transactive Node (LTN), subject
+      to local safety constraints and configuration.
+
+    "Standby": >
+      Intentional idle mode with active inhibition.
+      SCADA retains control authority over actuators but uses it only to prevent
+      heating or cooling from occurring. This mode is typically used when the
+      system is intentionally paused (e.g. seasonal shutdown, manual override,
+      or safety condition) while still ensuring that uncontrolled equipment
+      such as boilers or heat pumps do not engage.
+
+    "MonitorOnly": >
+      Absolute non-actuation mode.
+      SCADA MUST NOT issue any physical control actions, including relay changes
+      or analog output updates. Telemetry collection, reporting, forecasting,
+      and contract accounting may continue, but all actuators are left untouched.
+      This mode provides a strong guarantee that no physical intervention will
+      be performed by SCADA.

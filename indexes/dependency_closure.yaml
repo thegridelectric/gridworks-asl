@@ -6,7 +6,7 @@ types:
     '000':
       enums:
       - gw1.quantity:000
-      - gw1.unit:000
+      - gw1.quantity:001
       - gw1.unit:001
       formats:
       - left.right.dot
@@ -14,11 +14,22 @@ types:
       - uuid4.str
       types:
       - gw1.unit.quantity.projection:000
+  bid:
+    '000':
+      enums:
+      - market.price.unit:000
+      - market.quantity.unit:000
+      formats:
+      - left.right.dot
+      - market.slot.name
+      types:
+      - price.quantity.unitless:001
   channel.config:
     '000':
       enums:
       - spaceheat.unit:001
       formats:
+      - positive.int
       - spaceheat.name
       types: []
   channel.readings:
@@ -60,6 +71,7 @@ types:
       formats:
       - left.right.dot
       - spaceheat.name
+      - utc.seconds
       - uuid4.str
       types:
       - spaceheat.telemetry.quantity.projection:000
@@ -78,6 +90,7 @@ types:
       - gw1.unit:000
       formats:
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - uuid4.str
       types: []
@@ -90,8 +103,32 @@ types:
       - left.right.dot
       - spaceheat.name
       - uuid4.str
+      types: []
+  fis.authority.manifest:
+    '000':
+      enums:
+      - base.g.node.class:000
+      - g.node.instance.status:000
+      - g.node.instance.transport:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
       types:
-      - gw1.unit.quantity.projection:000
+      - g.node.gt:004
+      - g.node.instance.gt:000
+  fis.instance.authorization.event:
+    '000':
+      enums:
+      - fis.authorization.decision:000
+      - fis.authorization.reason:000
+      - g.node.instance.transport:000
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types: []
   fsm.atomic.report:
     '000':
       enums:
@@ -166,11 +203,18 @@ types:
       formats: []
       types:
       - gw1.tank.temp.calibration:000
-  gw1.unit.quantity.projection:
+  gw1.telemetry.name.quantity.projection:
     '000':
       enums:
       - gw1.quantity:000
-      - gw1.unit:000
+      - spaceheat.telemetry.name:006
+      formats: []
+      types: []
+  gw1.unit.quantity.projection:
+    '000':
+      enums:
+      - gw1.quantity:001
+      - gw1.unit:001
       formats: []
       types: []
   ha1.params:
@@ -195,6 +239,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - uuid4.str
       types:
@@ -207,6 +252,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - uuid4.str
       types:
@@ -224,6 +270,25 @@ types:
       - uuid4.str
       types:
       - relay.actor.config:003
+  i2c.thermistor.channel.config:
+    '000':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - positive.int
+      - spaceheat.name
+      types: []
+  i2c.thermistor.reader.component.gt:
+    '000':
+      enums:
+      - spaceheat.unit:001
+      - temp.calc.method:000
+      formats:
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - i2c.thermistor.channel.config:000
   layout.lite:
     '010':
       enums:
@@ -236,13 +301,14 @@ types:
       - hz.calc.method:001
       - relay.closed.or.open:000
       - relay.wiring.config:000
-      - spaceheat.make.model:007
+      - spaceheat.make.model:003
       - spaceheat.telemetry.name:006
       - spaceheat.unit:001
       - temp.calc.method:000
       formats:
       - handle.name
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -271,13 +337,14 @@ types:
       - hz.calc.method:001
       - relay.closed.or.open:000
       - relay.wiring.config:000
-      - spaceheat.make.model:007
+      - spaceheat.make.model:003
       - spaceheat.telemetry.name:006
       - spaceheat.unit:001
       - temp.calc.method:000
       formats:
       - handle.name
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -308,15 +375,17 @@ types:
       - hz.calc.method:001
       - relay.closed.or.open:000
       - relay.wiring.config:000
-      - spaceheat.make.model:007
+      - spaceheat.make.model:003
       - spaceheat.telemetry.name:007
       - spaceheat.unit:001
       - temp.calc.method:000
       formats:
       - handle.name
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - utc.milliseconds
+      - utc.seconds
       - uuid4.str
       types:
       - channel.config:000
@@ -345,7 +414,7 @@ types:
       - hz.calc.method:001
       - relay.closed.or.open:000
       - relay.wiring.config:000
-      - spaceheat.make.model:007
+      - spaceheat.make.model:003
       - spaceheat.telemetry.name:007
       - spaceheat.unit:001
       - temp.calc.method:000
@@ -355,6 +424,7 @@ types:
       - positive.int
       - spaceheat.name
       - utc.milliseconds
+      - utc.seconds
       - uuid4.str
       types:
       - channel.config:000
@@ -370,6 +440,15 @@ types:
       - sim.pico.tank.module.component.gt:000
       - spaceheat.node.gt:301
       - spaceheat.telemetry.quantity.projection:000
+  linear.one.dimensional.calibration:
+    '000':
+      enums: []
+      formats: []
+      types: []
+    '001':
+      enums: []
+      formats: []
+      types: []
   machine.states:
     '000':
       enums: []
@@ -383,9 +462,10 @@ types:
       enums:
       - gpm.from.hz.method:000
       - hz.calc.method:001
-      - spaceheat.make.model:007
+      - spaceheat.make.model:003
       - spaceheat.unit:001
       formats:
+      - positive.int
       - spaceheat.name
       - uuid4.str
       types:
@@ -396,6 +476,7 @@ types:
       - spaceheat.unit:001
       - temp.calc.method:000
       formats:
+      - positive.int
       - spaceheat.name
       - uuid4.str
       types:
@@ -406,6 +487,16 @@ types:
       formats:
       - uuid4.str
       types: []
+  power.watts:
+    '000':
+      enums: []
+      formats: []
+      types: []
+  price.quantity.unitless:
+    '001':
+      enums: []
+      formats: []
+      types: []
   relay.actor.config:
     '002':
       enums:
@@ -415,6 +506,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - positive.int
       - spaceheat.name
       types: []
     '003':
@@ -435,6 +527,7 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -451,6 +544,7 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -467,6 +561,7 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -484,6 +579,7 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -504,6 +600,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - utc.milliseconds
       - uuid4.str
@@ -536,6 +633,7 @@ types:
       - spaceheat.unit:001
       - temp.calc.method:000
       formats:
+      - positive.int
       - spaceheat.name
       - uuid4.str
       types:

@@ -1,9 +1,8 @@
 from typing import Literal
 
-from pydantic import ValidationError, model_validator
+from pydantic import model_validator
 
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gw1_quantity import Gw1Quantity
 from sema.runtime.enums.old_versions.spaceheat_telemetry_name_006 import SpaceheatTelemetryName006
 from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
 from sema.runtime.property_format import LeftRightDot, SpaceheatName, UTCSeconds, UUID4Str
@@ -35,26 +34,16 @@ class DataChannelGt001(SemaType):
         return self
 
     def upgrade(self) -> DataChannelGt:
-        """001 -> 002: TelemetryName 006 -> 007, add Quantity, add TelemetryQuantityConsistency."""
+        """001 -> 002: 
+          - TelemetryName 006 -> 007, 
+          - add Quantity, 
+          - add TelemetryQuantityConsistency."""
 
         data = self.model_dump()
         upgraded_telemetry_name = SpaceheatTelemetryName[self.telemetry_name.name]
-        upgraded_quantity = None
-        for quantity in Gw1Quantity:
-            try:
-                projection = SpaceheatTelemetryQuantityProjection(
-                    telemetry_name=upgraded_telemetry_name,
-                    quantity=quantity,
-                )
-                upgraded_quantity = projection.quantity
-                break
-            except ValidationError:
-                continue
-        if upgraded_quantity is None:
-            raise ValueError(
-                f"No quantity projection found for telemetry_name={upgraded_telemetry_name}"
-            )
         data["telemetry_name"] = upgraded_telemetry_name
-        data["quantity"] = upgraded_quantity
+        data["quantity"] = SpaceheatTelemetryQuantityProjection.project(
+            upgraded_telemetry_name
+        )
         data["version"] = "002"
         return DataChannelGt.model_validate(data)

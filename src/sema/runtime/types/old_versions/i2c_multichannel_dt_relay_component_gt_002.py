@@ -5,7 +5,7 @@ from pydantic import ConfigDict, StrictInt, model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.old_versions.relay_actor_config_002 import RelayActorConfig002
-from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import I2cMultichannelDtRelayComponentGt as I2cMultichannelDtRelayComponentGt003
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_003 import I2cMultichannelDtRelayComponentGt003
 
 
 class I2cMultichannelDtRelayComponentGt002(SemaType):
@@ -38,22 +38,10 @@ class I2cMultichannelDtRelayComponentGt002(SemaType):
         return self
 
     def upgrade(self) ->I2cMultichannelDtRelayComponentGt003:
-        """002 -> 003: upgrade nested RelayActorConfig items"""
+        """002 -> 003: Add I2cBus"""
 
         data = self.model_dump()
-
-        # Upgrade nested configs
-        upgraded_configs = []
-        for cfg in self.config_list:
-            if isinstance(cfg, RelayActorConfig002):
-                upgraded_configs.append(cfg.upgrade())
-            else:
-                # Already latest or unexpected — keep as-is
-                upgraded_configs.append(cfg)
-
-        data["config_list"] = upgraded_configs
-
-        # Update version
+        data["i2c_bus"] = "default"
         data["version"] = "003"
 
         return I2cMultichannelDtRelayComponentGt003.model_validate(data)

@@ -1,0 +1,26 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gridworks.ack"
+
+title: "gridworks.ack"
+type: object
+description: >
+  Versionless acknowledgement message used to confirm receipt of a prior
+  GridWorks message by its message identifier.
+
+properties:
+  AckMessageID:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Message identifier of the message being acknowledged.
+
+  TypeName:
+    const: "gridworks.ack"
+
+required:
+  - AckMessageID
+  - TypeName
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "smoothstone-computing"

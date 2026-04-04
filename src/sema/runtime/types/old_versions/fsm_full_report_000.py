@@ -18,9 +18,12 @@ class FsmFullReport000(SemaType):
     model_config["extra"] = "allow"
 
     def upgrade(self) -> FsmFullReport:
+        """
+        000 -> 001: AtomicList: fsm.atomic.report:000 -> 001
+        """
+        data = self.model_dump()
 
-        return FsmFullReport(
-            from_name=self.from_name,
-            trigger_id=self.trigger_id,
-            atomic_list=[atomic.upgrade() for atomic in self.atomic_list],
-        )
+        data["atomic_list"] = [atomic.upgrade() for atomic in self.atomic_list]
+
+        data["version"] = "001"
+        return FsmFullReport.model_validate(data)

@@ -1,0 +1,17 @@
+{
+  "CreatedByNodeName": "derived-generator",
+  "DisplayName": "Affine Derived Temperature",
+  "Id": "9b4e0cfe-4f79-4dd0-b3a6-e9e0f5b774c1",
+  "Name": "affine-temp",
+  "OutputUnit": "FahrenheitX100",
+  "OutputQuantity": "Temperature",
+  "Strategy": "affine",
+  "EmissionMethod": "OnTrigger",
+  "InputChannelNames": [
+    "buffer-depth1-device"
+  ],
+  "Parameters": {},
+  "TerminalAssetAlias": "d1.isone.ct.newhaven.orange1.ta",
+  "TypeName": "derived.channel.gt",
+  "Version": "002"
+}

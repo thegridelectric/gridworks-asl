@@ -1,0 +1,91 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/000"
+
+title: "i2c.thermistor.reader.component.gt"
+type: object
+description: >
+  Configuration for an I2C thermistor reader component that samples one ADC
+  device and publishes one or more thermistor-backed temperature channels.
+
+properties:
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.thermistor.channel.config/000"
+    description: >
+      Thermistor channel configurations attached to this ADC reader.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  Bus:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Logical bus name identifying the I2C bus on which this ADC is attached.
+
+  AdcAddress:
+    type: integer
+    description: >
+      7-bit I2C address of the ADC device.
+
+  AdcReferenceVolts:
+    type: number
+    exclusiveMinimum: 0
+    default: 3.3
+    description: >
+      Reference voltage used by the ADC when converting measured voltage to a
+      serialized reading.
+
+  SeriesResistanceKOhms:
+    type: number
+    exclusiveMinimum: 0
+    description: >
+      Series resistance, in kilo-ohms, used in the thermistor divider circuit.
+
+  TempCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/temp.calc.method/000"
+
+  TypeName:
+    const: "i2c.thermistor.reader.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - ComponentAttributeClassId
+  - ConfigList
+  - Bus
+  - AdcAddress
+  - SeriesResistanceKOhms
+  - TempCalcMethod
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "ConfigUniquenessAndDeviceChannelConsistency"
+      statement: >
+        Each ChannelName SHALL appear at most once in ConfigList. For each
+        AdcChannel, at most one config in ConfigList may use Unit equal to
+        Celcius.
+
+    - number: 2
+      name: "AddressValidity"
+      statement: >
+        AdcAddress SHALL be a valid 7-bit I2C address in the range 0 through
+        127.
