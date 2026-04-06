@@ -6,8 +6,7 @@
 #   - "<format_name>" (for formats)
 
 initial_targets:
-  - "layout.lite:013"
-  - "layout.lite:012"
+  - "layout.lite.013"
   - "layout.lite:011"
   - "report.event:003"
   - "report.event:002"
