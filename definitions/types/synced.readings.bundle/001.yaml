@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/synced.readings.bundle/000"
+$id: "https://schemas.electricity.works/types/synced.readings.bundle/001"
 
 title: "synced.readings.bundle"
 type: object
@@ -61,7 +61,7 @@ properties:
     const: "synced.readings.bundle"
 
   Version:
-    const: "000"
+    const: "001"
 
 required:
   - AboutGNodeAlias
@@ -77,44 +77,44 @@ additionalProperties: false
 
 examples:
   - |
-  {
-    "AboutGNodeAlias": "dw1.isone.me.versant.keene.apple.ta",
-    "StartTimestamp": "2025-02-26T00:00:00Z",
-    "EndTimestamp": "2025-02-26T00:02:00Z",
-    "TimestampList": [
-      "2025-02-26T00:00:00Z",
-      "2025-02-26T00:01:00Z",
-      "2025-02-26T00:02:00Z"
-    ],
-    "ChannelReadingsList": [
-      {
-        "ChannelName": "buffer-depth1",
-        "ValueList": [4973, 4966, 4979],
-        "Unit": "FahrenheitX100",
-        "UnitType": "gw1.unit"
-      },
-      {
-        "ChannelName": "hp-ewt",
-        "ValueList": [18234, 18179, 18157],
-        "Unit": "WaterTempCTimes1000",
-        "UnitType": "spaceheat.telemetry.name"
-      },
-      {
-        "ChannelName": "hp-idu-pwr",
-        "ValueList": [14, 14, 14],
-        "Unit": "Watts",
-        "UnitType": "gw1.unit"
-      },
-      {
-        "ChannelName": "persistence-delay",
-        "ValueList": [231, 102, 3650238],
-        "Unit": "Milliseconds",
-        "UnitType": "gw1.unit"
-      }
-    ],
-    "TypeName": "synced.readings.bundle",
-    "Version": "000"
-  }
+    {
+      "AboutGNodeAlias": "dw1.isone.me.versant.keene.apple.ta",
+      "StartTimestamp": "2025-02-26T00:00:00Z",
+      "EndTimestamp": "2025-02-26T00:02:00Z",
+      "TimestampList": [
+        "2025-02-26T00:00:00Z",
+        "2025-02-26T00:01:00Z",
+        "2025-02-26T00:02:00Z"
+      ],
+      "ChannelReadingsList": [
+        {
+          "ChannelName": "buffer-depth1",
+          "ValueList": [4973, 4966, 4979],
+          "Unit": "FahrenheitX100",
+          "UnitType": "gw1.unit"
+        },
+        {
+          "ChannelName": "hp-ewt",
+          "ValueList": [18234, 18179, 18157],
+          "Unit": "WaterTempCTimes1000",
+          "UnitType": "spaceheat.telemetry.name"
+        },
+        {
+          "ChannelName": "hp-idu-pwr",
+          "ValueList": [14, 14, 14],
+          "Unit": "Watts",
+          "UnitType": "gw1.unit"
+        },
+        {
+          "ChannelName": "persistence-delay",
+          "ValueList": [231, 102, 3650238],
+          "Unit": "Milliseconds",
+          "UnitType": "gw1.unit"
+        }
+      ],
+      "TypeName": "synced.readings.bundle",
+      "Version": "001"
+    }
 
 x-gridworks:
   owner: "gridworks-energy"
