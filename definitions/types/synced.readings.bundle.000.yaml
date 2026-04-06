@@ -19,10 +19,10 @@ properties:
   AboutGNodeAlias:
     $ref: "https://schemas.electricity.works/formats/left.right.dot"
 
-  Start:
+  StartTimestamp:
     $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
 
-  End:
+  EndTimestamp:
     $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
 
   TimestampList:
@@ -43,26 +43,6 @@ properties:
           items:
             type: integer
 
-      required:
-        - ChannelName
-        - ValueList
-    
-  ChannelDefinitions:
-    type: array
-    description: >
-      Minimal semantic definitions for each channel sufficient to interpret
-      values without reference to external layout.
-    items:
-      type: object
-      properties:
-        Name:
-          $ref: "https://schemas.electricity.works/formats/spaceheat.name"
-
-        Id:
-          $ref: "https://schemas.electricity.works/formats/uuid4.str"
-          description: >
-            Globally unique identifier of the channel definition.
-
         Unit:
           type: string
 
@@ -72,13 +52,11 @@ properties:
             Name of the Sema vocabulary from which Unit is drawn.
 
       required:
-        - Name
-        - Id
+        - ChannelName
+        - ValueList
         - Unit
         - UnitType
-
-      additionalProperties: false
-
+    
   TypeName:
     const: "synced.readings.bundle"
 
@@ -87,11 +65,10 @@ properties:
 
 required:
   - AboutGNodeAlias
-  - Start
-  - End
+  - StartTimestamp
+  - EndTimestamp
   - TimestampList
   - ChannelReadingsList
-  - ChannelDefinitions
   - TypeName
   - Version
 
@@ -102,8 +79,8 @@ examples:
   - |
   {
     "AboutGNodeAlias": "dw1.isone.me.versant.keene.apple.ta",
-    "Start": "2025-02-26T00:00:00Z",
-    "End": "2025-02-26T00:02:00Z",
+    "StartTimestamp": "2025-02-26T00:00:00Z",
+    "EndTimestamp": "2025-02-26T00:02:00Z",
     "TimestampList": [
       "2025-02-26T00:00:00Z",
       "2025-02-26T00:01:00Z",
@@ -112,44 +89,26 @@ examples:
     "ChannelReadingsList": [
       {
         "ChannelName": "buffer-depth1",
-        "ValueList": [4973, 4966, 4979]
-      },
-      {
-        "ChannelName": "hp-ewt",
-        "ValueList": [18234, 18179, 18157]
-      },
-      {
-        "ChannelName": "hp-idu-pwr",
-        "ValueList": [14, 14, 14]
-      },
-      {
-        "ChannelName": "persistence-delay",
-        "ValueList": [0.231, 0.102, 3650.238]
-      }
-    ],
-    "ChannelDefinitions": [
-      {
-        "Name": "buffer-depth1",
-        "Id": "3506d743-fd2f-44d0-98b0-1ec571b4ad98",
+        "ValueList": [4973, 4966, 4979],
         "Unit": "FahrenheitX100",
         "UnitType": "gw1.unit"
       },
       {
-        "Name": "hp-ewt",
-        "Id": "e5848bc1-72af-4677-857f-dc956e9ad9d0",
+        "ChannelName": "hp-ewt",
+        "ValueList": [18234, 18179, 18157],
         "Unit": "WaterTempCTimes1000",
         "UnitType": "spaceheat.telemetry.name"
       },
       {
-        "Name": "hp-idu-pwr",
-        "Id": "f8fc4cf3-fff8-4157-baf1-e034b360dd22",
+        "ChannelName": "hp-idu-pwr",
+        "ValueList": [14, 14, 14],
         "Unit": "Watts",
         "UnitType": "gw1.unit"
       },
       {
-        "Name": "persistence-delay",
-        "Id": "2ccc8f1c-1b1f-47de-b2b2-a1958929a88a",
-        "Unit": "Seconds",
+        "ChannelName": "persistence-delay",
+        "ValueList": [231, 102, 3650238],
+        "Unit": "Milliseconds",
         "UnitType": "gw1.unit"
       }
     ],
@@ -173,22 +132,17 @@ x-gridworks:
       statement: >
         ChannelName values SHALL be unique across ChannelReadingsList.
 
-        Name values SHALL be unique across ChannelDefinitions.
-        Id values SHALL be unique across ChannelDefinitions.
-
-        Furthermore:
-
-          - The set of ChannelName values appearing in ChannelReadingsList SHALL
-            equal the set of Name values appearing in ChannelDefinitions.
-
-
     - number: 3
-      name: "TimestampAlignment"
+      name: "StartTimestampBeforeEnd"
       statement: >
-        For each entry in ChannelReadingsList, the length of ValueList SHALL
-        be equal to len(TimestampList).
+        StartTimestamp shall be less than EndTimestamp
 
     - number: 4
+      name: "TimestampAndValueLengthAlignment"
+      statement: >
+        The length of TimestampList shall be equal to the length of ValueList for each entry in ChannelReadingsList.
+
+    - number: 5
       name: "UnitTypeAndValueRepresentationConsistency"
       statement: >
         For each entry in ChannelDefinitions:
