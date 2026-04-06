@@ -1487,23 +1487,21 @@ types:
             - "utc.milliseconds"
 
   synced.readings.bundle:
-    latest_version: "000"
+    latest_version: "001"
     owner: joe-strommen
-    status: "draft'"
     versioning_strategy: "literal"
     description: "Time-aligned sequence of synchronized multi-channel readings with embedded channel semantics sufficient for independent interpretation."
 
     versions:
-      "000":
-        schema_url: "https://schemas.electricity.works/types/synced.readings.bundle/000"
+      "001":
+        schema_url: "https://schemas.electricity.works/types/synced.readings.bundle/001"
         created: "2026-03-30T17:12:00Z"
-        summary: "Initial Sema version"
+        summary: "Baseline runtime version (no prior version tracked)."
         direct_dependencies:
           structural:
             - "left.right.dot"
             - "spaceheat.name"
             - "utc.iso8601.seconds"
-            - "uuid4.str"
           axiom:
             - "gw1.unit:001"
             - "spaceheat.telemetry.name:007"
