@@ -72,6 +72,26 @@ def ensure_lookup_path(lookup: dict, category: str, name: str, version: str | No
     return lookup[f"{category}s"][name]["versions"][version]
 
 
+def add_intermediate_type_versions(types: dict[str, set[str]], registry: dict) -> None:
+    # Intermediate versions are included to ensure upgrade chains are complete,
+    # using only registry-declared versions (no inferred versions).
+    for name, selected in list(types.items()):
+        if len(selected) < 2:
+            continue
+        available_versions = sorted(
+            (int(v), v) for v in registry["types"][name].get("versions", {})
+        )
+        available_set = {version for _, version in available_versions}
+        for version in selected:
+            if version not in available_set:
+                raise ValueError(f"Type {name}:{version} not declared in registry")
+        low = min(int(version) for version in selected)
+        high = max(int(version) for version in selected)
+        for numeric_version, version in available_versions:
+            if low <= numeric_version <= high:
+                selected.add(version)
+
+
 def resolve_output_name(name: str) -> Path:
     if "/" in name or "\\" in name:
         raise ValueError("--out must be a single filename with no slashes.")
@@ -134,6 +154,8 @@ def expand_seed(seed_request_path: Path, output_path: Path) -> None:
         for dep in type_closure["types"]:
             dep_name, dep_version = dep.rsplit(":", 1)
             add_type(dep_name, dep_version)
+
+    add_intermediate_type_versions(types, registry)
 
     output: dict[str, object] = {
         "metadata": {

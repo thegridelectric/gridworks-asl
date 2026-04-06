@@ -11,3 +11,4 @@ initial_targets:
   - "report.event:003"
   - "report.event:002"
   - "snapshot.spaceheat:003"
+  - "gridworks.ping"

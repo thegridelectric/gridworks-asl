@@ -371,11 +371,11 @@ types:
         summary: "Initial Sema version"
 
   synced.readings.bundle:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "001":
+        summary: "Baseline runtime version (no prior version tracked)."
 
 enums:
   base.g.node.class:

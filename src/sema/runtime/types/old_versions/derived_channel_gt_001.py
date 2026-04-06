@@ -5,7 +5,6 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
 from sema.runtime.enums.gw1_quantity import Gw1Quantity
-from sema.runtime.enums.gw1_unit import Gw1Unit
 from sema.runtime.enums.old_versions.gw1_unit_000 import Gw1Unit000
 from sema.runtime.property_format import (
     LeftRightDot,

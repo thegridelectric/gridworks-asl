@@ -4,11 +4,16 @@ import argparse
 from pathlib import Path
 
 from sema.tools.build_seed_expanded import expand_seed, resolve_output_name
-from sema.tools.mirror_seed_to_gridworks_data import (
+from sema.tools.build_seed_snapshot import (
+    build_restricted_registry,
+    copy_seed_definitions,
     load_seed,
-    mirror_vocab_package,
+    load_registry,
     resolve_target_path,
     validate_package_name,
+    write_restricted_indexes,
+    write_restricted_registry,
+    write_snapshot_readme,
 )
 
 
@@ -20,13 +25,13 @@ def _run_mirror(args: argparse.Namespace) -> None:
     seed = load_seed(Path(args.seed_expanded).resolve())
     package_name = validate_package_name(args.package_name)
     target_path = resolve_target_path(package_name, args.target_path)
-    mirror_vocab_package(
-        Path(args.source).resolve(),
-        target_path,
-        seed,
-        package_name,
-    )
-    print(f"Mirrored seed-selected vocabulary from {args.source} -> {target_path}")
+    target_path.mkdir(parents=True, exist_ok=True)
+    copy_seed_definitions(target_path, seed)
+    restricted_registry = build_restricted_registry(seed, load_registry())
+    write_restricted_registry(target_path, restricted_registry)
+    write_restricted_indexes(target_path, restricted_registry)
+    write_snapshot_readme(target_path, seed)
+    print(f"Built seed snapshot at {target_path}")
     print(f"Selection source: {args.seed_expanded}")
 
 
@@ -37,23 +42,23 @@ def _run_sync(args: argparse.Namespace) -> None:
     seed = load_seed(out_path)
     package_name = validate_package_name(args.package_name)
     target_path = resolve_target_path(package_name, args.target_path)
-    mirror_vocab_package(
-        Path(args.source).resolve(),
-        target_path,
-        seed,
-        package_name,
-    )
-    print(f"Mirrored seed-selected vocabulary from {args.source} -> {target_path}")
+    target_path.mkdir(parents=True, exist_ok=True)
+    copy_seed_definitions(target_path, seed)
+    restricted_registry = build_restricted_registry(seed, load_registry())
+    write_restricted_registry(target_path, restricted_registry)
+    write_restricted_indexes(target_path, restricted_registry)
+    write_snapshot_readme(target_path, seed)
+    print(f"Built seed snapshot at {target_path}")
     print(f"Selection source: {out_path}")
 
 
 def add_parser(subparsers: argparse._SubParsersAction) -> None:
     seed_parser = subparsers.add_parser(
         "seed",
-        help="Expand seed requests and mirror selected runtime vocabulary.",
+        help="Expand seed requests and build seed-scoped definition snapshots.",
         description=(
             "Seed tooling for building a generated seed/worklist from a small request file "
-            "and mirroring the selected runtime vocabulary into another package."
+            "and writing a seed-scoped definitions snapshot into another package."
         ),
     )
     seed_subparsers = seed_parser.add_subparsers(dest="seed_command", required=True)
@@ -64,8 +69,9 @@ def add_parser(subparsers: argparse._SubParsersAction) -> None:
         description=(
             "Read a small YAML request containing initial_targets, validate each target "
             "against definitions/registry.yaml, compute typed transitive closure using "
-            "indexes/dependency_closure.yaml, resolve local schema paths using "
-            "indexes/lookup.yaml, and write a generated seed/worklist YAML."
+            "indexes/dependency_closure.yaml, include any registry-declared intermediate "
+            "type versions needed to keep upgrade chains complete, resolve local schema "
+            "paths using indexes/lookup.yaml, and write a generated seed/worklist YAML."
         ),
         epilog=(
             "Example:\n"
@@ -84,12 +90,12 @@ def add_parser(subparsers: argparse._SubParsersAction) -> None:
 
     mirror_parser = seed_subparsers.add_parser(
         "mirror",
-        help="Mirror a generated seed/worklist into a target runtime package.",
+        help="Mirror a generated seed/worklist into a target snapshot package.",
         description=(
-            "Read a generated seed/worklist YAML and mirror the selected runtime enums, "
-            "types, and old_versions into the target package. During mirroring, imports "
-            "are rewritten from sema.runtime.* to <package-name>.sema.*. If --target-path "
-            "is omitted, the mirror is written to output/<package-name>/."
+            "Read a generated seed/worklist YAML and build a seed-scoped snapshot package "
+            "containing restricted definitions/, registry.yaml, indexes/, and README.md. "
+            "If --target-path is omitted, the snapshot "
+            "is written to output/<package-name>/."
         ),
         epilog=(
             "Example:\n"
@@ -117,10 +123,10 @@ def add_parser(subparsers: argparse._SubParsersAction) -> None:
         help="Expand a seed request and then mirror it in one step.",
         description=(
             "Run seed expand and then seed mirror in one command. This reads a small "
-            "seed request, writes a generated seed/worklist YAML, and mirrors the "
-            "selected runtime vocabulary into the target package. During mirroring, "
-            "imports are rewritten from sema.runtime.* to <package-name>.sema.*. If "
-            "--target-path is omitted, the mirror is written to output/<package-name>/."
+            "seed request, writes a generated seed/worklist YAML, and then builds a "
+            "seed-scoped snapshot package containing restricted definitions/, registry.yaml, "
+            "indexes/, and README.md. If --target-path "
+            "is omitted, the snapshot is written to output/<package-name>/."
         ),
         epilog=(
             "Example:\n"

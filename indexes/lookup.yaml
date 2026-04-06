@@ -252,10 +252,10 @@ types:
     versions:
       '000': definitions/types/synced.readings/000.yaml
   synced.readings.bundle:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/synced.readings.bundle/000.yaml
+      '001': definitions/types/synced.readings.bundle/001.yaml
 enums:
   base.g.node.class:
     enum_type: versioned

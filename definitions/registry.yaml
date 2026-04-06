@@ -1,7 +1,6 @@
-# type_definitions/registry.yaml
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-04-01T16:00:00Z"
+  last_updated: "2026-04-06T16:00:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -57,20 +56,20 @@ formats:
     owner: gridworks-energy
     schema_url: "https://schemas.electricity.works/formats/utc.milliseconds"
     created: "2024-09-02T15:00:00Z"
-    description:  "UTC timestamp in whole milliseconds since Unix epoch (2000–3000 range)"
+    description: "UTC timestamp in whole milliseconds since Unix epoch (2000–3000 range)"
 
   utc.seconds:
     owner: gridworks-energy
     schema_url: "https://schemas.electricity.works/formats/utc.seconds"
     created: "2024-09-02T15:00:00Z"
-    description:  "UTC timestamp in whole seconds since Unix epoch (2000–3000 range)"
+    description: "UTC timestamp in whole seconds since Unix epoch (2000–3000 range)"
 
   uuid4.str:
     owner: gridworks-energy
     schema_url: "https://schemas.electricity.works/formats/uuid4.str"
     created: "2024-09-02T15:00:00Z"
     description: "Canonical lowercase UUIDv4 string (RFC 4122) in 8-4-4-4-12 format"
-  
+
 enums:
   base.g.node.class:
     latest_version: "000"
@@ -82,7 +81,6 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/base.g.node.class/000"
         created: "2026-02-22T16:43:00Z"
-        
 
   buffer.regulation.mode:
     owner: gridworks-energy
@@ -146,7 +144,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/g.node.instance.status/000"
         created: "2026-03-04T17:00:00Z"
-        
+
 
   g.node.instance.transport:
     latest_version: "000"
@@ -158,7 +156,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/g.node.instance.transport/000"
         created: "2026-03-03T17:00:00Z"
-        
+
 
   g.node.status:
     latest_version: "000"
@@ -170,7 +168,6 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/g.node.status/000"
         created: "2026-02-22T16:43:00Z"
-        
 
   gpm.from.hz.method:
     latest_version: "000"
@@ -182,7 +179,6 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gpm.from.hz.method/000"
         created: "2024-10-23T19:32:00Z"
-        
 
   gw.g.node.class:
     latest_version: "000"
@@ -194,7 +190,6 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw.g.node.class/000"
         created: "2026-02-23T17:08:00Z"
-        
 
   gw1.actor.class:
     latest_version: "011"
@@ -218,7 +213,6 @@ enums:
       "009":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/009"
         created: "2026-01-15T18:00:00Z"
-        
 
   gw1.emission.method:
     latest_version: "000"
@@ -230,7 +224,6 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.emission.method/000"
         created: "2026-02-02T22:17:00Z"
-        
 
   gw1.quantity:
     latest_version: "001"
@@ -247,7 +240,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.quantity/000"
         created: "2026-02-17T19:54:00Z"
-        
+
 
   gw1.seasonal.storage.mode:
     latest_version: "000"
@@ -259,7 +252,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.seasonal.storage.mode/000"
         created: "2026-01-14T18:04:00Z"
-        
+
 
   gw1.system.mode:
     latest_version: "000"
@@ -271,7 +264,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.system.mode/000"
         created: "2026-01-14T18:04:00Z"
-        
+
 
   gw1.heat.call.interpretation:
     latest_version: "000"
@@ -283,7 +276,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.heat.call.interpretation/000"
         created: "2026-03-16T14:14:00Z"
-        
+
 
   gw1.unit:
     latest_version: "001"
@@ -301,7 +294,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.unit/000"
         created: "2025-12-25T22:18:00Z"
-        
+
 
   heatcall.source:
     owner: gridworks-energy
@@ -320,7 +313,7 @@ enums:
       "001":
         schema_url: "https://schemas.electricity.works/enums/hz.calc.method/001"
         created: "2024-10-23T19:32:00Z"
-        
+
 
   market.price.unit:
     latest_version: "000"
@@ -332,7 +325,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/market.price.unit/000"
         created: "2024-12-05T19:25:00Z"
-        
+
 
   market.quantity.unit:
     latest_version: "000"
@@ -344,7 +337,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/market.quantity.unit/000"
         created: "2024-12-05T19:25:00Z"
-        
+
 
   market.type.name:
     latest_version: "000"
@@ -356,7 +349,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/market.type.name/000"
         created: "2022-10-17T16:55:39Z"
-        
+
   relay.closed.or.open:
     owner: gridworks-energy
     enum_type: "literal"
@@ -389,7 +382,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/relay.wiring.config/000"
         created: "2024-09-17T19:18:00Z"
-        
+
 
   spaceheat.make.model:
     latest_version: "007"
@@ -410,7 +403,7 @@ enums:
       "003":
         schema_url: "https://schemas.electricity.works/enums/spaceheat.make.model/003"
         created: "2024-10-18T15:21:00Z"
-        
+
 
   spaceheat.telemetry.name:
     latest_version: "007"
@@ -427,7 +420,7 @@ enums:
       "006":
         schema_url: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/006"
         created: "2025-09-24T14:28:00Z"
-        
+
 
   spaceheat.unit:
     latest_version: "001"
@@ -439,8 +432,8 @@ enums:
       "001":
         schema_url: "https://schemas.electricity.works/enums/spaceheat.unit/001"
         created: "2024-09-02T15:00:00Z"
-        
-  
+
+
   temp.calc.method:
     latest_version: "000"
     owner: gridworks-energy
@@ -451,7 +444,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/temp.calc.method/000"
         created: "2024-10-21T23:19:00Z"
-        
+
 
 
 types:
@@ -1495,7 +1488,7 @@ types:
     versions:
       "001":
         schema_url: "https://schemas.electricity.works/types/synced.readings.bundle/001"
-        created: "2026-03-30T17:12:00Z"
+        created: "2026-04-03T16:00:00Z"
         summary: "Baseline runtime version (no prior version tracked)."
         direct_dependencies:
           structural:

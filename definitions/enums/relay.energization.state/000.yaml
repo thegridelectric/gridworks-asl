@@ -16,5 +16,5 @@ x-gridworks:
   owner: "gridworks-energy"
   version: "000"
   value_descriptions:
-    0: "DeEnergized relay"
-    1: "Energized relay"
+    0: "DeEnergized"
+    1: "Energized"
