@@ -34,7 +34,11 @@ def normalize_target(target: str, registry: dict) -> tuple[str, str | None, str]
                 raise ValueError(f"Unknown type target: {name}:{version}")
             return name, version, "type"
         if name in registry["enums"]:
-            if version not in registry["enums"][name].get("versions", {}):
+            enum_entry = registry["enums"][name]
+            if enum_entry["enum_type"] == "literal":
+                if version != "000":
+                    raise ValueError(f"Unknown enum target: {name}:{version}")
+            elif version not in enum_entry.get("versions", {}):
                 raise ValueError(f"Unknown enum target: {name}:{version}")
             return name, version, "enum"
         raise ValueError(f"Unknown versioned target: {target}")
@@ -54,6 +58,15 @@ def normalize_target(target: str, registry: dict) -> tuple[str, str | None, str]
 def ensure_lookup_path(lookup: dict, category: str, name: str, version: str | None) -> str:
     if category == "format":
         return lookup["formats"][name]
+    if category == "enum":
+        enum_entry = lookup["enums"][name]
+        if version is None:
+            raise ValueError(f"Enum lookup requires version: {name}")
+        if enum_entry.get("enum_type") == "literal":
+            if version != "000":
+                raise ValueError(f"Literal enum lookup only supports version 000: {name}:{version}")
+            return enum_entry["schema"]
+        return enum_entry["versions"][version]
     if version is None:
         return lookup["types"][name]["schema"]
     return lookup[f"{category}s"][name]["versions"][version]

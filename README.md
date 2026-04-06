@@ -82,36 +82,44 @@ A snapshot is a `sema/` directory committed into a repository. It contains a ful
 
 Example structure:
 
-
-## Example
-
-A Sema type defines the structure of a serialized message. Each message explicitly declares its identity using `TypeName` and `Version`.
-
-Example message::
-
-```json
-  {
-    "Watts": 1500, 
-    "TypeName": "power.watts", 
-    "Version": "000"
-  }
 ```
-This message can be validated mechanically using the schema identified by:
-
-```
-https://schemas.electricity.works/types/power.watts/000
+repo/
+  sema/
+    definitions/
+    indexes/
+      dependency_closure.yaml
+      reverse_dependencies.yaml
+      lookup.yaml
+      versions.yaml
+    types/
+    enums/
+    formats/
+    base.py
+    codec.py
+    property_format.py
 ```
 
-In generated  language bindings, the same message can be constructed using the corresponding type:
 
-```python
-power = PowerWatts(
-    Value=1500,
-    TypeName="power.watts",
-    Version="000",
-)
-```
-Because the contracts are explicit and versioned, systems can evolve their message vocabularies without breaking existing integrations.
+A snapshot provides everything required to:
+
+- validate messages
+- construct typed objects
+- analyze dependencies
+- reason about schema semantics
+
+All data required for these operations is available locally — no remote schema fetching is required.
+
+Projects commit the generated `sema/` directory directly into their repository.
+
+This approach provides:
+
+- **repository independence** — each project carries its own validated vocabulary
+- **no shared runtime dependency conflicts**
+- **local visibility of message contracts and their semantics**
+
+Vocabulary dependencies are resolved automatically. If a selected type references other types, enums, or formats, those dependencies are included in the snapshot.
+
+ 
 
 ## CLI and Local Tooling
 
@@ -149,9 +157,9 @@ This is useful for:
 
 ---
 
-### Seed and Snapshot Generation
+### Vocabulary Selection and Snapshot Generation
 
-Sema supports generating **self-contained vocabulary snapshots** from a small set of initial targets.
+Sema generates snapshots from a small set of initial targets.
 
 A seed request defines the starting vocabulary:
 
@@ -161,28 +169,42 @@ initial_targets:
   - "synced.readings.bundle:000"
 ```
 From this, Sema tooling:
- 1. Computes the **transitive dependency closure**
- 2. Resolves all required formats, enums, and types
- 3. Produces a complete, self-contained vocabulary snapshot
+ - Computes the **transitive dependency closure**
+ - Resolves all required formats, enums, and types
+ - Produces a complete, self-contained snapshot
 
-TODO: ELEVATE THE EXPLANATION OF WHAT THE sema/ folder IS IN A WORKING DIRECTORY
+The result is a sema/ directory containing all vocabulary required to interpret the selected types.
 
-### Local Reasoning and AI Support
 
-Sema is designed to support local semantic reasoning.
+### Local Reasoning and Indexes
 
-All vocabulary definitions, metadata, and dependency graphs are available locally:
+Sema is designed to support **local semantic reasoning**.
 
-  - schemas
-  - registry metadata
-  - dependency closure
-  - reverse dependency relationships
+Each snapshot includes an `indexes/` directory containing precomputed dependency and lookup data:
 
-This enables:
+- `dependency_closure.yaml`
+- `reverse_dependencies.yaml`
+- `lookup.yaml`
+- `versions.yaml`
 
-  - offline validation
-  - code generation
-  - AI-assisted reasoning over schema semantics
+These indexes enable tools to reason about the vocabulary efficiently without recomputing graph relationships.
+
+For example, the CLI command:
+
+```
+uv run sema reverse relay.actor.config 003
+```
+
+uses the reverse dependency index to compute the local transitive impact of a type.
+
+Because these indexes are included in every snapshot, both humans and automated systems — including AI tools — can:
+
+- analyze dependencies
+- understand schema relationships
+- reason about design decisions
+- operate offline without external schema access
+
+This makes the snapshot not just a validation artifact, but a **local semantic knowledge base**.
 
 ## Web Tooling
 Sema is designed to be used with automated tooling that manages vocabulary selection, validation, and code generation.

@@ -124,14 +124,32 @@ class SemaType(BaseModel):
             raise SemaError(f"No registry entry for {type_name}")
 
         latest_cls = registry[type_name]
-        latest_version = latest_cls.version_value()
+        latest_version_str = latest_cls.version_value()
 
-        safety = 0
-        while current.version != latest_version:
-            safety += 1
-            if safety > 20:
-                raise SemaError("Upgrade loop detected")
+        if current.version is None or latest_version_str is None:
+            raise SemaError(f"Version missing for {type_name}")
+
+        try:
+            current_version_int = int(current.version)
+            latest_version_int = int(latest_version_str)
+        except ValueError:
+            raise SemaError(f"Invalid version format for {type_name}")
+
+        if current_version_int > latest_version_int:
+            raise SemaError(
+                f"Current version {current.version} is greater than latest {latest_version_str}"
+            )
+
+        max_steps = latest_version_int - current_version_int
+        steps = 0
+
+        while current.version != latest_version_str:
+            if steps >= max_steps:
+                raise SemaError(
+                    f"Upgrade loop detected for {type_name}: exceeded {max_steps} steps"
+                )
             current = current.upgrade()
+            steps += 1
 
         return current
 

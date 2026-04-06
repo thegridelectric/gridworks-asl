@@ -33,6 +33,7 @@ from sema.runtime.types.spaceheat_telemetry_quantity_projection import (
     SpaceheatTelemetryQuantityProjection,
 )
 from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
+from sema.runtime.types.synced_readings_bundle import SyncedReadingsBundle
 from sema.runtime.types.tank_module_params import TankModuleParams
 
 __all__ = [
@@ -67,5 +68,6 @@ __all__ = [
     "SnapshotSpaceheat",
     "SpaceheatTelemetryQuantityProjection",
     "SpaceheatNodeGt",
+    "SyncedReadingsBundle",
     "TankModuleParams",
 ]

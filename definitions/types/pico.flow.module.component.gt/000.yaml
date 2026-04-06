@@ -1,0 +1,129 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/pico.flow.module.component.gt/000"
+
+title: "pico.flow.module.component.gt"
+type: object
+description: >
+  Configuration for a Pico-based flow module component in a Spaceheat SCADA
+  deployment.
+
+  This type includes the common component identity fields inherited from
+  ComponentGt together with flow-meter specific capture, conversion, and
+  publication parameters.
+
+properties:
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.config/000"
+    description: >
+      Channel configuration entries inherited from ComponentGt.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  Enabled:
+    type: boolean
+
+  SerialNumber:
+    type: string
+
+  FlowNodeName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  FlowMeterType:
+    $ref: "https://schemas.electricity.works/enums/spaceheat.make.model/003"
+    description: >
+      Make/model of the configured flow meter.
+
+  HzCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/hz.calc.method/001"
+    description: >
+      Method used to compute frequency from captured pulse data.
+
+  GpmFromHzMethod:
+    $ref: "https://schemas.electricity.works/enums/gpm.from.hz.method/000"
+    description: >
+      Method used to convert computed frequency into flow rate.
+
+  ConstantGallonsPerTick:
+    type: number
+
+  SendHz:
+    type: boolean
+
+  SendGallons:
+    type: boolean
+
+  SendTickLists:
+    type: boolean
+
+  NoFlowMs:
+    type: integer
+
+  AsyncCaptureThresholdGpmTimes100:
+    type: integer
+
+  PublishEmptyTicklistAfterS:
+    type: integer
+
+  PublishAnyTicklistAfterS:
+    type: integer
+
+  PublishTicklistPeriodS:
+    type: integer
+
+  PublishTicklistLength:
+    type: integer
+
+  ExpAlpha:
+    type: number
+
+  CutoffFrequency:
+    type: number
+
+  TypeName:
+    const: "pico.flow.module.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - ComponentAttributeClassId
+  - ConfigList
+  - Enabled
+  - SerialNumber
+  - FlowNodeName
+  - FlowMeterType
+  - HzCalcMethod
+  - GpmFromHzMethod
+  - ConstantGallonsPerTick
+  - SendHz
+  - SendGallons
+  - SendTickLists
+  - NoFlowMs
+  - AsyncCaptureThresholdGpmTimes100
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "HwUidPattern"
+      statement: >
+        If HwUid is present, it SHALL match the pattern pico_xxxxxx where
+        xxxxxx consists of six lowercase hexadecimal characters.

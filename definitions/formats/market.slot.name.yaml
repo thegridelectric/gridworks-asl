@@ -1,0 +1,24 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/formats/market.slot.name"
+
+title: "market.slot.name"
+description: >
+  Dot-separated identifier for a specific market slot.
+
+  The first segment identifies the market commodity class and MUST be one of
+  `e`, `r`, or `d`. The second segment identifies the market type. The final
+  segment is a 10-digit Unix timestamp in seconds giving the slot start. The
+  middle segments identify the market maker alias and must satisfy the
+  left-right-dot naming rules.
+
+  The slot start timestamp MUST align to the duration required by the market
+  type.
+
+type: string
+pattern: "^[erd]\\.[a-z0-9]+(?:\\.[a-z0-9]+)*(?:\\.[a-z0-9]+)+\\.[0-9]{10}$"
+
+examples:
+  - "e.rt60gate5.d1.isone.ver.keene.1673539200"
+
+x-gridworks:
+  owner: "gridworks-energy"

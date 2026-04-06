@@ -3,11 +3,13 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, StrictInt, model_validator
 
 from sema.runtime.base import SemaType
+from sema.runtime.enums.fsm_report_type import FsmReportType
+from sema.runtime.enums.relay_energization_state import RelayEnergizationState
 from sema.runtime.property_format import HandleName, LeftRightDot, SpaceheatName, UTCMilliseconds, UUID4Str
 
 
 class FsmAtomicReportSimpleAction(BaseModel):
-    value: Literal[0, 1]
+    value: RelayEnergizationState
 
     model_config = ConfigDict(
         alias_generator=SemaType.model_config.get("alias_generator"),
@@ -35,7 +37,7 @@ class FsmAtomicReport(SemaType):
 
     machine_handle: HandleName
     state_enum: str
-    report_type: Literal["Other", "Event", "Action"]
+    report_type: FsmReportType
     action: FsmAtomicReportSimpleAction | FsmAtomicReportI2cAction | None = None
     event_enum: LeftRightDot | None = None
     event: str | None = None

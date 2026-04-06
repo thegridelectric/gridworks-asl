@@ -1,10 +1,9 @@
-import uuid
 from typing import Literal
 
 from pydantic import ValidationError, model_validator
 
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gw1_quantity import Gw1Quantity
+from sema.runtime.enums.old_versions.gw1_quantity_000 import Gw1Quantity000
 from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
 from sema.runtime.property_format import LeftRightDot, SpaceheatName, UTCSeconds, UUID4Str
 from sema.runtime.types.spaceheat_telemetry_quantity_projection import SpaceheatTelemetryQuantityProjection
@@ -18,7 +17,7 @@ class DataChannelGt(SemaType):
     about_node_name: SpaceheatName
     captured_by_node_name: SpaceheatName
     telemetry_name: SpaceheatTelemetryName
-    quantity: Gw1Quantity
+    quantity: Gw1Quantity000
     terminal_asset_alias: LeftRightDot
     in_power_metering: bool | None = None
     start_s: UTCSeconds | None = None

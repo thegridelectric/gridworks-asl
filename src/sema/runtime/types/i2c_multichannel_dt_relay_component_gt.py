@@ -17,7 +17,7 @@ class I2cMultichannelDtRelayComponentGt(SemaType):
     hw_uid: str | None = None
     i2c_address_list: list[StrictInt]
     type_name: Literal["i2c.multichannel.dt.relay.component.gt"] = "i2c.multichannel.dt.relay.component.gt"
-    version: Literal["003"] = "003"
+    version: Literal["004"] = "004"
 
     model_config = ConfigDict(
         alias_generator=SemaType.model_config.get("alias_generator"),

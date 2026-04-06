@@ -263,6 +263,8 @@ def is_market_slot_name(v: str) -> str:
     return v
 
 
+
+
 HandleName = Annotated[str, BeforeValidator(is_handle_name)]
 LeftRightDot = Annotated[str, BeforeValidator(is_left_right_dot)]
 MarketName = Annotated[str, BeforeValidator(is_market_name)]
@@ -275,3 +277,65 @@ UTCSeconds = Annotated[int, BeforeValidator(is_utc_seconds)]
 UUID4Str = Annotated[str, BeforeValidator(is_uuid4_str)]
 UtcIso8601Seconds = Annotated[str, BeforeValidator(is_utc_iso8601_seconds)]
 UtcIso8601Millis = Annotated[str, BeforeValidator(is_utc_iso8601_millis)]
+
+
+
+class UtcIso8601SecondsFormat:
+    @staticmethod
+    def from_datetime(dt: datetime) -> UtcIso8601Seconds:
+        """
+        Convert a timezone-aware datetime to utc.iso8601.seconds format.
+
+        Rules enforced:
+        - Must be timezone-aware
+        - Converted to UTC
+        - No fractional seconds
+        - 'Z' suffix
+        """
+        if not isinstance(dt, datetime):
+            raise TypeError(f"{dt} must be a datetime")
+
+        if dt.tzinfo is None:
+            raise ValueError("datetime must be timezone-aware")
+
+        dt_utc = dt.astimezone(UTC)
+
+        # Strip microseconds to enforce second precision
+        dt_utc = dt_utc.replace(microsecond=0)
+
+        s = dt_utc.isoformat().replace("+00:00", "Z")
+
+        # Optional but recommended: validate against Sema format
+        return is_utc_iso8601_seconds(s)
+
+
+class UtcIso8601MillisFormat:
+    @staticmethod
+    def from_datetime(dt: datetime) -> UtcIso8601Millis:
+        """
+        Convert a timezone-aware datetime to utc.iso8601.millis format.
+
+        Rules enforced:
+        - Must be timezone-aware
+        - Converted to UTC
+        - Exactly 3 digits of fractional seconds (milliseconds)
+        - 'Z' suffix
+        """
+        if not isinstance(dt, datetime):
+            raise TypeError(f"{dt} must be a datetime")
+
+        if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
+            raise ValueError("datetime must be timezone-aware")
+
+        dt_utc = dt.astimezone(UTC)
+
+        # Convert microseconds → milliseconds (truncate, not round)
+        millis = dt_utc.microsecond // 1000
+
+        # Rebuild datetime with truncated microseconds
+        dt_utc = dt_utc.replace(microsecond=millis * 1000)
+
+        # Format with exactly 3 decimal places
+        s = dt_utc.isoformat(timespec="milliseconds").replace("+00:00", "Z")
+
+        return is_utc_iso8601_millis(s)

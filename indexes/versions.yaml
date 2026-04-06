@@ -10,6 +10,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  bid:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   channel.config:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -34,17 +41,6 @@ types:
     versions:
       "000":
         summary: "Initial Sema version"
-
-  i2c.multichannel.dt.relay.component.gt:
-    latest_version: "004"
-    versioning_strategy: "literal"
-    versions:
-      "004":
-        summary: "- ConfigList[]: relay.actor.config:002 -> 003"
-      "003":
-        summary: "- Add I2cBus"
-      "002":
-        summary: "Baseline runtime version (no prior version tracked)."
 
   data.channel.gt:
     latest_version: "002"
@@ -71,7 +67,21 @@ types:
         summary: >
           - InputChannelNames[]: add
           - EmissionMethod: add
-          - Parameters: add
+          - Parameters: add (Optional)
+      "000":
+        summary: "Initial Sema version"
+
+  fis.authority.manifest:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  fis.instance.authorization.event:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
       "000":
         summary: "Initial Sema version"
 
@@ -109,16 +119,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  gridworks.ack:
+    versioning_strategy: "none"
+    summary: "Versionless acknowledgement message."
+
   gridworks.ping:
     versioning_strategy: "none"
     summary: "Versionless message used for liveness/heartbeat checks."
-
-  gw1.unit.quantity.projection:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
 
   gw1.tank.temp.calibration:
     latest_version: "000"
@@ -128,6 +135,20 @@ types:
         summary: "Initial Sema version"
 
   gw1.tank.temp.calibration.map:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.telemetry.name.quantity.projection:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.unit.quantity.projection:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
@@ -149,6 +170,31 @@ types:
       "004":
         summary: "Baseline runtime version (no prior version tracked)."
 
+  i2c.multichannel.dt.relay.component.gt:
+    latest_version: "004"
+    versioning_strategy: "literal"
+    versions:
+      "004":
+        summary: "- ConfigList[]: relay.actor.config:002 -> 003"
+      "003":
+        summary: "- Add I2cBus"
+      "002":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  i2c.thermistor.channel.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  i2c.thermistor.reader.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   layout.lite:
     latest_version: "013"
     versioning_strategy: "literal"
@@ -166,6 +212,15 @@ types:
         summary: "- Ha1Params: ha1.params:005 -> 006"
       "010":
         summary: "Baseline runtime version (no prior version tracked)."
+
+  linear.one.dimensional.calibration:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "B: number → integer; semantics clarified to operate in OutputUnit scaling domain."
+      "000":
+        summary: "Initial Sema version"
 
   machine.states:
     latest_version: "000"
@@ -189,6 +244,20 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   position.point.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  price.quantity.unitless:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Baseline runtime version (no prior version tracked)."
+
+  power.watts:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
@@ -282,10 +351,17 @@ types:
     versions:
       "301":
         summary: >
-          - BoardComponentId: add
+          - BoardComponentId: add as Optional
           - ActorClass: gw1.actor.class:009 -> 011
       "300":
         summary: "Baseline runtime version (no prior version tracked)."
+
+  spaceheat.telemetry.quantity.projection:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
 
   synced.readings:
     latest_version: "000"
@@ -301,174 +377,220 @@ types:
       "000":
         summary: "Initial Sema version"
 
-  spaceheat.telemetry.quantity.projection:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
-
 enums:
+  base.g.node.class:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  buffer.regulation.mode:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
+
+  change.heatcall.source:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
+
   change.relay.state:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
+
+  fis.authorization.decision:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  fis.authorization.reason:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
 
   fsm.report.type:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
     versions:
-      "000":
-        summary: "Initial Sema version"
-
-  base.g.node.class:
-    enum_type: "versioned"
-    note: "This enum is versioned; new versions are additive only."
-    versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   g.node.instance.status:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   g.node.instance.transport:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   g.node.status:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   gpm.from.hz.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   gw.g.node.class:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   gw1.actor.class:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
       "011":
-        summary: "Add I2cThermistorReader."
+        added_values:
+          - "I2cThermistorReader"
       "010":
-        summary: "Add GpioSensor, I2cBus, and I2cRelayBoard."
-      "009":
-        summary: "Baseline runtime version (no prior version tracked)."
+        added_values:
+          - "GpioSensor"
+          - "I2cBus"
+          - "I2cRelayBoard"
+      "009": {}
 
   gw1.emission.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   gw1.quantity:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
       "001":
-        summary: "Add Time."
-      "000":
-        summary: "Initial Sema version"
+        added_values:
+          - "Time"
+      "000": {}
 
   gw1.seasonal.storage.mode:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   gw1.system.mode:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
+
+  gw1.heat.call.interpretation:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
 
   gw1.unit:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
       "001":
-        summary: "Add Seconds and SecondsX10."
-      "000":
-        summary: "Initial Sema version"
+        added_values:
+          - "Seconds"
+          - "SecondsX10"
+      "000": {}
+
+  heatcall.source:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
 
   hz.calc.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "001":
-        summary: "Baseline runtime version (no prior version tracked)."
+      "001": {}
+
+  market.price.unit:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  market.quantity.unit:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  market.type.name:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
 
   relay.closed.or.open:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   relay.energization.state:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
+
+  relay.open.or.closed:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
 
   relay.wiring.config:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}
 
   spaceheat.make.model:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
       "007":
-        summary: "Baseline runtime version (no prior version tracked)."
-
-  spaceheat.unit:
-    enum_type: "versioned"
-    note: "This enum is versioned; new versions are additive only."
-    versions:
-      "001":
-        summary: "Baseline runtime version (no prior version tracked)."
+        added_values:
+          - "SAIER__SENHZG1WA"
+          - "DFROBOT__DFR0971_TIMES2"
+          - "GRIDWORKS__TANKMODULE3"
+          - "GRIDWORKS__GW101"
+          - "GRIDWORKS__SCADA_GW108"
+      "003": {}
 
   spaceheat.telemetry.name:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
       "007":
-        summary: "Add BinaryState."
-      "006":
-        summary: "Baseline runtime version (no prior version tracked)."
+        added_values:
+          - "BinaryState"
+      "006": {}
+
+  spaceheat.unit:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
 
   temp.calc.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "000": {}

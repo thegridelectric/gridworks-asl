@@ -1,0 +1,39 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/gw1.actor.class/011"
+
+title: "gw1.actor.class"
+type: "string"
+description: >
+  Classification of actors in the GridWorks SCADA system.
+
+enum:
+  - "NoActor"
+  - "PrimaryScada"
+  - "SecondaryScada"
+  - "PowerMeter"
+  - "LocalControl"
+  - "LeafAlly"
+  - "DerivedGenerator"
+  - "PicoCycler"
+  - "HpBoss"
+  - "I2cRelayMultiplexer"
+  - "I2cZeroTenMultiplexer"
+  - "Hubitat"
+  - "Relay"
+  - "MultipurposeSensor"
+  - "HoneywellThermostat"
+  - "ApiTankModule"
+  - "ApiFlowModule"
+  - "ZeroTenOutputer"
+  - "ApiBtuMeter"
+  - "SiegLoop"
+  - "GpioSensor"
+  - "I2cBus"
+  - "I2cRelayBoard"
+  - "I2cThermistorReader"
+
+default: "NoActor"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "011"

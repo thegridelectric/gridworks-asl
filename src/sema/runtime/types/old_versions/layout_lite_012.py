@@ -12,11 +12,15 @@ from sema.runtime.property_format import (
     UUID4Str,
 )
 from sema.runtime.types.data_channel_gt import DataChannelGt
-from sema.runtime.types.derived_channel_gt import DerivedChannelGt
 from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
 from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
-    I2cMultichannelDtRelayComponentGt,
+    I2cMultichannelDtRelayComponentGt as I2cMultichannelDtRelayComponentGt004,
+)
+from sema.runtime.types.layout_lite import LayoutLite
+from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_003 import (
+    I2cMultichannelDtRelayComponentGt003,
 )
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
@@ -39,11 +43,11 @@ class LayoutLite012(SemaType):
     total_store_tanks: PositiveInt
     sh_nodes: list[SpaceheatNodeGt]
     data_channels: list[DataChannelGt]
-    derived_channels: list[DerivedChannelGt]
+    derived_channels: list[DerivedChannelGt001]
     tank_module_components: list[PicoTankModuleComponentGt | SimPicoTankModuleComponentGt]
     flow_module_components: list[PicoFlowModuleComponentGt]
     ha1_params: Ha1Params
-    i2c_relay_component: I2cMultichannelDtRelayComponentGt | None = None
+    i2c_relay_component: I2cMultichannelDtRelayComponentGt003 | None = None
     t_map: Gw1TankTempCalibrationMap | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
     version: Literal["012"] = "012"
@@ -84,3 +88,18 @@ class LayoutLite012(SemaType):
             if created_by is None or str(created_by.actor_class) == "NoActor":
                 raise ValueError("Axiom 4 failed: derived channel created_by_node_name must reference an active node.")
         return self
+
+    def upgrade(self) -> LayoutLite:
+        """
+        012 -> 013: I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004
+        """
+        data = self.model_dump()
+        if self.i2c_relay_component is not None:
+            upgraded_component = self.i2c_relay_component.upgrade()
+            if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt004):
+                raise TypeError(
+                    "Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt004"
+                )
+            data["i2c_relay_component"] = upgraded_component
+        data["version"] = "013"
+        return LayoutLite.model_validate(data)

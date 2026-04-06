@@ -1,0 +1,11 @@
+{
+  "Name": "primary-flow",
+  "DisplayName": "Primary Flow Gpm X 100",
+  "AboutNodeName": "primary-flow",
+  "CapturedByNodeName": "primary-btu",
+  "TelemetryName": "GpmTimes100",
+  "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
+  "Id": "9c33d7af-59e0-415b-8208-ecf64916a64b",
+  "TypeName": "data.channel.gt",
+  "Version": "001"
+}

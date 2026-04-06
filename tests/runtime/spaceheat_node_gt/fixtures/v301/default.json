@@ -1,0 +1,11 @@
+{
+  "Name": "vdc-relay-gpio-23",
+  "ActorHierarchyName": "s.vdc-relay-gpio-23",
+  "Handle": "auto.pico-cycler.vdc-relay-gpio-23",
+  "ActorClass": "Relay",
+  "DisplayName": "5VDC Relay",
+  "ComponentId": "c8baa219-8dec-4fcb-8d05-2c3ce6d8e2af",
+  "ShNodeId": "7ce8e05e-a18f-483d-82d4-5be8bda36837",
+  "TypeName": "spaceheat.node.gt",
+  "Version": "301"
+}

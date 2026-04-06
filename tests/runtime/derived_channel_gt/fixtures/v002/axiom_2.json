@@ -1,0 +1,21 @@
+{
+  "CreatedByNodeName": "derived-generator",
+  "DisplayName": "Required Energy Wh",
+  "Id": "26c5f643-96cc-4ede-b958-75d626790c01",
+  "Name": "required-energy",
+  "OutputUnit": "WattHours",
+  "OutputQuantity": "Power",
+  "Strategy": "system-model",
+  "EmissionMethod": "Periodic",
+  "EmitPeriodS": 60,
+  "InputChannelNames": [],
+  "Parameters": {
+    "EnergyModel": {
+      "TypeName": "gw0.required.energy.layered",
+      "Version": "000"
+    }
+  },
+  "TerminalAssetAlias": "d1.isone.ct.newhaven.orange1.ta",
+  "TypeName": "derived.channel.gt",
+  "Version": "002"
+}

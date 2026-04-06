@@ -1,0 +1,28 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/g.node.instance.transport/000"
+
+title: "g.node.instance.transport"
+type: "string"
+description: >
+  Messaging transport protocol through which a runtime instance connected
+  and established authority. This enum captures transport-layer context
+  for audit and operational diagnostics.
+
+enum:
+  - "RabbitAmqp"
+  - "RabbitMqtt"
+
+default: "RabbitAmqp"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+
+    "RabbitAmqp": >
+      The instance connected using the AMQP protocol over RabbitMQ,
+      typically via TLS on port 5671.
+
+    "RabbitMqtt": >
+      The instance connected using the MQTT protocol over RabbitMQ,
+      typically via TLS on port 8883 or 1883 depending on configuration.

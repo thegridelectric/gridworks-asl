@@ -1,6 +1,8 @@
 import json
 import logging
+from importlib import import_module
 from collections import defaultdict
+from pathlib import Path
 from typing import Literal
 
 
@@ -141,13 +143,23 @@ def get_current_types() -> dict[str, type[SemaType]]:
 
 
 def get_old_versions() -> dict[str, dict[str | None, type[SemaType]]]:
-    from sema.runtime.types import old_versions
-    old_types = [getattr(old_versions, name) for name in old_versions.__all__]
-
     registry: dict[str, dict[str | None, type[SemaType]]] = defaultdict(dict)
+    old_versions_dir = Path(__file__).resolve().parent / "types" / "old_versions"
 
-    for cls in old_types:
-        registry[cls.type_name_value()][cls.version_value()] = cls
+    for path in sorted(old_versions_dir.glob("*.py")):
+        if path.stem == "__init__":
+            continue
+        module = import_module(f"sema.runtime.types.old_versions.{path.stem}")
+        for name in dir(module):
+            obj = getattr(module, name)
+            if (
+                isinstance(obj, type)
+                and issubclass(obj, SemaType)
+                and obj is not SemaType
+            ):
+                version = obj.version_value()
+                if version is not None:
+                    registry[obj.type_name_value()][version] = obj
 
     return registry
 

@@ -148,16 +148,6 @@ The registry is the canonical source of vocabulary identity and lifecycle state.
 
 Vocabulary components fall into three categories: **formats**, **enums** and **types**. 
 
-### Registry Status Field
-
-Registry entries MAY include a `status` field indicating lifecycle state.
-
-Allowed values:
-- `"draft"`: type is under active development and not yet stable
-- `"active"`: type is stable and intended for production use (default if omitted)
-- `"deprecated"`: type is no longer recommended for new use
-
-If `status` is omitted, it SHALL be interpreted as `"active"`.
 
 ### Top-Level Structure
 
@@ -201,7 +191,19 @@ Example:
 ```
 
 
-### Format Entries
+### Registry Status Field
+
+Registry entries (formats, enu8ms, types) MAY include a `status` field indicating lifecycle state.
+
+Allowed values:
+- `"draft"`: type is under active development and not yet stable
+- `"active"`: type is stable and intended for production use (default if omitted)
+- `"deprecated"`: type is no longer recommended for new use
+
+If `status` is omitted, it SHALL be interpreted as `"active"`.
+
+
+### Registry Format Entries
 
 Formats are immutable and unversioned. Each format entry MUST include:
 
@@ -214,107 +216,344 @@ Formats are immutable and unversioned. Each format entry MUST include:
 ```
 
 For all vocabulary entries (formats, enums, and types), schema_url SHALL equal the $id declared in the referenced schema file.
-For enums, the registry SHALL also record `enum_type` for each published version, and that value SHALL match `x-gridworks.enum_type` in the corresponding enum schema file.
+For enums, the registry SHALL record top-level `enum_type`.
+For enums, the registry MAY record top-level `value_type`.
+If `value_type` is present, it SHALL be `"integer"` and the corresponding enum schema file SHALL have `type: integer`.
+If `value_type` is omitted from an enum registry entry, it SHALL be interpreted as `"string"` and the corresponding enum schema file SHALL have `type: string`.
 The enum schema file remains authoritative; the registry copy exists for compact tooling and validation.
 
 Formats SHALL NOT include any version related information.
 
-### Enum Entries
-Enums are versioned and additive.
+### Registry Enum Entries
 
-Each enum entry MUST include:
+Enums define closed sets of named values.
+
+Enums MAY be either:
+
+- `literal`: fixed and non-evolving  
+- `versioned`: additive over time  
+
+The `enum_type` field determines how the enum evolves.
+
+---
+
+**Literal Enum Structure**
+
+For `literal` enums:
 
 ```
 <enum-name>:
-  latest_version: "001"
-  owner: <owner-id>
-  description: "<concise semantic description>"
+owner: <owner-id>
+enum_type: "literal"
+description: "<concise semantic description>"
+value_type: "integer" # optional; omit for string-valued enums
 
-  versions:
-    "001":
-      schema_url: "https://schemas.electricity.works/enums/<enum-name>/001"
-      created: "<RFC 3339 timestamp>"
-      enum_type: "versioned" | "literal"
-    "000":
-      schema_url: "https://schemas.electricity.works/enums/<enum-name>/000"
-      created: "<RFC 3339 timestamp>"
-      enum_type: "versioned" | "literal"
+schema_url: "https://schemas.electricity.works/enums/
+<enum-name>/000"
+created: "<RFC 3339 timestamp>"
+```
+**Literal Enum Field Requirements**
+
+- `versions`
+  - SHALL NOT be present
+
+- `latest_version`
+  - SHALL NOT be present
+
+- `schema_url`
+  - SHALL uniquely identify the enum schema  
+  - SHALL include version `"000"`  
+
+- `created`
+  - SHALL be an RFC 3339 timestamp with seconds precision in UTC  
+
+- `value_type`
+  - MAY be present
+  - if present, SHALL equal `"integer"`
+  - if omitted, the enum SHALL be treated as string-valued
+
+
+- Literal enums:
+  - SHALL define a fixed set of values  
+  - SHALL NOT add or remove values  
+
+
+---
+
+**Versioned Enum Structure**
+
+For `versioned` enums:
+
+```
+<enum-name>:
+latest_version: "<version>"
+owner: <owner-id>
+enum_type: "versioned"
+description: "<concise semantic description>"
+value_type: "integer" # optional; omit for string-valued enums
+
+versions:
+"<version>":
+schema_url: "https://schemas.electricity.works/enums/
+<enum-name>/<version>"
+created: "<RFC 3339 timestamp>"
+added_values:"<list of values added in this version>"
+[..] # earlier versions
 ```
 
-Enum versions MAY also include:
 
-```
-summary: "<one-line changelog summary>"
-```
+**Versioned Enum Field Requirements**
 
-If summary is provided:
-  - It SHOULD be a brief one-line description of what changed in that enum version.
-  - For versioned enums, it will typically name the appended enum values.
-  - It is changelog metadata only and MUST NOT be treated as normative semantics.
+- `latest_version`
+  - SHALL equal the highest version listed under `versions`
 
-Enum versions: 
-  - MUST be three-digit numeric strings.
-  - MAY add values.
-  - SHALL NOT remove existing values.
+- `versions`
+  - SHALL contain an entry for each published version  
+  - SHALL be keyed by three-digit numeric strings  
+  - SHALL be listed in decreasing order by version  
 
-Existing values SHALL retain their original ordering.
+- `created`
+  - SHALL be an RFC 3339 timestamp with seconds precision in UTC  
 
-### Type Entries
+- `added_values`
+  - SHALL be present for all versions except the initial version in the registry
+  - SHALL be a list of enum values added in that version  
 
-Types may use one of three versioning strategies. 
+- `value_type`
+  - MAY be present
+  - if present, SHALL equal `"integer"`
+  - if omitted, the enum SHALL be treated as string-valued
 
-What the Registry should look like
-**Versioned Type (`literal` or `string`)**
+
+
+### Registry Type Entries
+
+Each type entry in the registry SHALL declare a `versioning_strategy` and SHALL conform to one of the following models.
 
 ```
 <type-name>:
-  latest_version: "200"
   owner: <owner-id>
-  versioning_strategy: "literal"  # "none", "literal", or "string"
-  description: "<concise description>"
+  versioning_strategy: "none" | "string" | "literal"
+  description: "<concise semantic description>"
+```
+
+
+#### Versioning Semantics
+
+**1. Versioned vs Versionless Types**
+  - Types with `versioning_strategy: "none"` are **versionless**
+  - Types with `versioning_strategy: "string"` or `"literal"` are **versioned**
+
+
+**2. Versioned Types (`string` or `literal`)**
+
+**2.1 Version Format**
+  - Versions SHALL be **numeric strings of exactly three digits**
+    
+    Examples: `"000"`, `"001"`, `"013"`
+
+**2.2 Ordering and Uniqueness** 
+  - Each version SHALL be unique within the type
+  - Each version entry SHALL include a `created` timestamp (see #### Version Updates)
+  - The `created` timestamp SHALL be unique across all versions of the type
+  - For any two versions `v_old` and `v_new`:
+    - If `v_new` is numerically greater than `v_old`, then 
+      `created(v_new)` SHALL be strictly later than `created(v_old)`
+  - For any version entry `v`, `created(v)` SHALL be no earlier than the
+    `created` timestamp of every vocabulary word named in that version's
+    `direct_dependencies`
+
+**2.3. Preferred Baseline Version**
+  - `"000"` SHOULD be used as the initial version of a versioned type, but this is not required.
+
+#### Versioned Type Structure
+
+A versioned type entry SHALL include the following fields:
+
+```
+<type-name>:
+  latest_version: "<version>"
+  owner: <owner-id>
+  versioning_strategy: "literal" | "string"
+  description: "<concise semantic description>"
 
   versions:
-    "<latest_version>":
-      schema_url: "https://schemas.electricity.works/types/<type-name>/<latest_version>"
+    "<version>":
+      schema_url: "https://schemas.electricity.works/types/<type-name>/<version>"
       created: "<RFC 3339 timestamp>"
       summary: "<concise description of change>"
       direct_dependencies:
         structural:
-          - "sh.actor.class:000"
-          - "spaceheat.name"
+          - "<dependency>"
         axiom:
-          - "projection.example:000"
-    [..] # earlier versions
+          - "<dependency>"
+    [..] # earlier versions`
 
 ```
 
-**Versionless type (`none`)**
-```
+**Field Requirements**
+
+  - `latest_version` 
+    - SHALL equal the highest version listed under `versions`
+
+  - `owner` 
+    - SHALL reference a valid owner identifier defined in `owners.yaml`
+
+  - `versions`
+    - SHALL contain an entry for each published version of the type
+    - SHALL be keyed by version string
+    - SHALL be listed in decreasing order by version
+    - The keys of `versions` SHALL match the `<version>` values used within each entry
+
+**Version Entry Requirements**
+
+Each entry under `versions` SHALL include:
+
+- `schema_url`
+  - SHALL uniquely identify the schema for that version
+
+- `created`
+  - SHALL be an RFC 3339 timestamp with seconds precision in UTC (e.g. `YYYY-MM-DDTHH:mm:ssZ`)
+
+- `summary`
+  - SHALL describe the change introduced in that version
+  - SHALL conform to the rules defined in the Summary Field section
+
+- `direct_dependencies`
+  - SHALL conform to the rules defined in the Dependency Model section
+
+#### Versionless Type Structure
+
+A versionless type entry SHALL include the following fields:
+
+```yaml
 <type-name>:
   owner: <owner-id>
   versioning_strategy: "none"
-  description: "<concise description>"
+  description: "<concise semantic description>"
 
   schema_url: "https://schemas.electricity.works/types/<type-name>"
   created: "<RFC 3339 timestamp>"
-  summary: "<concise description of change>"
+
   direct_dependencies:
     structural:
-      - "uuid4.str"
-  ```
+      - "<dependency>"
+```
 
-#### Version Updates
+**Field Requirements**
+- `owner` 
+  - SHALL reference a valid owner identifier defined in `owners.yaml`
 
-When publishing a new version of a versioned type, the registry SHALL be updated as follows:
+- Versionless types SHALL NOT include a `versions` field
 
-**1. Add a New Version Entry**
+- `schema_url`
+  - SHALL NOT include a version segment
+  - SHALL uniquely identify the schema for the type
 
-New versions SHALL be larger numbers, and listed in reverse order
+- `created`
+  - SHALL be an RFC 3339 timestamp with seconds precision in UTC
+
+- `direct_dependencies`
+  - SHALL conform to the rules defined in the Dependency Model section
+
+
+#### Strategy Semantics
+
+The `literal` and `string` strategies differ only in schema validation behavior.
+
+- `literal` enforces exact version matching in the schema
+- `string` allows a schema to validate multiple versions
+
+Both strategies:
+- SHALL require all versions to be explicitly listed in the registry
+- SHALL require versions to be strictly ordered
+- SHALL require runtime upgrade chains to resolve messages to the latest version
+
+#### Versioning Strategy Evolution
+
+The `versioning_strategy` evolution through time for a type SHALL follow a monotonic strictness model:
 
 ```
+none -> string -> literal
+```
+
+A type MAY transition only to a strictly more constrained strategy.
+
+The following transitions are permitted:
+- `none` → `string`
+- `none` → `literal`
+- `string` → `literal`
+
+The following transitions are prohibited:
+- `literal` → `string`
+- `literal` → `none`
+- `string` → `none`
+
+Once a type adopts a stricter strategy, it SHALL NOT revert to a less strict strategy.
+
+---
+
+**Transition from Versionless to Versioned**
+
+If a type with `versioning_strategy: "none"` adopts versioning:
+
+- The registry SHALL be updated to reflect the new strategy
+- A versioned lineage SHALL be established under `versions`
+- The initial version SHOULD be `"000"`
+
+A schema SHALL be published at:
+
+```
+https://schemas.electricity.works/types/
+<type-name>/000
+```
+
+
+The following SHALL hold:
+
+- The original versionless schema URL SHALL remain accessible  
+- The original schema SHALL NOT be retroactively modified or assigned a version number  
+
+Versioning begins at the point versioned schemas are introduced.
+
+#### New Versions (Creation and Publication)
+
+A new version of a versioned type SHALL be published when required and SHALL be recorded in the registry as defined below.
+
+---
+
+**1. When a New Version Is Required**
+
+A new version SHALL be published if any of the following occur:
+
+- A required property is added or removed  
+- A property type or constraint changes  
+- A referenced enum or type version changes  
+- An axiom is added, removed, or modified  
+- Validation constraints are strengthened or relaxed  
+- Semantic meaning changes  
+
+A new version SHOULD be published if:
+
+- Property descriptions are clarified in a way that could affect interpretation  
+- Architectural meaning changes in a non-trivial way  
+
+A new version MAY be published for:
+
+- Documentation or example improvements  
+
+---
+
+**2. Publishing a New Version**
+
+When publishing a new version, the registry SHALL be updated as follows:
+
+- A new entry SHALL be added under `versions` for the new version  
+
+```yaml
 versions:
-  "004":
-    schema_url: "https://schemas.electricity.works/types/<type-name>/004"
+  "<new_version>":
+    schema_url: "https://schemas.electricity.works/types/<type-name>/<new_version>"
     created: "<RFC 3339 timestamp>"
     summary: "<concise description of change>"
     direct_dependencies:
@@ -323,127 +562,114 @@ versions:
       axiom:
         - ...
 ```
+- latest_version SHALL be updated to the new version
 
-
-**2. Update `latest_version`**
-```
-latest_version: "004"
-```
-
-**3. Preserve Prior Versions**
- - All previously published versions SHALL remain listed.
- - Prior version metadata SHALL NOT be modified except to correct typographical errors.
- - Dependencies for prior versions MUST NOT be retroactively changed.
- - Previously published schema URLs MUST remain accessible.
-
-#### Summary Field
-
-Each version entry SHOULD include a `summary` field describing the primary change introduced in that version.
-
-Rules:
-  - The summary SHALL be concise.
-  - The summary SHALL describe what changed relative to the immediately previous version.
-  - The summary SHALL NOT duplicate the full schema description.
-  - The summary SHALL NOT reinterpret prior semantics.
-  - The summary exists for governance clarity and tooling support; it does not affect validation.
-
-#### When a New Version Is Required
-
-A new version SHALL be published if any of the following occur:
-  - A required property is added or removed.
-  - A property type or constraint changes.
-  - A referenced enum or type version changes.
-  - An axiom is added, removed, or modified.
-  - Validation constraints are strengthened or relaxed.
-  - Semantic meaning changes.
-
-A new version SHOULD be published if:
-  - Property descriptions are clarified in a way that could affect interpretation.
-  - Architectural meaning changes in a non-trivial way.
-
-A new version MAY be published for documentation or example improvements.
-
-#### Versioning Strategy Evolution
-
-The versioning_strategy for a type SHALL follow a monotonic strictness model:
-
-```
-none  →  string  →  literal
+```yaml
+latest_version: "<new_version>"
 ```
 
-The following transitions are permitted:
- - `none` → `string`
- - `none` → `literal`
- - `string` → `literal`
+**3. Preservation of Prior Versions**
 
-The following transitions are prohibited:
- - `literal` → `string`
- - `literal` → `none`
- - `string` → `none`
+ - All previously published versions SHALL remain listed in the registry
+ - Previously published schema URLs SHALL remain accessible
 
-Once a type adopts a stricter versioning strategy, it SHALL NOT revert to a less strict strategy.
+Additional constraints on modification of prior versions are defined in the Immutability section.
 
-#### Transition from Versionless to Versioned
+#### Immutability
 
-If a type originally used versioning_strategy: none and later adopts versioning:
- - The registry SHALL be updated to reflect the new versioning strategy.
- - A new versioned lineage SHOULD begin at "000".
- - A schema SHALL be published at:
+Sema registry entries are immutable except as explicitly permitted below.
 
-```
-https://schemas.electricity.works/types/<type-name>/000
-```
+Types with `status: "draft"` are exempt from the immutability requirements defined in this section.
 
-  - The original versionless schema URL SHALL remain accessible.
-  - The original schema SHALL NOT be retroactively modified or assigned a version number.
+---
 
-Versioning begins at the moment versioned schemas are introduced.
+**1. General Rules (All Types)**
 
-#### Prohibited Changes
+- The schema referenced by `schema_url` SHALL NOT be modified in a way that changes validation behavior  
+- Registry entries SHALL NOT be modified in a way that changes semantics  
 
-For versioned types:
-  - `versioning_strategy` MUST NOT change in a way that reduces strictness.
-  - Previously published versions MUST NOT be removed.
-  - Historical schemas MUST NOT be altered in ways that change validation behavior.
 
-### Dependency Model
-Versioned types SHALL declare direct dependencies. These identify the Sema vocabulary required both to validate the schema structurally and to implement any axioms attached to that specific type version.
+---
+
+**2. Versioned Types (Additional Constraints)**
+
+- Version identifiers (the keys under `versions`) SHALL NOT be changed or removed
+- New version identifiers MAY be added in accordance with the rules defined in **New Versions (Creation and Publication)**
+
+---
+
+**3. Permitted Changes (All Types)**
+
+The following changes are permitted, provided they do not alter semantics:
+
+- Correction of typographical errors  
+- Clarification of descriptive text  
+
+- Correction of `created` timestamps, provided that:
+  - Timestamp uniqueness is preserved  
+  - Timestamp ordering remains consistent with version ordering as defined in Versioning Semantics  
+
+---
+**4. Ownership Transfer**
+
+The `owner` field MAY be updated to transfer ownership of a type, provided that:
+
+- The transfer is explicitly authorized by the current owner  
+- The new owner identifier is valid and defined in `owners.yaml`  
+- The transfer does not alter the semantics of the type or any of its versions  
+
+Ownership transfer SHALL NOT affect:
+- Version history  
+- Schema behavior  
+- Dependency declarations  
+
+Ownership transfer history is not tracked in the registry.
+
+---
+**5. Versionless Types**
+
+Versionless types SHALL NOT be modified in a way that changes semantics.
+
+If a semantic change is required the rules defined in **Versioning Strategy Evolution** SHALL be followed.
+
+
+#### Dependency Model
+Versioned types SHALL declare direct dependencies. These identify the Sema vocabulary required to 
+  - validate the schema structurally 
+  - implement any axioms attached to that specific type version
 
 Dependencies are expressed in `registry.yaml` as:
 
-```
+```yaml
 direct_dependencies:
   structural:
-    - "<word-name>:<version>"   # for versioned types or enums
-    - "<format-name>"           # for versionless formats
+    - "<word-name>:<version>"   # enums or versioned types
+    - "<word-name>"           # formats or versionless types
   axiom:
     - "<word-name>:<version>"
-    - "<format-name>"
+    - "<word-name>"
 ```
 
-**Rules**
 
-1. **structural**
-    - SHALL include every vocabulary word explicitly referenced in the schema via `$ref` (all formats, enums, and types).
-    - SHALL use the canonical identifier format:
-      - `name:###` for versioned types and enums (3-digit numeric version)
-      - `name` for versionless formats or versionless types
-    - SHALL NOT include transitive dependencies.
+**1.Structural Dependencies**
+  - SHALL include every vocabulary word explicitly referenced in the schema via `$ref` 
+  - SHALL use the canonical identifier format:
+    - `name:###` for enums and versioned types (3-digit numeric version)
+    - `name` for formats and versionless types
+  - SHALL NOT include transitive dependencies.
 
-2. **axiom**
-    - SHALL include every Sema vocabulary word whose value set, structure, or specific version is normatively required to implement one or more axioms for that type version.
-    - SHALL be used when an axiom depends on a specific enum, type, or format even if that vocabulary is not referenced via `$ref`.
-    - SHALL use the same canonical identifier rules as `structural`.
-    - SHALL NOT include transitive dependencies.
-    - MAY be omitted entirely if the type version has no axiom-level dependency on external Sema vocabulary.
+**2. Axiom Depenedencies**
+  - SHALL include every Sema vocabulary word _not_ in the structural dependencies required to implement one or more axioms for that type version
+  - SHALL be included even if the vocabulary is not referenced via $ref
+  - SHALL use the same canonical identifier rules as `structural`
+  - SHALL NOT include transitive dependencies.
 
-3. **Ordering and Structure**
-    - `structural` and `axiom` (if present) SHALL:
-      - Be alphabetically sorted (lexicographically by full identifier string)
-      - Contain no duplicates
-      - Be declared as block lists (one entry per line)
-    - Dependency references SHALL NOT include URL prefixes or file paths.
-    - When computing dependencies, tooling SHALL extract the vocabulary word from the $ref URL path and omit the domain prefix.
+**3. Structure and Ordering**
+  - `structural` and `axiom` (if present) SHALL:
+    - be sorted lexicographically by full identifier string
+    - contain no duplicates
+    - be declared as block lists (one entry per line)
+  - Dependency references SHALL NOT include URL prefixes or file paths
     - If no dependencies exist, the dependency block SHALL be:
 ```
 direct_dependencies:
@@ -462,6 +688,23 @@ direct_dependencies:
     - If an axiom normatively names a specific Sema vocabulary word or version, that word SHALL appear in `axiom` unless it already appears in `structural`.
     - A type version SHALL NOT rely on undeclared external Sema vocabulary to make its axioms mechanically implementable.
 
+### Change Process (Registry Updates)
+
+All vocabulary changes SHALL be made through pull requests that:
+ 1. Update the relevant schema file
+ 2. Update registry.yaml
+ 3. Update dependencies (if applicable)
+ 4. Include a clear `summary` for new versions
+
+For versioned types:
+
+  - The `summary` SHALL describe the change relative to the previous version.
+  - The `latest_version` field SHALL be updated.
+
+Changes MUST pass:
+ - Structural validation
+ - Dependency validation
+ - Registry consistency checks
 
 ### `owners.yaml` - Vocabulary Ownership Registry
 
@@ -626,11 +869,15 @@ x-gridworks:
   owner: "gridworks-energy"
 ```
 
-### Enums
+### Enum Schema Files
 
 #### Purpose
 
-Enums define controlled vocabularies for semantic categories within Sema. Each enum constrains a value to a closed set of string literals.
+Enum schema files define the allowed values for a single enum version.
+
+Each schema constrains a value to a closed set of string literals.
+
+---
 
 #### Naming
 
@@ -641,103 +888,164 @@ Examples:
   - `sh.actor.role`
   - `market.quantity.unit`
 
+---
+
 #### Schema Structure
 
-Enum schema files MUST include:
+Each enum schema file SHALL define exactly one enum version.
+
+Schema files MUST include:
 
 ```
 $schema:
 $id:
 title:
-type: "string"
+type: "string" | "integer"
 description:
 enum:
 default:
 x-gridworks:
 ```
 
-#### Required Top-Level Fields
- - `$schema` — MUST reference JSON Schema draft 2020-12.
- - `$id` — MUST be the canonical public schema URL.
- - `title` — MUST match the registered enum name.
- - `type` — MUST be "string".
- - `description` — MUST describe the semantic role of the enum.
- - `enum` — MUST list all allowed string values.
- - `default` — MUST equal one of the declared enum value.
+---
 
+#### Required Fields
+
+- `$schema`
+  - SHALL reference JSON Schema draft 2020-12
+
+- `$id`
+  - SHALL equal the canonical schema URL
+  - SHALL match the corresponding `schema_url` in `registry.yaml`
+
+- `title`
+  - SHALL equal the enum name
+
+- `type`
+  - SHALL be `"string"` or `"integer"`
+  - SHALL be `"integer"` if and only if the corresponding enum registry entry has `value_type: "integer"`
+  - SHALL be `"string"` if the corresponding enum registry entry omits `value_type`
+
+- `description`
+  - SHALL describe the semantic role of the enum
+
+- `enum`
+  - SHALL list all allowed values for this version
+
+- `default`
+  - SHALL be one of the declared enum values
+
+---
 
 #### x-gridworks Metadata
 
-The `x-gridworks` block MUST include:
+Each enum schema SHALL include:
+
 ```
 x-gridworks:
-  owner: "<owner-id>"
-  version: "<3-digit version>"
-  enum_type: "versioned" | "literal"
+owner: "<owner-id>"
+version: "<3-digit version>"
 ```
 
-Optional: 
+
+**Requirements**
+
+- `owner`
+  - SHALL match the owner declared in `registry.yaml`
+
+- `version`
+  - SHALL be a three-digit numeric string
+  - SHALL match the version encoded in `$id`
+
+---
+
+#### Optional Metadata
+
 ```
-value_descriptions:
-  "<EnumValue>": "<Description>"
+x-gridworks:
+  value_descriptions:
+"<EnumValue>": "<Description>"
 
-extended_description: >
-  ...
+x-gridworks:
+  extended_description: >
+...
 ```
 
-If value_descriptions is provided:
-  - Every enum value SHOULD have a description.
-  - Descriptions SHOULD explain semantic meaning, not restate the name.
 
-If extended_description is provided:
-  - It SHOULD appear after value_descriptions for readability.
-  - It MAY provide additional architectural or migration context.
-  - References to other Sema words SHOULD appear in extended_description, not description.
-  - It MUST NOT introduce new normative constraints.
-  - It MUST NOT change the semantic meaning of any enum value.
+**Rules**
 
+- `value_descriptions`
+  - MAY appear only within `x-gridworks`
+  - SHOULD include an entry for each enum value
+  - SHOULD describe semantic meaning, not restate the name
+
+- `extended_description`
+  - MAY appear only within `x-gridworks`
+  - MAY provide architectural or contextual explanation
+  - MUST NOT introduce new normative constraints
+  - MUST NOT change the meaning of any enum value
+
+---
+
+#### Forbidden Extra Fields
+
+Enum schema files SHALL NOT include any top-level fields other than:
+
+- `$schema`
+- `$id`
+- `title`
+- `type`
+- `description`
+- `enum`
+- `default`
+- `x-gridworks`
+
+Within `x-gridworks`, enum schema files SHALL NOT include any fields other than:
+
+- `owner`
+- `version`
+- `value_descriptions`
+- `extended_description`
+
+---
 
 #### Evolution Rules
 
-Enums are versioned. These versions SHALL match the pattern `000`, `001`, `002` etc (i.e. three-digit numeric strings). For enums, these
-versions SHALL increase with each published version. 
+Enum evolution is determined by `enum_type`.
 
-Enum schemas SHALL declare one of two enum types:
-  - `versioned`
-  - `literal`
+- `literal`
+  - SHALL have version `"000"`
+  - SHALL define a fixed set of values
+  - SHALL NOT add, remove, reorder, or reinterpret values
+  - SHALL NOT change the default
 
-For `versioned` enums:
-  - New versions MAY append new values to the end of the `enum` list.
-  - New versions SHALL NOT remove existing values, reorder existing values, change the semantic meaning of existing values, or change the `default` value.
+- `versioned`
+  - Each schema file defines a single version
+  - New versions MAY append values to the end of the `enum` list
+  - Values present in prior versions SHALL appear in the same relative order
+  - SHALL NOT remove or reorder existing values
+  - SHALL NOT change the semantic meaning of existing values
+  - SHALL NOT change the default
 
-For `literal` enums:
-  - The enum version SHALL be `000`.
-  - New values SHALL NOT be added.
-  - Existing values SHALL NOT be removed, reordered, or reinterpreted.
-  - The `default` value SHALL NOT change.
+---
 
-In both cases, semantic stability is required across publication.
+#### Description Evolution
 
-####  Description Evolution
+In new versions of a `versioned` enum, the following MAY be updated:
 
-In new enum versions, the following MAY be modified for clarity:
-  - description
-  - value_descriptions
-  - extended_description
+- `description`
+- `value_descriptions`
+- `extended_description`
 
-Such modifications:
-  - MUST NOT change the semantic meaning of any enum value
-  - MUST NOT reinterpret prior behavior
-  - MUST NOT introduce new normative constraints
+Such updates:
 
-
-Description updates SHALL be limited to:
-  - Clarifying intent
-  - Improving wording
-  - Correcting grammar or typographical errors
-  - Expanding architectural explanation without altering semantics
+- MUST NOT change semantic meaning
+- MUST NOT reinterpret prior behavior
+- MUST NOT introduce new normative constraints
 
 If semantic meaning changes, a new enum value MUST be introduced instead.
+
+
 
 #### Example: `base.g.node.class v000` (Enum)
 
@@ -768,7 +1076,6 @@ default: "Logical"
 x-gridworks:
   owner: "gridworks-energy"
   version: "000"
-  enum_type: "versioned"
   value_descriptions:
     "TerminalAsset": >
       A physical transactive asset such as a heat pump, hot water heater, residential battery, 
@@ -832,44 +1139,15 @@ TypeName:
   const: "bid"
 ```
 
-**Version**
- - MUST follow the rules defined by versioning_strategy
+**Versions**
+ - MUST follow the rules defined by versioning_strategs. See section XX
 
-#### Versioning Model
 
-Types may use one of three `versioning_strategy` values in `registry.yaml`:
- - `none`
- - `literal`
- - `string`
-
-The `string` strategy means one schema file can validate multiple versions, and allows for a softer handling of backwards compatibility.  Under string, the registry SHALL list only one schema file. The schema SHALL internally validate the Version property.
-
-**Strategy:** `none`
-
-Types with strategy `none`:
- - MUST NOT include a Version field in the schema.
-
-**Strategy:**  `literal`
-
-  - MUST include a `Version` field in the schema.
-  - The `Version` property must be `const "<3-digit>".
-  - For `literal`:
-    -  The `Version field MUST be defined using `const`
-
-**Strategy:**  `string`
-
-  - For `string`: 
-    - The `Version` field MUST be declared as `type: string`
-    - The `Version` field MUST include `default: "<3-digit>"`
-    - The `default` value MUST equal the published version for that schema file
-    - Example:
-
-```
-Version:
-  type: string
-  default: "002"
-```
-
+#### Version Strategy Semantics
+Versioned types (`string` and `literal`) SHALL:
+- Enumerate all versions explicitly in the registry
+- Maintain strict version ordering
+- Provide upgrade paths between versions
 
 #### Required Top-Level Order
 Named type schemas SHALL appear in the following order:

@@ -1,6 +1,8 @@
 from typing import Literal
 
 from sema.runtime.base import SemaType
+from sema.runtime.enums.temp_calc_method import TempCalcMethod
+from sema.runtime.types.channel_config import ChannelConfig
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 
 

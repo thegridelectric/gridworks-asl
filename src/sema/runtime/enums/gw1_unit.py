@@ -15,7 +15,6 @@ class Gw1Unit(SemaEnum):
     GpmX100 = auto()
     Seconds = auto()
     SecondsX10 = auto()
-    Microseconds = auto()
     Milliseconds = auto()
 
     @classmethod

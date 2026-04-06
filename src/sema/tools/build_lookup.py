@@ -54,20 +54,27 @@ def build() -> None:
                 "latest_version": type_def["latest_version"],
                 "versioning_strategy": type_def["versioning_strategy"],
                 "versions": {
-                    version: f"definitions/types/{type_name}.{version}.yaml"
+                    version: f"definitions/types/{type_name}/{version}.yaml"
                     for version in versions
                 },
             }
 
     for enum_name, enum_def in registry["enums"].items():
-        versions = enum_def.get("versions", {})
-        output["enums"][enum_name] = {
-            "latest_version": enum_def["latest_version"],
-            "versions": {
-                version: f"definitions/enums/{enum_name}.{version}.yaml"
-                for version in versions
-            },
-        }
+        if enum_def["enum_type"] == "literal":
+            output["enums"][enum_name] = {
+                "enum_type": "literal",
+                "schema": f"definitions/enums/{enum_name}/000.yaml",
+            }
+        else:
+            versions = enum_def.get("versions", {})
+            output["enums"][enum_name] = {
+                "enum_type": "versioned",
+                "latest_version": enum_def["latest_version"],
+                "versions": {
+                    version: f"definitions/enums/{enum_name}/{version}.yaml"
+                    for version in versions
+                },
+            }
 
     for format_name in registry["formats"]:
         output["formats"][format_name] = f"definitions/formats/{format_name}.yaml"
