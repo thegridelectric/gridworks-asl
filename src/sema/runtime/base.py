@@ -2,7 +2,7 @@ import json
 import re
 from typing import Any, Self, TypeVar
 
-from pydantic import BaseModel, ConfigDict, ValidationError
+from pydantic import BaseModel, ConfigDict, ValidationError, PrivateAttr
 
 
 # ============================================================================
@@ -57,7 +57,7 @@ class SemaType(BaseModel):
     """
     Base class for strict Sema types.
     """
-
+    _original_version: str | None = PrivateAttr(default=None)
     type_name: str
     version: str | None = None
 
@@ -77,6 +77,12 @@ class SemaType(BaseModel):
 
     def to_dict(self) -> dict[str, Any]:
         return self.model_dump(exclude_none=True, by_alias=True)
+
+    def original_version(self) -> str | None:
+        return getattr(self, "_original_version", self.version_value())
+
+    def is_upgraded(self) -> bool:
+        return self.original_version() != self.version_value()
 
     @classmethod
     def from_bytes(cls, json_bytes: bytes) -> Self:
@@ -164,6 +170,7 @@ class DegradedSemaType:
 
     This is NOT a valid SemaType and MUST NOT be used for control logic.
     """
+    _original_version: str | None = PrivateAttr(default=None)
 
     def __init__(
         self,

@@ -30,7 +30,7 @@ class SemaCodec:
     def from_dict(
         self,
         data: dict,
-        mode: Literal["strict", "degraded"] = "strict",
+        mode: Literal["strict", "degraded", "preserve"] = "strict",
     ) -> SemaType | DegradedSemaType:
 
         if not isinstance(data, dict):
@@ -47,13 +47,15 @@ class SemaCodec:
 
         if type_name not in self.registry:
             if mode == "degraded":
-                return DegradedSemaType(
+                obj = DegradedSemaType(
                     type_name=type_name,
                     version=version,
                     raw=data,
                     known_fields={},
                     unknown_fields=data,
                 )
+                obj._original_version = version
+                return obj
             raise ValueError(f"Unknown type {type_name}")
 
         current_cls = self.registry[type_name]
@@ -61,7 +63,9 @@ class SemaCodec:
 
         # Fast path
         if version == current_version:
-            return current_cls.from_dict(data)
+            instance = current_cls.from_dict(data)
+            instance._original_version = version
+            return instance
 
         # Old version
         if (
@@ -70,7 +74,14 @@ class SemaCodec:
         ):
             old_cls = self.old_versions[type_name][version]
             old_instance = old_cls.from_dict(data)
-            return old_instance.to_latest(self.registry)
+            old_instance._original_version = version
+
+            if mode == "preserve":
+                return old_instance
+            
+            new_instance = old_instance.to_latest(self.registry)
+            new_instance._original_version = version
+            return new_instance
 
         # Unknown version
         if mode == "strict":
@@ -113,10 +124,31 @@ class SemaCodec:
             unknown_fields=unknown,
         )
 
+    def decode_with_metadata(
+        self,
+        data: dict,
+        mode: Literal["strict", "degraded", "preserve"] = "strict",
+    ) -> tuple[SemaType | DegradedSemaType, dict]:
+        obj = self.from_dict(data, mode=mode)
+
+        metadata = {
+            "type_name": data.get("TypeName"),
+            "original_version": data.get("Version"),
+            "decoded_version": (
+                obj.version_value() if isinstance(obj, SemaType) else None
+            ),
+            "was_upgraded": (
+                isinstance(obj, SemaType)
+                and data.get("Version") != obj.version_value()
+            ),
+        }
+
+        return obj, metadata
+            
     def from_bytes(
         self,
         data: bytes,
-        mode: Literal["strict", "degraded"] = "strict",
+        mode: Literal["strict", "degraded", "preserve"] = "strict",
     ) -> SemaType | DegradedSemaType:
 
         try:
@@ -128,6 +160,8 @@ class SemaCodec:
 
     def to_bytes(self, msg: SemaType) -> bytes:
         return msg.to_bytes()
+
+
 
 
 # ============================================================================
