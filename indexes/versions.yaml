@@ -211,6 +211,16 @@ types:
       "011":
         summary: "- Ha1Params: ha1.params:005 -> 006"
       "010":
+        summary: "- Ha1Params: ha1.params:004 -> 005"
+      "009":
+        summary: "- BufferShortCycling: add"
+      "008":
+        summary: >
+          - SystemMode: add
+          - SeasonalStorageMode: add
+          - TankModuleComponents[]: pico.tank.module.component.gt only -> pico.tank.module.component.gt | sim.pico.tank.module.component.gt
+          - Axiom 4 (DerivedNodeConsistency): add
+      "007":
         summary: "Baseline runtime version (no prior version tracked)."
 
   linear.one.dimensional.calibration:
@@ -354,6 +364,8 @@ types:
           - BoardComponentId: add as Optional
           - ActorClass: gw1.actor.class:009 -> 011
       "300":
+        summary: "- ActorClass: string -> gw1.actor.class:009"
+      "200":
         summary: "Baseline runtime version (no prior version tracked)."
 
   spaceheat.telemetry.quantity.projection:

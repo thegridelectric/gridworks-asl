@@ -145,6 +145,9 @@ types:
       '012': definitions/types/layout.lite/012.yaml
       '011': definitions/types/layout.lite/011.yaml
       '010': definitions/types/layout.lite/010.yaml
+      009: definitions/types/layout.lite/009.yaml
+      008: definitions/types/layout.lite/008.yaml
+      '007': definitions/types/layout.lite/007.yaml
   linear.one.dimensional.calibration:
     latest_version: '001'
     versioning_strategy: literal
@@ -241,6 +244,7 @@ types:
     versions:
       '301': definitions/types/spaceheat.node.gt/301.yaml
       '300': definitions/types/spaceheat.node.gt/300.yaml
+      '200': definitions/types/spaceheat.node.gt/200.yaml
   spaceheat.telemetry.quantity.projection:
     latest_version: '000'
     versioning_strategy: literal

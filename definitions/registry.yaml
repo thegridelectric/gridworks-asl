@@ -1044,7 +1044,8 @@ types:
       "010":
         schema_url: "https://schemas.electricity.works/types/layout.lite/010"
         created: "2026-02-18T21:34:00Z"
-        summary: "Baseline runtime version (no prior version tracked)."
+        summary: >-
+          - Ha1Params: ha1.params:004 -> 005
         direct_dependencies:
           structural:
             - "data.channel.gt:001"
@@ -1059,6 +1060,70 @@ types:
             - "pico.tank.module.component.gt:011"
             - "sim.pico.tank.module.component.gt:000"
             - "spaceheat.node.gt:300"
+            - "utc.milliseconds"
+            - "uuid4.str"
+          axiom:
+            - "gw1.actor.class:009"
+      "009":
+        schema_url: "https://schemas.electricity.works/types/layout.lite/009"
+        created: "2026-01-16T15:53:00Z"
+        summary: >-
+          - BufferShortCycling: add
+        direct_dependencies:
+          structural:
+            - "data.channel.gt:001"
+            - "derived.channel.gt:000"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "gw1.tank.temp.calibration.map:000"
+            - "ha1.params:004"
+            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:011"
+            - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.node.gt:300"
+            - "utc.milliseconds"
+            - "uuid4.str"
+      "008":
+        schema_url: "https://schemas.electricity.works/types/layout.lite/008"
+        created: "2026-01-15T18:00:00Z"
+        summary: >-
+          - SystemMode: add
+          - SeasonalStorageMode: add
+          - TankModuleComponents[]: pico.tank.module.component.gt only -> pico.tank.module.component.gt | sim.pico.tank.module.component.gt
+          - Axiom 4 (DerivedNodeConsistency): add
+        direct_dependencies:
+          structural:
+            - "data.channel.gt:001"
+            - "derived.channel.gt:000"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "gw1.tank.temp.calibration.map:000"
+            - "ha1.params:004"
+            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:011"
+            - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.node.gt:300"
+            - "utc.milliseconds"
+            - "uuid4.str"
+      "007":
+        schema_url: "https://schemas.electricity.works/types/layout.lite/007"
+        created: "2026-01-14T14:08:00Z"
+        summary: "Baseline runtime version (no prior version tracked)."
+        direct_dependencies:
+          structural:
+            - "data.channel.gt:001"
+            - "derived.channel.gt:000"
+            - "gw1.tank.temp.calibration.map:000"
+            - "ha1.params:004"
+            - "i2c.multichannel.dt.relay.component.gt:002"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:011"
+            - "spaceheat.node.gt:200"
             - "utc.milliseconds"
             - "uuid4.str"
 
@@ -1439,10 +1504,20 @@ types:
       "300":
         schema_url: "https://schemas.electricity.works/types/spaceheat.node.gt/300"
         created: "2026-01-15T18:00:00Z"
-        summary: "Baseline runtime version (no prior version tracked)."
+        summary: >-
+          - ActorClass: string -> gw1.actor.class:009
         direct_dependencies:
           structural:
             - "gw1.actor.class:009"
+            - "handle.name"
+            - "spaceheat.name"
+            - "uuid4.str"
+      "200":
+        schema_url: "https://schemas.electricity.works/types/spaceheat.node.gt/200"
+        created: "2026-01-14T14:08:00Z"
+        summary: "Baseline runtime version (no prior version tracked)."
+        direct_dependencies:
+          structural:
             - "handle.name"
             - "spaceheat.name"
             - "uuid4.str"

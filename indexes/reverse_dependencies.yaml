@@ -16,6 +16,9 @@ types:
   data.channel.gt:
     '001':
       used_by:
+      - layout.lite:007
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
     '002':
@@ -25,6 +28,9 @@ types:
   derived.channel.gt:
     '000':
       used_by:
+      - layout.lite:007
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
     '001':
@@ -60,6 +66,9 @@ types:
   gw1.tank.temp.calibration.map:
     '000':
       used_by:
+      - layout.lite:007
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
       - layout.lite:012
@@ -69,6 +78,11 @@ types:
       used_by:
       - analytics.channel.gt:000
   ha1.params:
+    '004':
+      used_by:
+      - layout.lite:007
+      - layout.lite:008
+      - layout.lite:009
     '005':
       used_by:
       - layout.lite:010
@@ -80,6 +94,9 @@ types:
   i2c.multichannel.dt.relay.component.gt:
     '002':
       used_by:
+      - layout.lite:007
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
       - scada.control.capabilities:000
@@ -101,6 +118,9 @@ types:
   pico.flow.module.component.gt:
     '000':
       used_by:
+      - layout.lite:007
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
       - layout.lite:012
@@ -108,6 +128,9 @@ types:
   pico.tank.module.component.gt:
     '011':
       used_by:
+      - layout.lite:007
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
       - layout.lite:012
@@ -134,6 +157,8 @@ types:
   sim.pico.tank.module.component.gt:
     '000':
       used_by:
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
       - layout.lite:012
@@ -147,8 +172,13 @@ types:
       used_by:
       - snapshot.spaceheat:003
   spaceheat.node.gt:
+    '200':
+      used_by:
+      - layout.lite:007
     '300':
       used_by:
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
     '301':
@@ -203,6 +233,7 @@ enums:
   gw1.actor.class:
     009:
       used_by:
+      - layout.lite:010
       - scada.control.capabilities:000
       - spaceheat.node.gt:300
     '011':
@@ -227,6 +258,8 @@ enums:
   gw1.seasonal.storage.mode:
     '000':
       used_by:
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
       - layout.lite:012
@@ -234,6 +267,8 @@ enums:
   gw1.system.mode:
     '000':
       used_by:
+      - layout.lite:008
+      - layout.lite:009
       - layout.lite:010
       - layout.lite:011
       - layout.lite:012
@@ -310,6 +345,7 @@ formats:
     - fsm.atomic.report:001
     - machine.states:000
     - single.machine.state:000
+    - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
   left.right.dot:
@@ -327,6 +363,9 @@ formats:
     - fsm.atomic.report:000
     - fsm.atomic.report:001
     - g.node.gt:004
+    - layout.lite:007
+    - layout.lite:008
+    - layout.lite:009
     - layout.lite:010
     - layout.lite:011
     - layout.lite:012
@@ -386,6 +425,7 @@ formats:
     - scada.control.capabilities:000
     - send.layout:000
     - single.reading:000
+    - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - synced.readings.bundle:001
@@ -402,6 +442,9 @@ formats:
     - fsm.atomic.report:000
     - fsm.atomic.report:001
     - g.node.instance.gt:000
+    - layout.lite:007
+    - layout.lite:008
+    - layout.lite:009
     - layout.lite:010
     - layout.lite:011
     - layout.lite:012
@@ -446,6 +489,9 @@ formats:
     - i2c.multichannel.dt.relay.component.gt:003
     - i2c.multichannel.dt.relay.component.gt:004
     - i2c.thermistor.reader.component.gt:000
+    - layout.lite:007
+    - layout.lite:008
+    - layout.lite:009
     - layout.lite:010
     - layout.lite:011
     - layout.lite:012
@@ -459,5 +505,6 @@ formats:
     - report:003
     - sim.pico.tank.module.component.gt:000
     - snapshot.spaceheat:003
+    - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301

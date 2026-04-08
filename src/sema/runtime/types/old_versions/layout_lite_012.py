@@ -54,6 +54,12 @@ class LayoutLite012(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "LayoutLite012":
+        """
+        Axiom 1: DcNodeConsistency.
+        Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName
+        SHALL reference an existing ShNodes.Name, and every captured-by node
+        SHALL have an active ActorClass.
+        """
         node_names = {node.name for node in self.sh_nodes}
         active_actorless = {"NoActor"}
         for channel in self.data_channels:
@@ -66,6 +72,11 @@ class LayoutLite012(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "LayoutLite012":
+        """
+        Axiom 2: NodeHandleHierarchyConsistency.
+        Every ShNode with a dotted handle SHALL have its immediate boss present
+        as another ShNode in the same payload.
+        """
         node_names = {node.name for node in self.sh_nodes}
         for node in self.sh_nodes:
             if node.handle and "." in node.handle:
@@ -76,12 +87,21 @@ class LayoutLite012(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_3(self) -> "LayoutLite012":
+        """
+        Axiom 3: CriticalZoneSubset.
+        CriticalZoneList SHALL be a subset of ZoneList.
+        """
         if not set(self.critical_zone_list).issubset(set(self.zone_list)):
             raise ValueError("Axiom 3 failed: critical_zone_list must be a subset of zone_list.")
         return self
 
     @model_validator(mode="after")
     def check_axiom_4(self) -> "LayoutLite012":
+        """
+        Axiom 4: DerivedNodeConsistency.
+        Every DerivedChannels.CreatedByNodeName SHALL reference an existing
+        ShNodes.Name whose ActorClass is active.
+        """
         nodes = {node.name: node for node in self.sh_nodes}
         for channel in self.derived_channels:
             created_by = nodes.get(channel.created_by_node_name)
