@@ -699,7 +699,7 @@ types:
       - utc.milliseconds
       types: []
   synced.readings.bundle:
-    '000':
+    '001':
       enums:
       - gw1.unit:001
       - spaceheat.telemetry.name:007
@@ -707,5 +707,4 @@ types:
       - left.right.dot
       - spaceheat.name
       - utc.iso8601.seconds
-      - uuid4.str
       types: []

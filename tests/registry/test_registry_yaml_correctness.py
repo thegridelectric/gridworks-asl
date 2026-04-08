@@ -142,6 +142,60 @@ def test_registry_top_level_structure_and_sections():
     assert isinstance(metadata["maintainer"], str)
 
 
+def test_registry_metadata_last_updated_is_later_than_all_created_dates():
+    registry = load_registry(DEFINITIONS_DIR / "registry.yaml")
+    last_updated = parse_ts(registry["metadata"]["last_updated"])
+
+    findings: list[str] = []
+
+    for format_name, entry in registry["formats"].items():
+        created = parse_ts(entry["created"])
+        if not last_updated >= created:
+            findings.append(
+                f"- metadata.last_updated {registry['metadata']['last_updated']} is earlier than "
+                f"format {format_name} created {entry['created']}"
+            )
+
+    for enum_name, entry in registry["enums"].items():
+        if entry["enum_type"] == "literal":
+            created = parse_ts(entry["created"])
+            if not last_updated >= created:
+                findings.append(
+                    f"- metadata.last_updated {registry['metadata']['last_updated']} is earlier than "
+                    f"enum {enum_name}:000 created {entry['created']}"
+                )
+            continue
+
+        for version, version_entry in entry["versions"].items():
+            created = parse_ts(version_entry["created"])
+            if not last_updated >= created:
+                findings.append(
+                    f"- metadata.last_updated {registry['metadata']['last_updated']} is earlier than "
+                    f"enum {enum_name}:{version} created {version_entry['created']}"
+                )
+
+    for type_name, entry in registry["types"].items():
+        if entry["versioning_strategy"] == "none":
+            created = parse_ts(entry["created"])
+            if not last_updated >= created:
+                findings.append(
+                    f"- metadata.last_updated {registry['metadata']['last_updated']} is earlier than "
+                    f"type {type_name} created {entry['created']}"
+                )
+            continue
+
+        for version, version_entry in entry["versions"].items():
+            created = parse_ts(version_entry["created"])
+            if not last_updated >= created:
+                findings.append(
+                    f"- metadata.last_updated {registry['metadata']['last_updated']} is earlier than "
+                    f"type {type_name}:{version} created {version_entry['created']}"
+                )
+
+    if findings:
+        raise AssertionError("\n".join(findings))
+
+
 def test_registry_format_structure():
     registry = load_registry(DEFINITIONS_DIR / "registry.yaml")
     owners = load_registry(DEFINITIONS_DIR / "owners.yaml")

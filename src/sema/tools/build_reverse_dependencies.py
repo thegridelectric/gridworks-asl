@@ -33,7 +33,7 @@ def load_registry() -> dict:
 
 def split_dep(dep: str) -> Tuple[str, str | None]:
     if ":" in dep:
-        name, version = dep.split(":")
+        name, version = dep.rsplit(":", 1)
         return name, version
     return dep, None
 
@@ -42,7 +42,7 @@ def get_direct_deps(type_version_block: dict) -> List[str]:
     deps = type_version_block.get("direct_dependencies", {})
     structural = deps.get("structural", []) or []
     axiom = deps.get("axiom", []) or []
-    return list(set(structural + axiom))
+    return sorted(set(structural + axiom))
 
 
 def classify(dep: str, registry: dict) -> str:
@@ -108,21 +108,26 @@ def build() -> None:
         "formats": {},
     }
 
-    for name, versions in reverse["types"].items():
+    for name in sorted(reverse["types"]):
+        versions = reverse["types"][name]
         output["types"][name] = {}
-        for version, users in versions.items():
+        for version in sorted(versions, key=int):
+            users = versions[version]
             output["types"][name][version] = {
                 "used_by": sorted(users)
             }
 
-    for name, versions in reverse["enums"].items():
+    for name in sorted(reverse["enums"]):
+        versions = reverse["enums"][name]
         output["enums"][name] = {}
-        for version, users in versions.items():
+        for version in sorted(versions, key=int):
+            users = versions[version]
             output["enums"][name][version] = {
                 "used_by": sorted(users)
             }
 
-    for name, users in reverse["formats"].items():
+    for name in sorted(reverse["formats"]):
+        users = reverse["formats"][name]
         output["formats"][name] = {
             "used_by": sorted(users)
         }
