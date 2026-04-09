@@ -20,19 +20,19 @@ class ReportEvent(SemaType):
     @model_validator(mode="after")
     def check_axiom_1(self) -> "ReportEvent":
         if self.message_id != self.report.id:
-            raise ValueError("Axiom 1 failed: message_id must equal report.id.")
+            raise ValueError(f"Axiom 1 failed: message_id {self.message_id} must equal report.id {self.report.id}.")
         return self
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "ReportEvent":
         if self.time_created_ms != self.report.message_created_ms:
             raise ValueError(
-                "Axiom 2 failed: time_created_ms must equal report.message_created_ms."
+                f"Axiom 2 failed: time_created_ms {self.time_created_ms} equal report.message_created_ms {self.report.message_created_ms}."
             )
         return self
 
     @model_validator(mode="after")
     def check_axiom_3(self) -> "ReportEvent":
         if self.src != self.report.from_g_node_alias:
-            raise ValueError("Axiom 3 failed: src must equal report.from_g_node_alias.")
+            raise ValueError(f"Axiom 3 failed: src {self.src} must equal report.from_g_node_alias {self.report.from_g_node_alias}.")
         return self
