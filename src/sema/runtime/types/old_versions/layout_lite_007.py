@@ -5,6 +5,7 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import (
     LeftRightDot,
+    PositiveInt,
     UTCMilliseconds,
     UUID4Str,
 )
@@ -30,7 +31,7 @@ class LayoutLite007(SemaType):
     strategy: str
     zone_list: list[str]
     critical_zone_list: list[str]
-    total_store_tanks: int
+    total_store_tanks: PositiveInt
     sh_nodes: list[SpaceheatNodeGt200]
     data_channels: list[DataChannelGt001]
     derived_channels: list[DerivedChannelGt000]

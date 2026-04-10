@@ -7,6 +7,7 @@ from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode
 from sema.runtime.enums.gw1_system_mode import Gw1SystemMode
 from sema.runtime.property_format import (
     LeftRightDot,
+    PositiveInt,
     UTCMilliseconds,
     UUID4Str,
 )
@@ -37,7 +38,7 @@ class LayoutLite009(SemaType):
     buffer_short_cycling: bool
     zone_list: list[str]
     critical_zone_list: list[str]
-    total_store_tanks: int
+    total_store_tanks: PositiveInt
     sh_nodes: list[SpaceheatNodeGt300]
     data_channels: list[DataChannelGt001]
     derived_channels: list[DerivedChannelGt000]
@@ -109,8 +110,9 @@ class LayoutLite009(SemaType):
     def upgrade(self) -> LayoutLite010:
         """
         009 -> 010:
-        - Ha1Params: ha1.params:004|005 -> 005
-        - I2cRelayComponent: optional (was required)
+        - Ha1Params: ha1.params:004 | 005 -> 005
+        - ShNodes[]: spaceheat.node.gt:300 -> 300 | 301
+        - I2cRelayComponent: required -> optional
         """
         data = self.model_dump()
         if self.ha1_params.version == "004":

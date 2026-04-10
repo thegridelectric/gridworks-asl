@@ -29,11 +29,11 @@ class Ha1Params005(SemaType):
     def upgrade(self) -> Ha1Params006:
         """
         005 -> 006:
-        - HpMaxKwTh -> HpMaxKwEl
+        - HpMaxKwEl: add as optional
+        - HpMaxKwTh: required -> optional
         - HpTurnOnMinutes: add
         """
         data = self.model_dump()
-        data["hp_max_kw_el"] = data.pop("hp_max_kw_th") / 2
-        data["hp_turn_on_minutes"] = 15
+        data["hp_turn_on_minutes"] = 12
         data["version"] = "006"
         return Ha1Params006.model_validate(data)

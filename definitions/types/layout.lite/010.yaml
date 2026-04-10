@@ -64,8 +64,7 @@ properties:
       Ordered list of critical zones. SHALL be a subset of ZoneList.
 
   TotalStoreTanks:
-    type: integer
-    minimum: 1
+    $ref: "https://schemas.electricity.works/formats/positive.int"
     description: >
       Number of store tanks configured for this deployment.
 
