@@ -35,6 +35,7 @@ types:
       - layout.lite:011
     '001':
       used_by:
+      - layout.lite:011
       - layout.lite:012
       - layout.lite:013
   fsm.atomic.report:
@@ -50,6 +51,7 @@ types:
       - report:002
     '001':
       used_by:
+      - report:002
       - report:003
   g.node.gt:
     '004':
@@ -85,6 +87,7 @@ types:
       - layout.lite:009
     '005':
       used_by:
+      - layout.lite:009
       - layout.lite:010
     '006':
       used_by:
@@ -183,6 +186,8 @@ types:
       - layout.lite:011
     '301':
       used_by:
+      - layout.lite:010
+      - layout.lite:011
       - layout.lite:012
       - layout.lite:013
   spaceheat.telemetry.quantity.projection:
@@ -392,6 +397,10 @@ formats:
     - channel.config:000
     - derived.channel.gt:001
     - i2c.thermistor.channel.config:000
+    - layout.lite:007
+    - layout.lite:008
+    - layout.lite:009
+    - layout.lite:010
     - layout.lite:011
     - layout.lite:012
     - layout.lite:013

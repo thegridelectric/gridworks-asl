@@ -64,8 +64,7 @@ properties:
       Ordered list of critical zones. SHALL be a subset of ZoneList.
 
   TotalStoreTanks:
-    type: integer
-    minimum: 1
+    $ref: "https://schemas.electricity.works/formats/positive.int"
     description: >
       Number of store tanks configured for this deployment.
 
@@ -109,7 +108,9 @@ properties:
       Flow module components present in the running deployment.
 
   Ha1Params:
-    $ref: "https://schemas.electricity.works/types/ha1.params/004"
+    oneOf:
+      - $ref: "https://schemas.electricity.works/types/ha1.params/004"
+      - $ref: "https://schemas.electricity.works/types/ha1.params/005"
     description: >
       Active HA1 parameter set used by the running deployment.
 

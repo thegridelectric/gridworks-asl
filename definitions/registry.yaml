@@ -200,12 +200,12 @@ enums:
     versions:
       "011":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/011"
-        created: "2026-03-27T16:56:00Z"
+        created: "2026-02-18T21:34:00Z"
         added_values:
           - "I2cThermistorReader"
       "010":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/010"
-        created: "2026-03-27T16:55:00Z"
+        created: "2026-02-17T20:00:00Z"
         added_values:
           - "GpioSensor"
           - "I2cBus"
@@ -691,7 +691,7 @@ types:
     versions:
       "001":
         schema_url: "https://schemas.electricity.works/types/fsm.atomic.report/001"
-        created: "2026-01-28T15:17:00Z"
+        created: "2025-04-23T18:03:00Z"
         summary: >-
           - Remove ActionType
           - Action: scalar → structured variants (oneOf)
@@ -726,7 +726,7 @@ types:
     versions:
       "001":
         schema_url: "https://schemas.electricity.works/types/fsm.full.report/001"
-        created: "2026-01-28T15:17:00Z"
+        created: "2025-04-23T18:03:00Z"
         summary: "Update AtomicList item type from fsm.atomic.report:000 to fsm.atomic.report:001."
         direct_dependencies:
           structural:
@@ -874,16 +874,20 @@ types:
         schema_url: "https://schemas.electricity.works/types/ha1.params/006"
         created: "2026-02-25T14:23:00Z"
         summary: >-
-          - HpMaxKwTh -> HpMaxKwEl
+          - HpMaxKwEl: add as optional
+          - HpMaxKwTh: required -> optional
           - HpTurnOnMinutes: add
         direct_dependencies:
           structural: []
       "005":
         schema_url: "https://schemas.electricity.works/types/ha1.params/005"
-        created: "2026-02-18T06:07:00Z"
+        created: "2026-01-16T15:53:00Z"
         summary: >-
-          - CopModelCoefficients: add
-          - MinimumOperatingCopParameters: add
+          - CopIntercept: add as optional
+          - CopOatCoeff: add as optional
+          - CopLwtCoeff: add as optional
+          - CopMin: add as optional
+          - CopMinOatF: add as optional
         direct_dependencies:
           structural: []
       "004":
@@ -997,11 +1001,10 @@ types:
         schema_url: "https://schemas.electricity.works/types/layout.lite/012"
         created: "2026-03-31T10:42:00Z"
         summary: >-
-          - DerivedChannels[]: derived.channel.gt:000 -> 001
+          - DerivedChannels[]: derived.channel.gt:000 | 001 -> 001
           - DataChannels[]: data.channel.gt:001 -> 002
-          - ShNodes[]: spaceheat.node.gt:300 -> 301
           - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> 003
-          - I2cRelayComponent: optional (was required)
+          - ShNodes[]: spaceheat.node.gt:300 | 301 -> 301
         direct_dependencies:
           structural:
             - "data.channel.gt:002"
@@ -1023,11 +1026,13 @@ types:
         schema_url: "https://schemas.electricity.works/types/layout.lite/011"
         created: "2026-02-25T19:23:00Z"
         summary: >-
-          - Ha1Params: ha1.params:005 -> 006
+          - Ha1Params: ha1.params: 005 -> 006
+          - DerivedChannels: derived.channel.gt:000 -> 000 | 001
         direct_dependencies:
           structural:
             - "data.channel.gt:001"
             - "derived.channel.gt:000"
+            - "derived.channel.gt:001"
             - "gw1.seasonal.storage.mode:000"
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
@@ -1039,13 +1044,16 @@ types:
             - "positive.int"
             - "sim.pico.tank.module.component.gt:000"
             - "spaceheat.node.gt:300"
+            - "spaceheat.node.gt:301"
             - "utc.milliseconds"
             - "uuid4.str"
       "010":
         schema_url: "https://schemas.electricity.works/types/layout.lite/010"
         created: "2026-02-18T21:34:00Z"
         summary: >-
-          - Ha1Params: ha1.params:004 -> 005
+          - Ha1Params: ha1.params:004 | 005 -> 005
+          - ShNodes[]: spaceheat.node.gt:300 -> 300 | 301
+          - I2cRelayComponent: required -> optional
         direct_dependencies:
           structural:
             - "data.channel.gt:001"
@@ -1058,8 +1066,10 @@ types:
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
+            - "positive.int"
             - "sim.pico.tank.module.component.gt:000"
             - "spaceheat.node.gt:300"
+            - "spaceheat.node.gt:301"
             - "utc.milliseconds"
             - "uuid4.str"
           axiom:
@@ -1069,6 +1079,7 @@ types:
         created: "2026-01-16T15:53:00Z"
         summary: >-
           - BufferShortCycling: add
+          - Ha1Params: 004 -> 004 | 005
         direct_dependencies:
           structural:
             - "data.channel.gt:001"
@@ -1077,10 +1088,12 @@ types:
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:004"
+            - "ha1.params:005"
             - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
+            - "positive.int"
             - "sim.pico.tank.module.component.gt:000"
             - "spaceheat.node.gt:300"
             - "utc.milliseconds"
@@ -1105,6 +1118,7 @@ types:
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
+            - "positive.int"
             - "sim.pico.tank.module.component.gt:000"
             - "spaceheat.node.gt:300"
             - "utc.milliseconds"
@@ -1123,6 +1137,7 @@ types:
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
             - "pico.tank.module.component.gt:011"
+            - "positive.int"
             - "spaceheat.node.gt:200"
             - "utc.milliseconds"
             - "uuid4.str"
@@ -1312,6 +1327,7 @@ types:
           structural:
             - "channel.readings:002"
             - "fsm.full.report:000"
+            - "fsm.full.report:001"
             - "left.right.dot"
             - "machine.states:000"
             - "positive.int"
@@ -1331,6 +1347,7 @@ types:
         created: "2026-03-30T19:01:47Z"
         summary: >-
           - Report: report:002 -> 003
+          - Removed (accidentally) former axioms 1 and 2
         direct_dependencies:
           structural:
             - "left.right.dot"
@@ -1491,7 +1508,7 @@ types:
     versions:
       "301":
         schema_url: "https://schemas.electricity.works/types/spaceheat.node.gt/301"
-        created: "2026-03-27T16:56:00Z"
+        created: "2026-02-18T21:34:00Z"
         summary: >-
           - BoardComponentId: add as Optional
           - ActorClass: gw1.actor.class:009 -> 011

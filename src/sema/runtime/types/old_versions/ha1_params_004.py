@@ -24,14 +24,12 @@ class Ha1Params004(SemaType):
     def upgrade(self) -> Ha1Params005:
         """
         004 -> 005:
-        - CopModelCoefficients: add
-        - MinimumOperatingCopParameters: add
+        - CopIntercept: add as optional
+        - CopOatCoeff: add as optional
+        - CopLwtCoeff: add as optional
+        - CopMin: add as optional
+        - CopMinOatF: add as optional
         """
         data = self.model_dump()
-        data["cop_intercept"] = 1.8
-        data["cop_oat_coeff"] = 0.012
-        data["cop_lwt_coeff"] = 0.0
-        data["cop_min"] = 1.8
-        data["cop_min_oat_f"] = 0.0
         data["version"] = "005"
         return Ha1Params005.model_validate(data)

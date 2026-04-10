@@ -35,6 +35,9 @@ properties:
   HpMaxKwEl:
     type: number
 
+  HpMaxKwTh:
+    type: number
+
   MaxEwtF:
     type: integer
 
@@ -76,14 +79,8 @@ required:
   - DdPowerKw
   - DdRswtF
   - DdDeltaTF
-  - HpMaxKwEl
   - MaxEwtF
   - LoadOverestimationPercent
-  - CopIntercept
-  - CopOatCoeff
-  - CopLwtCoeff
-  - CopMin
-  - CopMinOatF
   - HpTurnOnMinutes
   - TypeName
   - Version
