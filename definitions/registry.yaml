@@ -1028,6 +1028,7 @@ types:
           structural:
             - "data.channel.gt:001"
             - "derived.channel.gt:000"
+            - "derived.channel.gt:001"
             - "gw1.seasonal.storage.mode:000"
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
@@ -1039,6 +1040,7 @@ types:
             - "positive.int"
             - "sim.pico.tank.module.component.gt:000"
             - "spaceheat.node.gt:300"
+            - "spaceheat.node.gt:301"
             - "utc.milliseconds"
             - "uuid4.str"
       "010":
@@ -1060,6 +1062,7 @@ types:
             - "pico.tank.module.component.gt:011"
             - "sim.pico.tank.module.component.gt:000"
             - "spaceheat.node.gt:300"
+            - "spaceheat.node.gt:301"
             - "utc.milliseconds"
             - "uuid4.str"
           axiom:
@@ -1077,6 +1080,7 @@ types:
             - "gw1.system.mode:000"
             - "gw1.tank.temp.calibration.map:000"
             - "ha1.params:004"
+            - "ha1.params:005"
             - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
             - "pico.flow.module.component.gt:000"
@@ -1312,6 +1316,7 @@ types:
           structural:
             - "channel.readings:002"
             - "fsm.full.report:000"
+            - "fsm.full.report:001"
             - "left.right.dot"
             - "machine.states:000"
             - "positive.int"

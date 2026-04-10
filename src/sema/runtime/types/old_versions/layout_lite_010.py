@@ -23,6 +23,7 @@ from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleCompo
 from sema.runtime.types.sim_pico_tank_module_component_gt import SimPicoTankModuleComponentGt
 
 from sema.runtime.types.old_versions.layout_lite_011 import LayoutLite011
+from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 
 
 class LayoutLite010(SemaType):
@@ -38,13 +39,13 @@ class LayoutLite010(SemaType):
     zone_list: list[str]
     critical_zone_list: list[str]
     total_store_tanks: int
-    sh_nodes: list[SpaceheatNodeGt300]
+    sh_nodes: list[SpaceheatNodeGt300 | SpaceheatNodeGt]
     data_channels: list[DataChannelGt001]
     derived_channels: list[DerivedChannelGt000]
     tank_module_components: list[PicoTankModuleComponentGt | SimPicoTankModuleComponentGt]
     flow_module_components: list[PicoFlowModuleComponentGt]
     ha1_params: Ha1Params005
-    i2c_relay_component: I2cMultichannelDtRelayComponentGt002
+    i2c_relay_component: I2cMultichannelDtRelayComponentGt002 | None = None
     t_map: Gw1TankTempCalibrationMap | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
     version: Literal["010"] = "010"

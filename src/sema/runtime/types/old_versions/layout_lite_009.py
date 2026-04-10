@@ -12,6 +12,7 @@ from sema.runtime.property_format import (
 )
 from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
 from sema.runtime.types.old_versions.ha1_params_004 import Ha1Params004
+from sema.runtime.types.old_versions.ha1_params_005 import Ha1Params005
 from sema.runtime.types.old_versions.data_channel_gt_001 import DataChannelGt001
 from sema.runtime.types.old_versions.derived_channel_gt_000 import DerivedChannelGt000
 from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
@@ -42,7 +43,7 @@ class LayoutLite009(SemaType):
     derived_channels: list[DerivedChannelGt000]
     tank_module_components: list[PicoTankModuleComponentGt | SimPicoTankModuleComponentGt]
     flow_module_components: list[PicoFlowModuleComponentGt]
-    ha1_params: Ha1Params004
+    ha1_params: Ha1Params004 | Ha1Params005
     i2c_relay_component: I2cMultichannelDtRelayComponentGt002
     t_map: Gw1TankTempCalibrationMap | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
@@ -108,9 +109,11 @@ class LayoutLite009(SemaType):
     def upgrade(self) -> LayoutLite010:
         """
         009 -> 010:
-        - Ha1Params: ha1.params:004 -> 005
+        - Ha1Params: ha1.params:004|005 -> 005
+        - I2cRelayComponent: optional (was required)
         """
         data = self.model_dump()
-        data["ha1_params"] = self.ha1_params.upgrade()
+        if self.ha1_params.version == "004":
+            data["ha1_params"] = self.ha1_params.upgrade()
         data["version"] = "010"
         return LayoutLite010.model_validate(data)

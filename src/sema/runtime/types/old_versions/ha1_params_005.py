@@ -18,11 +18,11 @@ class Ha1Params005(SemaType):
     hp_max_kw_th: float
     max_ewt_f: StrictInt
     load_overestimation_percent: StrictInt
-    cop_intercept: float
-    cop_oat_coeff: float
-    cop_lwt_coeff: float
-    cop_min: float
-    cop_min_oat_f: float
+    cop_intercept: float | None = None
+    cop_oat_coeff: float | None = None
+    cop_lwt_coeff: float | None = None
+    cop_min: float | None = None
+    cop_min_oat_f: float | None = None
     type_name: str = "ha1.params"
     version: str = "005"
 

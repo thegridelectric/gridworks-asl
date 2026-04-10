@@ -55,7 +55,9 @@ properties:
     description: >
       Finite state machine reports generated during this slot.
     items:
-      $ref: "https://schemas.electricity.works/types/fsm.full.report/000"
+      oneOf:
+        - $ref: "https://schemas.electricity.works/types/fsm.full.report/000"
+        - $ref: "https://schemas.electricity.works/types/fsm.full.report/001"
 
   MessageCreatedMs:
     $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
