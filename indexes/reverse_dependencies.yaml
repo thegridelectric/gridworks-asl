@@ -397,6 +397,10 @@ formats:
     - channel.config:000
     - derived.channel.gt:001
     - i2c.thermistor.channel.config:000
+    - layout.lite:007
+    - layout.lite:008
+    - layout.lite:009
+    - layout.lite:010
     - layout.lite:011
     - layout.lite:012
     - layout.lite:013

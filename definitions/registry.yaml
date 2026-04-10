@@ -200,12 +200,12 @@ enums:
     versions:
       "011":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/011"
-        created: "2026-03-27T16:56:00Z"
+        created: "2026-02-18T21:34:00Z"
         added_values:
           - "I2cThermistorReader"
       "010":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/010"
-        created: "2026-03-27T16:55:00Z"
+        created: "2026-02-17T20:00:00Z"
         added_values:
           - "GpioSensor"
           - "I2cBus"
@@ -691,7 +691,7 @@ types:
     versions:
       "001":
         schema_url: "https://schemas.electricity.works/types/fsm.atomic.report/001"
-        created: "2026-01-28T15:17:00Z"
+        created: "2025-04-23T18:03:00Z"
         summary: >-
           - Remove ActionType
           - Action: scalar → structured variants (oneOf)
@@ -726,7 +726,7 @@ types:
     versions:
       "001":
         schema_url: "https://schemas.electricity.works/types/fsm.full.report/001"
-        created: "2026-01-28T15:17:00Z"
+        created: "2025-04-23T18:03:00Z"
         summary: "Update AtomicList item type from fsm.atomic.report:000 to fsm.atomic.report:001."
         direct_dependencies:
           structural:
@@ -881,7 +881,7 @@ types:
           structural: []
       "005":
         schema_url: "https://schemas.electricity.works/types/ha1.params/005"
-        created: "2026-02-18T06:07:00Z"
+        created: "2026-01-16T15:53:00Z"
         summary: >-
           - CopIntercept: add as optional
           - CopOatCoeff: add as optional
@@ -1508,7 +1508,7 @@ types:
     versions:
       "301":
         schema_url: "https://schemas.electricity.works/types/spaceheat.node.gt/301"
-        created: "2026-03-27T16:56:00Z"
+        created: "2026-02-18T21:34:00Z"
         summary: >-
           - BoardComponentId: add as Optional
           - ActorClass: gw1.actor.class:009 -> 011

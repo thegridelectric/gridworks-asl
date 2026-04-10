@@ -161,12 +161,16 @@ types:
     versions:
       "006":
         summary: >
-          - HpMaxKwTh -> HpMaxKwEl
+          - HpMaxKwEl: add as optional
+          - HpMaxKwTh: required -> optional
           - HpTurnOnMinutes: add
       "005":
         summary: >
-          - CopModelCoefficients: add
-          - MinimumOperatingCopParameters: add
+          - CopIntercept: add as optional
+          - CopOatCoeff: add as optional
+          - CopLwtCoeff: add as optional
+          - CopMin: add as optional
+          - CopMinOatF: add as optional
       "004":
         summary: "Baseline runtime version (no prior version tracked)."
 
@@ -203,17 +207,23 @@ types:
         summary: "- I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004"
       "012":
         summary: >
-          - DerivedChannels[]: derived.channel.gt:000 -> 001
+          - DerivedChannels[]: derived.channel.gt:000 | 001 -> 001
           - DataChannels[]: data.channel.gt:001 -> 002
-          - ShNodes[]: spaceheat.node.gt:300 -> 301
           - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> 003
-          - I2cRelayComponent: optional (was required)
+          - ShNodes[]: spaceheat.node.gt:300 | 301 -> 301
       "011":
-        summary: "- Ha1Params: ha1.params:005 -> 006"
+        summary: >
+          - Ha1Params: ha1.params: 005 -> 006
+          - DerivedChannels: derived.channel.gt:000 -> 000 | 001
       "010":
-        summary: "- Ha1Params: ha1.params:004 -> 005"
+        summary: >
+          - Ha1Params: ha1.params:004 | 005 -> 005
+          - ShNodes[]: spaceheat.node.gt:300 -> 300 | 301
+          - I2cRelayComponent: required -> optional
       "009":
-        summary: "- BufferShortCycling: add"
+        summary: >
+          - BufferShortCycling: add
+          - Ha1Params: 004 -> 004 | 005
       "008":
         summary: >
           - SystemMode: add
@@ -297,7 +307,9 @@ types:
     versioning_strategy: "literal"
     versions:
       "003":
-        summary: "- Report: report:002 -> 003"
+        summary: >
+          - Report: report:002 -> 003
+          - Removed (accidentally) former axioms 1 and 2
       "002":
         summary: "Baseline runtime version (no prior version tracked)."
 
