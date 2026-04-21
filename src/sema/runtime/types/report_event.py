@@ -36,5 +36,5 @@ class ReportEvent(SemaType):
     @model_validator(mode="after")
     def check_axiom_3(self) -> "ReportEvent":
         if self.src != self.report.from_g_node_alias:
-            raise ValueError("Axiom 3 failed: src must equal report.from_g_node_alias.")
+            raise ValueError(f"Axiom 3 failed: src {self.src} must equal report.from_g_node_alias {self.report.from_g_node_alias}.")
         return self
