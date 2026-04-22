@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/layout.lite/011"
+$id: "https://schemas.electricity.works/types/layout.lite/009"
 
 title: "layout.lite"
 type: object
@@ -71,9 +71,7 @@ properties:
   ShNodes:
     type: array
     items:
-      oneOf:
-        - $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/300"
-        - $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/301"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/300"
     description: >
       Spaceheat nodes available in the running SCADA context.
 
@@ -88,9 +86,7 @@ properties:
   DerivedChannels:
     type: array
     items:
-      oneOf:
-      - $ref: "https://schemas.electricity.works/types/derived.channel.gt/000"
-      - $ref: "https://schemas.electricity.works/types/derived.channel.gt/001"
+      $ref: "https://schemas.electricity.works/types/derived.channel.gt/000"
     description: >
       Derived telemetry channel definitions used to interpret derived channel
       names appearing in reports and snapshots.
@@ -112,14 +108,16 @@ properties:
       Flow module components present in the running deployment.
 
   Ha1Params:
-    $ref: "https://schemas.electricity.works/types/ha1.params/006"
+    oneOf:
+      - $ref: "https://schemas.electricity.works/types/ha1.params/004"
+      - $ref: "https://schemas.electricity.works/types/ha1.params/005"
     description: >
       Active HA1 parameter set used by the running deployment.
 
   I2cRelayComponent:
     $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002"
     description: >
-      Optional relay component configuration used by the running deployment.
+      Relay component configuration used by the running deployment.
 
   TMap:
     $ref: "https://schemas.electricity.works/types/gw1.tank.temp.calibration.map/000"
@@ -130,7 +128,7 @@ properties:
     const: "layout.lite"
 
   Version:
-    const: "011"
+    const: "009"
 
 required:
   - FromGNodeAlias
@@ -149,6 +147,7 @@ required:
   - TankModuleComponents
   - FlowModuleComponents
   - Ha1Params
+  - I2cRelayComponent
   - TypeName
   - Version
 

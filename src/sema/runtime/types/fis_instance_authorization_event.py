@@ -1,11 +1,9 @@
 from typing import Literal
 
 from sema.runtime.base import SemaType
-from sema.runtime.enums import (
-    GNodeInstanceTransport,
-    FisAuthorizationDecision,
-    FisAuthorizationReason,
-)
+from sema.runtime.enums.fis_authorization_decision import FisAuthorizationDecision
+from sema.runtime.enums.fis_authorization_reason import FisAuthorizationReason
+from sema.runtime.enums.g_node_instance_transport import GNodeInstanceTransport
 from sema.runtime.property_format import (
     UUID4Str,
     LeftRightDot,

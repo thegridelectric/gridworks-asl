@@ -1,10 +1,11 @@
 from pydantic import StrictInt
 
 from sema.runtime.base import SemaType
+from sema.runtime.types.ha1_params import Ha1Params as Ha1Params006
 
 
-class Ha1Params(SemaType):
-    """Sema: https://schemas.electricity.works/types/ha1.params/006"""
+class Ha1Params005(SemaType):
+    """Sema: https://schemas.electricity.works/types/ha1.params/005"""
 
     alpha_times10: StrictInt
     beta_times100: StrictInt
@@ -14,8 +15,7 @@ class Ha1Params(SemaType):
     dd_power_kw: float
     dd_rswt_f: StrictInt
     dd_delta_t_f: StrictInt
-    hp_max_kw_el: float | None = None
-    hp_max_kw_th: float | None = None
+    hp_max_kw_th: float
     max_ewt_f: StrictInt
     load_overestimation_percent: StrictInt
     cop_intercept: float | None = None
@@ -23,6 +23,17 @@ class Ha1Params(SemaType):
     cop_lwt_coeff: float | None = None
     cop_min: float | None = None
     cop_min_oat_f: float | None = None
-    hp_turn_on_minutes: StrictInt = 12
     type_name: str = "ha1.params"
-    version: str = "006"
+    version: str = "005"
+
+    def upgrade(self) -> Ha1Params006:
+        """
+        005 -> 006:
+        - HpMaxKwEl: add as optional
+        - HpMaxKwTh: required -> optional
+        - HpTurnOnMinutes: add
+        """
+        data = self.model_dump()
+        data["hp_turn_on_minutes"] = 12
+        data["version"] = "006"
+        return Ha1Params006.model_validate(data)

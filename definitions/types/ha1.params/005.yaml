@@ -109,11 +109,6 @@ required:
   - HpMaxKwTh
   - MaxEwtF
   - LoadOverestimationPercent
-  - CopIntercept
-  - CopOatCoeff
-  - CopLwtCoeff
-  - CopMin
-  - CopMinOatF
   - TypeName
   - Version
 

@@ -3,53 +3,48 @@ from typing import Literal
 from pydantic import model_validator
 
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode
-from sema.runtime.enums.gw1_system_mode import Gw1SystemMode
 from sema.runtime.property_format import (
     LeftRightDot,
     PositiveInt,
     UTCMilliseconds,
     UUID4Str,
 )
-from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
-from sema.runtime.types.ha1_params import Ha1Params
-from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
-    I2cMultichannelDtRelayComponentGt,
+from sema.runtime.types.old_versions.ha1_params_004 import Ha1Params004
+from sema.runtime.types.old_versions.data_channel_gt_001 import DataChannelGt001
+from sema.runtime.types.old_versions.derived_channel_gt_000 import DerivedChannelGt000
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
+    I2cMultichannelDtRelayComponentGt002,
 )
-from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
+from sema.runtime.types.old_versions.layout_lite_008 import LayoutLite008
+from sema.runtime.types.old_versions.spaceheat_node_gt_200 import SpaceheatNodeGt200
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
-from sema.runtime.types.sim_pico_tank_module_component_gt import SimPicoTankModuleComponentGt
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 
 
-class LayoutLite(SemaType):
-    """Sema: https://schemas.electricity.works/types/layout.lite/013"""
+class LayoutLite007(SemaType):
+    """Sema: https://schemas.electricity.works/types/layout.lite/007"""
 
     from_g_node_alias: LeftRightDot
     message_created_ms: UTCMilliseconds
     message_id: UUID4Str
     strategy: str
-    system_mode: Gw1SystemMode
-    seasonal_storage_mode: Gw1SeasonalStorageMode
-    buffer_short_cycling: bool
     zone_list: list[str]
     critical_zone_list: list[str]
     total_store_tanks: PositiveInt
-    sh_nodes: list[SpaceheatNodeGt]
-    data_channels: list[DataChannelGt]
-    derived_channels: list[DerivedChannelGt001]
-    tank_module_components: list[PicoTankModuleComponentGt | SimPicoTankModuleComponentGt]
+    sh_nodes: list[SpaceheatNodeGt200]
+    data_channels: list[DataChannelGt001]
+    derived_channels: list[DerivedChannelGt000]
+    tank_module_components: list[PicoTankModuleComponentGt]
     flow_module_components: list[PicoFlowModuleComponentGt]
-    ha1_params: Ha1Params
-    i2c_relay_component: I2cMultichannelDtRelayComponentGt | None = None
+    ha1_params: Ha1Params004
+    i2c_relay_component: I2cMultichannelDtRelayComponentGt002
     t_map: Gw1TankTempCalibrationMap | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
-    version: Literal["013"] = "013"
+    version: Literal["007"] = "007"
 
     @model_validator(mode="after")
-    def check_axiom_1(self) -> "LayoutLite":
+    def check_axiom_1(self) -> "LayoutLite007":
         """
         Axiom 1: DcNodeConsistency.
         Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName
@@ -67,7 +62,7 @@ class LayoutLite(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_2(self) -> "LayoutLite":
+    def check_axiom_2(self) -> "LayoutLite007":
         """
         Axiom 2: NodeHandleHierarchyConsistency.
         Every ShNode with a dotted handle SHALL have its immediate boss present
@@ -82,7 +77,7 @@ class LayoutLite(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_3(self) -> "LayoutLite":
+    def check_axiom_3(self) -> "LayoutLite007":
         """
         Axiom 3: CriticalZoneSubset.
         CriticalZoneList SHALL be a subset of ZoneList.
@@ -91,16 +86,17 @@ class LayoutLite(SemaType):
             raise ValueError("Axiom 3 failed: critical_zone_list must be a subset of zone_list.")
         return self
 
-    @model_validator(mode="after")
-    def check_axiom_4(self) -> "LayoutLite":
+
+    def upgrade(self) -> LayoutLite008:
         """
-        Axiom 4: DerivedNodeConsistency.
-        Every DerivedChannels.CreatedByNodeName SHALL reference an existing
-        ShNodes.Name whose ActorClass is active.
+        007 -> 008:
+        - SystemMode: add
+        - SeasonalStorageMode: add
+        - TankModuleComponents[]: pico.tank.module.component.gt only -> pico.tank.module.component.gt | sim.pico.tank.module.component.gt
+        - Axiom 4 (DerivedNodeConsistency): add
         """
-        nodes = {node.name: node for node in self.sh_nodes}
-        for channel in self.derived_channels:
-            created_by = nodes.get(channel.created_by_node_name)
-            if created_by is None or str(created_by.actor_class) == "NoActor":
-                raise ValueError("Axiom 4 failed: derived channel created_by_node_name must reference an active node.")
-        return self
+        data = self.model_dump()
+        data["system_mode"] = "Heating"
+        data["seasonal_storage_mode"] = "AllTanks"
+        data["version"] = "008"
+        return LayoutLite008.model_validate(data)

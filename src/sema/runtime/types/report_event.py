@@ -17,19 +17,22 @@ class ReportEvent(SemaType):
     type_name: Literal["report.event"] = "report.event"
     version: Literal["003"] = "003"
 
-    @model_validator(mode="after")
-    def check_axiom_1(self) -> "ReportEvent":
-        if self.message_id != self.report.id:
-            raise ValueError(f"Axiom 1 failed: message_id {self.message_id} must equal report.id {self.report.id}.")
-        return self
+    # TODO reinstate these in the next version once we have fixed the Spruce SCADA code to follow them. See OPS-329.
+    #
+    # @model_validator(mode="after")
+    # def check_axiom_1(self) -> "ReportEvent":
+    #     if self.message_id != self.report.id:
+    #         raise ValueError(f"Axiom 1 failed: message_id {self.message_id} must equal report.id {self.report.id}.")
+    #     return self
 
-    @model_validator(mode="after")
-    def check_axiom_2(self) -> "ReportEvent":
-        if self.time_created_ms != self.report.message_created_ms:
-            raise ValueError(
-                f"Axiom 2 failed: time_created_ms {self.time_created_ms} equal report.message_created_ms {self.report.message_created_ms}."
-            )
-        return self
+    # @model_validator(mode="after")
+    # def check_axiom_2(self) -> "ReportEvent":
+    #     if self.time_created_ms != self.report.message_created_ms:
+    #         raise ValueError(
+    #             f"Axiom 2 failed: time_created_ms {self.time_created_ms} equal report.message_created_ms {self.report.message_created_ms}."
+    #         )
+    #     return self
+
 
     @model_validator(mode="after")
     def check_axiom_3(self) -> "ReportEvent":
