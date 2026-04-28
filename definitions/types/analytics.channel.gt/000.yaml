@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/analytics.channel.gt/000"
+$id: "https://schemas.electricity.works/draft/types/analytics.channel.gt/000"
 
 title: "analytics.channel.gt"
 type: object
@@ -60,7 +60,6 @@ properties:
 
   Parameters:
     type: object
-    additionalProperties: true
     description: >
       Optional strategy-specific configuration.
 

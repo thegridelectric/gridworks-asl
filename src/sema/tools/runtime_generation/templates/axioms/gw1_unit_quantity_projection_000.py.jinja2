@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw1_unit_quantity_projection_000_class_name }}":
+        """
+        Axiom 1: EnumeratedProjectionMapping
+        Every (Unit, Quantity) pair SHALL match the mapping declared in
+        x-gridworks.projection.table. Any combination not present in the table is invalid.
+        """
+        expected = self.project(self.unit)
+        if expected != self.quantity:
+            raise ValueError(
+                "Axiom 1 failed: unit and quantity do not match the enumerated projection."
+            )
+        return self

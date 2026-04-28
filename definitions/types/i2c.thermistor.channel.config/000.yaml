@@ -45,12 +45,7 @@ properties:
     $ref: "https://schemas.electricity.works/enums/spaceheat.unit/001"
 
   AdcChannel:
-    type: string
-    enum:
-      - "P0"
-      - "P1"
-      - "P2"
-      - "P3"
+    $ref: "https://schemas.electricity.works/enums/i2c.adc.channel/000"
     description: >
       ADC input pin used for this thermistor channel.
 
@@ -80,6 +75,7 @@ required:
   - Exponent
   - Unit
   - AdcChannel
+  - SendToDerived
   - ThermistorBeta
   - TypeName
   - Version

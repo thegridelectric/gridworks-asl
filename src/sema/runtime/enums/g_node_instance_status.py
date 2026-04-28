@@ -1,13 +1,10 @@
 from enum import auto
-from typing import List
 
 from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
 class GNodeInstanceStatus(SemaEnum):
-    """
-    Sema: https://schemas.electricity.works/enums/g.node.instance.status/000
-    """
+    """Sema: https://schemas.electricity.works/enums/g.node.instance.status/000"""
 
     Active = auto()
     Revoked = auto()
@@ -18,7 +15,7 @@ class GNodeInstanceStatus(SemaEnum):
         return cls.Active
 
     @classmethod
-    def values(cls) -> List[str]:
+    def values(cls) -> list[str]:
         return [elt.value for elt in cls]
 
     @classmethod

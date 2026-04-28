@@ -1,0 +1,13 @@
+    def upgrade(self) -> {{ scada_control_capabilities_001_class_name }}:
+        """
+        - RelayNodes[]: inline object -> spaceheat.node.gt:300
+        - DacNodes[]: inline object -> spaceheat.node.gt:300
+        - ControlChannels[]: inline object -> data.channel.gt:001
+        - Axioms: add control surface consistency checks
+        """
+        raise ValueError(
+            "{{ scada_control_capabilities_000_class_name }} cannot be upgraded to "
+            "{{ scada_control_capabilities_001_class_name }} without the source "
+            "layout context needed to supply SpaceheatNodeGt.Handle, "
+            "SpaceheatNodeGt.ShNodeId, DataChannelGt.Id, and related channel fields."
+        )

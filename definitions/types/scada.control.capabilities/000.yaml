@@ -41,7 +41,7 @@ properties:
         ActorClass:
           $ref: "https://schemas.electricity.works/enums/gw1.actor.class/009"
           description: >
-            Actor class of the node. SHALL be Relay.
+            Actor class of the node.
         DisplayName:
           type: string
           description: >
@@ -68,7 +68,7 @@ properties:
         ActorClass:
           $ref: "https://schemas.electricity.works/enums/gw1.actor.class/009"
           description: >
-            Actor class of the node. SHALL be ZeroTenOutputer.
+            Actor class of the node.
         DisplayName:
           type: string
           description: >
@@ -131,41 +131,3 @@ additionalProperties: false
 x-gridworks:
   owner: "gridworks-energy"
 
-  axioms:
-    - number: 1
-      name: "RelayNodeClassConsistency"
-      statement: >
-        All nodes in RelayNodes SHALL have ActorClass equal to Relay.
-
-    - number: 2
-      name: "DacNodeClassConsistency"
-      statement: >
-        All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.
-
-    - number: 3
-      name: "UniqueRelayNodeNames"
-      statement: >
-        Name values in RelayNodes SHALL be unique.
-
-    - number: 4
-      name: "UniqueDacNodeNames"
-      statement: >
-        Name values in DacNodes SHALL be unique.
-
-    - number: 5
-      name: "UniqueControlChannelAboutNames"
-      statement: >
-        AboutNodeName values in ControlChannels SHALL be unique.
-
-    - number: 6
-      name: "ControlNodeChannelBijection"
-      statement: >
-        The set of node names defined by the union of RelayNodes.Name
-        and DacNodes.Name SHALL equal exactly the set of
-        ControlChannels.AboutNodeName values.
-
-    - number: 7
-      name: "RelayConfigNodeBijection"
-      statement: >
-        The set of ActorName values in I2cRelayComponent.ConfigList
-        SHALL equal exactly the set of RelayNodes.Name values.

@@ -6,7 +6,7 @@ import yaml
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-REGISTRY_PATH = REPO_ROOT / "definitions" / "registry.yaml"
+REGISTRY_PATH = REPO_ROOT / "indexes" / "public_registry.yaml"
 RUNTIME_TYPES_DIR = REPO_ROOT / "src" / "sema" / "runtime" / "types"
 
 

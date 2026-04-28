@@ -9,7 +9,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 ENUMS_DIR = REPO_ROOT / "definitions" / "enums"
 ENUM_NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:[.-][a-z0-9]+)*$")
 ENUM_ID_PATTERN = re.compile(
-    r"^https://schemas\.electricity\.works/enums/(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)/(?P<version>\d{3})$"
+    r"^https://schemas\.electricity\.works/(?:draft/)?enums/"
+    r"(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)/(?P<version>\d{3})$"
 )
 ALLOWED_TOP_LEVEL_KEYS = {
     "$schema",

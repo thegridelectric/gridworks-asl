@@ -1,10 +1,9 @@
 from typing import Literal
-
 from pydantic import ConfigDict, StrictInt, model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.temp_calc_method import TempCalcMethod
-from sema.runtime.property_format import PositiveInt, UUID4Str
+from sema.runtime.enums import TempCalcMethod
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.channel_config import ChannelConfig
 
 
@@ -32,15 +31,15 @@ class PicoTankModuleComponentGt(SemaType):
     type_name: Literal["pico.tank.module.component.gt"] = "pico.tank.module.component.gt"
     version: Literal["011"] = "011"
 
-    model_config = ConfigDict(
-        alias_generator=SemaType.model_config.get("alias_generator"),
-        frozen=True,
-        populate_by_name=True,
-        extra="allow",
-    )
+    model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "PicoTankModuleComponentGt":
+        """
+        Axiom 1: PicoHardwareIdentityXor
+        Exactly one of the following SHALL hold: - PicoHwUid is present - both PicoAHwUid and
+        PicoBHwUid are present
+        """
         has_single = self.pico_hw_uid is not None
         has_pair = self.pico_a_hw_uid is not None and self.pico_b_hw_uid is not None
         if has_single == has_pair:
@@ -51,6 +50,10 @@ class PicoTankModuleComponentGt(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "PicoTankModuleComponentGt":
+        """
+        Axiom 2: PicoKOhmsConsistency
+        PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
+        """
         if (self.temp_calc_method == TempCalcMethod.SimpleBetaForPico) != (
             self.pico_k_ohms is not None
         ):
@@ -61,6 +64,10 @@ class PicoTankModuleComponentGt(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_3(self) -> "PicoTankModuleComponentGt":
+        """
+        Axiom 3: SensorOrderPermutation
+        If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
+        """
         if self.sensor_order is not None and sorted(self.sensor_order) != [1, 2, 3]:
             raise ValueError(
                 "Axiom 3 failed: sensor_order must be a permutation of [1, 2, 3]."

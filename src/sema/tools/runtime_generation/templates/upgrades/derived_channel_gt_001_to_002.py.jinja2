@@ -1,0 +1,19 @@
+    def upgrade(self) -> {{ derived_channel_gt_002_class_name }}:
+        """
+        - OutputUnit: required
+        - OutputQuantity: add
+        - OutputUnitQuantityConsistency axiom: add
+        """
+        data = self.model_dump()
+
+        if self.output_unit is None:
+            data["output_unit"] = "Unknown"
+            data["output_quantity"] = {{ gw1_quantity_001_class_name }}.Unknown
+        else:
+            data["output_unit"] = self.output_unit.value
+            data["output_quantity"] = {{ gw1_unit_quantity_projection_000_class_name }}.project(
+                {{ gw1_unit_001_class_name }}(self.output_unit.value)
+            )
+
+        data["version"] = "002"
+        return {{ derived_channel_gt_002_class_name }}.model_validate(data)

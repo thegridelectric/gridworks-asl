@@ -1,0 +1,16 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ single_machine_state_000_class_name }}":
+        """
+        Axiom 1: RecognizedStateEnumConsistency
+        If StateEnum equals "relay.closed.or.open", then State SHALL equal "RelayClosed" or
+        "RelayOpen". More generally, if StateEnum is a recognized GridWorks enum, then State
+        SHALL be a valid value of that enum.
+        """
+        if (
+            self.state_enum == "relay.closed.or.open"
+            and self.state not in {{ relay_closed_or_open_000_class_name }}.values()
+        ):
+            raise ValueError(
+                "Axiom 1 failed: state must be a valid relay.closed.or.open value."
+            )
+        return self

@@ -1,13 +1,13 @@
 import argparse
 import sys
 
-from sema.interfaces.cli import reverse, seed
+from sema.interfaces.cli import reverse, runtime, snapshot
 
 
 def _run_info(_: argparse.Namespace) -> None:
     print("Sema CLI")
     print("Interface: textual")
-    print("Subcommands: reverse, seed, info")
+    print("Subcommands: reverse, runtime, snapshot, info")
     print("Use `uv run sema reverse --help` for reverse dependency examples.")
 
 
@@ -16,7 +16,8 @@ def main() -> None:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     reverse.add_parser(subparsers)
-    seed.add_parser(subparsers)
+    runtime.add_parser(subparsers)
+    snapshot.add_parser(subparsers)
 
     info_parser = subparsers.add_parser("info")
     info_parser.set_defaults(handler=_run_info)

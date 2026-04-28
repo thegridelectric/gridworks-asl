@@ -1,7 +1,8 @@
 from typing import Literal
-
+from pydantic import ConfigDict
 from sema.runtime.base import SemaType
-from sema.runtime.property_format import SpaceheatName, UUID4Str
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.fsm_atomic_report import FsmAtomicReport
 
 
@@ -14,5 +15,4 @@ class FsmFullReport(SemaType):
     type_name: Literal["fsm.full.report"] = "fsm.full.report"
     version: Literal["001"] = "001"
 
-    model_config = dict(SemaType.model_config)
-    model_config["extra"] = "allow"
+    model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))

@@ -193,14 +193,62 @@ Example:
 
 ### Registry Status Field
 
-Registry entries (formats, enu8ms, types) MAY include a `status` field indicating lifecycle state.
+Registry entries MAY include a `status` field indicating publication lifecycle state.
 
 Allowed values:
-- `"draft"`: type is under active development and not yet stable
-- `"active"`: type is stable and intended for production use (default if omitted)
-- `"deprecated"`: type is no longer recommended for new use
+- `"draft"`: the vocabulary definition is under active development, mutable, and not published
+- `"active"`: the vocabulary definition is stable, published or publishable, and immutable according to this specification
 
-If `status` is omitted, it SHALL be interpreted as `"active"`.
+For versionless vocabulary words, including formats and versionless types, `status` MAY appear on the word entry. If omitted, it SHALL be interpreted as `"active"`.
+
+For versioned enums and versioned types, `status` applies to individual version entries under `versions`. If omitted from a version entry, it SHALL be interpreted as `"active"`.
+
+A versioned enum or type MAY have both active and draft versions at the same time. In that case:
+
+- `latest_version` SHALL identify the latest active version
+- draft versions SHALL NOT be selected by `latest_version`
+- draft versions MAY be numerically greater than `latest_version`
+- tooling MAY expose draft versions only when explicitly requested
+
+Draft definitions MAY appear in the working registry and in local schema files. Draft definitions SHALL NOT be published to `https://schemas.electricity.works` and SHALL be excluded from public schema indexes, public schema pages, and default public schema serving.
+
+For draft definitions, `created` records the time the draft entry was first added to the working registry. When a draft definition is promoted to active, `created` SHALL be updated to the activation or publication timestamp. From that point forward, `created` is governed by the immutability rules for active definitions.
+
+If a draft schema file appears under `definitions/`, it SHALL remain parseable YAML and SHALL use the normal Sema schema file layout. Draft status relaxes immutability and may relax completeness checks defined by tooling, but it does not permit malformed schema files.
+
+### `replaced_by` Field
+
+Registry word entries MAY include a `replaced_by` field as advisory metadata.
+
+`replaced_by`:
+
+- SHALL appear only on a vocabulary word entry, not on a version entry
+- SHALL reference one or more vocabulary word names
+- SHALL NOT include version suffixes
+- SHALL NOT include URL prefixes or file paths
+- SHALL reference existing words in the registry
+
+Example:
+
+```yaml
+old.word:
+  owner: gridworks-energy
+  replaced_by:
+    - new.word
+```
+
+`replaced_by` is a hint for humans, documentation, migration tooling, and AI-assisted review. It does not create a lifecycle state.
+
+Specifically, `replaced_by`:
+
+- does not invalidate the current word or any version of it
+- does not affect schema validation
+- does not affect dependency closure
+- does not affect version ordering
+- does not affect `latest_version`
+- does not imply semantic equivalence
+- does not create an automatic upgrade or migration path
+- does not alter immutability requirements for published definitions
 
 
 ### Registry Format Entries
@@ -379,6 +427,7 @@ A versioned type entry SHALL include the following fields:
 
   versions:
     "<version>":
+      status: "active" | "draft" # optional; default active
       schema_url: "https://schemas.electricity.works/types/<type-name>/<version>"
       created: "<RFC 3339 timestamp>"
       summary: "<concise description of change>"
@@ -394,13 +443,15 @@ A versioned type entry SHALL include the following fields:
 **Field Requirements**
 
   - `latest_version` 
-    - SHALL equal the highest version listed under `versions`
+    - SHALL equal the highest active version listed under `versions`
+    - SHALL NOT identify a draft version
 
   - `owner` 
     - SHALL reference a valid owner identifier defined in `owners.yaml`
 
   - `versions`
-    - SHALL contain an entry for each published version of the type
+    - SHALL contain an entry for each published active version of the type
+    - MAY contain draft version entries
     - SHALL be keyed by version string
     - SHALL be listed in decreasing order by version
     - The keys of `versions` SHALL match the `<version>` values used within each entry
@@ -411,6 +462,11 @@ Each entry under `versions` SHALL include:
 
 - `schema_url`
   - SHALL uniquely identify the schema for that version
+
+- `status`
+  - MAY appear
+  - SHALL be `"active"` or `"draft"` if present
+  - SHALL be interpreted as `"active"` if omitted
 
 - `created`
   - SHALL be an RFC 3339 timestamp with seconds precision in UTC (e.g. `YYYY-MM-DDTHH:mm:ssZ`)
@@ -1184,7 +1240,105 @@ Property descriptions are **strongly recommended** but not required. If provided
 
 Over time, high-value types SHOULD include complete property descriptions.
 
-Type properties MAY use any applicable JSON Schema validation keywords (e.g., minLength, maxLength, minimum, pattern, minItems) provided they do not contradict declared axioms.
+Optional properties SHALL NOT declare `default`. If a property needs a default
+value, it SHALL be listed in `required`; otherwise the default SHALL be
+removed and absence SHALL remain absence.
+
+Sema does not use JSON Schema `default` as a semantic mechanism. Default
+values for type properties MUST NOT be relied upon for validation or
+interpretation and are instead applied explicitly by runtime implementations,
+such as during version upgrade or decoding. When introducing new required
+properties in a type version, the upgrade path MUST define how values are
+assigned. Optional properties MUST NOT encode implicit default behavior. Enum
+defaults remain the sole schema-level default mechanism and MUST be stable
+across versions.
+
+#### Primitive Constraint Rule
+
+Sema schemas SHALL NOT express primitive value constraints directly using JSON
+Schema keywords such as `minimum`, `maximum`, `exclusiveMinimum`,
+`exclusiveMaximum`, `pattern`, `minLength`, `maxLength`, or similar
+constraint-bearing constructs. All such constraints MUST be represented
+through named Sema formats, which serve as the canonical, reusable, and
+version-stable carriers of primitive semantics.
+
+JSON Schema within Sema type and enum schemas is restricted to structural
+description and reference (`type`, `$ref`, `required`, `additionalProperties`,
+and similar structural keywords) and MUST NOT be used to introduce new semantic
+meaning at the field level. If a constraint on a primitive value is required,
+it MUST be defined as a format and referenced via `$ref`. This ensures that all
+primitive semantics are explicit, reusable, and consistently enforced across
+languages and implementations.
+
+#### Composition Rule
+
+Type schemas MAY use `oneOf` only to express a closed union of registered Sema
+vocabulary references. Each `oneOf` branch SHALL be an object containing
+exactly one `$ref`, and that `$ref` SHALL reference either
+`https://schemas.electricity.works/types/...` or
+`https://schemas.electricity.works/enums/...`.
+
+Type schemas SHALL NOT use `oneOf` with inline schemas, primitive schemas,
+`const`, `enum`, formats, or constraint-bearing JSON Schema constructs. Type
+schemas SHALL NOT define inline enums with the JSON Schema `enum` keyword; such
+values SHALL be promoted to a named Sema enum and referenced with `$ref`.
+
+#### Const Usage Rule
+
+The JSON Schema keyword `const` SHALL be used only to declare fixed identity
+values within Sema types.
+
+Specifically, `const` is permitted only for:
+
+- `TypeName`
+- `Version`
+- Fields that explicitly encode the identity of a Sema vocabulary element
+  (e.g. `<Relation>TypeName` and `<Relation>Version` pairs that refer to
+  another Sema type)
+
+`const` MUST NOT be used to express constraints on ordinary data fields,
+including numeric, boolean, or string values (e.g. `NumPhases = 3`,
+`Enabled = true`). Such constraints MUST be represented using Sema formats,
+enums, or types, or enforced through runtime logic where appropriate.
+
+If a value is invariant across all instances of a type, it SHOULD NOT be
+modeled as a data field. Instead, it SHOULD either be omitted or encoded as
+part of the type's identity.
+
+#### Inline Object Properties
+
+Type schemas MAY include inline object definitions, but only as semantically inert structural groupings.
+
+An **inline object** is any schema node below the top-level named type schema that:
+
+- declares `type: object`
+- declares `properties`
+- is not a `$ref` to a registered Sema type
+
+Inline objects exist to group fields locally within a containing type. They do not define reusable vocabulary, semantic subtypes, or independently meaningful boundary contracts. If a nested object carries meaning that affects validation, composition, interoperability, axioms, or code generation beyond its containing field structure, it SHALL be promoted to a named Sema type and referenced with `$ref`.
+
+Inline objects SHALL NOT contain semantic JSON Schema constructs, including:
+
+- `const`
+- `enum`
+- `oneOf`
+- `anyOf`
+- `allOf`
+
+Inline object properties SHALL NOT reference Sema types. A `$ref` from within an inline object MAY reference formats or enums when needed for primitive or enumerated field validation, but SHALL NOT reference `https://schemas.electricity.works/types/...`.
+
+Inline objects SHALL NOT be referenced by axioms. Axioms for the containing type SHALL NOT normatively refer to fields defined only inside an inline object. If an invariant needs to name or constrain nested fields, the nested object SHALL be promoted to a named Sema type and the axiom SHALL be attached to that named type or to the containing type through the referenced type boundary.
+
+Inline object descriptions, and descriptions of fields within inline objects, SHALL remain structural and non-normative. They SHALL NOT include normative or semantic constraint language such as `SHALL`, `MUST`, `only`, or `exactly`.
+
+Inline objects MAY use ordinary structural JSON Schema keywords needed to define local shape, such as:
+
+- `properties`
+- `required`
+- `additionalProperties`
+- primitive `type`
+
+These permissions do not allow inline objects to carry semantic constraints. When the distinction is ambiguous, schema authors SHALL promote the object to a named Sema type.
 
 #### Referencing Other Vocabulary
 
@@ -1281,7 +1435,76 @@ x-gridworks:
 
 Optional fields include `axioms` and `extended_description`.
 
-Within x-gridworks, fields SHALL appear in the following order when present: owner, supersedes (if applicable), axioms (if any), extended_description (if any).
+Within x-gridworks, fields SHALL appear in the following order when present: owner, supersedes (if applicable), projection (if any), axioms (if any), extended_description (if any).
+
+#### Projections
+
+A projection is a structural declaration of a deterministic mapping between
+two enum-valued properties of a type. When present, it SHALL appear under
+`x-gridworks.projection`.
+
+A projection declares:
+- A source property (`from`) whose value is constrained to an enum
+- A target property (`to`) whose value is constrained to an enum
+- An exhaustive `table` mapping every value of the source enum to a value
+  of the target enum
+
+A type SHALL declare at most one projection.
+
+**Structure**
+
+x-gridworks:
+  projection:
+    from: <PropertyName>
+    to: <PropertyName>
+    table:
+      <SourceEnumValue>: <TargetEnumValue>
+      ...
+
+**Field Requirements**
+
+- `from`
+  - SHALL be the name of a property declared in `properties`
+  - The named property SHALL reference a Sema enum via `$ref`
+
+- `to`
+  - SHALL be the name of a property declared in `properties`
+  - The named property SHALL reference a Sema enum via `$ref`
+  - SHALL NOT equal `from`
+
+- `table`
+  - SHALL contain one entry for every value of the source enum (totality)
+  - Each value SHALL be a declared value of the target enum
+  - Keys SHALL be unique
+
+The source and target enums are identified through the `$ref` of the named
+properties. They appear in `direct_dependencies.structural` by virtue of those
+property references and SHALL NOT be redeclared as axiom dependencies.
+
+**Semantics**
+
+A projection establishes a structural invariant: for any valid instance of the
+type, the value of the target property SHALL equal the value associated with
+the value of the source property in `table`.
+
+A type that declares a projection SHALL also declare an axiom that references
+the projection table. The axiom SHALL NOT restate the table inline. This
+ensures the mapping has a single authoritative representation.
+
+**Evolution**
+
+When the source enum adds a value, totality requires the projection table to
+be extended. Such an extension SHALL be expressed through a new version of the
+projection type. Entries present in prior versions SHALL NOT be modified or
+removed in subsequent versions.
+
+**SDK Implementations**
+
+SDK implementations of a type that declares a projection SHOULD provide an
+accessor that returns the target value for a given source value, derived from
+`table`. Such accessors are non-serialized extensions as defined in *SDK
+Implementations and Non-Serialized Extensions* and SHALL NOT alter the
+serialized contract.
 
 
 #### Axioms
@@ -1315,6 +1538,56 @@ x-gridworks:
     - number: 2
       name: "ListLengthConsistency"
       statement: "len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList)."
+
+**Axiom Clause Labels and Counterexamples**
+
+An axiom statement may contain one or more independently testable validation
+obligations. If an axiom requires multiple distinct negative examples, those
+obligations SHALL be enumerated within the statement using lowercase labels
+`a.`, `b.`, `c.`, and so on.
+
+Clause labels are test and code-generation aids. They do not create separate
+axioms, alter axiom numbering, or change version semantics. The axiom remains
+identified by its `number` and `name`.
+
+Clause labels SHALL be used only when each labeled clause corresponds to a
+distinct counterexample obligation. Explanatory text SHALL NOT be labeled. If
+multiple checks can be naturally expressed as one validation condition, the
+axiom SHOULD remain a single unlabeled clause.
+
+For runtime validation tests, counterexample fixtures SHOULD follow this
+naming convention:
+
+```text
+axiom_<number>.json
+```
+
+for a single-clause axiom, and:
+
+```text
+axiom_<number>_<label>.json
+```
+
+for a multi-clause axiom, where `<label>` is the lowercase clause label.
+
+Example:
+
+```yaml
+x-gridworks:
+  axioms:
+    - number: 1
+      name: "ClassConsistency"
+      statement: >
+        a. If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass.
+        b. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
+```
+
+The corresponding negative examples SHOULD be named:
+
+```text
+axiom_1_a.json
+axiom_1_b.json
+```
 
 SDK implementations SHOULD provide one validation function per axiom.
 In the Python SDK, validator functions SHALL be named:
@@ -1524,7 +1797,7 @@ properties:
       Start time of the reporting period in Unix seconds.
 
   SlotDurationS:
-    type: integer
+    "https://schemas.electricity.works/formats/positive.int"
     minimum: 1
     description: >
       Duration of the reporting slot in seconds.

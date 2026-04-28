@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/fis.instance.authorization.event/000"
+$id: "https://schemas.electricity.works/draft/types/fis.instance.authorization.event/000"
 
 title: "fis.instance.authorization.event"
 type: object

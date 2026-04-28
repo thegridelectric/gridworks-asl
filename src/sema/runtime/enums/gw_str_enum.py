@@ -33,6 +33,25 @@ class GwStrEnum(StrEnum):
         return [str(elt) for elt in cls]
 
     @classmethod
+    def _init_index_maps(cls) -> None:
+        if hasattr(cls, "_index_to_value"):
+            return
+
+        values = [m.value for m in cls]
+        cls._index_to_value = values
+        cls._value_to_index = {v: i for i, v in enumerate(values)}
+
+    @classmethod
+    def to_index(cls, value: str) -> int:
+        cls._init_index_maps()
+        return cls._value_to_index[value]
+
+    @classmethod
+    def from_index(cls, idx: int) -> str:
+        cls._init_index_maps()
+        return cls._index_to_value[idx]
+
+    @classmethod
     def default(cls) -> Self | None:
         return None
 
@@ -42,7 +61,6 @@ class GwStrEnum(StrEnum):
         if default is None:
             raise ValueError(f"'{value}' is not valid {cls.__name__}")
         return default
-
 
 class SemaEnum(GwStrEnum):
     """
@@ -63,6 +81,8 @@ class SemaEnum(GwStrEnum):
         raise NotImplementedError(
             f"{cls.__name__} must implement enum_name() for Sema"
         )
+
+
 class SymbolizedEnum(SemaEnum):
     @classmethod
     def symbol_to_value(cls, symbol: str) -> str:

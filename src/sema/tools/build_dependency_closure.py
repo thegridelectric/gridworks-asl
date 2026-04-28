@@ -5,10 +5,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[3]
-REGISTRY_PATH = ROOT / "definitions" / "registry.yaml"
+REGISTRY_PATH = ROOT / "indexes" / "public_registry.yaml"
 OUTPUT_PATH = ROOT / "indexes" / "dependency_closure.yaml"
 HEADER = """# GENERATED FILE — DO NOT EDIT
-# Generated from definitions/registry.yaml
+# Generated from indexes/public_registry.yaml
 """
 
 

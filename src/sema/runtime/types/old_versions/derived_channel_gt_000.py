@@ -1,9 +1,10 @@
-from typing import Any, Literal
-
+from typing import Literal
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
+from sema.runtime.enums import Gw1EmissionMethod
 from sema.runtime.enums.old_versions.gw1_unit_000 import Gw1Unit000
-from sema.runtime.property_format import LeftRightDot, SpaceheatName, UUID4Str
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
 
 
@@ -21,7 +22,11 @@ class DerivedChannelGt000(SemaType):
     version: Literal["000"] = "000"
 
     def upgrade(self) -> DerivedChannelGt001:
-        """000 -> 001: add InputChannelNames, EmissionMethod, and Parameters."""
+        """
+        - InputChannelNames[]: add
+        - EmissionMethod: add
+        - Parameters: add (Optional)
+        """
 
         data = self.model_dump()
         data["input_channel_names"] = []

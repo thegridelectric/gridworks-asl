@@ -1,0 +1,13 @@
+    def upgrade(self) -> {{ derived_channel_gt_001_class_name }}:
+        """
+        - InputChannelNames[]: add
+        - EmissionMethod: add
+        - Parameters: add (Optional)
+        """
+
+        data = self.model_dump()
+        data["input_channel_names"] = []
+        data["emission_method"] = {{ gw1_emission_method_000_class_name }}.OnTrigger
+        data["parameters"] = None
+        data["version"] = "001"
+        return {{ derived_channel_gt_001_class_name }}.model_validate(data)

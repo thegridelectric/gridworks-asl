@@ -1,0 +1,41 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/draft/types/fsm.atomic.report.simple.action/000"
+
+title: "fsm.atomic.report.simple.action"
+type: object
+description: >
+  Single-value FSM action emitted by a state machine transition.
+  Used as the Action payload of an fsm.atomic.report when the
+  side-effect is a relay energization command. The payload carries
+  exactly one field, the target energization state of the relay.
+
+properties:
+
+  Value:
+    $ref: "https://schemas.electricity.works/enums/relay.energization.state/000"
+    description: >
+      Target energization state of the relay.
+
+  TypeName:
+    const: "fsm.atomic.report.simple.action"
+
+  Version:
+    const: "000"
+
+required:
+  - Value
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Value": 1,
+      "TypeName": "fsm.atomic.report.simple.action",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

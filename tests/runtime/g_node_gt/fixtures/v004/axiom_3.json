@@ -1,0 +1,12 @@
+{
+  "GNodeId": "4ba12b64-cb9f-4446-b9bc-af55affc16e0",
+  "Alias": "d1.isone.me.versant.keene.beech.ta",
+  "BaseClass": "TerminalAsset",
+  "GNodeClass": "TerminalAsset",
+  "Status": "Active",
+  "PrevAlias": "d1.isone.me.versant.keene.beech.ta",
+  "PositionPointId": "198ca6af-5a4b-43a2-a8a9-7546deabc731",
+  "DisplayName": "Beech Street Terminal Asset",
+  "TypeName": "g.node.gt",
+  "Version": "004"
+}

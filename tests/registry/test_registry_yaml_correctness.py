@@ -10,16 +10,20 @@ RFC3339_SECONDS_PATTERN = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$"
 )
 FORMAT_SCHEMA_URL_PATTERN = re.compile(
-    r"^https://schemas\.electricity\.works/formats/(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)$"
+    r"^https://schemas\.electricity\.works/(?:draft/)?formats/"
+    r"(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)$"
 )
 ENUM_SCHEMA_URL_PATTERN = re.compile(
-    r"^https://schemas\.electricity\.works/enums/(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)/(?P<version>\d{3})$"
+    r"^https://schemas\.electricity\.works/(?:draft/)?enums/"
+    r"(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)/(?P<version>\d{3})$"
 )
 VERSIONED_TYPE_SCHEMA_URL_PATTERN = re.compile(
-    r"^https://schemas\.electricity\.works/types/(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)/(?P<version>\d{3})$"
+    r"^https://schemas\.electricity\.works/(?:draft/)?types/"
+    r"(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)/(?P<version>\d{3})$"
 )
 VERSIONLESS_TYPE_SCHEMA_URL_PATTERN = re.compile(
-    r"^https://schemas\.electricity\.works/types/(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)$"
+    r"^https://schemas\.electricity\.works/(?:draft/)?types/"
+    r"(?P<name>[a-z0-9]+(?:[.-][a-z0-9]+)*)$"
 )
 
 
@@ -446,8 +450,13 @@ def test_registry_type_structure():
             sorted_versions = sorted(version_keys, reverse=True)
             assert version_keys == sorted_versions, f"{type_name} not sorted"
 
-            # latest_version must match highest
-            assert entry["latest_version"] == version_keys[0]
+            active_version_keys = [
+                version
+                for version, version_entry in versions.items()
+                if version_entry.get("status", "active") == "active"
+            ]
+            if active_version_keys:
+                assert entry["latest_version"] == active_version_keys[0]
 
             # -----------------------------------------------------------------
             # Created timestamps
@@ -534,20 +543,23 @@ def test_registry_type_structure():
                 for dep in deps["structural"] + deps.get("axiom", []):
                     assert is_valid_dep(dep)
 
+                if v_entry.get("status", "active") == "draft":
+                    continue
+
+                for dep in deps["structural"] + deps.get("axiom", []):
                     current_created = parse_ts(v_entry["created"])
-                    for dep in deps["structural"] + deps.get("axiom", []):
-                        dep_created_raw = get_created_for_dep(registry, dep)
-                        dep_created = parse_ts(dep_created_raw)
-                        if not current_created >= dep_created:
-                            raise AssertionError(
-                                "\n".join(
-                                    [
+                    dep_created_raw = get_created_for_dep(registry, dep)
+                    dep_created = parse_ts(dep_created_raw)
+                    if not current_created >= dep_created:
+                        raise AssertionError(
+                            "\n".join(
+                                [
                                     f"- sema/definitions/registry.yaml has dependency timestamps out of order for {type_name}:{v}",
                                     f"- {type_name}:{v} is {v_entry['created']}",
                                     f"- dependency {dep} is {dep_created_raw}",
                                 ]
                             )
-                            )
+                        )
 
 
 def test_type_versioning_strategy_matches_schema_version_field():
@@ -559,38 +571,198 @@ def test_type_versioning_strategy_matches_schema_version_field():
         if strategy == "none":
             schema_path = DEFINITIONS_DIR / "types" / f"{type_name}.yaml"
             schema = load_registry(schema_path)
-            properties = schema.get("properties", {})
-            assert "Version" not in properties, (
-                f"{type_name} has versioning_strategy 'none' but schema defines Version"
+            inferred = infer_schema_versioning_strategy(schema, None, type_name)
+            assert inferred == "none", (
+                f"{type_name} has versioning_strategy 'none' but schema uses "
+                f"versioning strategy {inferred!r}"
             )
+            continue
+
+        latest_version = entry["latest_version"]
+        if entry["versions"][latest_version].get("status", "active") == "draft":
+            continue
+        schema_path = DEFINITIONS_DIR / "types" / type_name / f"{latest_version}.yaml"
+        schema = load_registry(schema_path)
+        inferred = infer_schema_versioning_strategy(
+            schema, latest_version, f"{type_name}:{latest_version}"
+        )
+        assert inferred == strategy, (
+            f"{type_name}:{latest_version} registry versioning_strategy is {strategy!r} "
+            f"but latest active schema uses {inferred!r}"
+        )
+
+
+def test_each_type_schema_version_field_has_valid_shape():
+    registry = load_registry(DEFINITIONS_DIR / "registry.yaml")
+
+    for type_name, entry in registry["types"].items():
+        if entry["versioning_strategy"] == "none":
+            schema_path = DEFINITIONS_DIR / "types" / f"{type_name}.yaml"
+            schema = load_registry(schema_path)
+            infer_schema_versioning_strategy(schema, None, type_name)
+            continue
+
+        for version in entry["versions"]:
+            schema_path = DEFINITIONS_DIR / "types" / type_name / f"{version}.yaml"
+            schema = load_registry(schema_path)
+            infer_schema_versioning_strategy(schema, version, f"{type_name}:{version}")
+
+
+def test_type_versioning_strategy_evolution_is_monotonic():
+    registry = load_registry(DEFINITIONS_DIR / "registry.yaml")
+    rank = {"none": 0, "string": 1, "literal": 2}
+
+    for type_name, entry in registry["types"].items():
+        if entry["versioning_strategy"] == "none":
+            continue
+
+        previous_version: str | None = None
+        previous_strategy: str | None = None
+        for version in sorted(entry["versions"], key=int):
+            schema_path = DEFINITIONS_DIR / "types" / type_name / f"{version}.yaml"
+            schema = load_registry(schema_path)
+            strategy = infer_schema_versioning_strategy(
+                schema, version, f"{type_name}:{version}"
+            )
+            if previous_strategy is not None and rank[strategy] < rank[previous_strategy]:
+                raise AssertionError(
+                    f"{type_name}:{version} uses versioning strategy {strategy!r}, "
+                    f"which is earlier than {type_name}:{previous_version} strategy "
+                    f"{previous_strategy!r}"
+                )
+            previous_version = version
+            previous_strategy = strategy
+
+
+def test_registry_versioning_strategy_matches_latest_active_schema():
+    registry = load_registry(DEFINITIONS_DIR / "registry.yaml")
+
+    for type_name, entry in registry["types"].items():
+        if entry["versioning_strategy"] == "none":
+            continue
+
+        active_versions = [
+            version
+            for version, version_entry in entry["versions"].items()
+            if version_entry.get("status", "active") == "active"
+        ]
+        if not active_versions:
+            continue
+
+        latest_active = active_versions[0]
+        schema_path = DEFINITIONS_DIR / "types" / type_name / f"{latest_active}.yaml"
+        schema = load_registry(schema_path)
+        inferred = infer_schema_versioning_strategy(
+            schema, latest_active, f"{type_name}:{latest_active}"
+        )
+        assert entry["versioning_strategy"] == inferred, (
+            f"{type_name} registry versioning_strategy is {entry['versioning_strategy']!r} "
+            f"but latest active version {latest_active} uses {inferred!r}"
+        )
+
+
+def test_public_registry_versioning_strategy_matches_latest_public_schema():
+    registry = load_registry(REPO_ROOT / "indexes" / "public_registry.yaml")
+
+    for type_name, entry in registry["types"].items():
+        if entry["versioning_strategy"] == "none":
             continue
 
         latest_version = entry["latest_version"]
         schema_path = DEFINITIONS_DIR / "types" / type_name / f"{latest_version}.yaml"
         schema = load_registry(schema_path)
-        properties = schema.get("properties", {})
-
-        assert "Version" in properties, (
-            f"{type_name}:{latest_version} has versioning_strategy '{strategy}' but schema omits Version"
+        inferred = infer_schema_versioning_strategy(
+            schema, latest_version, f"{type_name}:{latest_version}"
+        )
+        assert entry["versioning_strategy"] == inferred, (
+            f"{type_name} public registry versioning_strategy is "
+            f"{entry['versioning_strategy']!r} but latest public version "
+            f"{latest_version} uses {inferred!r}"
         )
 
-        version_prop = properties["Version"]
 
-        if strategy == "literal":
-            assert version_prop == {"const": latest_version}, (
-                f"{type_name}:{latest_version} has versioning_strategy 'literal' but Version is not "
-                f'{{"const": "{latest_version}"}}'
-            )
+def test_const_usage_restricted(all_schemas):
+    """
+    Enforce that `const` is only used for identity fields.
 
-        elif strategy == "string":
-            assert version_prop == {"type": "string", "default": latest_version}, (
-                f"{type_name}:{latest_version} has versioning_strategy 'string' but Version is not "
-                f'{{"type": "string", "default": "{latest_version}"}}'
-            )
+    Allowed:
+      - TypeName
+      - Version
+      - *TypeName / *Version pairs used for explicit Sema identity bindings
+
+    Disallowed:
+      - const on numeric / boolean / general data fields
+      - const used to enforce domain constraints (e.g. NumPhases = 3)
+    """
+
+    def is_allowed_const_field(field_name: str) -> bool:
+        # Core identity fields
+        if field_name in {"TypeName", "Version"}:
+            return True
+
+        # Allow identity bindings like SimulatesTypeName, SimulatesVersion, etc.
+        if field_name.endswith("TypeName") or field_name.endswith("Version"):
+            return True
+
+        return False
+
+    def walk(schema, schema_name, path=None):
+        if path is None:
+            path = []
+
+        if isinstance(schema, dict):
+            for key, value in schema.items():
+                if key == "properties" and isinstance(value, dict):
+                    for field_name, field_def in value.items():
+                        if isinstance(field_def, dict) and "const" in field_def:
+                            assert is_allowed_const_field(field_name), (
+                                f"{schema_name}.{field_name}: uses `const` with value "
+                                f"{field_def['const']}. `const` is restricted to identity "
+                                f"fields (TypeName / Version / *TypeName/*Version bindings). "
+                                f"Remove or redesign this field."
+                            )
+
+                # recurse
+                walk(value, schema_name, path + [key])
+
+        elif isinstance(schema, list):
+            for item in schema:
+                walk(item, schema_name, path)
+
+    for schema_name, schema in all_schemas.items():
+        walk(schema, schema_name)
+
 
 # -----------------------------------------------------------------------------
 # HELPERS
 # -----------------------------------------------------------------------------
+
+def infer_schema_versioning_strategy(
+    schema: dict[str, Any],
+    version: str | None,
+    schema_name: str,
+) -> str:
+    version_prop = schema.get("properties", {}).get("Version")
+    if version_prop is None:
+        return "none"
+
+    if version is None:
+        raise AssertionError(
+            f"{schema_name} defines Version but has no expected version"
+        )
+
+    if version_prop == {"type": "string", "default": version}:
+        return "string"
+
+    if version_prop == {"const": version}:
+        return "literal"
+
+    raise AssertionError(
+        f"{schema_name} Version property must be absent, "
+        f'{{"type": "string", "default": "{version}"}}, or '
+        f'{{"const": "{version}"}}, got {version_prop!r}'
+    )
+
 
 def is_valid_ts(ts: str) -> bool:
     if not RFC3339_SECONDS_PATTERN.match(ts):

@@ -1,0 +1,11 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ data_channel_gt_001_class_name }}":
+        """
+        Axiom 1: PowerMeteringConstraint
+        If InPowerMetering is true, TelemetryName SHALL equal PowerW.
+        """
+        if self.in_power_metering and self.telemetry_name != {{ spaceheat_telemetry_name_006_class_name }}.PowerW:
+            raise ValueError(
+                "Axiom 1 failed: telemetry_name must be PowerW when in_power_metering is true."
+            )
+        return self

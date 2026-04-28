@@ -1,0 +1,68 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/draft/types/fsm.atomic.report.i2c.action/000"
+
+title: "fsm.atomic.report.i2c.action"
+type: object
+description: >
+  I2C bit-write FSM action emitted by a state machine transition.
+  Used as the Action payload of an fsm.atomic.report when the
+  side-effect is writing a single bit to a register on an I2C device.
+
+properties:
+
+  I2cBus:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Logical name of the I2C bus on which the device is reachable.
+
+  Address:
+    type: integer
+    description: >
+      I2C device address.
+
+  I2cRegister:
+    type: integer
+    description: >
+      Register address within the device.
+
+  Bit:
+    type: integer
+    description: >
+      Bit position within the register.
+
+  Value:
+    type: integer
+    description: >
+      Bit value to write (typically 0 or 1).
+
+  TypeName:
+    const: "fsm.atomic.report.i2c.action"
+
+  Version:
+    const: "000"
+
+required:
+  - I2cBus
+  - Address
+  - I2cRegister
+  - Bit
+  - Value
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "I2cBus": "vdc-relay-bus",
+      "Address": 32,
+      "I2cRegister": 6,
+      "Bit": 3,
+      "Value": 1,
+      "TypeName": "fsm.atomic.report.i2c.action",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

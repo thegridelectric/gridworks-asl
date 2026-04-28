@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/fis.authority.manifest/000"
+$id: "https://schemas.electricity.works/draft/types/fis.authority.manifest/000"
 
 title: "fis.authority.manifest"
 type: object

@@ -1,18 +1,16 @@
 from typing import Literal
-
 from sema.runtime.base import SemaType
-from sema.runtime.property_format import (
-    LeftRightDot,
-    PositiveInt,
-    UTCMilliseconds,
-    UTCSeconds,
-    UUID4Str,
-)
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import UTCMilliseconds
+from sema.runtime.property_format import UTCSeconds
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.channel_readings import ChannelReadings
 from sema.runtime.types.fsm_full_report import FsmFullReport
 from sema.runtime.types.machine_states import MachineStates
 from sema.runtime.types.old_versions.fsm_full_report_000 import FsmFullReport000
-from sema.runtime.types.report import Report as Report003
+from sema.runtime.types.report import Report
+
 
 class Report002(SemaType):
     """Sema: https://schemas.electricity.works/types/report/002"""
@@ -28,15 +26,13 @@ class Report002(SemaType):
     message_created_ms: UTCMilliseconds
     id: UUID4Str
     type_name: Literal["report"] = "report"
-    version: str = "002"
+    version: str = '002'
 
-    def upgrade(self) -> Report003:
-        """
-        002 -> 003: FsmReportList[]: fsm.full.report:000|001 -> 001
-        """
+    def upgrade(self) -> Report:
+        """- FsmReportList[]: fsm.full.report:000 -> 001"""
         data = self.model_dump()
         data["fsm_report_list"] = [
             fsm_report.upgrade() if fsm_report.version == "000" else fsm_report for fsm_report in self.fsm_report_list
         ]
         data["version"] = "003"
-        return Report003.model_validate(data)
+        return Report.model_validate(data)

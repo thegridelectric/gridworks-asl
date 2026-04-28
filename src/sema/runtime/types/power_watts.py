@@ -1,19 +1,11 @@
 from typing import Literal
-
+from pydantic import StrictInt
 from sema.runtime.base import SemaType
 
 
 class PowerWatts(SemaType):
-    """
-    Real-time power of TerminalAsset in Watts.
+    """Sema: https://schemas.electricity.works/types/power.watts/000"""
 
-    Used by a SCADA -> Atn or Atn -> AggregatedTNode to report real-time power of their TerminalAsset.
-    Positive number means WITHDRAWAL from the grid - so generating electricity creates a negative
-    number. This message is considered worse than useless to send after the first attempt, and
-    does not require an ack. Shares the same purpose as gs.pwr, but is not designed to minimize
-    bytes so comes in JSON format.
-    """
-
-    Watts: int
-    TypeName: Literal["power.watts"] = "power.watts"
-    Version: str = "000"
+    watts: StrictInt
+    type_name: Literal["power.watts"] = "power.watts"
+    version: Literal["000"] = "000"

@@ -1,14 +1,15 @@
 from typing import Literal
-
 from pydantic import StrictInt, model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.change_relay_state import ChangeRelayState
-from sema.runtime.enums.relay_closed_or_open import RelayClosedOrOpen
-from sema.runtime.enums.relay_wiring_config import RelayWiringConfig
-from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
-from sema.runtime.property_format import LeftRightDot, PositiveInt, SpaceheatName
-from sema.runtime.types.relay_actor_config import RelayActorConfig as RelayActorConfig003
+from sema.runtime.enums import ChangeRelayState
+from sema.runtime.enums import RelayClosedOrOpen
+from sema.runtime.enums import RelayWiringConfig
+from sema.runtime.enums import SpaceheatUnit
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.types.relay_actor_config import RelayActorConfig
+
 
 class RelayActorConfig002(SemaType):
     """Sema: https://schemas.electricity.works/types/relay.actor.config/002"""
@@ -34,6 +35,11 @@ class RelayActorConfig002(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "RelayActorConfig002":
+        """
+        Axiom 1: EventEnumConsistency
+        If EventType names a known enum, then DeEnergizingEvent and EnergizingEvent SHALL both
+        be valid values of that enum.
+        """
         if self.event_type == "change.relay.state":
             valid = set(ChangeRelayState.values())
             if self.de_energizing_event not in valid or self.energizing_event not in valid:
@@ -44,6 +50,11 @@ class RelayActorConfig002(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "RelayActorConfig002":
+        """
+        Axiom 2: StateEnumConsistency
+        If StateType names a known enum, then DeEnergizedState and EnergizedState SHALL both be
+        valid values of that enum.
+        """
         if self.state_type == "relay.closed.or.open":
             valid = set(RelayClosedOrOpen.values())
             if self.de_energized_state not in valid or self.energized_state not in valid:
@@ -53,7 +64,26 @@ class RelayActorConfig002(SemaType):
         return self
 
     @model_validator(mode="after")
+    def check_axiom_3(self) -> "RelayActorConfig002":
+        """
+        Axiom 3: EventStateSemanticMatch
+        EnergizingEvent and DeEnergizingEvent SHALL correspond semantically to transitions into
+        EnergizedState and DeEnergizedState respectively.
+        """
+        return self
+
+    @model_validator(mode="after")
     def check_axiom_4(self) -> "RelayActorConfig002":
+        """
+        Axiom 4: ClosedOpenWiringConsistency
+        If: - StateType equals "relay.closed.or.open" - EventType equals "change.relay.state" -
+        WiringConfig equals "NormallyClosed" then: - DeEnergizedState SHALL equal "RelayClosed"
+        - DeEnergizingEvent SHALL equal "CloseRelay" - EnergizedState SHALL equal "RelayOpen" -
+        EnergizingEvent SHALL equal "OpenRelay" If: - StateType equals "relay.closed.or.open" -
+        EventType equals "change.relay.state" - WiringConfig equals "NormallyOpen" then: -
+        DeEnergizedState SHALL equal "RelayOpen" - DeEnergizingEvent SHALL equal "OpenRelay" -
+        EnergizedState SHALL equal "RelayClosed" - EnergizingEvent SHALL equal "CloseRelay"
+        """
         if self.state_type != "relay.closed.or.open" or self.event_type != "change.relay.state":
             return self
 
@@ -83,8 +113,8 @@ class RelayActorConfig002(SemaType):
             )
         return self
 
-    def upgrade(self) -> RelayActorConfig003:
-        """002 -> 003 Require AsyncCaptureDelta when AsyncCapture is true"""
+    def upgrade(self) -> RelayActorConfig:
+        """- AsyncCaptureDelta: require when AsyncCapture is true"""
         data = self.model_dump()
 
         if self.async_capture:
@@ -94,4 +124,4 @@ class RelayActorConfig002(SemaType):
         # Update version
         data["version"] = "003"
 
-        return RelayActorConfig003.model_validate(data)
+        return RelayActorConfig.model_validate(data)

@@ -1,0 +1,59 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/channel.readings.list.item/000"
+
+title: "channel.readings.list.item"
+type: object
+description: >
+  Channel-specific readings and unit metadata for one entry in a synchronized
+  readings bundle.
+
+properties:
+
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  ValueList:
+    type: array
+    items:
+      type:
+        - integer
+        - "null"
+
+  Unit:
+    type: string
+
+  UnitType:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Name of the Sema vocabulary from which Unit is drawn.
+
+  TypeName:
+    const: "channel.readings.list.item"
+
+  Version:
+    const: "000"
+
+required:
+  - ChannelName
+  - ValueList
+  - Unit
+  - UnitType
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - ChannelName: "buffer-depth1"
+    ValueList: [4973, 4966, 4979]
+    Unit: "FahrenheitX100"
+    UnitType: "gw1.unit"
+    TypeName: "channel.readings.list.item"
+    Version: "000"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  extended_description: >
+    This type lifts the inline ChannelReadingsList item from
+    synced.readings.bundle:001 into a named Sema type so synchronized readings
+    bundles can refer to a stable reusable item schema.

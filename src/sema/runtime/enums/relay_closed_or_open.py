@@ -4,23 +4,18 @@ from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
 class RelayClosedOrOpen(SemaEnum):
-    """
-    Sema: https://schemas.electricity.works/enums/relay.closed.or.open/000
-    """
+    """Sema: https://schemas.electricity.works/enums/relay.closed.or.open/000"""
 
     RelayClosed = auto()
     RelayOpen = auto()
 
     @classmethod
-    def values(cls) -> list[str]:
-        """
-        Returns enum choices
-        """
-        return [elt.value for elt in cls]
-
-    @classmethod
     def default(cls) -> "RelayClosedOrOpen":
         return cls.RelayClosed
+
+    @classmethod
+    def values(cls) -> list[str]:
+        return [elt.value for elt in cls]
 
     @classmethod
     def enum_name(cls) -> str:

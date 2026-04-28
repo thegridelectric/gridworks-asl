@@ -1,10 +1,8 @@
 from typing import Literal
-
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
+from sema.runtime.enums import SpaceheatTelemetryName
 from sema.runtime.enums.old_versions.gw1_quantity_000 import Gw1Quantity000
-from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
 
 
 _PROJECTION = {
@@ -47,12 +45,17 @@ class SpaceheatTelemetryQuantityProjection(SemaType):
         expected = _PROJECTION.get(telemetry_name)
         if expected is None:
             raise ValueError(
-                f"No quantity projection defined for telemetry_name {telemetry_name!r}."
+                f"No projection defined for telemetry_name {telemetry_name!r}."
             )
         return expected
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "SpaceheatTelemetryQuantityProjection":
+        """
+        Axiom 1: EnumeratedProjectionMapping
+        Every (TelemetryName, Quantity) pair SHALL match the mapping declared in
+        x-gridworks.projection.table. Any other combination is invalid.
+        """
         expected = self.project(self.telemetry_name)
         if expected != self.quantity:
             raise ValueError(

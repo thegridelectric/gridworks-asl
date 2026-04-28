@@ -39,14 +39,6 @@ x-gridworks:
   owner: "gridworks-energy"
 
   axioms:
-    # - number: 1
-    #   name: "ReportIdentityPropagation"
-    #   statement: >
-    #     MessageId SHALL equal Report.Id.
-    # - number: 2
-    #   name: "ReportCreatedTimePropagation"
-    #   statement: >
-    #     TimeCreatedMs SHALL equal Report.MessageCreatedMs.
     - number: 3
       name: "ReportSourcePropagation"
       statement: >

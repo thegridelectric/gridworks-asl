@@ -169,6 +169,8 @@ def test_structural_dependencies_match_schema_refs():
         versions = entry["versions"]
 
         for version, v_entry in versions.items():
+            if v_entry.get("status", "active") == "draft":
+                continue
 
             schema_path = schema_path_for("types", type_name, version)
             assert schema_path.exists(), f"Missing schema file for {type_name}:{version}"

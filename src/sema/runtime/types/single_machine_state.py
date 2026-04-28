@@ -1,10 +1,10 @@
 from typing import Literal
-
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.relay_closed_or_open import RelayClosedOrOpen
-from sema.runtime.property_format import HandleName, LeftRightDot, UTCMilliseconds
+from sema.runtime.enums import RelayClosedOrOpen
+from sema.runtime.property_format import HandleName
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import UTCMilliseconds
 
 
 class SingleMachineState(SemaType):
@@ -20,6 +20,12 @@ class SingleMachineState(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "SingleMachineState":
+        """
+        Axiom 1: RecognizedStateEnumConsistency
+        If StateEnum equals "relay.closed.or.open", then State SHALL equal "RelayClosed" or
+        "RelayOpen". More generally, if StateEnum is a recognized GridWorks enum, then State
+        SHALL be a valid value of that enum.
+        """
         if (
             self.state_enum == "relay.closed.or.open"
             and self.state not in RelayClosedOrOpen.values()

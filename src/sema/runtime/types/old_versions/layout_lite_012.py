@@ -1,27 +1,19 @@
 from typing import Literal
-
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode
-from sema.runtime.enums.gw1_system_mode import Gw1SystemMode
-from sema.runtime.property_format import (
-    LeftRightDot,
-    PositiveInt,
-    UTCMilliseconds,
-    UUID4Str,
-)
+from sema.runtime.enums import Gw1SeasonalStorageMode
+from sema.runtime.enums import Gw1SystemMode
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import UTCMilliseconds
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
 from sema.runtime.types.ha1_params import Ha1Params
-from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
-    I2cMultichannelDtRelayComponentGt as I2cMultichannelDtRelayComponentGt004,
-)
+from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import I2cMultichannelDtRelayComponentGt
 from sema.runtime.types.layout_lite import LayoutLite
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
-from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_003 import (
-    I2cMultichannelDtRelayComponentGt003,
-)
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_003 import I2cMultichannelDtRelayComponentGt003
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 from sema.runtime.types.sim_pico_tank_module_component_gt import SimPicoTankModuleComponentGt
@@ -55,10 +47,9 @@ class LayoutLite012(SemaType):
     @model_validator(mode="after")
     def check_axiom_1(self) -> "LayoutLite012":
         """
-        Axiom 1: DcNodeConsistency.
-        Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName
-        SHALL reference an existing ShNodes.Name, and every captured-by node
-        SHALL have an active ActorClass.
+        Axiom 1: DcNodeConsistency
+        Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an
+        existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
         """
         node_names = {node.name for node in self.sh_nodes}
         active_actorless = {"NoActor"}
@@ -73,9 +64,9 @@ class LayoutLite012(SemaType):
     @model_validator(mode="after")
     def check_axiom_2(self) -> "LayoutLite012":
         """
-        Axiom 2: NodeHandleHierarchyConsistency.
-        Every ShNode with a dotted handle SHALL have its immediate boss present
-        as another ShNode in the same payload.
+        Axiom 2: NodeHandleHierarchyConsistency
+        Every ShNode with a dotted handle SHALL have its immediate boss present as another
+        ShNode in the same payload.
         """
         node_names = {node.name for node in self.sh_nodes}
         for node in self.sh_nodes:
@@ -88,7 +79,7 @@ class LayoutLite012(SemaType):
     @model_validator(mode="after")
     def check_axiom_3(self) -> "LayoutLite012":
         """
-        Axiom 3: CriticalZoneSubset.
+        Axiom 3: CriticalZoneSubset
         CriticalZoneList SHALL be a subset of ZoneList.
         """
         if not set(self.critical_zone_list).issubset(set(self.zone_list)):
@@ -98,9 +89,9 @@ class LayoutLite012(SemaType):
     @model_validator(mode="after")
     def check_axiom_4(self) -> "LayoutLite012":
         """
-        Axiom 4: DerivedNodeConsistency.
-        Every DerivedChannels.CreatedByNodeName SHALL reference an existing
-        ShNodes.Name whose ActorClass is active.
+        Axiom 4: DerivedNodeConsistency
+        Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose
+        ActorClass is active.
         """
         nodes = {node.name: node for node in self.sh_nodes}
         for channel in self.derived_channels:
@@ -110,15 +101,13 @@ class LayoutLite012(SemaType):
         return self
 
     def upgrade(self) -> LayoutLite:
-        """
-        012 -> 013: I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004
-        """
+        """- I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004"""
         data = self.model_dump()
         if self.i2c_relay_component is not None:
             upgraded_component = self.i2c_relay_component.upgrade()
-            if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt004):
+            if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt):
                 raise TypeError(
-                    "Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt004"
+                    "Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt"
                 )
             data["i2c_relay_component"] = upgraded_component
         data["version"] = "013"

@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ layout_lite_009_class_name }}:
+        """
+        - BufferShortCycling: add
+        - Ha1Params: 004 -> 004 | 005
+        """
+        data = self.model_dump()
+        data["buffer_short_cycling"] = False
+        data["version"] = "009"
+        return {{ layout_lite_009_class_name }}.model_validate(data)
