@@ -4,9 +4,13 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from sema.tools.build_seed_dag import normalize_ref, resolve_ref_to_node
-from sema.tools.runtime_generation.imports import import_path_and_symbol_for_node, target_path_for_node
-from sema.tools.runtime_generation.naming import class_name_for_node, pascal_to_snake
-from sema.tools.runtime_generation.schema import load_schema_for_node
+from sema.tools.runtime_generation.helpers import (
+    class_name_for_node,
+    import_path_and_symbol_for_node,
+    load_schema_for_node,
+    pascal_to_snake,
+    target_path_for_node,
+)
 
 
 @dataclass
@@ -15,6 +19,7 @@ class TypeContext:
     latest_map: dict[tuple[str, str], str | None]
     type_registry: dict[str, Any]
     enum_registry: dict[str, Any]
+    local_names: dict[str, Any] | None = None
     imports: set[str] = field(default_factory=set)
     needs_literal: bool = False
     needs_any: bool = False
@@ -23,7 +28,16 @@ class TypeContext:
     needs_strict_float: bool = False
 
 
-def generate_types(target_root, dag, latest, seed=None, registry=None, definitions_root=None, package_name="gjk"):
+def generate_types(
+    target_root,
+    dag,
+    latest,
+    seed=None,
+    registry=None,
+    definitions_root=None,
+    package_name="gjk",
+    local_names: dict[str, Any] | None = None,
+):
     if seed is None or registry is None or definitions_root is None:
         return
     write_base(target_root)
@@ -31,9 +45,11 @@ def generate_types(target_root, dag, latest, seed=None, registry=None, definitio
         if node[0] != "type":
             continue
         schema = load_schema_for_node(node, seed, definitions_root)
-        target_path = target_path_for_node(node, latest, target_root)
+        target_path = target_path_for_node(node, latest, target_root, local_names)
         target_path.parent.mkdir(parents=True, exist_ok=True)
-        target_path.write_text(render_type(node, schema, dag, latest, registry, package_name))
+        target_path.write_text(
+            render_type(node, schema, dag, latest, registry, package_name, local_names)
+        )
     (target_root / "types" / "__init__.py").write_text("")
     (target_root / "types" / "old_versions" / "__init__.py").write_text("")
 
@@ -129,14 +145,23 @@ class SemaType(BaseModel):
     )
 
 
-def render_type(node, schema: dict, dag, latest_map, registry: dict, package_name: str) -> str:
-    class_name = class_name_for_node(node, latest_map)
+def render_type(
+    node,
+    schema: dict,
+    dag,
+    latest_map,
+    registry: dict,
+    package_name: str,
+    local_names: dict[str, Any] | None = None,
+) -> str:
+    class_name = class_name_for_node(node, latest_map, local_names)
     schema_url = schema["$id"]
     ctx = TypeContext(
         package_name=package_name,
         latest_map=latest_map,
         type_registry=registry["types"],
         enum_registry=registry["enums"],
+        local_names=local_names,
     )
 
     properties = schema.get("properties", {})
@@ -171,7 +196,7 @@ def render_type(node, schema: dict, dag, latest_map, registry: dict, package_nam
     lines.extend(f"    {line}" for line in field_lines)
     if axiom_methods:
         lines.append("")
-        lines.extend(ax.strip("\n") for ax in axiom_methods)
+        lines.append("\n\n".join(ax.strip("\n") for ax in axiom_methods))
     if upgrade_method:
         lines.append("")
         lines.append(upgrade_method.strip("\n"))
@@ -235,7 +260,12 @@ def _annotation_for_schema(prop_schema: dict, ctx: TypeContext) -> str:
         if node is None:
             ctx.needs_any = True
             return "Any"
-        module_path, symbol_name = import_path_and_symbol_for_node(node, ctx.latest_map, ctx.package_name)
+        module_path, symbol_name = import_path_and_symbol_for_node(
+            node,
+            ctx.latest_map,
+            ctx.package_name,
+            ctx.local_names,
+        )
         ctx.imports.add(f"from {module_path} import {symbol_name}")
         return symbol_name
 
@@ -270,9 +300,14 @@ def _render_upgrade_method(node, dag, latest_map, package_name: str, ctx: TypeCo
     if node not in dag.upgrades:
         return None
     next_node = dag.upgrades[node]
-    module_path, symbol_name = import_path_and_symbol_for_node(next_node, latest_map, package_name)
+    module_path, symbol_name = import_path_and_symbol_for_node(
+        next_node,
+        latest_map,
+        package_name,
+        ctx.local_names,
+    )
     ctx.imports.add(f"from {module_path} import {symbol_name}")
-    class_name = class_name_for_node(node, latest_map)
+    class_name = class_name_for_node(node, latest_map, ctx.local_names)
     _, name, version = node
     _, _, next_version = next_node
     return (

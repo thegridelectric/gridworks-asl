@@ -63,6 +63,8 @@ class SemaEnum(GwStrEnum):
         raise NotImplementedError(
             f"{cls.__name__} must implement enum_name() for Sema"
         )
+
+
 class SymbolizedEnum(SemaEnum):
     @classmethod
     def symbol_to_value(cls, symbol: str) -> str:

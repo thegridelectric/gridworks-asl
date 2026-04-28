@@ -1,11 +1,25 @@
 from __future__ import annotations
 
-from sema.tools.runtime_generation.imports import target_path_for_node
-from sema.tools.runtime_generation.naming import class_name_for_node, to_enum_member
-from sema.tools.runtime_generation.schema import load_schema_for_node
+from typing import Any
+
+from sema.tools.runtime_generation.helpers import (
+    class_name_for_node,
+    integer_enum_member_name,
+    load_schema_for_node,
+    string_enum_member_name,
+    target_path_for_node,
+)
 
 
-def generate_enums(target_root, dag, latest, seed=None, definitions_root=None, package_name="gjk"):
+def generate_enums(
+    target_root,
+    dag,
+    latest,
+    seed=None,
+    definitions_root=None,
+    package_name="gjk",
+    local_names: dict[str, Any] | None = None,
+):
     if seed is None or definitions_root is None:
         return
     write_enum_base(target_root)
@@ -13,22 +27,44 @@ def generate_enums(target_root, dag, latest, seed=None, definitions_root=None, p
         if node[0] != "enum":
             continue
         schema = load_schema_for_node(node, seed, definitions_root)
-        target_path = target_path_for_node(node, latest, target_root)
+        target_path = target_path_for_node(node, latest, target_root, local_names)
         target_path.parent.mkdir(parents=True, exist_ok=True)
-        target_path.write_text(render_enum(node, schema, latest, package_name))
+        target_path.write_text(render_enum(node, schema, latest, package_name, local_names))
     (target_root / "enums" / "__init__.py").write_text("")
     (target_root / "enums" / "old_versions" / "__init__.py").write_text("")
 
 
 def write_enum_base(target_root) -> None:
+    (target_root / "enums").mkdir(parents=True, exist_ok=True)
     (target_root / "enums" / "gw_str_enum.py").write_text(
         '''from enum import StrEnum
 from typing import Any, Self
 
 
 class GwStrEnum(StrEnum):
+    """
+    Mimics fastapi-utils use of StrEnum, which diverges from the
+    python-native StrEnum for python 3.11+.  Also, fills in with default
+    value if a string does not exist in the enum.
+
+    Specifically (re difference with python StrEnum) if
+
+    class Foo(Enum):
+        Bar = auto()
+
+    then
+
+    Foo.Bar.value is 'Bar' (instead of 'bar')
+
+    """
+
     @staticmethod
-    def _generate_next_value_(name: str, start: int, count: int, last_values: list[Any]) -> str:
+    def _generate_next_value_(
+        name: str,
+        start: int,  # noqa: ARG004
+        count: int,  # noqa: ARG004
+        last_values: list[Any],  # noqa: ARG004
+    ) -> str:
         return name
 
     @classmethod
@@ -48,70 +84,149 @@ class GwStrEnum(StrEnum):
 
 
 class SemaEnum(GwStrEnum):
+    """
+    Base for enums published in Sema.
+    Requires enum_name(). Version is optional (return None for stable enums).
+    """
+
     @classmethod
     def enum_name(cls) -> str:
-        raise NotImplementedError
+        """Sema identifier (e.g., 'gw1.relay.state')"""
+        raise NotImplementedError(
+            f"{cls.__name__} must implement enum_name() for Sema"
+        )
 
     @classmethod
     def enum_version(cls) -> str:
+        """Sema identifier (e.g., '000')"""
+        raise NotImplementedError(
+            f"{cls.__name__} must implement enum_name() for Sema"
+        )
+
+
+class SymbolizedEnum(SemaEnum):
+    @classmethod
+    def symbol_to_value(cls, symbol: str) -> str:
+        raise NotImplementedError
+
+    @classmethod
+    def value_to_symbol(cls, value: str) -> str:
+        raise NotImplementedError
+
+    @classmethod
+    def symbols(cls) -> list[str]:
         raise NotImplementedError
 '''
     )
 
 
-def render_enum(node, schema: dict, latest_map, package_name: str) -> str:
+def render_enum(
+    node,
+    schema: dict,
+    latest_map,
+    package_name: str,
+    local_names: dict[str, Any] | None = None,
+) -> str:
     _, name, version = node
-    class_name = class_name_for_node(node, latest_map)
+    class_name = class_name_for_node(node, latest_map, local_names)
     schema_url = schema["$id"]
     values = schema["enum"]
     default_value = schema.get("default")
     x_gridworks = schema.get("x-gridworks", {})
 
     if schema["type"] == "string":
-        lines = [
-            "from enum import auto",
+        return _render_string_enum(
+            class_name,
+            schema_url,
+            name,
+            version,
+            values,
+            default_value,
+            package_name,
+        )
+
+    if schema["type"] != "integer":
+        raise ValueError(f"Unsupported enum schema type for {name}: {schema['type']}")
+
+    value_descriptions = x_gridworks.get("value_descriptions")
+    if not isinstance(value_descriptions, dict):
+        raise ValueError(
+            f"Integer enum {name}:{version} requires x-gridworks.value_descriptions"
+        )
+    return _render_integer_enum(
+        class_name,
+        schema_url,
+        name,
+        version,
+        values,
+        default_value,
+        value_descriptions,
+    )
+
+
+def _render_string_enum(
+    class_name: str,
+    schema_url: str,
+    name: str,
+    version: str,
+    values: list[str],
+    default_value: str | None,
+    package_name: str,
+) -> str:
+    lines = [
+        "from enum import auto",
+        "",
+        f"from {package_name}.sema.enums.gw_str_enum import SemaEnum",
+        "",
+        "",
+        f"class {class_name}(SemaEnum):",
+        f'    """Sema: {schema_url}"""',
+        "",
+    ]
+    for value in values:
+        member_name = string_enum_member_name(str(value))
+        lines.append(f"    {member_name} = auto()")
+    lines.extend(
+        [
             "",
-            f"from {package_name}.sema.enums.gw_str_enum import SemaEnum",
+            "    @classmethod",
+            (
+                f'    def default(cls) -> "{class_name}":'
+                if default_value is not None
+                else f'    def default(cls) -> "{class_name}" | None:'
+            ),
+            (
+                f"        return cls.{string_enum_member_name(str(default_value))}"
+                if default_value is not None
+                else "        return None"
+            ),
             "",
+            "    @classmethod",
+            "    def values(cls) -> list[str]:",
+            "        return [elt.value for elt in cls]",
             "",
-            f"class {class_name}(SemaEnum):",
-            f'    """Sema: {schema_url}"""',
+            "    @classmethod",
+            "    def enum_name(cls) -> str:",
+            f'        return "{name}"',
+            "",
+            "    @classmethod",
+            "    def enum_version(cls) -> str:",
+            f'        return "{version}"',
             "",
         ]
-        for value in values:
-            lines.append(f"    {to_enum_member(str(value))} = auto()")
-        lines.extend(
-            [
-                "",
-                "    @classmethod",
-                (
-                    f'    def default(cls) -> "{class_name}":'
-                    if default_value is not None
-                    else f'    def default(cls) -> "{class_name}" | None:'
-                ),
-                (
-                    f"        return cls.{to_enum_member(str(default_value))}"
-                    if default_value is not None
-                    else "        return None"
-                ),
-                "",
-                "    @classmethod",
-                "    def values(cls) -> list[str]:",
-                "        return [elt.value for elt in cls]",
-                "",
-                "    @classmethod",
-                "    def enum_name(cls) -> str:",
-                f'        return "{name}"',
-                "",
-                "    @classmethod",
-                "    def enum_version(cls) -> str:",
-                f'        return "{version}"',
-                "",
-            ]
-        )
-        return "\n".join(lines)
+    )
+    return "\n".join(lines)
 
-    value_descriptions = x_gridworks.get("value_descriptions", {})
+
+def _render_integer_enum(
+    class_name: str,
+    schema_url: str,
+    name: str,
+    version: str,
+    values: list[int],
+    default_value: int | None,
+    value_descriptions: dict[Any, Any],
+) -> str:
     lines = [
         "from enum import IntEnum",
         "",
@@ -121,14 +236,11 @@ def render_enum(node, schema: dict, latest_map, package_name: str) -> str:
         "",
     ]
     for value in values:
-        member_name = value_descriptions.get(value, value_descriptions.get(str(value), f"Value{value}"))
-        lines.append(f"    {to_enum_member(str(member_name))} = {value}")
+        member_name = integer_enum_member_name(value, value_descriptions)
+        lines.append(f"    {member_name} = {value}")
     default_member = None
     if default_value is not None:
-        default_member = value_descriptions.get(
-            default_value,
-            value_descriptions.get(str(default_value), f"Value{default_value}"),
-        )
+        default_member = integer_enum_member_name(default_value, value_descriptions)
     lines.extend(
         [
             "",
@@ -139,7 +251,7 @@ def render_enum(node, schema: dict, latest_map, package_name: str) -> str:
                 else f'    def default(cls) -> "{class_name}" | None:'
             ),
             (
-                f"        return cls.{to_enum_member(str(default_member))}"
+                f"        return cls.{default_member}"
                 if default_member is not None
                 else "        return None"
             ),

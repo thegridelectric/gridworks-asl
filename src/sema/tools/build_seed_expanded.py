@@ -1,3 +1,4 @@
+# build_seed_expanded.py
 from __future__ import annotations
 
 import argparse
@@ -15,44 +16,13 @@ CLOSURE_PATH = ROOT / "indexes" / "dependency_closure.yaml"
 OUTPUT_DIR = ROOT / "output"
 DEFAULT_OUTPUT_NAME = "seed_expanded.yaml"
 
-VERSION_PATTERN = re.compile(r"^(?P<name>.+)[.:](?P<version>\d{3})$")
 OUTPUT_NAME_PATTERN = re.compile(r"^[a-z0-9._-]+\.yaml$")
+VERSION_KEY_PATTERN = re.compile(r"^\d{3}$")
 
 
 def load_yaml(path: Path) -> dict:
     with path.open() as handle:
         return yaml.safe_load(handle)
-
-
-def normalize_target(target: str, registry: dict) -> tuple[str, str | None, str]:
-    match = VERSION_PATTERN.match(target)
-    if match:
-        name = match.group("name")
-        version = match.group("version")
-        if name in registry["types"]:
-            if version not in registry["types"][name].get("versions", {}):
-                raise ValueError(f"Unknown type target: {name}:{version}")
-            return name, version, "type"
-        if name in registry["enums"]:
-            enum_entry = registry["enums"][name]
-            if enum_entry["enum_type"] == "literal":
-                if version != "000":
-                    raise ValueError(f"Unknown enum target: {name}:{version}")
-            elif version not in enum_entry.get("versions", {}):
-                raise ValueError(f"Unknown enum target: {name}:{version}")
-            return name, version, "enum"
-        raise ValueError(f"Unknown versioned target: {target}")
-
-    if target in registry["formats"]:
-        return target, None, "format"
-
-    if target in registry["types"] and registry["types"][target].get("versioning_strategy") == "none":
-        return target, None, "type"
-
-    if target in registry["types"] or target in registry["enums"]:
-        raise ValueError(f"{target} requires a 3-digit version.")
-
-    raise ValueError(f"Unknown target: {target}")
 
 
 def ensure_lookup_path(lookup: dict, category: str, name: str, version: str | None) -> str:
@@ -72,9 +42,10 @@ def ensure_lookup_path(lookup: dict, category: str, name: str, version: str | No
     return lookup[f"{category}s"][name]["versions"][version]
 
 
-def add_intermediate_type_versions(types: dict[str, set[str]], registry: dict) -> None:
+def add_intermediate_type_versions(types: dict[str, set[str]], registry: dict) -> list[tuple[str, str]]:
     # Intermediate versions are included to ensure upgrade chains are complete,
     # using only registry-declared versions (no inferred versions).
+    added: list[tuple[str, str]] = []
     for name, selected in list(types.items()):
         if len(selected) < 2:
             continue
@@ -88,8 +59,109 @@ def add_intermediate_type_versions(types: dict[str, set[str]], registry: dict) -
         low = min(int(version) for version in selected)
         high = max(int(version) for version in selected)
         for numeric_version, version in available_versions:
-            if low <= numeric_version <= high:
+            if low <= numeric_version <= high and version not in selected:
                 selected.add(version)
+                added.append((name, version))
+    return added
+
+
+def available_versions(category: str, name: str, registry: dict) -> list[str | None]:
+    if category == "types":
+        if name not in registry["types"]:
+            raise ValueError(f"Unknown type target: {name}")
+        type_entry = registry["types"][name]
+        if type_entry.get("versioning_strategy") == "none":
+            return [None]
+        return sorted(type_entry.get("versions", {}), key=int)
+
+    if category == "enums":
+        if name not in registry["enums"]:
+            raise ValueError(f"Unknown enum target: {name}")
+        enum_entry = registry["enums"][name]
+        if enum_entry["enum_type"] == "literal":
+            return ["000"]
+        return sorted(enum_entry.get("versions", {}), key=int)
+
+    raise ValueError(f"Unsupported initial_targets section: {category}")
+
+
+def latest_version(category: str, name: str, registry: dict) -> str | None:
+    if category == "types":
+        type_entry = registry["types"][name]
+        if type_entry.get("versioning_strategy") == "none":
+            return None
+        return type_entry["latest_version"]
+
+    enum_entry = registry["enums"][name]
+    if enum_entry["enum_type"] == "literal":
+        return "000"
+    return enum_entry["latest_version"]
+
+
+def select_initial_versions(category: str, name: str, options: object, registry: dict) -> list[str | None]:
+    if not isinstance(options, dict):
+        raise ValueError(f"initial_targets.{category}.{name} must be a mapping.")
+
+    unknown_keys = set(options) - {"include_all_versions", "versions"}
+    if unknown_keys:
+        unknown = ", ".join(sorted(unknown_keys))
+        raise ValueError(f"Unknown initial target options for {category}.{name}: {unknown}")
+
+    has_include_all = "include_all_versions" in options
+    has_versions = "versions" in options
+    if has_include_all and has_versions:
+        raise ValueError(f"{category}.{name} cannot set both include_all_versions and versions.")
+
+    available = available_versions(category, name, registry)
+    if not options:
+        return [latest_version(category, name, registry)]
+
+    if has_include_all:
+        if options["include_all_versions"] is not True:
+            raise ValueError(f"{category}.{name}.include_all_versions must be true.")
+        return available
+
+    versions = options["versions"]
+    if not isinstance(versions, list) or not versions:
+        raise ValueError(f"{category}.{name}.versions must be a non-empty list.")
+
+    selected: list[str] = []
+    available_set = {version for version in available if version is not None}
+    for version in versions:
+        if not isinstance(version, str) or not VERSION_KEY_PATTERN.fullmatch(version):
+            raise ValueError(f"{category}.{name}.versions entries must be 3-digit strings.")
+        if version not in available_set:
+            raise ValueError(f"Unknown {category[:-1]} target: {name}:{version}")
+        if version not in selected:
+            selected.append(version)
+    return selected
+
+
+def iter_initial_targets(initial_targets: object, registry: dict) -> list[tuple[str, str, str | None]]:
+    if not isinstance(initial_targets, dict) or not initial_targets:
+        raise ValueError("seed request must contain a non-empty initial_targets mapping.")
+
+    unknown_sections = set(initial_targets) - {"types", "enums"}
+    if unknown_sections:
+        unknown = ", ".join(sorted(unknown_sections))
+        raise ValueError(f"initial_targets may only contain types and enums; found: {unknown}")
+
+    targets: list[tuple[str, str, str | None]] = []
+    for category in ("types", "enums"):
+        section = initial_targets.get(category, {})
+        if section is None:
+            continue
+        if not isinstance(section, dict):
+            raise ValueError(f"initial_targets.{category} must be a mapping.")
+        for name, options in section.items():
+            if not isinstance(name, str):
+                raise ValueError(f"initial_targets.{category} names must be strings.")
+            for version in select_initial_versions(category, name, options, registry):
+                targets.append((category, name, version))
+
+    if not targets:
+        raise ValueError("seed request initial_targets must include at least one type or enum.")
+    return targets
 
 
 def resolve_output_name(name: str) -> Path:
@@ -107,33 +179,47 @@ def expand_seed(seed_request_path: Path, output_path: Path) -> None:
     request = load_yaml(seed_request_path)
 
     initial_targets = request.get("initial_targets")
-    if not isinstance(initial_targets, list) or not initial_targets:
-        raise ValueError("seed request must contain a non-empty initial_targets list.")
+    requested_targets = iter_initial_targets(initial_targets, registry)
 
     formats: set[str] = set()
     enums: dict[str, set[str]] = {}
     types: dict[str, set[str]] = {}
     versionless_types: set[str] = set()
     normalized_targets: list[str] = []
+    pending_type_versions: list[tuple[str, str]] = []
+    expanded_type_versions: set[tuple[str, str]] = set()
 
     def add_enum(name: str, version: str) -> None:
         enums.setdefault(name, set()).add(version)
 
     def add_type(name: str, version: str) -> None:
-        types.setdefault(name, set()).add(version)
+        selected = types.setdefault(name, set())
+        if version not in selected:
+            selected.add(version)
+            pending_type_versions.append((name, version))
 
-    for raw_target in initial_targets:
-        if not isinstance(raw_target, str):
-            raise ValueError("initial_targets entries must be strings.")
+    def expand_pending_type_versions() -> None:
+        while pending_type_versions:
+            name, version = pending_type_versions.pop(0)
+            key = (name, version)
+            if key in expanded_type_versions:
+                continue
+            expanded_type_versions.add(key)
+            type_closure = closure["types"][name][version]
 
-        name, version, category = normalize_target(raw_target, registry)
+            for dep in type_closure["formats"]:
+                formats.add(dep)
+            for dep in type_closure["enums"]:
+                dep_name, dep_version = dep.rsplit(":", 1)
+                add_enum(dep_name, dep_version)
+            for dep in type_closure["types"]:
+                dep_name, dep_version = dep.rsplit(":", 1)
+                add_type(dep_name, dep_version)
+
+    for category, name, version in requested_targets:
         normalized_targets.append(name if version is None else f"{name}:{version}")
 
-        if category == "format":
-            formats.add(name)
-            continue
-
-        if category == "enum":
+        if category == "enums":
             if version is None:
                 raise ValueError(f"Enum target missing version: {name}")
             add_enum(name, version)
@@ -144,18 +230,13 @@ def expand_seed(seed_request_path: Path, output_path: Path) -> None:
             continue
 
         add_type(name, version)
-        type_closure = closure["types"][name][version]
 
-        for dep in type_closure["formats"]:
-            formats.add(dep)
-        for dep in type_closure["enums"]:
-            dep_name, dep_version = dep.rsplit(":", 1)
-            add_enum(dep_name, dep_version)
-        for dep in type_closure["types"]:
-            dep_name, dep_version = dep.rsplit(":", 1)
-            add_type(dep_name, dep_version)
-
-    add_intermediate_type_versions(types, registry)
+    while True:
+        expand_pending_type_versions()
+        added_intermediate_versions = add_intermediate_type_versions(types, registry)
+        if not added_intermediate_versions:
+            break
+        pending_type_versions.extend(added_intermediate_versions)
 
     output: dict[str, object] = {
         "metadata": {
@@ -210,8 +291,9 @@ def expand_seed(seed_request_path: Path, output_path: Path) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Expand a small seed request into a generated seed/worklist by validating "
-            "initial_targets, computing typed transitive closure, and resolving local paths."
+            "Expand a structured seed request into a generated seed/worklist by validating "
+            "initial target types and enums, computing typed transitive closure, and "
+            "resolving local paths."
         )
     )
     parser.add_argument("seed_request", type=Path)

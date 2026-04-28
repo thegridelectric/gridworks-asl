@@ -25,6 +25,9 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/sema"]
 
+[tool.pytest.ini_options]
+norecursedirs = ["output"]
+
 [dependency-groups]
 dev = [
     "ipython>=9.12.0",
