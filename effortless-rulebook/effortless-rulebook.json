@@ -15564,6 +15564,30 @@
         "type": "raw",
         "nullable": true,
         "Description": "Populated only if the projection isn't a flat lookup (escape hatch)."
+      },
+      {
+        "name": "MappingCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of ProjectionMappings (FromSymbol -> ToSymbol pairs) declared on this projection.",
+        "formula": "=COUNTIFS(ProjectionMappings!{{Projection}}, Projections!{{Name}})"
+      },
+      {
+        "name": "IsScripted",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when RawScript is set \u2014 projection isn't a flat lookup and falls back to a script.",
+        "formula": "=IF({{RawScript}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsFlatLookup",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this projection is a pure flat lookup (no RawScript). The common, well-behaved case.",
+        "formula": "=IF({{RawScript}}, FALSE(), TRUE())"
       }
     ],
     "data": [
@@ -15622,6 +15646,22 @@
         "type": "raw",
         "nullable": true,
         "Description": "Optional per-mapping description."
+      },
+      {
+        "name": "IsRemoval",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when ToSymbol is empty/null \u2014 the source symbol is dropped during projection.",
+        "formula": "=IF({{ToSymbol}}, FALSE(), TRUE())"
+      },
+      {
+        "name": "IsIdentity",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when FromSymbol equals ToSymbol \u2014 the projection passes the symbol through unchanged.",
+        "formula": "=IF({{FromSymbol}}={{ToSymbol}}, TRUE(), FALSE())"
       }
     ],
     "data": [

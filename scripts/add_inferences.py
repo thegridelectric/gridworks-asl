@@ -257,7 +257,7 @@ _PREVIOUS_BATCHES_BATCH3: dict[str, list[dict]] = {
 }
 
 
-BATCH: dict[str, list[dict]] = {
+_PREVIOUS_BATCHES_BATCH4: dict[str, list[dict]] = {
     "TypeHelpers": [
         field(
             "AttributeCount", "aggregation", "integer",
@@ -294,6 +294,44 @@ BATCH: dict[str, list[dict]] = {
                 'IF({{SubTypeVersionRef}}, "subtype", '
                 'IF({{HelperRef}}, "helper", "primitive"))))'
             ),
+            nullable=False,
+        ),
+    ],
+}
+
+
+BATCH: dict[str, list[dict]] = {
+    "Projections": [
+        field(
+            "MappingCount", "aggregation", "integer",
+            "Number of ProjectionMappings (FromSymbol -> ToSymbol pairs) declared on this projection.",
+            formula="=COUNTIFS(ProjectionMappings!{{Projection}}, Projections!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "IsScripted", "calculated", "boolean",
+            "True when RawScript is set — projection isn't a flat lookup and falls back to a script.",
+            formula='=IF({{RawScript}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "IsFlatLookup", "calculated", "boolean",
+            "True when this projection is a pure flat lookup (no RawScript). The common, well-behaved case.",
+            formula='=IF({{RawScript}}, FALSE(), TRUE())',
+            nullable=False,
+        ),
+    ],
+    "ProjectionMappings": [
+        field(
+            "IsRemoval", "calculated", "boolean",
+            "True when ToSymbol is empty/null — the source symbol is dropped during projection.",
+            formula='=IF({{ToSymbol}}, FALSE(), TRUE())',
+            nullable=False,
+        ),
+        field(
+            "IsIdentity", "calculated", "boolean",
+            "True when FromSymbol equals ToSymbol — the projection passes the symbol through unchanged.",
+            formula='=IF({{FromSymbol}}={{ToSymbol}}, TRUE(), FALSE())',
             nullable=False,
         ),
     ],
