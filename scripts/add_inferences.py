@@ -338,7 +338,7 @@ _PREVIOUS_BATCHES_BATCH5: dict[str, list[dict]] = {
 }
 
 
-BATCH: dict[str, list[dict]] = {
+_PREVIOUS_BATCHES_BATCH6: dict[str, list[dict]] = {
     "TypeUpgrades": [
         field(
             "OpCount", "aggregation", "integer",
@@ -413,6 +413,125 @@ BATCH: dict[str, list[dict]] = {
             "IsIdentity", "calculated", "boolean",
             "True when FromSymbol equals ToSymbol — the symbol passes through unchanged.",
             formula='=IF({{FromSymbol}}={{ToSymbol}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+    ],
+}
+
+
+# ----------------------------------------------------------------------------
+# BATCH 7 — higher-order inferences: cross-FK usage counts, lifecycle reach
+# ----------------------------------------------------------------------------
+BATCH: dict[str, list[dict]] = {
+    "Formats": [
+        field(
+            "TypeAttributeUsageCount", "aggregation", "integer",
+            "Number of TypeAttributes that point at this Format via FormatRef.",
+            formula="=COUNTIFS(TypeAttributes!{{FormatRef}}, Formats!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "TypeHelperAttributeUsageCount", "aggregation", "integer",
+            "Number of TypeHelperAttributes that point at this Format via FormatRef.",
+            formula="=COUNTIFS(TypeHelperAttributes!{{FormatRef}}, Formats!{{Name}})",
+            nullable=False,
+        ),
+    ],
+    "EnumVersions": [
+        field(
+            "TypeAttributeUsageCount", "aggregation", "integer",
+            "Number of TypeAttributes that point at this EnumVersion via EnumVersionRef.",
+            formula="=COUNTIFS(TypeAttributes!{{EnumVersionRef}}, EnumVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "TypeHelperAttributeUsageCount", "aggregation", "integer",
+            "Number of TypeHelperAttributes that point at this EnumVersion via EnumVersionRef.",
+            formula="=COUNTIFS(TypeHelperAttributes!{{EnumVersionRef}}, EnumVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "OutgoingProjectionCount", "aggregation", "integer",
+            "Number of Projections starting from this version (i.e. where this is FromEnumVersion).",
+            formula="=COUNTIFS(Projections!{{FromEnumVersion}}, EnumVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "IncomingProjectionCount", "aggregation", "integer",
+            "Number of Projections landing on this version (i.e. where this is ToEnumVersion).",
+            formula="=COUNTIFS(Projections!{{ToEnumVersion}}, EnumVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "OutgoingUpgradeCount", "aggregation", "integer",
+            "Number of EnumUpgrades that bump from this version.",
+            formula="=COUNTIFS(EnumUpgrades!{{FromEnumVersion}}, EnumVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "IncomingUpgradeCount", "aggregation", "integer",
+            "Number of EnumUpgrades that bump to this version.",
+            formula="=COUNTIFS(EnumUpgrades!{{ToEnumVersion}}, EnumVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "TypeUpgradeOpUsageCount", "aggregation", "integer",
+            "Number of TypeUpgradeOps referencing this version (via EnumVersionRef on EnumVersionBump / CoerceToEnum ops).",
+            formula="=COUNTIFS(TypeUpgradeOps!{{EnumVersionRef}}, EnumVersions!{{Name}})",
+            nullable=False,
+        ),
+    ],
+    "TypeVersions": [
+        field(
+            "TypeAttributeAsSubtypeCount", "aggregation", "integer",
+            "Number of TypeAttributes that nest this version as a sub-type via SubTypeVersionRef.",
+            formula="=COUNTIFS(TypeAttributes!{{SubTypeVersionRef}}, TypeVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "TypeHelperAttributeAsSubtypeCount", "aggregation", "integer",
+            "Number of TypeHelperAttributes that nest this version as a sub-type via SubTypeVersionRef.",
+            formula="=COUNTIFS(TypeHelperAttributes!{{SubTypeVersionRef}}, TypeVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "OutgoingUpgradeCount", "aggregation", "integer",
+            "Number of TypeUpgrades that bump from this version (this version has a successor).",
+            formula="=COUNTIFS(TypeUpgrades!{{FromTypeVersion}}, TypeVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "IncomingUpgradeCount", "aggregation", "integer",
+            "Number of TypeUpgrades that bump to this version (this version was reached from a predecessor).",
+            formula="=COUNTIFS(TypeUpgrades!{{ToTypeVersion}}, TypeVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "OriginatedHelperCount", "aggregation", "integer",
+            "Number of TypeHelpers whose YAML body originally introduced them in this version.",
+            formula="=COUNTIFS(TypeHelpers!{{OriginTypeVersion}}, TypeVersions!{{Name}})",
+            nullable=False,
+        ),
+    ],
+    "TypeHelpers": [
+        field(
+            "TypeAttributeUsageCount", "aggregation", "integer",
+            "Number of TypeAttributes that point at this helper via HelperRef.",
+            formula="=COUNTIFS(TypeAttributes!{{HelperRef}}, TypeHelpers!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "TypeHelperAttributeUsageCount", "aggregation", "integer",
+            "Number of TypeHelperAttributes that point at this helper via HelperRef (nested helpers).",
+            formula="=COUNTIFS(TypeHelperAttributes!{{HelperRef}}, TypeHelpers!{{Name}})",
+            nullable=False,
+        ),
+    ],
+    "Projections": [
+        field(
+            "TypeUpgradeOpUsageCount", "aggregation", "integer",
+            "Number of TypeUpgradeOps referencing this projection via ProjectionRef (typically AddProjected ops).",
+            formula="=COUNTIFS(TypeUpgradeOps!{{ProjectionRef}}, Projections!{{Name}})",
             nullable=False,
         ),
     ],

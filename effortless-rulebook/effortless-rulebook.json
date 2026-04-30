@@ -306,6 +306,22 @@
         "nullable": false,
         "Description": "Number of counterexamples on this format (FormatExamples where IsCounter=true).",
         "formula": "=COUNTIFS(FormatExamples!{{Format}}, Formats!{{Name}}, FormatExamples!{{IsCounter}}, TRUE())"
+      },
+      {
+        "name": "TypeAttributeUsageCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeAttributes that point at this Format via FormatRef.",
+        "formula": "=COUNTIFS(TypeAttributes!{{FormatRef}}, Formats!{{Name}})"
+      },
+      {
+        "name": "TypeHelperAttributeUsageCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeHelperAttributes that point at this Format via FormatRef.",
+        "formula": "=COUNTIFS(TypeHelperAttributes!{{FormatRef}}, Formats!{{Name}})"
       }
     ],
     "data": [
@@ -1590,6 +1606,62 @@
         "nullable": false,
         "Description": "Number of EnumValues (symbols) declared in this version.",
         "formula": "=COUNTIFS(EnumValues!{{EnumVersion}}, EnumVersions!{{Name}})"
+      },
+      {
+        "name": "TypeAttributeUsageCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeAttributes that point at this EnumVersion via EnumVersionRef.",
+        "formula": "=COUNTIFS(TypeAttributes!{{EnumVersionRef}}, EnumVersions!{{Name}})"
+      },
+      {
+        "name": "TypeHelperAttributeUsageCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeHelperAttributes that point at this EnumVersion via EnumVersionRef.",
+        "formula": "=COUNTIFS(TypeHelperAttributes!{{EnumVersionRef}}, EnumVersions!{{Name}})"
+      },
+      {
+        "name": "OutgoingProjectionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of Projections starting from this version (i.e. where this is FromEnumVersion).",
+        "formula": "=COUNTIFS(Projections!{{FromEnumVersion}}, EnumVersions!{{Name}})"
+      },
+      {
+        "name": "IncomingProjectionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of Projections landing on this version (i.e. where this is ToEnumVersion).",
+        "formula": "=COUNTIFS(Projections!{{ToEnumVersion}}, EnumVersions!{{Name}})"
+      },
+      {
+        "name": "OutgoingUpgradeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of EnumUpgrades that bump from this version.",
+        "formula": "=COUNTIFS(EnumUpgrades!{{FromEnumVersion}}, EnumVersions!{{Name}})"
+      },
+      {
+        "name": "IncomingUpgradeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of EnumUpgrades that bump to this version.",
+        "formula": "=COUNTIFS(EnumUpgrades!{{ToEnumVersion}}, EnumVersions!{{Name}})"
+      },
+      {
+        "name": "TypeUpgradeOpUsageCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeUpgradeOps referencing this version (via EnumVersionRef on EnumVersionBump / CoerceToEnum ops).",
+        "formula": "=COUNTIFS(TypeUpgradeOps!{{EnumVersionRef}}, EnumVersions!{{Name}})"
       }
     ],
     "data": [
@@ -4775,6 +4847,46 @@
         "nullable": false,
         "Description": "Number of TypeExamples attached to this version.",
         "formula": "=COUNTIFS(TypeExamples!{{TypeVersion}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "TypeAttributeAsSubtypeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeAttributes that nest this version as a sub-type via SubTypeVersionRef.",
+        "formula": "=COUNTIFS(TypeAttributes!{{SubTypeVersionRef}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "TypeHelperAttributeAsSubtypeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeHelperAttributes that nest this version as a sub-type via SubTypeVersionRef.",
+        "formula": "=COUNTIFS(TypeHelperAttributes!{{SubTypeVersionRef}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "OutgoingUpgradeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeUpgrades that bump from this version (this version has a successor).",
+        "formula": "=COUNTIFS(TypeUpgrades!{{FromTypeVersion}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "IncomingUpgradeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeUpgrades that bump to this version (this version was reached from a predecessor).",
+        "formula": "=COUNTIFS(TypeUpgrades!{{ToTypeVersion}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "OriginatedHelperCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeHelpers whose YAML body originally introduced them in this version.",
+        "formula": "=COUNTIFS(TypeHelpers!{{OriginTypeVersion}}, TypeVersions!{{Name}})"
       }
     ],
     "data": [
@@ -15200,6 +15312,22 @@
         "nullable": false,
         "Description": "True when ExtraAllowed is FALSE (the helper rejects unknown properties).",
         "formula": "=IF({{ExtraAllowed}}, FALSE(), TRUE())"
+      },
+      {
+        "name": "TypeAttributeUsageCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeAttributes that point at this helper via HelperRef.",
+        "formula": "=COUNTIFS(TypeAttributes!{{HelperRef}}, TypeHelpers!{{Name}})"
+      },
+      {
+        "name": "TypeHelperAttributeUsageCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeHelperAttributes that point at this helper via HelperRef (nested helpers).",
+        "formula": "=COUNTIFS(TypeHelperAttributes!{{HelperRef}}, TypeHelpers!{{Name}})"
       }
     ],
     "data": [
@@ -15588,6 +15716,14 @@
         "nullable": false,
         "Description": "True when this projection is a pure flat lookup (no RawScript). The common, well-behaved case.",
         "formula": "=IF({{RawScript}}, FALSE(), TRUE())"
+      },
+      {
+        "name": "TypeUpgradeOpUsageCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeUpgradeOps referencing this projection via ProjectionRef (typically AddProjected ops).",
+        "formula": "=COUNTIFS(TypeUpgradeOps!{{ProjectionRef}}, Projections!{{Name}})"
       }
     ],
     "data": [
