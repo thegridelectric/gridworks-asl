@@ -15905,6 +15905,30 @@
         "type": "raw",
         "nullable": true,
         "Description": "Whole-method escape hatch when no clean op decomposition is possible. Prefer per-op RawScript on TypeUpgradeOps."
+      },
+      {
+        "name": "OpCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeUpgradeOps that compose this upgrade.",
+        "formula": "=COUNTIFS(TypeUpgradeOps!{{TypeUpgrade}}, TypeUpgrades!{{Name}})"
+      },
+      {
+        "name": "IsScripted",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when RawScript is set \u2014 the upgrade is a whole-method escape hatch instead of a clean op decomposition.",
+        "formula": "=IF({{RawScript}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsDecomposed",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when RawScript is empty \u2014 the upgrade is composed of structured TypeUpgradeOps. The desired form.",
+        "formula": "=IF({{RawScript}}, FALSE(), TRUE())"
       }
     ],
     "data": [
@@ -16120,6 +16144,30 @@
         "type": "raw",
         "nullable": true,
         "Description": "Optional op-level description."
+      },
+      {
+        "name": "IsCustom",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when OpKind is 'Custom' \u2014 falls back to per-op RawScript, the escape hatch.",
+        "formula": "=IF({{OpKind}}=\"Custom\", TRUE(), FALSE())"
+      },
+      {
+        "name": "HasRawScript",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this op carries an inline RawScript snippet (typically only Custom ops).",
+        "formula": "=IF({{RawScript}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "ReferenceKind",
+        "datatype": "string",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Which cross-table reference this op carries: 'enum' (EnumVersionRef), 'projection' (ProjectionRef), or 'none'.",
+        "formula": "=IF({{EnumVersionRef}}, \"enum\", IF({{ProjectionRef}}, \"projection\", \"none\"))"
       }
     ],
     "data": [
@@ -16490,6 +16538,30 @@
         "type": "raw",
         "nullable": true,
         "Description": "Whole-upgrade escape hatch."
+      },
+      {
+        "name": "MappingCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of EnumUpgradeMappings that compose this upgrade.",
+        "formula": "=COUNTIFS(EnumUpgradeMappings!{{EnumUpgrade}}, EnumUpgrades!{{Name}})"
+      },
+      {
+        "name": "IsScripted",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when RawScript is set (whole-upgrade escape hatch).",
+        "formula": "=IF({{RawScript}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsDecomposed",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when RawScript is empty \u2014 upgrade is composed of structured mappings.",
+        "formula": "=IF({{RawScript}}, FALSE(), TRUE())"
       }
     ],
     "data": []
@@ -16533,6 +16605,22 @@
         "type": "raw",
         "nullable": true,
         "Description": "Optional per-mapping description."
+      },
+      {
+        "name": "IsRemoval",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when ToSymbol is empty/null \u2014 the source symbol is dropped in this upgrade.",
+        "formula": "=IF({{ToSymbol}}, FALSE(), TRUE())"
+      },
+      {
+        "name": "IsIdentity",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when FromSymbol equals ToSymbol \u2014 the symbol passes through unchanged.",
+        "formula": "=IF({{FromSymbol}}={{ToSymbol}}, TRUE(), FALSE())"
       }
     ],
     "data": []

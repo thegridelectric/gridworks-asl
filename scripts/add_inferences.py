@@ -300,7 +300,7 @@ _PREVIOUS_BATCHES_BATCH4: dict[str, list[dict]] = {
 }
 
 
-BATCH: dict[str, list[dict]] = {
+_PREVIOUS_BATCHES_BATCH5: dict[str, list[dict]] = {
     "Projections": [
         field(
             "MappingCount", "aggregation", "integer",
@@ -331,6 +331,87 @@ BATCH: dict[str, list[dict]] = {
         field(
             "IsIdentity", "calculated", "boolean",
             "True when FromSymbol equals ToSymbol — the projection passes the symbol through unchanged.",
+            formula='=IF({{FromSymbol}}={{ToSymbol}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+    ],
+}
+
+
+BATCH: dict[str, list[dict]] = {
+    "TypeUpgrades": [
+        field(
+            "OpCount", "aggregation", "integer",
+            "Number of TypeUpgradeOps that compose this upgrade.",
+            formula="=COUNTIFS(TypeUpgradeOps!{{TypeUpgrade}}, TypeUpgrades!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "IsScripted", "calculated", "boolean",
+            "True when RawScript is set — the upgrade is a whole-method escape hatch instead of a clean op decomposition.",
+            formula='=IF({{RawScript}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "IsDecomposed", "calculated", "boolean",
+            "True when RawScript is empty — the upgrade is composed of structured TypeUpgradeOps. The desired form.",
+            formula='=IF({{RawScript}}, FALSE(), TRUE())',
+            nullable=False,
+        ),
+    ],
+    "TypeUpgradeOps": [
+        field(
+            "IsCustom", "calculated", "boolean",
+            "True when OpKind is 'Custom' — falls back to per-op RawScript, the escape hatch.",
+            formula='=IF({{OpKind}}="Custom", TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "HasRawScript", "calculated", "boolean",
+            "True when this op carries an inline RawScript snippet (typically only Custom ops).",
+            formula='=IF({{RawScript}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "ReferenceKind", "calculated", "string",
+            "Which cross-table reference this op carries: 'enum' (EnumVersionRef), 'projection' (ProjectionRef), or 'none'.",
+            formula=(
+                '=IF({{EnumVersionRef}}, "enum", '
+                'IF({{ProjectionRef}}, "projection", "none"))'
+            ),
+            nullable=False,
+        ),
+    ],
+    "EnumUpgrades": [
+        field(
+            "MappingCount", "aggregation", "integer",
+            "Number of EnumUpgradeMappings that compose this upgrade.",
+            formula="=COUNTIFS(EnumUpgradeMappings!{{EnumUpgrade}}, EnumUpgrades!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "IsScripted", "calculated", "boolean",
+            "True when RawScript is set (whole-upgrade escape hatch).",
+            formula='=IF({{RawScript}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "IsDecomposed", "calculated", "boolean",
+            "True when RawScript is empty — upgrade is composed of structured mappings.",
+            formula='=IF({{RawScript}}, FALSE(), TRUE())',
+            nullable=False,
+        ),
+    ],
+    "EnumUpgradeMappings": [
+        field(
+            "IsRemoval", "calculated", "boolean",
+            "True when ToSymbol is empty/null — the source symbol is dropped in this upgrade.",
+            formula='=IF({{ToSymbol}}, FALSE(), TRUE())',
+            nullable=False,
+        ),
+        field(
+            "IsIdentity", "calculated", "boolean",
+            "True when FromSymbol equals ToSymbol — the symbol passes through unchanged.",
             formula='=IF({{FromSymbol}}={{ToSymbol}}, TRUE(), FALSE())',
             nullable=False,
         ),
