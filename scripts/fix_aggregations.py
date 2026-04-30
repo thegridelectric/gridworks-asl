@@ -52,11 +52,16 @@ def column_expr(table_pascal, field_pascal, kinds):
     return f"calc_{snake_t}_{snake_f}(t.{snake_t}_id)"
 
 
-def local_col(local_table_pascal, local_field_pascal):
-    """Local-side reference: this row's value for <field>, given p_<table>_id parameter."""
+def local_col(local_table_pascal, local_field_pascal, kinds):
+    """Local-side reference: this row's value for <field>, given p_<table>_id parameter.
+    For raw/relationship fields, read directly. For calc/lookup/aggregation,
+    call the corresponding calc fn so we don't need a column that lives in views."""
     snake_t = to_snake(local_table_pascal)
     snake_f = to_snake(local_field_pascal)
-    return f"(SELECT {snake_f} FROM {snake_t} WHERE {snake_t}_id = p_{snake_t}_id)"
+    kind = kinds.get((local_table_pascal, local_field_pascal), "raw")
+    if kind in ("raw", "relationship"):
+        return f"(SELECT {snake_f} FROM {snake_t} WHERE {snake_t}_id = p_{snake_t}_id)"
+    return f"calc_{snake_t}_{snake_f}(p_{snake_t}_id)"
 
 
 def parse_args(s):
@@ -143,7 +148,7 @@ def emit_override(source_table, field_name, datatype, agg_func, args, kinds):
             left = column_expr(r_tbl, r_fld, kinds)
             if c_tbl is not None:
                 # Comparison against a local-side field
-                right = local_col(c_tbl, c_fld)
+                right = local_col(c_tbl, c_fld, kinds)
             else:
                 right = render_criterion(crit_tok)
             criteria.append(f"{left} = {right}")
@@ -164,7 +169,7 @@ def emit_override(source_table, field_name, datatype, agg_func, args, kinds):
             c_tbl, c_fld = parse_table_field(crit_tok)
             left = column_expr(r_tbl, r_fld, kinds)
             if c_tbl is not None:
-                right = local_col(c_tbl, c_fld)
+                right = local_col(c_tbl, c_fld, kinds)
             else:
                 right = render_criterion(crit_tok)
             criteria.append(f"{left} = {right}")

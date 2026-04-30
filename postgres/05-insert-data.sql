@@ -48,7 +48,7 @@ INSERT INTO formats (formats_id, name, owner, schema_url, title, description, re
 VALUES ('c5a1ceb7-611b-e4b0-42d8-c2c3cdcbe8cb', 'market.slot.name', 'gridworks-energy', 'https://schemas.electricity.works/formats/market.slot.name', 'market.slot.name', 'Dot-separated identifier for a specific market slot.
 The first segment identifies the market commodity class and MUST be one of `e`, `r`, or `d`. The second segment identifies the market type. The final segment is a 10-digit Unix timestamp in seconds giving the slot start. The middle segments identify the market maker alias and must satisfy the left-right-dot naming rules.
 The slot start timestamp MUST align to the duration required by the market type.
-', NULL, '^[erd]\.[a-z0-9]+(?:\.[a-z0-9]+)*(?:\.[a-z0-9]+)+\.[0-9]{10}$', NULL, NULL, NULL, '2024-12-05T19:25:00Z', '{"type": "string"}') ON CONFLICT (formats_id) DO NOTHING;
+', 'market.slot.handle', '^[erd]\.[a-z0-9]+(?:\.[a-z0-9]+)*(?:\.[a-z0-9]+)+\.[0-9]{10}$', NULL, NULL, NULL, '2024-12-05T19:25:00Z', '{"type": "string"}') ON CONFLICT (formats_id) DO NOTHING;
 
 INSERT INTO formats (formats_id, name, owner, schema_url, title, description, replaced_by, pattern, min_length, max_length, json_schema_format, created, raw_json)
 VALUES ('dfd9c091-1312-1af0-2895-b43ebe9a84e3', 'non.negative.int', 'gridworks-energy', 'https://schemas.electricity.works/formats/non.negative.int', 'non.negative.int', 'Non-negative integer validated non-coercively at the serialized boundary. The serialized value must already be an integer greater than or equal to 0. Strings such as "0" and numeric floats such as 0.0 are not accepted.
@@ -88,485 +88,500 @@ INSERT INTO formats (formats_id, name, owner, schema_url, title, description, re
 VALUES ('26eaa1e8-d5ec-0e63-856a-6158eab410cc', 'uuid4.str', 'gridworks-energy', 'https://schemas.electricity.works/formats/uuid4.str', 'uuid4.str', 'Canonical lowercase UUID version 4 string in standard hyphenated 8-4-4-4-12 format. Enforces version (4) and variant (RFC 4122) and requires lowercase for consistency.
 ', NULL, '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', 36, 36, NULL, '2024-09-02T15:00:00Z', '{"type": "string"}') ON CONFLICT (formats_id) DO NOTHING;
 
+INSERT INTO formats (formats_id, name, owner, schema_url, title, description, replaced_by, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('90c98d9f-641b-3a0a-306a-19f6e4c84ec3', 'market.slot.handle', 'gridworks-energy', 'https://schemas.electricity.works/formats/market.slot.handle', 'Market Slot Handle', 'Successor to market.slot.name. Adds a checksum suffix so a slot handle is self-validating without a registry lookup.', NULL, '^[a-z][a-z0-9.]*\.[a-f0-9]{4}$', 6, 80, NULL, '2026-04-30T18:00:00Z', NULL) ON CONFLICT (formats_id) DO NOTHING;
+
+INSERT INTO formats (formats_id, name, owner, schema_url, title, description, replaced_by, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('40aba0d0-71e2-79de-276c-5d4de0ba486d', 'microera.feed.tag', 'microerapower', 'https://schemas.electricity.works/formats/microera.feed.tag', 'MicroEra feed tag', 'Tag identifying a MicroEra data feed. Lowercase letters, digits, hyphens; up to 32 characters.', NULL, '^[a-z0-9-]{3,32}$', 3, 32, NULL, '2026-04-30T18:00:00Z', NULL) ON CONFLICT (formats_id) DO NOTHING;
+
 -- ----------------------------------------------------------------------------
 -- FormatExamples: Per-format examples and counterexamples (with order preserved). Sourced from format YAML 'examples' and 'counterexamples' arrays.
 -- ----------------------------------------------------------------------------
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('d339edd1-6a40-de3b-e90a-d352aa324682', 'handle.name', 0, FALSE, '"main-tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('7abc403f-2d68-1f7c-ca6a-774cabc60867', 'handle.name', 0, FALSE, '"main-tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('125de027-6cd3-4d5c-bf59-07cb2ef88034', 'handle.name', 1, FALSE, '"sensor-1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('0cce7f6a-1b0a-f219-13b5-38d7f4a534a9', 'handle.name', 1, FALSE, '"sensor-1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('c6be966c-6536-f67b-e738-ed995f08a5de', 'handle.name', 2, FALSE, '"hp-odu.pump-relay"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('ace33aa4-0f18-d100-2537-eb9ba80111b3', 'handle.name', 2, FALSE, '"hp-odu.pump-relay"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('8c3d8501-8d9c-df04-fe2e-1c048760f1e1', 'handle.name', 0, TRUE, '""', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('4ef5790a-3b3a-58c8-df34-d083065e9e70', 'handle.name', 0, TRUE, '""', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('9d37329a-dded-99bc-c569-749011a1759f', 'handle.name', 1, TRUE, '"1st-floor"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('aff8fc30-484b-08db-d471-f3aa05103fa1', 'handle.name', 1, TRUE, '"1st-floor"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('a81ed789-0c2a-494c-99d0-38f5f9c8daa1', 'handle.name', 2, TRUE, '"Main-Tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('86f416a6-8623-c120-7522-70a36fc06b8e', 'handle.name', 2, TRUE, '"Main-Tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('6c8dccda-d3d1-f7ea-5838-f12991f43f0b', 'handle.name', 3, TRUE, '"sensor_1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('bb3bb12f-3e63-e386-53cd-98b07f6c1513', 'handle.name', 3, TRUE, '"sensor_1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('39c3300e-8e34-53f2-651b-413615623ec2', 'handle.name', 4, TRUE, '"sensor 1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('e82de365-7b5f-c876-dc0c-e8661f79dbff', 'handle.name', 4, TRUE, '"sensor 1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('ef5a99b3-21ab-ad2c-c066-f79cfb85f4af', 'handle.name', 5, TRUE, '"tank."', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('2c69cbf8-7dc0-300e-7802-a939cc54680f', 'handle.name', 5, TRUE, '"tank."', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('fc75f3de-487f-777f-67d4-9b5f94342dcf', 'handle.name', 6, TRUE, '".tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('956671e6-1f54-ba6b-f7c5-067cdaea96a6', 'handle.name', 6, TRUE, '".tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('e553a641-e922-b65a-255c-354648e2f23d', 'handle.name', 7, TRUE, '"a..b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('cffbb392-f874-c8bb-9531-2e92246625e6', 'handle.name', 7, TRUE, '"a..b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('81ab33b3-02cf-2f73-f8c3-5c908288e4fc', 'handle.name', 8, TRUE, '"a.-b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('61542a3c-fab5-184f-dffc-b1c6ed8db202', 'handle.name', 8, TRUE, '"a.-b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('32701b1f-3aaf-7746-374f-d89a6b362b8a', 'handle.name', 9, TRUE, '"a.b-"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('4a037049-c68e-f127-afd5-337412c68f9d', 'handle.name', 9, TRUE, '"a.b-"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('a97ee34c-3bbf-123f-ecb4-358610368b7a', 'handle.name', 10, TRUE, '"a--b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('fbbbb4a3-3e57-66ef-336f-ef66438d5c48', 'handle.name', 10, TRUE, '"a--b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('c75c3b14-8ada-772c-f640-437a821940ad', 'handle.name', 11, TRUE, '"a.b--c"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('13341054-4c04-573d-9d55-f4d7cbf38387', 'handle.name', 11, TRUE, '"a.b--c"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('735d8cde-b716-89bb-2c4f-55e68378594d', 'handle.name', 12, TRUE, '"a.1b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('b9352c8e-15ee-b74a-8a56-f6722baf77b4', 'handle.name', 12, TRUE, '"a.1b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('344cfa7c-afeb-1b58-c8c5-e60b23801791', 'handle.name', 13, TRUE, '"a.b.c3-"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('48e8b610-7559-5dce-48ef-c7c290b708a0', 'handle.name', 13, TRUE, '"a.b.c3-"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('9dc2892c-c611-34f8-4512-2cb81363ce09', 'handle.name', 14, TRUE, '"a.b.c#"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('fe8f5da0-349a-d18c-1113-954619ce7f5a', 'handle.name', 14, TRUE, '"a.b.c#"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('b34e2f0d-d774-1581-9c4c-3abbff6a72ac', 'left.right.dot', 0, FALSE, '"beech.1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('2bbbee66-c2d7-0412-1dfb-f598494239ea', 'left.right.dot', 0, FALSE, '"beech.1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('b819d571-60f4-6365-0106-32172de80ddc', 'left.right.dot', 1, FALSE, '"hw1.isone.me.versant.keene.beech"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('19cb11ed-adf5-7005-6d85-f4066793597d', 'left.right.dot', 1, FALSE, '"hw1.isone.me.versant.keene.beech"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('8a6ef7d5-6a7b-b023-f490-2e85896e9667', 'left.right.dot', 0, TRUE, '"scada.multipurpose-sensor"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('872cd371-1de4-9b88-9847-63c5303d036d', 'left.right.dot', 0, TRUE, '"scada.multipurpose-sensor"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('64493f82-6cbf-f29e-c85c-4614fedcbdfc', 'left.right.dot', 1, TRUE, '"2be.or.not"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('96673559-afda-20e2-a6c2-870872ff0705', 'left.right.dot', 1, TRUE, '"2be.or.not"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('36d11569-69b0-394a-2685-ff8fc7cb9271', 'left.right.dot', 2, TRUE, '"a..b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('c92ae565-d0b2-ce6d-64b8-8025266d1be1', 'left.right.dot', 2, TRUE, '"a..b"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('fa8b7309-31f7-d57b-f4b3-bcc8cfe675e3', 'left.right.dot', 3, TRUE, '""', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('9144c5c7-bdc6-7d3f-ddd0-c44a4c89b6f0', 'left.right.dot', 3, TRUE, '""', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('511defaa-ced3-ac60-b467-f02299704da0', 'market.slot.name', 0, FALSE, '"e.rt60gate5.d1.isone.ver.keene.1673539200"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('bb559e28-1e94-6844-aac5-cd18806bb79e', 'market.slot.name', 0, FALSE, '"e.rt60gate5.d1.isone.ver.keene.1673539200"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('12e8bf4f-fb6c-e63e-022e-f44a763ec0d9', 'non.negative.int', 0, FALSE, '0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('d401c115-3508-d09d-9cb5-045047c73457', 'non.negative.int', 0, FALSE, '0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('b238854d-e369-184b-21dc-b87f204098cc', 'non.negative.int', 1, FALSE, '1', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('ea5c9184-bd79-5ac6-8909-ae00a2d83b1d', 'non.negative.int', 1, FALSE, '1', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('893cae7e-4732-6342-06d6-61b0e4d2a50c', 'non.negative.int', 2, FALSE, '17', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('198981e3-b50e-2858-6dc3-70af44dd4ee7', 'non.negative.int', 2, FALSE, '17', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('c9422c43-7a7a-b81e-0d6f-b04fe7ea369b', 'non.negative.int', 0, TRUE, '-1', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('8ae5431b-426a-382d-c51b-9a5b713afdbf', 'non.negative.int', 0, TRUE, '-1', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('e2a028a4-432e-6a85-8aff-bd0b38c9a0f8', 'non.negative.int', 1, TRUE, '0.0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('68cb52d4-d5af-30a8-c342-13c0f67dc07b', 'non.negative.int', 1, TRUE, '0.0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('d8a631f7-75f7-9850-4200-432c71cff14a', 'non.negative.int', 2, TRUE, '1.0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('cc9ab3af-1529-0b7b-a0a8-8183e42f76fa', 'non.negative.int', 2, TRUE, '1.0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('b870b1f1-2b55-acda-ae54-c526c90f9c13', 'non.negative.int', 3, TRUE, '"0"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('21eaa7d6-fe6d-ca19-7ec8-5e3cd103939f', 'non.negative.int', 3, TRUE, '"0"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('d8688606-2fa6-113e-e827-a7662b24def2', 'positive.int', 0, FALSE, '1', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('2973b60d-0eed-2841-502f-ff0d4682ae03', 'positive.int', 0, FALSE, '1', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('4d1029c8-f38d-db5b-9f5e-3a7b9b6fb346', 'positive.int', 1, FALSE, '7', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('8de7d59e-2da3-34ee-6953-b443d2fa9f1a', 'positive.int', 1, FALSE, '7', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('b2efd1f5-944f-96b2-49b0-de7af94cd9d5', 'positive.int', 2, FALSE, '432', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('fff9af62-f6a9-ed94-be34-b313efdc79e5', 'positive.int', 2, FALSE, '432', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('b9693d0f-0471-9ad4-9a9b-e7e388a1fa81', 'positive.int', 0, TRUE, '0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('7ebfb791-f747-23ed-d28b-ffb5c879ea1d', 'positive.int', 0, TRUE, '0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('e76b6f57-1eab-660e-3445-c163df72c4df', 'positive.int', 1, TRUE, '-1', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('862d46b2-47ce-e174-1793-495d7ff487fb', 'positive.int', 1, TRUE, '-1', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('1c376823-e8d5-64df-d1b3-0da9ba0e1e0b', 'positive.int', 2, TRUE, '1.0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('581bc0b0-e89d-076c-aa6e-321675978b14', 'positive.int', 2, TRUE, '1.0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('d77fd433-fcf0-3426-7939-75c9fc322e12', 'positive.int', 3, TRUE, '"1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('6742247c-8dfa-cfce-b2e6-dc36bce40e8f', 'positive.int', 3, TRUE, '"1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('a854df18-cbea-a0c0-7f86-d1aff69d9901', 'spaceheat.name', 0, FALSE, '"scada"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('8e14eefc-e3f0-849c-0875-17799c248c65', 'spaceheat.name', 0, FALSE, '"scada"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('2d8fbce0-f03e-85c7-897e-13b637fc8b02', 'spaceheat.name', 1, FALSE, '"tank1-depth2"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('86e66226-8d9b-a606-d0f3-27fb2070ae45', 'spaceheat.name', 1, FALSE, '"tank1-depth2"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('f9019f2a-9682-35c0-81a0-c30c1c29f799', 'spaceheat.name', 0, TRUE, '"Tank1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('10fb21ac-d90b-9276-ef81-e3f06d7af959', 'spaceheat.name', 0, TRUE, '"Tank1"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('d86268a6-550c-1514-3a5c-89bc2488af89', 'spaceheat.name', 1, TRUE, '"1st-tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('8d5d1bb0-7b1f-d2a2-d669-a6c042fbf1f3', 'spaceheat.name', 1, TRUE, '"1st-tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('40f8d316-d9a0-e8f7-c575-2a04ed339861', 'spaceheat.name', 2, TRUE, '"tank_depth"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('4437b39c-33e8-c89c-709c-687ec13d3bdf', 'spaceheat.name', 2, TRUE, '"tank_depth"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('34734010-db60-c3cf-81a3-9bcb98f1f93d', 'spaceheat.name', 3, TRUE, '"tank."', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('3de1c6ed-9828-7d3d-287d-b4c3e656c85d', 'spaceheat.name', 3, TRUE, '"tank."', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('4e77356f-8420-bfa6-4465-954d4eef622a', 'spaceheat.name', 4, TRUE, '"tank--depth"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('94a66bbe-bca0-315f-70bb-15ad05a877bc', 'spaceheat.name', 4, TRUE, '"tank--depth"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('1a22b8a2-9547-1a95-83b2-12733424c584', 'spaceheat.name', 5, TRUE, '"-tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('57d40cb7-f3d8-8131-3ac1-4dc500ee3c4f', 'spaceheat.name', 5, TRUE, '"-tank"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('41b51ec1-1861-ddb2-839f-f2a3129039b9', 'spaceheat.name', 6, TRUE, '"tank-"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('1776e15a-f76f-d241-fbac-163b4a413003', 'spaceheat.name', 6, TRUE, '"tank-"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('ee95394a-8ccb-1180-d994-2d7509bd5a3e', 'utc.iso8601.millis', 0, FALSE, '"2025-02-26T00:00:00.000Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('f06fc0bc-9d19-a77d-6c26-2eee88ee91c6', 'utc.iso8601.millis', 0, FALSE, '"2025-02-26T00:00:00.000Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('d1f1b7f3-ebe5-2edc-1b17-77ca8207040e', 'utc.iso8601.millis', 1, FALSE, '"2025-02-26T00:01:23.456Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('b7c41f67-8ce6-edd8-c770-78b27fab4c0a', 'utc.iso8601.millis', 1, FALSE, '"2025-02-26T00:01:23.456Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('6eccc578-5fdc-842e-1ffd-f8b54d645fb4', 'utc.iso8601.millis', 0, TRUE, '"2025-02-26T00:00:00Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('ea881488-9e5c-e02d-2f45-03790137d38c', 'utc.iso8601.millis', 0, TRUE, '"2025-02-26T00:00:00Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('7dac1024-e7b3-7e14-4f2a-c272f66848fc', 'utc.iso8601.millis', 1, TRUE, '"2025-02-26T00:00:00.00Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('b9a9381a-53c5-d304-4cb4-ed58199af7a7', 'utc.iso8601.millis', 1, TRUE, '"2025-02-26T00:00:00.00Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('813d1844-802a-8e84-c522-f406aa999a70', 'utc.iso8601.millis', 2, TRUE, '"2025-02-26T00:00:00.1234Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('a20c9e2a-a0a1-70af-2c37-56b0e67b77f8', 'utc.iso8601.millis', 2, TRUE, '"2025-02-26T00:00:00.1234Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('505284d3-d36b-548c-78e7-b16f8d59a517', 'utc.iso8601.millis', 3, TRUE, '"2025-02-26T00:00:00.123+00:00"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('09c6a5fa-de01-44fc-cf33-186c7b428b84', 'utc.iso8601.millis', 3, TRUE, '"2025-02-26T00:00:00.123+00:00"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('7930b0e2-cf79-b9df-a4de-d6e9c7115003', 'utc.iso8601.seconds', 0, FALSE, '"2025-02-26T00:00:00Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('1a37cbd7-20aa-7c22-b1bb-81948a74aadf', 'utc.iso8601.seconds', 0, FALSE, '"2025-02-26T00:00:00Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('5924179f-3c17-55e6-d31a-3cd0720a137a', 'utc.iso8601.seconds', 1, FALSE, '"2025-02-26T00:01:23Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('c52e804c-155e-30a5-d821-de5d55a0c290', 'utc.iso8601.seconds', 1, FALSE, '"2025-02-26T00:01:23Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('c9ee65f4-d9b0-a2c0-b6c8-14774cc27783', 'utc.iso8601.seconds', 0, TRUE, '"2025-02-26T00:00:00.000Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('261c292b-b2ab-b508-8e69-6dc92a8d4be1', 'utc.iso8601.seconds', 0, TRUE, '"2025-02-26T00:00:00.000Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('7fd656f8-ce32-6fac-9c3a-b85bb2e0eda9', 'utc.iso8601.seconds', 1, TRUE, '"2025-02-26T00:00:00.00Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('7b43fcbb-354f-7b23-f51d-c4692f16c4d8', 'utc.iso8601.seconds', 1, TRUE, '"2025-02-26T00:00:00.00Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('80f2da6d-1e46-15ed-833f-da26e88f3a2e', 'utc.iso8601.seconds', 2, TRUE, '"2025-02-26T00:00:00.123Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('9775d1e4-3200-c05f-6132-c56f2b9fc10f', 'utc.iso8601.seconds', 2, TRUE, '"2025-02-26T00:00:00.123Z"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('f0895a73-d400-c692-b0ef-0d15473c6a79', 'utc.iso8601.seconds', 3, TRUE, '"2025-02-26T00:00:00+00:00"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('8f235c05-a2c0-bcd1-9105-4be47e5ac3ef', 'utc.iso8601.seconds', 3, TRUE, '"2025-02-26T00:00:00+00:00"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('5cc5813d-109d-e728-b37c-00126a6c2da0', 'utc.milliseconds', 0, FALSE, '1609459200000', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('3bdb3f66-ead4-8caf-04c0-56c4b3cf7811', 'utc.milliseconds', 0, FALSE, '1609459200000', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('36b73ac7-4d42-023c-1703-9e8f8a7f6cf8', 'utc.milliseconds', 1, FALSE, '1609459200500', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('1c66ca23-29f3-5d12-7de5-cc1a49b08c5b', 'utc.milliseconds', 1, FALSE, '1609459200500', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('be464622-304e-f397-e0b5-5d2378b6cab2', 'utc.milliseconds', 2, FALSE, '1735689600123', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('d321e4b1-cefa-eefd-2ba7-1c34ecbaf6ef', 'utc.milliseconds', 2, FALSE, '1735689600123', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('aef257c4-b0dd-ce40-4a78-eaefee69c98f', 'utc.milliseconds', 0, TRUE, '0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('88ed3530-171e-8e97-2188-b8a6bf8bbb28', 'utc.milliseconds', 0, TRUE, '0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('02a90cf1-f697-7f79-71a6-48d50e7cdf38', 'utc.milliseconds', 1, TRUE, '946684799999', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('ad79420f-7da0-5d3f-4aa9-2ff2457a4427', 'utc.milliseconds', 1, TRUE, '946684799999', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('53a4c552-a374-83dd-8035-b5da2a7b5d11', 'utc.milliseconds', 2, TRUE, '32503680000001', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('5e812bfb-6ce6-3d94-0e59-a3205f36ee67', 'utc.milliseconds', 2, TRUE, '32503680000001', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('115b6d9c-089a-adef-7703-cc56c71bb41d', 'utc.milliseconds', 3, TRUE, '1609459200000.5', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('3be899e2-8327-d782-be52-ec96b9d786ce', 'utc.milliseconds', 3, TRUE, '1609459200000.5', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('33fbf83a-6607-173c-5d95-128b94bbe22b', 'utc.seconds', 0, FALSE, '1609459200', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('a517040d-5c8f-0753-5cf8-ae047a29c742', 'utc.seconds', 0, FALSE, '1609459200', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('c2a3851f-c954-996d-17fa-06cc42b3e860', 'utc.seconds', 1, FALSE, '1735689600', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('5f33321e-ef63-8aa1-ccee-e76ef08df17f', 'utc.seconds', 1, FALSE, '1735689600', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('e858c5a5-2d9d-4ad6-9fd6-0efa0a8b4c3e', 'utc.seconds', 0, TRUE, '0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('974cc750-a063-d6ef-4635-8ab5eb72ee59', 'utc.seconds', 0, TRUE, '0', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('e1fd9ba5-044d-b49f-5ab6-e0cbfedda555', 'utc.seconds', 1, TRUE, '946684799', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('96727fda-9051-3028-c10e-bee40ad8f18f', 'utc.seconds', 1, TRUE, '946684799', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('fe97f5f5-aa5c-5508-14a4-930ef5f7ba68', 'utc.seconds', 2, TRUE, '32503680001', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('f610ec5a-0631-1d53-22a9-1f8f63ff2e7c', 'utc.seconds', 2, TRUE, '32503680001', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('6168eb02-b1c1-75aa-5d6e-407ff5318028', 'utc.seconds', 3, TRUE, '1609459200.5', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('bb580bc2-a102-86e5-5d0e-221d771ed04e', 'utc.seconds', 3, TRUE, '1609459200.5', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('40c7bc80-5133-123d-ca72-e8a196645fa4', 'uuid4.str', 0, FALSE, '"9cff2689-eadc-4577-94ea-6d86d0d23e9e"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('75c51726-9023-8f18-7018-a334a17995cd', 'uuid4.str', 0, FALSE, '"9cff2689-eadc-4577-94ea-6d86d0d23e9e"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('af93bbcc-192a-121b-5d17-b96443caa4ee', 'uuid4.str', 1, FALSE, '"4e5a6b1c-2d3e-4f5a-8b9c-1d2e3f4a5b6c"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('bc9f841b-343e-389b-2954-89939f252420', 'uuid4.str', 1, FALSE, '"4e5a6b1c-2d3e-4f5a-8b9c-1d2e3f4a5b6c"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('178a4bcc-7d25-c660-ea91-2060f33b938a', 'uuid4.str', 2, FALSE, '"f47ac10b-58cc-4372-a567-0e02b2c3d479"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('611f7707-77fe-651f-a620-bb03c584f433', 'uuid4.str', 2, FALSE, '"f47ac10b-58cc-4372-a567-0e02b2c3d479"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('b9666f82-2d91-7684-4967-2c34c47a7513', 'uuid4.str', 0, TRUE, '"not-a-uuid"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('95bbc780-8d70-42ee-1e5b-26ef7649d150', 'uuid4.str', 0, TRUE, '"not-a-uuid"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('1b536350-1fa6-840d-f392-c04ddbce329a', 'uuid4.str', 1, TRUE, '"6ba7b810-9dad-11d1-80b4-00c04fd430c"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('65cabe5f-39f5-68dc-4b0c-284740cff8f2', 'uuid4.str', 1, TRUE, '"6ba7b810-9dad-11d1-80b4-00c04fd430c"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('a3f1d362-6c94-c771-8f76-ee3f3524df59', 'uuid4.str', 2, TRUE, '"6ba7b810-9dad-11d1-80b4-00c04fd430c88"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('fa6cea83-af2a-bfd0-1c64-0903958123e8', 'uuid4.str', 2, TRUE, '"6ba7b810-9dad-11d1-80b4-00c04fd430c88"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('4ca2bfbc-9a4e-e303-d897-08bf80279424', 'uuid4.str', 3, TRUE, '"6ba7b810-9dad-21d1-80b4-00c04fd430c8"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('4bf9918a-d6c7-a4e8-23cb-87355e94d3bc', 'uuid4.str', 3, TRUE, '"6ba7b810-9dad-21d1-80b4-00c04fd430c8"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('d247ef5a-c3bf-d87a-ddc1-8b34b1e04822', 'uuid4.str', 4, TRUE, '"6ba7b810-9dad-11d1-70b4-00c04fd430c8"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('7db274f0-04e7-3b0a-1b7e-3277f1962ce5', 'uuid4.str', 4, TRUE, '"6ba7b810-9dad-11d1-70b4-00c04fd430c8"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
 
 INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
-VALUES ('3f4c838a-8c7b-d149-f7f3-ffb1f50f8300', 'uuid4.str', 5, TRUE, '"6BA7B810-9DAD-11D1-80B4-00C04FD430C8"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+VALUES ('52639dee-9a64-e9ec-9a41-8c99aa1203ad', 'uuid4.str', 5, TRUE, '"6BA7B810-9DAD-11D1-80B4-00C04FD430C8"', NULL) ON CONFLICT (format_examples_id) DO NOTHING;
+
+INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
+VALUES ('a83f4862-1af4-8968-efa6-bd0e81a9345e', 'microera.feed.tag', 0, FALSE, 'boston-grid-east', 'A regional feed tag.') ON CONFLICT (format_examples_id) DO NOTHING;
+
+INSERT INTO format_examples (format_examples_id, format, idx, is_counter, value, description)
+VALUES ('7903fc50-3203-1ad8-e5a3-ebb02c66575d', 'microera.feed.tag', 1, TRUE, 'Boston-Grid-East', 'Counter-example: uppercase not allowed.') ON CONFLICT (format_examples_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- Enums: Top-level enum definitions (name-level). Versioned enums have multiple EnumVersions; literal enums have one. Sourced from definitions/registry.yaml + definitions/enums/.
 -- ----------------------------------------------------------------------------
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('63df943b-f7be-ef63-347c-209174259199', 'base.g.node.class', 'gridworks-energy', 'versioned', NULL, 'Universal physical ontology classification for Grid Nodes', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('df1bc1da-9f4b-9488-cbea-cb0f8dca33a7', 'base.g.node.class', 'gridworks-energy', 'versioned', NULL, 'Universal physical ontology classification for Grid Nodes', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('135e01e3-602c-70cd-e037-8dd63dce62cd', 'buffer.regulation.mode', 'gridworks-energy', 'literal', NULL, 'Operating mode that governs how tightly the House0 buffer tank is regulated.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('ab875108-04ef-afb1-5646-8de946f3e4fc', 'buffer.regulation.mode', 'gridworks-energy', 'literal', NULL, 'Operating mode that governs how tightly the House0 buffer tank is regulated.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('5148c0cd-f546-47f8-b9f8-3b10ab199489', 'change.heatcall.source', 'gridworks-energy', 'literal', NULL, 'Command enum for switching heat-call control authority between wall thermostat and SCADA.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('90aa0127-8c93-c352-3259-bf696feab70d', 'change.heatcall.source', 'gridworks-energy', 'literal', NULL, 'Command enum for switching heat-call control authority between wall thermostat and SCADA.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('7baa8a75-ddc0-385b-2414-ca3f3e894869', 'change.relay.state', 'gridworks-energy', 'literal', NULL, 'FSM events for changing a simple relay between open and closed states.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('de6c27b4-10ce-20f9-6534-841cb037a1e4', 'change.relay.state', 'gridworks-energy', 'literal', NULL, 'FSM events for changing a simple relay between open and closed states.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('7eefe406-e34a-1b9d-3987-ca87258eded1', 'fis.authorization.decision', 'gridworks-energy', 'versioned', NULL, 'Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('0bd006b1-69e1-4a22-271b-292509cee02c', 'fis.authorization.decision', 'gridworks-energy', 'versioned', NULL, 'Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('2b753490-0d21-c6ea-e58d-612ced1699a8', 'fis.authorization.reason', 'gridworks-energy', 'versioned', NULL, 'Structured reason describing why the Fleet Index Service (FIS) produced a specific authorization decision.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('d0bcbba8-28a8-f986-0dd6-239ba31367a8', 'fis.authorization.reason', 'gridworks-energy', 'versioned', NULL, 'Structured reason describing why the Fleet Index Service (FIS) produced a specific authorization decision.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('d1b81ef3-87c1-d752-b199-73f111426993', 'fsm.report.type', 'gridworks-energy', 'literal', NULL, 'Enumeration of atomic FSM report categories.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('5dbb7189-e6b1-3f06-6086-4fc0d38fb31f', 'fsm.report.type', 'gridworks-energy', 'literal', NULL, 'Enumeration of atomic FSM report categories.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('6f704da1-c160-a3d0-8f0e-47e5bfe0df23', 'g.node.instance.status', 'gridworks-energy', 'versioned', NULL, 'Lifecycle state of a runtime instance tracked by FIS', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('b09f80f8-e2e4-76c0-e5b6-2061b79bba94', 'g.node.instance.status', 'gridworks-energy', 'versioned', NULL, 'Lifecycle state of a runtime instance tracked by FIS', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('6b7a11f1-ffd8-4be5-e164-b666fa6bd3e9', 'g.node.instance.transport', 'gridworks-energy', 'versioned', NULL, 'Transport protocol used by a runtime instance', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('504f53e6-0163-215a-fbf9-5b4c312ebe3b', 'g.node.instance.transport', 'gridworks-energy', 'versioned', NULL, 'Transport protocol used by a runtime instance', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('c74fd6d7-fa3b-8dde-d71c-6852a34da5dd', 'g.node.status', 'gridworks-energy', 'versioned', NULL, 'Lifecycle status of a Grid Node within the registry', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('ea2ac0cf-0caf-a4a5-2e22-22f840c174bc', 'g.node.status', 'gridworks-energy', 'versioned', NULL, 'Lifecycle status of a Grid Node within the registry', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('0cb660e7-8053-1c9e-f22b-2ec93eb8b90f', 'gpm.from.hz.method', 'gridworks-energy', 'versioned', NULL, 'Method used to convert measured pulse frequency into gallons per minute.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('001f376c-85b0-6c5a-1d78-e9728fee2a5c', 'gpm.from.hz.method', 'gridworks-energy', 'versioned', NULL, 'Method used to convert measured pulse frequency into gallons per minute.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('60deac88-cf95-99f5-231b-40b1a4fb8fbe', 'gw.g.node.class', 'gridworks-energy', 'versioned', NULL, 'GridWorks-specific functional classification for GNodes', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('ec6fb010-669a-19c9-7fbd-87134fdecad0', 'gw.g.node.class', 'gridworks-energy', 'versioned', NULL, 'GridWorks-specific functional classification for GNodes', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('63b3883f-a681-0571-0b85-48c51f767fad', 'gw1.actor.class', 'gridworks-energy', 'versioned', NULL, 'Classification of actors in the GridWorks SCADA system.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('9002e1f3-ac91-1e1d-2e7f-952eeb1259d0', 'gw1.actor.class', 'gridworks-energy', 'versioned', NULL, 'Classification of actors in the GridWorks SCADA system.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('78c127ee-8fa0-af6c-f68c-b18de24e2b50', 'gw1.emission.method', 'gridworks-energy', 'versioned', NULL, 'Method by which a derived or computed channel emits values.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('b8db5d08-2bd5-147d-3113-0ecdcc0366a8', 'gw1.emission.method', 'gridworks-energy', 'versioned', NULL, 'Method by which a derived or computed channel emits values.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('44011277-2c4e-0b29-b494-8061a4aded95', 'gw1.quantity', 'gridworks-energy', 'versioned', NULL, 'High-level physical or semantic quantity classification for telemetry values.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('edd4fc38-a663-7c4f-01c2-f60bcb20a36d', 'gw1.quantity', 'gridworks-energy', 'versioned', NULL, 'High-level physical or semantic quantity classification for telemetry values.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('c2abc2b9-0884-c207-5fff-2d722137b65b', 'gw1.seasonal.storage.mode', 'gridworks-energy', 'versioned', NULL, 'Seasonal storage operating mode for layouts that distinguish all-tank from buffer-only operation.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('4bac6787-e200-382f-54c2-26713ad22454', 'gw1.seasonal.storage.mode', 'gridworks-energy', 'versioned', NULL, 'Seasonal storage operating mode for layouts that distinguish all-tank from buffer-only operation.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('4e8eb3fb-51d4-1b03-db60-a48768858c16', 'gw1.system.mode', 'gridworks-energy', 'versioned', NULL, 'System operational mode for HVAC control.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('07528552-7c05-454c-4985-0a5b2896dadb', 'gw1.system.mode', 'gridworks-energy', 'versioned', NULL, 'System operational mode for HVAC control.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('2de30763-025d-ee1d-358e-9b1d6b60b08c', 'gw1.heat.call.interpretation', 'gridworks-energy', 'versioned', NULL, 'Defines how a source telemetry channel is interpreted to determine whether a zone is calling for heat.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('f360df47-93e6-611e-c8c1-9eeace029f45', 'gw1.heat.call.interpretation', 'gridworks-energy', 'versioned', NULL, 'Defines how a source telemetry channel is interpreted to determine whether a zone is calling for heat.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('c7036090-645b-0e70-5148-1569fcd4b6dc', 'gw1.unit', 'gridworks-energy', 'versioned', NULL, 'Measurement-unit vocabulary used for derived channels.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('09d47093-56bf-0d17-ba84-a048db61c72c', 'gw1.unit', 'gridworks-energy', 'versioned', NULL, 'Measurement-unit vocabulary used for derived channels.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('b63bad6f-dfe0-fa44-db49-842bc94f66b6', 'heatcall.source', 'gridworks-energy', 'literal', NULL, 'Source currently responsible for issuing a zone heat call.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('268913f5-ebe3-f6e2-005e-ee8e8281d456', 'heatcall.source', 'gridworks-energy', 'literal', NULL, 'Source currently responsible for issuing a zone heat call.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('d78264e7-2391-9f24-d080-afb28b9d778c', 'hz.calc.method', 'gridworks-energy', 'versioned', NULL, 'Method used to estimate signal frequency from pulse timing data.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('da9465f5-876c-6d62-ef53-f56d1ce84016', 'hz.calc.method', 'gridworks-energy', 'versioned', NULL, 'Method used to estimate signal frequency from pulse timing data.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('edf8e358-07c6-502b-9719-61a13cc4f88a', 'market.price.unit', 'gridworks-energy', 'versioned', NULL, 'Unit of the price axis for a market type.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('f35a676a-52cc-1c4b-3b30-8bee6cf43e69', 'market.price.unit', 'gridworks-energy', 'versioned', NULL, 'Unit of the price axis for a market type.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('826a64c8-ea5a-84b6-3df5-1e20ef935874', 'market.quantity.unit', 'gridworks-energy', 'versioned', NULL, 'Unit of the quantity axis for a market type.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('e771ef7d-c927-8c10-f10f-7aefc38089f0', 'market.quantity.unit', 'gridworks-energy', 'versioned', NULL, 'Unit of the quantity axis for a market type.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('a12fb952-17df-150c-7a72-49081165356f', 'market.type.name', 'gridworks-energy', 'versioned', NULL, 'Categorizes different markets run by MarketMaker', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('e7bdc854-3f15-919a-3515-242cc6b4baa7', 'market.type.name', 'gridworks-energy', 'versioned', NULL, 'Categorizes different markets run by MarketMaker', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('f6bb15fa-d029-d517-c162-7f8c827e9c9f', 'relay.closed.or.open', 'gridworks-energy', 'literal', NULL, 'FSM states for a simple relay with open and closed positions.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('317ed966-c80a-604c-67ad-773f78fcf074', 'relay.closed.or.open', 'gridworks-energy', 'literal', NULL, 'FSM states for a simple relay with open and closed positions.', 'relay.open.or.closed', NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('5088d165-db39-5f59-a479-858035137cd2', 'relay.energization.state', 'gridworks-energy', 'literal', 'integer', 'Two-state relay energization state.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('5ddbfa9e-ad6b-a6d9-336d-abee9939cbb7', 'relay.energization.state', 'gridworks-energy', 'literal', 'integer', 'Two-state relay energization state.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('b65f75bf-b3dd-4c69-3e75-d80b7933a979', 'relay.open.or.closed', 'gridworks-energy', 'literal', NULL, 'Binary contact state for a single-pole relay, independent of coil energization.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('62886cb4-0031-0637-9cc7-bf193fbf6017', 'relay.open.or.closed', 'gridworks-energy', 'literal', NULL, 'Binary contact state for a single-pole relay, independent of coil energization.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('2d02d670-95f0-5f70-ba06-723e52d00e6c', 'relay.wiring.config', 'gridworks-energy', 'versioned', NULL, 'Defines how a relay’s COM, NO, and NC terminals are wired into a circuit.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('878f7500-fe1f-3ac3-e903-e103fd49a672', 'relay.wiring.config', 'gridworks-energy', 'versioned', NULL, 'Defines how a relay’s COM, NO, and NC terminals are wired into a circuit.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('81acf3cf-4304-a738-49b3-e15f32213338', 'spaceheat.make.model', 'gridworks-energy', 'versioned', NULL, 'Make and model taxonomy used by Spaceheat SCADA for physical and simulated devices.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('d2743f97-f565-1413-26da-6f51a736d66f', 'spaceheat.make.model', 'gridworks-energy', 'versioned', NULL, 'Make and model taxonomy used by Spaceheat SCADA for physical and simulated devices.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('aa8d16cb-767a-02ac-f69b-d2e5fee16649', 'spaceheat.telemetry.name', 'gridworks-energy', 'versioned', NULL, 'Legacy Spaceheat telemetry-name vocabulary for raw channels.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('ed1b1d99-5b00-3ed7-b6bf-1793bbd55135', 'spaceheat.telemetry.name', 'gridworks-energy', 'versioned', NULL, 'Legacy Spaceheat telemetry-name vocabulary for raw channels.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('88d0c984-118f-d40b-62dd-7b6ffc79bbfa', 'spaceheat.unit', 'gridworks-energy', 'versioned', NULL, 'Legacy Spaceheat measurement-unit vocabulary used in channel configuration and telemetry payloads.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('afd430cc-2b41-d2e8-b6e2-12c0f37b6d94', 'spaceheat.unit', 'gridworks-energy', 'versioned', NULL, 'Legacy Spaceheat measurement-unit vocabulary used in channel configuration and telemetry payloads.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
-VALUES ('1029a4cb-8a31-7900-577e-43794986275c', 'temp.calc.method', 'gridworks-energy', 'versioned', NULL, 'Method used to calculate temperature from thermistor voltage measurements.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+VALUES ('b9d1bb6d-e989-c6df-331a-b353bbd22bec', 'temp.calc.method', 'gridworks-energy', 'versioned', NULL, 'Method used to calculate temperature from thermistor voltage measurements.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
+
+INSERT INTO enums (enums_id, name, owner, enum_type, value_type, description, replaced_by, raw_json)
+VALUES ('55c8c368-c189-cab2-3867-2e27c579a460', 'defauw.action', 'thomas-defauw', 'open', 'string', 'Atomic actions in Thomas''s signaling protocol.', NULL, NULL) ON CONFLICT (enums_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- EnumVersions: Specific versions of an enum. Each enum can have multiple versions (e.g. gw1.actor.class has versions 009, 010, 011).
 -- ----------------------------------------------------------------------------
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('b3dde112-2b5d-9af7-7f1e-9a23e9f6fedf', 'base.g.node.class', '000', 'https://schemas.electricity.works/enums/base.g.node.class/000', 'base.g.node.class', 'Ontology classification for Grid Nodes (GNodes) used to describe their structural relationship to the physical electric grid. Values identify whether a node represents a physical metered boundary, a physical topological structure, a market coordination constraint, or a purely logical entity.
+VALUES ('1e013a93-694a-3250-a190-b90528d03579', 'base.g.node.class', '000', 'https://schemas.electricity.works/enums/base.g.node.class/000', 'base.g.node.class', 'Ontology classification for Grid Nodes (GNodes) used to describe their structural relationship to the physical electric grid. Values identify whether a node represents a physical metered boundary, a physical topological structure, a market coordination constraint, or a purely logical entity.
 Every GNode SHALL declare exactly one base.g.node.class value.
 ', 'Logical', 'active', '2026-02-22T16:43:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('c74d75bb-ab80-91da-7491-797a2d5a711e', 'buffer.regulation.mode', '000', 'https://schemas.electricity.works/enums/buffer.regulation.mode/000', 'buffer.regulation.mode', 'Governs how the House0 buffer tank is operated.
+VALUES ('d318aa4a-8f0a-10ca-82db-0d4c774b79a9', 'buffer.regulation.mode', '000', 'https://schemas.electricity.works/enums/buffer.regulation.mode/000', 'buffer.regulation.mode', 'Governs how the House0 buffer tank is operated.
 ', 'Normal', 'active', '2026-03-16T14:14:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('3ad80427-0911-2af8-684c-b551cfe8c4c7', 'change.heatcall.source', '000', 'https://schemas.electricity.works/enums/change.heatcall.source/000', 'change.heatcall.source', 'Source responsible for issuing the heat call signal to a zone. Used to represent control authority in systems where a relay selects between SCADA and a local wall thermostat.
+VALUES ('e55663a6-308f-b33c-c568-15f6f2fc209a', 'change.heatcall.source', '000', 'https://schemas.electricity.works/enums/change.heatcall.source/000', 'change.heatcall.source', 'Source responsible for issuing the heat call signal to a zone. Used to represent control authority in systems where a relay selects between SCADA and a local wall thermostat.
 ', 'WallThermostat', 'active', '2026-03-27T21:31:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('8f6fc397-31ad-7493-7e27-53f80304e8bb', 'change.relay.state', '000', 'https://schemas.electricity.works/enums/change.relay.state/000', 'change.relay.state', 'Canonical FSM events for transitioning a simple relay between open and closed states. These events correspond to control actions applied to the relay.
+VALUES ('dd3ee3ad-9a4a-46c3-f7b1-942b4f964027', 'change.relay.state', '000', 'https://schemas.electricity.works/enums/change.relay.state/000', 'change.relay.state', 'Canonical FSM events for transitioning a simple relay between open and closed states. These events correspond to control actions applied to the relay.
 ', 'OpenRelay', 'active', '2024-09-17T20:17:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('6f942899-c34f-d93b-217d-0466f5f8bb82', 'fis.authorization.decision', '000', 'https://schemas.electricity.works/enums/fis.authorization.decision/000', 'fis.authorization.decision', 'Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.
+VALUES ('8e98b486-91b3-0ece-e177-4bf961afa390', 'fis.authorization.decision', '000', 'https://schemas.electricity.works/enums/fis.authorization.decision/000', 'fis.authorization.decision', 'Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.
 This enum captures only the final decision result. Structured explanations are conveyed separately via fis.authorization.reason.
 ', 'Denied', 'active', '2026-03-16T14:14:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('411c87e4-b124-6884-e4d4-51202b12268a', 'fis.authorization.reason', '000', 'https://schemas.electricity.works/enums/fis.authorization.reason/000', 'fis.authorization.reason', 'Structured reason describing why the Fleet Index Service (FIS) produced a specific authorization decision.
+VALUES ('0c8b6d94-a982-3e6c-56d2-218f82e9482c', 'fis.authorization.reason', '000', 'https://schemas.electricity.works/enums/fis.authorization.reason/000', 'fis.authorization.reason', 'Structured reason describing why the Fleet Index Service (FIS) produced a specific authorization decision.
 Reasons provide audit-level diagnostic clarity and are machine-readable.
 ', 'SecurityViolation', 'active', '2026-03-16T14:14:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('ff953813-919b-7657-e107-45c3b43fedd8', 'fsm.report.type', '000', 'https://schemas.electricity.works/enums/fsm.report.type/000', 'fsm.report.type', 'Enumeration of atomic FSM report categories.
+VALUES ('a9eb3dac-bae9-f5e6-b48a-2dd9a01b804f', 'fsm.report.type', '000', 'https://schemas.electricity.works/enums/fsm.report.type/000', 'fsm.report.type', 'Enumeration of atomic FSM report categories.
 ', 'Other', 'active', '2024-10-08T17:17:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('a0377ca3-2e33-6793-6352-e1af3176aab4', 'g.node.instance.status', '000', 'https://schemas.electricity.works/enums/g.node.instance.status/000', 'g.node.instance.status', 'Lifecycle state of a runtime instance representing a durable Grid Node. This enum describes the authority status of a specific GNodeInstanceId as tracked by the GridWorks Fleet Index Service (FIS).
+VALUES ('c8e9730c-9acc-2bba-a54f-11891a86ff12', 'g.node.instance.status', '000', 'https://schemas.electricity.works/enums/g.node.instance.status/000', 'g.node.instance.status', 'Lifecycle state of a runtime instance representing a durable Grid Node. This enum describes the authority status of a specific GNodeInstanceId as tracked by the GridWorks Fleet Index Service (FIS).
 Each GNodeInstanceId SHALL be in exactly one status at any given time.
 ', 'Active', 'active', '2026-03-04T17:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('9361b34c-5138-a0da-1364-6190bcc67089', 'g.node.instance.transport', '000', 'https://schemas.electricity.works/enums/g.node.instance.transport/000', 'g.node.instance.transport', 'Messaging transport protocol through which a runtime instance connected and established authority. This enum captures transport-layer context for audit and operational diagnostics.
+VALUES ('2d8fa657-7cf4-5a27-48dc-a7c945dc9658', 'g.node.instance.transport', '000', 'https://schemas.electricity.works/enums/g.node.instance.transport/000', 'g.node.instance.transport', 'Messaging transport protocol through which a runtime instance connected and established authority. This enum captures transport-layer context for audit and operational diagnostics.
 ', 'RabbitAmqp', 'active', '2026-03-03T17:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('63486b50-699e-ba5a-d796-93950c05a5b2', 'g.node.status', '000', 'https://schemas.electricity.works/enums/g.node.status/000', 'g.node.status', 'Lifecycle status of a Grid Node (GNode) within coordinated systems.
+VALUES ('edc8b400-14a2-59ef-d7ee-89be77cf068c', 'g.node.status', '000', 'https://schemas.electricity.works/enums/g.node.status/000', 'g.node.status', 'Lifecycle status of a Grid Node (GNode) within coordinated systems.
 ', 'Pending', 'active', '2026-02-22T16:43:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('e7f2bae1-5e8a-4e07-a16e-96609c21c131', 'gpm.from.hz.method', '000', 'https://schemas.electricity.works/enums/gpm.from.hz.method/000', 'gpm.from.hz.method', 'Method used to convert measured pulse frequency into gallons per minute for supported flow-meter components.
+VALUES ('a30f2416-1eb4-8426-d42a-b90ad5d8f949', 'gpm.from.hz.method', '000', 'https://schemas.electricity.works/enums/gpm.from.hz.method/000', 'gpm.from.hz.method', 'Method used to convert measured pulse frequency into gallons per minute for supported flow-meter components.
 ', 'Constant', 'active', '2024-10-23T19:32:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('35c4870e-4603-e234-8e80-9f9b2cfa08a3', 'gw.g.node.class', '000', 'https://schemas.electricity.works/enums/gw.g.node.class/000', 'gw.g.node.class', 'GridWorks functional classification for Grid Nodes (GNodes). Defines the operational or service-level role a GNode performs within the GridWorks ecosystem.
+VALUES ('c96a945c-2640-79b4-d4c7-2d6e46e26439', 'gw.g.node.class', '000', 'https://schemas.electricity.works/enums/gw.g.node.class/000', 'gw.g.node.class', 'GridWorks functional classification for Grid Nodes (GNodes). Defines the operational or service-level role a GNode performs within the GridWorks ecosystem.
 This enum is specific to GridWorks. Other organizations MAY define their own functional taxonomies under separate namespaces (e.g., acme.g.node.class). Structural interoperability across organizations is governed by base.g.node.class, not by this enum.
 ', 'Unknown', 'active', '2026-02-23T17:08:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('d35ecbbb-e6fb-7a16-7923-b6aec6a03172', 'gw1.actor.class', '009', 'https://schemas.electricity.works/enums/gw1.actor.class/009', 'gw1.actor.class', 'Classification of actors in the GridWorks SCADA system.
+VALUES ('a6b1443a-93f5-42ff-b9c9-456b7a7ccdc8', 'gw1.actor.class', '009', 'https://schemas.electricity.works/enums/gw1.actor.class/009', 'gw1.actor.class', 'Classification of actors in the GridWorks SCADA system.
 ', 'NoActor', 'active', '2026-01-15T18:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('01338906-d217-83af-53ca-45d68cc72922', 'gw1.actor.class', '010', 'https://schemas.electricity.works/enums/gw1.actor.class/010', 'gw1.actor.class', 'Classification of actors in the GridWorks SCADA system.
+VALUES ('936f7f73-29c6-56af-2c94-20cb4fe3735d', 'gw1.actor.class', '010', 'https://schemas.electricity.works/enums/gw1.actor.class/010', 'gw1.actor.class', 'Classification of actors in the GridWorks SCADA system.
 ', 'NoActor', 'active', '2026-02-17T20:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('5807ba65-5bfd-ecaf-83f0-d0e904852c16', 'gw1.actor.class', '011', 'https://schemas.electricity.works/enums/gw1.actor.class/011', 'gw1.actor.class', 'Classification of actors in the GridWorks SCADA system.
+VALUES ('ac6f7ba3-725e-83ab-a235-775b0184f9c5', 'gw1.actor.class', '011', 'https://schemas.electricity.works/enums/gw1.actor.class/011', 'gw1.actor.class', 'Classification of actors in the GridWorks SCADA system.
 ', 'NoActor', 'active', '2026-02-18T21:34:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('814017c0-c89d-b718-1450-a455d9bc4181', 'gw1.emission.method', '000', 'https://schemas.electricity.works/enums/gw1.emission.method/000', 'gw1.emission.method', 'Method by which a derived or computed channel emits values.
+VALUES ('f86ac204-faac-d64c-a33c-d659aae0e3df', 'gw1.emission.method', '000', 'https://schemas.electricity.works/enums/gw1.emission.method/000', 'gw1.emission.method', 'Method by which a derived or computed channel emits values.
 ', 'OnTrigger', 'active', '2026-02-02T22:17:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('f17fc08c-280d-4154-323e-165ef991741a', 'gw1.heat.call.interpretation', '000', 'https://schemas.electricity.works/enums/gw1.heat.call.interpretation/000', 'gw1.heat.call.interpretation', 'Defines how a source telemetry channel is interpreted to determine whether a zone is calling for heat.
+VALUES ('f91a358e-3684-5edd-2746-b86637ba91b0', 'gw1.heat.call.interpretation', '000', 'https://schemas.electricity.works/enums/gw1.heat.call.interpretation/000', 'gw1.heat.call.interpretation', 'Defines how a source telemetry channel is interpreted to determine whether a zone is calling for heat.
 ', 'DigitalZeroIsActive', 'active', '2026-03-16T14:14:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('41a645bc-e6ae-8d59-77a5-62cff1bdfda3', 'gw1.quantity', '000', 'https://schemas.electricity.works/enums/gw1.quantity/000', 'gw1.quantity', 'High-level physical or semantic quantity classification associated with a telemetry value. Quantity expresses the physical dimension or logical interpretation independent of unit scaling.
+VALUES ('1f23a464-7233-3ae6-093a-cac23dd49180', 'gw1.quantity', '000', 'https://schemas.electricity.works/enums/gw1.quantity/000', 'gw1.quantity', 'High-level physical or semantic quantity classification associated with a telemetry value. Quantity expresses the physical dimension or logical interpretation independent of unit scaling.
 ', 'Unknown', 'active', '2026-02-17T19:54:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('7a510040-4f8a-5205-33f8-406da3851b73', 'gw1.quantity', '001', 'https://schemas.electricity.works/enums/gw1.quantity/001', 'gw1.quantity', 'High-level physical or semantic quantity classification associated with a telemetry value. Quantity expresses the physical dimension or logical interpretation independent of unit scaling.
+VALUES ('6479de76-c356-2f76-428e-91a42d4c3020', 'gw1.quantity', '001', 'https://schemas.electricity.works/enums/gw1.quantity/001', 'gw1.quantity', 'High-level physical or semantic quantity classification associated with a telemetry value. Quantity expresses the physical dimension or logical interpretation independent of unit scaling.
 ', 'Unknown', 'active', '2026-03-31T09:18:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('27905454-664d-f8eb-1a39-72a40b428f4a', 'gw1.seasonal.storage.mode', '000', 'https://schemas.electricity.works/enums/gw1.seasonal.storage.mode/000', 'gw1.seasonal.storage.mode', 'Seasonal storage operating mode for layouts that distinguish between all-tank operation and buffer-only operation.
+VALUES ('0a297cfc-95a6-5995-12bf-bc06d1c2fc21', 'gw1.seasonal.storage.mode', '000', 'https://schemas.electricity.works/enums/gw1.seasonal.storage.mode/000', 'gw1.seasonal.storage.mode', 'Seasonal storage operating mode for layouts that distinguish between all-tank operation and buffer-only operation.
 ', 'AllTanks', 'active', '2026-01-14T18:04:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('b8774039-6d87-515f-6609-57b2525dbe84', 'gw1.system.mode', '000', 'https://schemas.electricity.works/enums/gw1.system.mode/000', 'gw1.system.mode', '**SCADA system operational mode.** This enum declares the degree of physical actuation authority exercised by SCADA over connected hardware. It is communicated to other actors (e.g. LTN, admin tools, analytics) to establish shared expectations about whether and how physical control actions may occur.
+VALUES ('1dfc28f8-5d36-2edd-5f96-0fab1ead33ca', 'gw1.system.mode', '000', 'https://schemas.electricity.works/enums/gw1.system.mode/000', 'gw1.system.mode', '**SCADA system operational mode.** This enum declares the degree of physical actuation authority exercised by SCADA over connected hardware. It is communicated to other actors (e.g. LTN, admin tools, analytics) to establish shared expectations about whether and how physical control actions may occur.
 ', 'Heating', 'active', '2026-01-14T18:04:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('e5830d4d-aba7-db12-6e68-c0988c003fc6', 'gw1.unit', '000', 'https://schemas.electricity.works/enums/gw1.unit/000', 'gw1.unit', 'Canonical measurement unit associated with a GridWorks telemetry value. This enum defines the structural unit representation used at the serialization boundary. Scaling conventions (e.g., X100) are encoded explicitly in the unit name to preserve mechanical interpretability.
+VALUES ('d11efe66-7ea8-80b9-1a09-7d13633b6479', 'gw1.unit', '000', 'https://schemas.electricity.works/enums/gw1.unit/000', 'gw1.unit', 'Canonical measurement unit associated with a GridWorks telemetry value. This enum defines the structural unit representation used at the serialization boundary. Scaling conventions (e.g., X100) are encoded explicitly in the unit name to preserve mechanical interpretability.
 ', 'Unknown', 'active', '2025-12-25T22:18:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('92df356e-7d06-1be6-cbb5-9ee1f9db32d7', 'gw1.unit', '001', 'https://schemas.electricity.works/enums/gw1.unit/001', 'gw1.unit', 'Canonical measurement unit associated with a GridWorks telemetry value. This enum defines the structural unit representation used at the serialization boundary. Scaling conventions are encoded explicitly in the unit name.
+VALUES ('c5022990-1465-ffcb-2fa3-2ee52af6cda4', 'gw1.unit', '001', 'https://schemas.electricity.works/enums/gw1.unit/001', 'gw1.unit', 'Canonical measurement unit associated with a GridWorks telemetry value. This enum defines the structural unit representation used at the serialization boundary. Scaling conventions are encoded explicitly in the unit name.
 ', 'Unknown', 'active', '2026-03-04T20:35:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('24e20686-95c6-75c2-1c16-2c617bbdcca0', 'heatcall.source', '000', 'https://schemas.electricity.works/enums/heatcall.source/000', 'heatcall.source', 'Source responsible for issuing the heat call signal to a zone. Used to represent control authority in systems where a relay selects between SCADA and a local wall thermostat.
+VALUES ('f6c56ce1-fca9-8410-d88c-104a19b05a1b', 'heatcall.source', '000', 'https://schemas.electricity.works/enums/heatcall.source/000', 'heatcall.source', 'Source responsible for issuing the heat call signal to a zone. Used to represent control authority in systems where a relay selects between SCADA and a local wall thermostat.
 ', 'WallThermostat', 'active', '2026-03-27T21:31:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('ff16d42f-a2d6-38ec-3255-7a61542cde7f', 'hz.calc.method', '001', 'https://schemas.electricity.works/enums/hz.calc.method/001', 'hz.calc.method', 'Method used to estimate signal frequency from pulse timing data.
+VALUES ('068b19be-63c8-ba05-9432-28f1f7bedc99', 'hz.calc.method', '001', 'https://schemas.electricity.works/enums/hz.calc.method/001', 'hz.calc.method', 'Method used to estimate signal frequency from pulse timing data.
 ', 'BasicExpWeightedAvg', 'active', '2024-10-23T19:32:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('30cdb6c7-f17e-00c4-a89d-3ca410b46433', 'market.price.unit', '000', 'https://schemas.electricity.works/enums/market.price.unit/000', 'market.price.unit', 'Unit of the price axis for a MarketType. This unit defines the dimensional interpretation of bid prices and clearing prices within the associated MarketSlot.
+VALUES ('b8508992-14cf-b793-be38-25cd172920fb', 'market.price.unit', '000', 'https://schemas.electricity.works/enums/market.price.unit/000', 'market.price.unit', 'Unit of the price axis for a MarketType. This unit defines the dimensional interpretation of bid prices and clearing prices within the associated MarketSlot.
 Price units represent compensation per unit of the declared QuantityUnit over the market settlement interval. All bids and clearing results for a given MarketSlot SHALL use the PriceUnit declared by its MarketType.
 ', 'USDPerMWh', 'active', '2024-12-05T19:25:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('85a39fbd-401e-db0a-0428-a9ccbb2a1dd2', 'market.quantity.unit', '000', 'https://schemas.electricity.works/enums/market.quantity.unit/000', 'market.quantity.unit', 'Unit of the quantity axis for a MarketType. This unit defines the dimensional meaning of quantities submitted in bids and cleared in the associated MarketSlot.
+VALUES ('ba0b5abc-4c95-a173-584d-f8bb7b5a3dba', 'market.quantity.unit', '000', 'https://schemas.electricity.works/enums/market.quantity.unit/000', 'market.quantity.unit', 'Unit of the quantity axis for a MarketType. This unit defines the dimensional meaning of quantities submitted in bids and cleared in the associated MarketSlot.
 Quantity units represent average power over the market settlement interval unless otherwise specified by the MarketType definition. All bids and clearing results for a given MarketSlot SHALL use the QuantityUnit declared by its MarketType.
 ', 'AvgMW', 'active', '2024-12-05T19:25:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('84d73a22-acb8-4bf3-fd29-9ea49923b210', 'market.type.name', '000', 'https://schemas.electricity.works/enums/market.type.name/000', 'market.type.name', 'Categorizes different markets run by MarketMaker', 'unknown', 'active', '2022-10-17T16:55:39Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
+VALUES ('aac9c85d-dfef-48c8-748f-295459632629', 'market.type.name', '000', 'https://schemas.electricity.works/enums/market.type.name/000', 'market.type.name', 'Categorizes different markets run by MarketMaker', 'unknown', 'active', '2022-10-17T16:55:39Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('6d714ff4-9b47-8345-2300-5d791d8deeef', 'relay.closed.or.open', '000', 'https://schemas.electricity.works/enums/relay.closed.or.open/000', 'relay.closed.or.open', 'Canonical FSM states for a simple relay with two positions: closed (energized) and open (de-energized). These states represent the logical relay condition, not raw electrical readings.
+VALUES ('0dd4a4a6-9550-5f6c-ea4b-f88f86e22b1e', 'relay.closed.or.open', '000', 'https://schemas.electricity.works/enums/relay.closed.or.open/000', 'relay.closed.or.open', 'Canonical FSM states for a simple relay with two positions: closed (energized) and open (de-energized). These states represent the logical relay condition, not raw electrical readings.
 ', 'RelayClosed', 'active', '2024-09-17T20:17:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('15577dd2-4bfe-10ef-576c-44f37bbdac51', 'relay.energization.state', '000', 'https://schemas.electricity.works/enums/relay.energization.state/000', 'relay.energization.state', 'Two-state relay energization state.
+VALUES ('24709479-438a-ea4e-9be2-808ed26f1c41', 'relay.energization.state', '000', 'https://schemas.electricity.works/enums/relay.energization.state/000', 'relay.energization.state', 'Two-state relay energization state.
 ', '0', 'active', '2024-03-06T22:07:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('1c3717ae-197e-6011-c295-7ad6b812bc50', 'relay.open.or.closed', '000', 'https://schemas.electricity.works/enums/relay.open.or.closed/000', 'relay.open.or.closed', 'Binary state of a single-pole relay contact. Describes whether the relay 
+VALUES ('63179a7e-f703-590e-975f-49ef1b130a80', 'relay.open.or.closed', '000', 'https://schemas.electricity.works/enums/relay.open.or.closed/000', 'relay.open.or.closed', 'Binary state of a single-pole relay contact. Describes whether the relay 
 contact is open (not conducting) or closed (conducting), regardless of 
 coil energization state.
 
@@ -582,1452 +597,1509 @@ patterns.
 ', 'RelayClosed', 'active', '2025-10-14T16:07:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('1e57430b-4752-03fd-4f6a-a89523194b7a', 'relay.wiring.config', '000', 'https://schemas.electricity.works/enums/relay.wiring.config/000', 'relay.wiring.config', 'Wiring configuration of a relay contact set. Defines how the relay''s common (COM), normally open (NO), and normally closed (NC) terminals are used within a circuit.
+VALUES ('98996cbd-eaae-e85f-9a20-897d84d91eb3', 'relay.wiring.config', '000', 'https://schemas.electricity.works/enums/relay.wiring.config/000', 'relay.wiring.config', 'Wiring configuration of a relay contact set. Defines how the relay''s common (COM), normally open (NO), and normally closed (NC) terminals are used within a circuit.
 ', 'NormallyClosed', 'active', '2024-09-17T19:18:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('c0e4fb14-230e-04c2-04ad-bcfa621e6c4b', 'spaceheat.make.model', '003', 'https://schemas.electricity.works/enums/spaceheat.make.model/003', 'spaceheat.make.model', 'Make and model taxonomy used by Spaceheat SCADA for hardware devices and simulated components.
+VALUES ('9f7b443b-7c37-e386-a265-86df075ce12a', 'spaceheat.make.model', '003', 'https://schemas.electricity.works/enums/spaceheat.make.model/003', 'spaceheat.make.model', 'Make and model taxonomy used by Spaceheat SCADA for hardware devices and simulated components.
 ', 'UnknownMake__UnknownModel', 'active', '2024-10-18T15:21:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('46ee96be-e1b8-ae12-41ed-0d3c6400e192', 'spaceheat.make.model', '007', 'https://schemas.electricity.works/enums/spaceheat.make.model/007', 'spaceheat.make.model', 'Make and model taxonomy used by Spaceheat SCADA for hardware devices and simulated components.
+VALUES ('f2628553-79cc-726e-9603-f16eab6e6ef7', 'spaceheat.make.model', '007', 'https://schemas.electricity.works/enums/spaceheat.make.model/007', 'spaceheat.make.model', 'Make and model taxonomy used by Spaceheat SCADA for hardware devices and simulated components.
 ', 'UnknownMake__UnknownModel', 'active', '2026-01-03T14:27:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('bbfa1058-5dc6-190c-0cdf-33530f681a9d', 'spaceheat.telemetry.name', '006', 'https://schemas.electricity.works/enums/spaceheat.telemetry.name/006', 'spaceheat.telemetry.name', 'Specifies the canonical name of telemetry values produced by legacy Spaceheat SCADA systems.
+VALUES ('9566f918-3cf1-4447-e705-9531aeb5a46e', 'spaceheat.telemetry.name', '006', 'https://schemas.electricity.works/enums/spaceheat.telemetry.name/006', 'spaceheat.telemetry.name', 'Specifies the canonical name of telemetry values produced by legacy Spaceheat SCADA systems.
 This enum historically encoded both physical quantity and unit scaling within a single string (e.g., WaterTempCTimes1000, GpmTimes100). It remains supported for backward compatibility and stable integration with existing deployed systems.
 Newer Sema vocabulary separates quantity classification (gw1.quantity) from unit representation (gw1.unit) to make dimensional semantics explicit and mechanically verifiable. Future designs SHOULD prefer those explicit fields over introducing new values into this enum.
 This enum remains authoritative for existing Spaceheat channel definitions but is not intended to expand indefinitely.
 ', 'Unknown', 'active', '2025-09-24T14:28:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('69312881-3345-1db2-71e0-2c0abb39d284', 'spaceheat.telemetry.name', '007', 'https://schemas.electricity.works/enums/spaceheat.telemetry.name/007', 'spaceheat.telemetry.name', 'Specifies the canonical name of telemetry values produced by legacy Spaceheat SCADA systems.
+VALUES ('8030c191-05c5-794f-ed59-b3a9eb33e8b4', 'spaceheat.telemetry.name', '007', 'https://schemas.electricity.works/enums/spaceheat.telemetry.name/007', 'spaceheat.telemetry.name', 'Specifies the canonical name of telemetry values produced by legacy Spaceheat SCADA systems.
 This enum historically encoded both physical quantity and unit scaling within a single string (e.g., WaterTempCTimes1000, GpmTimes100). It remains supported for backward compatibility and stable integration with existing deployed systems.
 Newer Sema vocabulary separates quantity classification (gw1.quantity) from unit representation (gw1.unit) to make dimensional semantics explicit and mechanically verifiable. Future designs SHOULD prefer those explicit fields over introducing new values into this enum.
 This enum remains authoritative for existing Spaceheat channel definitions but is not intended to expand indefinitely.
 ', 'Unknown', 'active', '2026-03-30T17:12:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('38c2a436-ff84-e437-ce3c-0c205700646e', 'spaceheat.unit', '001', 'https://schemas.electricity.works/enums/spaceheat.unit/001', 'spaceheat.unit', 'Canonical measurement unit used by legacy Spaceheat SCADA channel configuration and telemetry payloads.
+VALUES ('5b80df46-4d5f-77ed-d083-8d1d4490f03b', 'spaceheat.unit', '001', 'https://schemas.electricity.works/enums/spaceheat.unit/001', 'spaceheat.unit', 'Canonical measurement unit used by legacy Spaceheat SCADA channel configuration and telemetry payloads.
 ', 'Unknown', 'active', '2024-09-02T15:00:00Z', '{"x-gridworks-extended_description": "This enum is used in component ChannelConfig objects, where it is paired with an Exponent field to express the serialized unit and scaling of a telemetry channel.\nIt is a legacy Spaceheat unit vocabulary. In the near future it is expected to be replaced by a new layout mechanism based on gw1.unit.\n"}', NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('2a01c09a-3bf7-adc0-de26-1e191eca754f', 'temp.calc.method', '000', 'https://schemas.electricity.works/enums/temp.calc.method/000', 'temp.calc.method', 'Method used to calculate temperature from voltage-derived thermistor measurements.
+VALUES ('88313271-ece5-5a2d-15fc-9c9888bb2e1c', 'temp.calc.method', '000', 'https://schemas.electricity.works/enums/temp.calc.method/000', 'temp.calc.method', 'Method used to calculate temperature from voltage-derived thermistor measurements.
 ', 'SimpleBeta', 'active', '2024-10-21T23:19:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
+
+INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
+VALUES ('4254c774-4709-a5c7-679e-ec8d695b18ea', 'gw1.unit', '002', 'https://schemas.electricity.works/enums/gw1.unit/002', 'GridWorks Unit (draft v002)', 'Adds KiloWattHours and MegaWatts to the canonical unit set.', NULL, 'draft', '2026-04-30T18:00:00Z', NULL, '2026-04-30T18:00:00Z', NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
+
+INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
+VALUES ('cc71c556-e299-6099-d74e-66324edf8976', 'relay.closed.or.open', '001', 'https://schemas.electricity.works/enums/relay.closed.or.open/001', 'Relay closed-or-open (draft v001 — Word being retired)', 'Draft addition of Unknown, but the Word itself is being retired in favor of relay.open.or.closed. Demonstrates that drafts can exist on retired Words (their history is still legible).', NULL, 'draft', '2026-04-30T18:00:00Z', NULL, '2026-04-30T18:00:00Z', NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
+
+INSERT INTO enum_versions (enum_versions_id, enum, version, schema_url, title, description, default_symbol, status, created, raw_json, last_modified, promoted_at, deprecated_at)
+VALUES ('3db257ea-3048-745d-175b-8e034691332b', 'defauw.action', '000', 'https://schemas.electricity.works/enums/defauw.action/000', 'DeFauw Action', 'Initial release.', 'Hold', 'active', '2026-04-30T18:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (enum_versions_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- EnumValues: Individual symbol values within an EnumVersion (with order preserved and per-symbol descriptions).
 -- ----------------------------------------------------------------------------
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2e626cb0-259c-a0ee-f09e-4dee20de7548', 'base.g.node.class/000', 'TerminalAsset', 0, 'A physical transactive asset such as a heat pump, hot water heater, residential battery,  electric vehicle, or any other end-use device located behind an atomic metered point.
+VALUES ('05f1b191-e309-1bf5-95e1-5fb2cdd08be1', 'base.g.node.class/000', 'TerminalAsset', 0, 'A physical transactive asset such as a heat pump, hot water heater, residential battery,  electric vehicle, or any other end-use device located behind an atomic metered point.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2d3eee26-e7ae-e2a9-1ccd-fcf279399c71', 'base.g.node.class/000', 'LeafTransactiveNode', 1, 'The atomic metered unit of the grid. Represents the smallest indivisible metering boundary capable of participating in markets or entering Dispatch Contracts on behalf of a TerminalAsset. Every TerminalAsset is associated with exactly one LeafTransactiveNode.
+VALUES ('5e16ed30-a02f-f3b8-c130-16e972fb99e3', 'base.g.node.class/000', 'LeafTransactiveNode', 1, 'The atomic metered unit of the grid. Represents the smallest indivisible metering boundary capable of participating in markets or entering Dispatch Contracts on behalf of a TerminalAsset. Every TerminalAsset is associated with exactly one LeafTransactiveNode.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('1d131eba-b8bd-4051-8c3b-c5a5ba9f4c36', 'base.g.node.class/000', 'ConnectivityNode', 2, 'A physical topological node in the electric power system where conductors join, split, or change configuration. Conceptually aligned with the ConnectivityNode in the IEC 61970/61968 CIM (Common Information Model), but simplified for distribution-level modeling and OPF applications.
+VALUES ('785758ce-11da-2ead-c703-96e99d342677', 'base.g.node.class/000', 'ConnectivityNode', 2, 'A physical topological node in the electric power system where conductors join, split, or change configuration. Conceptually aligned with the ConnectivityNode in the IEC 61970/61968 CIM (Common Information Model), but simplified for distribution-level modeling and OPF applications.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('85f94fd4-9231-c713-5ba9-f3c94b862245', 'base.g.node.class/000', 'MarketMaker', 3, 'A physical constraint point in the conductor topology that requires localized market coordination. Identified as a grid location (e.g., feeder constraint, transformer limit) where a MarketMaker actor computes local prices for balancing and constraint compliance. See [market-maker](https://gridworks.readthedocs.io/en/latest/market-maker.html).
+VALUES ('d0563452-ab0a-4ebc-4eef-e1c81505e507', 'base.g.node.class/000', 'MarketMaker', 3, 'A physical constraint point in the conductor topology that requires localized market coordination. Identified as a grid location (e.g., feeder constraint, transformer limit) where a MarketMaker actor computes local prices for balancing and constraint compliance. See [market-maker](https://gridworks.readthedocs.io/en/latest/market-maker.html).
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3c02d401-57b0-d891-3131-65a625b4a3c7', 'base.g.node.class/000', 'Logical', 4, 'A non-physical Grid Node whose identity carries no inherent conductor-topology or metering semantics. Used for purely logical or service-level nodes such as SCADA, forecasting services, market-maker actors, simulation nodes, or organizational microservices. Logical nodes may coordinate with or operate on physical nodes, but do not themselves represent physical grid structure.
+VALUES ('3d98ee02-b4eb-270d-49c3-e0835c6db292', 'base.g.node.class/000', 'Logical', 4, 'A non-physical Grid Node whose identity carries no inherent conductor-topology or metering semantics. Used for purely logical or service-level nodes such as SCADA, forecasting services, market-maker actors, simulation nodes, or organizational microservices. Logical nodes may coordinate with or operate on physical nodes, but do not themselves represent physical grid structure.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('bf2464a6-30f2-21fc-76dc-672f9ae974d3', 'buffer.regulation.mode/000', 'Normal', 0, 'Normal mode uses the full range of the buffer thermal store. Charging begins when the buffer is declared empty, as determined by the lowest available buffer temperature sensor dropping below a threshold temperature. The buffer is declared full when the highest buffer temperature sensor rises above a threshold temperature. Thresholds are derived from required source water temperature calculations that account for house performance and weather forecasts.
+VALUES ('06b6f20b-b625-1632-a185-292aeeb1a87f', 'buffer.regulation.mode/000', 'Normal', 0, 'Normal mode uses the full range of the buffer thermal store. Charging begins when the buffer is declared empty, as determined by the lowest available buffer temperature sensor dropping below a threshold temperature. The buffer is declared full when the highest buffer temperature sensor rises above a threshold temperature. Thresholds are derived from required source water temperature calculations that account for house performance and weather forecasts.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e81af9f0-8494-6196-3103-9b9c7ce6b068', 'buffer.regulation.mode/000', 'Tight', 1, 'Tight mode keeps the buffer within a narrowly regulated temperature band, permitting frequent charge and discharge transitions to maintain relatively constant buffer energy. Heat pump short-cycling is prevented by alternating between charging the buffer and the store.
+VALUES ('3dc30f4b-c0bc-b662-17ef-16d812db8f38', 'buffer.regulation.mode/000', 'Tight', 1, 'Tight mode keeps the buffer within a narrowly regulated temperature band, permitting frequent charge and discharge transitions to maintain relatively constant buffer energy. Heat pump short-cycling is prevented by alternating between charging the buffer and the store.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('bd228880-06cc-1009-3695-f93082e402aa', 'change.heatcall.source/000', 'WallThermostat', 0, 'Heat call is controlled by the local wall thermostat.
+VALUES ('53771701-bc10-a267-b855-03634753cf9d', 'change.heatcall.source/000', 'WallThermostat', 0, 'Heat call is controlled by the local wall thermostat.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('bb117e64-4e81-2c5d-0db5-b939f633bd0c', 'change.heatcall.source/000', 'Scada', 1, 'Heat call is controlled by the SCADA system.
+VALUES ('23b01f06-7f04-344a-de1e-96fa5df21b00', 'change.heatcall.source/000', 'Scada', 1, 'Heat call is controlled by the SCADA system.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('cdb8f6e2-ffb6-9ba7-770b-c1c20fc4c29f', 'change.relay.state/000', 'CloseRelay', 0, 'Command to close the relay (energize circuit).') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('d50b1ba6-eb16-522a-5abd-69525c326f0d', 'change.relay.state/000', 'CloseRelay', 0, 'Command to close the relay (energize circuit).') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('74863c13-a023-34b2-904e-8ea296de6796', 'change.relay.state/000', 'OpenRelay', 1, 'Command to open the relay (de-energize circuit).') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('daadd689-f9eb-2dc9-4161-200d4cb16349', 'change.relay.state/000', 'OpenRelay', 1, 'Command to open the relay (de-energize circuit).') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2f51b038-8719-5f92-e2ff-2771b8be1baa', 'fis.authorization.decision/000', 'Authorized', 0, 'The runtime instance is permitted to establish or continue broker connectivity under its presented identity.
+VALUES ('d07dd1c2-c0d5-74d3-8ed3-77d0071d411f', 'fis.authorization.decision/000', 'Authorized', 0, 'The runtime instance is permitted to establish or continue broker connectivity under its presented identity.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('cd50c5bf-65a7-e6c9-1e75-98775eac214a', 'fis.authorization.decision/000', 'Denied', 1, 'The runtime instance is not permitted to establish or continue broker connectivity under its presented identity.
+VALUES ('1fb09417-e124-9775-1c85-a1fa4dd9a044', 'fis.authorization.decision/000', 'Denied', 1, 'The runtime instance is not permitted to establish or continue broker connectivity under its presented identity.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('0ca06a0d-2d7b-1ff7-6df1-091e42cd0023', 'fis.authorization.reason/000', 'NewInstance', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('af34d2cb-6d03-0550-586b-96a85468a211', 'fis.authorization.reason/000', 'NewInstance', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4b4bdf6b-653f-7f79-196f-a39a624b3002', 'fis.authorization.reason/000', 'IdempotentReconnect', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('442b03b1-6d89-abb0-bbef-41ed657dd77d', 'fis.authorization.reason/000', 'IdempotentReconnect', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('28f6d53d-869a-aa8b-f72f-78f1df35b218', 'fis.authorization.reason/000', 'SupersededPrevious', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('85930908-9da5-5500-0cdf-2d831a178fa9', 'fis.authorization.reason/000', 'SupersededPrevious', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('17e2c839-8445-6c24-10a2-aaa8cf87a86e', 'fis.authorization.reason/000', 'MalformedRequest', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('3066b9a1-1e53-9a9e-6e31-2029c34ce726', 'fis.authorization.reason/000', 'MalformedRequest', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('0f7dfea8-5e14-5e21-ddf9-51c0196ee954', 'fis.authorization.reason/000', 'UnknownGNode', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('3c5a4ff2-3a54-4207-ec2d-2f8536f55bee', 'fis.authorization.reason/000', 'UnknownGNode', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('663bb1da-0393-1449-eb51-b1b12abd88f0', 'fis.authorization.reason/000', 'InactiveGNode', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('a30423f4-072e-1ac0-ed02-d5099b729690', 'fis.authorization.reason/000', 'InactiveGNode', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('7f8d08be-b285-f995-fd0c-a59a111b1b57', 'fis.authorization.reason/000', 'AliasMismatch', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('0bbc6b6d-2327-29b5-cad6-53dbd393182d', 'fis.authorization.reason/000', 'AliasMismatch', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b6842023-c1f0-aebf-09aa-b9f26a720bdc', 'fis.authorization.reason/000', 'ClassMismatch', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('3ce6fb9b-0d50-44c3-6c77-1be804267497', 'fis.authorization.reason/000', 'ClassMismatch', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c950ed02-d8af-6078-f914-3705ac98746b', 'fis.authorization.reason/000', 'InstanceRevoked', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c1d3e600-cff2-8b24-55f8-3f5cb842c4dc', 'fis.authorization.reason/000', 'InstanceRevoked', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('84b3d0be-e4a5-0a89-08c8-a0b0dce4f144', 'fis.authorization.reason/000', 'SecurityViolation', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('1f57ffea-a960-6710-4005-f73470570dfb', 'fis.authorization.reason/000', 'SecurityViolation', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('71f32de4-c23f-b62b-4f2d-8da5baa592fa', 'fsm.report.type/000', 'Other', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('cc39e50e-09fb-b9ba-0037-25f4e9408db4', 'fsm.report.type/000', 'Other', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('140caef7-d5e3-814e-297a-55cb7a8471ad', 'fsm.report.type/000', 'Event', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('9ef61df5-671e-4e7d-da01-dde45118633e', 'fsm.report.type/000', 'Event', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('8eddeb42-8eba-4bc4-3a72-60e0f706f201', 'fsm.report.type/000', 'Action', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('81f78ad2-e339-866a-5544-14a706c1bf3e', 'fsm.report.type/000', 'Action', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3f110bc7-5b5e-fc09-3b85-ced98526b83e', 'g.node.instance.status/000', 'Active', 0, 'This runtime instance currently holds authoritative execution rights for the associated GNodeId. At most one instance per GNodeId may be Active at any time.
+VALUES ('e414eb5f-b9b0-6e21-4a73-c59a70ca86b0', 'g.node.instance.status/000', 'Active', 0, 'This runtime instance currently holds authoritative execution rights for the associated GNodeId. At most one instance per GNodeId may be Active at any time.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('30b87243-c294-62e4-1a06-39f1862d3bb0', 'g.node.instance.status/000', 'Revoked', 1, 'This runtime instance previously held authority but was superseded or explicitly revoked. A Revoked instance SHALL NOT regain authority without generating a new GNodeInstanceId.
+VALUES ('c70eae39-1d17-8acd-10c8-fd911fb79f35', 'g.node.instance.status/000', 'Revoked', 1, 'This runtime instance previously held authority but was superseded or explicitly revoked. A Revoked instance SHALL NOT regain authority without generating a new GNodeInstanceId.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('19809bd2-c1e6-b181-6e33-96a560bfc53f', 'g.node.instance.status/000', 'Ended', 2, 'This runtime instance terminated cleanly and voluntarily relinquished authority. Ended indicates normal shutdown rather than conflict resolution or forced revocation.
+VALUES ('7a5dd9b6-d69c-c99d-ccbd-ac604ac6c238', 'g.node.instance.status/000', 'Ended', 2, 'This runtime instance terminated cleanly and voluntarily relinquished authority. Ended indicates normal shutdown rather than conflict resolution or forced revocation.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('0cea7e17-06c1-7d47-6b68-acc5da3a3682', 'g.node.instance.transport/000', 'RabbitAmqp', 0, 'The instance connected using the AMQP protocol over RabbitMQ, typically via TLS on port 5671.
+VALUES ('746f408f-6ad6-c0db-e219-c79454272932', 'g.node.instance.transport/000', 'RabbitAmqp', 0, 'The instance connected using the AMQP protocol over RabbitMQ, typically via TLS on port 5671.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('386dde22-3fb8-3315-faf4-83034bc476cc', 'g.node.instance.transport/000', 'RabbitMqtt', 1, 'The instance connected using the MQTT protocol over RabbitMQ, typically via TLS on port 8883 or 1883 depending on configuration.
+VALUES ('07b55d76-3a13-4284-2468-0618e3e2aa30', 'g.node.instance.transport/000', 'RabbitMqtt', 1, 'The instance connected using the MQTT protocol over RabbitMQ, typically via TLS on port 8883 or 1883 depending on configuration.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2f30729f-2cac-709c-5227-6647ecf17617', 'g.node.status/000', 'Pending', 0, 'The GNode has been created but is not yet authorized to participate in system coordination.
+VALUES ('44693cc3-b683-9b59-c9b2-70f7f43cf714', 'g.node.status/000', 'Pending', 0, 'The GNode has been created but is not yet authorized to participate in system coordination.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c8ec978b-8ee7-37a7-db3b-c7e64e7f5383', 'g.node.status/000', 'Active', 1, 'The GNode is authorized to participate in system coordination.
+VALUES ('9eb7d56c-9925-4d7a-566a-6c1bfc970635', 'g.node.status/000', 'Active', 1, 'The GNode is authorized to participate in system coordination.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('8400f74c-e2e2-f416-1e28-d90a047bc529', 'g.node.status/000', 'Suspended', 2, 'The GNode is temporarily disabled. It retains identity but does not participate in active coordination. A Suspended GNode MAY transition back to Active.
+VALUES ('b286f035-701f-652f-3854-af893c0b94f5', 'g.node.status/000', 'Suspended', 2, 'The GNode is temporarily disabled. It retains identity but does not participate in active coordination. A Suspended GNode MAY transition back to Active.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f34eea4c-6569-260c-f45c-3b634c87db0b', 'g.node.status/000', 'PermanentlyDeactivated', 3, 'The GNode has been permanently retired and does not participate in active coordination. It may not change back to another state.
+VALUES ('8e03b83a-40c6-7020-48fb-b3bd5e35ef09', 'g.node.status/000', 'PermanentlyDeactivated', 3, 'The GNode has been permanently retired and does not participate in active coordination. It may not change back to another state.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3d6350f9-1836-3a9c-7c22-5729e8355d86', 'gpm.from.hz.method/000', 'Constant', 0, 'Apply a fixed conversion relationship from frequency to gallons per minute.
+VALUES ('168fb487-be66-7472-d046-2fd14b384fa4', 'gpm.from.hz.method/000', 'Constant', 0, 'Apply a fixed conversion relationship from frequency to gallons per minute.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('1e1174ab-f588-b216-c65f-6186e3a79ea1', 'gw.g.node.class/000', 'Unknown', 0, 'A GNode whose class has not yet been assigned.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('688185d9-efe8-01eb-f422-e6a80dc5cb29', 'gw.g.node.class/000', 'Unknown', 0, 'A GNode whose class has not yet been assigned.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a5799312-ab07-d269-b66f-885fe7a4bfaa', 'gw.g.node.class/000', 'TerminalAsset', 1, 'A physical transactive asset such as a heat pump, hot water heater, residential battery,  electric vehicle, or any other end-use device located behind an atomic metered point.
+VALUES ('039912e4-2c72-1561-cbbf-e5c403d4576b', 'gw.g.node.class/000', 'TerminalAsset', 1, 'A physical transactive asset such as a heat pump, hot water heater, residential battery,  electric vehicle, or any other end-use device located behind an atomic metered point.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('1d8dc828-7351-f7f4-29d7-7c9224f779de', 'gw.g.node.class/000', 'ConnectivityNode', 2, 'A physical topological node in the electric power system where conductors join, split, or change configuration. Conceptually aligned with the ConnectivityNode in the IEC 61970/61968 CIM (Common Information Model), but simplified for distribution-level modeling and OPF applications.
+VALUES ('b1c1c3f0-9572-86d6-4603-c8f94ab0422c', 'gw.g.node.class/000', 'ConnectivityNode', 2, 'A physical topological node in the electric power system where conductors join, split, or change configuration. Conceptually aligned with the ConnectivityNode in the IEC 61970/61968 CIM (Common Information Model), but simplified for distribution-level modeling and OPF applications.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('d9f77330-68a3-dffd-2f24-90e82692156a', 'gw.g.node.class/000', 'LeafTransactiveNode', 3, 'The atomic metered unit of the grid. Represents the smallest indivisible metering boundary capable of participating in markets or entering Dispatch Contracts on behalf of a TerminalAsset. Every TerminalAsset is associated with exactly one LeafTransactiveNode.
+VALUES ('0497ab20-9921-0967-4f52-0bc14d639751', 'gw.g.node.class/000', 'LeafTransactiveNode', 3, 'The atomic metered unit of the grid. Represents the smallest indivisible metering boundary capable of participating in markets or entering Dispatch Contracts on behalf of a TerminalAsset. Every TerminalAsset is associated with exactly one LeafTransactiveNode.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('cc5f1f15-c713-165f-76b4-a6cdc6224bdd', 'gw.g.node.class/000', 'MarketMaker', 4, 'A physical constraint point in the conductor topology that requires localized market coordination. Identified as a grid location (e.g., feeder constraint, transformer limit) where a MarketMaker actor computes local prices for balancing and constraint compliance. See [market-maker](https://gridworks.readthedocs.io/en/latest/market-maker.html).
+VALUES ('1b2e0ce7-44bb-7d88-9d6c-117873cec151', 'gw.g.node.class/000', 'MarketMaker', 4, 'A physical constraint point in the conductor topology that requires localized market coordination. Identified as a grid location (e.g., feeder constraint, transformer limit) where a MarketMaker actor computes local prices for balancing and constraint compliance. See [market-maker](https://gridworks.readthedocs.io/en/latest/market-maker.html).
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6dfc5a18-31f2-32ea-2c79-199402e94a4d', 'gw.g.node.class/000', 'Scada', 5, 'A GNode responsible for local telemetry, data acquisition, and control of a TerminalAsset.
+VALUES ('548a2c1c-7de0-6bcf-b2c6-d86439ddf8b8', 'gw.g.node.class/000', 'Scada', 5, 'A GNode responsible for local telemetry, data acquisition, and control of a TerminalAsset.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a61f24a8-a702-39bd-a569-22ed0da129d5', 'gw.g.node.class/000', 'PriceForecastService', 6, 'A service that provides forward price projections for planning, bidding, or dispatch optimization.
+VALUES ('dddeef72-0ba2-3f81-da10-fe9e8951dbdc', 'gw.g.node.class/000', 'PriceForecastService', 6, 'A service that provides forward price projections for planning, bidding, or dispatch optimization.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('23d20795-82a8-72d7-38e4-c341bcef756c', 'gw.g.node.class/000', 'WeatherForecastService', 7, 'A service that provides meteorological forecasts used for load and generation prediction.
+VALUES ('dd700604-9f13-d98c-d330-7c5633daa6ee', 'gw.g.node.class/000', 'WeatherForecastService', 7, 'A service that provides meteorological forecasts used for load and generation prediction.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b16b3257-4482-c52e-2a1a-ad772a490edc', 'gw.g.node.class/000', 'TimeCoordinator', 8, 'A service responsible for maintaining simulation time or orchestrated  test time across actors.
+VALUES ('4f37d0c6-fc94-995b-36e0-051316630f31', 'gw.g.node.class/000', 'TimeCoordinator', 8, 'A service responsible for maintaining simulation time or orchestrated  test time across actors.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('8afc8e52-a195-b253-c160-433252c1ef55', 'gw1.actor.class/009', 'NoActor', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('98c65195-d1fc-740b-9a75-650b6cd9163a', 'gw1.actor.class/009', 'NoActor', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('76046e10-75a8-24be-6039-b190a229ee36', 'gw1.actor.class/009', 'PrimaryScada', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ae5f4bc5-cce5-5a64-0496-76b7ed5a8428', 'gw1.actor.class/009', 'PrimaryScada', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6a46b699-cb7e-7b04-7177-8cc2d4228b1c', 'gw1.actor.class/009', 'SecondaryScada', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('bd1b8d4d-b33b-b46f-bbf0-f2fccb2f83f4', 'gw1.actor.class/009', 'SecondaryScada', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('31da884d-dc13-8204-9636-60973eb60fcd', 'gw1.actor.class/009', 'PowerMeter', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('6f7e1e6b-f1e1-848c-c7a4-e8fc7c82c662', 'gw1.actor.class/009', 'PowerMeter', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('58779081-cd7b-4eff-0d1e-4015e2d8c1bb', 'gw1.actor.class/009', 'LocalControl', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('01a602b3-db79-4df3-d5bd-031d84489abb', 'gw1.actor.class/009', 'LocalControl', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ba194023-3c4e-ac33-bc86-9bb5b0464105', 'gw1.actor.class/009', 'LeafAlly', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('aaf3977d-2515-8484-045e-c231717c346f', 'gw1.actor.class/009', 'LeafAlly', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4fafb130-84d2-25b6-dd0c-05078e6b929c', 'gw1.actor.class/009', 'DerivedGenerator', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('15afa9c1-0a60-d664-cfb4-5399e1c00bef', 'gw1.actor.class/009', 'DerivedGenerator', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('315a4a2d-bb89-7ea5-ca03-046bb08110fe', 'gw1.actor.class/009', 'PicoCycler', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('fefb52ee-8211-cd2e-8275-d36e53dba58d', 'gw1.actor.class/009', 'PicoCycler', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f7e57512-c1a9-a5ee-8682-cdd467409bed', 'gw1.actor.class/009', 'HpBoss', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('5baf494e-ad93-38a9-5168-75d4d0f27d79', 'gw1.actor.class/009', 'HpBoss', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('0010d31b-a2de-087c-7373-1a8dd09a7c35', 'gw1.actor.class/009', 'I2cRelayMultiplexer', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('2a77b545-9f6c-a83e-900c-ced9300d43ba', 'gw1.actor.class/009', 'I2cRelayMultiplexer', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('9d093abe-e95b-c146-0130-c573d3980018', 'gw1.actor.class/009', 'I2cZeroTenMultiplexer', 10, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('f26728cb-4caf-98ae-5c16-817acd13f442', 'gw1.actor.class/009', 'I2cZeroTenMultiplexer', 10, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('529b0e5e-7a10-7d92-2dee-ba3ba18820ae', 'gw1.actor.class/009', 'Hubitat', 11, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('4238abb2-7c2c-9302-baee-8c33c9ac418d', 'gw1.actor.class/009', 'Hubitat', 11, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('521b648d-b3c7-25be-ac3a-e067cc542c43', 'gw1.actor.class/009', 'Relay', 12, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('9fd05a0d-12d6-2565-4421-1ed8b7082866', 'gw1.actor.class/009', 'Relay', 12, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('95a76f0f-9fd8-123d-31fd-696ef6f1ab7f', 'gw1.actor.class/009', 'MultipurposeSensor', 13, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('fcd2f895-4070-d826-a752-c72a6fa11bb1', 'gw1.actor.class/009', 'MultipurposeSensor', 13, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('df2cb66e-308f-4709-ed72-5d254c2254a1', 'gw1.actor.class/009', 'HoneywellThermostat', 14, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e7f569b7-241c-48ed-545c-09adf253603a', 'gw1.actor.class/009', 'HoneywellThermostat', 14, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('94812ab6-22d0-f721-6b09-1b6705fb7fc9', 'gw1.actor.class/009', 'ApiTankModule', 15, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('36ecf6fd-83ae-ae65-1791-762e904d6154', 'gw1.actor.class/009', 'ApiTankModule', 15, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3bcdaf59-34b2-70d0-565e-7d3fbb282a26', 'gw1.actor.class/009', 'ApiFlowModule', 16, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('3752d30b-1eb0-7ded-1d71-f06859cd860f', 'gw1.actor.class/009', 'ApiFlowModule', 16, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('fd38da0c-cd55-5890-f47e-b048075673dd', 'gw1.actor.class/009', 'ZeroTenOutputer', 17, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('6bba36c5-01f2-2f64-9b6c-f2a3408b9fff', 'gw1.actor.class/009', 'ZeroTenOutputer', 17, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f8d25fc6-7001-f413-0be5-04a78d57dcba', 'gw1.actor.class/009', 'ApiBtuMeter', 18, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('a5246f78-a809-d6a0-9999-33d32d60a703', 'gw1.actor.class/009', 'ApiBtuMeter', 18, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('803dc6c0-ba97-6fba-31a8-b103a8cd3c45', 'gw1.actor.class/009', 'SiegLoop', 19, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('61396b40-cc36-c529-0942-7f031f9d82b2', 'gw1.actor.class/009', 'SiegLoop', 19, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3e13002f-67c5-7166-48bb-33656dc6b517', 'gw1.actor.class/010', 'NoActor', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('8f3fe070-6f0f-d941-d555-48a8551adb7a', 'gw1.actor.class/010', 'NoActor', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2e4c3c88-02e5-2938-0b98-94747e7b261d', 'gw1.actor.class/010', 'PrimaryScada', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ff5537f4-72f2-358e-95c3-8b3cd0aea04c', 'gw1.actor.class/010', 'PrimaryScada', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('adf8deca-eb62-627e-904c-e0e6f250611f', 'gw1.actor.class/010', 'SecondaryScada', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('4d9beee0-ae42-e697-b235-a13947666526', 'gw1.actor.class/010', 'SecondaryScada', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6fbb7847-d36c-abb6-a3e6-2e8707eb3611', 'gw1.actor.class/010', 'PowerMeter', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('0542a32e-9a16-c759-4ae6-3d6257f97c29', 'gw1.actor.class/010', 'PowerMeter', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e51171c2-b4fc-7546-f668-3f5ee5541fc2', 'gw1.actor.class/010', 'LocalControl', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('14d372f0-48e4-7f47-db89-d9cc0b78a92d', 'gw1.actor.class/010', 'LocalControl', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f9918113-5af3-c1a9-2d4c-76b9add4bdef', 'gw1.actor.class/010', 'LeafAlly', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b92260a9-879d-93d4-74ab-c077a87a03cc', 'gw1.actor.class/010', 'LeafAlly', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('31318e8c-4598-44b6-e32c-f0b8d70780b5', 'gw1.actor.class/010', 'DerivedGenerator', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ea5488a4-b7b0-1991-ef90-94bafdb9d3f0', 'gw1.actor.class/010', 'DerivedGenerator', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3f13600b-e070-9d03-d532-3bf2efe0910c', 'gw1.actor.class/010', 'PicoCycler', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7770abc7-77aa-654a-b1f0-2a1c7ac39a30', 'gw1.actor.class/010', 'PicoCycler', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('354ef7ba-0831-f1ec-5faf-7f5f87639029', 'gw1.actor.class/010', 'HpBoss', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('80b013a4-ce6a-9a2d-54ae-f91f4c86065e', 'gw1.actor.class/010', 'HpBoss', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('82fab6c0-a7d9-7462-e09f-5f87a41900a5', 'gw1.actor.class/010', 'I2cRelayMultiplexer', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('897f48f0-6b5e-99ea-842b-1167458af884', 'gw1.actor.class/010', 'I2cRelayMultiplexer', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('474498fc-f758-621c-fdd4-9793f0c9accb', 'gw1.actor.class/010', 'I2cZeroTenMultiplexer', 10, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('f662f32a-e6e1-9de0-d307-3fc5067783c6', 'gw1.actor.class/010', 'I2cZeroTenMultiplexer', 10, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('bbfa3298-fcad-c3cd-1446-d03c259701d6', 'gw1.actor.class/010', 'Hubitat', 11, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('f04b88d8-bfd4-9950-8025-7179964a5314', 'gw1.actor.class/010', 'Hubitat', 11, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('68bf9159-f294-4ca9-b70e-9d956ee9d1be', 'gw1.actor.class/010', 'Relay', 12, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('2b4994bd-286d-303a-3295-a6937d5b5e3f', 'gw1.actor.class/010', 'Relay', 12, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f8dfbba5-e5a6-1b68-d0ae-04be8422ce59', 'gw1.actor.class/010', 'MultipurposeSensor', 13, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('54aa5c0f-8065-4efc-6b70-d508af6f9ca3', 'gw1.actor.class/010', 'MultipurposeSensor', 13, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c09b34d4-a623-04dd-628d-c27cb8776f55', 'gw1.actor.class/010', 'HoneywellThermostat', 14, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('31bcec82-d060-1431-21ba-2bdcc1cb23f1', 'gw1.actor.class/010', 'HoneywellThermostat', 14, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e24ce131-0916-7529-a88e-6227284df011', 'gw1.actor.class/010', 'ApiTankModule', 15, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c40b67d8-0aa4-66f0-5e4c-d82b3841a499', 'gw1.actor.class/010', 'ApiTankModule', 15, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a43f1622-792b-9533-1d12-5c308d9f92a8', 'gw1.actor.class/010', 'ApiFlowModule', 16, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b6ff50ae-2e06-0744-8d59-e8d0c8fd6a30', 'gw1.actor.class/010', 'ApiFlowModule', 16, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('7653da68-0f5e-ebb5-06e1-c89c4b5f6b3e', 'gw1.actor.class/010', 'ZeroTenOutputer', 17, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('2c702fe7-9422-286a-2fa9-c12c485b2eca', 'gw1.actor.class/010', 'ZeroTenOutputer', 17, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e22811af-c326-c2c2-82b3-fb9a55522def', 'gw1.actor.class/010', 'ApiBtuMeter', 18, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('59fbbab6-b215-1e2d-17a2-ec78be698a7c', 'gw1.actor.class/010', 'ApiBtuMeter', 18, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e7e66cbb-959a-6c5c-26fb-5614459840e4', 'gw1.actor.class/010', 'SiegLoop', 19, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('4dd208ec-27fb-c128-9155-5aa64e3b9f57', 'gw1.actor.class/010', 'SiegLoop', 19, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('eab3a1a0-434f-8d6a-a500-d2db1f775468', 'gw1.actor.class/010', 'GpioSensor', 20, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e6095972-5099-f33b-aa4e-018f8bdcb34f', 'gw1.actor.class/010', 'GpioSensor', 20, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('8e523523-3023-f177-58ae-5a1a7fb63cba', 'gw1.actor.class/010', 'I2cBus', 21, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('04f6777e-5bba-40df-3a8f-cbc1e1ee8d5d', 'gw1.actor.class/010', 'I2cBus', 21, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('285a9811-27be-5d40-c242-d31572691bf2', 'gw1.actor.class/010', 'I2cRelayBoard', 22, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('1ab98f69-6891-ed21-ff04-376a7bca0bf8', 'gw1.actor.class/010', 'I2cRelayBoard', 22, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('76cd26e7-fbf4-fb71-d88c-854a3698140c', 'gw1.actor.class/011', 'NoActor', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e0ae982d-5a74-d859-9ee5-60344e1fd2b6', 'gw1.actor.class/011', 'NoActor', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('30d51e99-c1d3-9428-e0ba-d2111978526d', 'gw1.actor.class/011', 'PrimaryScada', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('f22a697e-b309-1a34-d4cd-559187bacafe', 'gw1.actor.class/011', 'PrimaryScada', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('04150466-96c4-e716-2df5-39de85b6ce70', 'gw1.actor.class/011', 'SecondaryScada', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ab0a96a1-8502-1c0a-0acc-162ee3428e96', 'gw1.actor.class/011', 'SecondaryScada', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('455eb04e-dbfa-e1a6-5747-adbd6248c3d2', 'gw1.actor.class/011', 'PowerMeter', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('eb110654-d4f7-eb6a-7682-68d261274948', 'gw1.actor.class/011', 'PowerMeter', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('101ff261-51be-3a0b-2757-61aeb5c7e640', 'gw1.actor.class/011', 'LocalControl', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('4a9cc08b-7857-843d-5193-17f417a04086', 'gw1.actor.class/011', 'LocalControl', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6f63d52f-0f0f-3ad4-5a61-4d4c85720185', 'gw1.actor.class/011', 'LeafAlly', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b7ce0ff2-1ef8-b3a4-d0b0-ec25812abd70', 'gw1.actor.class/011', 'LeafAlly', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('97a85c6d-8e28-c463-6707-97c31e2ebef7', 'gw1.actor.class/011', 'DerivedGenerator', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ebe306a6-180f-2e40-051d-067a7f7f6d7d', 'gw1.actor.class/011', 'DerivedGenerator', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('17d0fa39-6609-b7f2-6a49-c529b391cc11', 'gw1.actor.class/011', 'PicoCycler', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('757bee17-4998-0eb2-4ebc-97be3f4f8834', 'gw1.actor.class/011', 'PicoCycler', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b7b5175c-1800-b7c9-d3fd-c62e0082b5e4', 'gw1.actor.class/011', 'HpBoss', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('5b1cdfcb-1b1d-8616-1b97-163c398cb33c', 'gw1.actor.class/011', 'HpBoss', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('7d978179-e5b3-28b7-7ff9-d3194b6cbc0d', 'gw1.actor.class/011', 'I2cRelayMultiplexer', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('fd8cde03-81f2-c66c-78f9-5b62ca56cbe0', 'gw1.actor.class/011', 'I2cRelayMultiplexer', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('9d7c943a-ca6e-afa7-a324-d5e40c123a6a', 'gw1.actor.class/011', 'I2cZeroTenMultiplexer', 10, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('739c5601-9c6d-39ea-d567-6a7d14410cef', 'gw1.actor.class/011', 'I2cZeroTenMultiplexer', 10, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('bfe48b65-9008-b891-b623-e96f42d3861b', 'gw1.actor.class/011', 'Hubitat', 11, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('758b03a5-5cb3-7640-1a81-898a8f371cce', 'gw1.actor.class/011', 'Hubitat', 11, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('86b8efd4-0cac-ea0b-2ab1-2dafa914076f', 'gw1.actor.class/011', 'Relay', 12, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('fdff5869-00a8-c599-a63b-f4a6d9798024', 'gw1.actor.class/011', 'Relay', 12, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('134015bf-7860-54a8-59d9-87a7dcb62d2a', 'gw1.actor.class/011', 'MultipurposeSensor', 13, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b792d7e7-30f5-8102-338e-334752c7ac9e', 'gw1.actor.class/011', 'MultipurposeSensor', 13, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('26f7437f-2027-dfb9-3c20-5123686eb995', 'gw1.actor.class/011', 'HoneywellThermostat', 14, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('43639403-090d-68bc-b819-a0a7490be0ab', 'gw1.actor.class/011', 'HoneywellThermostat', 14, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('57a6f109-1655-9453-814e-c3a033587f54', 'gw1.actor.class/011', 'ApiTankModule', 15, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('78ff7a58-7241-e86d-8af3-9887645364d5', 'gw1.actor.class/011', 'ApiTankModule', 15, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('90f84365-3e6c-9c81-5b6d-8c4eb51f2998', 'gw1.actor.class/011', 'ApiFlowModule', 16, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('59dd92d6-a05b-00ac-b4c1-9303e815761f', 'gw1.actor.class/011', 'ApiFlowModule', 16, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2c0700a5-ccfa-1d64-f98d-5823f92e64c1', 'gw1.actor.class/011', 'ZeroTenOutputer', 17, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7d394951-b070-ed83-f205-6fbf71643eb2', 'gw1.actor.class/011', 'ZeroTenOutputer', 17, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('67dac993-7d0c-2c28-c335-172686fdd13f', 'gw1.actor.class/011', 'ApiBtuMeter', 18, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b9f523ab-53c0-8826-49e6-ea7580263f1c', 'gw1.actor.class/011', 'ApiBtuMeter', 18, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('bacb24f6-8e19-7db6-7c79-58608196e093', 'gw1.actor.class/011', 'SiegLoop', 19, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('f2148b31-42d0-68ed-f655-2bb975370b4c', 'gw1.actor.class/011', 'SiegLoop', 19, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2e4a90cc-d880-d6a6-2daf-6a3085214451', 'gw1.actor.class/011', 'GpioSensor', 20, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('82168921-e270-3d05-15b7-e3efc5ae5d38', 'gw1.actor.class/011', 'GpioSensor', 20, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('97ea47d9-f1e7-9e4a-a365-ac7e6b0d5d04', 'gw1.actor.class/011', 'I2cBus', 21, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e1155c1f-f6e3-833b-1f03-bc0bb15c13ac', 'gw1.actor.class/011', 'I2cBus', 21, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('93d9814b-8bb4-bcde-9908-a9240aefbe38', 'gw1.actor.class/011', 'I2cRelayBoard', 22, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7f2df225-fde7-6896-6281-a6099be55f04', 'gw1.actor.class/011', 'I2cRelayBoard', 22, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('9389102c-fb27-817c-ca9c-b0ac28c9b5ac', 'gw1.actor.class/011', 'I2cThermistorReader', 23, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e40d3d6a-102d-4e12-ea19-001db4496509', 'gw1.actor.class/011', 'I2cThermistorReader', 23, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('46a050b3-5513-3401-49b9-a54558a9a658', 'gw1.emission.method/000', 'OnTrigger', 0, 'Emit values only when triggered by the governing event or computation.
+VALUES ('26f0c4bd-c512-c878-da07-0f1aa3a96a52', 'gw1.emission.method/000', 'OnTrigger', 0, 'Emit values only when triggered by the governing event or computation.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('aa485dcb-d50e-785f-70c1-580a01771606', 'gw1.emission.method/000', 'Periodic', 1, 'Emit values on a periodic schedule.
+VALUES ('6b2dfa4d-c80b-9fea-0ca4-6fa9fc553591', 'gw1.emission.method/000', 'Periodic', 1, 'Emit values on a periodic schedule.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f1f47640-3ee7-7076-8d60-e50b68ab9347', 'gw1.emission.method/000', 'AsyncAndPeriodic', 2, 'Emit values both asynchronously on trigger and on a periodic schedule.
+VALUES ('f18f6542-12be-298d-b4ce-3174289c0fad', 'gw1.emission.method/000', 'AsyncAndPeriodic', 2, 'Emit values both asynchronously on trigger and on a periodic schedule.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('843e7533-7254-f28a-5760-083c47a9c4dd', 'gw1.heat.call.interpretation/000', 'DigitalZeroIsActive', 0, 'The source channel is treated as a digital signal where a value of zero indicates an active call for heat. This is typically used for opto-isolated GPIO inputs connected to 24 VAC thermostat circuits that pull the input low when energized.
+VALUES ('73096e07-3550-4c96-3d35-cf356673d176', 'gw1.heat.call.interpretation/000', 'DigitalZeroIsActive', 0, 'The source channel is treated as a digital signal where a value of zero indicates an active call for heat. This is typically used for opto-isolated GPIO inputs connected to 24 VAC thermostat circuits that pull the input low when energized.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('fb6f8f36-963e-aab4-d99c-a3bbd5a7f19f', 'gw1.heat.call.interpretation/000', 'DigitalOneIsActive', 1, 'The source channel is treated as a digital signal where a value of one indicates an active call for heat.
+VALUES ('2d5c62b9-c99c-17ff-1b9e-7f06d13c9cde', 'gw1.heat.call.interpretation/000', 'DigitalOneIsActive', 1, 'The source channel is treated as a digital signal where a value of one indicates an active call for heat.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('aea8c0a2-cc3b-5c4b-ad50-02e0e9455cb7', 'gw1.heat.call.interpretation/000', 'GreaterThanThreshold', 2, 'The source channel is treated as a scalar measurement. A zone is considered to be calling for heat when the absolute value of the source reading exceeds the configured threshold. This mode is typically used for legacy white-wire power measurements.
+VALUES ('4ed85016-c834-2fd7-11b0-f2e6b5dd240b', 'gw1.heat.call.interpretation/000', 'GreaterThanThreshold', 2, 'The source channel is treated as a scalar measurement. A zone is considered to be calling for heat when the absolute value of the source reading exceeds the configured threshold. This mode is typically used for legacy white-wire power measurements.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b2ed68f5-726a-f909-653d-75dd2170a6c5', 'gw1.quantity/000', 'Unknown', 0, 'Quantity classification has not been specified.
+VALUES ('3426f5c5-3394-6958-7557-fd3687791057', 'gw1.quantity/000', 'Unknown', 0, 'Quantity classification has not been specified.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('39a22bfe-3c92-5ad1-691d-61d839d676aa', 'gw1.quantity/000', 'Unitless', 1, 'Dimensionless logical or numerical value.
+VALUES ('4f6283f2-54c6-9020-3ca7-64f861c3f3ef', 'gw1.quantity/000', 'Unitless', 1, 'Dimensionless logical or numerical value.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('279db04d-b86c-4e52-23af-ce25a486aef0', 'gw1.quantity/000', 'Power', 2, 'Rate of energy transfer per unit time.
+VALUES ('429f2f10-ce8e-5a4d-8484-2c792b2a8339', 'gw1.quantity/000', 'Power', 2, 'Rate of energy transfer per unit time.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('d001c904-bf38-4a7a-e328-7412b70cf97b', 'gw1.quantity/000', 'Energy', 3, 'Accumulated or stored energy.
+VALUES ('92ec8434-4a10-c1a0-6ea2-a9c69ccb056d', 'gw1.quantity/000', 'Energy', 3, 'Accumulated or stored energy.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ee6af4b3-efc8-c9d5-c3de-41881f332f0c', 'gw1.quantity/000', 'Temperature', 4, 'Thermal state measurement.
+VALUES ('5a9dd626-cfb4-784a-8a03-bb9ce2acb1c7', 'gw1.quantity/000', 'Temperature', 4, 'Thermal state measurement.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('d6913bbe-4890-1ffa-dcce-118863ea1170', 'gw1.quantity/000', 'FlowRate', 5, 'Volumetric or mass flow rate.
+VALUES ('cc33d517-9274-4a06-9ef9-1e755ec69f35', 'gw1.quantity/000', 'FlowRate', 5, 'Volumetric or mass flow rate.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('89176ce0-458a-7296-3113-8d16d3d8c4eb', 'gw1.quantity/000', 'Volume', 6, 'Physical volume measurement.
+VALUES ('fede5401-f500-7ddf-9cfb-c1f7d636ffd6', 'gw1.quantity/000', 'Volume', 6, 'Physical volume measurement.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('9bb0c875-2670-a134-4305-8a74848902d9', 'gw1.quantity/000', 'Voltage', 7, 'Electrical potential difference.
+VALUES ('be2a6e1a-75a1-4f47-0484-cbf9126577fc', 'gw1.quantity/000', 'Voltage', 7, 'Electrical potential difference.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e1c85822-f2a9-1a48-86a2-90169d36cbef', 'gw1.quantity/000', 'Current', 8, 'Electrical current.
+VALUES ('50298120-5fad-3c54-ba81-cecbe0ea0a65', 'gw1.quantity/000', 'Current', 8, 'Electrical current.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3a230265-c91e-e135-356e-4d48828fa3da', 'gw1.quantity/000', 'Percent', 9, 'Fractional ratio expressed as a percentage.
+VALUES ('331311be-1512-57d0-1620-4a211d4d3e59', 'gw1.quantity/000', 'Percent', 9, 'Fractional ratio expressed as a percentage.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b16eee27-82f9-e80c-a73c-4e6fda570b21', 'gw1.quantity/000', 'Frequency', 10, 'Cycles per unit time.
+VALUES ('eed3daac-24b9-87db-7973-6e90a06bd053', 'gw1.quantity/000', 'Frequency', 10, 'Cycles per unit time.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e613628d-ce40-03c8-c211-87b84d209226', 'gw1.quantity/001', 'Unknown', 0, 'Quantity classification has not been specified.
+VALUES ('f92a1a39-7832-2fb7-b56a-b00f0e332c79', 'gw1.quantity/001', 'Unknown', 0, 'Quantity classification has not been specified.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('32bb5790-7b10-dfa8-21f4-f59814a5108e', 'gw1.quantity/001', 'Unitless', 1, 'Dimensionless logical or numerical value.
+VALUES ('e11f2663-aa81-3340-e377-ba58b7a786e6', 'gw1.quantity/001', 'Unitless', 1, 'Dimensionless logical or numerical value.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ea6fb824-e6a4-9c5b-9bb4-0013e917059b', 'gw1.quantity/001', 'Power', 2, 'Rate of energy transfer per unit time.
+VALUES ('11e7ae27-a89e-ec47-bf51-018833b0f7da', 'gw1.quantity/001', 'Power', 2, 'Rate of energy transfer per unit time.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('98a1b9e0-98ff-e944-e906-507309c828b0', 'gw1.quantity/001', 'Energy', 3, 'Accumulated or stored energy.
+VALUES ('83409d7c-6151-42a5-add5-e2e4a6a392b6', 'gw1.quantity/001', 'Energy', 3, 'Accumulated or stored energy.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ce51bea8-76b6-72ce-83da-b89526943feb', 'gw1.quantity/001', 'Temperature', 4, 'Thermal state measurement.
+VALUES ('4194f6a5-f28d-789e-797d-007b441d7cb6', 'gw1.quantity/001', 'Temperature', 4, 'Thermal state measurement.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('d1a83b3a-e615-c4a5-8626-3c22b89cf7e0', 'gw1.quantity/001', 'FlowRate', 5, 'Volumetric or mass flow rate.
+VALUES ('1d790c0a-93f9-bb7e-063c-09644aafd7de', 'gw1.quantity/001', 'FlowRate', 5, 'Volumetric or mass flow rate.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b53f77f4-a371-a5d0-ef4d-2f3f51faed25', 'gw1.quantity/001', 'Volume', 6, 'Physical volume measurement.
+VALUES ('5b9257db-cb92-ba32-618f-913937b09a16', 'gw1.quantity/001', 'Volume', 6, 'Physical volume measurement.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('0f535a12-dea1-ba38-d0fe-cad9f3bbabd7', 'gw1.quantity/001', 'Voltage', 7, 'Electrical potential difference.
+VALUES ('8efd024c-cae8-4590-13f0-4687b4878093', 'gw1.quantity/001', 'Voltage', 7, 'Electrical potential difference.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('bec931ec-45a8-dbc2-f187-368712c7873c', 'gw1.quantity/001', 'Current', 8, 'Electrical current.
+VALUES ('3246d23b-54e4-2fb2-a32b-e30ee0e13aff', 'gw1.quantity/001', 'Current', 8, 'Electrical current.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('bdeae10b-2186-5813-48df-5b1d122480e3', 'gw1.quantity/001', 'Percent', 9, 'Fractional ratio expressed as a percentage.
+VALUES ('5c8c09db-2e04-0c0c-a7b3-907e1fb81c15', 'gw1.quantity/001', 'Percent', 9, 'Fractional ratio expressed as a percentage.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('79177c2f-8ebd-fcbb-6e0b-2048ace24e38', 'gw1.quantity/001', 'Frequency', 10, 'Cycles per unit time.
+VALUES ('6896ee2e-a2dc-9601-3983-39310c669070', 'gw1.quantity/001', 'Frequency', 10, 'Cycles per unit time.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('1241818d-3b9b-fbd8-5568-990a5aa302ab', 'gw1.quantity/001', 'Time', 11, 'Elapsed or absolute time quantity.
+VALUES ('684d19d4-c22c-515f-a2c9-84154a999aa5', 'gw1.quantity/001', 'Time', 11, 'Elapsed or absolute time quantity.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c40aa6c3-1b96-cb94-4cd5-5563bc2e0751', 'gw1.seasonal.storage.mode/000', 'AllTanks', 0, 'Operate using the full seasonal storage tank set.
+VALUES ('f8d66e4f-6c17-5936-53b9-b28c8bf537ea', 'gw1.seasonal.storage.mode/000', 'AllTanks', 0, 'Operate using the full seasonal storage tank set.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('d2538507-d057-4706-6da4-560106384a10', 'gw1.seasonal.storage.mode/000', 'BufferOnly', 1, 'Operate using only the buffer tank.
+VALUES ('a2365a10-9cdc-85a0-0559-58e1fd130337', 'gw1.seasonal.storage.mode/000', 'BufferOnly', 1, 'Operate using only the buffer tank.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('eabed9e4-7ab7-9d14-a5e4-24b420262c4a', 'gw1.system.mode/000', 'Heating', 0, 'Normal operational mode. SCADA may actively energize and de-energize actuators in order to provide heating or cooling services. In this mode, SCADA may accept and execute Dispatch Contracts originating from the Leaf Transactive Node (LTN), subject to local safety constraints and configuration.
+VALUES ('48cf42d6-68cc-7699-46e5-4b7c21d07f0b', 'gw1.system.mode/000', 'Heating', 0, 'Normal operational mode. SCADA may actively energize and de-energize actuators in order to provide heating or cooling services. In this mode, SCADA may accept and execute Dispatch Contracts originating from the Leaf Transactive Node (LTN), subject to local safety constraints and configuration.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('670df0d3-5c60-f7d1-1d21-d7f58fcf9af8', 'gw1.system.mode/000', 'Standby', 1, 'Intentional idle mode with active inhibition. SCADA retains control authority over actuators but uses it only to prevent heating or cooling from occurring. This mode is typically used when the system is intentionally paused (e.g. seasonal shutdown, manual override, or safety condition) while still ensuring that uncontrolled equipment such as boilers or heat pumps do not engage.
+VALUES ('ac887998-4945-867d-68d2-6acc6cd2c1a0', 'gw1.system.mode/000', 'Standby', 1, 'Intentional idle mode with active inhibition. SCADA retains control authority over actuators but uses it only to prevent heating or cooling from occurring. This mode is typically used when the system is intentionally paused (e.g. seasonal shutdown, manual override, or safety condition) while still ensuring that uncontrolled equipment such as boilers or heat pumps do not engage.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('540f1559-72dd-fdfb-b6e4-010e877a9da3', 'gw1.system.mode/000', 'MonitorOnly', 2, 'Absolute non-actuation mode. SCADA MUST NOT issue any physical control actions, including relay changes or analog output updates. Telemetry collection, reporting, forecasting, and contract accounting may continue, but all actuators are left untouched. This mode provides a strong guarantee that no physical intervention will be performed by SCADA.
+VALUES ('3b01361f-4c52-af46-a71e-b18d68fe20de', 'gw1.system.mode/000', 'MonitorOnly', 2, 'Absolute non-actuation mode. SCADA MUST NOT issue any physical control actions, including relay changes or analog output updates. Telemetry collection, reporting, forecasting, and contract accounting may continue, but all actuators are left untouched. This mode provides a strong guarantee that no physical intervention will be performed by SCADA.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3f563f1e-5f53-dd00-c7a6-98b7ee57358b', 'gw1.unit/000', 'Unknown', 0, 'Unit has not been specified or is not known.
+VALUES ('cfe87e1e-48f6-1edd-2530-aa4a5bee47cc', 'gw1.unit/000', 'Unknown', 0, 'Unit has not been specified or is not known.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('5c2f3f88-e910-3f2d-d84e-9a8cc7ca8e55', 'gw1.unit/000', 'Unitless', 1, 'Dimensionless quantity (e.g., digital input state, normalized ratio).
+VALUES ('b03a99e1-d631-b943-c56b-4510218cb211', 'gw1.unit/000', 'Unitless', 1, 'Dimensionless quantity (e.g., digital input state, normalized ratio).
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('409f4af8-e475-3a0b-427a-cf0d4f7ad4cc', 'gw1.unit/000', 'FahrenheitX100', 2, 'Temperature in degrees Fahrenheit multiplied by 100 to preserve integer transport precision.
+VALUES ('334117f3-3c7e-2c2a-9365-ada3cef0b656', 'gw1.unit/000', 'FahrenheitX100', 2, 'Temperature in degrees Fahrenheit multiplied by 100 to preserve integer transport precision.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('70a37d12-a178-b523-a223-74a42b41cb17', 'gw1.unit/000', 'Watts', 3, 'Instantaneous power in watts.
+VALUES ('33724974-a845-2d29-413d-2d252f03e7ed', 'gw1.unit/000', 'Watts', 3, 'Instantaneous power in watts.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a36b6546-8839-bfa9-3c53-301d6e257b57', 'gw1.unit/000', 'WattHours', 4, 'Energy in watt-hours.
+VALUES ('2abf3607-4c8d-d3b6-5f3a-3c2ce45af184', 'gw1.unit/000', 'WattHours', 4, 'Energy in watt-hours.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2449b58a-14f6-aa06-591a-48d62971fe11', 'gw1.unit/000', 'Gallons', 5, 'Volume in U.S. gallons.
+VALUES ('f2f85063-991b-7853-8f4c-7a5e54f9cc59', 'gw1.unit/000', 'Gallons', 5, 'Volume in U.S. gallons.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('7a66b472-5763-ba93-7dd1-319a05061131', 'gw1.unit/000', 'GpmX100', 6, 'Flow rate in gallons per minute multiplied by 100 to preserve integer transport precision.
+VALUES ('48c19baf-dd77-b8e1-8415-b2bbefd5ce56', 'gw1.unit/000', 'GpmX100', 6, 'Flow rate in gallons per minute multiplied by 100 to preserve integer transport precision.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('fc64ecc9-27b1-f48f-cd33-8308da7e5bd4', 'gw1.unit/001', 'Unknown', 0, 'Unit has not been specified or is not known.
+VALUES ('4a057ac0-74e0-8353-4f1c-300edc1d6aba', 'gw1.unit/001', 'Unknown', 0, 'Unit has not been specified or is not known.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('0dfeaef3-a1ed-75f8-2293-1cf8acdf011d', 'gw1.unit/001', 'Unitless', 1, 'Dimensionless quantity.
+VALUES ('12d6edbb-085e-5aab-4ab7-d96340b2c489', 'gw1.unit/001', 'Unitless', 1, 'Dimensionless quantity.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('42b15b13-3841-ac64-7fdd-fa7318a5a7f4', 'gw1.unit/001', 'FahrenheitX100', 2, 'Temperature in degrees Fahrenheit multiplied by 100.
+VALUES ('6d30383f-20e4-bcfe-91c5-4687fb3ff795', 'gw1.unit/001', 'FahrenheitX100', 2, 'Temperature in degrees Fahrenheit multiplied by 100.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e05ed402-655a-ce93-0c84-c08c74891b5b', 'gw1.unit/001', 'Watts', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c8815dc7-8a3b-7c74-49ec-3fa318b1f286', 'gw1.unit/001', 'Watts', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('13ce9f48-7da0-1eeb-5ee8-9b97cb81f94f', 'gw1.unit/001', 'WattHours', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ab5e8051-b978-3dc9-19f0-d60c120dbf17', 'gw1.unit/001', 'WattHours', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4124c30e-7a02-bc36-4d2a-53a721fc8446', 'gw1.unit/001', 'Gallons', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('a7ed5a2e-d7f2-b744-1529-7b093c3e01f5', 'gw1.unit/001', 'Gallons', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('25f33573-0061-c83e-dc29-997490e4a4c0', 'gw1.unit/001', 'GpmX100', 6, 'Flow rate in gallons per minute multiplied by 100.
+VALUES ('e339d8e2-5230-d952-6809-4c266f4b0a15', 'gw1.unit/001', 'GpmX100', 6, 'Flow rate in gallons per minute multiplied by 100.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c8986d29-dba3-5fd2-dbb0-bf7355c1c688', 'gw1.unit/001', 'Seconds', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('752f91cd-008a-c5a4-c0f1-2ce958fe523e', 'gw1.unit/001', 'Seconds', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('09bf8980-0e78-606e-342e-75993094d63f', 'gw1.unit/001', 'SecondsX10', 8, 'Time measured in tenths of a second.
+VALUES ('ad9c2a73-6175-e2a4-5aa5-65fd4a286c0d', 'gw1.unit/001', 'SecondsX10', 8, 'Time measured in tenths of a second.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('cb0ddbf9-3961-6a95-b5e6-64857504bdb0', 'gw1.unit/001', 'Milliseconds', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('affcf00c-2f49-ab6c-c643-f2ea81903939', 'gw1.unit/001', 'Milliseconds', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6bc90ca6-bc59-06c1-c579-6d44805dbb9d', 'heatcall.source/000', 'WallThermostat', 0, 'Heat call is controlled by the local wall thermostat.
+VALUES ('1d8410dd-dcf1-fa6d-2344-222858011cc5', 'heatcall.source/000', 'WallThermostat', 0, 'Heat call is controlled by the local wall thermostat.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('54f473de-a665-1e25-172f-dc878236caed', 'heatcall.source/000', 'Scada', 1, 'Heat call is controlled by the SCADA system.
+VALUES ('0f6801fa-2d5b-2d52-0459-1ad668838eb2', 'heatcall.source/000', 'Scada', 1, 'Heat call is controlled by the SCADA system.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('9f55abb6-32bf-4ef0-ef2b-301ad4a58a4b', 'hz.calc.method/001', 'BasicExpWeightedAvg', 0, 'Estimate frequency using a basic exponentially weighted average.
+VALUES ('9d0b55b2-4e34-d2ec-7f0b-8779aaaee0ba', 'hz.calc.method/001', 'BasicExpWeightedAvg', 0, 'Estimate frequency using a basic exponentially weighted average.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('93ee8d52-274e-948d-133f-02db801aab6b', 'hz.calc.method/001', 'BasicButterWorth', 1, 'Estimate frequency using a basic Butterworth-style filter.
+VALUES ('3a4094cc-8b21-a2e4-ea51-6ea404deb028', 'hz.calc.method/001', 'BasicButterWorth', 1, 'Estimate frequency using a basic Butterworth-style filter.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6e75a59f-70ca-eba1-bbcb-312817bfb61e', 'hz.calc.method/001', 'UniformWindow', 2, 'Estimate frequency using a uniform window over recent pulses.
+VALUES ('8e3a95a3-7bad-0589-4d3a-6fa0bb625cc6', 'hz.calc.method/001', 'UniformWindow', 2, 'Estimate frequency using a uniform window over recent pulses.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('08bf6079-4534-c8ed-ba04-31280cea9f61', 'market.price.unit/000', 'USDPerMWh', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ae516463-8290-4388-2876-972c5234f92f', 'market.price.unit/000', 'USDPerMWh', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('947b9041-f36c-9560-ae08-8310630927e2', 'market.quantity.unit/000', 'AvgMW', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('19c8bc2a-4383-71fa-7a8c-4ebae012863c', 'market.quantity.unit/000', 'AvgMW', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f6681a28-7dd4-37e8-765f-cafdded14a0e', 'market.quantity.unit/000', 'AvgkW', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('d56fd1d6-59b1-2986-0de6-69c7b7cf9869', 'market.quantity.unit/000', 'AvgkW', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('eeaa26e9-7a3f-a3fc-0fe3-bfefdc653062', 'market.type.name/000', 'unknown', 0, 'Default unknown') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('51ea91df-169d-e886-4e4d-57e2b482fb51', 'market.type.name/000', 'unknown', 0, 'Default unknown') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c6ee78d6-fab3-de76-58b9-c94e285e7cdf', 'market.type.name/000', 'rt5gate5', 1, 'Real-time energy, 5 minute MarketSlots, gate closing 5 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c8ed4831-3d36-0c1a-b20c-0e8dc43da42b', 'market.type.name/000', 'rt5gate5', 1, 'Real-time energy, 5 minute MarketSlots, gate closing 5 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('03c107f2-7ffd-9bff-4b1e-2a680cfcb8b9', 'market.type.name/000', 'rt60gate5', 2, 'Real-time energy, 60 minute MarketSlots, gate closing 5 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('f637cb8c-ec97-5b1b-d9e2-7abcfe871e8c', 'market.type.name/000', 'rt60gate5', 2, 'Real-time energy, 60 minute MarketSlots, gate closing 5 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('5eaebea4-0d91-18a7-9171-236e08bf3bed', 'market.type.name/000', 'da60', 3, 'Day-ahead energy, 60 minute MarketSlots') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('cc4f752f-98d7-fbd4-3d4a-27a0766a1f68', 'market.type.name/000', 'da60', 3, 'Day-ahead energy, 60 minute MarketSlots') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('634da4fa-fb5c-4c78-8985-bf091c9faf62', 'market.type.name/000', 'rt60gate30', 4, 'Real-time energy, 60 minute MarketSlots, gate closing 30 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('4e26deee-5dfe-5685-e252-26935f8d5d69', 'market.type.name/000', 'rt60gate30', 4, 'Real-time energy, 60 minute MarketSlots, gate closing 30 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('10c7e2af-1a18-22c3-af5a-e363623a9aed', 'market.type.name/000', 'rt15gate5', 5, 'Real-time energy, 15 minute MarketSlots, gate closing 5 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ae2537b5-7940-d2db-6b92-0abf93d81092', 'market.type.name/000', 'rt15gate5', 5, 'Real-time energy, 15 minute MarketSlots, gate closing 5 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c5baa770-0d41-91a7-03b5-b5147e762eef', 'market.type.name/000', 'rt30gate5', 6, 'Real-time energy, 30 minute MarketSlots, gate closing 5 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('485baa45-e776-5331-3524-f92be96f1eb4', 'market.type.name/000', 'rt30gate5', 6, 'Real-time energy, 30 minute MarketSlots, gate closing 5 minutes prior to start') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a0781c28-0a50-67dd-3651-7cf6816a282a', 'market.type.name/000', 'rt60gate30b', 7, 'Real-time energy, 30 minute MarketSlots, gate closing 5 minutes prior to start, QuantityUnit AvgkW') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c9ed48c2-4f88-5c05-9364-6662a2fb2857', 'market.type.name/000', 'rt60gate30b', 7, 'Real-time energy, 30 minute MarketSlots, gate closing 5 minutes prior to start, QuantityUnit AvgkW') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('940d9fa6-f821-3d65-d7ea-db7dfd16eca7', 'relay.closed.or.open/000', 'RelayClosed', 0, 'Relay is closed; circuit is energized (power on).') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('fbd84d53-71e2-e396-1cca-3f63411d90c5', 'relay.closed.or.open/000', 'RelayClosed', 0, 'Relay is closed; circuit is energized (power on).') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a9b197a9-7836-1274-798e-916405a6c525', 'relay.closed.or.open/000', 'RelayOpen', 1, 'Relay is open; circuit is de-energized (power off).') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('a9225111-8bc6-232c-cb93-e549e08ef619', 'relay.closed.or.open/000', 'RelayOpen', 1, 'Relay is open; circuit is de-energized (power off).') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('31bae158-08ea-0c77-d81b-f30615a2028b', 'relay.energization.state/000', '0', 0, 'DeEnergized') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('4cde061e-5ff7-ef20-af6a-0e0cb57ed61d', 'relay.energization.state/000', '0', 0, 'DeEnergized') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('1bcc8b69-054b-1a1d-30dc-cf859fd58736', 'relay.energization.state/000', '1', 1, 'Energized') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('d6fd4f2b-d07f-f650-19a0-20aaa6fb6ac0', 'relay.energization.state/000', '1', 1, 'Energized') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('40585909-cd97-bc40-9f5a-8290c1440d6f', 'relay.open.or.closed/000', 'RelayClosed', 0, 'Relay contact is closed (conducting)') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7432d05b-f59a-d690-6ab9-3ae42e4e0b76', 'relay.open.or.closed/000', 'RelayClosed', 0, 'Relay contact is closed (conducting)') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f593398d-76e2-23d3-9f7f-e0fc44cf6d60', 'relay.open.or.closed/000', 'RelayOpen', 1, 'Relay contact is open (not conducting)') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('90589dcf-4684-006c-3086-c49713eee446', 'relay.open.or.closed/000', 'RelayOpen', 1, 'Relay contact is open (not conducting)') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('fdac7229-384b-f3a4-c776-03daeca25c07', 'relay.wiring.config/000', 'NormallyClosed', 0, 'Circuit is closed when the relay is de-energized. Wiring uses COM and NC.
+VALUES ('bcff6952-e309-b3c7-8084-823780af9374', 'relay.wiring.config/000', 'NormallyClosed', 0, 'Circuit is closed when the relay is de-energized. Wiring uses COM and NC.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6f9e6d36-aa47-f635-37b1-fce8477c8546', 'relay.wiring.config/000', 'NormallyOpen', 1, 'Circuit is open when the relay is de-energized. Wiring uses COM and NO.
+VALUES ('29e4c557-0325-ed09-dd4f-ac549fa938a9', 'relay.wiring.config/000', 'NormallyOpen', 1, 'Circuit is open when the relay is de-energized. Wiring uses COM and NO.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e861f6ff-8250-b625-d6ce-c5a059a0a4ed', 'relay.wiring.config/000', 'DoubleThrow', 2, 'Both NC and NO are used. Energizing the relay switches the circuit between two distinct paths (e.g., SCADA vs wall thermostat control).') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c109347b-99d8-b2cc-cc85-f591589a0552', 'relay.wiring.config/000', 'DoubleThrow', 2, 'Both NC and NO are used. Energizing the relay switches the circuit between two distinct paths (e.g., SCADA vs wall thermostat control).') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e41d8837-fa08-a160-2d2e-bebaf5cb8a96', 'spaceheat.make.model/003', 'UnknownMake__UnknownModel', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('d2d823ca-b641-aefa-4be4-10ef3c3010ff', 'spaceheat.make.model/003', 'UnknownMake__UnknownModel', 0, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a05043ad-6b9f-54b2-0bec-da611f5ab6c9', 'spaceheat.make.model/003', 'EGAUGE__4030', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('999fa4f2-a5d0-85e3-cd93-4a5462a823af', 'spaceheat.make.model/003', 'EGAUGE__4030', 1, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b7a8f7f0-d8e4-883a-6f2e-102bb91615fc', 'spaceheat.make.model/003', 'NCD__PR814SPST', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ddd0d5d8-534e-d629-0916-5064552c5f94', 'spaceheat.make.model/003', 'NCD__PR814SPST', 2, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ae6a615e-744e-9880-6988-4aea259fc747', 'spaceheat.make.model/003', 'Adafruit__642', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e99b798b-ad31-43c8-27ae-60b0c9b8fa58', 'spaceheat.make.model/003', 'Adafruit__642', 3, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a7655ede-c5b2-fd06-6484-25b9f4ef7b5d', 'spaceheat.make.model/003', 'GRIDWORKS__TSNAP1', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c2058edd-ebcd-9874-d1a6-3b3a31dd04b7', 'spaceheat.make.model/003', 'GRIDWORKS__TSNAP1', 4, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('91e2d00c-f258-014f-e8d8-c00c56dfc131', 'spaceheat.make.model/003', 'GRIDWORKS__WATERTEMPHIGHPRECISION', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7eb22a74-5b0c-2820-6fe6-5c0e81b9424f', 'spaceheat.make.model/003', 'GRIDWORKS__WATERTEMPHIGHPRECISION', 5, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('7da1a163-3a2e-aac7-994d-993466798d08', 'spaceheat.make.model/003', 'GRIDWORKS__SIMPM1', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c0273bc9-96ec-787c-be1c-a6e0a26774c9', 'spaceheat.make.model/003', 'GRIDWORKS__SIMPM1', 6, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('357be709-8e44-5404-7be9-0888126fe894', 'spaceheat.make.model/003', 'SCHNEIDERELECTRIC__IEM3455', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('74b015e5-97dd-984a-2b35-6d363dc7fa7b', 'spaceheat.make.model/003', 'SCHNEIDERELECTRIC__IEM3455', 7, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e954e4b8-8412-1c9c-b02d-c0e943b8e4a0', 'spaceheat.make.model/003', 'GRIDWORKS__SIMBOOL30AMPRELAY', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('0f69d760-ecfb-9938-06b7-e7493dfd10b6', 'spaceheat.make.model/003', 'GRIDWORKS__SIMBOOL30AMPRELAY', 8, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4ac065fe-259d-c957-f576-fe2c4a16eff2', 'spaceheat.make.model/003', 'OPENENERGY__EMONPI', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e1ab1b3d-07a9-99be-9cb4-8783a3653a93', 'spaceheat.make.model/003', 'OPENENERGY__EMONPI', 9, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('aa63208e-df73-fb06-e291-dae417392532', 'spaceheat.make.model/003', 'GRIDWORKS__SIMTSNAP1', 10, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7354dff8-9492-dacb-f891-ad2d5d2d3491', 'spaceheat.make.model/003', 'GRIDWORKS__SIMTSNAP1', 10, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('58b6124a-de04-97f2-8c1f-4cdc2141a9db', 'spaceheat.make.model/003', 'ATLAS__EZFLO', 11, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('67025233-8c75-0e2b-f545-65a8b72516cc', 'spaceheat.make.model/003', 'ATLAS__EZFLO', 11, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('0bb02dc6-e06e-bd6d-5e22-be0b426d2bc0', 'spaceheat.make.model/003', 'HUBITAT__C7__LAN1', 12, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('839391aa-5e13-f7a0-9368-2c15d4d6e8d2', 'spaceheat.make.model/003', 'HUBITAT__C7__LAN1', 12, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4c5e015d-4390-1800-0fc9-8c82f0394ae8', 'spaceheat.make.model/003', 'GRIDWORKS__TANK_MODULE_1', 13, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('f4e22bbb-a5d3-4990-afd8-5714c41cb612', 'spaceheat.make.model/003', 'GRIDWORKS__TANK_MODULE_1', 13, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('83d63863-fb17-98fc-fd28-53bb246fa2a2', 'spaceheat.make.model/003', 'FIBARO__ANALOG_TEMP_SENSOR', 14, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('373d2490-66f7-a6e9-0beb-b6e8e8116ef2', 'spaceheat.make.model/003', 'FIBARO__ANALOG_TEMP_SENSOR', 14, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('43b2899e-ba3a-77f0-14c0-f49987399bde', 'spaceheat.make.model/003', 'AMPHENOL__NTC_10K_THERMISTOR_MA100GG103BN', 15, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('4128d032-f60e-51b3-5570-35dbbb932b11', 'spaceheat.make.model/003', 'AMPHENOL__NTC_10K_THERMISTOR_MA100GG103BN', 15, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b7ae7a23-4b47-4404-c7c3-1b779170114b', 'spaceheat.make.model/003', 'YHDC__SCT013100', 16, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('80c8f08f-f3ea-cdb7-0aa9-1be3252f8ed6', 'spaceheat.make.model/003', 'YHDC__SCT013100', 16, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('8bbedf5a-d3b0-38e9-5184-a09441d5ec08', 'spaceheat.make.model/003', 'MAGNELAB__SCT0300050', 17, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('4ab92748-adea-f9a8-3e36-1ed6df061a7d', 'spaceheat.make.model/003', 'MAGNELAB__SCT0300050', 17, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('fa544fd7-016b-70d0-44dd-2c81e9274565', 'spaceheat.make.model/003', 'GRIDWORKS__MULTITEMP1', 18, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('9acd2c00-6d0d-19b3-d31a-ef01383e0a07', 'spaceheat.make.model/003', 'GRIDWORKS__MULTITEMP1', 18, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('17f3eb64-726b-2317-805d-7d22f0abcc86', 'spaceheat.make.model/003', 'KRIDA__EMR16I2CV3', 19, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e1c6ab10-3f65-166b-c747-a3760b806d75', 'spaceheat.make.model/003', 'KRIDA__EMR16I2CV3', 19, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2a4ff107-eb13-ac0c-4230-a9181293c67c', 'spaceheat.make.model/003', 'OMEGA__FTB8007HWPT', 20, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('006160dd-cf70-c1c8-eff9-3a1f218b8937', 'spaceheat.make.model/003', 'OMEGA__FTB8007HWPT', 20, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c871b8b3-2dc4-a704-538e-1287ee559d07', 'spaceheat.make.model/003', 'ISTEC_4440', 21, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e7c0ae22-dc33-5a18-de3c-c127e1ed9b20', 'spaceheat.make.model/003', 'ISTEC_4440', 21, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c156911a-a30d-6bfb-e62a-329106c9390b', 'spaceheat.make.model/003', 'OMEGA__FTB8010HWPT', 22, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e77f1da0-748c-33f0-9d07-fb88d114efc5', 'spaceheat.make.model/003', 'OMEGA__FTB8010HWPT', 22, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2d16f408-d3c2-14f2-36a4-3ea17b0c447b', 'spaceheat.make.model/003', 'BELIMO__BALLVALVE232VS', 23, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('39b2fbcd-1932-2366-d44a-3cd7911d5cb0', 'spaceheat.make.model/003', 'BELIMO__BALLVALVE232VS', 23, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('497d290f-c8e7-c508-a3c7-e11995b4a511', 'spaceheat.make.model/003', 'BELIMO__DIVERTERB332L', 24, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('363c895c-245a-4ade-aefc-ae7b9352227d', 'spaceheat.make.model/003', 'BELIMO__DIVERTERB332L', 24, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f24632f5-dca0-2618-9506-6b02ba06d236', 'spaceheat.make.model/003', 'TACO__0034EPLUS', 25, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7af0f67f-dee5-284a-d350-3a3c959f2b35', 'spaceheat.make.model/003', 'TACO__0034EPLUS', 25, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('aeb55391-fcc6-55b5-40de-8f95249dfef7', 'spaceheat.make.model/003', 'TACO__007E', 26, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('12c5d15c-4238-d001-3345-087bf744ace3', 'spaceheat.make.model/003', 'TACO__007E', 26, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('24395b04-086b-e222-d46c-3ab95a7331d2', 'spaceheat.make.model/003', 'ARMSTRONG__COMPASSH', 27, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ee1d88a7-be93-4833-dc89-9b0d3c908753', 'spaceheat.make.model/003', 'ARMSTRONG__COMPASSH', 27, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a2d77baa-681e-7b89-dcc6-267d5e923f35', 'spaceheat.make.model/003', 'HONEYWELL__T6ZWAVETHERMOSTAT', 28, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('042d791f-13f6-be8e-9704-4e36736a53ed', 'spaceheat.make.model/003', 'HONEYWELL__T6ZWAVETHERMOSTAT', 28, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('cef20367-1b86-1c34-0c5d-4c048f95cd60', 'spaceheat.make.model/003', 'PRMFILTRATION__WM075', 29, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('d41869ac-cb20-c1aa-cbcc-d25a5887dc13', 'spaceheat.make.model/003', 'PRMFILTRATION__WM075', 29, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('37310518-ecfd-3e9c-6b5d-dfa5809f7d8e', 'spaceheat.make.model/003', 'BELLGOSSETT__ECOCIRC20_18', 30, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7d82a11f-94b6-b30d-52b2-7c081bdc13f3', 'spaceheat.make.model/003', 'BELLGOSSETT__ECOCIRC20_18', 30, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ffb3b5ca-9184-2796-7ccb-7c1921e74e12', 'spaceheat.make.model/003', 'TEWA__TT0P10KC3T1051500', 31, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('f3f6546d-8995-ab48-01ea-2210f2daaac9', 'spaceheat.make.model/003', 'TEWA__TT0P10KC3T1051500', 31, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('653085bc-6539-22d1-0b1a-f5f74a91177a', 'spaceheat.make.model/003', 'EKM__HOTSPWM075HD', 32, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('585a7a39-0fff-ce22-8b16-edf325e94244', 'spaceheat.make.model/003', 'EKM__HOTSPWM075HD', 32, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ee21fdc8-4217-d4ad-37df-2fcf5da9c405', 'spaceheat.make.model/003', 'GRIDWORKS__SIMMULTITEMP', 33, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('2f13870f-7ae3-9023-bf38-384576c9ed1a', 'spaceheat.make.model/003', 'GRIDWORKS__SIMMULTITEMP', 33, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('0589cf1a-8b36-4535-65da-0a7c0319941e', 'spaceheat.make.model/003', 'GRIDWORKS__SIMTOTALIZER', 34, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('3d22e044-e25c-4966-fb00-da7cc54ff90b', 'spaceheat.make.model/003', 'GRIDWORKS__SIMTOTALIZER', 34, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c8bd59b5-8201-4c43-4503-8824e610eadc', 'spaceheat.make.model/003', 'KRIDA__DOUBLEEMR16I2CV3', 35, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('261ee475-f4a1-046a-0ca5-87e86b92f5ee', 'spaceheat.make.model/003', 'KRIDA__DOUBLEEMR16I2CV3', 35, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b14b1961-5259-0825-18b4-ab8fc397d73f', 'spaceheat.make.model/003', 'GRIDWORKS__SIMDOUBLE16PINI2CRELAY', 36, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('fa7b0c97-00fa-f473-5718-cda00a4d5d10', 'spaceheat.make.model/003', 'GRIDWORKS__SIMDOUBLE16PINI2CRELAY', 36, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('fa8401c7-0740-111b-9f2f-64c47a2fb777', 'spaceheat.make.model/003', 'GRIDWORKS__TANKMODULE2', 37, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('5925d1e0-8136-5182-b20b-210cc8576a9d', 'spaceheat.make.model/003', 'GRIDWORKS__TANKMODULE2', 37, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a2307fc9-25eb-1805-0956-26ae7508c6aa', 'spaceheat.make.model/003', 'GRIDWORKS__PICOFLOWHALL', 38, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7c7c2365-0587-b2f0-9e05-5acc8155a1b9', 'spaceheat.make.model/003', 'GRIDWORKS__PICOFLOWHALL', 38, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e7ffc867-250f-09c4-9a0b-b5dab311c936', 'spaceheat.make.model/003', 'GRIDWORKS__PICOFLOWREED', 39, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('2a3fd902-e226-52a1-459c-651a387ea397', 'spaceheat.make.model/003', 'GRIDWORKS__PICOFLOWREED', 39, NULL) ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4f7ce88e-1cf1-a515-f352-992af5ed5990', 'spaceheat.make.model/007', 'UnknownMake__UnknownModel', 0, 'Unknown device make and model.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('0fb41267-357e-de4f-0d53-a5fc96cccc49', 'spaceheat.make.model/007', 'UnknownMake__UnknownModel', 0, 'Unknown device make and model.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('307db4e6-a0b5-b855-3008-683bee0c5077', 'spaceheat.make.model/007', 'EGAUGE__4030', 1, 'eGauge 4030 power meter.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('a9494f8e-ed92-902c-48d6-01611f25d018', 'spaceheat.make.model/007', 'EGAUGE__4030', 1, 'eGauge 4030 power meter.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('03596755-a6e2-1fa9-e96a-644ea3d2dd42', 'spaceheat.make.model/007', 'NCD__PR814SPST', 2, 'NCD PR8-14-SPST relay board.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('9f25445b-fb5d-5b4d-37ae-99a033c99f1d', 'spaceheat.make.model/007', 'NCD__PR814SPST', 2, 'NCD PR8-14-SPST relay board.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3540ef09-bab9-54e3-cac4-c2ef4c00dbf2', 'spaceheat.make.model/007', 'Adafruit__642', 3, 'Adafruit 642 waterproof temperature sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('d69e4c2c-f66a-f17b-4a22-2318df640292', 'spaceheat.make.model/007', 'Adafruit__642', 3, 'Adafruit 642 waterproof temperature sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2e3cbdc8-e6d9-0bf2-2ef3-bb16690387c2', 'spaceheat.make.model/007', 'GRIDWORKS__TSNAP1', 4, 'GridWorks TSnap1 SCADA hardware.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('bb63a38b-ed64-e62e-8b2d-95a094e0faaf', 'spaceheat.make.model/007', 'GRIDWORKS__TSNAP1', 4, 'GridWorks TSnap1 SCADA hardware.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c92cfe2f-88f4-9cfa-cf9e-01f88357abad', 'spaceheat.make.model/007', 'GRIDWORKS__WATERTEMPHIGHPRECISION', 5, 'GridWorks high-precision water temperature device.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('61f4f62e-780a-440a-6113-3013ce851c0d', 'spaceheat.make.model/007', 'GRIDWORKS__WATERTEMPHIGHPRECISION', 5, 'GridWorks high-precision water temperature device.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e1e4126c-4e87-5613-3a53-44436b267cec', 'spaceheat.make.model/007', 'GRIDWORKS__SIMPM1', 6, 'GridWorks simulated power meter.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('a80f05b9-3551-4442-4844-9c5703bd847a', 'spaceheat.make.model/007', 'GRIDWORKS__SIMPM1', 6, 'GridWorks simulated power meter.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('776e8c9b-e920-5e7e-a013-5d2857e0ced8', 'spaceheat.make.model/007', 'SCHNEIDERELECTRIC__IEM3455', 7, 'Schneider Electric IEM3455 power meter.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('baeab599-7fe3-88f1-5d1c-4e6b3601059b', 'spaceheat.make.model/007', 'SCHNEIDERELECTRIC__IEM3455', 7, 'Schneider Electric IEM3455 power meter.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('5cb69cb5-329e-6398-af48-5bf80b414087', 'spaceheat.make.model/007', 'GRIDWORKS__SIMBOOL30AMPRELAY', 8, 'GridWorks simulated 30A relay.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('6eed49ab-d15a-f98b-3a6f-112e22591bec', 'spaceheat.make.model/007', 'GRIDWORKS__SIMBOOL30AMPRELAY', 8, 'GridWorks simulated 30A relay.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f6bf2f00-a229-cdf0-013d-18bc9edc4c8a', 'spaceheat.make.model/007', 'OPENENERGY__EMONPI', 9, 'OpenEnergy EmonPi.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('cfb6cb77-f59c-d097-660d-43e829ff9c87', 'spaceheat.make.model/007', 'OPENENERGY__EMONPI', 9, 'OpenEnergy EmonPi.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('7eda0c5b-de22-1090-7814-24c08c26a9c9', 'spaceheat.make.model/007', 'GRIDWORKS__SIMTSNAP1', 10, 'GridWorks simulated TSnap1.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('6d4c5eb5-fe03-d2a0-5e25-ae2884663c15', 'spaceheat.make.model/007', 'GRIDWORKS__SIMTSNAP1', 10, 'GridWorks simulated TSnap1.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b8e7245e-a477-7a0e-f631-0857e4d528f0', 'spaceheat.make.model/007', 'ATLAS__EZFLO', 11, 'Atlas EZ Flo meter.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('88d4d053-2d0a-e8eb-b355-83c67f249579', 'spaceheat.make.model/007', 'ATLAS__EZFLO', 11, 'Atlas EZ Flo meter.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e4ac2933-6171-e138-8ae1-535251142cc3', 'spaceheat.make.model/007', 'HUBITAT__C7__LAN1', 12, 'Hubitat C7 LAN integration.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('77a2847e-b9e1-26f7-4604-e08e14c8592c', 'spaceheat.make.model/007', 'HUBITAT__C7__LAN1', 12, 'Hubitat C7 LAN integration.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c0fda87c-94ba-d949-4a52-9104388c0ba9', 'spaceheat.make.model/007', 'GRIDWORKS__TANK_MODULE_1', 13, 'GridWorks Tank Module 1.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('2e50ba1e-66df-0f18-c4a4-c9422a554f1a', 'spaceheat.make.model/007', 'GRIDWORKS__TANK_MODULE_1', 13, 'GridWorks Tank Module 1.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4829e513-1c87-046b-8a8e-f1da38d4966f', 'spaceheat.make.model/007', 'FIBARO__ANALOG_TEMP_SENSOR', 14, 'Fibaro analog temperature sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('1ff75d4a-c230-7ef6-31ba-7c637002adb5', 'spaceheat.make.model/007', 'FIBARO__ANALOG_TEMP_SENSOR', 14, 'Fibaro analog temperature sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('154209dc-cff7-2d2e-948f-814871a510f6', 'spaceheat.make.model/007', 'AMPHENOL__NTC_10K_THERMISTOR_MA100GG103BN', 15, 'Amphenol 10K NTC thermistor.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('9c9d4cd1-59bd-239c-d763-9ad99302847a', 'spaceheat.make.model/007', 'AMPHENOL__NTC_10K_THERMISTOR_MA100GG103BN', 15, 'Amphenol 10K NTC thermistor.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b59fba42-c604-ef4a-6464-9793972e2f00', 'spaceheat.make.model/007', 'YHDC__SCT013100', 16, 'YHDC SCT013-100 current transformer.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('87832541-5938-8f85-e7f5-7999ec7af833', 'spaceheat.make.model/007', 'YHDC__SCT013100', 16, 'YHDC SCT013-100 current transformer.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('04477e06-d1de-decc-18c0-7f25d11881ad', 'spaceheat.make.model/007', 'MAGNELAB__SCT0300050', 17, 'Magnelab SCT-0300-050 current transformer.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('95b0624b-3bf3-801f-e147-fe37d35e623c', 'spaceheat.make.model/007', 'MAGNELAB__SCT0300050', 17, 'Magnelab SCT-0300-050 current transformer.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('00a1a1e0-7b59-2b68-a530-ab7838d56f6d', 'spaceheat.make.model/007', 'GRIDWORKS__MULTITEMP1', 18, 'GridWorks MultiTemp1.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('349d37ec-e2b8-b803-443e-228bee905f1d', 'spaceheat.make.model/007', 'GRIDWORKS__MULTITEMP1', 18, 'GridWorks MultiTemp1.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6a27e583-ed99-f30d-e43d-24c08f41fd01', 'spaceheat.make.model/007', 'KRIDA__EMR16I2CV3', 19, 'Krida EMR16 I2C V3 relay board.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('28dcc199-353c-257b-6fed-47fc24992980', 'spaceheat.make.model/007', 'KRIDA__EMR16I2CV3', 19, 'Krida EMR16 I2C V3 relay board.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6a9bd2ea-3b8f-ae67-aec1-9aeab4f7c277', 'spaceheat.make.model/007', 'OMEGA__FTB8007HWPT', 20, 'Omega FTB8007HW-PT flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c3068df9-33cb-ed5a-e783-ad05159a5d1c', 'spaceheat.make.model/007', 'OMEGA__FTB8007HWPT', 20, 'Omega FTB8007HW-PT flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('982e373c-2682-f676-8eed-3000d43784ac', 'spaceheat.make.model/007', 'ISTEC_4440', 21, 'Istec 4440 flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ebb437e9-59b0-281c-5341-4e5340d020da', 'spaceheat.make.model/007', 'ISTEC_4440', 21, 'Istec 4440 flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2553c9d7-a1d9-b4d9-1da4-58cba9e41d3c', 'spaceheat.make.model/007', 'OMEGA__FTB8010HWPT', 22, 'Omega FTB8010HW-PT flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('1926d80c-0f41-b9bb-a659-4c17682e067b', 'spaceheat.make.model/007', 'OMEGA__FTB8010HWPT', 22, 'Omega FTB8010HW-PT flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('85968af0-5208-b4fc-138b-c323735a9b5e', 'spaceheat.make.model/007', 'BELIMO__BALLVALVE232VS', 23, 'Belimo Ball Valve 232VS.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e2634547-d80b-d97f-b293-5f332e9da325', 'spaceheat.make.model/007', 'BELIMO__BALLVALVE232VS', 23, 'Belimo Ball Valve 232VS.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('91292cea-dead-ff84-0b2a-cf6d3217095a', 'spaceheat.make.model/007', 'BELIMO__DIVERTERB332L', 24, 'Belimo Diverter B332L.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('da34ff62-b320-a694-10d3-620ae26246d3', 'spaceheat.make.model/007', 'BELIMO__DIVERTERB332L', 24, 'Belimo Diverter B332L.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('fb848d88-3d9a-358b-d960-85cfe2efb7f4', 'spaceheat.make.model/007', 'TACO__0034EPLUS', 25, 'Taco 0034ePlus pump.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('82c64599-3509-fb7e-3d4c-758cf6b21914', 'spaceheat.make.model/007', 'TACO__0034EPLUS', 25, 'Taco 0034ePlus pump.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('d70bd4a4-e46a-1791-a7b8-eb467b5c2353', 'spaceheat.make.model/007', 'TACO__007E', 26, 'Taco 007e pump.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('04c18cf6-48f0-277c-447f-f74893f353dd', 'spaceheat.make.model/007', 'TACO__007E', 26, 'Taco 007e pump.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ef0f5aa1-0fc1-c5c3-3faa-a7fed32266f2', 'spaceheat.make.model/007', 'ARMSTRONG__COMPASSH', 27, 'Armstrong CompassH pump.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('2e1d13ed-ebcc-1964-2ef7-8955bed01a95', 'spaceheat.make.model/007', 'ARMSTRONG__COMPASSH', 27, 'Armstrong CompassH pump.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('d87da389-07e2-6f0b-3076-ac9a25cebede', 'spaceheat.make.model/007', 'HONEYWELL__T6ZWAVETHERMOSTAT', 28, 'Honeywell T6 Z-Wave thermostat.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('931bf871-4843-8fa9-1896-853076d3a988', 'spaceheat.make.model/007', 'HONEYWELL__T6ZWAVETHERMOSTAT', 28, 'Honeywell T6 Z-Wave thermostat.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f25bb9bf-de0b-6273-5d8c-66ea99751009', 'spaceheat.make.model/007', 'PRMFILTRATION__WM075', 29, 'PRM Filtration WM075 flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('71ba25a4-8690-497e-2f71-01727b5d49f7', 'spaceheat.make.model/007', 'PRMFILTRATION__WM075', 29, 'PRM Filtration WM075 flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e40d8467-ab4d-3bcb-4eee-5b796d4bc407', 'spaceheat.make.model/007', 'BELLGOSSETT__ECOCIRC20_18', 30, 'Bell & Gossett Ecocirc 20-18 pump.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('797effb9-34be-9cbb-8885-25d5d2f3a7fa', 'spaceheat.make.model/007', 'BELLGOSSETT__ECOCIRC20_18', 30, 'Bell & Gossett Ecocirc 20-18 pump.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('302760c1-2b1c-9894-c005-63e338964a0f', 'spaceheat.make.model/007', 'TEWA__TT0P10KC3T1051500', 31, 'Tewa TT0P-10KC3-T105-1500 thermistor.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('2eca3d94-0e48-db37-3447-02ac75e18ab4', 'spaceheat.make.model/007', 'TEWA__TT0P10KC3T1051500', 31, 'Tewa TT0P-10KC3-T105-1500 thermistor.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('584bb606-bc00-96aa-cbf2-c5970dca7f8b', 'spaceheat.make.model/007', 'EKM__HOTSPWM075HD', 32, 'EKM HOT-SPWM-075-HD flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('62c37cc8-0760-0e2d-604c-4e7cdf549c12', 'spaceheat.make.model/007', 'EKM__HOTSPWM075HD', 32, 'EKM HOT-SPWM-075-HD flow meter.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f1fb1de1-3ecd-a5a8-7754-2abe7a386823', 'spaceheat.make.model/007', 'GRIDWORKS__SIMMULTITEMP', 33, 'GridWorks simulated multi-temperature sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e7a7bc10-3913-5b14-0bf4-f2017cc00d5f', 'spaceheat.make.model/007', 'GRIDWORKS__SIMMULTITEMP', 33, 'GridWorks simulated multi-temperature sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('04955f96-ca93-7f27-926d-87328340b9d4', 'spaceheat.make.model/007', 'GRIDWORKS__SIMTOTALIZER', 34, 'GridWorks simulated totalizer.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('670c8717-440a-05c5-ac66-e16b3c037fe3', 'spaceheat.make.model/007', 'GRIDWORKS__SIMTOTALIZER', 34, 'GridWorks simulated totalizer.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ed31fec8-b5b5-5016-9467-1da6ecfb84e5', 'spaceheat.make.model/007', 'KRIDA__DOUBLEEMR16I2CV3', 35, 'Krida double EMR16 I2C V3 relay board.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e58657a0-1fd4-9e7a-e2b7-b72ccff2e7e6', 'spaceheat.make.model/007', 'KRIDA__DOUBLEEMR16I2CV3', 35, 'Krida double EMR16 I2C V3 relay board.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('43943aad-4db7-c880-f993-9c17720c81bc', 'spaceheat.make.model/007', 'GRIDWORKS__SIMDOUBLE16PINI2CRELAY', 36, 'GridWorks simulated double 16-pin I2C relay.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b6e5d4f8-b8da-9391-cce8-a40217df3bf3', 'spaceheat.make.model/007', 'GRIDWORKS__SIMDOUBLE16PINI2CRELAY', 36, 'GridWorks simulated double 16-pin I2C relay.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('34a30bf0-59ce-6a25-1061-0b1af862d481', 'spaceheat.make.model/007', 'GRIDWORKS__TANKMODULE2', 37, 'GridWorks Tank Module 2.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c054e073-076e-1635-b12a-c096ce77984b', 'spaceheat.make.model/007', 'GRIDWORKS__TANKMODULE2', 37, 'GridWorks Tank Module 2.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('ab7d71cd-25f9-0022-f695-8b937d2a92f3', 'spaceheat.make.model/007', 'GRIDWORKS__PICOFLOWHALL', 38, 'GridWorks Pico flow hall sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('dd132849-8d8a-174f-2222-f2fd1467b8be', 'spaceheat.make.model/007', 'GRIDWORKS__PICOFLOWHALL', 38, 'GridWorks Pico flow hall sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3cbeae67-3a37-fd02-6281-e5c02edc7119', 'spaceheat.make.model/007', 'GRIDWORKS__PICOFLOWREED', 39, 'GridWorks Pico flow reed sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c44407a6-e4a6-bcc4-91f2-79bba6e4f3f4', 'spaceheat.make.model/007', 'GRIDWORKS__PICOFLOWREED', 39, 'GridWorks Pico flow reed sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b587736c-d6dd-0a4b-07d7-e3665171926e', 'spaceheat.make.model/007', 'SAIER__SENHZG1WA', 40, 'Saier SEN-HZG1WA flow sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('aae6fac2-13d3-35f1-453f-6e548a804d14', 'spaceheat.make.model/007', 'SAIER__SENHZG1WA', 40, 'Saier SEN-HZG1WA flow sensor.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('1d082fdb-5bf2-37c0-ebb1-3263d13ae0cc', 'spaceheat.make.model/007', 'DFROBOT__DFR0971_TIMES2', 41, 'Two DFRobot DFR0971 analog output devices.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('0e5c4414-ab03-3707-6ade-f03487d373d7', 'spaceheat.make.model/007', 'DFROBOT__DFR0971_TIMES2', 41, 'Two DFRobot DFR0971 analog output devices.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f4947011-11a9-0049-c8c0-81d7e5cec1b2', 'spaceheat.make.model/007', 'GRIDWORKS__TANKMODULE3', 42, 'GridWorks Tank Module 3.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7bcc847b-1ea4-91da-e987-7b9c6e73915b', 'spaceheat.make.model/007', 'GRIDWORKS__TANKMODULE3', 42, 'GridWorks Tank Module 3.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('b4bfc733-cddb-6b2b-294b-3ebb061f2740', 'spaceheat.make.model/007', 'GRIDWORKS__GW101', 43, 'GridWorks GW101 device.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('6f86ebe7-7191-7248-223f-6bc094f2334c', 'spaceheat.make.model/007', 'GRIDWORKS__GW101', 43, 'GridWorks GW101 device.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('7f30521e-28f9-f651-eca4-9c00bf43e5b6', 'spaceheat.make.model/007', 'GRIDWORKS__SCADA_GW108', 44, 'GridWorks SCADA GW108 device.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('bef9e70f-cfb7-78f8-93d8-4096828193b8', 'spaceheat.make.model/007', 'GRIDWORKS__SCADA_GW108', 44, 'GridWorks SCADA GW108 device.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3c050350-ae25-5860-9f56-eb1a4d00c63f', 'spaceheat.telemetry.name/006', 'Unknown', 0, 'Default Value - unknown telemetry name.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('074d731b-ea4b-8488-4eb1-ae4e3858bf14', 'spaceheat.telemetry.name/006', 'Unknown', 0, 'Default Value - unknown telemetry name.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('353f5f8a-b580-5d5d-8b4f-88d0fdd79f54', 'spaceheat.telemetry.name/006', 'PowerW', 1, 'Power in Watts.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('33dc515d-f06b-8adc-27d4-f13f52a9cb2e', 'spaceheat.telemetry.name/006', 'PowerW', 1, 'Power in Watts.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e2167988-2e71-db96-9283-ec3b47e8c73a', 'spaceheat.telemetry.name/006', 'RelayState', 2, 'The Telemetry reading belongs to [1 (''Energized''), 0 (''DeEnergized'')] (relay.energization.state enum).') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('af9b55c5-0cca-ebbd-d1ef-720b49863eb6', 'spaceheat.telemetry.name/006', 'RelayState', 2, 'The Telemetry reading belongs to [1 (''Energized''), 0 (''DeEnergized'')] (relay.energization.state enum).') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('8087f053-52e5-059c-9f18-db3fd72bfafe', 'spaceheat.telemetry.name/006', 'WaterTempCTimes1000', 3, 'Water temperature, in Degrees Celcius multiplied by 1000. Example: 43200 means 43.2 deg Celcius.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('8ab9cde8-9270-606a-9790-d1c876043c0a', 'spaceheat.telemetry.name/006', 'WaterTempCTimes1000', 3, 'Water temperature, in Degrees Celcius multiplied by 1000. Example: 43200 means 43.2 deg Celcius.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('94ad1d2c-b74f-076e-5e55-974292fb3d5d', 'spaceheat.telemetry.name/006', 'WaterTempFTimes1000', 4, 'Water temperature, in Degrees F multiplied by 1000. Example: 142100 means 142.1 deg Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c3f52763-a9f8-ee35-f69d-8bfb05cc82c7', 'spaceheat.telemetry.name/006', 'WaterTempFTimes1000', 4, 'Water temperature, in Degrees F multiplied by 1000. Example: 142100 means 142.1 deg Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('5722a512-30bf-4c7d-685d-2d0f1e7f94b0', 'spaceheat.telemetry.name/006', 'GpmTimes100', 5, 'Gallons Per Minute multiplied by 100. Example: 433 means 4.33 gallons per minute.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('881fdcb8-46df-c208-0c13-f344caaed201', 'spaceheat.telemetry.name/006', 'GpmTimes100', 5, 'Gallons Per Minute multiplied by 100. Example: 433 means 4.33 gallons per minute.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('8a10c985-8ae2-8c7e-5905-2d0d53c956b0', 'spaceheat.telemetry.name/006', 'CurrentRmsMicroAmps', 6, 'Current measurement in Root Mean Square MicroAmps.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('bcd2ac39-5d9e-10dc-72a4-98011b6098bf', 'spaceheat.telemetry.name/006', 'CurrentRmsMicroAmps', 6, 'Current measurement in Root Mean Square MicroAmps.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6c7a2647-9e0f-a86c-530f-a4e27c999d52', 'spaceheat.telemetry.name/006', 'GallonsTimes100', 7, 'Gallons multipled by 100. This is useful for flow meters that report cumulative gallons as their raw output. Example: 55300 means 55.3 gallons.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7104db4b-8601-ed5c-a9f4-e5c49f3b129e', 'spaceheat.telemetry.name/006', 'GallonsTimes100', 7, 'Gallons multipled by 100. This is useful for flow meters that report cumulative gallons as their raw output. Example: 55300 means 55.3 gallons.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e5d8ecae-f37c-ae3c-cfac-a2b494f76021', 'spaceheat.telemetry.name/006', 'VoltageRmsMilliVolts', 8, 'Voltage in Root Mean Square MilliVolts.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('9159a063-e385-d8ee-3c22-9b2fe7c63012', 'spaceheat.telemetry.name/006', 'VoltageRmsMilliVolts', 8, 'Voltage in Root Mean Square MilliVolts.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e18e21d7-509d-fbe5-139d-058fec44ccac', 'spaceheat.telemetry.name/006', 'MilliWattHours', 9, 'Energy in MilliWattHours.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('206d52ee-b3be-9b28-6af3-308b44846ea5', 'spaceheat.telemetry.name/006', 'MilliWattHours', 9, 'Energy in MilliWattHours.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('913fa8a1-fb07-282d-7584-8951461be2e7', 'spaceheat.telemetry.name/006', 'MicroHz', 10, 'Frequency in MicroHz. Example: 59,965,332 means 59.965332 Hz.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7f4f1b3b-3884-b0e6-bb88-1fa7f5f303cf', 'spaceheat.telemetry.name/006', 'MicroHz', 10, 'Frequency in MicroHz. Example: 59,965,332 means 59.965332 Hz.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('473ce044-4074-ddad-889b-6fb0ed682447', 'spaceheat.telemetry.name/006', 'AirTempCTimes1000', 11, 'Air temperature, in Degrees Celsius multiplied by 1000. Example: 6234 means 6.234 deg Celcius.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('2d12afd8-55c4-b779-1269-ba00c4c12f93', 'spaceheat.telemetry.name/006', 'AirTempCTimes1000', 11, 'Air temperature, in Degrees Celsius multiplied by 1000. Example: 6234 means 6.234 deg Celcius.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('62574c10-cb05-010f-3fd6-cefb4ea43a57', 'spaceheat.telemetry.name/006', 'AirTempFTimes1000', 12, 'Air temperature, in Degrees F multiplied by 1000. Example: 69329 means 69.329 deg Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('baf6d408-e2f3-c15f-593e-f74506697825', 'spaceheat.telemetry.name/006', 'AirTempFTimes1000', 12, 'Air temperature, in Degrees F multiplied by 1000. Example: 69329 means 69.329 deg Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('48739bcf-7f76-25c8-21fe-fd4edc5ea95e', 'spaceheat.telemetry.name/006', 'ThermostatState', 13, 'Thermostat State: 0 means idle, 1 means heating, 2 means pending heat') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('d5a34815-7084-e22c-3af5-1b3ba2a3b6d7', 'spaceheat.telemetry.name/006', 'ThermostatState', 13, 'Thermostat State: 0 means idle, 1 means heating, 2 means pending heat') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('8b2d8e58-6a81-47c5-4ed5-7001c79f0a15', 'spaceheat.telemetry.name/006', 'MicroVolts', 14, 'Microvolts RMS') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b9676c78-d506-21e6-4158-70e02837de77', 'spaceheat.telemetry.name/006', 'MicroVolts', 14, 'Microvolts RMS') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6d477db9-28db-2e4e-68f9-7ac35339ac73', 'spaceheat.telemetry.name/006', 'VoltsTimesTen', 15, 'VoltsTimesTen value') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('a16020cf-c65b-7639-4dc0-10707d4f2fa5', 'spaceheat.telemetry.name/006', 'VoltsTimesTen', 15, 'VoltsTimesTen value') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('cc3ba4ae-a7f9-970d-6f1a-118e1b27b1ef', 'spaceheat.telemetry.name/006', 'WattHours', 16, 'WattHours value') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('761d9ab7-6d48-5a68-c6c4-627f2b81462c', 'spaceheat.telemetry.name/006', 'WattHours', 16, 'WattHours value') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('bb87ab5b-0c9e-8732-56d5-262edf54f5bb', 'spaceheat.telemetry.name/006', 'StorageLayer', 17, 'StorageLayer value') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('649124c1-5d37-cda8-77bf-63189eb509a2', 'spaceheat.telemetry.name/006', 'StorageLayer', 17, 'StorageLayer value') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('1d9b9a7d-054d-c915-a916-388882dd85b7', 'spaceheat.telemetry.name/006', 'PercentKeep', 18, 'Percentage of the flow in the Siegenthaler loop that returns to the heat pump') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('9a760c81-dd51-b424-d358-773c624317c7', 'spaceheat.telemetry.name/006', 'PercentKeep', 18, 'Percentage of the flow in the Siegenthaler loop that returns to the heat pump') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6c04dff1-74d9-034e-2994-c46cd9fa0671', 'spaceheat.telemetry.name/006', 'CelsiusTimes100', 19, 'Temperature in celsius times 100') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('67685370-bd27-43f8-c9db-59f59baffdf3', 'spaceheat.telemetry.name/006', 'CelsiusTimes100', 19, 'Temperature in celsius times 100') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('82ec5598-3dcc-1899-4d99-0803081cb229', 'spaceheat.telemetry.name/006', 'VoltsTimes100', 20, 'Voltage times 100') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('772f8b80-3dba-76b9-086c-b86024031199', 'spaceheat.telemetry.name/006', 'VoltsTimes100', 20, 'Voltage times 100') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('7488b11d-3d0a-a46d-c1d6-65fd0d4d7e49', 'spaceheat.telemetry.name/006', 'HzTimes100', 21, 'Frequency times 100') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('76eb675e-541f-882c-2858-7eb378dad9e8', 'spaceheat.telemetry.name/006', 'HzTimes100', 21, 'Frequency times 100') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('3412e312-c3a5-cf50-dc95-4f585d72d962', 'spaceheat.telemetry.name/007', 'Unknown', 0, 'Default Value - unknown telemetry name.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ba691edf-e6d3-fc7c-562d-aba33fe0121a', 'spaceheat.telemetry.name/007', 'Unknown', 0, 'Default Value - unknown telemetry name.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6f3b9e09-6181-f454-3fbd-f335956d3297', 'spaceheat.telemetry.name/007', 'PowerW', 1, 'Power in Watts.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('51a94a26-430d-c883-2e40-edc673301124', 'spaceheat.telemetry.name/007', 'PowerW', 1, 'Power in Watts.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('df90f990-1ff4-fe71-6884-27b86ce7c8ca', 'spaceheat.telemetry.name/007', 'RelayState', 2, 'The Telemetry reading belongs to [1 (''Energized''), 0 (''DeEnergized'')] (relay.energization.state enum).') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('3ed0fd63-e361-1494-457d-222c4cf53945', 'spaceheat.telemetry.name/007', 'RelayState', 2, 'The Telemetry reading belongs to [1 (''Energized''), 0 (''DeEnergized'')] (relay.energization.state enum).') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('8acbab5e-e739-2524-71dd-f5c6a566ee18', 'spaceheat.telemetry.name/007', 'WaterTempCTimes1000', 3, 'Water temperature, in Degrees Celcius multiplied by 1000. Example: 43200 means 43.2 deg Celcius.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b467db9f-7455-d16e-c3c9-85f4a728bf00', 'spaceheat.telemetry.name/007', 'WaterTempCTimes1000', 3, 'Water temperature, in Degrees Celcius multiplied by 1000. Example: 43200 means 43.2 deg Celcius.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c554b49f-4327-23f5-97ca-bbad66e234c3', 'spaceheat.telemetry.name/007', 'WaterTempFTimes1000', 4, 'Water temperature, in Degrees F multiplied by 1000. Example: 142100 means 142.1 deg Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b90af072-d9f6-a78c-8b91-0d2cff72611e', 'spaceheat.telemetry.name/007', 'WaterTempFTimes1000', 4, 'Water temperature, in Degrees F multiplied by 1000. Example: 142100 means 142.1 deg Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('2b7ba5b6-419a-1ab7-b907-0c58574ec411', 'spaceheat.telemetry.name/007', 'GpmTimes100', 5, 'Gallons Per Minute multiplied by 100. Example: 433 means 4.33 gallons per minute.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('01afb13d-b99d-2495-7851-c5e9a745fe31', 'spaceheat.telemetry.name/007', 'GpmTimes100', 5, 'Gallons Per Minute multiplied by 100. Example: 433 means 4.33 gallons per minute.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a4aed41a-6bd5-bb46-6ade-1364c2c58649', 'spaceheat.telemetry.name/007', 'CurrentRmsMicroAmps', 6, 'Current measurement in Root Mean Square MicroAmps.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('74ae9c15-7454-d79c-97bf-ac3674c8ef84', 'spaceheat.telemetry.name/007', 'CurrentRmsMicroAmps', 6, 'Current measurement in Root Mean Square MicroAmps.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('6b9dc088-04c8-a8f5-fcbe-87d06a2540fa', 'spaceheat.telemetry.name/007', 'GallonsTimes100', 7, 'Gallons multipled by 100. This is useful for flow meters that report cumulative gallons as their raw output. Example: 55300 means 55.3 gallons.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('3a56c28c-52d3-347a-9bb0-de048bd1d2f8', 'spaceheat.telemetry.name/007', 'GallonsTimes100', 7, 'Gallons multipled by 100. This is useful for flow meters that report cumulative gallons as their raw output. Example: 55300 means 55.3 gallons.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4c9f09b2-9692-f064-3e9c-433b761808ff', 'spaceheat.telemetry.name/007', 'VoltageRmsMilliVolts', 8, 'Voltage in Root Mean Square MilliVolts.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e53fb453-7e5a-61f7-9375-8327ed5f177d', 'spaceheat.telemetry.name/007', 'VoltageRmsMilliVolts', 8, 'Voltage in Root Mean Square MilliVolts.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e325b35e-bfb9-08f3-0017-edda892ff10a', 'spaceheat.telemetry.name/007', 'MilliWattHours', 9, 'Energy in MilliWattHours.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('7bc6c1bf-47fc-02d8-7dbe-816be5463f4a', 'spaceheat.telemetry.name/007', 'MilliWattHours', 9, 'Energy in MilliWattHours.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('463cebaf-66ac-c818-ca6b-ecb9219d78d5', 'spaceheat.telemetry.name/007', 'MicroHz', 10, 'Frequency in MicroHz. Example: 59,965,332 means 59.965332 Hz.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('fbe1b4db-a776-32d8-7182-45bab74163b1', 'spaceheat.telemetry.name/007', 'MicroHz', 10, 'Frequency in MicroHz. Example: 59,965,332 means 59.965332 Hz.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('17b83f03-5c0b-7ab1-5863-75af772cc52d', 'spaceheat.telemetry.name/007', 'AirTempCTimes1000', 11, 'Air temperature, in Degrees Celsius multiplied by 1000. Example: 6234 means 6.234 deg Celcius.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('1418be5f-7a67-20f6-c80c-506dcb32a2b8', 'spaceheat.telemetry.name/007', 'AirTempCTimes1000', 11, 'Air temperature, in Degrees Celsius multiplied by 1000. Example: 6234 means 6.234 deg Celcius.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('701fdf49-dda5-975c-8847-8dd9a5ce1527', 'spaceheat.telemetry.name/007', 'AirTempFTimes1000', 12, 'Air temperature, in Degrees F multiplied by 1000. Example: 69329 means 69.329 deg Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e9bbb759-6695-d199-c7e2-22aec3e2840b', 'spaceheat.telemetry.name/007', 'AirTempFTimes1000', 12, 'Air temperature, in Degrees F multiplied by 1000. Example: 69329 means 69.329 deg Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('078804ae-f0c1-dda5-8219-5a90804bea96', 'spaceheat.telemetry.name/007', 'ThermostatState', 13, 'Thermostat State: 0 means idle, 1 means heating, 2 means pending heat') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('9f106e21-01d7-fb4e-4470-e25f5377a67a', 'spaceheat.telemetry.name/007', 'ThermostatState', 13, 'Thermostat State: 0 means idle, 1 means heating, 2 means pending heat') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4a5f0e8d-a4cc-f8d3-6eb1-577fc7955d6a', 'spaceheat.telemetry.name/007', 'MicroVolts', 14, 'Microvolts RMS') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('dd02c090-2e28-29ee-0cda-f1db28cec95d', 'spaceheat.telemetry.name/007', 'MicroVolts', 14, 'Microvolts RMS') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('06c1469f-70c6-1537-208e-16aea6d8b87d', 'spaceheat.telemetry.name/007', 'VoltsTimesTen', 15, 'VoltsTimesTen value') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('d7aebbcd-cea2-6ef2-21c8-f7f638130199', 'spaceheat.telemetry.name/007', 'VoltsTimesTen', 15, 'VoltsTimesTen value') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('41b7fb4c-51af-3b9d-4a62-2d3d496c2962', 'spaceheat.telemetry.name/007', 'WattHours', 16, 'WattHours value') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('64c587df-cef6-0b9c-37cd-554332a09db1', 'spaceheat.telemetry.name/007', 'WattHours', 16, 'WattHours value') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('99b09da4-d459-7e18-e1f5-d62f4c91262c', 'spaceheat.telemetry.name/007', 'StorageLayer', 17, 'StorageLayer value') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c7ba9a27-6aaa-5b40-579b-89afe97838c4', 'spaceheat.telemetry.name/007', 'StorageLayer', 17, 'StorageLayer value') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('92c1fce7-542c-f02a-28ae-9480d4d344cf', 'spaceheat.telemetry.name/007', 'PercentKeep', 18, 'Percentage of the flow in the Siegenthaler loop that returns to the heat pump') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('de99598d-2c64-0e8c-18d2-dd66e76a8821', 'spaceheat.telemetry.name/007', 'PercentKeep', 18, 'Percentage of the flow in the Siegenthaler loop that returns to the heat pump') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4fc1e2c6-50ec-e4e5-a348-e0b21fd52a94', 'spaceheat.telemetry.name/007', 'CelsiusTimes100', 19, 'Temperature in celsius times 100') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('eb024255-b75f-6e6d-4dc1-c842d523519d', 'spaceheat.telemetry.name/007', 'CelsiusTimes100', 19, 'Temperature in celsius times 100') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('e5802c82-5e4f-0d6b-3a60-f186e6c3e0a1', 'spaceheat.telemetry.name/007', 'VoltsTimes100', 20, 'Voltage times 100') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('06a2dbcf-3591-838b-94a7-23d2426d09a1', 'spaceheat.telemetry.name/007', 'VoltsTimes100', 20, 'Voltage times 100') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('af5dcbb4-4a41-8238-5576-a068467b1ab1', 'spaceheat.telemetry.name/007', 'HzTimes100', 21, 'Frequency times 100') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('e9917696-104d-679e-3d8b-e1d11a19dc2f', 'spaceheat.telemetry.name/007', 'HzTimes100', 21, 'Frequency times 100') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c73e8a60-5fb6-5df6-59af-e214f70f5c47', 'spaceheat.telemetry.name/007', 'BinaryState', 22, 'In [0,1], generic') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('bab7a581-cde2-c19d-dbd3-ddec2f341952', 'spaceheat.telemetry.name/007', 'BinaryState', 22, 'In [0,1], generic') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('1d723b68-d7da-094e-461e-d2aae948f1ec', 'spaceheat.unit/001', 'Unknown', 0, 'Unit has not been specified or is not known.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b2e30ccc-6616-d0e9-4fe4-15bdac22075b', 'spaceheat.unit/001', 'Unknown', 0, 'Unit has not been specified or is not known.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('53e2a5cd-82e0-41c4-6d8d-16bc78cec3cc', 'spaceheat.unit/001', 'Unitless', 1, 'Dimensionless value.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('b40bdcd1-7e40-5646-45e2-fc6e06181f18', 'spaceheat.unit/001', 'Unitless', 1, 'Dimensionless value.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('018d7a94-6fd8-fb8d-b74a-690bb9be6e6e', 'spaceheat.unit/001', 'W', 2, 'Power in watts.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('1824f4e5-0713-3de2-fdbe-78d5e0b7d77c', 'spaceheat.unit/001', 'W', 2, 'Power in watts.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('81578f2d-3bcc-3c0c-f441-5a6a640ee951', 'spaceheat.unit/001', 'Celcius', 3, 'Temperature in degrees Celsius using the legacy enum spelling.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('1f4f13af-14c0-49cb-710c-d45468853ece', 'spaceheat.unit/001', 'Celcius', 3, 'Temperature in degrees Celsius using the legacy enum spelling.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('c71a8bf5-34e5-0102-d988-21d9866a2ac3', 'spaceheat.unit/001', 'Fahrenheit', 4, 'Temperature in degrees Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('ca8f0274-af20-41d6-3a53-4d3cdfbb1693', 'spaceheat.unit/001', 'Fahrenheit', 4, 'Temperature in degrees Fahrenheit.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('089920df-5f23-908e-9da3-6c144a0c8278', 'spaceheat.unit/001', 'Gpm', 5, 'Flow rate in gallons per minute.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('619fe853-2233-4965-e7b9-b20dec1aeb37', 'spaceheat.unit/001', 'Gpm', 5, 'Flow rate in gallons per minute.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a88f80e5-89c5-95f2-322e-9dc4d9017c2d', 'spaceheat.unit/001', 'WattHours', 6, 'Energy in watt-hours.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('a8c59ea9-bbc2-dba4-1d22-c3e54ca27e99', 'spaceheat.unit/001', 'WattHours', 6, 'Energy in watt-hours.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('4e0295d6-5061-82f7-bfe6-da28ee88786d', 'spaceheat.unit/001', 'AmpsRms', 7, 'Current in RMS amps.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('bd296d77-1fa2-3361-966e-4d0d785c8be5', 'spaceheat.unit/001', 'AmpsRms', 7, 'Current in RMS amps.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('54181ce5-3064-7f6f-df8b-2d4067e13b96', 'spaceheat.unit/001', 'VoltsRms', 8, 'Voltage in RMS volts.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('15f2b5cf-99ec-da32-2345-560409f7a70c', 'spaceheat.unit/001', 'VoltsRms', 8, 'Voltage in RMS volts.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('99974f16-4e78-0a52-f076-ab3e4f0d664d', 'spaceheat.unit/001', 'Gallons', 9, 'Volume in gallons.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('c25ebb83-4130-9e31-1471-d1b223d77b99', 'spaceheat.unit/001', 'Gallons', 9, 'Volume in gallons.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('1afe21c3-67b2-bf8d-9093-bd92bae0e7e7', 'spaceheat.unit/001', 'ThermostatStateEnum', 10, 'Thermostat state encoded as an enum-valued quantity.') ON CONFLICT (enum_values_id) DO NOTHING;
+VALUES ('8d65e71e-9d6c-4229-781f-b9abc9d30f6a', 'spaceheat.unit/001', 'ThermostatStateEnum', 10, 'Thermostat state encoded as an enum-valued quantity.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('a5359c28-ccb8-5e75-5d45-1824c48b59db', 'temp.calc.method/000', 'SimpleBetaForPico', 0, 'Use the beta method with the Pico-specific fixed-resistance assumption.
+VALUES ('ecde0cea-3aa5-c4c4-8935-92e9dc2b07a0', 'temp.calc.method/000', 'SimpleBetaForPico', 0, 'Use the beta method with the Pico-specific fixed-resistance assumption.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
 
 INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
-VALUES ('f16a1209-70df-1942-7f5e-c755082098ba', 'temp.calc.method/000', 'SimpleBeta', 1, 'Use the beta method with ThermistorBeta as the required parameter.
+VALUES ('85a4a753-8371-423b-c751-4e258a0e9e44', 'temp.calc.method/000', 'SimpleBeta', 1, 'Use the beta method with ThermistorBeta as the required parameter.
 ') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('abf05769-4f77-35aa-26db-659948bbd655', 'gw1.unit/002', 'Unitless', 0, 'Dimensionless quantity.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('c8e2ba18-21d2-35a9-f614-6ad681128bbf', 'gw1.unit/002', 'W', 1, 'Watts.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('d9547fab-f3ac-5f18-ec69-a43052f9999a', 'gw1.unit/002', 'Wh', 2, 'Watt-hours.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('ebb2bf41-4044-9e33-79c1-ad2d490985f5', 'gw1.unit/002', 'Celsius', 3, 'Degrees Celsius.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('01bbbfc2-64c4-9d91-0e19-88cdebdd7446', 'gw1.unit/002', 'Gpm', 4, 'Gallons per minute.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('5534fffa-52d6-4ed6-7398-58fbc8a744c8', 'gw1.unit/002', 'KiloWattHours', 5, 'NEW in /002: kilowatt-hours, for accumulated energy reporting.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('4898d65f-4f09-cbd6-c27d-826e451ca4e4', 'gw1.unit/002', 'MegaWatts', 6, 'NEW in /002: megawatts, for utility-scale power.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('0b4341c5-7872-a75f-c993-752bf67d168d', 'relay.closed.or.open/001', 'Closed', 0, 'Relay is closed (current flowing).') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('fa10c805-45dc-0669-e2a6-4d33c8a16a03', 'relay.closed.or.open/001', 'Open', 1, 'Relay is open (no current).') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('ea8a410d-b1c1-3d6e-112d-dfb2c8604a26', 'relay.closed.or.open/001', 'Unknown', 2, 'Relay state is indeterminate.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('f4f826e5-4087-475d-b8d0-ff78abf39fed', 'defauw.action/000', 'Hold', 0, 'Take no action.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('f752eb7b-86b9-716e-c41e-31acf1c4d520', 'defauw.action/000', 'Advance', 1, 'Advance to the next signal.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('dca03c98-8a83-cf96-c7f6-afab6409f9ae', 'defauw.action/000', 'Retreat', 2, 'Step back one signal.') ON CONFLICT (enum_values_id) DO NOTHING;
+
+INSERT INTO enum_values (enum_values_id, enum_version, symbol, idx, description)
+VALUES ('3554a4c3-5f8d-8866-d4ae-1c7d9a723c39', 'defauw.action/000', 'Reset', 3, 'Return to initial state.') ON CONFLICT (enum_values_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- Types: Top-level type definitions (name-level). Each type can have multiple TypeVersions. Sourced from definitions/registry.yaml + definitions/types/.
 -- ----------------------------------------------------------------------------
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('4c9cd167-84cd-1e52-c418-848af983aabf', 'analytics.channel.gt', 'gridworks-energy', NULL, 'Canonical definition of a computed telemetry channel scoped to a single terminal asset and produced outside SCADA systems.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('2f8fd3ca-e40a-63a4-be2d-8c43a60fa40b', 'analytics.channel.gt', 'gridworks-energy', NULL, 'Canonical definition of a computed telemetry channel scoped to a single terminal asset and produced outside SCADA systems.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('762f26a8-fc3a-fa7c-e21f-cbbb14d5254b', 'bid', 'gridworks-energy', NULL, 'Market-normalized, slot-specific price-quantity schedule submitted by a market participant.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('9a4988f1-b57f-def0-3acb-3437e1bd2385', 'bid', 'gridworks-energy', NULL, 'Market-normalized, slot-specific price-quantity schedule submitted by a market participant.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('be11c592-b996-cf6d-39b0-03f78b471423', 'channel.config', 'gridworks-energy', NULL, 'Base configuration for a component telemetry channel, including sampling cadence, async reporting, scaling exponent, and serialized unit.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('f1d8c6f3-0f51-f855-6e8d-18119d66cc10', 'channel.config', 'gridworks-energy', NULL, 'Base configuration for a component telemetry channel, including sampling cadence, async reporting, scaling exponent, and serialized unit.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('01cfe132-ad23-da5e-bb97-b5f77130ec82', 'channel.readings', 'gridworks-energy', NULL, 'Timestamped integer readings for one channel within a SCADA reporting context.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('0c8defc0-aabe-8f0e-7655-0a4d58cc9cc9', 'channel.readings', 'gridworks-energy', NULL, 'Timestamped integer readings for one channel within a SCADA reporting context.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('66d3b422-7259-3249-215f-6bc38e8a11e6', 'connectivity.edge.gt', 'gridworks-energy', NULL, 'Directed topological edge connecting two Grid Nodes in the physical electric network', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('7efc1524-2032-6414-ea9c-fdbc6a0c0801', 'connectivity.edge.gt', 'gridworks-energy', NULL, 'Directed topological edge connecting two Grid Nodes in the physical electric network', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('11aa5a80-f618-8aff-aac0-f4b88b805395', 'data.channel.gt', 'gridworks-energy', NULL, 'Canonical definition of a telemetry channel representing directly captured measurements', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('51747974-29c6-97d0-17a4-1eec6e7c6996', 'data.channel.gt', 'gridworks-energy', NULL, 'Canonical definition of a telemetry channel representing directly captured measurements', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('5cecd4bb-a59e-d1b1-1e6a-e06f867fa49a', 'derived.channel.gt', 'gridworks-energy', NULL, 'Canonical definition of computed telemetry channels within a GridWorks system.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('07b78aae-1d1e-8b5c-c2b5-1ca266e8e112', 'derived.channel.gt', 'gridworks-energy', NULL, 'Canonical definition of computed telemetry channels within a GridWorks system.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('d75afc3b-c9c5-ed7d-4330-e6deba1c6f6d', 'fis.authority.manifest', 'jessica-millar', NULL, 'Coherent snapshot of the authority plane as maintained by the Fleet Index Service (FIS) at a specific point in time.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('92d050e1-74fc-1c3f-1b47-ecc3ca54ef2c', 'fis.authority.manifest', 'jessica-millar', NULL, 'Coherent snapshot of the authority plane as maintained by the Fleet Index Service (FIS) at a specific point in time.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('1e75c7d1-89b8-921e-fa42-4589b8656175', 'fis.instance.authorization.event', 'jessica-millar', NULL, 'Event emitted by the Fleet Index Service (FIS) recording an authorization decision for a runtime instance attempting to connect to a broker.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('e80c7522-d36f-bdad-09b8-9cf056ee4670', 'fis.instance.authorization.event', 'jessica-millar', NULL, 'Event emitted by the Fleet Index Service (FIS) recording an authorization decision for a runtime instance attempting to connect to a broker.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('6b4e99f7-dd21-8050-9922-cde463ceac67', 'fsm.atomic.report', 'gridworks-energy', NULL, 'Single atomic FSM report item representing either an event or an action.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('5de6b703-a78c-9d9a-0999-ab79dfcfe774', 'fsm.atomic.report', 'gridworks-energy', NULL, 'Single atomic FSM report item representing either an event or an action.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('925db6e5-1956-ca70-07ea-b79bc3c0f8ef', 'fsm.full.report', 'gridworks-energy', NULL, 'Full FSM report emitted for one trigger, including its ordered atomic report items.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('7ba7fc8c-a834-d5b9-9a15-0881c8fb1a66', 'fsm.full.report', 'gridworks-energy', NULL, 'Full FSM report emitted for one trigger, including its ordered atomic report items.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('f5e83569-c93b-1ad9-624c-a5c6c212a498', 'g.node.gt', 'gridworks-energy', NULL, 'Fundamental identity object representing physical and logical grid nodes', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('0fda3f4c-4d75-cdb4-e5df-ca0904469a34', 'g.node.gt', 'gridworks-energy', NULL, 'Fundamental identity object representing physical and logical grid nodes', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('f1b76215-3164-1bb2-725c-091c3390492a', 'g.node.instance.gt', 'gridworks-energy', NULL, 'Runtime execution instance of a GNode identity', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('c8caca48-c099-fbab-24fa-aed4a5c171b1', 'g.node.instance.gt', 'gridworks-energy', NULL, 'Runtime execution instance of a GNode identity', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('cdeb6622-89c9-1408-1e1f-e2354f58e4f0', 'gridworks.ack', 'smoothstone-computing', NULL, 'Versionless acknowledgement message keyed by the message identifier being acknowledged.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('18cd7baf-25cf-3bb8-ef70-e04145fd563f', 'gridworks.ack', 'smoothstone-computing', NULL, 'Versionless acknowledgement message keyed by the message identifier being acknowledged.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('575b01e5-2054-ab7f-7e94-121edbc6a1d2', 'gridworks.ping', 'smoothstone-computing', NULL, 'Versionless message used for liveness/heartbeat checks.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('0043cefd-3dc3-4ea4-cf23-b0d047cefaa6', 'gridworks.ping', 'smoothstone-computing', NULL, 'Versionless message used for liveness/heartbeat checks.', 'gridworks.heartbeat', NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('fb0bad6f-6edd-2e47-5b53-db3451b9abfb', 'gw1.tank.temp.calibration', 'gridworks-energy', NULL, 'Linear calibration coefficients for converting raw tank probe readings into calibrated temperatures.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('d04e81a7-a2f8-5792-64fa-13fae19d8398', 'gw1.tank.temp.calibration', 'gridworks-energy', NULL, 'Linear calibration coefficients for converting raw tank probe readings into calibrated temperatures.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('3f77536a-86b5-1700-7a15-ac2d62ed0a1f', 'gw1.tank.temp.calibration.map', 'gridworks-energy', NULL, 'Buffer and per-tank calibration map for converting raw probe readings into calibrated temperatures.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('ca80940a-183f-ecd0-d2cb-d67c7281d816', 'gw1.tank.temp.calibration.map', 'gridworks-energy', NULL, 'Buffer and per-tank calibration map for converting raw probe readings into calibrated temperatures.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('4987e5fa-f136-a960-1aaa-461f1caa6a34', 'gw1.telemetry.name.quantity.projection', 'gridworks-energy', NULL, 'Canonical projection from spaceheat.telemetry.name to gw1.quantity.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('a9b67f78-a334-3d6b-5fde-322e7b44f881', 'gw1.telemetry.name.quantity.projection', 'gridworks-energy', NULL, 'Canonical projection from spaceheat.telemetry.name to gw1.quantity.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('30a4c463-acb3-1fae-622d-792a646910fa', 'gw1.unit.quantity.projection', 'gridworks-energy', NULL, 'Canonical projection from gw1.unit to gw1.quantity.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('45aa66d3-4039-a078-88f4-61568a6b5b0f', 'gw1.unit.quantity.projection', 'gridworks-energy', NULL, 'Canonical projection from gw1.unit to gw1.quantity.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('74190eba-9a56-0ea0-3839-b314ead86d01', 'ha1.params', 'gridworks-energy', NULL, 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('db4d95c6-b694-f229-3d24-48ebf1796f2a', 'ha1.params', 'gridworks-energy', NULL, 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('b410e44b-6088-4634-843d-459bbf898210', 'i2c.multichannel.dt.relay.component.gt', 'gridworks-energy', NULL, 'Configuration for a multi-channel I2C relay board component.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('7a670e4d-a0f4-82d6-4f66-c836a82bd390', 'i2c.multichannel.dt.relay.component.gt', 'gridworks-energy', NULL, 'Configuration for a multi-channel I2C relay board component.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('6be95cf8-8708-666a-2dcf-163197d804ff', 'i2c.thermistor.channel.config', 'gridworks-energy', NULL, 'Per-channel configuration for a thermistor input read through an I2C ADC.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('dc07acaf-7d6e-bd6a-213f-78376ea9d2d5', 'i2c.thermistor.channel.config', 'gridworks-energy', NULL, 'Per-channel configuration for a thermistor input read through an I2C ADC.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('955df381-783d-c305-3619-182754dd4ed6', 'i2c.thermistor.reader.component.gt', 'gridworks-energy', NULL, 'Configuration for an I2C thermistor reader component that samples one ADC device and publishes one or more thermistor-backed temperature channels.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('5dfbf6b1-86b8-07bf-0c8e-2d70acd289c3', 'i2c.thermistor.reader.component.gt', 'gridworks-energy', NULL, 'Configuration for an I2C thermistor reader component that samples one ADC device and publishes one or more thermistor-backed temperature channels.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('ba883149-bf07-9d10-e876-def3e2392a15', 'layout.lite', 'gridworks-energy', NULL, 'Runtime projection of the active SCADA context used to interpret reports, snapshots, and control-adjacent messages.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('539059f5-b88a-04ac-0919-e1a001758801', 'layout.lite', 'gridworks-energy', NULL, 'Runtime projection of the active SCADA context used to interpret reports, snapshots, and control-adjacent messages.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('f1e44b74-538c-2d2c-c3bb-15ec935a6d7a', 'linear.one.dimensional.calibration', 'gridworks-energy', NULL, 'Affine calibration mapping a scalar measurement to a corrected scalar value using a linear transformation (M * x + B), with semantics defined relative to the measurement domain of the referencing context.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('72a1f4bf-2bdf-c770-2b12-0cfd6a58f7cc', 'linear.one.dimensional.calibration', 'gridworks-energy', NULL, 'Affine calibration mapping a scalar measurement to a corrected scalar value using a linear transformation (M * x + B), with semantics defined relative to the measurement domain of the referencing context.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('363959b1-9422-0e46-9a1c-17260d016979', 'machine.states', 'gridworks-energy', NULL, 'Sequence of machine states observed for one state machine during a reporting interval.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('f195bd9d-eb1b-1fb2-85da-0dd00c418bee', 'machine.states', 'gridworks-energy', NULL, 'Sequence of machine states observed for one state machine during a reporting interval.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('04c86deb-8718-100a-513a-facd279d623d', 'pico.flow.module.component.gt', 'gridworks-energy', NULL, 'Configuration for a Pico-based flow module component.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('9e8cf399-e3ac-9c11-a2d6-52056eaabf50', 'pico.flow.module.component.gt', 'gridworks-energy', NULL, 'Configuration for a Pico-based flow module component.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('cc3f78f2-5d84-2bdf-f8d7-4c8a5fafcd0a', 'pico.tank.module.component.gt', 'gridworks-energy', NULL, 'Configuration for a Pico-based tank temperature module component.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('10b1b575-55c5-a45a-4a23-7703111abfde', 'pico.tank.module.component.gt', 'gridworks-energy', NULL, 'Configuration for a Pico-based tank temperature module component.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('bb0da19b-ed52-b633-da2d-6200010afd54', 'position.point.gt', 'gridworks-energy', NULL, 'Geographic position expressed in integer microdegrees (WGS84)', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('acb0dcf0-30fb-b58a-f102-142ae58e3f80', 'position.point.gt', 'gridworks-energy', NULL, 'Geographic position expressed in integer microdegrees (WGS84)', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('044a3caf-6103-9014-2f10-b7c92effed82', 'price.quantity.unitless', 'gridworks-energy', NULL, 'Integer price and quantity pair for market bidding and dispatch curves, with both values serialized at x1000 scaling.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('dcca4aad-25d4-8df1-81ad-1bf9d83cd210', 'price.quantity.unitless', 'gridworks-energy', NULL, 'Integer price and quantity pair for market bidding and dispatch curves, with both values serialized at x1000 scaling.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('e7f6a083-9d70-7b54-71f2-f46cdace5494', 'power.watts', 'gridworks-energy', NULL, 'Immediate real-time power measurement message for instantaneous transmission.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('7c4dc47e-55c5-7c52-5276-1dae8f95f46b', 'power.watts', 'gridworks-energy', NULL, 'Immediate real-time power measurement message for instantaneous transmission.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('cc62b7bd-a3fd-4287-4241-12cb9efd373b', 'relay.actor.config', 'gridworks-energy', NULL, 'Configuration for a relay-backed actor controlling a physical or logical switching device.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('708cd7b4-d3b0-e6a0-224a-e62ef9488971', 'relay.actor.config', 'gridworks-energy', NULL, 'Configuration for a relay-backed actor controlling a physical or logical switching device.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('379b28fb-cf41-6104-8777-b92c201533a4', 'report', 'gridworks-energy', NULL, 'Primary telemetry and state reporting message produced by a SCADA node for a specific reporting slot.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('f3962ccc-9236-1595-81a2-2d18c5b086ff', 'report', 'gridworks-energy', NULL, 'Primary telemetry and state reporting message produced by a SCADA node for a specific reporting slot.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('c95b1656-e05e-e357-e3be-2974a7e1160f', 'report.event', 'gridworks-energy', NULL, 'Event wrapper for a report payload with message tracking metadata.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('6090e069-e61e-b303-b5d6-fbcbee2acc51', 'report.event', 'gridworks-energy', NULL, 'Event wrapper for a report payload with message tracking metadata.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('2ae350cf-ad99-5d9f-2284-e969a3be4d4a', 'scada.control.capabilities', 'gridworks-energy', NULL, 'Projection of the SCADA control surface including controllable nodes, state channels, and relay semantic configuration.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('8ae5a0cc-a592-b6a8-2de7-5cfa32520066', 'scada.control.capabilities', 'gridworks-energy', NULL, 'Projection of the SCADA control surface including controllable nodes, state channels, and relay semantic configuration.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('f4dcec72-8302-7ee9-9ef6-73467bd6f8e1', 'send.control.capabilities', 'gridworks-energy', NULL, 'Request message asking a SCADA actor to publish its scada.control.capabilities projection.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('1f1e9d6d-d338-1848-ff20-8b57d3ae0c89', 'send.control.capabilities', 'gridworks-energy', NULL, 'Request message asking a SCADA actor to publish its scada.control.capabilities projection.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('5280b148-a88a-57e9-45ea-0a0626b0b282', 'send.layout', 'gridworks-energy', NULL, 'Request message asking a SCADA actor to send its current layout.lite.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('3df6ad32-ca30-994d-3406-fdb6ed775d35', 'send.layout', 'gridworks-energy', NULL, 'Request message asking a SCADA actor to send its current layout.lite.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('ec9f854e-14cc-6ce9-0059-d9c8e7c25826', 'sim.pico.tank.module.component.gt', 'gridworks-energy', NULL, 'Simulation configuration corresponding to pico.tank.module.component.gt.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('7a3113be-a58c-5bce-6a96-8bc2cba61318', 'sim.pico.tank.module.component.gt', 'gridworks-energy', NULL, 'Simulation configuration corresponding to pico.tank.module.component.gt.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('cf523893-e402-66dd-a7ea-db2870346cbd', 'single.machine.state', 'gridworks-energy', NULL, 'Latest known state for a single state machine at a specific timestamp.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('aa8d5613-126d-f280-d194-111d88c06dd9', 'single.machine.state', 'gridworks-energy', NULL, 'Latest known state for a single state machine at a specific timestamp.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('953de53a-b22e-987f-f08c-67f866ce730a', 'single.reading', 'gridworks-energy', NULL, 'Latest known reading for a single channel at a specific SCADA read time.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('218f93f1-f8f8-0f09-b41e-2181673f30c8', 'single.reading', 'gridworks-energy', NULL, 'Latest known reading for a single channel at a specific SCADA read time.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('5d7120cf-64b1-98ef-1f2d-6c695d4bf3c0', 'snapshot.spaceheat', 'gridworks-energy', NULL, 'Point-in-time snapshot containing the latest known readings and machine states captured by a Spaceheat SCADA.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('83ed7590-94e1-277d-b698-641395a4bc02', 'snapshot.spaceheat', 'gridworks-energy', NULL, 'Point-in-time snapshot containing the latest known readings and machine states captured by a Spaceheat SCADA.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('e4710930-a267-c6b5-45b9-5fba10334d19', 'spaceheat.node.gt', 'gridworks-energy', NULL, 'A Spaceheat node representing a named element in the SCADA system.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('25cbca6f-99f8-7813-85a1-9c18f432ee79', 'spaceheat.node.gt', 'gridworks-energy', NULL, 'A Spaceheat node representing a named element in the SCADA system.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('6e54d2f3-f6a5-99e4-17e1-911f1fb73493', 'spaceheat.telemetry.quantity.projection', 'gridworks-energy', NULL, 'Canonical projection from legacy TelemetryName encodings to gw1.quantity.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('aac348ea-a25e-5c5a-0e20-a927bab2b7da', 'spaceheat.telemetry.quantity.projection', 'gridworks-energy', NULL, 'Canonical projection from legacy TelemetryName encodings to gw1.quantity.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('0edc385b-210a-9bce-ee56-fab0c0735c1e', 'synced.readings', 'gridworks-energy', NULL, 'Compact synchronized reading payload consisting of a single SCADA read time and parallel channel and value lists.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('4703824d-3c4f-60df-ad46-10c0deb52b51', 'synced.readings', 'gridworks-energy', NULL, 'Compact synchronized reading payload consisting of a single SCADA read time and parallel channel and value lists.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('c187866e-d064-a634-80de-7e4cafff2114', 'synced.readings.bundle', 'gridworks-energy', NULL, 'Time-aligned sequence of synchronized multi-channel readings with embedded channel semantics sufficient for independent interpretation.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('fafc62d7-c0bf-b0fd-f44c-c2a58298c8e3', 'synced.readings.bundle', 'gridworks-energy', NULL, 'Time-aligned sequence of synchronized multi-channel readings with embedded channel semantics sufficient for independent interpretation.', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
 
 INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
-VALUES ('fee10d89-a2ba-4b30-73fc-d2d6f10000a5', 'gw.nolan.layout', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+VALUES ('af43e5bc-d435-dac9-7ce1-75d8a9fc8f7f', 'gw.nolan.layout', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (types_id) DO NOTHING;
+
+INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('53f181f9-b78c-0329-cb94-f2c8292344d1', 'gridworks.heartbeat', 'smoothstone-computing', 'Heartbeat', 'Successor to gridworks.ping. Includes structured liveness telemetry instead of just an empty round-trip.', NULL, 'GridworksHeartbeat', TRUE, FALSE, FALSE) ON CONFLICT (types_id) DO NOTHING;
+
+INSERT INTO types (types_id, name, owner, title, description, replaced_by, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('d50f7ae6-3e4f-91cf-aa9e-bd765509defa', 'boundary.heartbeat', 'joe-strommen', 'Boundary Heartbeat', 'Liveness signal exchanged across an org-to-org boundary (e.g. a federation peer).', NULL, 'BoundaryHeartbeat', TRUE, FALSE, FALSE) ON CONFLICT (types_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- TypeVersions: Specific versions of a type. Each declares its JSON-Schema shape. Versions follow a 3-digit suffix in the YAML files.
 -- ----------------------------------------------------------------------------
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('0f01c8a4-976f-15fe-5d4e-3b2fd88aeae8', 'analytics.channel.gt', '000', 'https://schemas.electricity.works/types/analytics.channel.gt/000', 'analytics.channel.gt', 'Canonical definition of a computed telemetry channel scoped to a single terminal asset and produced outside SCADA systems.
+VALUES ('0c910aa0-2877-e23a-8272-db73347b06d7', 'analytics.channel.gt', '000', 'https://schemas.electricity.works/types/analytics.channel.gt/000', 'analytics.channel.gt', 'Canonical definition of a computed telemetry channel scoped to a single terminal asset and produced outside SCADA systems.
 An analytics.channel.gt declares a computation over message streams, telemetry, or system behavior associated with a specific terminal asset. These channels represent analytics-derived signals such as persistence delay, heartbeat-based health, or other observational metrics.
 Unlike derived.channel.gt, analytics.channel.gt is not computed by a GridWorks GNode. Its semantic authority lies in external analytics systems.
 ', FALSE, 'active', '2026-04-02T00:00:00Z', '{"x-gridworks-extended_description": "`analytics.channel.gt` defines computed telemetry channels whose semantic authority lies outside SCADA systems and whose scope is a single terminal asset.\nValues associated with `analytics.channel.gt` SHALL be represented as floating point numbers, with the unit defined by OutputUnit.\nMulti-terminal-asset computations (e.g. aggregation across assets or GNode-based selection) are intentionally excluded from this type and should be represented by a separate aggregation type."}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('151299e4-f21d-661d-5c89-d1c4680b0d09', 'bid', '000', 'https://schemas.electricity.works/types/bid/000', 'bid', 'A market-normalized, slot-specific price–quantity schedule submitted by a market participant. A bid expresses willingness to inject or withdraw a quantity of a market-defined commodity as a function of price, subject to the rules of the MarketType associated with the specified MarketSlot.
+VALUES ('65e9919d-7077-eee4-3e9a-d4db55cf9892', 'bid', '000', 'https://schemas.electricity.works/types/bid/000', 'bid', 'A market-normalized, slot-specific price–quantity schedule submitted by a market participant. A bid expresses willingness to inject or withdraw a quantity of a market-defined commodity as a function of price, subject to the rules of the MarketType associated with the specified MarketSlot.
 Bids are economically admissible, cryptographically anchored messages that serve as the primary input to market aggregation and clearing. Differences between participant classes (e.g. leaf nodes, aggregators, fleets, generators) are expressed through MarketType rules and bidder authorization registries, not through differences in bid structure.
 ', FALSE, 'active', '2026-01-15T15:45:08Z', '{"x-gridworks-extended_description": "The bid type is the foundational economic message of the GridWorks market architecture. By enforcing strict normalization against MarketType-defined price and quantity domains, bids enable a self-scaling market maker strategy in which aggregation, clearing, and dispatch logic can be applied uniformly across participant classes and market layers.\nAll bids share a common structure and validation contract. Differences in physical assets, aggregation scope, or operational responsibility are expressed through external registries, MarketType definitions, and settlement processes rather than through specialized bid schemas.\nThis design supports permissioned or permissionless participation, economic rate-limiting via fees, and bounded computational complexity, while preserving extensibility for future market products and clearing mechanisms.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('9601b453-8736-e93a-ebaa-bef6f2d84746', 'channel.config', '000', 'https://schemas.electricity.works/types/channel.config/000', 'channel.config', 'Base channel configuration used by component definitions to describe how a telemetry channel is sampled, scaled, and serialized.
+VALUES ('78dda680-8356-7e2a-9830-3846acae8b60', 'channel.config', '000', 'https://schemas.electricity.works/types/channel.config/000', 'channel.config', 'Base channel configuration used by component definitions to describe how a telemetry channel is sampled, scaled, and serialized.
 ', FALSE, 'active', '2024-09-22T11:32:00Z', '{"x-gridworks-extended_description": "`channel.config` captures both periodic sampling behavior and optional asynchronous emission behavior for a telemetry channel.\n`PollPeriodMs` and `CapturePeriodS` describe different stages of SCADA behavior. `PollPeriodMs` is the cadence at which SCADA polls the hardware device or upstream source for a value. `CapturePeriodS` is the cadence at which SCADA emits that channel value into the telemetry stream.\nThese cadences may differ. For example, SCADA may poll a device frequently to maintain fresh local state while only reporting the value periodically or when an async trigger condition is met.\nIn current runtime practice, `AsyncCapture` may be true even when `AsyncCaptureDelta` is omitted. This means asynchronous capture is enabled, but the threshold semantics are not fully specified in the payload itself.\nWhen `AsyncCaptureDelta` is present, the intended interpretation is: publish asynchronously when the magnitude of the change since the last published value is greater than or equal to `AsyncCaptureDelta`.\n`Exponent` describes how to interpret the serialized integer reading relative to `Unit`. For example, if `Unit` is `Gpm` and `Exponent` is `2`, then a reading value of `432` represents `4.32 Gpm`.\nA future published version may strengthen this contract by requiring `AsyncCaptureDelta` whenever `AsyncCapture` is true, once runtime behavior consistently provides that value.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('e9d8cc86-b948-bde2-2f01-c01a04a25dfa', 'channel.readings', '001', 'https://schemas.electricity.works/types/channel.readings/001', 'channel.readings', 'Timestamped integer readings for one channel within a SCADA reporting context, including the channel UUID.
+VALUES ('7511991a-209a-3562-7726-8523bb902de2', 'channel.readings', '001', 'https://schemas.electricity.works/types/channel.readings/001', 'channel.readings', 'Timestamped integer readings for one channel within a SCADA reporting context, including the channel UUID.
 ', TRUE, 'active', '2024-10-06T17:49:32Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('1a6a8db1-b484-f6b6-3736-057d4cda03a5', 'channel.readings', '002', 'https://schemas.electricity.works/types/channel.readings/002', 'channel.readings', 'Timestamped integer readings for one channel within a SCADA reporting context.
+VALUES ('1223132b-c46a-f167-6468-c1b21e8fec3e', 'channel.readings', '002', 'https://schemas.electricity.works/types/channel.readings/002', 'channel.readings', 'Timestamped integer readings for one channel within a SCADA reporting context.
 ', FALSE, 'active', '2024-10-12T17:43:44Z', '{"x-gridworks-extended_description": "ChannelName SHALL reference a channel definition known to both the reporting node and the receiving system. Channel definitions may be declared using data.channel.gt (for raw telemetry) or derived.channel.gt (for computed channels).\nThis type transmits timestamped values only. It does not encode channel units, quantities, or derivation semantics. Those properties are resolved by consulting the corresponding channel definition.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('16f8dc80-d817-a7ec-58fe-8ebb17715652', 'connectivity.edge.gt', '000', 'https://schemas.electricity.works/types/connectivity.edge.gt/000', 'connectivity.edge.gt', 'Directed topological edge connecting two Grid Nodes (GNodes) in the physical electric network. This type encodes copper-level adjacency used for graph-based modeling, Kirchhoff power flow calculations, and constraint propagation.
+VALUES ('bd5fd3e4-b579-fa7a-874e-5a99197e4c8f', 'connectivity.edge.gt', '000', 'https://schemas.electricity.works/types/connectivity.edge.gt/000', 'connectivity.edge.gt', 'Directed topological edge connecting two Grid Nodes (GNodes) in the physical electric network. This type encodes copper-level adjacency used for graph-based modeling, Kirchhoff power flow calculations, and constraint propagation.
 A ConnectivityEdge represents an oriented structural relationship between two distinct GNodes. Direction SHALL be interpreted as the positive reference direction for flow modeling and graph traversal. Physical power MAY flow in either direction subject to system conditions.
 For a given pair of GNodes, only one structural ConnectivityEdge SHALL exist. Reverse flow SHALL be represented by sign conventions in power quantities and SHALL NOT be modeled by introducing a secondConnectivityEdge reversing the same GNode pair.
 ConnectivityEdge does not encode electrical impedance, capacity, or switching state. It defines structural topology only.
 ', FALSE, 'active', '2026-02-23T00:00:00Z', '{"x-gridworks-extended_description": "ConnectivityEdge represents structural conductor adjacency only. Most edges correspond directly to parent\u2013child relationships in the GNode hierarchy (for example, substation to feeder or feeder to downstream connectivity node). In these cases, the directed edge makes explicit the physical copper relationship already implied by the structural topology.\nHowever, real distribution systems may contain tie-lines, loops, and alternate routing paths. The graph formed by ConnectivityEdge objects MAY therefore contain cycles. Acyclicity is not assumed.\nThe directed orientation of a ConnectivityEdge establishes a positive reference direction for flow modeling and graph traversal. It does NOT restrict physical power flow to a single direction. Reverse flow SHALL be represented by sign conventions in power quantities rather than by duplicating edges in the opposite direction.\nStatus expresses lifecycle participation of the edge in the registry and coordination system. It SHALL NOT be interpreted as operational switching state (e.g., breaker open or closed). Operational configuration of the active network graph MUST be modeled using separate types designed for dynamic topology state.\nConceptually, ConnectivityEdge aligns with the conductor adjacency relationships represented in IEC 61970/61968 CIM (Common Information Model), where network topology is derived from connections between ConnectivityNodes through conducting equipment. ConnectivityEdge provides a simplified, distribution-level abstraction suitable for graph-based modeling and transactive coordination without adopting the full CIM equipment hierarchy."}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('21a02fe2-7ef8-affe-df24-31b187991bd9', 'data.channel.gt', '001', 'https://schemas.electricity.works/types/data.channel.gt/001', 'data.channel.gt', 'Canonical definition of a telemetry channel representing directly captured measurements within a GridWorks system.
+VALUES ('b0cf8562-6507-0ee3-8113-b0820eea8191', 'data.channel.gt', '001', 'https://schemas.electricity.works/types/data.channel.gt/001', 'data.channel.gt', 'Canonical definition of a telemetry channel representing directly captured measurements within a GridWorks system.
 A data.channel.gt declares the semantic identity of a telemetry stream, including what is measured, which node it describes, and which node captures the measurement. To interpret a channel.readings instance, consumers SHALL resolve ChannelName against the channel definitions for the relevant terminal asset / SCADA context (typically by matching data.channel.gt.Name).
-', FALSE, 'active', '2025-09-24T14:29:00Z', '{"x-gridworks-extended_description": "data.channel.gt defines primary telemetry channels corresponding to directly observed measurements from physical devices or sensors.\nIn contrast, derived.channel.gt defines computed channels whose values are produced from one or more input channels according to a declared strategy.\nTelemetry is transported using channel.readings, which includes a ChannelName and aligned lists of values and timestamps. channel.readings does not carry the full channel definition; consumers interpret channel.readings by resolving ChannelName against the channel definition set for the relevant SCADA / terminal asset context (data.channel.gt and derived.channel.gt), typically by Name equality.\nreport messages aggregate channel.readings (ChannelReadingList) along with state transitions and FSM outputs for transmission from SCADA nodes associated with terminal assets.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2025-09-24T14:29:00Z', '{"x-gridworks-extended_description": "data.channel.gt defines primary telemetry channels corresponding to directly observed measurements from physical devices or sensors.\nIn contrast, derived.channel.gt defines computed channels whose values are produced from one or more input channels according to a declared strategy.\nTelemetry is transported using channel.readings, which includes a ChannelName and aligned lists of values and timestamps. channel.readings does not carry the full channel definition; consumers interpret channel.readings by resolving ChannelName against the channel definition set for the relevant SCADA / terminal asset context (data.channel.gt and derived.channel.gt), typically by Name equality.\nreport messages aggregate channel.readings (ChannelReadingList) along with state transitions and FSM outputs for transmission from SCADA nodes associated with terminal assets.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('42b2d758-d401-4e2b-9d5e-a0f5f39e7d4b', 'data.channel.gt', '002', 'https://schemas.electricity.works/types/data.channel.gt/002', 'data.channel.gt', 'Canonical definition of a telemetry channel representing directly captured measurements within a GridWorks system.
+VALUES ('ff9b8478-e758-18fc-7254-9942a80af76e', 'data.channel.gt', '002', 'https://schemas.electricity.works/types/data.channel.gt/002', 'data.channel.gt', 'Canonical definition of a telemetry channel representing directly captured measurements within a GridWorks system.
 A data.channel.gt declares the semantic identity of a telemetry stream, including what is measured, which node it describes, and which node captures the measurement. To interpret a channel.readings instance, consumers SHALL resolve ChannelName against the channel definitions for the relevant terminal asset / SCADA context (typically by matching data.channel.gt.Name).
 ', FALSE, 'active', '2026-03-30T21:27:05Z', '{"x-gridworks-extended_description": "data.channel.gt defines primary telemetry channels corresponding to directly observed measurements from physical devices or sensors.\nIn contrast, derived.channel.gt defines computed channels whose values are produced from one or more input channels according to a declared strategy.\nTelemetry is transported using channel.readings, which includes a ChannelName and aligned lists of values and timestamps. channel.readings does not carry the full channel definition; consumers interpret channel.readings by resolving ChannelName against the channel definition set for the relevant SCADA / terminal asset context (data.channel.gt and derived.channel.gt), typically by Name equality.\nreport messages aggregate channel.readings (ChannelReadingList) along with state transitions and FSM outputs for transmission from SCADA nodes associated with terminal assets.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('9ad8d793-c003-b44f-a6a4-6cbafbadd08f', 'derived.channel.gt', '000', 'https://schemas.electricity.works/types/derived.channel.gt/000', 'derived.channel.gt', 'Canonical definition of a derived telemetry channel within a GridWorks system.
+VALUES ('c54420ec-c852-7fe3-4842-6c3c750774b1', 'derived.channel.gt', '000', 'https://schemas.electricity.works/types/derived.channel.gt/000', 'derived.channel.gt', 'Canonical definition of a derived telemetry channel within a GridWorks system.
 A derived channel declares a computed telemetry stream whose values are produced from a named computation strategy rather than from direct physical measurement. Derived channels represent transformations, aggregations, or model-based computations over other telemetry streams.
 In the GridWorks SCADA lexicon, channels define the semantic identity of telemetry streams. data.channel.gt defines directly observed measurements, while derived.channel.gt defines computed streams.
-', FALSE, 'active', '2026-01-03T14:27:00Z', '{"x-gridworks-extended_description": "derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes."}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2026-01-03T14:27:00Z', '{"x-gridworks-extended_description": "derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes."}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('9a409441-b8b3-9b21-d8cf-5de0759cf380', 'derived.channel.gt', '001', 'https://schemas.electricity.works/types/derived.channel.gt/001', 'derived.channel.gt', 'Canonical definition of a derived telemetry channel within a GridWorks system.
+VALUES ('207b48ac-b2dd-fdf0-c891-6a42a7ac9528', 'derived.channel.gt', '001', 'https://schemas.electricity.works/types/derived.channel.gt/001', 'derived.channel.gt', 'Canonical definition of a derived telemetry channel within a GridWorks system.
 A derived.channel.gt declares a computed telemetry stream whose values are produced from one or more input channels according to a declared strategy. Derived channels do not represent directly captured measurements; instead, they represent transformations, aggregations, or computations over other telemetry streams.
-', FALSE, 'active', '2026-02-02T23:00:00Z', '{"x-gridworks-extended_description": "derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2026-02-02T23:00:00Z', '{"x-gridworks-extended_description": "derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('00a7e4db-307f-2cb0-e142-50ec9cb59122', 'derived.channel.gt', '002', 'https://schemas.electricity.works/types/derived.channel.gt/002', 'derived.channel.gt', 'Canonical definition of a derived telemetry channel within a GridWorks system.
+VALUES ('14ec25ac-7093-6aed-d483-76f855f7ff6d', 'derived.channel.gt', '002', 'https://schemas.electricity.works/types/derived.channel.gt/002', 'derived.channel.gt', 'Canonical definition of a derived telemetry channel within a GridWorks system.
 A derived.channel.gt declares a computed telemetry stream whose values are produced from one or more input channels according to a declared strategy. Derived channels do not represent directly captured measurements; instead, they represent transformations, aggregations, or computations over other telemetry streams.
 ', FALSE, 'active', '2026-03-04T19:00:00Z', '{"x-gridworks-extended_description": "`derived.channel.gt` defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\nTelemetry values associated with `derived.channel.gt` are intended to be represented as integers, with any required scaling encoded in the OutputUnit.\nThis convention supports deterministic and efficient serialization while preserving mechanical interpretability of values. Alternative representations (e.g., floating point values) are expected to be introduced through separate vocabularies rather than modifying the semantics of `derived.channel.gt`.\nInstances of `channel.readings` referencing a derived channel SHALL be interpreted by resolving ChannelName against `derived.channel.gt`.Name within the relevant terminal asset / SCADA context.\nTogether, `data.channel.gt` and `derived.channel.gt` form the semantic backbone for telemetry reporting. `channel.readings` transports values, and `report` aggregates those readings for transmission from SCADA nodes."}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('b94c86df-bdeb-9c10-ed0e-abc4457d02a3', 'fis.authority.manifest', '000', 'https://schemas.electricity.works/types/fis.authority.manifest/000', 'fis.authority.manifest', 'A coherent snapshot of the authority plane as maintained by the Fleet Index Service (FIS) at a specific point in time.
+VALUES ('b2b9f95e-bbde-58ef-f6d1-ab924cf623a4', 'fis.authority.manifest', '000', 'https://schemas.electricity.works/types/fis.authority.manifest/000', 'fis.authority.manifest', 'A coherent snapshot of the authority plane as maintained by the Fleet Index Service (FIS) at a specific point in time.
 This manifest encodes design-level invariants of Grid Node identity and runtime instance authority. It is intended for audit, verification, and architectural clarity. It is not part of the runtime authorization enforcement path.
 ', FALSE, 'active', '2026-04-06T16:00:00Z', '{"x-gridworks-extended_description": "This manifest formalizes authority-plane design invariants without embedding database implementation details.\nThe SingleActiveInstancePerGNode invariant expresses the single-writer authority model enforced operationally by FIS. ParentClosureUpToDeclaredRoots ensures that the GNode alias hierarchy is structurally coherent within the manifest scope.\nThis type is intended for architectural verification, regression testing, and diagnostic inspection. It is not required for runtime authorization enforcement.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('b4a0ced3-dbfc-f068-65e0-01b87ad83953', 'fis.instance.authorization.event', '000', 'https://schemas.electricity.works/types/fis.instance.authorization.event/000', 'fis.instance.authorization.event', 'Event emitted by the Fleet Index Service (FIS) recording an authorization decision for a runtime instance attempting to connect to a broker. This event provides an immutable audit record of instance-level authorization outcomes.
+VALUES ('89161645-27b5-6e6d-1b61-abccb34e4367', 'fis.instance.authorization.event', '000', 'https://schemas.electricity.works/types/fis.instance.authorization.event/000', 'fis.instance.authorization.event', 'Event emitted by the Fleet Index Service (FIS) recording an authorization decision for a runtime instance attempting to connect to a broker. This event provides an immutable audit record of instance-level authorization outcomes.
 ', FALSE, 'active', '2026-04-06T16:00:00Z', '{"x-gridworks-extended_description": "Authorization events are emitted asynchronously by FIS after evaluating a connection attempt. They provide a durable audit trail of authorization outcomes, including supersession events and denial decisions.\nThese events do not grant authority; they record authority decisions. Runtime enforcement occurs at the broker level.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('0f481679-231d-8737-4649-1277c2124d02', 'fsm.atomic.report', '000', 'https://schemas.electricity.works/types/fsm.atomic.report/000', 'fsm.atomic.report', 'Single atomic FSM report item representing either an event or an action emitted by a state machine transition.
-', TRUE, 'active', '2024-10-08T17:17:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+VALUES ('66f19f9d-7e30-7b12-4ab3-f6ac8ce55ddd', 'fsm.atomic.report', '000', 'https://schemas.electricity.works/types/fsm.atomic.report/000', 'fsm.atomic.report', 'Single atomic FSM report item representing either an event or an action emitted by a state machine transition.
+', TRUE, 'deprecated', '2024-10-08T17:17:00Z', NULL, NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('babc8fe5-d8af-e692-6326-c5b08c8df18e', 'fsm.atomic.report', '001', 'https://schemas.electricity.works/types/fsm.atomic.report/001', 'fsm.atomic.report', 'Single atomic FSM report item representing either an event or an action emitted by a state machine transition. An action represents a side-effect applied to the physical or logical system.
+VALUES ('ea492b8f-96cb-160e-e574-98fe3543d53c', 'fsm.atomic.report', '001', 'https://schemas.electricity.works/types/fsm.atomic.report/001', 'fsm.atomic.report', 'Single atomic FSM report item representing either an event or an action emitted by a state machine transition. An action represents a side-effect applied to the physical or logical system.
 ', TRUE, 'active', '2025-04-23T18:03:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('4c762d5a-66dc-6ceb-57fc-843894bcd1d0', 'fsm.full.report', '000', 'https://schemas.electricity.works/types/fsm.full.report/000', 'fsm.full.report', 'Full FSM report emitted for a trigger, including the ordered list of atomic report items produced by the state machine.
-', TRUE, 'active', '2024-10-08T17:41:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+VALUES ('0f6901ea-de25-55b7-8825-98f79aa0262d', 'fsm.full.report', '000', 'https://schemas.electricity.works/types/fsm.full.report/000', 'fsm.full.report', 'Full FSM report emitted for a trigger, including the ordered list of atomic report items produced by the state machine.
+', TRUE, 'deprecated', '2024-10-08T17:41:00Z', NULL, NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('8f201790-efbb-78bc-4f59-1f95e5c1febd', 'fsm.full.report', '001', 'https://schemas.electricity.works/types/fsm.full.report/001', 'fsm.full.report', 'Full FSM report emitted for a trigger, including the ordered list of atomic report items produced by the state machine.
+VALUES ('c8184d98-d5c9-a81f-b477-bc235226e6f8', 'fsm.full.report', '001', 'https://schemas.electricity.works/types/fsm.full.report/001', 'fsm.full.report', 'Full FSM report emitted for a trigger, including the ordered list of atomic report items produced by the state machine.
 ', TRUE, 'active', '2025-04-23T18:03:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('ae4e6efb-516c-a757-c662-2a5db3ecdc83', 'g.node.gt', '004', 'https://schemas.electricity.works/types/g.node.gt/004', 'g.node.gt', 'A GNode (“Grid Node”) is the fundamental identity object in the GridWorks  ecosystem. Every physical location, metered unit, device, service, or actor  interacting with the transactive system is represented as a GNode.
+VALUES ('78755a4c-de34-3068-385f-53903d0b75f2', 'g.node.gt', '004', 'https://schemas.electricity.works/types/g.node.gt/004', 'g.node.gt', 'A GNode (“Grid Node”) is the fundamental identity object in the GridWorks  ecosystem. Every physical location, metered unit, device, service, or actor  interacting with the transactive system is represented as a GNode.
 ', FALSE, 'active', '2026-02-24T14:00:00Z', '{"x-gridworks-extended_description": "Grid Nodes (GNodes) provide the stable identity layer for distributed coordination in the GridWorks ecosystem. Each GNode participates in a hierarchical alias structure that encodes topology, routing semantics, and coordination scope.\nGNodes may represent physical grid structure (e.g., metered boundaries, connectivity nodes, constraint points) or logical and service roles (e.g., SCADA agents, forecasting services, market participants). BaseClass defines the universal structural ontology required for interoperability. GNodeClass expresses organization-specific functional roles and does not alter structural semantics.\n`g.node.gt` is an immutable serialized snapshot of declared node state. Any change to a GNode (alias updates, status changes, relocations, or classification changes) SHALL be represented by publishing a new `g.node.gt` message rather than mutating a previously published instance. This preserves durable identity (GNodeId) while allowing controlled evolution of descriptive attributes.\nGNode is designed as the atomic unit of coordination in a recursively composable grid architecture. Systems of arbitrary scale are formed by composing GNodes into hierarchical or heterarchical structures. This allows optimal power flow (OPF), market clearing, and constraint coordination mechanisms to operate centrally, regionally, or in distributed configurations without altering the underlying identity model.\nConceptually, GNode aligns with node abstractions in IEC 61970/61968 CIM (e.g., ConnectivityNode and TopologicalNode), while unifying physical and logical coordination entities within a single identity abstraction suitable for graph-based modeling and transactive coordination.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('4c924f65-6fe4-f9ef-7679-213dc9bc8e1f', 'g.node.instance.gt', '000', 'https://schemas.electricity.works/types/g.node.instance.gt/000', 'g.node.instance.gt', 'Durable snapshot of a runtime instance representing a Grid Node. Each instance record corresponds bijectively to a persistent FIS database record tracking runtime authority and transport connection state.
+VALUES ('fbd0eec7-bd37-b382-0d33-99c538bb8b77', 'g.node.instance.gt', '000', 'https://schemas.electricity.works/types/g.node.instance.gt/000', 'g.node.instance.gt', 'Durable snapshot of a runtime instance representing a Grid Node. Each instance record corresponds bijectively to a persistent FIS database record tracking runtime authority and transport connection state.
 ', FALSE, 'active', '2026-03-04T17:00:00Z', '{"x-gridworks-extended_description": "The g.node.instance.gt type represents a durable record of runtime authority for a Grid Node. It is maintained by the Fleet Index Service (FIS) and serves as an auditable snapshot of instance lifecycle events.\nWhile this type represents a single runtime instance, the broader system enforces a single-writer authority model: at most one instance per GNodeId is permitted to hold Status = Active at any time. That invariant is enforced at the runtime and database layer and is not validated within this schema itself.\nThe distinction between Active, Revoked, and Ended enables audit differentiation between normal shutdown, supersession by a newer instance, and forced authority revocation.\nConnectionHandle and ObservedPeerAddress are transport-observed values used for operational diagnostics and forensic analysis. Their structure is transport-specific and intentionally opaque to preserve neutrality across messaging systems.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('b8d57aff-c290-2b7e-ffab-20c468bf08e9', 'gridworks.ack', '000', 'https://schemas.electricity.works/types/gridworks.ack', 'gridworks.ack', 'Versionless acknowledgement message used to confirm receipt of a prior GridWorks message by its message identifier.
+VALUES ('62f79f0f-95c6-7c63-18f0-a5d13caf8861', 'gridworks.ack', '000', 'https://schemas.electricity.works/types/gridworks.ack', 'gridworks.ack', 'Versionless acknowledgement message used to confirm receipt of a prior GridWorks message by its message identifier.
 ', FALSE, 'active', NULL, '{"IsVersionless": true}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('1d0f58ca-af1a-233e-b9e8-f23e19b94c85', 'gridworks.ping', '000', 'https://schemas.electricity.works/types/gridworks.ping', 'gridworks.ping', 'Versionless message used for liveness and heartbeat checks between GridWorks components.
+VALUES ('60246ded-3b9a-914c-4f92-b7c06b146997', 'gridworks.ping', '000', 'https://schemas.electricity.works/types/gridworks.ping', 'gridworks.ping', 'Versionless message used for liveness and heartbeat checks between GridWorks components.
 ', FALSE, 'active', NULL, '{"IsVersionless": true}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('cfc16dd0-ccb8-dd39-572e-63f2d974b39e', 'gw1.tank.temp.calibration', '000', 'https://schemas.electricity.works/types/gw1.tank.temp.calibration/000', 'gw1.tank.temp.calibration', 'Linear calibration coefficients for converting three raw tank probe readings into calibrated temperatures.
+VALUES ('c62ef8fe-4138-5f07-3543-e26c954232a3', 'gw1.tank.temp.calibration', '000', 'https://schemas.electricity.works/types/gw1.tank.temp.calibration/000', 'gw1.tank.temp.calibration', 'Linear calibration coefficients for converting three raw tank probe readings into calibrated temperatures.
 ', FALSE, 'active', '2025-12-25T22:18:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('98fa93d7-27f5-b56a-360f-c7acd554851d', 'gw1.tank.temp.calibration.map', '000', 'https://schemas.electricity.works/types/gw1.tank.temp.calibration.map/000', 'gw1.tank.temp.calibration.map', 'Buffer and per-tank calibration map for converting raw probe readings into calibrated temperatures.
+VALUES ('b0c8b44b-d9c4-d3b5-a500-f38f3c203c72', 'gw1.tank.temp.calibration.map', '000', 'https://schemas.electricity.works/types/gw1.tank.temp.calibration.map/000', 'gw1.tank.temp.calibration.map', 'Buffer and per-tank calibration map for converting raw probe readings into calibrated temperatures.
 ', FALSE, 'active', '2025-12-25T22:18:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('157b3a49-3b24-931a-26a7-9c7308e61f7b', 'gw1.telemetry.name.quantity.projection', '000', 'https://schemas.electricity.works/types/gw1.telemetry.name.quantity.projection/000', 'telemetry.name.quantity.projection', 'Canonical projection from spaceheat.telemetry.name to gw1.quantity.
+VALUES ('de32b6fd-fafa-e83d-2e4a-b64f0186178b', 'gw1.telemetry.name.quantity.projection', '000', 'https://schemas.electricity.works/types/gw1.telemetry.name.quantity.projection/000', 'telemetry.name.quantity.projection', 'Canonical projection from spaceheat.telemetry.name to gw1.quantity.
 This type declares the deterministic semantic relationship by which every legacy Spaceheat telemetry encoding maps to exactly one gw1.quantity value.
 It exists to support safe transition from TelemetryName-based dimensional encoding toward explicit gw1.unit and gw1.quantity separation.
 ', FALSE, 'active', '2026-03-16T14:14:56Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('6aa0f474-33f9-0c9e-1bfc-a3e89ba59fa7', 'gw1.unit.quantity.projection', '000', 'https://schemas.electricity.works/types/gw1.unit.quantity.projection/000', 'gw1.unit.quantity.projection', 'Canonical projection from gw1.unit to gw1.quantity. This type declares the deterministic semantic relationship by which every gw1.unit maps to exactly one gw1.quantity.
+VALUES ('3178727a-f3ae-504e-3380-47b1c07ad3da', 'gw1.unit.quantity.projection', '000', 'https://schemas.electricity.works/types/gw1.unit.quantity.projection/000', 'gw1.unit.quantity.projection', 'Canonical projection from gw1.unit to gw1.quantity. This type declares the deterministic semantic relationship by which every gw1.unit maps to exactly one gw1.quantity.
 The projection defines the physical dimension abstraction associated with each unit and ensures consistent dimensional reasoning across telemetry, derived channels, and market contracts.
 ', FALSE, 'active', '2026-03-31T09:18:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('f0124e1d-a0f3-9273-740d-b8f0d924ca37', 'ha1.params', '004', 'https://schemas.electricity.works/types/ha1.params/004', 'ha1.params', 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 house-heating model.
-', FALSE, 'active', '2025-12-04T15:54:00Z', '{"x-gridworks-extended_description": "`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. These values are exchanged across system boundaries so SCADA and downstream consumers can make consistent calculations from the same declared parameter set.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+VALUES ('b364f7b9-52cd-f54a-8325-894d2f967b64', 'ha1.params', '004', 'https://schemas.electricity.works/types/ha1.params/004', 'ha1.params', 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 house-heating model.
+', FALSE, 'deprecated', '2025-12-04T15:54:00Z', '{"x-gridworks-extended_description": "`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. These values are exchanged across system boundaries so SCADA and downstream consumers can make consistent calculations from the same declared parameter set.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('37920e7f-5c98-9fa0-73e4-d00739fb2bd6', 'ha1.params', '005', 'https://schemas.electricity.works/types/ha1.params/005', 'ha1.params', 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 house-heating model.
-', FALSE, 'active', '2026-01-16T15:53:00Z', '{"x-gridworks-extended_description": "`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. Version `005` extends the earlier shape with COP-model coefficients and minimum-COP parameters so SCADA and downstream consumers can apply the same heat-pump performance assumptions.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+VALUES ('3e87e954-be2e-7bfc-327c-3cc3cac73c7f', 'ha1.params', '005', 'https://schemas.electricity.works/types/ha1.params/005', 'ha1.params', 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 house-heating model.
+', FALSE, 'deprecated', '2026-01-16T15:53:00Z', '{"x-gridworks-extended_description": "`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. Version `005` extends the earlier shape with COP-model coefficients and minimum-COP parameters so SCADA and downstream consumers can apply the same heat-pump performance assumptions.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('a6fbbbe6-637d-71c5-7e4e-65aff0dbc8d7', 'ha1.params', '006', 'https://schemas.electricity.works/types/ha1.params/006', 'ha1.params', 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model.
+VALUES ('beea52aa-9265-dbed-a391-007ce78ae410', 'ha1.params', '006', 'https://schemas.electricity.works/types/ha1.params/006', 'ha1.params', 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model.
 ', FALSE, 'active', '2026-02-25T14:23:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('2e40e01b-f07f-a432-4c48-cdb5b1b2c400', 'i2c.multichannel.dt.relay.component.gt', '002', 'https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002', 'i2c.multichannel.dt.relay.component.gt', 'Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
+VALUES ('735aa5e8-2b22-378e-7e1b-7f7d214b3a1c', 'i2c.multichannel.dt.relay.component.gt', '002', 'https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002', 'i2c.multichannel.dt.relay.component.gt', 'Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
 This includes relay-actor configuration fields specific to the I2C relay board.
-', TRUE, 'active', '2024-12-31T15:42:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', TRUE, 'deprecated', '2024-12-31T15:42:00Z', NULL, NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('6b12292b-bb79-5c18-f21e-2b986218aabd', 'i2c.multichannel.dt.relay.component.gt', '003', 'https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/003', 'i2c.multichannel.dt.relay.component.gt', 'Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
+VALUES ('72e21cab-d4fb-f03f-f4ae-3ddb4f61f981', 'i2c.multichannel.dt.relay.component.gt', '003', 'https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/003', 'i2c.multichannel.dt.relay.component.gt', 'Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
 This includes relay-actor configuration fields specific to the I2C relay board together with the logical I2C bus name used to address it at runtime.
-', TRUE, 'active', '2026-01-28T15:17:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', TRUE, 'deprecated', '2026-01-28T15:17:00Z', NULL, NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('50804439-07cc-80b7-caf6-fcd46a8d4f2c', 'i2c.multichannel.dt.relay.component.gt', '004', 'https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004', 'i2c.multichannel.dt.relay.component.gt', 'Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
+VALUES ('aa0c986b-9ea9-e0d9-43f9-be354fa1600b', 'i2c.multichannel.dt.relay.component.gt', '004', 'https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004', 'i2c.multichannel.dt.relay.component.gt', 'Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
 This includes relay-actor configuration fields specific to the I2C relay board together with the logical I2C bus name used to address it at runtime.
 ', TRUE, 'active', '2026-04-01T10:49:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('5dbd5296-dbbf-adec-4644-d444fa57741c', 'i2c.thermistor.channel.config', '000', 'https://schemas.electricity.works/types/i2c.thermistor.channel.config/000', 'i2c.thermistor.channel.config', 'Channel configuration for one thermistor input read through an I2C ADC.
+VALUES ('7dc34d8e-b36e-f77c-1018-c888e32ab095', 'i2c.thermistor.channel.config', '000', 'https://schemas.electricity.works/types/i2c.thermistor.channel.config/000', 'i2c.thermistor.channel.config', 'Channel configuration for one thermistor input read through an I2C ADC.
 This type extends the base channel configuration with the ADC pin selection, thermistor beta parameter, and whether the channel should also be forwarded into derived-channel processing.
 ', FALSE, 'active', '2026-03-30T16:07:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('21b9ba3e-fd6d-6c54-c6ac-85f1a014de0f', 'i2c.thermistor.reader.component.gt', '000', 'https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/000', 'i2c.thermistor.reader.component.gt', 'Configuration for an I2C thermistor reader component that samples one ADC device and publishes one or more thermistor-backed temperature channels.
+VALUES ('b7a1d276-0f60-1a4c-663b-e48683d077cc', 'i2c.thermistor.reader.component.gt', '000', 'https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/000', 'i2c.thermistor.reader.component.gt', 'Configuration for an I2C thermistor reader component that samples one ADC device and publishes one or more thermistor-backed temperature channels.
 ', FALSE, 'active', '2026-03-30T16:07:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('d1a668c1-76e6-db24-bd03-17c56df31757', 'layout.lite', '007', 'https://schemas.electricity.works/types/layout.lite/007', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+VALUES ('bd1d8f38-cddf-39d7-a9b5-4d93fd208b03', 'layout.lite', '007', 'https://schemas.electricity.works/types/layout.lite/007', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
 `layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
-', FALSE, 'active', '2026-01-14T14:08:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including active HA1 parameters.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2026-01-14T14:08:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including active HA1 parameters.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('1659b0e1-9a43-115d-504b-b246697a435a', 'layout.lite', '008', 'https://schemas.electricity.works/types/layout.lite/008', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+VALUES ('580d67b0-23c7-47c4-234c-83fe37b72da0', 'layout.lite', '008', 'https://schemas.electricity.works/types/layout.lite/008', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
 `layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
-', FALSE, 'active', '2026-01-15T18:00:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2026-01-15T18:00:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('9eed3479-a330-e889-ee82-7d44d742a402', 'layout.lite', '009', 'https://schemas.electricity.works/types/layout.lite/009', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+VALUES ('3eaa9250-724f-49cb-8755-a18727acbeeb', 'layout.lite', '009', 'https://schemas.electricity.works/types/layout.lite/009', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
 `layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
-', FALSE, 'active', '2026-01-16T15:53:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2026-01-16T15:53:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('8e24c4c0-01aa-7bc5-b9c8-7c5157f62ba8', 'layout.lite', '010', 'https://schemas.electricity.works/types/layout.lite/010', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+VALUES ('bf3c19e6-8e61-4979-3fbc-3f1bc25bd2f1', 'layout.lite', '010', 'https://schemas.electricity.works/types/layout.lite/010', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
 `layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings. 
-', FALSE, 'active', '2026-02-18T21:34:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2026-02-18T21:34:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('0e6179d2-d3be-9df1-92e4-d641725486bc', 'layout.lite', '011', 'https://schemas.electricity.works/types/layout.lite/011', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+VALUES ('b6db81df-6f0f-06ea-92a9-05a7a5438b07', 'layout.lite', '011', 'https://schemas.electricity.works/types/layout.lite/011', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
 `layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
-', FALSE, 'active', '2026-02-25T19:23:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2026-02-25T19:23:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('83436608-827f-14f8-d5d4-300ac4fcb964', 'layout.lite', '012', 'https://schemas.electricity.works/types/layout.lite/012', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+VALUES ('8788e30a-1011-b706-3bb7-f4bf8b441e12', 'layout.lite', '012', 'https://schemas.electricity.works/types/layout.lite/012', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
 `layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
-', FALSE, 'active', '2026-03-31T10:42:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2026-03-31T10:42:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('e92d7170-1590-4c8b-5a39-23ffee88e9c0', 'layout.lite', '013', 'https://schemas.electricity.works/types/layout.lite/013', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+VALUES ('073713b3-9ddf-8fe9-a9de-f759a30c9ef8', 'layout.lite', '013', 'https://schemas.electricity.works/types/layout.lite/013', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
 `layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
 ', FALSE, 'active', '2026-04-01T10:49:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('47720785-5d78-6853-80d0-186e82e0b352', 'linear.one.dimensional.calibration', '000', 'https://schemas.electricity.works/types/linear.one.dimensional.calibration/000', 'linear.one.dimensional.calibration', 'Linear calibration applied to a raw sensor measurement.
+VALUES ('815da65c-29e5-58dc-f6a0-d88cc44abcad', 'linear.one.dimensional.calibration', '000', 'https://schemas.electricity.works/types/linear.one.dimensional.calibration/000', 'linear.one.dimensional.calibration', 'Linear calibration applied to a raw sensor measurement.
 The transformation is interpreted as:
 
     calibrated_value = M * raw_value + B
@@ -2036,7 +2108,7 @@ This type represents empirical correction of a sensor''s raw output into a physi
 ', FALSE, 'active', '2026-02-06T17:06:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('aee03008-6533-e91b-a2d0-8b1fe08de2bd', 'linear.one.dimensional.calibration', '001', 'https://schemas.electricity.works/types/linear.one.dimensional.calibration/001', 'linear.one.dimensional.calibration', 'Linear calibration applied to a measurement expressed in the derived channel''s declared OutputUnit domain.
+VALUES ('91a3d233-fa5a-91aa-0658-272b72d7d20c', 'linear.one.dimensional.calibration', '001', 'https://schemas.electricity.works/types/linear.one.dimensional.calibration/001', 'linear.one.dimensional.calibration', 'Linear calibration applied to a measurement expressed in the derived channel''s declared OutputUnit domain.
 The transformation is interpreted as:
 
     calibrated = M * x + B
@@ -2055,157 +2127,172 @@ This type represents an affine correction applied after unit normalization and d
 ', FALSE, 'active', '2026-03-16T20:55:00Z', '{"x-gridworks-extended_description": "Instances of this type are typically used as Parameters for derived.channel.gt when Strategy equals \"affine\".\nThe calibration is interpreted in the OutputUnit scaling domain declared by the referencing derived channel."}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('db5d589f-8c79-8c28-10bd-050cfdc99f62', 'machine.states', '000', 'https://schemas.electricity.works/types/machine.states/000', 'machine.states', 'Sequence of machine states observed for one state machine during a reporting interval.
+VALUES ('67c47dfd-e7c6-b362-e620-7c0c75000004', 'machine.states', '000', 'https://schemas.electricity.works/types/machine.states/000', 'machine.states', 'Sequence of machine states observed for one state machine during a reporting interval.
 ', FALSE, 'active', '2024-11-09T16:36:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('d0532cb6-c978-bbda-845c-eb1bdce50a4a', 'pico.flow.module.component.gt', '000', 'https://schemas.electricity.works/types/pico.flow.module.component.gt/000', 'pico.flow.module.component.gt', 'Configuration for a Pico-based flow module component in a Spaceheat SCADA deployment.
+VALUES ('ddc97fd9-9b96-17fa-885f-04571296cd84', 'pico.flow.module.component.gt', '000', 'https://schemas.electricity.works/types/pico.flow.module.component.gt/000', 'pico.flow.module.component.gt', 'Configuration for a Pico-based flow module component in a Spaceheat SCADA deployment.
 This type includes the common component identity fields inherited from ComponentGt together with flow-meter specific capture, conversion, and publication parameters.
 ', FALSE, 'active', '2024-10-23T19:32:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('57181970-9f55-2516-3def-adb461998871', 'pico.tank.module.component.gt', '011', 'https://schemas.electricity.works/types/pico.tank.module.component.gt/011', 'pico.tank.module.component.gt', 'Configuration for a Pico-based tank temperature module component in a Spaceheat SCADA deployment.
+VALUES ('20a7f296-018a-7a83-5c7e-1ea6ba7ddc0f', 'pico.tank.module.component.gt', '011', 'https://schemas.electricity.works/types/pico.tank.module.component.gt/011', 'pico.tank.module.component.gt', 'Configuration for a Pico-based tank temperature module component in a Spaceheat SCADA deployment.
 ', TRUE, 'active', '2025-12-05T02:59:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('8dd86ed8-727c-f9f7-2695-58272811bca8', 'position.point.gt', '000', 'https://schemas.electricity.works/types/position.point.gt/000', 'position.point.gt', 'A geographic position for a physical Grid Node. Coordinates are stored in integer microdegrees (degrees × 1,000,000). This type is conceptually aligned with the IEC 61970/61968 CIM `PositionPoint` class, but simplified for GridWorks use cases, which require only a single latitude/longitude point.
+VALUES ('1471e798-3f36-9ff6-03e1-771316703681', 'position.point.gt', '000', 'https://schemas.electricity.works/types/position.point.gt/000', 'position.point.gt', 'A geographic position for a physical Grid Node. Coordinates are stored in integer microdegrees (degrees × 1,000,000). This type is conceptually aligned with the IEC 61970/61968 CIM `PositionPoint` class, but simplified for GridWorks use cases, which require only a single latitude/longitude point.
 ', FALSE, 'active', '2026-02-24T15:00:00Z', '{"x-gridworks-extended_description": "PositionPoint represents the physical location of a GNode that has spatial meaning within the electric grid, such as TerminalAssets, LeafTransactiveNodes, MarketMaker constraint points, and ConnectivityNodes. Coordinates are expressed in WGS84 (EPSG:4326), the standard global geodetic reference system used by GPS and commonly adopted in utility GIS, mapping, and DERMS integrations.\nThis type corresponds to a simplified form of the IEC 61970/61968 CIM `PositionPoint` class. The CIM model supports elevation, coordinate-system definitions, and collections of points for geometric shapes. GridWorks intentionally restricts this type to a single latitude/longitude pair to provide a deterministic and minimal spatial anchor for coordination.\nPosition accuracy is not prescribed by this type. The microdegree representation provides sufficient precision to distinguish distribution-level assets (e.g., residential footprints, poles, transformers, substations). The actual positional accuracy of a PositionPoint depends entirely on the source of the underlying geographic data."}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('2b8e549e-caf4-c8e4-a4af-a5598f73b245', 'power.watts', '000', 'https://schemas.electricity.works/types/power.watts/000', 'power.watts', 'Immediate real-time power measurement message for instantaneous transmission.
+VALUES ('678f560e-bb93-5d2f-d0e7-59a8bc941e18', 'power.watts', '000', 'https://schemas.electricity.works/types/power.watts/000', 'power.watts', 'Immediate real-time power measurement message for instantaneous transmission.
 Positive values indicate power withdrawal from the grid. Negative values indicate power injection to the grid.
 ', FALSE, 'active', '2022-10-17T16:55:39Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('cb28b6a6-3b67-ad23-243b-4e5f63d0789c', 'price.quantity.unitless', '001', 'https://schemas.electricity.works/types/price.quantity.unitless/001', 'price.quantity.unitless', 'Integer price and quantity pair for market bidding and dispatch curves.
+VALUES ('76e44c82-059f-de83-54c9-b26a132df146', 'price.quantity.unitless', '001', 'https://schemas.electricity.works/types/price.quantity.unitless/001', 'price.quantity.unitless', 'Integer price and quantity pair for market bidding and dispatch curves.
 Both values are serialized as strict integers scaled by 1000.
 ', FALSE, 'active', '2025-10-30T17:29:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('c0d85768-83d9-88ac-624d-655d8e9d5bfb', 'relay.actor.config', '002', 'https://schemas.electricity.works/types/relay.actor.config/002', 'relay.actor.config', 'Configuration for a relay-backed Spaceheat actor associated with one relay on a multi-channel relay board.
+VALUES ('265e5217-4aa6-cad6-57fd-2a1be6c2a0ca', 'relay.actor.config', '002', 'https://schemas.electricity.works/types/relay.actor.config/002', 'relay.actor.config', 'Configuration for a relay-backed Spaceheat actor associated with one relay on a multi-channel relay board.
 A relay.actor.config binds a specific relay index on a relay component to a named actor and declares the event/state semantics associated with energizing and de-energizing that relay. The config also carries the channel capture settings required to report the relay-controlled actor''s state into the telemetry system.
-', FALSE, 'active', '2024-12-31T15:38:00Z', '{"x-gridworks-extended_description": "relay.actor.config specializes generic channel capture configuration for relay-backed actors in hydronic control systems.\nThis type binds one relay position on a relay board to a specific actor and declares the event/state semantics associated with switching that relay. These semantics are important for distributed coordination because different layouts may realize the same functional role using different underlying hardware node names, while preserving identical actor-level meaning.\nTypical uses include selecting the source of a heat call, enabling or disabling control authority, or switching physical flow or heating elements between named operating states.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+', FALSE, 'deprecated', '2024-12-31T15:38:00Z', '{"x-gridworks-extended_description": "relay.actor.config specializes generic channel capture configuration for relay-backed actors in hydronic control systems.\nThis type binds one relay position on a relay board to a specific actor and declares the event/state semantics associated with switching that relay. These semantics are important for distributed coordination because different layouts may realize the same functional role using different underlying hardware node names, while preserving identical actor-level meaning.\nTypical uses include selecting the source of a heat call, enabling or disabling control authority, or switching physical flow or heating elements between named operating states.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('ff13c8a6-1f95-0119-fc94-0bfc81f2191f', 'relay.actor.config', '003', 'https://schemas.electricity.works/types/relay.actor.config/003', 'relay.actor.config', 'Configuration for a relay-backed Spaceheat actor associated with one relay on a multi-channel relay board.
+VALUES ('a8fc47f0-126b-41b7-4f83-99f1d8121ecf', 'relay.actor.config', '003', 'https://schemas.electricity.works/types/relay.actor.config/003', 'relay.actor.config', 'Configuration for a relay-backed Spaceheat actor associated with one relay on a multi-channel relay board.
 A relay.actor.config binds a specific relay index on a relay component to a named actor and declares the event/state semantics associated with energizing and de-energizing that relay. The config also carries the channel capture settings required to report the relay-controlled actor''s state into the telemetry system.
 ', FALSE, 'active', '2026-04-01T10:49:00Z', '{"x-gridworks-extended_description": "relay.actor.config specializes generic channel capture configuration for relay-backed actors in hydronic control systems.\nThis type binds one relay position on a relay board to a specific actor and declares the event/state semantics associated with switching that relay. These semantics are important for distributed coordination because different layouts may realize the same functional role using different underlying hardware node names while preserving identical actor-level meaning.\nIn this registry, the declared relay event/state semantics are based on change.relay.state and relay.closed.or.open.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('696c44d0-da49-5537-a3e3-43b096aa7fcc', 'report', '002', 'https://schemas.electricity.works/types/report/002', 'report', 'Primary telemetry and state reporting message produced by a SCADA node for a specific reporting slot. A report contains all meaningful channel readings, state transitions, and FSM outputs observed during the slot period.
-', FALSE, 'active', '2025-04-23T18:03:00Z', '{"x-gridworks-extended_description": "Reports are sent at fixed slot intervals (typically 5 minutes) and provide a durable historical record of telemetry and state changes observed during that period.\nGridWorks SCADA devices emit most channel readings asynchronously when values change beyond configured thresholds. Each reading is timestamped at the moment of observation by the SCADA device. Reports preserve these original timestamps without resampling or aggregation.\nAs a result, a report represents a batched event log for the slot period rather than a sampled snapshot. Consumers can reconstruct the precise timing of state transitions (e.g., relay changes) and value updates within the slot window.\nThis differs from snapshot messages, which represent the most recent value of each channel at a single point in time and are optimized for near-real-time visualization rather than historical accuracy.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+VALUES ('3b9a6eaa-7ec6-f906-240c-fc18ddef2690', 'report', '002', 'https://schemas.electricity.works/types/report/002', 'report', 'Primary telemetry and state reporting message produced by a SCADA node for a specific reporting slot. A report contains all meaningful channel readings, state transitions, and FSM outputs observed during the slot period.
+', FALSE, 'deprecated', '2025-04-23T18:03:00Z', '{"x-gridworks-extended_description": "Reports are sent at fixed slot intervals (typically 5 minutes) and provide a durable historical record of telemetry and state changes observed during that period.\nGridWorks SCADA devices emit most channel readings asynchronously when values change beyond configured thresholds. Each reading is timestamped at the moment of observation by the SCADA device. Reports preserve these original timestamps without resampling or aggregation.\nAs a result, a report represents a batched event log for the slot period rather than a sampled snapshot. Consumers can reconstruct the precise timing of state transitions (e.g., relay changes) and value updates within the slot window.\nThis differs from snapshot messages, which represent the most recent value of each channel at a single point in time and are optimized for near-real-time visualization rather than historical accuracy.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('b1b86d29-205e-fd10-bc14-0e811d617ced', 'report', '003', 'https://schemas.electricity.works/types/report/003', 'report', 'Historical telemetry and state report for a fixed reporting interval. A Report contains all meaningful channel readings and machine state transitions observed during a single SlotDurationS window.
+VALUES ('f8866900-7d3b-296b-1458-77066d7e7223', 'report', '003', 'https://schemas.electricity.works/types/report/003', 'report', 'Historical telemetry and state report for a fixed reporting interval. A Report contains all meaningful channel readings and machine state transitions observed during a single SlotDurationS window.
 Reports are the authoritative historical record of SCADA behavior. They are emitted periodically (typically every 5 minutes) and contain timestamped readings for each channel that changed or reported during the interval.
 ', FALSE, 'active', '2026-03-30T19:01:47Z', '{"x-gridworks-extended_description": "Reports provide the durable historical record of SCADA telemetry. They differ from snapshots in that they preserve all timestamped readings within a fixed interval rather than only the most recent value.\nReports are optimized for replay, auditing, debugging, and analytics. Snapshots are optimized for real-time visualization.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('7a84ff48-6393-9aa3-d8f5-d561f410b1f1', 'report.event', '002', 'https://schemas.electricity.works/types/report.event/002', 'report.event', 'Event wrapper for a report payload with message tracking metadata.
-', FALSE, 'active', '2025-04-23T18:03:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+VALUES ('c0b11928-4ceb-3c02-44ec-06a175bc31bf', 'report.event', '002', 'https://schemas.electricity.works/types/report.event/002', 'report.event', 'Event wrapper for a report payload with message tracking metadata.
+', FALSE, 'deprecated', '2025-04-23T18:03:00Z', NULL, '2026-04-30T18:00:00Z', NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('5d02bf40-eca2-a9d6-bc62-9ed3dc07c5dd', 'report.event', '003', 'https://schemas.electricity.works/types/report.event/003', 'report.event', 'Event wrapper for a report payload with message tracking metadata.
+VALUES ('4ca75b4e-173f-739c-3f7a-301da0cf30d8', 'report.event', '003', 'https://schemas.electricity.works/types/report.event/003', 'report.event', 'Event wrapper for a report payload with message tracking metadata.
 ', FALSE, 'active', '2026-03-30T19:01:47Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('2c223a5b-7aef-a192-d6a7-22aa2ffddf25', 'scada.control.capabilities', '000', 'https://schemas.electricity.works/types/scada.control.capabilities/000', 'scada.control.capabilities', 'Projection of the control surface exposed by a SCADA node. This type declares controllable relay and DAC nodes, the telemetry channels that represent their observed state, and the relay semantic configuration required for dispatch construction.
+VALUES ('1b07c079-322e-03d1-17fc-94dc699044af', 'scada.control.capabilities', '000', 'https://schemas.electricity.works/types/scada.control.capabilities/000', 'scada.control.capabilities', 'Projection of the control surface exposed by a SCADA node. This type declares controllable relay and DAC nodes, the telemetry channels that represent their observed state, and the relay semantic configuration required for dispatch construction.
 This is a control-focused projection derived from layout.lite and does not represent the full system topology.
 ', FALSE, 'active', '2026-03-02T18:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('b63b3605-70fa-aca1-abcf-1efeff9bf73f', 'send.control.capabilities', '000', 'https://schemas.electricity.works/types/send.control.capabilities/000', 'send.control.capabilities', 'Request message asking a SCADA actor to send its current scada.control.capabilities.
+VALUES ('8c0d461b-a3f0-cd16-dd70-576df2ff2686', 'send.control.capabilities', '000', 'https://schemas.electricity.works/types/send.control.capabilities/000', 'send.control.capabilities', 'Request message asking a SCADA actor to send its current scada.control.capabilities.
 ', FALSE, 'active', '2026-03-02T18:15:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('ff8c68a0-8a88-f266-dcd4-463b78b49e74', 'send.layout', '000', 'https://schemas.electricity.works/types/send.layout/000', 'send.layout', 'Request message asking a SCADA actor to send its current layout.lite.
+VALUES ('d42343e6-1df1-10d1-4a33-1a982fc20f10', 'send.layout', '000', 'https://schemas.electricity.works/types/send.layout/000', 'send.layout', 'Request message asking a SCADA actor to send its current layout.lite.
 ', FALSE, 'active', '2024-12-09T15:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('b33a56cc-3d42-1dbd-8462-223697bcda17', 'send.layout', '001', 'https://schemas.electricity.works/types/send.layout/001', 'send.layout', 'Request message asking a SCADA actor to send its current layout.lite.
+VALUES ('ef2f752b-4acc-c66c-3c13-969cdf1265ba', 'send.layout', '001', 'https://schemas.electricity.works/types/send.layout/001', 'send.layout', 'Request message asking a SCADA actor to send its current layout.lite.
 ', FALSE, 'active', '2026-03-02T17:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('213dfcf0-533d-ba7c-3956-9cf8c1b7796e', 'sim.pico.tank.module.component.gt', '000', 'https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000', 'sim.pico.tank.module.component.gt', 'Simulation configuration corresponding to pico.tank.module.component.gt.
+VALUES ('d707f6a3-207a-4898-85bf-5b34387fb201', 'sim.pico.tank.module.component.gt', '000', 'https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000', 'sim.pico.tank.module.component.gt', 'Simulation configuration corresponding to pico.tank.module.component.gt.
 ', TRUE, 'active', '2026-01-03T14:27:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('ef7ae9b6-36ac-8c76-c6ff-481bba0e9780', 'single.machine.state', '000', 'https://schemas.electricity.works/types/single.machine.state/000', 'single.machine.state', 'Latest known state for a single state machine at a specific timestamp.
+VALUES ('a348692b-9260-70d8-9ad2-3ae26d72c97e', 'single.machine.state', '000', 'https://schemas.electricity.works/types/single.machine.state/000', 'single.machine.state', 'Latest known state for a single state machine at a specific timestamp.
 ', FALSE, 'active', '2026-03-30T19:01:47Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('4e2dee05-e815-c2ff-2534-c0004e5a1ac8', 'single.reading', '000', 'https://schemas.electricity.works/types/single.reading/000', 'single.reading', 'Latest known reading for a single channel at a specific SCADA read time.
+VALUES ('ac5337fa-66da-a39b-6858-7062150ef896', 'single.reading', '000', 'https://schemas.electricity.works/types/single.reading/000', 'single.reading', 'Latest known reading for a single channel at a specific SCADA read time.
 ', FALSE, 'active', '2026-03-30T19:01:47Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('b92b48df-b4f7-6a46-6063-9607593613d5', 'snapshot.spaceheat', '003', 'https://schemas.electricity.works/types/snapshot.spaceheat/003', 'snapshot.spaceheat', 'Point-in-time snapshot containing the latest known readings and machine states captured by a Spaceheat SCADA.
+VALUES ('3e5212a1-34c1-7a4f-0709-7658febb09e4', 'snapshot.spaceheat', '003', 'https://schemas.electricity.works/types/snapshot.spaceheat/003', 'snapshot.spaceheat', 'Point-in-time snapshot containing the latest known readings and machine states captured by a Spaceheat SCADA.
 ', FALSE, 'active', '2026-03-30T19:01:47Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('17406115-b90b-4148-9fb1-87c6c69e5ff6', 'spaceheat.node.gt', '200', 'https://schemas.electricity.works/types/spaceheat.node.gt/200', 'spaceheat.node.gt', 'A Spaceheat node representing a named element in the SCADA system.
-', TRUE, 'active', '2026-01-14T14:08:00Z', '{"x-gridworks-extended_description": "Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+VALUES ('0b90bacd-3e56-3469-b799-9a56cccfa9e0', 'spaceheat.node.gt', '200', 'https://schemas.electricity.works/types/spaceheat.node.gt/200', 'spaceheat.node.gt', 'A Spaceheat node representing a named element in the SCADA system.
+', TRUE, 'deprecated', '2026-01-14T14:08:00Z', '{"x-gridworks-extended_description": "Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('522e704f-8d13-985e-9104-2a61d51ab438', 'spaceheat.node.gt', '300', 'https://schemas.electricity.works/types/spaceheat.node.gt/300', 'spaceheat.node.gt', 'A Spaceheat node representing a named element in the SCADA system.
-', TRUE, 'active', '2026-01-15T18:00:00Z', '{"x-gridworks-extended_description": "Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+VALUES ('c73203c8-9fd8-4c71-1817-c777fcfbd713', 'spaceheat.node.gt', '300', 'https://schemas.electricity.works/types/spaceheat.node.gt/300', 'spaceheat.node.gt', 'A Spaceheat node representing a named element in the SCADA system.
+', TRUE, 'deprecated', '2026-01-15T18:00:00Z', '{"x-gridworks-extended_description": "Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\n"}', NULL, NULL, '2026-04-30T18:05:00Z') ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('d91560dc-dc30-b0f1-63f9-0be37725daa1', 'spaceheat.node.gt', '301', 'https://schemas.electricity.works/types/spaceheat.node.gt/301', 'spaceheat.node.gt', 'A Spaceheat node representing a named element in the SCADA system.
+VALUES ('922aeb39-6a6f-906f-74de-34988669556e', 'spaceheat.node.gt', '301', 'https://schemas.electricity.works/types/spaceheat.node.gt/301', 'spaceheat.node.gt', 'A Spaceheat node representing a named element in the SCADA system.
 ', TRUE, 'active', '2026-02-18T21:34:00Z', '{"x-gridworks-extended_description": "Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('2d6fd1f0-31d7-88ce-39bd-2c7192934227', 'spaceheat.telemetry.quantity.projection', '000', 'https://schemas.electricity.works/types/spaceheat.telemetry.quantity.projection/000', 'spaceheat.telemetry.quantity.projection', 'Canonical projection from spaceheat.telemetry.name to gw1.quantity. This type defines the authoritative dimensional abstraction associated with each telemetry semantic category in version 007 of spaceheat.telemetry.name.
+VALUES ('4d0648a0-ebe0-93f7-2948-12a4df86731f', 'spaceheat.telemetry.quantity.projection', '000', 'https://schemas.electricity.works/types/spaceheat.telemetry.quantity.projection/000', 'spaceheat.telemetry.quantity.projection', 'Canonical projection from spaceheat.telemetry.name to gw1.quantity. This type defines the authoritative dimensional abstraction associated with each telemetry semantic category in version 007 of spaceheat.telemetry.name.
 This projection exists to make dimensional semantics explicit at the serialization boundary and to support safe evolution toward gw1.unit.
 ', FALSE, 'active', '2026-03-30T17:12:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('c33a2708-1ebb-352f-a524-f348805a05f0', 'synced.readings', '000', 'https://schemas.electricity.works/types/synced.readings/000', 'synced.readings', 'Compact synchronized reading payload consisting of a single SCADA read time and parallel channel and value lists.
+VALUES ('8e25dcf6-174e-f01c-9b08-4e90d7fceb69', 'synced.readings', '000', 'https://schemas.electricity.works/types/synced.readings/000', 'synced.readings', 'Compact synchronized reading payload consisting of a single SCADA read time and parallel channel and value lists.
 Each value in ValueList is aligned by index with ChannelNameList, such that ValueList[i] is the reading for ChannelNameList[i] captured at ScadaReadTimeUnixMs.
 ', FALSE, 'active', '2026-03-30T00:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
-VALUES ('34b97a0e-e8df-36ea-f6cb-48cbbdc87051', 'synced.readings.bundle', '001', 'https://schemas.electricity.works/types/synced.readings.bundle/001', 'synced.readings.bundle', 'Time-aligned sequence of synchronized multi-channel readings with embedded channel semantics sufficient for independent interpretation.
+VALUES ('1ea8dd1e-65b4-227b-ade7-a7c6c3b297b4', 'synced.readings.bundle', '001', 'https://schemas.electricity.works/types/synced.readings.bundle/001', 'synced.readings.bundle', 'Time-aligned sequence of synchronized multi-channel readings with embedded channel semantics sufficient for independent interpretation.
 For each channel, values in its associated ValueList are ordered to align by index with TimestampList, such that the value at index i corresponds to TimestampList[i].
 ChannelDefinitions provides the measurement unit required to interpret values for each channel.
 ', FALSE, 'active', '2026-04-03T16:00:00Z', '{"x-gridworks-extended_description": "\n`synced.readings.bundle` represents a rectangular, time-aligned dataset across multiple channels.\nChannelName values are identifiers defined within a GridWorks SCADA layout context (e.g. layout.lite or gw.nolan.layout). They are not globally standardized vocabulary and SHALL be interpreted only within the context in which they were produced.\nChannelDefinitions provides a minimal projection of channel semantics, including `Name`, `Id`, `Unit` and `UnitType`, sufficient to interpret the numeric values in this bundle without requiring access to the full layout.\nThe `Id` together with the channel TypeName (e.g. `data.channel.gt`, `derived.channel.gt`, or `analytics.channel.gt`) enables resolution of the authoritative channel definition. This bundle is not a source of semantic authority; it provides a convenient projection for transport, indexing, and querying.\nIn GridWorks systems, full channel definitions are typically available in layout artifacts such as `layout.lite`, which include additional information such as `AboutNodeName`, `CapturedByNodeName`, and derivation strategy. Those details are intentionally omitted here to keep this type lightweight and focused on boundary interpretation.\nAll channels share a common `TimestampList`. For any index i, values across all channels correspond to the same point in time.\n"}', NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+
+INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
+VALUES ('feb5b9f9-12c9-8d88-a31c-e3f019452cf0', 'gridworks.heartbeat', '000', 'https://schemas.electricity.works/types/gridworks.heartbeat/000', 'Gridworks Heartbeat', 'Periodic liveness signal carrying observed clock skew and queue-depth metrics.', FALSE, 'active', '2026-04-30T18:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+
+INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
+VALUES ('06cc4376-3e03-9bc5-0e51-c69efdf6f6be', 'bid', '001', 'https://schemas.electricity.works/types/bid/001', 'bid (draft v001)', 'Proposed evolution of bid/000. Adds explicit BidExpiry and an optional BidNotes free-text field. Also adopts market.slot.handle (the successor format) for MarketSlotName.', FALSE, 'draft', '2026-04-30T18:00:00Z', NULL, '2026-04-30T18:00:00Z', NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+
+INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
+VALUES ('da624ab7-e17c-62fe-76ba-262400a7418d', 'data.channel.gt', '003', 'https://schemas.electricity.works/types/data.channel.gt/003', 'Data Channel (draft v003)', 'Adds RetentionWindowDays — channels become self-describing about their data-retention guarantees.', FALSE, 'draft', '2026-04-30T18:00:00Z', NULL, '2026-04-30T18:00:00Z', NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+
+INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
+VALUES ('aa7f9314-d650-ef2e-605c-23d2ca610cf2', 'boundary.heartbeat', '000', 'https://schemas.electricity.works/types/boundary.heartbeat/000', 'Boundary Heartbeat', 'Periodic boundary liveness probe with monotonic sequence number.', FALSE, 'active', '2026-04-30T18:00:00Z', NULL, NULL, NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
+
+INSERT INTO type_versions (type_versions_id, type, version, schema_url, title, description, extra_allowed, status, created, raw_json, last_modified, promoted_at, deprecated_at)
+VALUES ('bf7e3ce3-191b-3192-0b6e-9ae552d837f6', 'report.event', '004', 'https://schemas.electricity.works/types/report.event/004', 'Report Event (draft v004)', 'Adds Severity, an enumerated severity classification. Forks from /003 (current leaf).', FALSE, 'draft', '2026-04-30T18:00:00Z', NULL, '2026-04-30T18:00:00Z', NULL, NULL) ON CONFLICT (type_versions_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- TypeAttributes: The shape-of-record for every property declared on a TypeVersion. Polymorphic via mutually-exclusive FK columns: at most one of FormatRef / EnumVersionRef / SubTypeVersionRef / HelperRef is non-null per row.
 -- ----------------------------------------------------------------------------
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('203e6c1c-6839-b975-2b2e-05355269d129', 'analytics.channel.gt/000', 'Id', 0, 'Globally unique identifier for this analytics channel definition.
+VALUES ('7129c064-8a35-ed28-b57a-e4b978693739', 'analytics.channel.gt/000', 'Id', 0, 'Globally unique identifier for this analytics channel definition.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d565c5ab-0464-73cc-06e8-ee56d58a9dc7', 'analytics.channel.gt/000', 'Name', 1, 'Identifier of the channel within the terminal asset context.
+VALUES ('3a9c39e0-ea94-0e55-a1d2-fd3b010f17bd', 'analytics.channel.gt/000', 'Name', 1, 'Identifier of the channel within the terminal asset context.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c9268a2b-61fc-2ed6-660c-c6c3f09b031d', 'analytics.channel.gt/000', 'DisplayName', 2, 'Human-readable name for UI and visualization.
+VALUES ('f2b6757f-bc8a-2a1e-bb5d-3d4dcc20d564', 'analytics.channel.gt/000', 'DisplayName', 2, 'Human-readable name for UI and visualization.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('31d54b19-a825-3b52-1870-896a3059946d', 'analytics.channel.gt/000', 'TerminalAssetAlias', 3, 'Canonical alias of the terminal asset whose behavior this channel characterizes.
+VALUES ('01deee31-32d4-85d7-04df-d4793dab38b6', 'analytics.channel.gt/000', 'TerminalAssetAlias', 3, 'Canonical alias of the terminal asset whose behavior this channel characterizes.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1e62ccdb-4ef6-f18d-4dad-cc9ec91dfea5', 'analytics.channel.gt/000', 'ProducedBy', 4, 'Declares the system responsible for producing this channel.
+VALUES ('27b2766a-50e5-cf2d-82e3-70079175d670', 'analytics.channel.gt/000', 'ProducedBy', 4, 'Declares the system responsible for producing this channel.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"$ref": "string", "description": "Declares the system responsible for producing this channel.\n"}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('09773ac0-29cb-a65f-2b82-c04e898ca784', 'analytics.channel.gt/000', 'Strategy', 5, 'Identifier of the computation strategy used to produce this channel.
+VALUES ('e6ecbcfd-6b10-28c8-21ff-396d878e3ea5', 'analytics.channel.gt/000', 'Strategy', 5, 'Identifier of the computation strategy used to produce this channel.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f8a40782-3f76-dd90-b495-d9e167ac6d62', 'analytics.channel.gt/000', 'OutputUnit', 6, 'Measurement unit of the output values.
+VALUES ('6c17c9ca-b633-540b-de2e-7a2deae42cea', 'analytics.channel.gt/000', 'OutputUnit', 6, 'Measurement unit of the output values.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.unit/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d1f7cc1e-32e1-fce1-b98d-bd07d154a495', 'analytics.channel.gt/000', 'OutputQuantity', 7, 'Canonical quantity of the output.
+VALUES ('254572fd-41c7-f18b-7bf4-f19f621f6786', 'analytics.channel.gt/000', 'OutputQuantity', 7, 'Canonical quantity of the output.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('156d9bb1-fca3-5597-0584-32feaef6b9d7', 'analytics.channel.gt/000', 'Parameters', 8, 'Optional strategy-specific configuration.
+VALUES ('cfe80072-746d-1611-8c0c-4473d73653de', 'analytics.channel.gt/000', 'Parameters', 8, 'Optional strategy-specific configuration.
 Parameters define:
   - which message types are consumed
   - filtering conditions (e.g. requires CreatedTimestamp)
@@ -2214,2082 +2301,2142 @@ Parameters define:
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OpenObjectDeferredToRawJson", "schema": {"type": "object", "additionalProperties": true, "description": "Optional strategy-specific configuration.\nParameters define:\n  - which message types are consumed\n  - filtering conditions (e.g. requires CreatedTimestamp)\n  - aggregation windows or thresholds\n  - any other computation-specific inputs\n"}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('16f26ed8-d8f4-b0c6-acab-14aaea70be88', 'bid/000', 'BidderAlias', 0, 'Canonical alias of the market participant submitting this bid. This alias is used to associate the bid with authorization, fee-payment credentials, and market participation rules defined outside this message.
+VALUES ('8485b11d-ebb0-a299-40b0-ce21b7bdd4ec', 'bid/000', 'BidderAlias', 0, 'Canonical alias of the market participant submitting this bid. This alias is used to associate the bid with authorization, fee-payment credentials, and market participation rules defined outside this message.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0b85ce59-e1ac-d2c7-935e-a5a2b71ab2c1', 'bid/000', 'MarketSlotName', 1, 'Identifier of the market slot for which this bid applies. The MarketSlot determines the applicable MarketType, settlement interval, and market rules used to validate and clear the bid.
+VALUES ('ba63cd52-bc22-0920-c9f1-b1374b25ad60', 'bid/000', 'MarketSlotName', 1, 'Identifier of the market slot for which this bid applies. The MarketSlot determines the applicable MarketType, settlement interval, and market rules used to validate and clear the bid.
 ', NULL, TRUE, FALSE, NULL, 'market.slot.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('38c8e531-c57c-45d1-af30-d6e5b3636ed8', 'bid/000', 'PqPairs', 2, 'Ordered list of price–quantity pairs defining the bid curve. Prices SHALL be ordered according to MarketType rules and normalized to the market’s declared price domain. Quantities represent willingness to inject or withdraw at the corresponding prices.
+VALUES ('71ad717e-bb1f-0fec-f48d-f02250636bda', 'bid/000', 'PqPairs', 2, 'Ordered list of price–quantity pairs defining the bid curve. Prices SHALL be ordered according to MarketType rules and normalized to the market’s declared price domain. Quantities represent willingness to inject or withdraw at the corresponding prices.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'price.quantity.unitless/001', NULL, '{"extras": {"minItems": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('389030b7-9608-660d-7d73-626ef4f44304', 'bid/000', 'InjectionIsPositive', 3, 'Sign convention for quantities in this bid. If true, positive quantities represent injection into the market; if false, positive quantities represent withdrawal. The interpretation of this convention is governed by the associated MarketType.
+VALUES ('25b7a25f-aa46-f89d-4eaa-0791a0de3768', 'bid/000', 'InjectionIsPositive', 3, 'Sign convention for quantities in this bid. If true, positive quantities represent injection into the market; if false, positive quantities represent withdrawal. The interpretation of this convention is governed by the associated MarketType.
 ', NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2b68e1fa-088e-a759-bea4-758dbfa117c4', 'bid/000', 'PriceUnit', 4, 'Unit of the price axis for this bid. MUST match the PriceUnit declared by the MarketType associated with the MarketSlot.
+VALUES ('8f9b22ed-13c8-072b-6ebf-169493f89831', 'bid/000', 'PriceUnit', 4, 'Unit of the price axis for this bid. MUST match the PriceUnit declared by the MarketType associated with the MarketSlot.
 ', NULL, TRUE, FALSE, NULL, NULL, 'market.price.unit/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('13f9f72e-235d-be19-38a0-c0ee1e1aff1f', 'bid/000', 'QuantityUnit', 5, 'Unit of the quantity axis for this bid. MUST match the QuantityUnit declared by the MarketType associated with the MarketSlot.
+VALUES ('94f57a9f-6a62-6bef-3ebf-9986562357f3', 'bid/000', 'QuantityUnit', 5, 'Unit of the quantity axis for this bid. MUST match the QuantityUnit declared by the MarketType associated with the MarketSlot.
 ', NULL, TRUE, FALSE, NULL, NULL, 'market.quantity.unit/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7c6cce6e-bd0f-b59f-7477-5a8fdc7bc99b', 'bid/000', 'SignedMarketFeeTxn', 6, 'Cryptographic proof of payment of the market-defined bid submission fee. This value SHALL reference a signed transaction that satisfies the market’s fee and admission rules for the specified MarketSlot.
+VALUES ('89661034-b422-29d9-fc08-28ad3fb03aa0', 'bid/000', 'SignedMarketFeeTxn', 6, 'Cryptographic proof of payment of the market-defined bid submission fee. This value SHALL reference a signed transaction that satisfies the market’s fee and admission rules for the specified MarketSlot.
 The SignedMarketFeeTxn proves economic admissibility of the bid. It does NOT, by itself, prove physical feasibility, delivery capability, portfolio composition, or settlement commitment. Those guarantees, if any, are established by clearing, dispatch, and settlement processes external to this message.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9dc3ce74-82f6-d658-c1ae-0cb6f0a66ffe', 'channel.config/000', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('fa958157-5983-938a-92d8-d2b82671c8c6', 'channel.config/000', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1081d538-56d3-4070-2f70-51c596ae0969', 'channel.config/000', 'PollPeriodMs', 1, 'How often SCADA polls the underlying hardware device or source for a fresh value, in milliseconds. This applies to devices that do not emit readings on their own and must instead be queried by SCADA.
+VALUES ('e0cfecd8-7467-7619-8416-e736286818e4', 'channel.config/000', 'PollPeriodMs', 1, 'How often SCADA polls the underlying hardware device or source for a fresh value, in milliseconds. This applies to devices that do not emit readings on their own and must instead be queried by SCADA.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f6d42704-5291-1836-fd64-1c4a87034e6a', 'channel.config/000', 'CapturePeriodS', 2, 'How often SCADA reports or emits the channel value into the telemetry stream, in seconds. This is distinct from hardware polling cadence.
+VALUES ('d0133fb5-5a0b-3b71-8b01-b321fa05ef96', 'channel.config/000', 'CapturePeriodS', 2, 'How often SCADA reports or emits the channel value into the telemetry stream, in seconds. This is distinct from hardware polling cadence.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('40880ea6-da5b-fbc5-4f14-5a6ed62ba06c', 'channel.config/000', 'AsyncCapture', 3, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('e0e302c2-c93c-001a-d1b7-6191514de431', 'channel.config/000', 'AsyncCapture', 3, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('20c6214a-2855-f4fb-862a-dfd246208ab5', 'channel.config/000', 'AsyncCaptureDelta', 4, 'Optional threshold for asynchronous emission. If present, an async capture is triggered when the magnitude of the change since the last published value is greater than or equal to AsyncCaptureDelta, expressed in Unit-scaled values.
+VALUES ('71ac6281-c074-32c9-3461-c2473c489f36', 'channel.config/000', 'AsyncCaptureDelta', 4, 'Optional threshold for asynchronous emission. If present, an async capture is triggered when the magnitude of the change since the last published value is greater than or equal to AsyncCaptureDelta, expressed in Unit-scaled values.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('42c41ff7-e4c4-5ae3-d964-452dab076a84', 'channel.config/000', 'Exponent', 5, 'Base-10 scaling exponent applied to the serialized integer reading in combination with Unit. For example, if Unit is Gpm and Exponent is 2, then a reading of 432 represents 4.32 Gpm.
+VALUES ('b34a9cdf-e819-c165-5f04-007a45735fb9', 'channel.config/000', 'Exponent', 5, 'Base-10 scaling exponent applied to the serialized integer reading in combination with Unit. For example, if Unit is Gpm and Exponent is 2, then a reading of 432 represents 4.32 Gpm.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b5afa08c-6150-f65a-a5f7-a79a3c26013d', 'channel.config/000', 'Unit', 6, NULL, NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('044d6d38-21e8-ede1-24ad-b335be5ccdea', 'channel.config/000', 'Unit', 6, NULL, NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8138a3af-5f56-5a27-9d16-32dcf867e5bc', 'channel.readings/001', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('6eb922a6-958e-5ba8-4055-f6d2a0f76c70', 'channel.readings/001', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('afdbbb94-fec3-0105-33d1-f8a90dd775ef', 'channel.readings/001', 'ChannelId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('21cadbbc-33bc-0b3d-b249-97f5ae2fe07f', 'channel.readings/001', 'ChannelId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2a9bd3ac-b07b-9326-429e-55ff1e4d0e98', 'channel.readings/001', 'ValueList', 2, NULL, NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('e4759965-7415-30ad-e656-64aa8dcc39d4', 'channel.readings/001', 'ValueList', 2, NULL, NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('91fb485f-fb29-bd05-454b-9d285ef04f28', 'channel.readings/001', 'ScadaReadTimeUnixMsList', 3, NULL, NULL, TRUE, TRUE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('f97b65bd-8281-4efe-0b0e-bce3525ce847', 'channel.readings/001', 'ScadaReadTimeUnixMsList', 3, NULL, NULL, TRUE, TRUE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cab4b4b7-61b8-768c-3520-bfe6e3874de4', 'channel.readings/002', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a9191188-528d-96a9-e793-86d164ca62fd', 'channel.readings/002', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('49da6df0-5ae4-ec30-e070-9f4b99d4ce26', 'channel.readings/002', 'ValueList', 1, 'Reading values aligned with ScadaReadTimeUnixMsList.', NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('ff3c29b8-af8f-547c-096f-897bbfe0951b', 'channel.readings/002', 'ValueList', 1, 'Reading values aligned with ScadaReadTimeUnixMsList.', NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2dc1ce0f-8f48-b53b-3bc3-8842c719e03f', 'channel.readings/002', 'ScadaReadTimeUnixMsList', 2, 'SCADA read times (UTC ms) aligned with ValueList.', NULL, TRUE, TRUE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4c6d243e-987d-de15-94db-c4605fb5d77a', 'channel.readings/002', 'ScadaReadTimeUnixMsList', 2, 'SCADA read times (UTC ms) aligned with ValueList.', NULL, TRUE, TRUE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2e5eb448-0877-c4d1-0eea-ee9f90edb3f9', 'connectivity.edge.gt/000', 'Id', 0, 'Globally unique identifier for this ConnectivityEdge.
+VALUES ('55056daf-951e-fbae-de8b-dfd60192f13c', 'connectivity.edge.gt/000', 'Id', 0, 'Globally unique identifier for this ConnectivityEdge.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('50eeed5f-6c7f-e3d9-ee0f-ec13e75cfa0e', 'connectivity.edge.gt/000', 'FromGNodeId', 1, 'Unique identifier of the upstream GNode in the directed relationship. This node is the source of the positive reference direction.
+VALUES ('3594ef56-923d-4cc9-c671-7448a2cc9748', 'connectivity.edge.gt/000', 'FromGNodeId', 1, 'Unique identifier of the upstream GNode in the directed relationship. This node is the source of the positive reference direction.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('364cf29a-28fa-acfd-29cf-df80a5cc847a', 'connectivity.edge.gt/000', 'ToGNodeId', 2, 'Unique identifier of the downstream GNode in the directed relationship. This node is the target of the positive reference direction.
+VALUES ('0431c7d1-a0d2-e5d3-cae3-e5b545a12185', 'connectivity.edge.gt/000', 'ToGNodeId', 2, 'Unique identifier of the downstream GNode in the directed relationship. This node is the target of the positive reference direction.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f351fe51-32ff-6d4d-deb5-0da97ef325fb', 'connectivity.edge.gt/000', 'FromGNodeAlias', 3, 'Canonical alias of the upstream GNode. Provided for readability, registry lookup, and human interpretability. MUST correspond to FromGNodeId.
+VALUES ('0e6ee880-2cf8-e20e-fd3f-e44f69a2e546', 'connectivity.edge.gt/000', 'FromGNodeAlias', 3, 'Canonical alias of the upstream GNode. Provided for readability, registry lookup, and human interpretability. MUST correspond to FromGNodeId.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('dcf27da9-e5bc-a43d-7079-60c4ee1ae274', 'connectivity.edge.gt/000', 'ToGNodeAlias', 4, 'Canonical alias of the downstream GNode. Provided for readability, registry lookup, and human interpretability. MUST correspond to ToGNodeId.
+VALUES ('f40e5526-5c1a-9636-a5d1-84fdc10848f8', 'connectivity.edge.gt/000', 'ToGNodeAlias', 4, 'Canonical alias of the downstream GNode. Provided for readability, registry lookup, and human interpretability. MUST correspond to ToGNodeId.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('db46bb9f-dae0-e847-4cd4-b6f9fd32edfa', 'connectivity.edge.gt/000', 'Status', 5, 'Lifecycle status of this ConnectivityEdge within the registry and coordination system. An edge with Status "Active" participates in topology modeling and graph-based computations. Edges with Status "Suspended" or "PermanentlyDeactivated" SHALL be excluded from active coordination and SHALL NOT be included in topology or power-flow graph construction.
+VALUES ('acdec371-5e71-ab4b-ea32-132512ed44eb', 'connectivity.edge.gt/000', 'Status', 5, 'Lifecycle status of this ConnectivityEdge within the registry and coordination system. An edge with Status "Active" participates in topology modeling and graph-based computations. Edges with Status "Suspended" or "PermanentlyDeactivated" SHALL be excluded from active coordination and SHALL NOT be included in topology or power-flow graph construction.
 Status represents administrative lifecycle state only and SHALL NOT be used to represent operational switching state (e.g., breaker open or closed).
 ', NULL, TRUE, FALSE, NULL, NULL, 'g.node.status/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a2c90c3b-5f4a-4b22-fb7e-5cffbcc57fd0', 'data.channel.gt/001', 'Name', 0, 'Short identifier of the channel within the context of a SCADA or terminal asset configuration.
+VALUES ('602ce244-42f4-0fa0-ebe4-f6a9028ab3b0', 'data.channel.gt/001', 'Name', 0, 'Short identifier of the channel within the context of a SCADA or terminal asset configuration.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('976d50d0-d601-58d6-4659-e743727a4e2b', 'data.channel.gt/001', 'DisplayName', 1, 'Human-readable name for display and UI purposes.
+VALUES ('5a085a50-868a-006b-a573-fb65fc1161c3', 'data.channel.gt/001', 'DisplayName', 1, 'Human-readable name for display and UI purposes.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5603e7af-8a9e-ca3a-f7ea-3c80826cf029', 'data.channel.gt/001', 'AboutNodeName', 2, 'Name of the node whose state or behavior this channel describes.
+VALUES ('b55cb4e5-9974-b040-3336-d9ee98766c80', 'data.channel.gt/001', 'AboutNodeName', 2, 'Name of the node whose state or behavior this channel describes.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2b2b44b9-23ea-fc4d-3a74-4eea61600a08', 'data.channel.gt/001', 'CapturedByNodeName', 3, 'Name of the node responsible for observing and reporting this telemetry.
+VALUES ('a13e76bd-ae0c-09de-23b8-7af724adbd50', 'data.channel.gt/001', 'CapturedByNodeName', 3, 'Name of the node responsible for observing and reporting this telemetry.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('069cc61d-5fd8-6e0d-297d-418f1a7f1d04', 'data.channel.gt/001', 'TelemetryName', 4, 'Semantic category of measurement represented by this channel.
+VALUES ('dc81176b-f0ff-ee52-f9a7-e631bdfb77a0', 'data.channel.gt/001', 'TelemetryName', 4, 'Semantic category of measurement represented by this channel.
 ', NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.telemetry.name/006', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ec65ed6f-90bd-eb02-0966-2d6204759d80', 'data.channel.gt/001', 'TerminalAssetAlias', 5, 'Canonical alias of the terminal asset within which this channel exists.
+VALUES ('5bbafc28-b67c-b4c3-0fc7-3eabe4697def', 'data.channel.gt/001', 'TerminalAssetAlias', 5, 'Canonical alias of the terminal asset within which this channel exists.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3fa869dc-0cac-9c52-7fa6-6ce8ecd43c60', 'data.channel.gt/001', 'InPowerMetering', 6, 'Indicates whether this channel participates in power metering calculations. If true, TelemetryName SHALL equal PowerW.
+VALUES ('c30aeb06-d6e6-7beb-9114-c912e074ff6b', 'data.channel.gt/001', 'InPowerMetering', 6, 'Indicates whether this channel participates in power metering calculations. If true, TelemetryName SHALL equal PowerW.
 ', 'false', FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ed9539d6-d221-b68d-1d10-352e28060ffb', 'data.channel.gt/001', 'StartS', 7, 'Optional timestamp indicating when this channel became active or valid. Interpretation of this value is implementation-specific.
+VALUES ('3631d21a-d0cc-6c31-898d-12f8049f5a10', 'data.channel.gt/001', 'StartS', 7, 'Optional timestamp indicating when this channel became active or valid. Interpretation of this value is implementation-specific.
 ', NULL, FALSE, FALSE, NULL, 'utc.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a58d3338-68f4-90e9-b789-4cb8923ad325', 'data.channel.gt/001', 'Id', 8, 'Globally unique identifier for this channel definition.
+VALUES ('1c3ca519-a0e1-940c-7855-d57d96ffdd53', 'data.channel.gt/001', 'Id', 8, 'Globally unique identifier for this channel definition.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3326ea30-6c95-6f4c-a082-e6badb2d89a9', 'data.channel.gt/002', 'Name', 0, 'Short identifier of the channel within the context of a SCADA or terminal asset configuration.
+VALUES ('820fd4e6-26b6-ab94-a0b2-f5652e8ad34a', 'data.channel.gt/002', 'Name', 0, 'Short identifier of the channel within the context of a SCADA or terminal asset configuration.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1ef2b08e-c382-ffcd-cf27-a391e1e758c2', 'data.channel.gt/002', 'DisplayName', 1, 'Human-readable name for display and UI purposes.
+VALUES ('bdd7880b-6d43-ce0a-d545-c8b6bf7888f0', 'data.channel.gt/002', 'DisplayName', 1, 'Human-readable name for display and UI purposes.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ffc87bf7-2650-4f10-8e46-c327ebfbd7bf', 'data.channel.gt/002', 'AboutNodeName', 2, 'Name of the node whose state or behavior this channel describes.
+VALUES ('4d61dbe6-2528-d7aa-1d72-9cc3cc1eefef', 'data.channel.gt/002', 'AboutNodeName', 2, 'Name of the node whose state or behavior this channel describes.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('26ce5e52-4113-9028-26ba-9bb1b7fddc29', 'data.channel.gt/002', 'CapturedByNodeName', 3, 'Name of the node responsible for observing and reporting this telemetry.
+VALUES ('3f166548-348b-d34a-ca75-d9492fc9b791', 'data.channel.gt/002', 'CapturedByNodeName', 3, 'Name of the node responsible for observing and reporting this telemetry.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ea32d7c4-8569-7797-3a93-5110c620be25', 'data.channel.gt/002', 'TelemetryName', 4, 'Legacy semantic identifier describing what is measured and how it is encoded. TelemetryName values may include unit conventions and scaling semantics (e.g., Times100, Times1000) inherited from earlier system implementations.
+VALUES ('75af79e8-6893-5dd1-5a0b-860433c93ead', 'data.channel.gt/002', 'TelemetryName', 4, 'Legacy semantic identifier describing what is measured and how it is encoded. TelemetryName values may include unit conventions and scaling semantics (e.g., Times100, Times1000) inherited from earlier system implementations.
 TelemetryName determines the canonical gw1.quantity via the spaceheat.telemetry.quantity.projection/000 type.
 ', NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.telemetry.name/007', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4cc8e424-54db-06bd-a3b9-a62b347ffd94', 'data.channel.gt/002', 'Quantity', 5, 'Canonical physical dimension of the telemetry stream (e.g., Power, Temperature, FlowRate).
+VALUES ('7c6be605-691c-c916-446b-b74249b926db', 'data.channel.gt/002', 'Quantity', 5, 'Canonical physical dimension of the telemetry stream (e.g., Power, Temperature, FlowRate).
 Quantity SHALL equal the value defined by the spaceheat.telemetry.quantity.projection/000 for the given TelemetryName.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3cd3bc57-2de8-d675-59fd-2ecfa0a9fc44', 'data.channel.gt/002', 'TerminalAssetAlias', 6, 'Canonical alias of the terminal asset within which this channel exists.
+VALUES ('29f44a1b-e3f3-aa85-3d59-a28452474247', 'data.channel.gt/002', 'TerminalAssetAlias', 6, 'Canonical alias of the terminal asset within which this channel exists.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ad276bc2-1aab-3a6a-fdd8-7ff36bff8e43', 'data.channel.gt/002', 'InPowerMetering', 7, 'Indicates whether this channel participates in power metering calculations. If true, TelemetryName SHALL equal PowerW.
+VALUES ('4c51045c-d164-f77d-3beb-4f92292d09f7', 'data.channel.gt/002', 'InPowerMetering', 7, 'Indicates whether this channel participates in power metering calculations. If true, TelemetryName SHALL equal PowerW.
 ', NULL, FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('12dbd96c-9178-63a4-70b4-b260ace67d4b', 'data.channel.gt/002', 'StartS', 8, 'Optional timestamp indicating when this channel became active or valid. Interpretation of this value is implementation-specific.
+VALUES ('38aeed76-fecd-2985-2f93-b3430e246031', 'data.channel.gt/002', 'StartS', 8, 'Optional timestamp indicating when this channel became active or valid. Interpretation of this value is implementation-specific.
 ', NULL, FALSE, FALSE, NULL, 'utc.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1c93dbc9-f366-4697-d1e5-d087a3de3017', 'data.channel.gt/002', 'Id', 9, 'Globally unique identifier for this channel definition.
+VALUES ('79cc5a88-bab6-b327-ff45-5e77912d5352', 'data.channel.gt/002', 'Id', 9, 'Globally unique identifier for this channel definition.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cddced96-08b4-3b0a-0ed2-14b0fc861226', 'derived.channel.gt/000', 'Id', 0, 'Globally unique identifier for this derived channel definition.
+VALUES ('a2a64da3-4a61-7b33-9883-f7f9c42d14c3', 'derived.channel.gt/000', 'Id', 0, 'Globally unique identifier for this derived channel definition.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d02b0712-a329-67dc-df4d-02c9e1a37f9f', 'derived.channel.gt/000', 'Name', 1, 'Short identifier of the derived channel within the terminal asset or SCADA context.
+VALUES ('be7af67b-9a75-26f9-ba83-2eb82531c20b', 'derived.channel.gt/000', 'Name', 1, 'Short identifier of the derived channel within the terminal asset or SCADA context.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f8e6265e-5a89-63e3-5bbc-e6b9094c620d', 'derived.channel.gt/000', 'CreatedByNodeName', 2, 'Name of the node responsible for computing this derived channel.
+VALUES ('6f2e1148-7382-e705-855c-05217ff5c301', 'derived.channel.gt/000', 'CreatedByNodeName', 2, 'Name of the node responsible for computing this derived channel.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('63b14197-d5c7-c216-d892-e47d86574207', 'derived.channel.gt/000', 'Strategy', 3, 'Identifier of the computation strategy used to produce this channel.
+VALUES ('9313a65e-87f9-306c-c1c3-1cccfddf7567', 'derived.channel.gt/000', 'Strategy', 3, 'Identifier of the computation strategy used to produce this channel.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c7a58a63-a7b6-e706-b827-d59d87d608e1', 'derived.channel.gt/000', 'OutputUnit', 4, 'Measurement unit of the derived output values.
+VALUES ('fe62adf8-4c4c-7331-df8e-e550e43fc740', 'derived.channel.gt/000', 'OutputUnit', 4, 'Measurement unit of the derived output values.
 ', NULL, FALSE, FALSE, NULL, NULL, 'gw1.unit/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('54540ddf-87fc-2eca-618a-3c69ad6e307e', 'derived.channel.gt/000', 'DisplayName', 5, 'Human-readable name for display and UI purposes.
+VALUES ('8330951a-3366-edba-0862-d2a9d7497d14', 'derived.channel.gt/000', 'DisplayName', 5, 'Human-readable name for display and UI purposes.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a7e64014-e0fb-6dbd-cf3b-726fa1b3dd14', 'derived.channel.gt/000', 'TerminalAssetAlias', 6, 'Canonical alias of the terminal asset within which this derived channel exists.
+VALUES ('5876a330-2c07-a7b0-6e22-7a1377df677a', 'derived.channel.gt/000', 'TerminalAssetAlias', 6, 'Canonical alias of the terminal asset within which this derived channel exists.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d0da1cfe-337a-f10c-e6ed-24c93ce80411', 'derived.channel.gt/001', 'Id', 0, 'Globally unique identifier for this derived channel definition.
+VALUES ('8619851d-298b-4c29-2cd4-1019835c64b3', 'derived.channel.gt/001', 'Id', 0, 'Globally unique identifier for this derived channel definition.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3dad7533-f07a-4192-c662-1255d5c7eb7e', 'derived.channel.gt/001', 'Name', 1, 'Short identifier of the derived channel within the terminal asset or SCADA context.
+VALUES ('75f684f4-4c30-c277-94e1-e97e6595a663', 'derived.channel.gt/001', 'Name', 1, 'Short identifier of the derived channel within the terminal asset or SCADA context.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a1c5b848-bb0e-58a0-efd3-eaa3a3d56905', 'derived.channel.gt/001', 'CreatedByNodeName', 2, 'Name of the node responsible for computing this derived channel.
+VALUES ('65368e4a-515d-fca9-2aac-9898adf20736', 'derived.channel.gt/001', 'CreatedByNodeName', 2, 'Name of the node responsible for computing this derived channel.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1ea1b419-1278-7fea-8b81-be6a6b8d0d64', 'derived.channel.gt/001', 'Strategy', 3, 'Identifier of the computation strategy used to produce this channel.
+VALUES ('d540a9a2-469f-c3e5-8080-11a83894317e', 'derived.channel.gt/001', 'Strategy', 3, 'Identifier of the computation strategy used to produce this channel.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9b11c4a2-663c-2534-e829-a5e1b7c22a7b', 'derived.channel.gt/001', 'InputChannelNames', 4, 'Names of input channels consumed by the computation strategy.
+VALUES ('e058bf99-2fd4-5bb5-e066-be117487eff7', 'derived.channel.gt/001', 'InputChannelNames', 4, 'Names of input channels consumed by the computation strategy.
 ', NULL, TRUE, TRUE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b935713b-c076-1d96-a265-0bf66f6632d7', 'derived.channel.gt/001', 'OutputUnit', 5, 'Measurement unit of the derived output values.
+VALUES ('5190f8c7-a5a6-309d-ec38-807d7534963a', 'derived.channel.gt/001', 'OutputUnit', 5, 'Measurement unit of the derived output values.
 ', NULL, FALSE, FALSE, NULL, NULL, 'gw1.unit/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('03f02ac8-5894-436b-5f79-a7756078284d', 'derived.channel.gt/001', 'EmissionMethod', 6, 'Defines how and when derived values are emitted (e.g., OnTrigger, Periodic, AsyncAndPeriodic).
+VALUES ('9086c0ad-1595-f565-d222-f58212dec9ac', 'derived.channel.gt/001', 'EmissionMethod', 6, 'Defines how and when derived values are emitted (e.g., OnTrigger, Periodic, AsyncAndPeriodic).
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.emission.method/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9729bb02-b564-6434-f736-40334f6ac36d', 'derived.channel.gt/001', 'AsyncEmitDelta', 7, 'Minimum delta required to emit asynchronously. Required for AsyncAndPeriodic. Must not be present for OnTrigger or Periodic.
+VALUES ('892ebb14-cf63-40bd-f743-e7514605eed4', 'derived.channel.gt/001', 'AsyncEmitDelta', 7, 'Minimum delta required to emit asynchronously. Required for AsyncAndPeriodic. Must not be present for OnTrigger or Periodic.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7e3ad764-b94b-638e-4455-4089ad5c0697', 'derived.channel.gt/001', 'EmitPeriodS', 8, 'Periodic emission interval in seconds. Required for Periodic and AsyncAndPeriodic. Must not be present for OnTrigger.
+VALUES ('5b687c1d-7e7f-e4c7-fc95-81caa5387c91', 'derived.channel.gt/001', 'EmitPeriodS', 8, 'Periodic emission interval in seconds. Required for Periodic and AsyncAndPeriodic. Must not be present for OnTrigger.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2ce529a1-b77e-554f-1d1d-3cf4b04e2c7c', 'derived.channel.gt/001', 'Parameters', 9, 'Optional strategy-specific configuration parameters.
+VALUES ('9ef1f795-2801-69c4-e9dc-cc8994af4fa3', 'derived.channel.gt/001', 'Parameters', 9, 'Optional strategy-specific configuration parameters.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OpenObjectDeferredToRawJson", "schema": {"type": "object", "additionalProperties": true, "description": "Optional strategy-specific configuration parameters.\n"}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3463ac32-efdd-46e4-c3da-1763cbeded68', 'derived.channel.gt/001', 'DisplayName', 10, 'Human-readable name for display and UI purposes.
+VALUES ('e82aefd7-0962-06cb-5840-162830511871', 'derived.channel.gt/001', 'DisplayName', 10, 'Human-readable name for display and UI purposes.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d0bd62a1-8f40-7f77-833a-4a46397a675b', 'derived.channel.gt/001', 'TerminalAssetAlias', 11, 'Canonical alias of the terminal asset within which this derived channel exists.
+VALUES ('077a8cf7-74fb-8a8b-12f5-44bbd33c6134', 'derived.channel.gt/001', 'TerminalAssetAlias', 11, 'Canonical alias of the terminal asset within which this derived channel exists.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6053c1a5-d430-6485-cdbd-be77f254730f', 'derived.channel.gt/002', 'Id', 0, 'Globally unique identifier for this derived channel definition.
+VALUES ('aa58ae45-ae38-2950-937b-34678840188c', 'derived.channel.gt/002', 'Id', 0, 'Globally unique identifier for this derived channel definition.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('dad0e765-f212-2932-a923-cf924bd4138a', 'derived.channel.gt/002', 'Name', 1, 'Short identifier of the derived channel within the terminal asset or SCADA context.
+VALUES ('a994c1d0-b224-3d71-6d07-a84439080e6c', 'derived.channel.gt/002', 'Name', 1, 'Short identifier of the derived channel within the terminal asset or SCADA context.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1b1ce323-035e-1332-9c69-a92da101ae19', 'derived.channel.gt/002', 'CreatedByNodeName', 2, 'Name of the node responsible for computing this derived channel.
+VALUES ('1f23c172-dddf-99c4-5836-0d7799dcd846', 'derived.channel.gt/002', 'CreatedByNodeName', 2, 'Name of the node responsible for computing this derived channel.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('412fd7b3-cf19-c27e-54e4-8cec17985b86', 'derived.channel.gt/002', 'Strategy', 3, 'Identifier of the computation strategy used to produce this channel.
+VALUES ('808b8b3f-40ab-973b-8e89-a214828adbf2', 'derived.channel.gt/002', 'Strategy', 3, 'Identifier of the computation strategy used to produce this channel.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('648af2b1-636b-3b74-cfff-a11cbade03d7', 'derived.channel.gt/002', 'InputChannelNames', 4, 'Names of input channels consumed by the computation strategy.
+VALUES ('14b999b3-1d8c-3114-4815-01addddf1a6a', 'derived.channel.gt/002', 'InputChannelNames', 4, 'Names of input channels consumed by the computation strategy.
 ', NULL, TRUE, TRUE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('fb436fb2-328b-3d7a-8f53-b00d255d9a56', 'derived.channel.gt/002', 'OutputUnit', 5, 'Measurement unit of the derived output values.
+VALUES ('7a2fadda-4dd3-e588-ad7c-8f02cd7d136f', 'derived.channel.gt/002', 'OutputUnit', 5, 'Measurement unit of the derived output values.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.unit/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f6d67289-7256-31a1-b42b-80d31cd23831', 'derived.channel.gt/002', 'OutputQuantity', 6, 'Canonical physical dimension of the derived output. OutputQuantity SHALL equal the quantity defined by the canonical gw1.unit.quantity.projection/000 instance for the specified OutputUnit.
+VALUES ('a9605ccb-864f-bbd7-1be8-99c75a1b654c', 'derived.channel.gt/002', 'OutputQuantity', 6, 'Canonical physical dimension of the derived output. OutputQuantity SHALL equal the quantity defined by the canonical gw1.unit.quantity.projection/000 instance for the specified OutputUnit.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('34597587-bde6-1457-3dff-bf7e723b9b5b', 'derived.channel.gt/002', 'EmissionMethod', 7, 'Defines how and when derived values are emitted (e.g., OnTrigger, Periodic, AsyncAndPeriodic).
+VALUES ('58b8c973-8725-3cd9-838e-fc7371df771e', 'derived.channel.gt/002', 'EmissionMethod', 7, 'Defines how and when derived values are emitted (e.g., OnTrigger, Periodic, AsyncAndPeriodic).
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.emission.method/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5155f6d1-568e-1c19-3920-3e964b6f9e2c', 'derived.channel.gt/002', 'AsyncEmitDelta', 8, 'Minimum delta required to emit asynchronously. Required for AsyncAndPeriodic. Must not be present for OnTrigger or Periodic.
+VALUES ('662b7384-e11e-978a-b814-120a31402961', 'derived.channel.gt/002', 'AsyncEmitDelta', 8, 'Minimum delta required to emit asynchronously. Required for AsyncAndPeriodic. Must not be present for OnTrigger or Periodic.
 ', NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, '{"extras": {"minimum": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('37c0982c-31d2-1581-042f-74da913ba6a5', 'derived.channel.gt/002', 'EmitPeriodS', 9, 'Periodic emission interval in seconds. Required for Periodic and AsyncAndPeriodic. Must not be present for OnTrigger.
+VALUES ('a4a81cc1-d056-44eb-3303-cb5ea0d08139', 'derived.channel.gt/002', 'EmitPeriodS', 9, 'Periodic emission interval in seconds. Required for Periodic and AsyncAndPeriodic. Must not be present for OnTrigger.
 ', NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, '{"extras": {"minimum": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('576da504-8578-e2b7-675c-ba1eddb282b8', 'derived.channel.gt/002', 'Parameters', 10, 'Optional strategy-specific configuration parameters.
+VALUES ('feb98d86-56a2-7eba-efcb-d7c4811b6747', 'derived.channel.gt/002', 'Parameters', 10, 'Optional strategy-specific configuration parameters.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OpenObjectDeferredToRawJson", "schema": {"type": "object", "additionalProperties": true, "description": "Optional strategy-specific configuration parameters.\n"}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('252b9e98-952d-6ba9-3346-da0e42c28708', 'derived.channel.gt/002', 'DisplayName', 11, 'Human-readable name for display and UI purposes.
+VALUES ('00233352-47cb-891c-2e5a-627c3c22dd77', 'derived.channel.gt/002', 'DisplayName', 11, 'Human-readable name for display and UI purposes.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cadb0b13-28b6-3f8f-9977-ef1df9862aea', 'derived.channel.gt/002', 'TerminalAssetAlias', 12, 'Canonical alias of the terminal asset within which this derived channel exists.
+VALUES ('f47bcc53-db02-3338-dad8-55671e06f7ba', 'derived.channel.gt/002', 'TerminalAssetAlias', 12, 'Canonical alias of the terminal asset within which this derived channel exists.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d2340649-a2c8-363f-e24c-62336b93f637', 'fis.authority.manifest/000', 'SnapshotId', 0, 'Globally unique identifier for this authority snapshot.
+VALUES ('1aefc93b-5204-dc56-c8c1-e28fc572d77d', 'fis.authority.manifest/000', 'SnapshotId', 0, 'Globally unique identifier for this authority snapshot.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('fe728bee-b014-0452-6aae-8a6466beb9f8', 'fis.authority.manifest/000', 'SnapshotTakenAtUnixMs', 1, 'Timestamp at which the manifest snapshot was generated.
+VALUES ('fda5d1b1-0570-f05c-c8fd-a86d54148bb2', 'fis.authority.manifest/000', 'SnapshotTakenAtUnixMs', 1, 'Timestamp at which the manifest snapshot was generated.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0b4d4098-9d65-b676-3afa-94ca6b431040', 'fis.authority.manifest/000', 'ParentRootAliasList', 2, 'List of alias prefixes considered valid parent roots for this manifest. GNodeList SHALL be closed under parent alias relationship up to one of these roots.
+VALUES ('d9aa0408-8285-ee49-e956-415a0cec04d2', 'fis.authority.manifest/000', 'ParentRootAliasList', 2, 'List of alias prefixes considered valid parent roots for this manifest. GNodeList SHALL be closed under parent alias relationship up to one of these roots.
 ', NULL, TRUE, TRUE, NULL, 'left.right.dot', NULL, NULL, NULL, '{"extras": {"minItems": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('af85858d-f90b-b154-432c-2039e1828566', 'fis.authority.manifest/000', 'GNodeList', 3, 'List of Grid Nodes included in this manifest.
+VALUES ('8ed71e26-c015-1d87-54e6-94c59ea42a57', 'fis.authority.manifest/000', 'GNodeList', 3, 'List of Grid Nodes included in this manifest.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'g.node.gt/004', NULL, '{"extras": {"minItems": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('bccec5f1-6a01-c4be-d77a-c98189ecd787', 'fis.authority.manifest/000', 'GNodeInstanceList', 4, 'List of runtime instance records associated with GNodes in this manifest.
+VALUES ('4b757e09-e5fb-8a9c-b3fb-d68dadc5debf', 'fis.authority.manifest/000', 'GNodeInstanceList', 4, 'List of runtime instance records associated with GNodes in this manifest.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'g.node.instance.gt/000', NULL, '{"extras": {"minItems": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('fb204f87-4b88-228d-6a4a-c7ae37b9de3e', 'fis.instance.authorization.event/000', 'EventId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('27cbdcd0-6d35-65de-ea71-50ef61bf173c', 'fis.instance.authorization.event/000', 'EventId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('dcc2cc32-75b7-fa84-1f0d-0098915e792f', 'fis.instance.authorization.event/000', 'GNodeId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('423fe5cf-e8d2-cbf8-209f-6e12edc7c3ad', 'fis.instance.authorization.event/000', 'GNodeId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('68821675-962b-525b-ca9c-848f69b9656d', 'fis.instance.authorization.event/000', 'GNodeAlias', 2, NULL, NULL, FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('2010d8cf-43cd-20f4-c2dd-9c22e608d91f', 'fis.instance.authorization.event/000', 'GNodeAlias', 2, NULL, NULL, FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('84aab766-6b62-42cd-6e41-aec17e9848e2', 'fis.instance.authorization.event/000', 'GNodeInstanceId', 3, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('aeca3c4a-67e7-6a9c-4317-a448d76e3cea', 'fis.instance.authorization.event/000', 'GNodeInstanceId', 3, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1cec7f82-622c-0192-6d1d-fa1a0a651189', 'fis.instance.authorization.event/000', 'Decision', 4, NULL, NULL, TRUE, FALSE, NULL, NULL, 'fis.authorization.decision/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('d487c140-3e5f-268a-14ae-02ee50a5e439', 'fis.instance.authorization.event/000', 'Decision', 4, NULL, NULL, TRUE, FALSE, NULL, NULL, 'fis.authorization.decision/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f08ef4a5-e849-e714-164c-fe885d91d068', 'fis.instance.authorization.event/000', 'Reason', 5, NULL, NULL, TRUE, FALSE, NULL, NULL, 'fis.authorization.reason/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('cf09f83a-1bdd-fb2c-e322-612f04bbd4ee', 'fis.instance.authorization.event/000', 'Reason', 5, NULL, NULL, TRUE, FALSE, NULL, NULL, 'fis.authorization.reason/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('30972931-31fb-7f39-dc8d-8f6b6d3a81a5', 'fis.instance.authorization.event/000', 'Transport', 6, NULL, NULL, TRUE, FALSE, NULL, NULL, 'g.node.instance.transport/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('d008bcd4-1261-8fc1-bb53-b1481ba8519a', 'fis.instance.authorization.event/000', 'Transport', 6, NULL, NULL, TRUE, FALSE, NULL, NULL, 'g.node.instance.transport/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8fc50ecd-27a7-5876-a995-539fa4b95205', 'fis.instance.authorization.event/000', 'ObservedPeerAddress', 7, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('735b0088-aa54-ed4c-b3a7-5e5e8fe1436d', 'fis.instance.authorization.event/000', 'ObservedPeerAddress', 7, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9b113c2e-7ad2-632a-03cd-5cae25725a46', 'fis.instance.authorization.event/000', 'ConnectionHandle', 8, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('52d54208-035e-4645-03f5-c504ade90a67', 'fis.instance.authorization.event/000', 'ConnectionHandle', 8, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7b2822bc-ac5b-5130-216d-793947de4879', 'fis.instance.authorization.event/000', 'DecidedAtUnixMs', 9, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('56ece786-8c86-0891-cd68-ea44a9f43b67', 'fis.instance.authorization.event/000', 'DecidedAtUnixMs', 9, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('931140df-90fd-8ae0-d03c-83420e63b219', 'fsm.atomic.report/000', 'MachineHandle', 0, NULL, NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('d9caf139-2b76-5de0-3adc-f41080913d00', 'fsm.atomic.report/000', 'MachineHandle', 0, NULL, NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('032dffcc-37fe-0913-95ce-8346508c7f13', 'fsm.atomic.report/000', 'StateEnum', 1, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('66c55090-d127-5e17-75ca-e8b260445d00', 'fsm.atomic.report/000', 'StateEnum', 1, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a7bf52bf-79f2-f34f-0328-400842f63812', 'fsm.atomic.report/000', 'ReportType', 2, NULL, NULL, TRUE, FALSE, NULL, NULL, 'fsm.report.type/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('c38ff112-4628-1ece-fd58-8742154d4f36', 'fsm.atomic.report/000', 'ReportType', 2, NULL, NULL, TRUE, FALSE, NULL, NULL, 'fsm.report.type/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7a6217db-049b-7865-0e0b-ff54849bfb15', 'fsm.atomic.report/000', 'ActionType', 3, 'Optional identifier describing the type of action. Not constrained by an enum in version 000.
+VALUES ('a42c441e-ad7d-356b-553a-0505a3b2914c', 'fsm.atomic.report/000', 'ActionType', 3, 'Optional identifier describing the type of action. Not constrained by an enum in version 000.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6926324d-0a56-8250-f796-c055aee835d0', 'fsm.atomic.report/000', 'Action', 4, 'Scalar value associated with the action.
+VALUES ('ff7658ff-5d1e-c58e-a0d7-1f1f38bd9c58', 'fsm.atomic.report/000', 'Action', 4, 'Scalar value associated with the action.
 ', NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('60eb07e4-7cec-16a0-186b-be57d83abe98', 'fsm.atomic.report/000', 'EventEnum', 5, NULL, NULL, FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('9f89f560-02a1-8f9a-8622-514beb8af1ef', 'fsm.atomic.report/000', 'EventEnum', 5, NULL, NULL, FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('963aff52-3a4b-7e4a-08c7-71c9029a42f6', 'fsm.atomic.report/000', 'Event', 6, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('3cdfb959-fda1-ec1d-ac58-06a7d1e1ef18', 'fsm.atomic.report/000', 'Event', 6, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('042144a7-e0fa-7af4-a9f3-d572d91f5756', 'fsm.atomic.report/000', 'FromState', 7, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('add7b68f-4d59-9f9a-1f7d-7b06e695ae06', 'fsm.atomic.report/000', 'FromState', 7, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3194a85c-03e2-f68a-34fa-94c6b5b3a40a', 'fsm.atomic.report/000', 'ToState', 8, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('17d0ae91-5b76-53ed-a7fd-7bf331e2e47e', 'fsm.atomic.report/000', 'ToState', 8, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3dd8a1e2-55f5-06e0-f2db-59c6a9fe3f5c', 'fsm.atomic.report/000', 'UnixTimeMs', 9, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('3b916c71-3813-60b2-19ea-41adee2d9e63', 'fsm.atomic.report/000', 'UnixTimeMs', 9, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('faf4fb59-1cf0-fec0-dc8e-229716d7fe23', 'fsm.atomic.report/000', 'TriggerId', 10, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('3e2d8df2-f3bb-04d6-0409-8483e1effc44', 'fsm.atomic.report/000', 'TriggerId', 10, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c52c1225-cdde-6ebe-81ab-374d894a6aec', 'fsm.atomic.report/001', 'MachineHandle', 0, 'Identifier of the state machine instance emitting this report.
+VALUES ('e6a7f430-a898-09c7-eb23-9ba3b0087131', 'fsm.atomic.report/001', 'MachineHandle', 0, 'Identifier of the state machine instance emitting this report.
 ', NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('eecb3779-a3c1-92da-060f-fbac96b9ee80', 'fsm.atomic.report/001', 'StateEnum', 1, 'Name of the state machine enum defining the current state space.
+VALUES ('6d767790-d483-5325-ad5e-298c371cc542', 'fsm.atomic.report/001', 'StateEnum', 1, 'Name of the state machine enum defining the current state space.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6c3f4b61-41a7-3cae-123d-c8b92dcf3daf', 'fsm.atomic.report/001', 'ReportType', 2, 'Indicates whether this report represents an Event, an Action, or Other.
+VALUES ('a9485004-66f0-9746-679c-3a6bea4c29e2', 'fsm.atomic.report/001', 'ReportType', 2, 'Indicates whether this report represents an Event, an Action, or Other.
 ', NULL, TRUE, FALSE, NULL, NULL, 'fsm.report.type/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f018e308-cf34-bbf0-3bc4-73608c5f412e', 'fsm.atomic.report/001', 'Action', 3, 'Structured payload describing a side-effect produced by the state machine. The structure of this object determines the type of action being executed.
+VALUES ('7546e86f-f628-c0b1-227f-401b7bcbf306', 'fsm.atomic.report/001', 'Action', 3, 'Structured payload describing a side-effect produced by the state machine. The structure of this object determines the type of action being executed.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfDeferredToRawJson", "oneOf": [{"type": "object", "description": "Relay energization command. Sets a relay to either energized or de-energized state.\n", "properties": {"Value": {"$ref": "https://schemas.electricity.works/enums/relay.energization.state/000", "description": "Target energization state of the relay.\n"}}, "required": ["Value"], "additionalProperties": false}, {"type": "object", "description": "I2C bit write operation. Writes a single bit value to a specified register on an I2C device.\n", "properties": {"I2cBus": {"$ref": "https://schemas.electricity.works/formats/spaceheat.name", "description": "Logical name of the I2C bus.\n"}, "Address": {"type": "integer", "description": "I2C device address.\n"}, "I2cRegister": {"type": "integer", "description": "Register address within the device.\n"}, "Bit": {"type": "integer", "description": "Bit position within the register.\n"}, "Value": {"type": "integer", "description": "Bit value to write (typically 0 or 1).\n"}}, "required": ["I2cBus", "Address", "I2cRegister", "Bit", "Value"], "additionalProperties": false}]}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d142d4e7-177a-0f44-c36f-4457c2079463', 'fsm.atomic.report/001', 'EventEnum', 4, 'Identifier describing the type of event.
+VALUES ('c0beefad-8cfb-7f83-ac7d-b8abbb1b5195', 'fsm.atomic.report/001', 'EventEnum', 4, 'Identifier describing the type of event.
 ', NULL, FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('08f59171-9fce-2335-3cc0-138f6e4f22ad', 'fsm.atomic.report/001', 'Event', 5, 'Event payload or label emitted by the state machine.
+VALUES ('fa473806-3d68-be5e-c960-1fcdc655b26e', 'fsm.atomic.report/001', 'Event', 5, 'Event payload or label emitted by the state machine.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ecda3df7-c8be-e0c3-318b-159ed66e440d', 'fsm.atomic.report/001', 'FromState', 6, 'State prior to the transition.
+VALUES ('fafdb8e3-9375-66f2-552a-cfd26f29a475', 'fsm.atomic.report/001', 'FromState', 6, 'State prior to the transition.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('829139ca-5da4-7d36-36bd-ba5c6827b975', 'fsm.atomic.report/001', 'ToState', 7, 'State after the transition.
+VALUES ('6d6e6832-f0d1-6a39-e47c-b6263cfef147', 'fsm.atomic.report/001', 'ToState', 7, 'State after the transition.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5cdc560f-533d-18ce-7910-f6bde51bb254', 'fsm.atomic.report/001', 'UnixTimeMs', 8, 'Timestamp of the report in milliseconds since Unix epoch.
+VALUES ('4e1eef1c-8ed9-681f-231f-2f717b34fb76', 'fsm.atomic.report/001', 'UnixTimeMs', 8, 'Timestamp of the report in milliseconds since Unix epoch.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f9552642-a8d3-3e32-b645-f251c874e331', 'fsm.atomic.report/001', 'TriggerId', 9, 'Unique identifier for the triggering event or transition.
+VALUES ('31ddd8b5-b923-b007-cf3a-5d4425d5c73d', 'fsm.atomic.report/001', 'TriggerId', 9, 'Unique identifier for the triggering event or transition.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2e2432f4-864c-be8d-ce99-f0587c1eded7', 'fsm.full.report/000', 'FromName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a48391eb-ae75-dfb1-8692-5fd427d40fd4', 'fsm.full.report/000', 'FromName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('46434ebc-6003-46bd-3f32-311a23ea9144', 'fsm.full.report/000', 'TriggerId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('5e62d2e2-4f19-6d96-662e-9b45a0d651f6', 'fsm.full.report/000', 'TriggerId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e410a509-2c91-f5be-4f7b-d9b7b17d97cb', 'fsm.full.report/000', 'AtomicList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'fsm.atomic.report/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('72827460-6cb2-b9fb-d99a-bcceeb7fa300', 'fsm.full.report/000', 'AtomicList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'fsm.atomic.report/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cf601153-27d6-41f0-24e7-113dd8cec8ea', 'fsm.full.report/001', 'FromName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4984dfd7-5212-7511-93cd-d943734c6b64', 'fsm.full.report/001', 'FromName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7e11c614-7f8f-b749-213a-27577a78885b', 'fsm.full.report/001', 'TriggerId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('41a4e856-b38c-abb5-8c51-32b3c0249b7d', 'fsm.full.report/001', 'TriggerId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f48c7ba0-901b-aaa8-0417-d002304bebcb', 'fsm.full.report/001', 'AtomicList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'fsm.atomic.report/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('28674f58-036d-6b47-34d6-419a2fedfc1e', 'fsm.full.report/001', 'AtomicList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'fsm.atomic.report/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e1eae2df-9c9e-ad32-fab9-1799aae4df8e', 'g.node.gt/004', 'GNodeId', 0, 'Globally unique identifier for this GNode. Immutable for the lifetime of the GNode.
+VALUES ('c98e29d4-1cec-d6e0-088c-c9b49782243f', 'g.node.gt/004', 'GNodeId', 0, 'Globally unique identifier for this GNode. Immutable for the lifetime of the GNode.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ce503263-8a0f-c924-2fd3-10670da50b37', 'g.node.gt/004', 'Alias', 1, 'Human-readable hierarchical identifier. Forms the basis of the GNodeTree topology. Alias may change over time as the physical or conceptual topology is refined.
+VALUES ('22af2bbf-827b-64b0-b732-7cb82485efb9', 'g.node.gt/004', 'Alias', 1, 'Human-readable hierarchical identifier. Forms the basis of the GNodeTree topology. Alias may change over time as the physical or conceptual topology is refined.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('69798b5c-ee57-22ce-b65e-0a12c7e0edf8', 'g.node.gt/004', 'BaseClass', 2, 'Universal structural ontology classification for the GNode. Defines the physical or logical topology role used for interoperability, copper-tree construction, and market coordination across organizations.
+VALUES ('896a2016-8907-8613-41fc-6dfe4b8eabb1', 'g.node.gt/004', 'BaseClass', 2, 'Universal structural ontology classification for the GNode. Defines the physical or logical topology role used for interoperability, copper-tree construction, and market coordination across organizations.
 ', NULL, TRUE, FALSE, NULL, NULL, 'base.g.node.class/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('37906e58-8266-4193-b82a-986213664061', 'g.node.gt/004', 'GNodeClass', 3, 'Functional or role-based classification for the GNode. Interpreted according to the namespace of the registering organization. This field is a free-form string, not a universal enum. 
+VALUES ('610f2206-2897-f962-f5ea-1d1b4c5a2eb8', 'g.node.gt/004', 'GNodeClass', 3, 'Functional or role-based classification for the GNode. Interpreted according to the namespace of the registering organization. This field is a free-form string, not a universal enum. 
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d32c20dd-7137-f9ff-d954-eacafac31ca8', 'g.node.gt/004', 'Status', 4, 'Lifecycle status of the GNode within the registry.
+VALUES ('521aa4b9-0c0a-a5ac-99cd-b1d09b2e5d06', 'g.node.gt/004', 'Status', 4, 'Lifecycle status of the GNode within the registry.
 ', NULL, TRUE, FALSE, NULL, NULL, 'g.node.status/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ed6cdb9d-048b-caef-edec-d2d887b98ee6', 'g.node.gt/004', 'PrevAlias', 5, 'Previous Alias value during alias transitions. Required only when Alias changes. Must be null if Alias has not changed.
+VALUES ('ef6a84df-f6cc-a882-5b80-b34c72ce4f48', 'g.node.gt/004', 'PrevAlias', 5, 'Previous Alias value during alias transitions. Required only when Alias changes. Must be null if Alias has not changed.
 ', NULL, FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('61c192bf-d45f-a100-e543-2617db78a8d1', 'g.node.gt/004', 'PositionPointId', 6, 'Reference to a PositionPoint GT type giving physical location (WGS84 microdegrees). Required for physical GNodes; null for logical/service nodes.
+VALUES ('94c24e42-6bd8-e4e0-be96-7bbacb2a7064', 'g.node.gt/004', 'PositionPointId', 6, 'Reference to a PositionPoint GT type giving physical location (WGS84 microdegrees). Required for physical GNodes; null for logical/service nodes.
 ', NULL, FALSE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f4d00d7f-7b83-c141-7a12-99ac5519d068', 'g.node.gt/004', 'DisplayName', 7, 'Optional human-friendly label for UI or documentation.
+VALUES ('ef59506f-3097-9e66-6ff1-07a054089d04', 'g.node.gt/004', 'DisplayName', 7, 'Optional human-friendly label for UI or documentation.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2e5d1926-d2bf-b7b5-734e-23bb6aac70e0', 'g.node.instance.gt/000', 'GNodeId', 0, 'Durable identifier of the Grid Node whose runtime instance is represented by this record.
+VALUES ('17a4fd3d-6790-4989-3b79-8f010d3a1e74', 'g.node.instance.gt/000', 'GNodeId', 0, 'Durable identifier of the Grid Node whose runtime instance is represented by this record.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9540fa14-e745-24b1-9808-012168465442', 'g.node.instance.gt/000', 'GNodeInstanceId', 1, 'Unique identifier for this runtime process instance.
+VALUES ('b61bb2c2-d022-3380-136b-68a9763c4a9c', 'g.node.instance.gt/000', 'GNodeInstanceId', 1, 'Unique identifier for this runtime process instance.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('fa2e019e-908e-2463-7c3c-bb6389ff7de6', 'g.node.instance.gt/000', 'Status', 2, 'Current lifecycle state of this runtime instance.
+VALUES ('7ad1de95-3cc5-d26e-e1ee-781e27ffa79e', 'g.node.instance.gt/000', 'Status', 2, 'Current lifecycle state of this runtime instance.
 ', NULL, TRUE, FALSE, NULL, NULL, 'g.node.instance.status/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2ffe3379-c392-e801-ee67-54182d46abe2', 'g.node.instance.gt/000', 'Transport', 3, 'Messaging transport through which this instance connected.
+VALUES ('8f28225d-a589-28a8-b7d9-1ae377db83b1', 'g.node.instance.gt/000', 'Transport', 3, 'Messaging transport through which this instance connected.
 ', NULL, TRUE, FALSE, NULL, NULL, 'g.node.instance.transport/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cbbdaf7d-5d10-4eba-245d-309265f449ef', 'g.node.instance.gt/000', 'ConnectedAtUnixMs', 4, 'Timestamp when this runtime instance was authorized.
+VALUES ('132ce53e-0ad7-8675-88a8-9a6036ae051a', 'g.node.instance.gt/000', 'ConnectedAtUnixMs', 4, 'Timestamp when this runtime instance was authorized.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2f889ffa-79fa-6b2c-6df3-72315b79fa6c', 'g.node.instance.gt/000', 'RevokedAtUnixMs', 5, 'Timestamp when authority was revoked or ended. MUST be absent if Status is Active.
+VALUES ('85f6a7d2-f0db-92c9-8d73-99c718199eb8', 'g.node.instance.gt/000', 'RevokedAtUnixMs', 5, 'Timestamp when authority was revoked or ended. MUST be absent if Status is Active.
 ', NULL, FALSE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9fce9965-7126-dda2-9ab5-db6a10575254', 'g.node.instance.gt/000', 'ConnectionHandle', 6, 'Opaque transport-level connection identifier as reported by the broker (e.g., RabbitMQ connection name).
+VALUES ('bd215397-f1bb-077e-b562-1b864f57a70e', 'g.node.instance.gt/000', 'ConnectionHandle', 6, 'Opaque transport-level connection identifier as reported by the broker (e.g., RabbitMQ connection name).
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f13f8ad9-4b9f-1a40-dbaa-4d8c009d77da', 'g.node.instance.gt/000', 'ObservedPeerAddress', 7, 'Remote address as observed by the broker at connection time.
+VALUES ('30f5f548-f573-b304-0ef3-175ec86f4da3', 'g.node.instance.gt/000', 'ObservedPeerAddress', 7, 'Remote address as observed by the broker at connection time.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('dbafad47-7726-b48a-4f5b-5b5ef6f9d4f5', 'gridworks.ack/000', 'AckMessageID', 0, 'Message identifier of the message being acknowledged.
+VALUES ('44b9fa66-c8d7-8c50-0ed7-ac91ede556ec', 'gridworks.ack/000', 'AckMessageID', 0, 'Message identifier of the message being acknowledged.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('475bab44-1b84-022c-7918-694479e1107c', 'gridworks.ping/000', 'MessageId', 0, 'Unique identifier for this ping message.
+VALUES ('4a51fff0-64ab-95ce-bc71-2bef78327354', 'gridworks.ping/000', 'MessageId', 0, 'Unique identifier for this ping message.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('66c286be-9b3f-d599-30ab-cdd64a3145e8', 'gw1.tank.temp.calibration/000', 'Depth1M', 0, NULL, '1.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('f0b96ec7-7757-d65a-e905-b2e756bf78a8', 'gw1.tank.temp.calibration/000', 'Depth1M', 0, NULL, '1.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b2dff417-f45f-9771-b6e7-77d36efb590b', 'gw1.tank.temp.calibration/000', 'Depth1B', 1, NULL, '0.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('cf8c3cdf-f67c-422b-360b-ecd4a3a982c8', 'gw1.tank.temp.calibration/000', 'Depth1B', 1, NULL, '0.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2ed82c76-8aba-5a6d-450a-061412a70422', 'gw1.tank.temp.calibration/000', 'Depth2M', 2, NULL, '1.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('1866d38c-7f86-6a8b-3357-58a3ac92de46', 'gw1.tank.temp.calibration/000', 'Depth2M', 2, NULL, '1.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ef5cfdac-c27d-85c7-ba2e-64e93a642790', 'gw1.tank.temp.calibration/000', 'Depth2B', 3, NULL, '0.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('ace062cf-4813-ef8f-2c4f-cb61a5f35f9f', 'gw1.tank.temp.calibration/000', 'Depth2B', 3, NULL, '0.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('475aaa80-6591-54fd-943a-e296865bbfaa', 'gw1.tank.temp.calibration/000', 'Depth3M', 4, NULL, '1.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('bd43dd3f-7d76-79e5-a71b-ed3648d5ef16', 'gw1.tank.temp.calibration/000', 'Depth3M', 4, NULL, '1.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6c9cd95b-45c4-4474-dd20-66b8bf6c30fa', 'gw1.tank.temp.calibration/000', 'Depth3B', 5, NULL, '0.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('c20f743f-b08d-4ea6-6ad0-384e0d41e260', 'gw1.tank.temp.calibration/000', 'Depth3B', 5, NULL, '0.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2a32a937-9561-66a6-9849-13ccee2c0107', 'gw1.tank.temp.calibration.map/000', 'Buffer', 0, NULL, NULL, TRUE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('68539be4-9b69-3a77-b78b-044c751cdfee', 'gw1.tank.temp.calibration.map/000', 'Buffer', 0, NULL, NULL, TRUE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9459bfdb-4ca5-a122-3170-2307b362c83f', 'gw1.tank.temp.calibration.map/000', 'Tank', 1, NULL, NULL, TRUE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OpenObjectDeferredToRawJson", "schema": {"type": "object", "propertyNames": {"pattern": "^[1-9][0-9]*$"}, "additionalProperties": {"$ref": "https://schemas.electricity.works/types/gw1.tank.temp.calibration/000"}}}') ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('c8582cd9-8662-2247-4c0b-c8d3e2090e24', 'gw1.tank.temp.calibration.map/000', 'Tank', 1, NULL, NULL, TRUE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OpenObjectDeferredToRawJson", "schema": {"type": "object", "propertyNames": {"pattern": "^[1-9][0-9]*$"}, "additionalProperties": {"$ref": "https://schemas.electricity.works/types/gw1.tank.temp.calibration/000"}}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('712cebaa-484b-7463-89c5-2b0f7fc5d8b3', 'gw1.telemetry.name.quantity.projection/000', 'TelemetryName', 0, 'Legacy telemetry encoding value.
+VALUES ('89ac3fde-da31-4cdd-32ca-1f268a28b696', 'gw1.telemetry.name.quantity.projection/000', 'TelemetryName', 0, 'Legacy telemetry encoding value.
 ', NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.telemetry.name/006', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('65745a7e-3fe2-30b7-cf05-6c17927fa6c6', 'gw1.telemetry.name.quantity.projection/000', 'Quantity', 1, 'Canonical physical or logical quantity associated with the specified TelemetryName.
+VALUES ('8f2bab97-a3dd-887a-6fc6-63cc958b3fc8', 'gw1.telemetry.name.quantity.projection/000', 'Quantity', 1, 'Canonical physical or logical quantity associated with the specified TelemetryName.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3e4225b0-d083-d359-52d2-672d44339e76', 'gw1.unit.quantity.projection/000', 'Unit', 0, 'The concrete measurement unit.
+VALUES ('7fd10304-22e7-5bcd-fa92-644cd95e3e11', 'gw1.unit.quantity.projection/000', 'Unit', 0, 'The concrete measurement unit.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.unit/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e3d79377-fa0e-ead9-4198-67507b660292', 'gw1.unit.quantity.projection/000', 'Quantity', 1, 'The abstract physical quantity associated with Unit.
+VALUES ('05687329-76eb-b16d-f55c-b3ef39264dee', 'gw1.unit.quantity.projection/000', 'Quantity', 1, 'The abstract physical quantity associated with Unit.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.quantity/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2f6b76d2-d0ff-16fc-d68d-dfe143404ddb', 'ha1.params/004', 'AlphaTimes10', 0, 'Alpha coefficient scaled by 10.
+VALUES ('f86a299a-a7b6-1bd2-aaf5-17c76f724e29', 'ha1.params/004', 'AlphaTimes10', 0, 'Alpha coefficient scaled by 10.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9480659d-8c8e-5ad3-cb3f-8a7bc3fa4107', 'ha1.params/004', 'BetaTimes100', 1, 'Beta coefficient scaled by 100.
+VALUES ('64c4c302-3901-2bb6-48f8-7d3e5383f2bc', 'ha1.params/004', 'BetaTimes100', 1, 'Beta coefficient scaled by 100.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e2f33c06-936f-00f3-6a43-e8393b478841', 'ha1.params/004', 'GammaEx6', 2, 'Gamma coefficient scaled by 10^6.
+VALUES ('6d609446-1dca-5044-d2a2-1aaca1985960', 'ha1.params/004', 'GammaEx6', 2, 'Gamma coefficient scaled by 10^6.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('edfb1532-5d45-3d9b-5e8b-8f5eaaefe9a1', 'ha1.params/004', 'IntermediatePowerKw', 3, 'Intermediate heating power in kW thermal.
+VALUES ('90d27c3c-c4a5-1de9-eff8-06f3f9ebdc36', 'ha1.params/004', 'IntermediatePowerKw', 3, 'Intermediate heating power in kW thermal.
 ', NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('83ed2b81-5425-a035-7704-55e55766666a', 'ha1.params/004', 'IntermediateRswtF', 4, 'Intermediate required source water temperature in degrees Fahrenheit.
+VALUES ('643d2699-17f5-3dad-f01b-4f27ba73495b', 'ha1.params/004', 'IntermediateRswtF', 4, 'Intermediate required source water temperature in degrees Fahrenheit.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('01840933-fd37-ef0c-5295-8604901423ae', 'ha1.params/004', 'DdPowerKw', 5, 'Design-day heating power in kW thermal.
+VALUES ('f83bd00d-6179-f9f3-4f75-368a087947fb', 'ha1.params/004', 'DdPowerKw', 5, 'Design-day heating power in kW thermal.
 ', NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e593157e-2cf1-5955-0437-84c2e7b01a69', 'ha1.params/004', 'DdRswtF', 6, 'Design-day required source water temperature in degrees Fahrenheit.
+VALUES ('fd38ca8a-7621-b13e-5840-75e30e4fd01e', 'ha1.params/004', 'DdRswtF', 6, 'Design-day required source water temperature in degrees Fahrenheit.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('84eba48e-2480-435b-d099-28449f32c631', 'ha1.params/004', 'DdDeltaTF', 7, 'Design-day delta-T in degrees Fahrenheit.
+VALUES ('acb0912c-d25c-ba53-7c53-4bc850644beb', 'ha1.params/004', 'DdDeltaTF', 7, 'Design-day delta-T in degrees Fahrenheit.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b6cba802-f94e-dac0-29c2-161e344fce74', 'ha1.params/004', 'HpMaxKwTh', 8, 'Maximum heat-pump thermal output in kW.
+VALUES ('e3ee7512-210a-13df-427a-650b681efb9a', 'ha1.params/004', 'HpMaxKwTh', 8, 'Maximum heat-pump thermal output in kW.
 ', NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5046ceb2-58f2-b3a8-9d6a-1f696ed7f1ae', 'ha1.params/004', 'MaxEwtF', 9, 'Maximum entering-water temperature in degrees Fahrenheit.
+VALUES ('2332002c-a6f4-2d2f-0884-ed8c8bca8a4f', 'ha1.params/004', 'MaxEwtF', 9, 'Maximum entering-water temperature in degrees Fahrenheit.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6863621d-34ba-f78b-98f8-287fb1924892', 'ha1.params/004', 'LoadOverestimationPercent', 10, 'Percentage uplift applied to estimated load.
+VALUES ('6a21b792-0394-ad68-0839-f20278e01503', 'ha1.params/004', 'LoadOverestimationPercent', 10, 'Percentage uplift applied to estimated load.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a801e6f7-58ee-d384-97cc-bda6469a0aa8', 'ha1.params/004', 'Version', 12, NULL, '"004"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('b2c429d7-47e8-c296-8cc7-1e158fa6132c', 'ha1.params/004', 'Version', 12, NULL, '"004"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('739c18a0-dd3f-f652-4f9b-a627d193a61c', 'ha1.params/005', 'AlphaTimes10', 0, 'Alpha coefficient scaled by 10.
+VALUES ('790d4726-2d97-37b3-17cd-1c29237d421d', 'ha1.params/005', 'AlphaTimes10', 0, 'Alpha coefficient scaled by 10.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6f90157a-f80c-2a31-f36d-d569d024ac38', 'ha1.params/005', 'BetaTimes100', 1, 'Beta coefficient scaled by 100.
+VALUES ('239722d8-a047-cf1d-e7d5-99e755eb322c', 'ha1.params/005', 'BetaTimes100', 1, 'Beta coefficient scaled by 100.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('276640e6-2c73-d58b-7175-4380e5b5ab2a', 'ha1.params/005', 'GammaEx6', 2, 'Gamma coefficient scaled by 10^6.
+VALUES ('8a4c698b-2a29-c3fb-47a1-7024982b5fd6', 'ha1.params/005', 'GammaEx6', 2, 'Gamma coefficient scaled by 10^6.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('904850a2-a61e-dd74-6687-f079402ff8f1', 'ha1.params/005', 'IntermediatePowerKw', 3, 'Intermediate heating power in kW thermal.
+VALUES ('d70bd2b8-3d1a-8105-ccd9-90b27d74d711', 'ha1.params/005', 'IntermediatePowerKw', 3, 'Intermediate heating power in kW thermal.
 ', NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('bda69d0e-5dfa-fa32-9401-7cbd6c7e49ef', 'ha1.params/005', 'IntermediateRswtF', 4, 'Intermediate required source water temperature in degrees Fahrenheit.
+VALUES ('f48ba6c5-d73d-ccf7-28a4-b38628c0e225', 'ha1.params/005', 'IntermediateRswtF', 4, 'Intermediate required source water temperature in degrees Fahrenheit.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('440b03f7-67a4-82a5-9f67-81e04b6f6aeb', 'ha1.params/005', 'DdPowerKw', 5, 'Design-day heating power in kW thermal.
+VALUES ('64e6d937-8138-7008-15a1-793f588f1323', 'ha1.params/005', 'DdPowerKw', 5, 'Design-day heating power in kW thermal.
 ', NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('bc426ee8-e5b3-fb44-2d82-67614a8fcdd2', 'ha1.params/005', 'DdRswtF', 6, 'Design-day required source water temperature in degrees Fahrenheit.
+VALUES ('f406eafa-efb6-2fd0-e234-b11b3c036539', 'ha1.params/005', 'DdRswtF', 6, 'Design-day required source water temperature in degrees Fahrenheit.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d19bf2b3-c0f6-acf6-cbc6-a14eae87c313', 'ha1.params/005', 'DdDeltaTF', 7, 'Design-day delta-T in degrees Fahrenheit.
+VALUES ('a01d0dde-ed52-9cf6-1c96-9f0342c1610d', 'ha1.params/005', 'DdDeltaTF', 7, 'Design-day delta-T in degrees Fahrenheit.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('09e64987-2919-b32e-38cb-4e42a35a68f4', 'ha1.params/005', 'HpMaxKwTh', 8, 'Maximum heat-pump thermal output in kW.
+VALUES ('6c2563b7-8ebb-689d-8813-a5eb5f866b24', 'ha1.params/005', 'HpMaxKwTh', 8, 'Maximum heat-pump thermal output in kW.
 ', NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('57ca5816-5688-1163-eb20-26195fa50feb', 'ha1.params/005', 'MaxEwtF', 9, 'Maximum entering-water temperature in degrees Fahrenheit.
+VALUES ('7b3687b5-33a5-d34c-11e0-73dc4bc381d4', 'ha1.params/005', 'MaxEwtF', 9, 'Maximum entering-water temperature in degrees Fahrenheit.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a83f64ad-c825-e4eb-1851-3a45a94ddb8b', 'ha1.params/005', 'LoadOverestimationPercent', 10, 'Percentage uplift applied to estimated load.
+VALUES ('e54bd472-3c40-b94a-6e90-491915987ac7', 'ha1.params/005', 'LoadOverestimationPercent', 10, 'Percentage uplift applied to estimated load.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('08044634-f805-a6a6-0e62-7b9798a052d5', 'ha1.params/005', 'CopIntercept', 11, 'Constant term in the COP model.
+VALUES ('61d9f72b-ae51-137f-ec6e-65384043c7d0', 'ha1.params/005', 'CopIntercept', 11, 'Constant term in the COP model.
 ', NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5f6d5f67-cb8b-a1fc-40fd-610dacb6673a', 'ha1.params/005', 'CopOatCoeff', 12, 'Outdoor-air-temperature coefficient in the COP model.
+VALUES ('da8f9a6d-6690-61e6-9d12-9b431b66dff2', 'ha1.params/005', 'CopOatCoeff', 12, 'Outdoor-air-temperature coefficient in the COP model.
 ', NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d2900f61-8512-dc76-a3a5-1f59f1d9bd2a', 'ha1.params/005', 'CopLwtCoeff', 13, 'Leaving-water-temperature coefficient in the COP model.
+VALUES ('29b4e372-1ec7-1dea-7f06-4b912c99a22f', 'ha1.params/005', 'CopLwtCoeff', 13, 'Leaving-water-temperature coefficient in the COP model.
 ', NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('079cfeb8-1331-8312-f2ec-2ed48e2312a6', 'ha1.params/005', 'CopMin', 14, 'Minimum coefficient of performance allowed by the COP model.
+VALUES ('8ac81e7b-2470-ac30-0d7e-8ea79280f643', 'ha1.params/005', 'CopMin', 14, 'Minimum coefficient of performance allowed by the COP model.
 ', NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('320539f2-2ec3-5f86-0621-f6cd01602ce4', 'ha1.params/005', 'CopMinOatF', 15, 'Outdoor-air temperature threshold used with the minimum COP rule, in degrees Fahrenheit.
+VALUES ('da8c5ca0-1f73-099f-376d-8cbe2de3d188', 'ha1.params/005', 'CopMinOatF', 15, 'Outdoor-air temperature threshold used with the minimum COP rule, in degrees Fahrenheit.
 ', NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('62932d32-fee0-721a-ef48-bedbdea51b9e', 'ha1.params/005', 'Version', 17, NULL, '"005"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('ce2ddecb-f225-b37a-258a-46f371539fca', 'ha1.params/005', 'Version', 17, NULL, '"005"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7d432ff1-b7d2-e349-b2e5-537f4855e4c5', 'ha1.params/006', 'AlphaTimes10', 0, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('e67deeac-db77-b214-35fb-e42d5dab3475', 'ha1.params/006', 'AlphaTimes10', 0, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a72f6cb4-545b-eafa-427c-428aa91e9838', 'ha1.params/006', 'BetaTimes100', 1, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('5ce123d4-e1da-452f-d107-d79c176d3dfd', 'ha1.params/006', 'BetaTimes100', 1, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('71e63d09-1748-f7a8-7ee3-8064cac83750', 'ha1.params/006', 'GammaEx6', 2, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('8c3702dc-8b0c-bcac-bd8c-2742af15664d', 'ha1.params/006', 'GammaEx6', 2, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('be2d4301-afb1-3ed5-0d0d-64668401768c', 'ha1.params/006', 'IntermediatePowerKw', 3, NULL, NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('8c3aae53-1fb4-796b-4f44-dc9ccb0a63df', 'ha1.params/006', 'IntermediatePowerKw', 3, NULL, NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8d7b3858-05a1-ebb1-8c09-f7e8b91f88a6', 'ha1.params/006', 'IntermediateRswtF', 4, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('fe9b69da-d9aa-f1b2-c817-dc7f9ff669d0', 'ha1.params/006', 'IntermediateRswtF', 4, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8a9b0a2a-4d2d-c62b-f013-d4c451902893', 'ha1.params/006', 'DdPowerKw', 5, NULL, NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('8f7e74f7-2f73-3c4a-81e0-6aa3fb544261', 'ha1.params/006', 'DdPowerKw', 5, NULL, NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('65fa5f30-39a5-5fc5-e554-239456155cef', 'ha1.params/006', 'DdRswtF', 6, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('89d21a9d-4375-f8e7-6d38-964d3df35592', 'ha1.params/006', 'DdRswtF', 6, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6095f2bb-869e-8e28-9b91-ee61bdc2b32d', 'ha1.params/006', 'DdDeltaTF', 7, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('5fff0805-08d4-c6c0-8406-7655f82e9e96', 'ha1.params/006', 'DdDeltaTF', 7, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0a7b8485-e166-b5a6-1e70-f670dba94dc1', 'ha1.params/006', 'HpMaxKwEl', 8, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('1ff2e657-34a0-9e2a-f19c-2ada461f720f', 'ha1.params/006', 'HpMaxKwEl', 8, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('61b9590f-b1ac-0d92-275c-855c824595de', 'ha1.params/006', 'HpMaxKwTh', 9, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('7095fc02-6835-c403-49f5-a74d8bb87d2c', 'ha1.params/006', 'HpMaxKwTh', 9, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('045d81e0-ea58-3f10-09a8-ddd3a9709620', 'ha1.params/006', 'MaxEwtF', 10, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('5b49f6c6-eaf9-3a81-86bd-e54413da55fd', 'ha1.params/006', 'MaxEwtF', 10, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2853b0ab-3596-7e54-993b-514fdc1a8dc6', 'ha1.params/006', 'LoadOverestimationPercent', 11, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4f65ad35-b345-421b-552b-ffe98a06131a', 'ha1.params/006', 'LoadOverestimationPercent', 11, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('20732e8a-3a74-9922-460e-af9229fddacf', 'ha1.params/006', 'CopIntercept', 12, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('78abf999-7382-b842-1c8a-cd5dafcf28ab', 'ha1.params/006', 'CopIntercept', 12, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e7253e40-d442-4a11-4bc5-3cda4abae732', 'ha1.params/006', 'CopOatCoeff', 13, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('8ee07358-16e3-951b-871a-a5d5b8a81477', 'ha1.params/006', 'CopOatCoeff', 13, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a692509c-9e3d-dadf-a109-422abae07832', 'ha1.params/006', 'CopLwtCoeff', 14, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('57d9e21a-c940-3558-6ef7-bc809ecae785', 'ha1.params/006', 'CopLwtCoeff', 14, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c8b68b66-dea1-4390-e754-e84450841c0d', 'ha1.params/006', 'CopMin', 15, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('6a9855ef-5d65-040b-bcfd-429d959d42f0', 'ha1.params/006', 'CopMin', 15, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6a3d4fc3-1878-b9d1-e180-747ee67cbf24', 'ha1.params/006', 'CopMinOatF', 16, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('20335368-f2f2-5666-848a-18e153cde900', 'ha1.params/006', 'CopMinOatF', 16, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0d4f14b9-e956-f556-5d07-2744adf801a5', 'ha1.params/006', 'HpTurnOnMinutes', 17, NULL, '12', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('6c362f5d-1594-3e09-13ee-76cdf0785778', 'ha1.params/006', 'HpTurnOnMinutes', 17, NULL, '12', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d627ad2f-f882-7d09-35fc-6c19a1894c80', 'ha1.params/006', 'Version', 19, NULL, '"006"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('faa0d65d-096b-0db9-6c98-81ffbac72cde', 'ha1.params/006', 'Version', 19, NULL, '"006"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('618bd114-f60f-9a02-2c27-e4e9efe44a83', 'i2c.multichannel.dt.relay.component.gt/002', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('725ebaed-da6b-e93c-58d5-49b0776c3b23', 'i2c.multichannel.dt.relay.component.gt/002', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('522110b4-d79a-0563-3f3c-75c9062f3440', 'i2c.multichannel.dt.relay.component.gt/002', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a66b49cd-38f7-8f21-9209-5a6c75d6b1f4', 'i2c.multichannel.dt.relay.component.gt/002', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c3978283-f207-363f-b6ab-9535f88750dc', 'i2c.multichannel.dt.relay.component.gt/002', 'ConfigList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'relay.actor.config/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('d2e601d1-aeb8-9042-01f8-1e6527d48c0d', 'i2c.multichannel.dt.relay.component.gt/002', 'ConfigList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'relay.actor.config/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('dfce083f-d880-1105-09ea-ae8c3ba2cd57', 'i2c.multichannel.dt.relay.component.gt/002', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('43532723-ea6a-3a04-54a6-beff71a48687', 'i2c.multichannel.dt.relay.component.gt/002', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7758d256-45eb-e53e-5249-124a1be62fa3', 'i2c.multichannel.dt.relay.component.gt/002', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a776bd8b-937e-46b5-821f-b2e58a74a017', 'i2c.multichannel.dt.relay.component.gt/002', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('61909d77-9a2d-aa92-bb64-ed69d4d939dc', 'i2c.multichannel.dt.relay.component.gt/002', 'I2cAddressList', 5, NULL, NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('ad37fa6d-fe06-e543-2ab1-b6543ae88e8b', 'i2c.multichannel.dt.relay.component.gt/002', 'I2cAddressList', 5, NULL, NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2329f061-aa32-aaa2-2d80-ca35a751550d', 'i2c.multichannel.dt.relay.component.gt/003', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('7b3a46af-5d58-766a-86dc-05edf2f3771d', 'i2c.multichannel.dt.relay.component.gt/003', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4bc58870-82b7-5ca7-a587-351a19741784', 'i2c.multichannel.dt.relay.component.gt/003', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('5ebb27fe-95f7-b330-4a5f-0b9569d20445', 'i2c.multichannel.dt.relay.component.gt/003', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('dc2b0a02-5d0d-8055-065c-8d3247ec7f8f', 'i2c.multichannel.dt.relay.component.gt/003', 'ConfigList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'relay.actor.config/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('b0665455-374a-1893-5d3e-bc6d0d89fb68', 'i2c.multichannel.dt.relay.component.gt/003', 'ConfigList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'relay.actor.config/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('91b4b68e-c276-6f50-c1b4-9890b136d273', 'i2c.multichannel.dt.relay.component.gt/003', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('78841418-dbd3-c870-8e79-b03236685a36', 'i2c.multichannel.dt.relay.component.gt/003', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('086c9530-f2db-6a73-3302-e0552a361816', 'i2c.multichannel.dt.relay.component.gt/003', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('e76f1c7b-0871-cd39-caca-15e66979ba5c', 'i2c.multichannel.dt.relay.component.gt/003', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2805e0e3-4eda-0333-ce28-b806a2d7a446', 'i2c.multichannel.dt.relay.component.gt/003', 'I2cBus', 5, 'Spaceheat node name of the I2C bus actor that hosts this relay board.
+VALUES ('a968eb99-25ba-26d8-74fc-b0ba43ddc2cf', 'i2c.multichannel.dt.relay.component.gt/003', 'I2cBus', 5, 'Spaceheat node name of the I2C bus actor that hosts this relay board.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7b7ad176-896c-2704-f91c-ad3e60eb0bd2', 'i2c.multichannel.dt.relay.component.gt/003', 'I2cAddressList', 6, 'Integer I2C addresses used by the relay board hardware.
+VALUES ('cabe1190-da2d-1010-458b-f1d8c7ac974f', 'i2c.multichannel.dt.relay.component.gt/003', 'I2cAddressList', 6, 'Integer I2C addresses used by the relay board hardware.
 ', NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2e8926dd-76c8-6db5-321d-dadd9232018f', 'i2c.multichannel.dt.relay.component.gt/004', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('9474b1f3-c97b-a944-2f46-c8f5bddd9034', 'i2c.multichannel.dt.relay.component.gt/004', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6d21d476-97ee-d2e4-0280-5bb7281e189b', 'i2c.multichannel.dt.relay.component.gt/004', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('07448007-2a11-b6ea-8e4c-f6078eb995dc', 'i2c.multichannel.dt.relay.component.gt/004', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4e313531-2948-a07e-7188-6cf434616fd5', 'i2c.multichannel.dt.relay.component.gt/004', 'ConfigList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'relay.actor.config/003', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('3a1a0f7f-f8b8-2095-849e-58d60d0d7413', 'i2c.multichannel.dt.relay.component.gt/004', 'ConfigList', 2, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'relay.actor.config/003', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('371492aa-6933-5e5e-0464-06d845337652', 'i2c.multichannel.dt.relay.component.gt/004', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4f9e5ffe-b39e-3dbf-c85e-fe52a4c90052', 'i2c.multichannel.dt.relay.component.gt/004', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('166ac2a4-a5ac-6d1b-138d-5b3f07a8e190', 'i2c.multichannel.dt.relay.component.gt/004', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('bf7cd7bf-992b-8991-9307-66a3effde554', 'i2c.multichannel.dt.relay.component.gt/004', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('aaada14c-37f7-9caa-3a59-3baadf4e0172', 'i2c.multichannel.dt.relay.component.gt/004', 'I2cBus', 5, 'Spaceheat node name of the I2C bus actor that hosts this relay board.
+VALUES ('fe7f2c8a-389a-bd8f-abed-1dd863eaf813', 'i2c.multichannel.dt.relay.component.gt/004', 'I2cBus', 5, 'Spaceheat node name of the I2C bus actor that hosts this relay board.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('20a71def-2987-a56b-5e77-b4d22aff0338', 'i2c.multichannel.dt.relay.component.gt/004', 'I2cAddressList', 6, 'Integer I2C addresses used by the relay board hardware.
+VALUES ('5bd1f387-e986-2fe3-3f2d-073ad8f3af62', 'i2c.multichannel.dt.relay.component.gt/004', 'I2cAddressList', 6, 'Integer I2C addresses used by the relay board hardware.
 ', NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9a11351a-9456-6064-3b30-caae18510015', 'i2c.thermistor.channel.config/000', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('93f27388-aa5e-cf56-911d-a1d478413ed2', 'i2c.thermistor.channel.config/000', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d870f882-d887-7676-7d74-ef145b6eecea', 'i2c.thermistor.channel.config/000', 'PollPeriodMs', 1, 'How often SCADA polls the underlying hardware device or source for a fresh value, in milliseconds.
+VALUES ('c143ca00-0b9e-2673-877d-638c3cff573e', 'i2c.thermistor.channel.config/000', 'PollPeriodMs', 1, 'How often SCADA polls the underlying hardware device or source for a fresh value, in milliseconds.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('51a50061-b602-4f1f-3e10-ae1f91ea8205', 'i2c.thermistor.channel.config/000', 'CapturePeriodS', 2, 'How often SCADA reports or emits the channel value into the telemetry stream, in seconds.
+VALUES ('13e1cfa8-2df8-dce1-cafe-9de611c75e0c', 'i2c.thermistor.channel.config/000', 'CapturePeriodS', 2, 'How often SCADA reports or emits the channel value into the telemetry stream, in seconds.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('dca3dd5f-1a21-ae14-316d-42ab78a85e2d', 'i2c.thermistor.channel.config/000', 'AsyncCapture', 3, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a3baae03-be28-4954-0cdd-886794886e01', 'i2c.thermistor.channel.config/000', 'AsyncCapture', 3, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('fcb429ed-6e10-72f7-0805-406c8bcf3e79', 'i2c.thermistor.channel.config/000', 'AsyncCaptureDelta', 4, 'Optional threshold for asynchronous emission, expressed in Unit-scaled values.
+VALUES ('a2c44d3b-6298-545e-d432-a872e85940f4', 'i2c.thermistor.channel.config/000', 'AsyncCaptureDelta', 4, 'Optional threshold for asynchronous emission, expressed in Unit-scaled values.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3e69d946-0486-633d-9bd4-1df328355e35', 'i2c.thermistor.channel.config/000', 'Exponent', 5, 'Base-10 scaling exponent applied to the serialized integer reading in combination with Unit.
+VALUES ('133d81fc-438d-9348-7dc7-e739531d3dad', 'i2c.thermistor.channel.config/000', 'Exponent', 5, 'Base-10 scaling exponent applied to the serialized integer reading in combination with Unit.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('580d64c0-7679-1ffe-0d8b-b98d24b77f2a', 'i2c.thermistor.channel.config/000', 'Unit', 6, NULL, NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('decf86ed-a289-173e-43ca-31e244a2a690', 'i2c.thermistor.channel.config/000', 'Unit', 6, NULL, NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('701c66ac-8d27-575c-1ba2-2eb27a33c7b0', 'i2c.thermistor.channel.config/000', 'AdcChannel', 7, 'ADC input pin used for this thermistor channel.
+VALUES ('c291472e-78bf-fcb3-c1fb-19f1ee0009fe', 'i2c.thermistor.channel.config/000', 'AdcChannel', 7, 'ADC input pin used for this thermistor channel.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"enum": ["P0", "P1", "P2", "P3"]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7e458206-7f08-93f4-98d7-214200654d22', 'i2c.thermistor.channel.config/000', 'SendToDerived', 8, 'Whether this raw thermistor reading should also be provided to derived channel logic.
+VALUES ('ff04c01e-130e-d4cb-507b-f02162a92b0c', 'i2c.thermistor.channel.config/000', 'SendToDerived', 8, 'Whether this raw thermistor reading should also be provided to derived channel logic.
 ', 'false', FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('52ac11f8-b5d6-9d83-10c0-d123882ca6d8', 'i2c.thermistor.channel.config/000', 'ThermistorBeta', 9, 'Beta parameter of the thermistor used to convert resistance to temperature.
+VALUES ('4da081fd-a6b1-1565-73bb-9e518a589ef2', 'i2c.thermistor.channel.config/000', 'ThermistorBeta', 9, 'Beta parameter of the thermistor used to convert resistance to temperature.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9a747167-ef6a-03fa-b5a7-874f269ab105', 'i2c.thermistor.reader.component.gt/000', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('78970649-bb00-4e06-7872-f645c61b3633', 'i2c.thermistor.reader.component.gt/000', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3585f6c7-3e77-5734-039d-aab61c2be297', 'i2c.thermistor.reader.component.gt/000', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('c4eb5098-19d5-8769-44cb-e63924d7fa46', 'i2c.thermistor.reader.component.gt/000', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d8acfe12-ec96-bb1b-e9a3-6546757963a6', 'i2c.thermistor.reader.component.gt/000', 'ConfigList', 2, 'Thermistor channel configurations attached to this ADC reader.
+VALUES ('6a9d41c5-7363-03df-7be2-0de7a2ee61aa', 'i2c.thermistor.reader.component.gt/000', 'ConfigList', 2, 'Thermistor channel configurations attached to this ADC reader.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'i2c.thermistor.channel.config/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('bc441d04-5288-8946-3f53-ee8a9c1651aa', 'i2c.thermistor.reader.component.gt/000', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('e301dbb7-a04f-f160-3c91-f0aec8fccde2', 'i2c.thermistor.reader.component.gt/000', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('10e77eb4-6d68-3e27-1579-d05bd369cb02', 'i2c.thermistor.reader.component.gt/000', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('675e66bb-987c-927a-b749-1b97be120cb2', 'i2c.thermistor.reader.component.gt/000', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6b204c80-7145-d0b2-39c5-af990979efc0', 'i2c.thermistor.reader.component.gt/000', 'Bus', 5, 'Logical bus name identifying the I2C bus on which this ADC is attached.
+VALUES ('d0abe899-5179-3204-9bbe-609465abb9db', 'i2c.thermistor.reader.component.gt/000', 'Bus', 5, 'Logical bus name identifying the I2C bus on which this ADC is attached.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8816fa0a-eaaa-ae52-4e52-d7c494eb5604', 'i2c.thermistor.reader.component.gt/000', 'AdcAddress', 6, '7-bit I2C address of the ADC device.
+VALUES ('a4c4076f-9566-4289-9be3-59560a3d7a14', 'i2c.thermistor.reader.component.gt/000', 'AdcAddress', 6, '7-bit I2C address of the ADC device.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('71b52560-1f34-05ff-2627-d44bacea6aef', 'i2c.thermistor.reader.component.gt/000', 'AdcReferenceVolts', 7, 'Reference voltage used by the ADC when converting measured voltage to a serialized reading.
+VALUES ('578a1019-9853-d1c2-62fe-725a5fb54a8f', 'i2c.thermistor.reader.component.gt/000', 'AdcReferenceVolts', 7, 'Reference voltage used by the ADC when converting measured voltage to a serialized reading.
 ', '3.3', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, '{"extras": {"exclusiveMinimum": 0}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('89d0838c-8f8d-385e-af41-fe2169fc79bf', 'i2c.thermistor.reader.component.gt/000', 'SeriesResistanceKOhms', 8, 'Series resistance, in kilo-ohms, used in the thermistor divider circuit.
+VALUES ('cd5021d6-3d07-1a14-6541-94593ae5186d', 'i2c.thermistor.reader.component.gt/000', 'SeriesResistanceKOhms', 8, 'Series resistance, in kilo-ohms, used in the thermistor divider circuit.
 ', NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, '{"extras": {"exclusiveMinimum": 0}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('eab2db37-f1e1-b787-b33d-d22f1e74d76c', 'i2c.thermistor.reader.component.gt/000', 'TempCalcMethod', 9, NULL, NULL, TRUE, FALSE, NULL, NULL, 'temp.calc.method/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('7083953f-f6b9-4323-cc48-89fbdb68d749', 'i2c.thermistor.reader.component.gt/000', 'TempCalcMethod', 9, NULL, NULL, TRUE, FALSE, NULL, NULL, 'temp.calc.method/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9e2758d8-e253-bf31-c473-d7a6bb09fc67', 'layout.lite/007', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+VALUES ('8f64e65a-d5b8-5c68-563f-430b7f5c4257', 'layout.lite/007', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c1275370-217a-a329-db73-032711a34d4d', 'layout.lite/007', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+VALUES ('f6d1f08e-75dd-a5a8-406d-d162a7d1dff5', 'layout.lite/007', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e6802d6b-89c7-e171-89db-55defe07f97b', 'layout.lite/007', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+VALUES ('16c99695-b261-8e90-1f50-a6ec8421ec4d', 'layout.lite/007', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a46fbc49-9e05-54a8-1431-8e92f21458ef', 'layout.lite/007', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+VALUES ('4a4339cd-158d-38eb-fd3c-778c8c30bbeb', 'layout.lite/007', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f43ba65d-b380-542c-a28e-756f69496b4a', 'layout.lite/007', 'ZoneList', 4, 'Ordered list of zones known to the running deployment.
+VALUES ('0723948a-13c3-a2d4-cdc5-bd6b2f768de0', 'layout.lite/007', 'ZoneList', 4, 'Ordered list of zones known to the running deployment.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c9a5951f-1d40-96d6-bbe8-7f827a6db9e7', 'layout.lite/007', 'CriticalZoneList', 5, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+VALUES ('b12df1bd-9673-8579-a95f-0604abda5d41', 'layout.lite/007', 'CriticalZoneList', 5, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('49cac221-cc95-b85f-774c-67a287216ba9', 'layout.lite/007', 'TotalStoreTanks', 6, 'Number of store tanks configured for this deployment.
+VALUES ('e99137e6-19c6-1b42-f0c9-6349a870c071', 'layout.lite/007', 'TotalStoreTanks', 6, 'Number of store tanks configured for this deployment.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6464ea42-90a4-a924-33ec-9347f78b1e5a', 'layout.lite/007', 'ShNodes', 7, 'Spaceheat nodes available in the running SCADA context.
+VALUES ('92ccbf85-9fdb-bdd7-e4d8-4fc4266c079a', 'layout.lite/007', 'ShNodes', 7, 'Spaceheat nodes available in the running SCADA context.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/200', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a188699b-4b2b-33d9-f115-d17cbd990014', 'layout.lite/007', 'DataChannels', 8, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+VALUES ('54c2b096-28da-f031-b2ab-38b630ad23af', 'layout.lite/007', 'DataChannels', 8, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('31a1cf30-fa4f-0873-8d54-a9b7e0ba0ec9', 'layout.lite/007', 'DerivedChannels', 9, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+VALUES ('f7268b19-2174-bd7c-04b2-af2b64515f08', 'layout.lite/007', 'DerivedChannels', 9, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6348cf35-f0a5-d7f8-a3d0-52a793020692', 'layout.lite/007', 'TankModuleComponents', 10, 'Tank module components present in the running deployment.
+VALUES ('1416a0df-abbc-4e3e-9f1e-d5b277d7e57f', 'layout.lite/007', 'TankModuleComponents', 10, 'Tank module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'pico.tank.module.component.gt/011', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cb575f85-15e6-5d40-9271-a1dc03294be4', 'layout.lite/007', 'FlowModuleComponents', 11, 'Flow module components present in the running deployment.
+VALUES ('73a74ce7-22cf-6886-1ced-bae6a9ace333', 'layout.lite/007', 'FlowModuleComponents', 11, 'Flow module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a5dea5c2-2536-23f0-d4ab-2f5d6b0065f4', 'layout.lite/007', 'Ha1Params', 12, 'Active HA1 parameter set used by the running deployment.
+VALUES ('99247783-2898-1b5c-9f24-e6a9a6d22dc1', 'layout.lite/007', 'Ha1Params', 12, 'Active HA1 parameter set used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/004', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cee70988-6e3f-2d82-a2b0-c70b26d73b2c', 'layout.lite/007', 'I2cRelayComponent', 13, 'Relay component configuration used by the running deployment.
+VALUES ('b75885b5-0aa2-4a8d-0bc9-41c82ec89517', 'layout.lite/007', 'I2cRelayComponent', 13, 'Relay component configuration used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c6faa07f-f96e-db1c-dd3a-6df525647a29', 'layout.lite/007', 'TMap', 14, 'Optional tank temperature calibration map emitted with the runtime context.
+VALUES ('e2cff203-1b4d-d2cd-da7b-27d895790420', 'layout.lite/007', 'TMap', 14, 'Optional tank temperature calibration map emitted with the runtime context.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3b4e44fc-7d17-57ff-0281-7297a6f9c40c', 'layout.lite/008', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+VALUES ('d522efb1-663d-7e5f-c0c4-14305bd6fad5', 'layout.lite/008', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1b2ec02e-a8fe-c2a3-bc88-6957f2609a4e', 'layout.lite/008', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+VALUES ('09a79c92-462a-2c18-1b78-181206b30765', 'layout.lite/008', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2171fb3b-532b-18ad-c946-f322724ed726', 'layout.lite/008', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+VALUES ('40355dbd-86ec-e826-e709-a5fc4d424678', 'layout.lite/008', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('96c11ec7-9ad9-48f3-50d5-250b1713d742', 'layout.lite/008', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+VALUES ('92be1854-57bd-2245-20a9-fb2bc812f512', 'layout.lite/008', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e80ca6ea-9d30-9309-bcf3-0be82a9343c0', 'layout.lite/008', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+VALUES ('8ed70d83-b290-4818-e287-83b404b0bd15', 'layout.lite/008', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1c902f3f-3f2c-9106-5a8d-d794308daf4c', 'layout.lite/008', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+VALUES ('55cb246f-7a68-899e-dcb6-7301e213bd3d', 'layout.lite/008', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a4138f73-60fc-f00e-88e9-172d5b554b51', 'layout.lite/008', 'ZoneList', 6, 'Ordered list of zones known to the running deployment.
+VALUES ('7c0e2513-bc54-a563-4aa6-678135f0cbeb', 'layout.lite/008', 'ZoneList', 6, 'Ordered list of zones known to the running deployment.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('237aeb2e-40c3-b2f3-eae6-e9edd00aca39', 'layout.lite/008', 'CriticalZoneList', 7, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+VALUES ('6508db24-7123-526a-cc11-741ae91c9e6b', 'layout.lite/008', 'CriticalZoneList', 7, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a83428b5-7dba-8acf-2c4f-c8baf350dcc2', 'layout.lite/008', 'TotalStoreTanks', 8, 'Number of store tanks configured for this deployment.
+VALUES ('c7ee9cb8-6084-b3c2-63fb-5ac382653d14', 'layout.lite/008', 'TotalStoreTanks', 8, 'Number of store tanks configured for this deployment.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b5a7aa6e-5d71-42fa-c71b-6e597d7739bd', 'layout.lite/008', 'ShNodes', 9, 'Spaceheat nodes available in the running SCADA context.
+VALUES ('ec022319-10cb-1181-0758-5ca96c42ab81', 'layout.lite/008', 'ShNodes', 9, 'Spaceheat nodes available in the running SCADA context.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/300', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ae1573f3-7725-1b44-ff8f-14f64e4de584', 'layout.lite/008', 'DataChannels', 10, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+VALUES ('3918ea43-2d24-3ae3-cd18-bdd88127d6b4', 'layout.lite/008', 'DataChannels', 10, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d2e0d5d9-8f32-e704-5b5f-5cb4deecf517', 'layout.lite/008', 'DerivedChannels', 11, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+VALUES ('8b4be713-10c7-fec3-6dad-73bbfde32b41', 'layout.lite/008', 'DerivedChannels', 11, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ffb790d6-8c75-7dd7-6ec6-839853cf55d1', 'layout.lite/008', 'TankModuleComponents', 12, 'Tank module components present in the running deployment.
+VALUES ('c8c526b4-6cfc-2f98-a6c5-164f8c9cddbe', 'layout.lite/008', 'TankModuleComponents', 12, 'Tank module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cfae1bcd-6503-f5e7-65f0-f91da9f5c659', 'layout.lite/008', 'FlowModuleComponents', 13, 'Flow module components present in the running deployment.
+VALUES ('efb18fcc-2906-f581-303a-1aba5d7255fb', 'layout.lite/008', 'FlowModuleComponents', 13, 'Flow module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('01c2dc21-446c-b9d2-bc92-350c9d044cea', 'layout.lite/008', 'Ha1Params', 14, 'Active HA1 parameter set used by the running deployment.
+VALUES ('aa34b207-0846-3c78-c3a5-3c6d35ceaf7b', 'layout.lite/008', 'Ha1Params', 14, 'Active HA1 parameter set used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/004', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3c9e5a49-eb70-b631-60f7-cfa039233f74', 'layout.lite/008', 'I2cRelayComponent', 15, 'Relay component configuration used by the running deployment.
+VALUES ('13a9e9b8-bdfe-54f9-b522-ed33ae7735e9', 'layout.lite/008', 'I2cRelayComponent', 15, 'Relay component configuration used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8ad62555-72f9-04c8-4480-821a34a015e6', 'layout.lite/008', 'TMap', 16, 'Optional tank temperature calibration map emitted with the runtime context.
+VALUES ('cd9b445f-5536-e93f-b17d-7030acfcebd3', 'layout.lite/008', 'TMap', 16, 'Optional tank temperature calibration map emitted with the runtime context.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('df4a1f01-0956-513d-8ca9-38e3db0a8b2a', 'layout.lite/009', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+VALUES ('e8a1d024-5aa7-ee0d-303e-a26ac148e3ac', 'layout.lite/009', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7d0ca7bf-a1cb-0f47-9ed9-0f3ceea281eb', 'layout.lite/009', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+VALUES ('80890f09-295b-8402-be6a-76ea45c3edf7', 'layout.lite/009', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('108e20e9-7846-6bdf-9f41-8626bcb50b70', 'layout.lite/009', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+VALUES ('fb86a434-8e33-d105-c892-082e814bc2a3', 'layout.lite/009', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('faa866c3-5b6c-0536-cc3d-419cfe8bfdb1', 'layout.lite/009', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+VALUES ('766728f1-199d-442d-0fff-8716acd21fa1', 'layout.lite/009', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e9da9ef6-bf26-d4dc-bb97-7c2a298b98a5', 'layout.lite/009', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+VALUES ('cb14f2c8-da76-a221-e7aa-18a7728d8dc6', 'layout.lite/009', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('96b97a73-e00c-b13d-6ed1-4fbb07ce1632', 'layout.lite/009', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+VALUES ('969b62a5-04c5-ebc5-afb9-92948b0ab6bd', 'layout.lite/009', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('78b39f3f-c532-80d1-e3b2-d91b32c991f2', 'layout.lite/009', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+VALUES ('a1800c61-5642-50b9-1675-f1ec937cadf0', 'layout.lite/009', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
 ', NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('833a9b44-d5c0-f453-62d9-8117fd9e5396', 'layout.lite/009', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+VALUES ('62a74fd7-e8f1-5bc3-40f1-b9abff01df54', 'layout.lite/009', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0dca48fd-ad73-b3c0-85fc-ca90b8cea58a', 'layout.lite/009', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+VALUES ('7539459e-5b8b-126a-a08b-82bc1f6a91ed', 'layout.lite/009', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('59ee61f6-0e24-2727-54ce-63bff6270765', 'layout.lite/009', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+VALUES ('681da920-6be5-4536-9b70-db4ef8a8247c', 'layout.lite/009', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('85923b51-d90e-cfbb-4a72-f79868f3d198', 'layout.lite/009', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+VALUES ('c90eb16a-1ed2-6938-8f58-6ff3911c45a4', 'layout.lite/009', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/300', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6d5c5962-2b9c-94a6-15f6-48b7bbd425a9', 'layout.lite/009', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+VALUES ('53033b5c-2ffc-af2f-fc5b-f8f1a8ad9bfd', 'layout.lite/009', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('36574474-5957-faeb-f328-10ec6c2feb47', 'layout.lite/009', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+VALUES ('8d08f933-9f95-fe6b-3cbc-3c59f88d70e0', 'layout.lite/009', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('873a287f-5b6f-f2dc-1b4a-a6c2df34ba6a', 'layout.lite/009', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+VALUES ('beeee985-3c6b-d602-3ab4-3d6098eccd8f', 'layout.lite/009', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('aa23a3c3-5899-122f-0693-3cade941cb04', 'layout.lite/009', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+VALUES ('477e7b73-37c7-5099-cd3e-38823f4c5bdb', 'layout.lite/009', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b9d91922-5ebd-020f-8d75-379952fb0a5d', 'layout.lite/009', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+VALUES ('ed1d031f-e862-2d9a-3752-c1aa1a131e91', 'layout.lite/009', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfDeferredToRawJson", "oneOf": [{"$ref": "https://schemas.electricity.works/types/ha1.params/004"}, {"$ref": "https://schemas.electricity.works/types/ha1.params/005"}]}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('11c69bb2-c402-354f-a6d2-9f692df495ae', 'layout.lite/009', 'I2cRelayComponent', 16, 'Relay component configuration used by the running deployment.
+VALUES ('6724b46b-9c54-1bed-1ffe-a18d57f2a7d5', 'layout.lite/009', 'I2cRelayComponent', 16, 'Relay component configuration used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6a6f9f59-02c9-b317-d266-4fb01434f16f', 'layout.lite/009', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+VALUES ('b791f8a4-4172-65fd-e7d4-3e259bcea6d9', 'layout.lite/009', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('575d9f87-35a2-68f4-2e49-8f9e1b2e040d', 'layout.lite/010', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+VALUES ('42712b36-a49b-4db2-9d35-e3ac6490e7c8', 'layout.lite/010', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1e007a69-c624-bd59-5d59-f30272c2bbc4', 'layout.lite/010', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+VALUES ('d420b6a2-8fb2-fd2f-f8ba-680819499296', 'layout.lite/010', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a0aa0421-a14a-33c2-52d8-dd9488ac8883', 'layout.lite/010', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+VALUES ('210ffa28-01dd-584f-e98b-a89faccb26ff', 'layout.lite/010', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('27c3fae1-9268-271f-fc4f-bcce57d69197', 'layout.lite/010', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+VALUES ('d64cf69a-03ce-2581-82ab-cae02dafdf62', 'layout.lite/010', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3e0b046a-6987-50d4-63d5-b7a3e5baa47a', 'layout.lite/010', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+VALUES ('968f194a-66a7-add7-70a6-4a68541587f5', 'layout.lite/010', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('74baee79-a3a0-4762-9d46-037cf4c49a4a', 'layout.lite/010', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+VALUES ('f87a7196-07d0-522b-843e-05a561c523a9', 'layout.lite/010', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3e2e05fc-0100-aa57-00b4-75ecd94133a4', 'layout.lite/010', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+VALUES ('e54e1862-e72b-fd1f-3812-cf84327305ea', 'layout.lite/010', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
 ', NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9bb790bf-c974-438a-7aa8-85eef9237b19', 'layout.lite/010', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+VALUES ('aa2fea31-a56c-d08c-73f5-6b46fffded4e', 'layout.lite/010', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4adfd178-9575-322c-c6c9-8bbef89a6d02', 'layout.lite/010', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+VALUES ('c5a09995-c3c6-38c6-79bd-39df1ddc1df4', 'layout.lite/010', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b5f05b66-ab1c-e712-b336-b0d62507d472', 'layout.lite/010', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+VALUES ('0e75d035-0a17-ca06-7e95-c1ff9bc7a743', 'layout.lite/010', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e92a8777-97ce-4da6-c43b-945e5b5ec7b9', 'layout.lite/010', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+VALUES ('d5097e02-0b86-a6aa-46d1-bf710b4a8b13', 'layout.lite/010', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/spaceheat.node.gt/300"}, {"$ref": "https://schemas.electricity.works/types/spaceheat.node.gt/301"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('046712f2-e610-13ea-4d23-89a195f6a7e8', 'layout.lite/010', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+VALUES ('aad702dd-7082-cf7a-28af-1230508382ec', 'layout.lite/010', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('36309df6-6c10-710d-ba49-a92113f77ee2', 'layout.lite/010', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+VALUES ('e2fc11ce-72d1-276c-ff17-900b792c4715', 'layout.lite/010', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2971ffd0-4f1c-766c-e9d9-e55902783260', 'layout.lite/010', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+VALUES ('4b713826-e6c0-be6b-d703-a9d12609ea89', 'layout.lite/010', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('17e16530-e8ab-e179-e1a4-bcdd3f80933a', 'layout.lite/010', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+VALUES ('cc2dffec-8267-aaae-bbbc-20bb9a2457f6', 'layout.lite/010', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a8ea1ba6-39b3-9790-7f28-6225872de2a3', 'layout.lite/010', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+VALUES ('98f063ec-3f5d-d29f-e843-9d6edaef196a', 'layout.lite/010', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/005', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9cecd47b-56ec-43c1-7c0a-58913c573e3d', 'layout.lite/010', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
+VALUES ('6ac71102-02a7-c11f-077b-e764a5cf15da', 'layout.lite/010', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8597224e-0aa5-af67-54a6-37df90d6a4db', 'layout.lite/010', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+VALUES ('79896e84-1c14-920f-736c-e158f23504c5', 'layout.lite/010', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4c5e8027-fbde-7d44-2e85-ec9cf1f43e8c', 'layout.lite/011', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+VALUES ('5e18059a-5272-e94a-1251-36719566a5d3', 'layout.lite/011', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('adc82515-fb22-11d4-8387-9c59c7a28320', 'layout.lite/011', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+VALUES ('0cdb9dcc-1924-1263-3a3f-45b562243959', 'layout.lite/011', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('27c10472-52fb-f2cd-c1fd-3d921dfd863d', 'layout.lite/011', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+VALUES ('316d626b-2cea-80d4-9b5b-c0849b0ef12e', 'layout.lite/011', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cdd17976-622d-32bc-1a15-ab8aba6b8ce9', 'layout.lite/011', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+VALUES ('1bdc7854-ab07-2a36-19d7-e128f09e9c63', 'layout.lite/011', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('710cdc16-906e-8b94-da2b-145f5dc6923e', 'layout.lite/011', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+VALUES ('f903a90a-46a2-3781-4721-ad0644bafaeb', 'layout.lite/011', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e4805514-5e76-a6b9-873e-e168b7d8c67f', 'layout.lite/011', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+VALUES ('4e3f368a-fa2c-d972-d93b-35cd7b9b46d5', 'layout.lite/011', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b1dba71d-51b6-9a3a-ccec-63f8c9c22954', 'layout.lite/011', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+VALUES ('27eaffdc-4fad-6aa2-6d24-eea403d0ee80', 'layout.lite/011', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
 ', NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7a710494-4c94-3961-1240-db71d18c6327', 'layout.lite/011', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+VALUES ('9951537e-0d96-8a39-d180-95cb18f8866d', 'layout.lite/011', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6a6eab97-99fb-bfe3-740e-e747a801596f', 'layout.lite/011', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+VALUES ('2d507d05-aba4-f4cc-7f09-343f51760a68', 'layout.lite/011', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3c79d125-c50f-c234-0599-167e3349eef6', 'layout.lite/011', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+VALUES ('32c5c2ee-5851-ee51-667f-ffc334a25248', 'layout.lite/011', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('31c595d8-1df6-1d21-4f17-3886b60120c1', 'layout.lite/011', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+VALUES ('0a601091-c03d-d47a-8dc2-d7892e9e4313', 'layout.lite/011', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/spaceheat.node.gt/300"}, {"$ref": "https://schemas.electricity.works/types/spaceheat.node.gt/301"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2b3e6a9f-a530-e299-3472-c4f6e459ee9d', 'layout.lite/011', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+VALUES ('56fd3dc5-e081-ab3d-4763-c03c86228f61', 'layout.lite/011', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3715cc9d-8b53-08f5-5fb2-ae902791de2e', 'layout.lite/011', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+VALUES ('3225f4b2-e931-7105-9f88-10c68740edbf', 'layout.lite/011', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/derived.channel.gt/000"}, {"$ref": "https://schemas.electricity.works/types/derived.channel.gt/001"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7fcea5a4-252f-df23-8cc8-c1ad4efe28e2', 'layout.lite/011', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+VALUES ('8c3aa833-dd65-9516-48b1-59dc83f48caa', 'layout.lite/011', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9582f650-c9c4-efe8-4c4c-b26bb727cd64', 'layout.lite/011', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+VALUES ('e19c8c1b-c113-6801-31a2-38e6c5ff0644', 'layout.lite/011', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5f788cb1-83c9-1ea8-67d0-c41c3404e549', 'layout.lite/011', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+VALUES ('d0dbf476-2adc-b7b1-90a2-3e3fa0dbcdf0', 'layout.lite/011', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/006', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0dc3eb1f-9a3c-55d6-9b63-d79df6d767e3', 'layout.lite/011', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
+VALUES ('17d79a13-15b8-049e-26da-6a901a5c9cea', 'layout.lite/011', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7b51d370-c2ab-4fb6-493a-e0a6cc4b09e0', 'layout.lite/011', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+VALUES ('69e5ac84-a1dd-18f2-d085-d2f7acb92421', 'layout.lite/011', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('31000746-de18-33b5-bdd9-c73e6d41534c', 'layout.lite/012', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+VALUES ('198002d0-6da1-a628-75c7-19bbfd3f23b2', 'layout.lite/012', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('380d07f9-cbd5-916c-0289-589a22b4aa9c', 'layout.lite/012', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+VALUES ('4e0fe114-8f39-aab3-b0d8-7a6213108d38', 'layout.lite/012', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a5a1a143-c468-f365-547d-0a43be33da76', 'layout.lite/012', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+VALUES ('0b7c39cb-3db9-fe43-9ab6-f298903e6254', 'layout.lite/012', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('34836108-3183-5279-de55-b04092ce76c7', 'layout.lite/012', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+VALUES ('837bde90-3df4-633c-a6dc-d7c6639c7156', 'layout.lite/012', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5f9fcd29-9dd8-f35f-9861-52f0cccfded0', 'layout.lite/012', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+VALUES ('74f8fd14-b79c-0080-1a5a-a36cca65edcb', 'layout.lite/012', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('25c5dee2-cf1c-9e3d-3cb0-53682d479822', 'layout.lite/012', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+VALUES ('53bad955-4020-762d-0741-777e4d564f10', 'layout.lite/012', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('bf7fb8c1-85cb-0add-cded-5506fd347630', 'layout.lite/012', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+VALUES ('fef96d35-68a4-6c62-7f72-910fba8d6c97', 'layout.lite/012', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
 ', NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ae68b1f4-cd76-12d8-015f-e04f3a0a98b3', 'layout.lite/012', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+VALUES ('afeff4b4-8966-6e5c-11c1-1c5d17c4ac8a', 'layout.lite/012', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('93dd747d-93c6-638d-ac49-c3f4749b3adb', 'layout.lite/012', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+VALUES ('07431601-c187-dc80-fb9e-cd2d5498509d', 'layout.lite/012', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('86310618-d7a1-4760-baea-f413edf1a794', 'layout.lite/012', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+VALUES ('a01bca04-a369-5b99-ec04-8012235219f2', 'layout.lite/012', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('15812b71-067b-8a5c-8812-78516a0eca6f', 'layout.lite/012', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+VALUES ('de07ce92-c786-8a72-fad7-2cb839825c03', 'layout.lite/012', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/301', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4a3c44ab-163b-dfca-368b-ef1b8ca25dac', 'layout.lite/012', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+VALUES ('b1485700-a3a9-1669-5ad4-32f7d72ce0f5', 'layout.lite/012', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4601d26f-1b5f-e609-b149-682eed36673e', 'layout.lite/012', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+VALUES ('c2c61fb0-79b0-e213-e59e-49a8ba33b1ae', 'layout.lite/012', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f4ca6e4c-e628-c56e-a0cb-0c72bca6fbef', 'layout.lite/012', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+VALUES ('c07c4529-9102-0dee-ea51-d4ba9f751dc2', 'layout.lite/012', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('09820481-d5e2-9e30-c285-baa63ad7aee8', 'layout.lite/012', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+VALUES ('3541cab2-6d10-ac67-0720-e50598448e81', 'layout.lite/012', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('dae4ed8b-d8ed-9d4a-a917-d58f5921cc0e', 'layout.lite/012', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+VALUES ('8d0be4db-3a25-828d-f793-57e5b2ce8c74', 'layout.lite/012', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/006', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('df380def-da78-d107-93d1-f857028d5af5', 'layout.lite/012', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
+VALUES ('9a396b6d-d485-3565-d10a-633bea877178', 'layout.lite/012', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/003', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2c9f84b8-dcf8-e515-e014-162968fab643', 'layout.lite/012', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+VALUES ('0b286310-3624-355e-3684-77f4dd84e1f4', 'layout.lite/012', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c3d12a8a-f5c7-8698-7603-acc8f0093acf', 'layout.lite/013', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+VALUES ('0898300a-4244-ca93-170a-a03c1a190112', 'layout.lite/013', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('168e2872-33c8-d24c-1e70-18922390580c', 'layout.lite/013', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+VALUES ('3c673c4a-c06d-85c2-2a64-a853e92b368e', 'layout.lite/013', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4391bd30-97a0-b28b-e722-029f2d6f6d8d', 'layout.lite/013', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+VALUES ('c88b06d0-2258-f6e9-22f6-b906ae40bd3d', 'layout.lite/013', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2d68746f-228b-0dc0-d797-7b0ac8d77bf0', 'layout.lite/013', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+VALUES ('41dcc0e9-2928-e263-a11d-ff8468d7330a', 'layout.lite/013', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ef84ce6a-0496-3cd5-b3d2-7f6f59d04b20', 'layout.lite/013', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+VALUES ('931cf238-ace5-40c3-8b98-1eb485d9703f', 'layout.lite/013', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8f1ece33-d8a8-9cc9-6394-543379484a61', 'layout.lite/013', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+VALUES ('1d048017-64d5-f181-77c8-4299a08e46f5', 'layout.lite/013', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a29f3f0d-2fb9-22f2-3b27-3c0413e43959', 'layout.lite/013', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+VALUES ('7b04869d-7be5-1c07-85c3-a1b911f9a41c', 'layout.lite/013', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
 ', NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1e9ed7d5-785b-6509-8d93-8adae2cfb206', 'layout.lite/013', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+VALUES ('3791f17d-4385-0927-fff8-4f013618f16d', 'layout.lite/013', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7307e657-4768-2625-2b57-05355e6a413b', 'layout.lite/013', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+VALUES ('735e975d-a549-fb6e-6daa-7457ec162fb7', 'layout.lite/013', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
 ', NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7547e6c9-a313-2b26-c624-f5babe8fac17', 'layout.lite/013', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+VALUES ('2803cce8-81c6-9de3-24bc-9eee9caacb85', 'layout.lite/013', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ee0944c9-5d5a-1d75-a60f-2a67a5703320', 'layout.lite/013', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+VALUES ('a1d639e6-8b9b-80b5-31bd-ef5243c8e9a4', 'layout.lite/013', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/301', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('57c40ba8-7c66-01ce-59dc-a360d0d06f44', 'layout.lite/013', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+VALUES ('0350eb36-ee37-1477-027a-f36fec26e5eb', 'layout.lite/013', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('168b3c20-d7b8-b0f4-ce98-51e7c030a8fe', 'layout.lite/013', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+VALUES ('d18d0d3c-9034-65d6-b035-848e531462f5', 'layout.lite/013', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3f3e633a-fa65-4756-2117-acb92e7fa62f', 'layout.lite/013', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+VALUES ('c309b7fb-9e62-d622-36be-d62dc4402897', 'layout.lite/013', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('305e77a0-af21-47f4-c5e1-a02ecad28464', 'layout.lite/013', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+VALUES ('f46bdb6a-0411-d4a2-b319-da6a460548e1', 'layout.lite/013', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2ef59588-e28b-9adb-72aa-e52c0e37f7d8', 'layout.lite/013', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+VALUES ('f006de09-92c2-24bd-0a94-8789007ec287', 'layout.lite/013', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/006', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('75f83ce2-739d-0c13-878a-078b58e724af', 'layout.lite/013', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
+VALUES ('0d70de33-a477-c091-9aa6-06b776b38a6b', 'layout.lite/013', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/004', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7dfafda7-2993-5f1d-3ddc-fb6cb3f3a8e9', 'layout.lite/013', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+VALUES ('971c6b81-3999-cfce-05d5-02f1a0c7a240', 'layout.lite/013', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
 ', NULL, FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4ea488df-8c8d-9c85-632d-5da31714cd76', 'linear.one.dimensional.calibration/000', 'M', 0, 'Multiplicative slope applied to the raw input measurement.
+VALUES ('9ae8677e-2949-e9a0-311b-6355b09bca07', 'linear.one.dimensional.calibration/000', 'M', 0, 'Multiplicative slope applied to the raw input measurement.
 ', '1.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2a9cf316-000b-dddc-515f-1a70d2b042f8', 'linear.one.dimensional.calibration/000', 'B', 1, 'Additive offset applied after the multiplicative slope.
+VALUES ('7532d160-ee51-da04-06b5-63284875f078', 'linear.one.dimensional.calibration/000', 'B', 1, 'Additive offset applied after the multiplicative slope.
 ', '0.0', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b4281286-436e-7036-fdc3-6e23c46cba5d', 'linear.one.dimensional.calibration/001', 'M', 0, 'Dimensionless slope applied to the normalized input value. Must be finite.
+VALUES ('bd3d027c-590b-87e4-0007-8fa08324bad8', 'linear.one.dimensional.calibration/001', 'M', 0, 'Dimensionless slope applied to the normalized input value. Must be finite.
 ', NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0852bd8c-bd18-2dc7-9005-0a443108cc27', 'linear.one.dimensional.calibration/001', 'B', 1, 'Additive offset expressed in the derived channel''s OutputUnit scaling domain.
+VALUES ('af70141f-25e9-2cd2-b7a4-acc5e63f4cd9', 'linear.one.dimensional.calibration/001', 'B', 1, 'Additive offset expressed in the derived channel''s OutputUnit scaling domain.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7088cead-f4e7-621f-33d4-b9ea07065d76', 'machine.states/000', 'MachineHandle', 0, NULL, NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('8ec4d403-ad3e-df0f-cfb0-114231055e87', 'machine.states/000', 'MachineHandle', 0, NULL, NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7370eadf-a78a-d138-fcab-cc7d45c3972f', 'machine.states/000', 'StateEnum', 1, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('b27afbca-cb02-3457-1f38-40763e4e8df3', 'machine.states/000', 'StateEnum', 1, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1c297d56-6fc7-c32d-7276-2deda88554b2', 'machine.states/000', 'StateList', 2, NULL, NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('554f630b-4d46-9195-38df-f461432c03f8', 'machine.states/000', 'StateList', 2, NULL, NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('eef60b45-f0a1-fa7b-9773-74090de6a254', 'machine.states/000', 'UnixMsList', 3, NULL, NULL, TRUE, TRUE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('97060333-0a11-7191-cdbf-8bfdc66567b5', 'machine.states/000', 'UnixMsList', 3, NULL, NULL, TRUE, TRUE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4432f138-872c-b5f8-71c9-3009dbd395e6', 'pico.flow.module.component.gt/000', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('6c0f05ff-f666-341b-86db-81575a69ca54', 'pico.flow.module.component.gt/000', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('067f331e-5bc3-c14a-50ea-f36f8f99286b', 'pico.flow.module.component.gt/000', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('b3739c04-18cc-a10a-f426-6eebc6d24a59', 'pico.flow.module.component.gt/000', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0d557ecd-e661-eb86-b557-1b718cc6f5b3', 'pico.flow.module.component.gt/000', 'ConfigList', 2, 'Channel configuration entries inherited from ComponentGt.
+VALUES ('b4ad7ce2-ad35-664e-2a6c-81943d69b9db', 'pico.flow.module.component.gt/000', 'ConfigList', 2, 'Channel configuration entries inherited from ComponentGt.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'channel.config/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1b6f6951-b3ea-84a8-59c5-d7ada7e4f193', 'pico.flow.module.component.gt/000', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('2a6d9852-36ae-303b-1269-aac4125aa202', 'pico.flow.module.component.gt/000', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8576db12-0174-79f6-2db0-7767e860b179', 'pico.flow.module.component.gt/000', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('e8239d55-1ec5-abc9-8b65-fe07bee5c522', 'pico.flow.module.component.gt/000', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9ab71623-9f1d-1d5b-6793-b0b56c99e753', 'pico.flow.module.component.gt/000', 'Enabled', 5, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('3fdde40d-1c85-886d-59a8-d83f4893fb44', 'pico.flow.module.component.gt/000', 'Enabled', 5, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('81c2a2e3-b02b-b377-808d-3c78bb972c1b', 'pico.flow.module.component.gt/000', 'SerialNumber', 6, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('f8151dfc-4841-5eb6-e3e2-27c11797dfb2', 'pico.flow.module.component.gt/000', 'SerialNumber', 6, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('25548e81-a383-f959-7f1e-a751effcca5d', 'pico.flow.module.component.gt/000', 'FlowNodeName', 7, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('52166f47-c156-f4c6-96cb-e766e4c8856f', 'pico.flow.module.component.gt/000', 'FlowNodeName', 7, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a18e25eb-8a70-31ac-8209-ed7cfcccd871', 'pico.flow.module.component.gt/000', 'FlowMeterType', 8, 'Make/model of the configured flow meter.
+VALUES ('e2f0ad46-d60b-b19c-7632-108499e93c34', 'pico.flow.module.component.gt/000', 'FlowMeterType', 8, 'Make/model of the configured flow meter.
 ', NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.make.model/003', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a4197e88-ab0e-61c1-1d6b-51782582c5d6', 'pico.flow.module.component.gt/000', 'HzCalcMethod', 9, 'Method used to compute frequency from captured pulse data.
+VALUES ('818235c8-68f9-8a16-da36-3438e7a2a17d', 'pico.flow.module.component.gt/000', 'HzCalcMethod', 9, 'Method used to compute frequency from captured pulse data.
 ', NULL, TRUE, FALSE, NULL, NULL, 'hz.calc.method/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7b4d4926-1984-6a6c-f312-c4d943d08b41', 'pico.flow.module.component.gt/000', 'GpmFromHzMethod', 10, 'Method used to convert computed frequency into flow rate.
+VALUES ('7e94ebcb-81cd-6bc2-3be2-f369eef6e01f', 'pico.flow.module.component.gt/000', 'GpmFromHzMethod', 10, 'Method used to convert computed frequency into flow rate.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gpm.from.hz.method/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('fee9caa1-eb5b-9107-90c8-9d27f84c4741', 'pico.flow.module.component.gt/000', 'ConstantGallonsPerTick', 11, NULL, NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('1774d47e-d588-6558-65bb-681318b040ce', 'pico.flow.module.component.gt/000', 'ConstantGallonsPerTick', 11, NULL, NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e22ce927-26a5-80bc-9ad2-3baf7548cbe1', 'pico.flow.module.component.gt/000', 'SendHz', 12, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4d8896e1-29ae-1da5-0f9b-68fd469aae25', 'pico.flow.module.component.gt/000', 'SendHz', 12, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7c33bfd8-8102-1546-bf34-8a9a44ac8c95', 'pico.flow.module.component.gt/000', 'SendGallons', 13, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('ab96e1ce-9a3c-7ef7-8c08-334a26a0b3b4', 'pico.flow.module.component.gt/000', 'SendGallons', 13, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('57901129-1da3-249e-67bc-d23cfc0adaac', 'pico.flow.module.component.gt/000', 'SendTickLists', 14, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('8c2aa65b-64e6-85f6-ea33-fc0ff80bbb7c', 'pico.flow.module.component.gt/000', 'SendTickLists', 14, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5a68bd56-c4d3-9865-a4f5-dcab5dca8867', 'pico.flow.module.component.gt/000', 'NoFlowMs', 15, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('486607b4-cd89-6492-ab0b-985fea79262c', 'pico.flow.module.component.gt/000', 'NoFlowMs', 15, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f926a851-f3cb-cd50-a868-647f2f8b4a5c', 'pico.flow.module.component.gt/000', 'AsyncCaptureThresholdGpmTimes100', 16, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('bf8a7392-bf1f-880d-797c-57909ce2b6f9', 'pico.flow.module.component.gt/000', 'AsyncCaptureThresholdGpmTimes100', 16, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('635bf8c5-d2a1-0748-0f8b-b86f2a186bf5', 'pico.flow.module.component.gt/000', 'PublishEmptyTicklistAfterS', 17, NULL, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('d47a77d4-2fce-283d-8c69-91dfeae29cb1', 'pico.flow.module.component.gt/000', 'PublishEmptyTicklistAfterS', 17, NULL, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3881fe5d-d9f5-a23a-94b2-86937b08bb69', 'pico.flow.module.component.gt/000', 'PublishAnyTicklistAfterS', 18, NULL, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('3d0e6dee-aa02-65f9-ba94-45d796bf0419', 'pico.flow.module.component.gt/000', 'PublishAnyTicklistAfterS', 18, NULL, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f6bdcc19-adb2-7ab8-2256-a76e5a3f800d', 'pico.flow.module.component.gt/000', 'PublishTicklistPeriodS', 19, NULL, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('189d0902-4c16-00a7-63bb-b0438e6c2767', 'pico.flow.module.component.gt/000', 'PublishTicklistPeriodS', 19, NULL, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('973bf828-83e9-39f9-9484-9bd5c7fdd6ee', 'pico.flow.module.component.gt/000', 'PublishTicklistLength', 20, NULL, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('f21424a2-237d-a4de-8ee7-46ac102becc7', 'pico.flow.module.component.gt/000', 'PublishTicklistLength', 20, NULL, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f6077380-cf24-7e35-c9c7-9e396dde4989', 'pico.flow.module.component.gt/000', 'ExpAlpha', 21, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4084becb-a22b-c0a2-d35b-eaa5db8038d0', 'pico.flow.module.component.gt/000', 'ExpAlpha', 21, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('93a52ce5-a342-5ab5-3e65-b13496cc9651', 'pico.flow.module.component.gt/000', 'CutoffFrequency', 22, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('46d591ac-33d2-715f-b2c5-3a9796977924', 'pico.flow.module.component.gt/000', 'CutoffFrequency', 22, NULL, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('99c1a45c-e7d9-531e-1963-2d336ae5aab8', 'pico.tank.module.component.gt/011', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('d486b45f-e42e-530d-7101-0299d5da20c8', 'pico.tank.module.component.gt/011', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('dbdbe176-72f0-39b2-5f2c-38a3db1044c1', 'pico.tank.module.component.gt/011', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('68de2f86-867d-5809-0b5e-cdceaf442c5e', 'pico.tank.module.component.gt/011', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6fa857e0-63e9-7dad-a414-8c291a3fe73a', 'pico.tank.module.component.gt/011', 'ConfigList', 2, 'Channel configuration entries inherited from ComponentGt.
+VALUES ('2126a311-c80d-be32-300e-d75be7cfd111', 'pico.tank.module.component.gt/011', 'ConfigList', 2, 'Channel configuration entries inherited from ComponentGt.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'channel.config/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('344d3d29-e131-3399-0511-6c501836d4e6', 'pico.tank.module.component.gt/011', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('963e7e25-f6e3-d4c4-0025-0af6958176db', 'pico.tank.module.component.gt/011', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('479f2363-e01d-5627-d7ac-8a536d9045d9', 'pico.tank.module.component.gt/011', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('2be40b46-7cd2-bcec-4a2d-8513c17b1991', 'pico.tank.module.component.gt/011', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7cdf6cd1-d358-f009-db0a-e94d2d5c90bf', 'pico.tank.module.component.gt/011', 'Enabled', 5, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('0896238a-ee99-6968-0312-c4d9ef67e974', 'pico.tank.module.component.gt/011', 'Enabled', 5, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('002666cb-10d8-f732-166a-717fefe2f0b9', 'pico.tank.module.component.gt/011', 'PicoHwUid', 6, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('c2baf2f2-94d8-1ad7-18ec-97ccce95c4e5', 'pico.tank.module.component.gt/011', 'PicoHwUid', 6, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('efb6596b-af6c-0482-cbf7-8b1ade0c1e65', 'pico.tank.module.component.gt/011', 'PicoAHwUid', 7, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('1c4dbb10-ec36-7455-2616-9b63f77f4e3a', 'pico.tank.module.component.gt/011', 'PicoAHwUid', 7, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d9a64b99-3e1f-7f0b-cf46-610608580752', 'pico.tank.module.component.gt/011', 'PicoBHwUid', 8, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('0c37b96f-81fc-4e1d-c58e-e3421a56e41d', 'pico.tank.module.component.gt/011', 'PicoBHwUid', 8, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a49c78e2-9b79-ae71-4e28-ab3649f498c2', 'pico.tank.module.component.gt/011', 'TempCalcMethod', 9, NULL, NULL, TRUE, FALSE, NULL, NULL, 'temp.calc.method/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a2443e86-c7dc-2e3b-7133-f45d5e43bdae', 'pico.tank.module.component.gt/011', 'TempCalcMethod', 9, NULL, NULL, TRUE, FALSE, NULL, NULL, 'temp.calc.method/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7bcbf9ed-90ef-e25b-3652-57865093e53c', 'pico.tank.module.component.gt/011', 'ThermistorBeta', 10, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('fdae3212-c8b4-66fc-3533-dcbb7ca3a654', 'pico.tank.module.component.gt/011', 'ThermistorBeta', 10, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6db89302-f396-084b-15f5-41a37dd890d5', 'pico.tank.module.component.gt/011', 'SendMicroVolts', 11, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('2acfa43e-251d-5d65-459d-9de95400b005', 'pico.tank.module.component.gt/011', 'SendMicroVolts', 11, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a2741ebe-d321-436d-17e9-dcd4b7a5329a', 'pico.tank.module.component.gt/011', 'Samples', 12, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('bb2dff92-64a4-0d7e-8954-24aa9da264ae', 'pico.tank.module.component.gt/011', 'Samples', 12, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e7d4ea10-052e-dae8-64d2-fd076ea54e81', 'pico.tank.module.component.gt/011', 'NumSampleAverages', 13, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('e0f2e752-b423-588a-7f28-6da2aacc5f6a', 'pico.tank.module.component.gt/011', 'NumSampleAverages', 13, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('04863aab-ecd5-b905-bde9-e94befd21ab0', 'pico.tank.module.component.gt/011', 'PicoKOhms', 14, NULL, NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('45383599-dcf4-f892-993f-571e4bfbb319', 'pico.tank.module.component.gt/011', 'PicoKOhms', 14, NULL, NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('783c4215-faa2-e760-ae80-6c95e5c7d426', 'pico.tank.module.component.gt/011', 'SerialNumber', 15, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('bb94b08d-eeff-1fa8-2523-f37e18bf61d4', 'pico.tank.module.component.gt/011', 'SerialNumber', 15, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9fda3082-1621-a2df-d570-9410ffacb63a', 'pico.tank.module.component.gt/011', 'AsyncCaptureDeltaMicroVolts', 16, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('35f1a62e-b414-8126-ea85-4689221055a8', 'pico.tank.module.component.gt/011', 'AsyncCaptureDeltaMicroVolts', 16, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8f70aa95-aee8-d8d6-0647-83468f9cc387', 'pico.tank.module.component.gt/011', 'SensorOrder', 17, NULL, NULL, FALSE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('1615ac6c-e494-ba9d-75df-5effc9236a14', 'pico.tank.module.component.gt/011', 'SensorOrder', 17, NULL, NULL, FALSE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c12d58d5-1069-b7d8-d92c-a71705074c9d', 'position.point.gt/000', 'Id', 0, 'Globally unique identifier for this PositionPoint. Serves as the primary key in the Grid Node Registry.
+VALUES ('d261be8c-ccb7-8b1e-e4aa-3b5bdaa22b03', 'position.point.gt/000', 'Id', 0, 'Globally unique identifier for this PositionPoint. Serves as the primary key in the Grid Node Registry.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('fa7aa46d-d4b0-91d5-7ee9-3e6fdb4825ff', 'position.point.gt/000', 'LatitudeMicroDeg', 1, 'Latitude in microdegrees. Must fall between -90,000,000 and 90,000,000 inclusive (corresponding to -90.0° to +90.0° in WGS84).
+VALUES ('45cdcc8a-218c-de34-8ec0-c129f47bd9f8', 'position.point.gt/000', 'LatitudeMicroDeg', 1, 'Latitude in microdegrees. Must fall between -90,000,000 and 90,000,000 inclusive (corresponding to -90.0° to +90.0° in WGS84).
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, '{"extras": {"minimum": -90000000, "maximum": 90000000}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('55ec15f9-8092-bbc1-82e8-78de2f227a10', 'position.point.gt/000', 'LongitudeMicroDeg', 2, 'Longitude in microdegrees. Must fall between -180,000,000 and 180,000,000 inclusive (corresponding to -180.0° to +180.0° in WGS84).
+VALUES ('bb95609c-93a4-c9bc-2ac4-914b9f8db854', 'position.point.gt/000', 'LongitudeMicroDeg', 2, 'Longitude in microdegrees. Must fall between -180,000,000 and 180,000,000 inclusive (corresponding to -180.0° to +180.0° in WGS84).
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, '{"extras": {"minimum": -180000000, "maximum": 180000000}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1c503384-09ab-fb27-c93f-67af180863d3', 'power.watts/000', 'Watts', 0, 'Instantaneous power in watts. Positive means consuming from the grid and negative means generating to the grid.
+VALUES ('8dbd9a45-852c-e511-b7c5-bb9456f7e5cd', 'power.watts/000', 'Watts', 0, 'Instantaneous power in watts. Positive means consuming from the grid and negative means generating to the grid.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('fc7b6fa9-f8ef-4409-ad5e-7060e670f6c2', 'price.quantity.unitless/001', 'PriceX1000', 0, 'Price value scaled by 1000.
+VALUES ('95697225-6965-8032-0b03-bd8adf30065a', 'price.quantity.unitless/001', 'PriceX1000', 0, 'Price value scaled by 1000.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('27fe5bf0-1a97-ffbb-657d-266afe559501', 'price.quantity.unitless/001', 'QuantityX1000', 1, 'Quantity value scaled by 1000.
+VALUES ('f17b0d2c-90b1-83ed-cf55-3340786a981c', 'price.quantity.unitless/001', 'QuantityX1000', 1, 'Quantity value scaled by 1000.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('16ce2dec-f4b4-878c-f68c-d86d3b32ca5b', 'relay.actor.config/002', 'ChannelName', 0, 'Name of the telemetry channel associated with this relay actor.
+VALUES ('c6eaa55b-aa74-227d-7053-c051653d8216', 'relay.actor.config/002', 'ChannelName', 0, 'Name of the telemetry channel associated with this relay actor.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('29b23381-e8b3-8283-8903-f645049e3855', 'relay.actor.config/002', 'PollPeriodMs', 1, 'Polling period in milliseconds used to check the relay state.
+VALUES ('4271921e-7b12-c793-ae81-3e81eaea82b1', 'relay.actor.config/002', 'PollPeriodMs', 1, 'Polling period in milliseconds used to check the relay state.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('261b0fc4-a589-fcf2-dc3c-50b37f9cc7f0', 'relay.actor.config/002', 'CapturePeriodS', 2, 'Period in seconds for periodic capture of the relay state channel.
+VALUES ('10737916-6fa7-36d7-9f6c-148fab6570e9', 'relay.actor.config/002', 'CapturePeriodS', 2, 'Period in seconds for periodic capture of the relay state channel.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('86d010bd-0a7b-34b7-4224-ed604ff1e331', 'relay.actor.config/002', 'AsyncCapture', 3, 'If true, state changes SHALL be captured asynchronously in addition to periodic capture.
+VALUES ('70f9b0b3-8224-3b19-9941-a7fb4c0217da', 'relay.actor.config/002', 'AsyncCapture', 3, 'If true, state changes SHALL be captured asynchronously in addition to periodic capture.
 ', NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('60d1a427-2b01-a38d-fde3-b3d73b9eee3e', 'relay.actor.config/002', 'AsyncCaptureDelta', 4, 'Minimum change required to trigger asynchronous capture. For relay-backed state channels this is typically 1.
+VALUES ('ef020056-e10d-6ca1-d8a8-a6e0a49d7aaa', 'relay.actor.config/002', 'AsyncCaptureDelta', 4, 'Minimum change required to trigger asynchronous capture. For relay-backed state channels this is typically 1.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('82c9fe07-4267-3982-30a7-5c1a385137a3', 'relay.actor.config/002', 'Exponent', 5, 'Base-10 exponent applied to the channel value representation.
+VALUES ('c542f358-6987-2cdc-409c-c6c392032ebf', 'relay.actor.config/002', 'Exponent', 5, 'Base-10 exponent applied to the channel value representation.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('48be0a20-bdbf-f645-918b-5a11aff0f59a', 'relay.actor.config/002', 'Unit', 6, 'Unit associated with the channel represented by this relay actor config.
+VALUES ('3b50bd41-3bed-88c2-d791-7e651b4fb929', 'relay.actor.config/002', 'Unit', 6, 'Unit associated with the channel represented by this relay actor config.
 ', NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0fd706c1-0594-70d4-cb4d-1392dcff6e5f', 'relay.actor.config/002', 'RelayIdx', 7, 'One-based relay index on the associated relay board component.
+VALUES ('2920684c-5204-303a-b300-8539848f3bd5', 'relay.actor.config/002', 'RelayIdx', 7, 'One-based relay index on the associated relay board component.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('45673cef-c770-500c-6ad4-db75d3eb2e5d', 'relay.actor.config/002', 'ActorName', 8, 'Canonical Spaceheat node name of the actor controlled by this relay.
+VALUES ('d2d12931-d0c5-829c-032b-b1b2b12a3ba3', 'relay.actor.config/002', 'ActorName', 8, 'Canonical Spaceheat node name of the actor controlled by this relay.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('94bc3b78-9df1-c9e5-3da9-04fea2548500', 'relay.actor.config/002', 'WiringConfig', 9, 'Wiring configuration of the relay contact arrangement used by this actor.
+VALUES ('3a5740de-1f1d-a8e3-ef3d-6d45f4b4bb5e', 'relay.actor.config/002', 'WiringConfig', 9, 'Wiring configuration of the relay contact arrangement used by this actor.
 ', NULL, TRUE, FALSE, NULL, NULL, 'relay.wiring.config/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7911ef2d-31f9-c6b4-b574-20a2bbfe04a4', 'relay.actor.config/002', 'EventType', 10, 'Semantic event category emitted when the relay changes the controlled actor''s state.
+VALUES ('c334cd1d-7bf7-de8d-77c4-72432a586e0b', 'relay.actor.config/002', 'EventType', 10, 'Semantic event category emitted when the relay changes the controlled actor''s state.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b2f5b3bf-26f1-cc08-ff5c-d0aad0d0040d', 'relay.actor.config/002', 'DeEnergizingEvent', 11, 'Event value associated with transition caused by relay de-energization.
+VALUES ('14c4912c-c43c-3fc0-6378-45b7134fe272', 'relay.actor.config/002', 'DeEnergizingEvent', 11, 'Event value associated with transition caused by relay de-energization.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c8c3b3c6-bd1c-bf2c-be21-a7a37c8eedaa', 'relay.actor.config/002', 'EnergizingEvent', 12, 'Event value associated with transition caused by relay energization.
+VALUES ('821e0924-609c-6606-6deb-de53f6ec8294', 'relay.actor.config/002', 'EnergizingEvent', 12, 'Event value associated with transition caused by relay energization.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ce7aac6a-56e6-7418-b2dc-e299f425c899', 'relay.actor.config/002', 'StateType', 13, 'Semantic state category controlled by this relay.
+VALUES ('000975e2-368d-45a7-eba8-3d1261a7e4cb', 'relay.actor.config/002', 'StateType', 13, 'Semantic state category controlled by this relay.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a7ced4a1-cf09-a5da-9224-061caafbdde1', 'relay.actor.config/002', 'DeEnergizedState', 14, 'State value associated with the de-energized relay position.
+VALUES ('293d117c-2947-aa47-39eb-b1440ad5329f', 'relay.actor.config/002', 'DeEnergizedState', 14, 'State value associated with the de-energized relay position.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('bedc70cf-08cc-8245-e9e0-da24a49c7fff', 'relay.actor.config/002', 'EnergizedState', 15, 'State value associated with the energized relay position.
+VALUES ('5948ada4-4bf0-54d9-bf6c-52aa1e717501', 'relay.actor.config/002', 'EnergizedState', 15, 'State value associated with the energized relay position.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('95e8dceb-be79-39c6-328a-95a12bbe6a00', 'relay.actor.config/003', 'ChannelName', 0, 'Name of the telemetry channel associated with this relay actor.
+VALUES ('d5e656ed-96dc-cd3c-dd42-7b145bc36b68', 'relay.actor.config/003', 'ChannelName', 0, 'Name of the telemetry channel associated with this relay actor.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0ba67f9f-7493-d95b-5656-ecdb66bf4d19', 'relay.actor.config/003', 'PollPeriodMs', 1, 'Polling period in milliseconds used to check the relay state.
+VALUES ('e2c8b751-3eff-f793-7584-ccdf8f1d649e', 'relay.actor.config/003', 'PollPeriodMs', 1, 'Polling period in milliseconds used to check the relay state.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4b6b9734-c8bd-c555-bc3c-12c95b891f5c', 'relay.actor.config/003', 'CapturePeriodS', 2, 'Period in seconds for periodic capture of the relay state channel.
+VALUES ('f6cb0c1a-6b13-ea99-18c0-3d0b9c467d68', 'relay.actor.config/003', 'CapturePeriodS', 2, 'Period in seconds for periodic capture of the relay state channel.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2967fdf8-f92a-38a9-7dbe-8a1bb7a32d0c', 'relay.actor.config/003', 'AsyncCapture', 3, 'If true, state changes SHALL be captured asynchronously in addition to periodic capture.
+VALUES ('46ae8c8c-713e-899b-2c02-68eb02536223', 'relay.actor.config/003', 'AsyncCapture', 3, 'If true, state changes SHALL be captured asynchronously in addition to periodic capture.
 ', NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('296c2bfa-3938-7f1e-4d85-673335eda931', 'relay.actor.config/003', 'AsyncCaptureDelta', 4, 'Minimum change required to trigger asynchronous capture. For relay-backed state channels this is typically 1.
+VALUES ('48575f0f-c972-090d-8361-9b2d918da320', 'relay.actor.config/003', 'AsyncCaptureDelta', 4, 'Minimum change required to trigger asynchronous capture. For relay-backed state channels this is typically 1.
 ', NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5e8508e5-332c-0269-55d4-f9b65336f79d', 'relay.actor.config/003', 'Exponent', 5, 'Base-10 exponent applied to the channel value representation.
+VALUES ('6b38fd0d-28d6-50a1-7040-38911df25315', 'relay.actor.config/003', 'Exponent', 5, 'Base-10 exponent applied to the channel value representation.
 ', NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d5170ac8-a331-4d7a-6e25-415c6c6d65df', 'relay.actor.config/003', 'Unit', 6, 'Unit associated with the channel represented by this relay actor config.
+VALUES ('41fbbc65-d0de-c98d-64ab-2eea6ba6d286', 'relay.actor.config/003', 'Unit', 6, 'Unit associated with the channel represented by this relay actor config.
 ', NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('442b3874-629f-ddf0-0ca9-5eabe48295a0', 'relay.actor.config/003', 'RelayIdx', 7, 'One-based relay index on the associated relay board component.
+VALUES ('e0fef35a-bef9-a62e-3eb0-d995e5a7050a', 'relay.actor.config/003', 'RelayIdx', 7, 'One-based relay index on the associated relay board component.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c1cd8aff-fb87-3de4-0c4b-a72bceb32c24', 'relay.actor.config/003', 'ActorName', 8, 'Canonical Spaceheat node name of the actor controlled by this relay.
+VALUES ('7e561d72-cff4-c3bc-c0e8-b9d6f05d66ef', 'relay.actor.config/003', 'ActorName', 8, 'Canonical Spaceheat node name of the actor controlled by this relay.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('23e95f79-4517-917c-e3ba-ebba63cb0766', 'relay.actor.config/003', 'WiringConfig', 9, 'Wiring configuration of the relay contact arrangement used by this actor.
+VALUES ('396e2ca4-ea1f-631a-4a46-d65fb6bd2d09', 'relay.actor.config/003', 'WiringConfig', 9, 'Wiring configuration of the relay contact arrangement used by this actor.
 ', NULL, TRUE, FALSE, NULL, NULL, 'relay.wiring.config/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('863376a4-86cd-4c3c-2767-e95193043e53', 'relay.actor.config/003', 'EventType', 10, 'Semantic event category emitted when the relay changes the controlled actor''s state.
+VALUES ('561c81df-920b-c81a-d76d-6355085865df', 'relay.actor.config/003', 'EventType', 10, 'Semantic event category emitted when the relay changes the controlled actor''s state.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('98041666-fb96-46ef-3ce5-4d949b1e2073', 'relay.actor.config/003', 'DeEnergizingEvent', 11, 'Event value associated with transition caused by relay de-energization.
+VALUES ('507d3777-f07d-157f-c96a-93b8a492aacb', 'relay.actor.config/003', 'DeEnergizingEvent', 11, 'Event value associated with transition caused by relay de-energization.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e5d1d485-efe4-f04f-ecf5-93ee9d07c6a7', 'relay.actor.config/003', 'EnergizingEvent', 12, 'Event value associated with transition caused by relay energization.
+VALUES ('1c89ecc4-3e8d-d309-b79d-908e267bc04f', 'relay.actor.config/003', 'EnergizingEvent', 12, 'Event value associated with transition caused by relay energization.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6c701b42-8611-4cf4-e58f-0b96ebdee8a0', 'relay.actor.config/003', 'StateType', 13, 'Semantic state category controlled by this relay.
+VALUES ('eb2f1364-ebfa-1ba1-808c-c5dca02ace1a', 'relay.actor.config/003', 'StateType', 13, 'Semantic state category controlled by this relay.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9067d844-a889-cd3d-823a-248df0c27740', 'relay.actor.config/003', 'DeEnergizedState', 14, 'State value associated with the de-energized relay position.
+VALUES ('f8d4fb9c-822d-cf62-88b4-0e079a313566', 'relay.actor.config/003', 'DeEnergizedState', 14, 'State value associated with the de-energized relay position.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ba621eab-f96b-9039-efc7-d0158afafb38', 'relay.actor.config/003', 'EnergizedState', 15, 'State value associated with the energized relay position.
+VALUES ('f830dc01-4e2c-54ab-0ad1-7cf85c99e242', 'relay.actor.config/003', 'EnergizedState', 15, 'State value associated with the energized relay position.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"extras": {"minLength": 1}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f4ec8ae0-9c8b-d6f5-096d-9410d9c180d4', 'report/002', 'FromGNodeAlias', 0, 'GNode alias of the entity sending this report.
+VALUES ('8dab1ab8-0a40-b86f-3420-5bf934acf4f8', 'report/002', 'FromGNodeAlias', 0, 'GNode alias of the entity sending this report.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8ff74482-872a-9320-817d-1b7932e7f31b', 'report/002', 'FromGNodeInstanceId', 1, 'Unique identifier of the specific runtime instance producing this report.
+VALUES ('d53fed6c-7aa2-c1d4-7ff4-2fe05135f471', 'report/002', 'FromGNodeInstanceId', 1, 'Unique identifier of the specific runtime instance producing this report.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e660a19b-dc4e-017c-84ee-27f1821554c2', 'report/002', 'AboutGNodeAlias', 2, 'GNode alias of the entity about which this report is describing telemetry.
+VALUES ('ea239b49-9866-bb8c-6867-a989f7ad65f3', 'report/002', 'AboutGNodeAlias', 2, 'GNode alias of the entity about which this report is describing telemetry.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6b32f425-3db1-90fa-2eef-d1d7d4ef255c', 'report/002', 'SlotStartUnixS', 3, 'Start time of the reporting period in Unix seconds.
+VALUES ('3c626f2f-7d60-9371-784f-db2bee6e5358', 'report/002', 'SlotStartUnixS', 3, 'Start time of the reporting period in Unix seconds.
 ', NULL, TRUE, FALSE, NULL, 'utc.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f786afe2-8cb6-fe39-4040-749ec5fa2da2', 'report/002', 'SlotDurationS', 4, 'Duration of the reporting slot in seconds.
+VALUES ('bdac75b5-9d1f-6a17-7c75-c8f6bc2caf08', 'report/002', 'SlotDurationS', 4, 'Duration of the reporting slot in seconds.
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('039a1621-96ed-e3e8-823e-30003f9b198c', 'report/002', 'ChannelReadingList', 5, 'Telemetry readings observed during this reporting slot.
+VALUES ('7c6f398a-e62b-a4eb-bfa0-06be1bda5ba3', 'report/002', 'ChannelReadingList', 5, 'Telemetry readings observed during this reporting slot.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'channel.readings/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6706b897-3f17-c8c9-d2a4-479101837c67', 'report/002', 'StateList', 6, 'State transitions observed during this reporting slot.
+VALUES ('3fc5d1d4-1a6d-c3cf-38d4-b020337728f1', 'report/002', 'StateList', 6, 'State transitions observed during this reporting slot.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'machine.states/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3da8d877-04e0-a612-8596-8dcb3dccbf85', 'report/002', 'FsmReportList', 7, 'Finite state machine reports generated during this slot.
+VALUES ('0fe04396-c331-f1ca-4ad2-fee1825b8128', 'report/002', 'FsmReportList', 7, 'Finite state machine reports generated during this slot.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/fsm.full.report/000"}, {"$ref": "https://schemas.electricity.works/types/fsm.full.report/001"}]}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('881217ee-6651-7f20-7e40-14c2b8f680c9', 'report/002', 'MessageCreatedMs', 8, 'Timestamp at which this report was created by the reporting node.
+VALUES ('a4b84ef2-2ca7-377c-cc6b-54643647a988', 'report/002', 'MessageCreatedMs', 8, 'Timestamp at which this report was created by the reporting node.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('baea5577-c288-c7f9-c4e3-a62b9fb51c29', 'report/002', 'Id', 9, 'Globally unique identifier for this report message.
+VALUES ('ff19c556-1249-4b8e-064b-5c13f840d5ba', 'report/002', 'Id', 9, 'Globally unique identifier for this report message.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('289c2342-43a2-741a-0eb0-5ec11f5dc883', 'report/002', 'Version', 11, NULL, '"002"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('0096903e-cc48-d38b-3064-0fd98431a45b', 'report/002', 'Version', 11, NULL, '"002"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('63a534bd-3874-85df-9cf4-ed302c91622c', 'report/003', 'FromGNodeAlias', 0, 'Canonical alias of the GNode emitting this report.
+VALUES ('80a08af2-11fb-e98c-c77d-78acf3d7dd35', 'report/003', 'FromGNodeAlias', 0, 'Canonical alias of the GNode emitting this report.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9ef5e09a-d8c7-abfb-6c3f-c97f4926f162', 'report/003', 'FromGNodeInstanceId', 1, 'Unique identifier of the specific running instance of the GNode that produced this report.
+VALUES ('eb34996b-274b-b96d-4548-c2eccc78102f', 'report/003', 'FromGNodeInstanceId', 1, 'Unique identifier of the specific running instance of the GNode that produced this report.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0e674453-006b-e4bb-4750-a8e7b261e71f', 'report/003', 'AboutGNodeAlias', 2, 'Canonical alias of the GNode whose behavior is being reported. In most deployments this equals FromGNodeAlias, but may differ in proxy or aggregation scenarios.
+VALUES ('e87befb6-31df-8b37-4446-f401cabe5433', 'report/003', 'AboutGNodeAlias', 2, 'Canonical alias of the GNode whose behavior is being reported. In most deployments this equals FromGNodeAlias, but may differ in proxy or aggregation scenarios.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c2dbdbea-8858-8e52-4fc7-644b8acee21a', 'report/003', 'SlotStartUnixS', 3, 'Start timestamp (UTC seconds) of the reporting interval.
+VALUES ('4ddcd6cc-18de-0c85-3ad2-72ea434b0d31', 'report/003', 'SlotStartUnixS', 3, 'Start timestamp (UTC seconds) of the reporting interval.
 ', NULL, TRUE, FALSE, NULL, 'utc.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a7932249-883a-908c-a312-ea4de216fe94', 'report/003', 'SlotDurationS', 4, 'Duration of the reporting interval in seconds. Typical value is 300 (5 minutes).
+VALUES ('4a4ca744-be86-2668-6518-1c0a0df75a82', 'report/003', 'SlotDurationS', 4, 'Duration of the reporting interval in seconds. Typical value is 300 (5 minutes).
 ', NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5b28c80e-e368-ebc5-7b54-95e4d4635512', 'report/003', 'ChannelReadingList', 5, 'All channel readings observed during the reporting interval. Each ChannelReadings element may contain multiple timestamped values for a single channel.
+VALUES ('c5d7aae9-1490-8dce-89f3-54e8fff4a239', 'report/003', 'ChannelReadingList', 5, 'All channel readings observed during the reporting interval. Each ChannelReadings element may contain multiple timestamped values for a single channel.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'channel.readings/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c01fe28e-a103-74a5-a66b-2cb090ff7588', 'report/003', 'StateList', 6, 'Machine state transitions observed during the reporting interval.
+VALUES ('252c5d98-5931-cd66-9aea-aa5ae4cb3cb9', 'report/003', 'StateList', 6, 'Machine state transitions observed during the reporting interval.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'machine.states/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c0eb5394-2001-fc9c-20dc-7aa5bf7ce254', 'report/003', 'FsmReportList', 7, 'Full finite-state-machine reports emitted during this interval.
+VALUES ('93a639d2-135b-95cf-a8a9-461020e12873', 'report/003', 'FsmReportList', 7, 'Full finite-state-machine reports emitted during this interval.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'fsm.full.report/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c997fb92-b229-2093-b10d-dd6f146f9072', 'report/003', 'MessageCreatedMs', 8, 'Timestamp (UTC milliseconds) at which this report message was created by the SCADA process.
+VALUES ('1158ff11-11b3-ac97-75ac-d37fcfcf8d4f', 'report/003', 'MessageCreatedMs', 8, 'Timestamp (UTC milliseconds) at which this report message was created by the SCADA process.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ee9ea2eb-70d0-1e92-205c-ef84c6da0189', 'report/003', 'Id', 9, 'Globally unique identifier for this report message.
+VALUES ('02a8a281-657f-5e19-a596-b208f9b1455d', 'report/003', 'Id', 9, 'Globally unique identifier for this report message.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0f7917b0-6d7c-c2cf-8ed9-b328ce02ba84', 'report.event/002', 'MessageId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('93e7316d-3a90-52fc-a21c-0024174e8d34', 'report.event/002', 'MessageId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('51fa66a8-fd1f-9ebb-bcdb-db0bbc6e0e7c', 'report.event/002', 'TimeCreatedMs', 1, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('997e1c4a-a027-5007-5402-aab2847d28b3', 'report.event/002', 'TimeCreatedMs', 1, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8362744f-16b1-0115-2681-df84c008b827', 'report.event/002', 'Src', 2, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4c2ef2c8-d79c-4f69-0757-9feae0a32b73', 'report.event/002', 'Src', 2, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ae4712a3-03f8-c0fe-9650-7c03f06b3514', 'report.event/002', 'Report', 3, NULL, NULL, TRUE, FALSE, NULL, NULL, NULL, 'report/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('774abe46-acc7-0687-a9a8-5c2488c6985e', 'report.event/002', 'Report', 3, NULL, NULL, TRUE, FALSE, NULL, NULL, NULL, 'report/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4e6683b8-2da1-5aac-e72f-dcdb383ef74b', 'report.event/002', 'Version', 5, NULL, '"002"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('81a12c51-76c8-f76d-78cf-014979b80b7d', 'report.event/002', 'Version', 5, NULL, '"002"', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5db38618-1acc-ec27-0b94-c24c68ebcc0f', 'report.event/003', 'MessageId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('99636d1f-0933-6b86-3489-b3ae36e2d0e9', 'report.event/003', 'MessageId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7e9eea13-bf6c-149a-f456-ba92857adb63', 'report.event/003', 'TimeCreatedMs', 1, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('baf86978-7565-63bd-940e-ebe78a47676c', 'report.event/003', 'TimeCreatedMs', 1, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7a07e2fe-f95a-8b85-f27c-e368cadd50af', 'report.event/003', 'Src', 2, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4a977d8e-06ba-b488-03dd-11e1d3f19401', 'report.event/003', 'Src', 2, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a7f8a070-d2ef-0d26-0bc3-bf9415f16782', 'report.event/003', 'Report', 3, NULL, NULL, TRUE, FALSE, NULL, NULL, NULL, 'report/003', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('b5a8d03a-361f-cf31-6504-f9ea5fe1b2b6', 'report.event/003', 'Report', 3, NULL, NULL, TRUE, FALSE, NULL, NULL, NULL, 'report/003', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('512d216e-ff02-2b87-4cba-6fab7d2845d0', 'scada.control.capabilities/000', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this capability projection.
+VALUES ('bb269f77-3071-7e05-efc8-90eec6aa0e66', 'scada.control.capabilities/000', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this capability projection.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2221385f-d160-ac18-21f2-9c1d9eed239e', 'scada.control.capabilities/000', 'MessageCreatedMs', 1, 'Timestamp at which this projection was created.
+VALUES ('b91069d3-887c-e7a7-bf9c-f17b3dfcd886', 'scada.control.capabilities/000', 'MessageCreatedMs', 1, 'Timestamp at which this projection was created.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9e029933-ede6-fb6e-9fe1-155407090d7e', 'scada.control.capabilities/000', 'RelayNodes', 2, 'List of nodes representing controllable relays exposed by this SCADA. Each corresponds to a ShNode in layout.lite whose ActorClass is Relay.
+VALUES ('2efdeb64-aa5f-2013-4bd0-ffa5e1eba986', 'scada.control.capabilities/000', 'RelayNodes', 2, 'List of nodes representing controllable relays exposed by this SCADA. Each corresponds to a ShNode in layout.lite whose ActorClass is Relay.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, 'scada.control.capabilities.RelayNode', NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('aec5b37a-a47c-34eb-d944-2440b16c9786', 'scada.control.capabilities/000', 'DacNodes', 3, 'List of nodes representing controllable 0–10V outputs exposed by this SCADA. Each corresponds to a ShNode in layout.lite whose ActorClass is ZeroTenOutputer.
+VALUES ('2c091138-0de9-2111-87d1-ee6024f5ea01', 'scada.control.capabilities/000', 'DacNodes', 3, 'List of nodes representing controllable 0–10V outputs exposed by this SCADA. Each corresponds to a ShNode in layout.lite whose ActorClass is ZeroTenOutputer.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, 'scada.control.capabilities.DacNode', NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7af6ec09-2e44-e87a-69b2-1b6e66742773', 'scada.control.capabilities/000', 'ControlChannels', 4, 'Telemetry channels corresponding to controllable nodes.
+VALUES ('dfd754e0-8b87-c030-6223-90ac87bfb6e3', 'scada.control.capabilities/000', 'ControlChannels', 4, 'Telemetry channels corresponding to controllable nodes.
 Each entry is a projection of a DataChannel from layout.lite whose AboutNodeName references a node listed in RelayNodes or DacNodes. These channels represent the observed state of the corresponding control.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, 'scada.control.capabilities.ControlChannel', NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('60271c54-026e-7e47-3fd3-3356039ebf15', 'scada.control.capabilities/000', 'I2cRelayComponent', 5, 'Relay semantic configuration component providing event and state mappings required for dispatch construction.
+VALUES ('8cb2e4e5-6fad-8783-cc94-17cc490af9a7', 'scada.control.capabilities/000', 'I2cRelayComponent', 5, 'Relay semantic configuration component providing event and state mappings required for dispatch construction.
 ', NULL, TRUE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ff84633a-a07b-6b52-8242-c2966f13eac1', 'send.control.capabilities/000', 'FromGNodeAlias', 0, 'GNode alias of the actor issuing the request. Typically an admin actor
+VALUES ('ba0d0e1d-bff7-7d24-7a82-1b4c2cc5d46d', 'send.control.capabilities/000', 'FromGNodeAlias', 0, 'GNode alias of the actor issuing the request. Typically an admin actor
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('ce44d598-2b00-dd60-deee-a69c6d21a2ae', 'send.control.capabilities/000', 'MessageCreatedMs', 1, 'Timestamp at which this request was created by the requesting node.
+VALUES ('0c1477aa-4cc7-d0ec-bff7-2d1f45815811', 'send.control.capabilities/000', 'MessageCreatedMs', 1, 'Timestamp at which this request was created by the requesting node.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0f6310fb-14e0-eef2-d679-d775ff4ca793', 'send.layout/000', 'FromGNodeAlias', 0, 'GNode alias of the actor issuing the request.
+VALUES ('6df0c3be-2f0d-27ae-dd20-09f02aa20db9', 'send.layout/000', 'FromGNodeAlias', 0, 'GNode alias of the actor issuing the request.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7d78d98e-d41a-fb17-7b7b-d7d0b3b6d49f', 'send.layout/000', 'FromName', 1, 'Spaceheat actor name of the requester (legacy routing/addressing field).
+VALUES ('59d3c501-a43d-f412-7a3f-8f5ecbf5a747', 'send.layout/000', 'FromName', 1, 'Spaceheat actor name of the requester (legacy routing/addressing field).
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d6e10bd6-ea43-433d-d50f-452d1aeb9c9d', 'send.layout/000', 'ToName', 2, 'Spaceheat actor name of the intended recipient (legacy routing/addressing field).
+VALUES ('5f7d0289-6a88-43d8-8314-6d2d125adbf9', 'send.layout/000', 'ToName', 2, 'Spaceheat actor name of the intended recipient (legacy routing/addressing field).
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f8392f5f-5a54-2968-14db-47e9695de849', 'send.layout/001', 'FromGNodeAlias', 0, 'GNode alias of the actor issuing the request.
+VALUES ('d6729f45-a6d9-6e32-81a0-ed194e404b40', 'send.layout/001', 'FromGNodeAlias', 0, 'GNode alias of the actor issuing the request.
 ', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3d833330-738c-bf61-78b7-03bf2c64ce7c', 'send.layout/001', 'MessageCreatedMs', 1, 'Timestamp at which this request was created by the requesting node.
+VALUES ('8acea402-0849-c25f-5ac0-5bb01017c968', 'send.layout/001', 'MessageCreatedMs', 1, 'Timestamp at which this request was created by the requesting node.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cab08a6e-d0a8-9067-3752-f6b29ad49330', 'sim.pico.tank.module.component.gt/000', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4474fb9a-7c2d-7cf7-3889-be77c4028b59', 'sim.pico.tank.module.component.gt/000', 'ComponentId', 0, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5c636af5-9f92-513b-ada6-d8e6fc7e5e50', 'sim.pico.tank.module.component.gt/000', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('37df7328-5498-c33b-714a-ca33335e4634', 'sim.pico.tank.module.component.gt/000', 'ComponentAttributeClassId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('70b5668b-4667-d643-075f-bc8b8dfb2681', 'sim.pico.tank.module.component.gt/000', 'ConfigList', 2, 'Channel configuration entries inherited from ComponentGt.
+VALUES ('170c50d7-836a-397e-3292-7e47e6ce9a24', 'sim.pico.tank.module.component.gt/000', 'ConfigList', 2, 'Channel configuration entries inherited from ComponentGt.
 ', NULL, TRUE, TRUE, NULL, NULL, NULL, 'channel.config/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('bb597aa5-2fe1-7706-ea91-7cfefaa12d21', 'sim.pico.tank.module.component.gt/000', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('bff29b63-c30e-15ca-6590-19b190307b1f', 'sim.pico.tank.module.component.gt/000', 'DisplayName', 3, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('30aecfe1-9446-57a5-efdd-691759e0fabd', 'sim.pico.tank.module.component.gt/000', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('964988c0-1c36-36e5-ffe5-0076d179da70', 'sim.pico.tank.module.component.gt/000', 'HwUid', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b77af674-841b-cad9-e496-29a390a5c2af', 'sim.pico.tank.module.component.gt/000', 'Enabled', 5, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('1fbcea3b-51aa-f184-ee68-16ab3c09521a', 'sim.pico.tank.module.component.gt/000', 'Enabled', 5, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6c8193ff-94d2-d96c-158d-2a04716af127', 'sim.pico.tank.module.component.gt/000', 'PicoHwUid', 6, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('2eab9c18-28b0-546b-a4e4-fa2d3e1d9dae', 'sim.pico.tank.module.component.gt/000', 'PicoHwUid', 6, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c112939d-cf92-0af7-ae68-1b279027e564', 'sim.pico.tank.module.component.gt/000', 'PicoAHwUid', 7, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('4b113d8e-26cd-bec8-9731-b4c2340e9e8a', 'sim.pico.tank.module.component.gt/000', 'PicoAHwUid', 7, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0ba3ddc5-2188-8578-8e2a-6954183c1c88', 'sim.pico.tank.module.component.gt/000', 'PicoBHwUid', 8, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('cdca99ba-a56d-9db8-d771-dc098be57e0f', 'sim.pico.tank.module.component.gt/000', 'PicoBHwUid', 8, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c8012130-382a-467d-c2d2-1fecbf1d4a2d', 'sim.pico.tank.module.component.gt/000', 'TempCalcMethod', 9, NULL, NULL, TRUE, FALSE, NULL, NULL, 'temp.calc.method/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('b453e91c-acbc-c331-cfeb-b8d81c10226c', 'sim.pico.tank.module.component.gt/000', 'TempCalcMethod', 9, NULL, NULL, TRUE, FALSE, NULL, NULL, 'temp.calc.method/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6766a1f6-b6fa-6d5f-749a-fa207fa156a6', 'sim.pico.tank.module.component.gt/000', 'ThermistorBeta', 10, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('465594a0-a52a-9f2b-9540-a120277c5dfd', 'sim.pico.tank.module.component.gt/000', 'ThermistorBeta', 10, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d4fd6fb2-e7c9-fb05-5f84-7932752364c6', 'sim.pico.tank.module.component.gt/000', 'SendMicroVolts', 11, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a6074229-f577-abc5-082b-4c3a4f1c456c', 'sim.pico.tank.module.component.gt/000', 'SendMicroVolts', 11, NULL, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('28be494c-e201-6706-effe-222183c69edd', 'sim.pico.tank.module.component.gt/000', 'Samples', 12, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a41e11a8-2f9f-db4c-0c4c-c91db1d20114', 'sim.pico.tank.module.component.gt/000', 'Samples', 12, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5740e1f1-adec-0f52-a526-1d42e23f96dc', 'sim.pico.tank.module.component.gt/000', 'NumSampleAverages', 13, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('46711fa8-64de-d7e6-cf05-96160df12c41', 'sim.pico.tank.module.component.gt/000', 'NumSampleAverages', 13, NULL, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8a19693e-aa79-63b5-ab63-ad70d50e90ec', 'sim.pico.tank.module.component.gt/000', 'PicoKOhms', 14, NULL, NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('0345a908-a296-891d-8bbf-47dc817d30e9', 'sim.pico.tank.module.component.gt/000', 'PicoKOhms', 14, NULL, NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0ad6b46e-fec4-f99d-17cf-789293059a70', 'sim.pico.tank.module.component.gt/000', 'SerialNumber', 15, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('eb33a340-a197-a179-430d-d4e517b45dff', 'sim.pico.tank.module.component.gt/000', 'SerialNumber', 15, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('251adb93-ec12-7505-72c7-252de3bb63f2', 'sim.pico.tank.module.component.gt/000', 'AsyncCaptureDeltaMicroVolts', 16, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('68fd5b33-7353-59d3-49b8-ca03be028d6f', 'sim.pico.tank.module.component.gt/000', 'AsyncCaptureDeltaMicroVolts', 16, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('05a1ccdf-2758-3fd6-af97-b59443a69ec3', 'sim.pico.tank.module.component.gt/000', 'SensorOrder', 17, NULL, NULL, FALSE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('1551600c-54bd-f28b-1432-79d0b5e5eea9', 'sim.pico.tank.module.component.gt/000', 'SensorOrder', 17, NULL, NULL, FALSE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0e6bdcf0-281d-a0f5-d44e-5ea2ffdb0d2b', 'sim.pico.tank.module.component.gt/000', 'SimulatesTypeName', 18, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"const": "pico.tank.module.component.gt"}') ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a758cc0e-1752-61b7-ec2e-6d05d0bc01ee', 'sim.pico.tank.module.component.gt/000', 'SimulatesTypeName', 18, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"const": "pico.tank.module.component.gt"}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c4c808a5-843b-f91c-6c15-24e899482bf5', 'sim.pico.tank.module.component.gt/000', 'SimulatesVersion', 19, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"const": "011"}') ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('52abe142-4e49-26ac-1264-31b9602deb8b', 'sim.pico.tank.module.component.gt/000', 'SimulatesVersion', 19, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"const": "011"}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7051ac9f-d655-e906-6557-1fe63fb7327c', 'single.machine.state/000', 'MachineHandle', 0, NULL, NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('f0e90cd3-8093-7cf5-ba8d-705e1ccfa74c', 'single.machine.state/000', 'MachineHandle', 0, NULL, NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('d3a7c2e6-4f79-b441-f420-32f3ea492abf', 'single.machine.state/000', 'StateEnum', 1, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('a90d6dfa-4945-dc1f-6edb-6dee8d51b8af', 'single.machine.state/000', 'StateEnum', 1, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1d0a18eb-5fc0-0288-177a-b58436b9dce6', 'single.machine.state/000', 'State', 2, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('bb28bace-e705-5a3c-ac0a-a37af57ae6e5', 'single.machine.state/000', 'State', 2, NULL, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('59e01fe1-4127-4236-29c9-602a8225b2cf', 'single.machine.state/000', 'UnixMs', 3, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('32c610e1-e04e-ad4d-d349-8fa85609b911', 'single.machine.state/000', 'UnixMs', 3, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3ba53219-a7a7-91e5-c90c-5d71f0cb1a5c', 'single.machine.state/000', 'Cause', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('b739571d-f312-f1e0-99fe-820f2a678298', 'single.machine.state/000', 'Cause', 4, NULL, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6801b305-e581-ebc4-a263-dfee0681870a', 'single.reading/000', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('71e9446a-451f-c9e3-a9a9-61105dd7446e', 'single.reading/000', 'ChannelName', 0, NULL, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('eb5e1b9d-a1b6-ee58-1116-6a9d19195c61', 'single.reading/000', 'Value', 1, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('6be14016-485d-216d-30e4-6ca479dda0b1', 'single.reading/000', 'Value', 1, NULL, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('571d057b-cf63-0275-59d0-b0763ea65231', 'single.reading/000', 'ScadaReadTimeUnixMs', 2, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('bb020cf5-4743-55fc-95c9-fda6e540df63', 'single.reading/000', 'ScadaReadTimeUnixMs', 2, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('4099713c-58f7-d268-9383-e1a0ee565d96', 'snapshot.spaceheat/003', 'FromGNodeAlias', 0, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('63254ea0-d14f-8556-bd2b-c44bfc3a21a7', 'snapshot.spaceheat/003', 'FromGNodeAlias', 0, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('545486b4-fedb-23ac-8a81-3b36bd31d814', 'snapshot.spaceheat/003', 'FromGNodeInstanceId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('3c8528e6-2a7d-cdcd-d1f7-666c7c48efad', 'snapshot.spaceheat/003', 'FromGNodeInstanceId', 1, NULL, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9a00b1c2-197e-d66e-6102-152a66e19539', 'snapshot.spaceheat/003', 'SnapshotTimeUnixMs', 2, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('cb3cb708-1279-b1ef-ddd2-cd85fd6b0ec9', 'snapshot.spaceheat/003', 'SnapshotTimeUnixMs', 2, NULL, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('27fda322-8412-017e-cc4a-6ef65b6259ae', 'snapshot.spaceheat/003', 'LatestReadingList', 3, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'single.reading/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('297ddb8b-effa-4f57-f58c-bec082500c07', 'snapshot.spaceheat/003', 'LatestReadingList', 3, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'single.reading/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a3d6ddb7-0eef-0fab-7a41-f8ca9c6aab50', 'snapshot.spaceheat/003', 'LatestStateList', 4, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'single.machine.state/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('327c7714-50ec-4fd1-c3f8-00ac5f6ba362', 'snapshot.spaceheat/003', 'LatestStateList', 4, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, 'single.machine.state/000', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('3e1af1ad-bd3d-ffb8-d6b0-0c3c1632b1fd', 'spaceheat.node.gt/200', 'Name', 0, 'Unique name identifying this node within the Spaceheat system. This name is used as the primary reference point for binding channels, actors, and control logic.
+VALUES ('863d8ebe-e626-5d47-9470-b86806cbe41d', 'spaceheat.node.gt/200', 'Name', 0, 'Unique name identifying this node within the Spaceheat system. This name is used as the primary reference point for binding channels, actors, and control logic.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('f5c75e78-2925-8be3-5013-21cc9a7e538b', 'spaceheat.node.gt/200', 'ActorHierarchyName', 1, 'Hierarchical name in the actor command tree. This is used when the node participates in structured actor control and command routing.
+VALUES ('4e7e47a2-d60e-6aeb-08d5-97b54b3ff3af', 'spaceheat.node.gt/200', 'ActorHierarchyName', 1, 'Hierarchical name in the actor command tree. This is used when the node participates in structured actor control and command routing.
 ', NULL, FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('283d7a59-e2e4-b33e-e825-8d0e6a43ca29', 'spaceheat.node.gt/200', 'Handle', 2, 'Handle used for actor-to-actor communication. When present, this defines the addressable identity of the node within the actor messaging layer.
+VALUES ('ee5975cb-cf69-fc21-c892-91f00617479f', 'spaceheat.node.gt/200', 'Handle', 2, 'Handle used for actor-to-actor communication. When present, this defines the addressable identity of the node within the actor messaging layer.
 ', NULL, FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cbbd1789-7d69-408d-b4f5-dc9ffe4e14e0', 'spaceheat.node.gt/200', 'ActorClass', 3, 'Actor-class string associated with this node.
+VALUES ('1033ce5b-c46c-23d7-64c9-ef7c1c6d465a', 'spaceheat.node.gt/200', 'ActorClass', 3, 'Actor-class string associated with this node.
 ', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0dfd3194-82fe-9cbb-76fe-153e6451c098', 'spaceheat.node.gt/200', 'DisplayName', 4, 'Human-readable display name for this node, intended for UI presentation and operator interaction.
+VALUES ('5afcd31d-0d6d-ad01-fa7b-b6ab2479a0fb', 'spaceheat.node.gt/200', 'DisplayName', 4, 'Human-readable display name for this node, intended for UI presentation and operator interaction.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a9118029-06fb-4fd7-4d68-e1bfca9da7d8', 'spaceheat.node.gt/200', 'ComponentId', 5, 'Identifier of the physical component associated with this node. This links the node to hardware defined elsewhere in the system.
+VALUES ('33c2c00d-439c-9df9-00e2-dd1884cee9e9', 'spaceheat.node.gt/200', 'ComponentId', 5, 'Identifier of the physical component associated with this node. This links the node to hardware defined elsewhere in the system.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('862796d5-cb90-0402-8bed-328df17d9f01', 'spaceheat.node.gt/200', 'NameplatePowerW', 6, 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
+VALUES ('032484a2-d1cf-e799-fc22-9e49f25404ec', 'spaceheat.node.gt/200', 'NameplatePowerW', 6, 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
 ', NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, '{"extras": {"minimum": 0}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0fe6250b-156d-9b4b-f15e-3501da9fe981', 'spaceheat.node.gt/200', 'InPowerMetering', 7, 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.
+VALUES ('e206991b-3613-7d69-d634-9be7ad9470b2', 'spaceheat.node.gt/200', 'InPowerMetering', 7, 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.
 ', NULL, FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('33c0973f-237a-2a69-d87d-2b42ddb1c7ba', 'spaceheat.node.gt/200', 'ShNodeId', 8, 'Immutable unique identifier for this Spaceheat node. This identifier is stable across deployments and renaming.
+VALUES ('98f3db0b-7d2f-284e-e026-be8abbb8afed', 'spaceheat.node.gt/200', 'ShNodeId', 8, 'Immutable unique identifier for this Spaceheat node. This identifier is stable across deployments and renaming.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0e53c8f5-86e8-fe4c-59a3-16b523a38cb0', 'spaceheat.node.gt/300', 'Name', 0, 'Unique name identifying this node within the Spaceheat system. This name is used as the primary reference point for binding channels, actors, and control logic.
+VALUES ('b1f429c4-6565-d1dd-7e6d-d2921adc92f9', 'spaceheat.node.gt/300', 'Name', 0, 'Unique name identifying this node within the Spaceheat system. This name is used as the primary reference point for binding channels, actors, and control logic.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('66b6eac6-ad91-c7ec-c3f6-a1383328b5e6', 'spaceheat.node.gt/300', 'ActorHierarchyName', 1, 'Hierarchical name in the actor command tree. This is used when the node participates in structured actor control and command routing.
+VALUES ('12576e58-fe42-3ad3-e277-c22c2be11214', 'spaceheat.node.gt/300', 'ActorHierarchyName', 1, 'Hierarchical name in the actor command tree. This is used when the node participates in structured actor control and command routing.
 ', NULL, FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a3d04230-e8e3-e7d7-3a7c-0fb9c5c46cdd', 'spaceheat.node.gt/300', 'Handle', 2, 'Handle used for actor-to-actor communication. When present, this defines the addressable identity of the node within the actor messaging layer.
+VALUES ('f7c9a4f2-cfd3-56c8-232c-3da90cd54300', 'spaceheat.node.gt/300', 'Handle', 2, 'Handle used for actor-to-actor communication. When present, this defines the addressable identity of the node within the actor messaging layer.
 ', NULL, FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2e2749d0-cc6e-3eb3-2bcd-72d9e5eed4c6', 'spaceheat.node.gt/300', 'ActorClass', 3, 'Class of the software actor associated with this node. This determines the behavior, capabilities, and runtime role of the node within the SCADA.
+VALUES ('6f64371e-d3e6-4361-c936-d699cf77dcbf', 'spaceheat.node.gt/300', 'ActorClass', 3, 'Class of the software actor associated with this node. This determines the behavior, capabilities, and runtime role of the node within the SCADA.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.actor.class/009', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('51ed0fde-c64a-98e2-876b-dac0533c5dc2', 'spaceheat.node.gt/300', 'DisplayName', 4, 'Human-readable display name for this node, intended for UI presentation and operator interaction.
+VALUES ('6e7f78e2-abf9-a260-f791-2b96e49581de', 'spaceheat.node.gt/300', 'DisplayName', 4, 'Human-readable display name for this node, intended for UI presentation and operator interaction.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('b0246f3c-60d7-434c-529a-c0c59d36347b', 'spaceheat.node.gt/300', 'ComponentId', 5, 'Identifier of the physical component associated with this node. This links the node to hardware defined elsewhere in the system.
+VALUES ('7d135b00-28e2-9e50-5a0c-715f41bd69d5', 'spaceheat.node.gt/300', 'ComponentId', 5, 'Identifier of the physical component associated with this node. This links the node to hardware defined elsewhere in the system.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9523035b-7ef5-1617-0eee-3fef8e97f2d7', 'spaceheat.node.gt/300', 'NameplatePowerW', 6, 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
+VALUES ('e16fb786-ea54-4801-2b63-2ebe18dcb682', 'spaceheat.node.gt/300', 'NameplatePowerW', 6, 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
 ', NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, '{"extras": {"minimum": 0}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('a081d01f-f00a-4cf7-6978-177cf416a23e', 'spaceheat.node.gt/300', 'InPowerMetering', 7, 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.
+VALUES ('341c31b4-2983-74b3-c89a-97af903ef459', 'spaceheat.node.gt/300', 'InPowerMetering', 7, 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.
 ', NULL, FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('180dd3f6-5516-f899-3d1c-ca4f85a6c243', 'spaceheat.node.gt/300', 'ShNodeId', 8, 'Immutable unique identifier for this Spaceheat node. This identifier is stable across deployments and renaming.
+VALUES ('e1c439bb-7262-e2ef-5839-0798069251be', 'spaceheat.node.gt/300', 'ShNodeId', 8, 'Immutable unique identifier for this Spaceheat node. This identifier is stable across deployments and renaming.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('cf523a61-18b5-e938-07e6-d7fdaa13a937', 'spaceheat.node.gt/301', 'Name', 0, 'Unique name identifying this node within the Spaceheat system. This name is used as the primary reference point for binding channels, actors, and control logic.
+VALUES ('7695f0b8-2f18-928d-f397-a9dcdc31f9b5', 'spaceheat.node.gt/301', 'Name', 0, 'Unique name identifying this node within the Spaceheat system. This name is used as the primary reference point for binding channels, actors, and control logic.
 ', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('8d5f7913-17ee-07d0-f0b0-91f25df7e90b', 'spaceheat.node.gt/301', 'ActorHierarchyName', 1, 'Hierarchical name in the actor command tree. This is used when the node participates in structured actor control and command routing.
+VALUES ('3ab66fbf-88f7-ccf5-597f-a4d15ee54053', 'spaceheat.node.gt/301', 'ActorHierarchyName', 1, 'Hierarchical name in the actor command tree. This is used when the node participates in structured actor control and command routing.
 ', NULL, FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('239d84aa-8842-c6ee-4bf1-e4277788c705', 'spaceheat.node.gt/301', 'Handle', 2, 'Handle used for actor-to-actor communication. When present, this defines the addressable identity of the node within the actor messaging layer.
+VALUES ('22a52117-3030-657c-feb6-93d05f794482', 'spaceheat.node.gt/301', 'Handle', 2, 'Handle used for actor-to-actor communication. When present, this defines the addressable identity of the node within the actor messaging layer.
 ', NULL, FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('deafc7a4-6e22-97a4-fd26-10a10754e786', 'spaceheat.node.gt/301', 'ActorClass', 3, 'Class of the software actor associated with this node. This determines the behavior, capabilities, and runtime role of the node within the SCADA.
+VALUES ('9e090fab-e222-6233-d2f4-5a19f33afd0f', 'spaceheat.node.gt/301', 'ActorClass', 3, 'Class of the software actor associated with this node. This determines the behavior, capabilities, and runtime role of the node within the SCADA.
 ', NULL, TRUE, FALSE, NULL, NULL, 'gw1.actor.class/011', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e3369929-1045-5187-34b2-670af3f937d0', 'spaceheat.node.gt/301', 'DisplayName', 4, 'Human-readable display name for this node, intended for UI presentation and operator interaction.
+VALUES ('eeb99753-a6f7-d637-b961-506a42c2150e', 'spaceheat.node.gt/301', 'DisplayName', 4, 'Human-readable display name for this node, intended for UI presentation and operator interaction.
 ', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('1b3b3f28-f606-d5c8-ca6d-cbbd7754ec5c', 'spaceheat.node.gt/301', 'ComponentId', 5, 'Identifier of the physical component associated with this node. This links the node to hardware defined elsewhere in the system.
+VALUES ('897cde4e-e744-064a-7c92-e8615a0aa255', 'spaceheat.node.gt/301', 'ComponentId', 5, 'Identifier of the physical component associated with this node. This links the node to hardware defined elsewhere in the system.
 ', NULL, FALSE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('aeaaf370-7188-b51c-d422-55004072c831', 'spaceheat.node.gt/301', 'BoardComponentId', 6, 'Identifier of the board-level component associated with this node. This allows grouping of nodes by embedded hardware platform or control board.
+VALUES ('91414323-9208-db8e-0c7a-339da1121bd9', 'spaceheat.node.gt/301', 'BoardComponentId', 6, 'Identifier of the board-level component associated with this node. This allows grouping of nodes by embedded hardware platform or control board.
 ', NULL, FALSE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('eb4fd91c-6e45-f547-2529-c43a3a66b2bc', 'spaceheat.node.gt/301', 'NameplatePowerW', 7, 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
+VALUES ('12a8e04c-c5c3-3f0d-13de-8fbc205b9295', 'spaceheat.node.gt/301', 'NameplatePowerW', 7, 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
 ', NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, '{"extras": {"minimum": 0}}') ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('5c05562e-947d-5aef-247c-4ba5e998d3d3', 'spaceheat.node.gt/301', 'InPowerMetering', 8, 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.
+VALUES ('6f0bc217-54b6-59cb-b12a-9713b54f5329', 'spaceheat.node.gt/301', 'InPowerMetering', 8, 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.
 ', NULL, FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('68ec1651-0263-b6b1-b1c4-5c21e836b8cd', 'spaceheat.node.gt/301', 'ShNodeId', 9, 'Immutable unique identifier for this Spaceheat node. This identifier is stable across deployments and renaming.
+VALUES ('1b1c10cf-d5e8-654d-0749-00510c88f69f', 'spaceheat.node.gt/301', 'ShNodeId', 9, 'Immutable unique identifier for this Spaceheat node. This identifier is stable across deployments and renaming.
 ', NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('798e6db4-ac79-a8dc-4d3c-2cf6f1463139', 'spaceheat.telemetry.quantity.projection/000', 'TelemetryName', 0, NULL, NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.telemetry.name/007', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('870b6af4-fa99-7d8e-67b5-b97e881073b0', 'spaceheat.telemetry.quantity.projection/000', 'TelemetryName', 0, NULL, NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.telemetry.name/007', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7694ea3b-ddf9-55c0-294c-1ccf0d00341e', 'spaceheat.telemetry.quantity.projection/000', 'Quantity', 1, NULL, NULL, TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('dd738996-e97b-80bc-11e5-c249c820d543', 'spaceheat.telemetry.quantity.projection/000', 'Quantity', 1, NULL, NULL, TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('04b3ed66-ba7a-8b01-545a-9fb861dd6d02', 'synced.readings/000', 'ChannelNameList', 0, 'Ordered list of channel names whose readings are included in this payload.
+VALUES ('148a67c2-4dd2-8a7e-ca3a-aedf66dd45c9', 'synced.readings/000', 'ChannelNameList', 0, 'Ordered list of channel names whose readings are included in this payload.
 ', NULL, TRUE, TRUE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('45a67cc7-9808-41ee-6625-57fa2aa8173e', 'synced.readings/000', 'ValueList', 1, 'Ordered list of integer readings aligned by index with ChannelNameList.
+VALUES ('87a3a53e-0210-2dee-0633-b1b765f48dbf', 'synced.readings/000', 'ValueList', 1, 'Ordered list of integer readings aligned by index with ChannelNameList.
 ', NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('6c0f7127-0ae8-f5f3-c0e7-c73e4c953519', 'synced.readings/000', 'ScadaReadTimeUnixMs', 2, 'UTC millisecond timestamp at which these synchronized readings were captured.
+VALUES ('f79f6247-0dab-402b-8ab4-f6d508a043da', 'synced.readings/000', 'ScadaReadTimeUnixMs', 2, 'UTC millisecond timestamp at which these synchronized readings were captured.
 ', NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('7ded6549-b304-47e7-90df-c24101d104ac', 'synced.readings.bundle/001', 'AboutGNodeAlias', 0, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('cc73430d-6dd6-d1c7-91dc-53672c7bc9ce', 'synced.readings.bundle/001', 'AboutGNodeAlias', 0, NULL, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('34c0fba0-1de8-a9b7-f68c-3091af8e826c', 'synced.readings.bundle/001', 'StartTimestamp', 1, NULL, NULL, TRUE, FALSE, NULL, 'utc.iso8601.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('318f7b71-4d55-17ca-04ff-03b582f7ee88', 'synced.readings.bundle/001', 'StartTimestamp', 1, NULL, NULL, TRUE, FALSE, NULL, 'utc.iso8601.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c930cdb9-3ccc-9a43-9239-cd201e46ada0', 'synced.readings.bundle/001', 'EndTimestamp', 2, NULL, NULL, TRUE, FALSE, NULL, 'utc.iso8601.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('83832860-7c36-4528-6491-e53c5fd3319c', 'synced.readings.bundle/001', 'EndTimestamp', 2, NULL, NULL, TRUE, FALSE, NULL, 'utc.iso8601.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('184627b1-5ea3-6e48-41d0-0e4bb602718b', 'synced.readings.bundle/001', 'TimestampList', 3, NULL, NULL, TRUE, TRUE, NULL, 'utc.iso8601.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('f4636ed7-9211-619a-f6e4-42dc94f732c3', 'synced.readings.bundle/001', 'TimestampList', 3, NULL, NULL, TRUE, TRUE, NULL, 'utc.iso8601.seconds', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('db6f337c-d408-0fd6-ec94-2db5927c051d', 'synced.readings.bundle/001', 'ChannelReadingsList', 4, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, 'synced.readings.bundle.ChannelReading', NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+VALUES ('996ded5d-402c-9c8d-a4a3-a8c7ba4959c2', 'synced.readings.bundle/001', 'ChannelReadingsList', 4, NULL, NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, 'synced.readings.bundle.ChannelReading', NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('e560a54c-950a-efb0-a21e-bcef69b79897', 'gridworks.heartbeat/000', 'FromGNodeAlias', 0, 'Sender''s canonical alias.', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('3025d11d-b868-8946-7f7d-7c6aefc88509', 'gridworks.heartbeat/000', 'HeartbeatTimestamp', 1, 'Wall-clock at signal emission.', NULL, TRUE, FALSE, NULL, 'utc.iso8601.millis', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('20e85372-38fc-ae6a-b111-c27e0a994230', 'gridworks.heartbeat/000', 'ObservedSkewMs', 2, 'Observed offset vs upstream NTP, in ms.', NULL, TRUE, FALSE, 'int', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('e760874d-6fce-561d-e224-ba1efff5dd9d', 'gridworks.heartbeat/000', 'QueueDepth', 3, 'Outbound queue depth at emission.', NULL, TRUE, FALSE, 'int', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('cf7572be-9b9a-2da6-1e90-5ae0fbd5817c', 'bid/001', 'BidderAlias', 0, 'Canonical alias of the market participant submitting this bid.', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('4a8a7360-09f7-d53f-bc7e-8e6ff73406c6', 'bid/001', 'MarketSlotName', 1, 'Identifier of the market slot. Now uses the new market.slot.handle format (successor to market.slot.name).', NULL, TRUE, FALSE, NULL, 'market.slot.handle', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('c4c3f185-a18b-03dc-f054-9b93676fdf15', 'bid/001', 'PqPairs', 2, 'Ordered list of price-quantity pairs.', NULL, TRUE, TRUE, NULL, NULL, NULL, 'price.quantity.unitless/001', NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('e822f2e5-7e7d-0899-555a-4a3506badd4a', 'bid/001', 'PriceUnit', 3, 'Currency/unit for prices.', NULL, TRUE, FALSE, NULL, NULL, 'market.price.unit/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('f019a90f-5b11-69d8-f797-66322918a3a4', 'bid/001', 'QuantityUnit', 4, 'Unit for quantities.', NULL, TRUE, FALSE, NULL, NULL, 'market.quantity.unit/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('b6cd64f5-3c79-c607-4e4d-48ae616f06f3', 'bid/001', 'BidExpiry', 5, 'NEW in /001: hard expiry timestamp; bids must clear before this instant or be rejected.', NULL, TRUE, FALSE, NULL, 'utc.iso8601.millis', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('81b63cc2-4662-74db-49c1-c710d67747cb', 'bid/001', 'BidNotes', 6, 'NEW in /001: optional free-text annotation, unstructured.', NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('35d41859-7691-763c-f706-979622bbfa67', 'data.channel.gt/003', 'Name', 0, 'Channel name.', NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ef723d78-5827-6235-7c3e-91374d0dbec6', 'data.channel.gt/003', 'RetentionWindowDays', 1, 'NEW in /003: how many days of samples this channel commits to keeping.', NULL, TRUE, FALSE, 'int', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ff27216a-135e-1820-b496-56b95ef3366f', 'report.event/002', 'EventName', 0, 'Short descriptive name.', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('5c90fb6e-1d33-2338-21a2-9e918574aefd', 'report.event/002', 'Severity', 1, 'NEW in /002: severity from a controlled vocabulary.', NULL, TRUE, FALSE, NULL, NULL, 'fis.authorization.decision/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('18ac634f-72bd-5b9a-c1ae-3448fbc79aee', 'boundary.heartbeat/000', 'PeerAlias', 0, 'The peer org''s alias on the other side of the boundary.', NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('da3218be-5d70-00f4-0842-92d107bc62d4', 'boundary.heartbeat/000', 'Sequence', 1, 'Monotonically increasing sequence number.', NULL, TRUE, FALSE, 'int', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('7ed2f950-1791-cee4-573e-cc412ee6721c', 'boundary.heartbeat/000', 'EmittedAt', 2, 'When the heartbeat left the sender.', NULL, TRUE, FALSE, NULL, 'utc.iso8601.millis', NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('79233699-7847-84ae-ec8d-6a6d0d36fb78', 'report.event/004', 'EventName', 0, 'Short descriptive name.', NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
+
+INSERT INTO type_attributes (type_attributes_id, type_version, attribute_name, idx, description, "default", is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('61dbeea4-513a-0827-1775-22433ff1e5b5', 'report.event/004', 'Severity', 1, 'NEW in /002: severity from a controlled vocabulary.', NULL, TRUE, FALSE, NULL, NULL, 'fis.authorization.decision/000', NULL, NULL, NULL) ON CONFLICT (type_attributes_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- TypeExamples: Per-TypeVersion full-instance examples (with order preserved). Sourced from JSON-Schema 'examples' arrays.
 -- ----------------------------------------------------------------------------
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('da5f617a-c8a3-a124-aa92-5be919d34c20', 'analytics.channel.gt/000', 0, '{
+VALUES ('7b32340a-ec66-2dec-02a4-e3879d3646fc', 'analytics.channel.gt/000', 0, '{
   "Id": "9c2f2a3a-6f5a-4f9d-8e4b-1b7c2d1e6a11",
   "Name": "persistence-delay",
   "DisplayName": "Persistence Delay Orange1",
@@ -4303,10 +4450,10 @@ VALUES ('da5f617a-c8a3-a124-aa92-5be919d34c20', 'analytics.channel.gt/000', 0, '
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('0d97cb63-456d-38a6-e0c2-e282486aa896', 'channel.readings/002', 0, '{"ChannelName": "hp-odu-pwr", "ValueList": [3215, 3315, 4200], "ScadaReadTimeUnixMsList": [1735689600123, 1735689601123, 1735689602123], "TypeName": "channel.readings", "Version": "002"}') ON CONFLICT (type_examples_id) DO NOTHING;
+VALUES ('654cb384-a631-8b4b-bb74-8b6d91be5ec6', 'channel.readings/002', 0, '{"ChannelName": "hp-odu-pwr", "ValueList": [3215, 3315, 4200], "ScadaReadTimeUnixMsList": [1735689600123, 1735689601123, 1735689602123], "TypeName": "channel.readings", "Version": "002"}') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('d44564b6-db49-7031-45be-41da70462908', 'connectivity.edge.gt/000', 0, '{
+VALUES ('5cc62196-9a39-6c2e-390e-e4897ea4938d', 'connectivity.edge.gt/000', 0, '{
   "Id": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
   "FromGNodeId": "86f3c021-e217-4197-b55f-547a7ab88c30",
   "ToGNodeId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -4318,7 +4465,7 @@ VALUES ('d44564b6-db49-7031-45be-41da70462908', 'connectivity.edge.gt/000', 0, '
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('924ddc99-cc68-35f5-336c-aea009f34871', 'data.channel.gt/001', 0, '{
+VALUES ('3e05c962-aeaf-c8f9-f9b2-111c5bf7e30a', 'data.channel.gt/001', 0, '{
   "Name": "primary-flow",
   "DisplayName": "Primary Flow Gpm X 100",
   "AboutNodeName": "primary-flow",
@@ -4331,7 +4478,7 @@ VALUES ('924ddc99-cc68-35f5-336c-aea009f34871', 'data.channel.gt/001', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('32c54c70-c309-e98f-ea4f-40b7f5df7cf2', 'data.channel.gt/002', 0, '{
+VALUES ('b3902ebb-d42a-02a5-7f42-1a3f6f4ddad4', 'data.channel.gt/002', 0, '{
   "Name": "vdc-relay",
   "DisplayName": "5V DC Bus Relay State",
   "AboutNodeName": "vdc-relay-gpio-23",
@@ -4345,7 +4492,7 @@ VALUES ('32c54c70-c309-e98f-ea4f-40b7f5df7cf2', 'data.channel.gt/002', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('1eb947ee-c285-e0d3-c0e5-52d895619812', 'derived.channel.gt/000', 0, '{
+VALUES ('46558dd7-159c-f5b1-fb23-a0111edc2a74', 'derived.channel.gt/000', 0, '{
   "CreatedByNodeName": "derived-generator",
   "DisplayName": "Usable Energy Wh",
   "Id": "23bf86b8-266a-4244-9b72-914179ab85aa",
@@ -4358,7 +4505,7 @@ VALUES ('1eb947ee-c285-e0d3-c0e5-52d895619812', 'derived.channel.gt/000', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('f56309f1-9b7d-e4e0-22d5-45fbf6cb1529', 'derived.channel.gt/001', 0, '{
+VALUES ('f1c2f276-3503-e8bd-da0b-d6c14801c1b1', 'derived.channel.gt/001', 0, '{
   "CreatedByNodeName": "derived-generator",
   "DisplayName": "Required Energy Wh",
   "Id": "26c5f643-96cc-4ede-b958-75d626790c01",
@@ -4380,7 +4527,7 @@ VALUES ('f56309f1-9b7d-e4e0-22d5-45fbf6cb1529', 'derived.channel.gt/001', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('c4384eba-3cb3-ba13-42e4-b525028f1020', 'derived.channel.gt/002', 0, '{
+VALUES ('0a39cf77-4e68-43e4-4134-ce663fef5504', 'derived.channel.gt/002', 0, '{
   "CreatedByNodeName": "derived-generator",
   "DisplayName": "Required Energy Wh",
   "Id": "26c5f643-96cc-4ede-b958-75d626790c01",
@@ -4403,7 +4550,7 @@ VALUES ('c4384eba-3cb3-ba13-42e4-b525028f1020', 'derived.channel.gt/002', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('a86a7037-c7ac-8c9a-5dc5-908ce1df8ede', 'fsm.atomic.report/000', 0, '{
+VALUES ('5bc716b9-01ab-88d7-7df0-a587a9f1658c', 'fsm.atomic.report/000', 0, '{
   "MachineHandle": "auto.pico-cycler.vdc-relay-gpio-23",
   "StateEnum": "relay.closed.or.open",
   "ReportType": "Action",
@@ -4416,7 +4563,7 @@ VALUES ('a86a7037-c7ac-8c9a-5dc5-908ce1df8ede', 'fsm.atomic.report/000', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('a1526a94-dffa-ed73-d8b5-5bef45d8b2cc', 'fsm.atomic.report/001', 0, '{
+VALUES ('3ede7879-9895-faed-5b40-666343b93dfc', 'fsm.atomic.report/001', 0, '{
   "MachineHandle": "auto.pico-cycler.vdc-relay-gpio-23",
   "StateEnum": "relay.closed.or.open",
   "ReportType": "Action",
@@ -4430,7 +4577,7 @@ VALUES ('a1526a94-dffa-ed73-d8b5-5bef45d8b2cc', 'fsm.atomic.report/001', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('13210204-c074-1076-5fdd-470de0524b8f', 'g.node.gt/004', 0, '{
+VALUES ('f82f56de-517f-2714-e6ff-aa105a575dce', 'g.node.gt/004', 0, '{
   "GNodeId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "Alias": "d1.isone.me.versant.keene.beech",
   "BaseClass": "LeafTransactiveNode",
@@ -4443,7 +4590,7 @@ VALUES ('13210204-c074-1076-5fdd-470de0524b8f', 'g.node.gt/004', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('d4c50855-a153-9544-29dc-dc551b5dc34d', 'g.node.gt/004', 1, '{
+VALUES ('b6969368-20bb-ae40-f201-29077946bb0f', 'g.node.gt/004', 1, '{
   "GNodeId": "dcb05390-5bca-40ef-b63d-7908ccb33d9b",
   "Alias": "d1.isone.me.ws",
   "BaseClass": "Logical",
@@ -4455,7 +4602,7 @@ VALUES ('d4c50855-a153-9544-29dc-dc551b5dc34d', 'g.node.gt/004', 1, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('0404df4e-0ca2-c636-0500-d27adbfb2da4', 'g.node.instance.gt/000', 0, '{
+VALUES ('63b639a3-a943-9bab-648d-2517e0dc7398', 'g.node.instance.gt/000', 0, '{
   "GNodeId": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
   "GNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
   "Status": "Active",
@@ -4468,7 +4615,7 @@ VALUES ('0404df4e-0ca2-c636-0500-d27adbfb2da4', 'g.node.instance.gt/000', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('4a3887d5-71df-bcc6-1fda-e7b09e7e6dc2', 'gw1.telemetry.name.quantity.projection/000', 0, '{
+VALUES ('da488417-933e-d96d-5b59-cd8c6b0c1668', 'gw1.telemetry.name.quantity.projection/000', 0, '{
   "TelemetryName": "PowerW",
   "Quantity": "Power",
   "TypeName": "gw1.telemetry.name.quantity.projection",
@@ -4476,7 +4623,7 @@ VALUES ('4a3887d5-71df-bcc6-1fda-e7b09e7e6dc2', 'gw1.telemetry.name.quantity.pro
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('6746408c-9cda-a54d-d1fd-a7c5e347bb0d', 'gw1.unit.quantity.projection/000', 0, '{
+VALUES ('231c986c-cacb-d3a6-b332-f75d4cf8f65b', 'gw1.unit.quantity.projection/000', 0, '{
   "Unit": "Watts",
   "Quantity": "Power",
   "TypeName": "gw1.unit.quantity.projection",
@@ -4484,7 +4631,7 @@ VALUES ('6746408c-9cda-a54d-d1fd-a7c5e347bb0d', 'gw1.unit.quantity.projection/00
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('ed2526e5-adfa-658e-dab5-ef37cd1281a6', 'ha1.params/004', 0, '{
+VALUES ('bc20737c-3214-6bf2-066a-1dafd59fd7ae', 'ha1.params/004', 0, '{
   "AlphaTimes10": 55,
   "BetaTimes100": -10,
   "GammaEx6": 0,
@@ -4501,7 +4648,7 @@ VALUES ('ed2526e5-adfa-658e-dab5-ef37cd1281a6', 'ha1.params/004', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('2ee0c64f-eee3-1020-550c-d76b4b7f1cdd', 'ha1.params/005', 0, '{
+VALUES ('110ccce6-1a68-5b69-cf3d-358f00f8306b', 'ha1.params/005', 0, '{
   "AlphaTimes10": 55,
   "BetaTimes100": -10,
   "GammaEx6": 0,
@@ -4523,13 +4670,13 @@ VALUES ('2ee0c64f-eee3-1020-550c-d76b4b7f1cdd', 'ha1.params/005', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('47f50c34-5f9b-3292-2079-cc09ed6460a5', 'linear.one.dimensional.calibration/000', 0, '{
+VALUES ('b7bd0b81-760a-ae25-5f08-c5f9fbc4c2c8', 'linear.one.dimensional.calibration/000', 0, '{
   "TypeName": "linear.one.dimensional.calibration",
   "Version": "000"
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('50bbacf1-e096-829f-8657-5c3644eaa12a', 'linear.one.dimensional.calibration/000', 1, '{
+VALUES ('d63ba1fa-cf44-8fd2-f7cc-e8ceca8af47f', 'linear.one.dimensional.calibration/000', 1, '{
   "M": 1.069,
   "B": -4.3,
   "TypeName": "linear.one.dimensional.calibration",
@@ -4537,7 +4684,7 @@ VALUES ('50bbacf1-e096-829f-8657-5c3644eaa12a', 'linear.one.dimensional.calibrat
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('9ed2e203-e721-4c30-e199-13e77a22a1f1', 'linear.one.dimensional.calibration/001', 0, '{
+VALUES ('72b37817-1293-731f-ede0-75cb5fb08a2d', 'linear.one.dimensional.calibration/001', 0, '{
   "M": 1.069,
   "B": -430,
   "TypeName": "linear.one.dimensional.calibration",
@@ -4545,7 +4692,7 @@ VALUES ('9ed2e203-e721-4c30-e199-13e77a22a1f1', 'linear.one.dimensional.calibrat
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('efd1dba3-eac0-5e4d-b0c0-4150cd364b68', 'position.point.gt/000', 0, '{
+VALUES ('a198d129-9671-a519-69c4-375634d07140', 'position.point.gt/000', 0, '{
   "Id": "198ca6af-5a4b-43a2-a8a9-7546deabc731",
   "LatitudeMicroDeg": 45657842,
   "LongitudeMicroDeg": -68708913,
@@ -4554,7 +4701,7 @@ VALUES ('efd1dba3-eac0-5e4d-b0c0-4150cd364b68', 'position.point.gt/000', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('b9f7dc3a-68ca-1fb4-2f66-fd3077f71dd1', 'price.quantity.unitless/001', 0, '{
+VALUES ('ea0ff2fb-9dbf-59c6-b40a-31f35b596063', 'price.quantity.unitless/001', 0, '{
   "PriceX1000": 12500,
   "QuantityX1000": -3000,
   "TypeName": "price.quantity.unitless",
@@ -4562,7 +4709,7 @@ VALUES ('b9f7dc3a-68ca-1fb4-2f66-fd3077f71dd1', 'price.quantity.unitless/001', 0
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('43c06ad1-3091-c868-db8a-82666d03aa18', 'relay.actor.config/002', 0, '{
+VALUES ('65e308a7-f3d6-0ae0-8900-c872bdff3777', 'relay.actor.config/002', 0, '{
   "ActorName": "relay17",
   "AsyncCapture": true,
   "CapturePeriodS": 300,
@@ -4583,7 +4730,7 @@ VALUES ('43c06ad1-3091-c868-db8a-82666d03aa18', 'relay.actor.config/002', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('9b3433e8-daf2-bdc2-1fc2-f04368230db1', 'relay.actor.config/003', 0, '{
+VALUES ('b0d8df5d-2ce6-4ed6-6807-7af1f192372b', 'relay.actor.config/003', 0, '{
   "ActorName": "relay17",
   "AsyncCapture": true,
   "AsyncCaptureDelta": 1,
@@ -4605,7 +4752,7 @@ VALUES ('9b3433e8-daf2-bdc2-1fc2-f04368230db1', 'relay.actor.config/003', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('9d8438d8-cbe6-8908-a247-02315f07ea6b', 'report/002', 0, '{
+VALUES ('2aa6e423-01de-1f41-fd31-250c7ac804e1', 'report/002', 0, '{
   "FromGNodeAlias": "hw1.isone.me.versant.keene.beech.scada",
   "FromGNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
   "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
@@ -4644,7 +4791,7 @@ VALUES ('9d8438d8-cbe6-8908-a247-02315f07ea6b', 'report/002', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('675fd7fd-3eb7-2d11-d1c8-28e75fb1a78e', 'report/003', 0, '{
+VALUES ('fccc95df-9906-2efe-e1c9-8ece4d4e775d', 'report/003', 0, '{
   "FromGNodeAlias": "hw1.isone.me.versant.keene.beech.scada",
   "FromGNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
   "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
@@ -4683,7 +4830,7 @@ VALUES ('675fd7fd-3eb7-2d11-d1c8-28e75fb1a78e', 'report/003', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('3c3f4746-01d6-a4e9-8b80-7525e4bdd25e', 'send.control.capabilities/000', 0, '{
+VALUES ('0a73d5aa-b026-d259-5c05-f8aaf3611ede', 'send.control.capabilities/000', 0, '{
   "FromGNodeAlias": "d1.isone.me.versant.keene.beech.admin",
   "MessageCreatedMs": 1762634100033,
   "TypeName": "send.control.capabilities",
@@ -4691,7 +4838,7 @@ VALUES ('3c3f4746-01d6-a4e9-8b80-7525e4bdd25e', 'send.control.capabilities/000',
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('16130ca7-bbd3-e1fd-0589-10a16ea4c941', 'send.layout/000', 0, '{
+VALUES ('967f1ce1-c278-2ae3-2a93-796e4fccdb28', 'send.layout/000', 0, '{
   "FromGNodeAlias": "d1.isone.me.versant.keene.beech.admin",
   "FromName": "admin",
   "ToName": "scada",
@@ -4700,7 +4847,7 @@ VALUES ('16130ca7-bbd3-e1fd-0589-10a16ea4c941', 'send.layout/000', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('d1d95a1c-7344-291a-61ae-406b28f59b2c', 'send.layout/001', 0, '{
+VALUES ('58d2ad2f-7228-bbb9-0239-762188e0cd3b', 'send.layout/001', 0, '{
   "FromGNodeAlias": "d1.isone.me.versant.keene.beech.admin",
   "MessageCreatedMs": 1762634100033,
   "TypeName": "send.layout",
@@ -4708,7 +4855,7 @@ VALUES ('d1d95a1c-7344-291a-61ae-406b28f59b2c', 'send.layout/001', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('4d5bcead-9d94-c739-b7b2-a39688727e49', 'single.machine.state/000', 0, '{
+VALUES ('d7a517f9-4297-bf6a-5b66-c90f18aebe46', 'single.machine.state/000', 0, '{
   "MachineHandle": "auto.local-control.local-control-normal.relay6",
   "StateEnum": "relay.closed.or.open",
   "State": "RelayClosed",
@@ -4718,7 +4865,7 @@ VALUES ('4d5bcead-9d94-c739-b7b2-a39688727e49', 'single.machine.state/000', 0, '
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('6189e483-f6e3-6915-9b65-dce81ff4de79', 'snapshot.spaceheat/003', 0, '{
+VALUES ('ff02314b-ef2f-558f-ceaa-af88193fef69', 'snapshot.spaceheat/003', 0, '{
   "FromGNodeAlias": "d1.isone.me.versant.keene.peach.scada",
   "FromGNodeInstanceId": "e4cbf56c-6918-4504-ad77-2da01fbe2c1b",
   "SnapshotTimeUnixMs": 1774893120000,
@@ -4809,7 +4956,7 @@ VALUES ('6189e483-f6e3-6915-9b65-dce81ff4de79', 'snapshot.spaceheat/003', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('e06dff6d-c9a5-a652-3a23-82886b21c508', 'spaceheat.node.gt/301', 0, '{
+VALUES ('6ca01a3b-d283-d400-b2b2-5070702acfe9', 'spaceheat.node.gt/301', 0, '{
   "Name": "s",
   "ActorClass": "PrimaryScada",
   "DisplayName": "Spruce Scada",
@@ -4819,7 +4966,7 @@ VALUES ('e06dff6d-c9a5-a652-3a23-82886b21c508', 'spaceheat.node.gt/301', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('f4851600-8c14-a478-0de7-9a08d87bf8c1', 'spaceheat.node.gt/301', 1, '{
+VALUES ('7c7206aa-78d9-0e73-cf94-26b294668b4c', 'spaceheat.node.gt/301', 1, '{
   "ActorClass": "Relay",
   "ActorHierarchyName": "s.relay1",
   "ComponentId": "7a2f6d84-9cb1-4e73-b8a6-3f1d52ce8049",
@@ -4832,7 +4979,7 @@ VALUES ('f4851600-8c14-a478-0de7-9a08d87bf8c1', 'spaceheat.node.gt/301', 1, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('616989a0-a6f2-eaa8-cb07-82a2c0bc6724', 'synced.readings/000', 0, '{
+VALUES ('13eaf550-d723-4626-55ef-25338b71ade6', 'synced.readings/000', 0, '{
   "ChannelNameList": ["hp-odu-pwr", "buffer-depth1"],
   "ValueList": [3215, 4973],
   "ScadaReadTimeUnixMs": 1735689600123,
@@ -4841,7 +4988,7 @@ VALUES ('616989a0-a6f2-eaa8-cb07-82a2c0bc6724', 'synced.readings/000', 0, '{
 }') ON CONFLICT (type_examples_id) DO NOTHING;
 
 INSERT INTO type_examples (type_examples_id, type_version, idx, example_json)
-VALUES ('503a9cf9-4d4a-3a6a-1726-be4c2648987f', 'synced.readings.bundle/001', 0, '{
+VALUES ('cfc46476-548a-c4c6-8f40-cf6b02a31c81', 'synced.readings.bundle/001', 0, '{
   "AboutGNodeAlias": "dw1.isone.me.versant.keene.apple.ta",
   "StartTimestamp": "2025-02-26T00:00:00Z",
   "EndTimestamp": "2025-02-26T00:02:00Z",
@@ -4884,55 +5031,55 @@ VALUES ('503a9cf9-4d4a-3a6a-1726-be4c2648987f', 'synced.readings.bundle/001', 0,
 -- TypeAxioms: Per-TypeVersion axioms (numbered invariants stated in natural language). Sourced from x-gridworks.axioms in YAML.
 -- ----------------------------------------------------------------------------
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('430a6c73-b744-686d-acd6-a45f8329bb2e', 'analytics.channel.gt/000', 1, 'OutputUnitQuantityConsistency', 'OutputQuantity SHALL equal the Quantity defined by the canonical gw1.float.unit.quantity.projection/000 instance for the specified OutputUnit.
+VALUES ('0beff28e-75e4-cd0e-021a-de3eee0fde79', 'analytics.channel.gt/000', 1, 'OutputUnitQuantityConsistency', 'OutputQuantity SHALL equal the Quantity defined by the canonical gw1.float.unit.quantity.projection/000 instance for the specified OutputUnit.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('52762e96-a32f-00a5-6864-c7cc1f8f7629', 'bid/000', 1, 'MarketNormalizationAnchor', 'The price of the first element in PqPairs SHALL equal the PriceMax defined by the MarketType associated with MarketSlotName.
+VALUES ('3a4ec5cd-c075-4ac3-991f-2df5238be863', 'bid/000', 1, 'MarketNormalizationAnchor', 'The price of the first element in PqPairs SHALL equal the PriceMax defined by the MarketType associated with MarketSlotName.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('16d28a07-89d2-8ad1-2156-28e414268bf6', 'bid/000', 2, 'UnitConsistency', 'PriceUnit and QuantityUnit SHALL match the units declared by the MarketType associated with MarketSlotName.
+VALUES ('9a68db1e-abd1-1665-0d3f-57bd502e1346', 'bid/000', 2, 'UnitConsistency', 'PriceUnit and QuantityUnit SHALL match the units declared by the MarketType associated with MarketSlotName.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('61c2c082-b731-17fd-8d27-5de9869b3f69', 'bid/000', 3, 'CurveAdmissibility', 'The structure, ordering, and cardinality of PqPairs SHALL conform to the admissibility rules of the MarketType associated with MarketSlotName (including any constraints on price ordering, monotonicity, tick size, or maximum number of segments).
+VALUES ('8666c6da-fc04-ede9-7929-4e44cf325819', 'bid/000', 3, 'CurveAdmissibility', 'The structure, ordering, and cardinality of PqPairs SHALL conform to the admissibility rules of the MarketType associated with MarketSlotName (including any constraints on price ordering, monotonicity, tick size, or maximum number of segments).
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('bb1b9a88-2bfd-3c70-f8bd-b113c42c7a0e', 'bid/000', 4, 'EconomicAdmission', 'SignedMarketFeeTxn MUST be verifiable under the market’s fee and admission policy for the specified MarketSlot.
+VALUES ('949dc395-6ef6-0953-c294-d2dd419326d6', 'bid/000', 4, 'EconomicAdmission', 'SignedMarketFeeTxn MUST be verifiable under the market’s fee and admission policy for the specified MarketSlot.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('c2e0a7bc-1fc8-9a17-6d0f-7a11c60017d4', 'channel.config/000', 1, 'CaptureAndPollingConsistency', 'If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.
+VALUES ('b46d5e8a-b092-0eb2-7230-7944c2be9695', 'channel.config/000', 1, 'CaptureAndPollingConsistency', 'If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('7c6880df-1d71-290a-833a-4e385e7fca40', 'channel.readings/001', 1, 'ListLengthConsistency', 'len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
+VALUES ('5461f1a3-a7d7-f95a-8ffc-665bc92dea27', 'channel.readings/001', 1, 'ListLengthConsistency', 'len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('85609803-5e9b-66db-2d97-5bb96d5e2eed', 'channel.readings/002', 1, 'ListLengthConsistency', 'len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
+VALUES ('d35ba098-c40e-e765-e9a4-64046f2289dd', 'channel.readings/002', 1, 'ListLengthConsistency', 'len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('ba8afc63-aaef-cae5-a221-3582b5ba5def', 'connectivity.edge.gt/000', 1, 'NoSelfLoop', 'FromGNodeId SHALL NOT equal ToGNodeId.
+VALUES ('c404ea6f-1675-afd1-9097-e819e063a782', 'connectivity.edge.gt/000', 1, 'NoSelfLoop', 'FromGNodeId SHALL NOT equal ToGNodeId.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('c729d9ca-55ee-7c7f-bed7-473f5c420dec', 'data.channel.gt/001', 1, 'PowerMeteringConstraint', 'If InPowerMetering is true, TelemetryName SHALL equal PowerW.
+VALUES ('6a2e08e3-5670-2c25-6b89-ea7d7b879e2c', 'data.channel.gt/001', 1, 'PowerMeteringConstraint', 'If InPowerMetering is true, TelemetryName SHALL equal PowerW.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('0c156ea4-7ab2-ee70-d63e-43166203b3df', 'data.channel.gt/002', 1, 'PowerMeteringConstraint', 'If InPowerMetering is true, TelemetryName SHALL equal PowerW.
+VALUES ('dac8ecfd-a432-ca1f-0e32-fc5ddc0bb0b2', 'data.channel.gt/002', 1, 'PowerMeteringConstraint', 'If InPowerMetering is true, TelemetryName SHALL equal PowerW.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('481505d3-a07b-d149-b779-3040349dcd95', 'data.channel.gt/002', 2, 'TelemetryQuantityConsistency', 'Quantity SHALL equal the Quantity defined by the canonical spaceheat.telemetry.quantity.projection/000 instance for the specified TelemetryName.
+VALUES ('b28c6e6c-1ed9-0ee9-807a-8a17d55854a1', 'data.channel.gt/002', 2, 'TelemetryQuantityConsistency', 'Quantity SHALL equal the Quantity defined by the canonical spaceheat.telemetry.quantity.projection/000 instance for the specified TelemetryName.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('8fbee6b3-da03-c958-f568-4b0fd20e0c13', 'derived.channel.gt/001', 1, 'EmissionSemanticsConsistency', 'EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:
+VALUES ('3dee861e-5312-e47c-fccf-3fffda05d310', 'derived.channel.gt/001', 1, 'EmissionSemanticsConsistency', 'EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:
 
   OnTrigger → neither EmitPeriodS nor AsyncEmitDelta present
   Periodic → EmitPeriodS present, AsyncEmitDelta absent
@@ -4940,7 +5087,7 @@ VALUES ('8fbee6b3-da03-c958-f568-4b0fd20e0c13', 'derived.channel.gt/001', 1, 'Em
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('348c6d5b-8c46-68af-67e1-902a3c00266c', 'derived.channel.gt/002', 1, 'EmissionSemanticsConsistency', 'EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:
+VALUES ('547af4fb-b7e3-45e3-8cdb-001d8f7064fd', 'derived.channel.gt/002', 1, 'EmissionSemanticsConsistency', 'EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:
 
   OnTrigger → neither EmitPeriodS nor AsyncEmitDelta present
   Periodic → EmitPeriodS present, AsyncEmitDelta absent
@@ -4948,11 +5095,11 @@ VALUES ('348c6d5b-8c46-68af-67e1-902a3c00266c', 'derived.channel.gt/002', 1, 'Em
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('2121a64a-dd34-c26d-f7aa-c3486f82c564', 'derived.channel.gt/002', 2, 'OutputUnitQuantityConsistency', 'OutputQuantity SHALL equal the Quantity defined by the canonical gw1.unit.quantity.projection:000 instance for the specified OutputUnit.
+VALUES ('b7bda6a7-209c-c4b0-c999-49ee2435bb96', 'derived.channel.gt/002', 2, 'OutputUnitQuantityConsistency', 'OutputQuantity SHALL equal the Quantity defined by the canonical gw1.unit.quantity.projection:000 instance for the specified OutputUnit.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('82e9c64c-622e-275d-ba4c-a2916967a14f', 'derived.channel.gt/002', 3, 'AffineStrategyRequiresCalibration', 'If Strategy equals "affine", then:
+VALUES ('36d243fe-2745-ac53-e2c5-5a7124797bae', 'derived.channel.gt/002', 3, 'AffineStrategyRequiresCalibration', 'If Strategy equals "affine", then:
 
   - Parameters SHALL contain a key "Calibration".
   - Parameters.Calibration SHALL be a valid
@@ -4960,7 +5107,7 @@ VALUES ('82e9c64c-622e-275d-ba4c-a2916967a14f', 'derived.channel.gt/002', 3, 'Af
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('992012a7-6557-5bd1-ad63-ee90378bf980', 'derived.channel.gt/002', 4, 'SystemModelRequiresParameters', 'If Strategy equals "system-model", then:
+VALUES ('8322921b-22b9-531d-f9b3-026c57f8df16', 'derived.channel.gt/002', 4, 'SystemModelRequiresParameters', 'If Strategy equals "system-model", then:
   - Parameters SHALL be present.
   - Parameters SHALL contain a key "EnergyModel".
   - Parameters.EnergyModel SHALL include:
@@ -4969,67 +5116,67 @@ VALUES ('992012a7-6557-5bd1-ad63-ee90378bf980', 'derived.channel.gt/002', 4, 'Sy
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('7711d552-ef97-c597-b292-ea8f17dec892', 'fis.authority.manifest/000', 1, 'InstanceReferenceIntegrity', 'For every element in GNodeInstanceList, there SHALL exist exactly one element in GNodeList whose GNodeId matches the instance''s GNodeId.
+VALUES ('d0915af7-8e8b-8105-6ca2-1242125a16b1', 'fis.authority.manifest/000', 1, 'InstanceReferenceIntegrity', 'For every element in GNodeInstanceList, there SHALL exist exactly one element in GNodeList whose GNodeId matches the instance''s GNodeId.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('21605d15-307b-dc58-74bf-065385341235', 'fis.authority.manifest/000', 2, 'SingleActiveInstancePerGNode', 'For each element in GNodeList, exactly one element in GNodeInstanceList SHALL have matching GNodeId and Status equal to Active.
+VALUES ('778ebf41-c2c8-3cb1-8b63-477e2c9f50e3', 'fis.authority.manifest/000', 2, 'SingleActiveInstancePerGNode', 'For each element in GNodeList, exactly one element in GNodeInstanceList SHALL have matching GNodeId and Status equal to Active.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('c3451c6d-db8f-a0e8-9d19-b10a375d4e08', 'fis.authority.manifest/000', 3, 'ParentClosureUpToDeclaredRoots', 'For every element in GNodeList, all alias prefixes of GNodeAlias SHALL also appear in GNodeList unless the prefix equals one of the aliases listed in ParentRootAliasList.
+VALUES ('3fe1947d-960a-069b-b8c5-ac4a685c8d6f', 'fis.authority.manifest/000', 3, 'ParentClosureUpToDeclaredRoots', 'For every element in GNodeList, all alias prefixes of GNodeAlias SHALL also appear in GNodeList unless the prefix equals one of the aliases listed in ParentRootAliasList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('637e4aea-9a05-464a-c4d8-9b857879b11e', 'fsm.atomic.report/000', 1, 'ActionPresenceConsistency', 'Action and ActionType SHALL be present if and only if ReportType equals Action.
+VALUES ('e7bff700-d079-b988-8803-24b127fcdac8', 'fsm.atomic.report/000', 1, 'ActionPresenceConsistency', 'Action and ActionType SHALL be present if and only if ReportType equals Action.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('3a60ea0e-da17-fe3b-7e4b-5c97aabaf9d1', 'fsm.atomic.report/000', 2, 'ActionTypeConsistency', 'If Action is present, ActionType SHALL also be present.
+VALUES ('c9a9b254-f5ab-c259-ea4f-7ffadaac041b', 'fsm.atomic.report/000', 2, 'ActionTypeConsistency', 'If Action is present, ActionType SHALL also be present.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('9f7cd6eb-f9e3-a59c-eb4f-0ed5524006b7', 'fsm.atomic.report/000', 3, 'EventPresenceConsistency', 'EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.
+VALUES ('c0b0a54b-960d-62fd-3474-ffb703f00a58', 'fsm.atomic.report/000', 3, 'EventPresenceConsistency', 'EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('e1c9f3e9-b86b-3656-e564-7fc3ce352464', 'fsm.atomic.report/001', 1, 'ActionPresenceConsistency', 'Action SHALL be present if and only if ReportType equals Action.
+VALUES ('b16d2b48-8ad7-0755-9ddd-1b0d17fd2329', 'fsm.atomic.report/001', 1, 'ActionPresenceConsistency', 'Action SHALL be present if and only if ReportType equals Action.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('b7924213-6be5-6790-a33b-cb02adb74d7d', 'fsm.atomic.report/001', 2, 'EventPresenceConsistency', 'EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.
+VALUES ('cf704fc7-a5ee-4e65-a632-27447f01e1ad', 'fsm.atomic.report/001', 2, 'EventPresenceConsistency', 'EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('7301a0f8-7d70-2dc2-33c5-e886c066c9d0', 'g.node.gt/004', 1, 'ClassConsistency', 'If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
+VALUES ('feecda66-cebc-f712-51a4-480777b72a18', 'g.node.gt/004', 1, 'ClassConsistency', 'If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('1d448282-5fb6-be0a-007f-b4ba46a236ac', 'g.node.gt/004', 2, 'PhysicalGNodeLocations', 'If BaseClass != Logical, PositionPointId SHALL NOT be null.
+VALUES ('03abe7ef-9d8c-31e3-5fb4-6fed8032db4e', 'g.node.gt/004', 2, 'PhysicalGNodeLocations', 'If BaseClass != Logical, PositionPointId SHALL NOT be null.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('6339a8b6-e4e1-f054-c29d-2521a05b92d2', 'g.node.gt/004', 3, 'AliasTransitionConsistency', 'If PrevAlias is not null, it SHALL differ from Alias. If PrevAlias is null, no alias transition is represented in this snapshot.
+VALUES ('4da4e92f-9e55-c055-5fb9-2273b521183b', 'g.node.gt/004', 3, 'AliasTransitionConsistency', 'If PrevAlias is not null, it SHALL differ from Alias. If PrevAlias is null, no alias transition is represented in this snapshot.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('033c74fc-7306-ef60-e01a-9c51c83c1aa2', 'g.node.gt/004', 4, 'GNodeClassNamespacing', 'GNodeClass SHALL be a non-empty string. It SHALL NOT contain whitespace.
+VALUES ('38e13ce7-e216-00c1-0b9e-642d7f592932', 'g.node.gt/004', 4, 'GNodeClassNamespacing', 'GNodeClass SHALL be a non-empty string. It SHALL NOT contain whitespace.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('196272ab-26db-d3c7-e06e-01b52510f73c', 'g.node.gt/004', 5, 'AliasSuffixSemantics', 'Alias SHALL end with ".ta" if and only if GNodeClass is "TerminalAsset". Alias SHALL end with ".scada" if and only if GNodeClass is "Scada".
+VALUES ('abd25dee-23e9-bb16-e49d-2ef67c4b3ccb', 'g.node.gt/004', 5, 'AliasSuffixSemantics', 'Alias SHALL end with ".ta" if and only if GNodeClass is "TerminalAsset". Alias SHALL end with ".scada" if and only if GNodeClass is "Scada".
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('14a09d32-fad0-e030-13cb-1ea992cafc27', 'g.node.instance.gt/000', 1, 'RevocationTimestampConsistency', 'RevokedAtUnixMs SHALL be present if and only if Status is Revoked or Ended.
+VALUES ('4660460d-e667-29ee-ff4d-1c8ed2a92bd7', 'g.node.instance.gt/000', 1, 'RevocationTimestampConsistency', 'RevokedAtUnixMs SHALL be present if and only if Status is Revoked or Ended.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('72ccd36f-689e-c977-1bc5-505fd17449fb', 'gw1.tank.temp.calibration.map/000', 1, 'ContiguousTankIndexConstraint', 'Tank SHALL contain between 1 and 6 entries, and its keys SHALL be the contiguous integer strings starting at 1.
+VALUES ('4b919c42-e09d-b0e6-dfb4-dde4c75af7f9', 'gw1.tank.temp.calibration.map/000', 1, 'ContiguousTankIndexConstraint', 'Tank SHALL contain between 1 and 6 entries, and its keys SHALL be the contiguous integer strings starting at 1.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('d6314f56-ce28-d0c4-c6f0-3547334f4277', 'gw1.telemetry.name.quantity.projection/000', 1, 'EnumeratedTelemetryProjectionMapping', 'The only valid TelemetryName → Quantity pairs in version 000 are:
+VALUES ('99f9b3e0-1f94-e15f-c82e-3d48136cf25f', 'gw1.telemetry.name.quantity.projection/000', 1, 'EnumeratedTelemetryProjectionMapping', 'The only valid TelemetryName → Quantity pairs in version 000 are:
 
   Unknown → Unknown
 
@@ -5065,7 +5212,7 @@ VALUES ('d6314f56-ce28-d0c4-c6f0-3547334f4277', 'gw1.telemetry.name.quantity.pro
 Any other combination SHALL be invalid.') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('d029c596-f348-d7b9-a56f-ec8eccf1aca7', 'gw1.unit.quantity.projection/000', 1, 'EnumeratedProjectionMapping', 'For version 000, the projection is defined exhaustively as follows:
+VALUES ('f6431340-10f6-082d-64de-ee33d463727e', 'gw1.unit.quantity.projection/000', 1, 'EnumeratedProjectionMapping', 'For version 000, the projection is defined exhaustively as follows:
 
   Unknown → Unknown
   Unitless → Unitless
@@ -5080,176 +5227,176 @@ VALUES ('d029c596-f348-d7b9-a56f-ec8eccf1aca7', 'gw1.unit.quantity.projection/00
 Any other combination SHALL be invalid.') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('db186810-64c0-5c12-52ef-7a7e3d50e4d2', 'i2c.multichannel.dt.relay.component.gt/002', 1, 'ActorAndRelayIndexUniqueness', 'ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
+VALUES ('81635ec5-2330-5df4-4dc7-d3b66b6da3c3', 'i2c.multichannel.dt.relay.component.gt/002', 1, 'ActorAndRelayIndexUniqueness', 'ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('36899c1c-310e-32db-c5b3-8c91beb56fda', 'i2c.multichannel.dt.relay.component.gt/003', 1, 'ActorAndRelayIndexUniqueness', 'ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
+VALUES ('a5618dde-cb2a-97a1-67fb-d42e8021e06d', 'i2c.multichannel.dt.relay.component.gt/003', 1, 'ActorAndRelayIndexUniqueness', 'ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('d697ce25-f12a-da67-31da-d8153de0c334', 'i2c.multichannel.dt.relay.component.gt/004', 1, 'ActorAndRelayIndexUniqueness', 'ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
+VALUES ('a6fee063-595e-b556-dc82-198012b93544', 'i2c.multichannel.dt.relay.component.gt/004', 1, 'ActorAndRelayIndexUniqueness', 'ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('9addb15e-8a97-2c4e-3fd8-d9fd22f124d1', 'i2c.thermistor.reader.component.gt/000', 1, 'ConfigUniquenessAndDeviceChannelConsistency', 'Each ChannelName SHALL appear at most once in ConfigList. For each AdcChannel, at most one config in ConfigList may use Unit equal to Celcius.
+VALUES ('74c93ff4-9a88-04c9-f8c2-4494f40a4b81', 'i2c.thermistor.reader.component.gt/000', 1, 'ConfigUniquenessAndDeviceChannelConsistency', 'Each ChannelName SHALL appear at most once in ConfigList. For each AdcChannel, at most one config in ConfigList may use Unit equal to Celcius.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('9a860a12-348d-a048-5a43-44f2d5482ed8', 'i2c.thermistor.reader.component.gt/000', 2, 'AddressValidity', 'AdcAddress SHALL be a valid 7-bit I2C address in the range 0 through 127.') ON CONFLICT (type_axioms_id) DO NOTHING;
+VALUES ('ea64fa71-a897-ab8d-328e-e5c96c0c1f06', 'i2c.thermistor.reader.component.gt/000', 2, 'AddressValidity', 'AdcAddress SHALL be a valid 7-bit I2C address in the range 0 through 127.') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('ad4d0a63-aa30-00c5-aab6-4041cc76dc07', 'layout.lite/007', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+VALUES ('7239fe17-0477-1f55-bb0f-6d77e130d20c', 'layout.lite/007', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('f4e73db5-cf76-bade-2051-ab8994245af8', 'layout.lite/007', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+VALUES ('e380351d-2d05-81ac-7799-bb07149ebe7e', 'layout.lite/007', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('e0c8ff14-2f5d-2b82-fce2-ffb5ba7d2f01', 'layout.lite/007', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+VALUES ('0bdc2358-b9e6-79fa-89fe-8c8630d16508', 'layout.lite/007', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('f8158459-8905-0bed-d984-f422384ca575', 'layout.lite/008', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+VALUES ('49529894-8b20-dd45-9597-9800fd32bbc7', 'layout.lite/008', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('65de15e6-77cb-7698-2daf-a887f82f6a85', 'layout.lite/008', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+VALUES ('bae6c952-d63c-4ba7-9c93-0866efc39abc', 'layout.lite/008', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('dba87195-0270-1d38-6a11-de49c1c734fd', 'layout.lite/008', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+VALUES ('25fbf4c9-064e-02b9-3608-fc76bdddadd3', 'layout.lite/008', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('5915704d-83fc-8427-d15a-902516cdd802', 'layout.lite/008', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+VALUES ('408bb5e2-0c75-aefe-32cf-17c8658c4509', 'layout.lite/008', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('2e847a77-61eb-a78d-93f5-58b1b4df1f3a', 'layout.lite/009', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+VALUES ('31d13e91-4cc0-09ee-f4cc-7c33a6fb45fe', 'layout.lite/009', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('0c7a31ef-f8dd-4544-6aa0-cf91a7de94bb', 'layout.lite/009', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+VALUES ('0c110e86-7de9-b83b-09f6-53ff26389fe8', 'layout.lite/009', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('b5dfc3f6-2ac4-083e-f4d4-f95dcdedc568', 'layout.lite/009', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+VALUES ('e8a31c0c-a81f-1959-02f5-24396471574e', 'layout.lite/009', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('ea592f3b-8c5a-e74a-b376-ece4492f8ee0', 'layout.lite/009', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+VALUES ('3b135096-368a-42d0-90a7-2eabc48196db', 'layout.lite/009', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('f96330da-8a8b-3a74-a213-236065a5fc39', 'layout.lite/010', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+VALUES ('b98319b6-1c04-e05e-5fe0-648d5d538ba1', 'layout.lite/010', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('e2f6d775-fc04-fca6-bf61-732dbda6fc2f', 'layout.lite/010', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+VALUES ('08693039-93a5-e656-c17b-96bdc6735526', 'layout.lite/010', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('89ddc9db-f222-8fb9-4fba-df9518936516', 'layout.lite/010', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+VALUES ('89ba5c4f-bc64-ea38-8f3f-bb7e5269b4b2', 'layout.lite/010', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('0646be10-917f-dba4-1b2f-3e310689ad99', 'layout.lite/010', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+VALUES ('8ae9b8e3-7fda-7f78-a251-df3940a009dd', 'layout.lite/010', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('aa47c766-2f71-8593-f7df-354aa8644b11', 'layout.lite/011', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+VALUES ('baa1dd79-9cca-d07d-c23f-bd234dd32b3f', 'layout.lite/011', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('ef87daf1-c89c-4891-c038-704a74d2383f', 'layout.lite/011', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+VALUES ('40097e5b-6722-f57f-6118-b4c2623186d3', 'layout.lite/011', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('4d9aafa0-f9cc-6f75-2a68-4aa94fb29127', 'layout.lite/011', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+VALUES ('684cbd9a-152c-5d60-3840-197c97715377', 'layout.lite/011', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('79aae425-bcae-3146-8847-e0f53ee491b3', 'layout.lite/011', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+VALUES ('ec80665e-9829-76fb-c8b3-aec61357b69d', 'layout.lite/011', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('bc5ac4e5-2071-578d-bf33-f9a3909d3343', 'layout.lite/012', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+VALUES ('e004f3a6-c949-bff8-fb5e-a39d1076fcab', 'layout.lite/012', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('e48e8bdf-11d1-a77d-92d6-bce80e62e247', 'layout.lite/012', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+VALUES ('cff3246c-5ca3-563c-ae8a-2f7b06d13adc', 'layout.lite/012', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('2566d416-87bf-819b-7bb8-6daab1ad61e2', 'layout.lite/012', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+VALUES ('e3af2831-01fd-c0fb-a3d5-938b939e34f2', 'layout.lite/012', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('7de59c43-ca98-664f-ed32-4b51aee9ca49', 'layout.lite/012', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+VALUES ('aee10844-01a2-4660-0cab-6cd7dac5836d', 'layout.lite/012', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('7255ca3c-f1e5-7747-5424-96ca1c05ba1d', 'layout.lite/013', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+VALUES ('af682797-798f-c2cc-c119-a50f4e728489', 'layout.lite/013', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('38d83774-cc8e-ade3-452a-4d83efd53e6a', 'layout.lite/013', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+VALUES ('615b3745-f34f-7ee4-a1f4-7343319226bf', 'layout.lite/013', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('4d00420b-57b7-e819-19a2-0df9e0fd28fd', 'layout.lite/013', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+VALUES ('8e850b1f-0857-c21f-445c-0ad34be0e8cf', 'layout.lite/013', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('bff80b22-5d1d-3817-3757-c6f818c0ed38', 'layout.lite/013', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+VALUES ('795e7bc0-2c95-f54e-5e67-36d972d9defc', 'layout.lite/013', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('a5070868-beab-d56b-0053-b8c9603fdb73', 'machine.states/000', 1, 'ListLengthConsistency', 'len(StateList) SHALL equal len(UnixMsList).
+VALUES ('825b16bb-0199-2371-ae7d-929c50a18e6a', 'machine.states/000', 1, 'ListLengthConsistency', 'len(StateList) SHALL equal len(UnixMsList).
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('d588194f-4dfa-4484-63e2-f90e681522e1', 'machine.states/000', 2, 'RecognizedStateEnumConsistency', 'If StateEnum is a recognized GridWorks enum, then all elements of StateList SHALL be valid values of that enum.
+VALUES ('74b2abf1-9635-e320-88d5-6967f9d8cdfd', 'machine.states/000', 2, 'RecognizedStateEnumConsistency', 'If StateEnum is a recognized GridWorks enum, then all elements of StateList SHALL be valid values of that enum.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('a88e43a4-9b58-7552-5f64-8f4856b54a9c', 'pico.flow.module.component.gt/000', 1, 'HwUidPattern', 'If HwUid is present, it SHALL match the pattern pico_xxxxxx where xxxxxx consists of six lowercase hexadecimal characters.
+VALUES ('50bbfe3f-096f-15c5-34c6-2e7a689fc767', 'pico.flow.module.component.gt/000', 1, 'HwUidPattern', 'If HwUid is present, it SHALL match the pattern pico_xxxxxx where xxxxxx consists of six lowercase hexadecimal characters.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('cb7afa48-a510-4606-7562-921db80b520c', 'pico.tank.module.component.gt/011', 1, 'PicoHardwareIdentityXor', 'Exactly one of the following SHALL hold:
+VALUES ('98d2f123-c57f-aaab-f6a3-b89778ca3820', 'pico.tank.module.component.gt/011', 1, 'PicoHardwareIdentityXor', 'Exactly one of the following SHALL hold:
   - PicoHwUid is present
   - both PicoAHwUid and PicoBHwUid are present
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('367693f7-642f-61c1-b406-721e618381ba', 'pico.tank.module.component.gt/011', 2, 'PicoKOhmsConsistency', 'PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
+VALUES ('9cea57ff-9d14-8bca-bd4f-5a2d2b114cc7', 'pico.tank.module.component.gt/011', 2, 'PicoKOhmsConsistency', 'PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('194f594a-3c43-2d05-466d-fa5e01d344fd', 'pico.tank.module.component.gt/011', 3, 'SensorOrderPermutation', 'If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
+VALUES ('a9525fd1-19a0-1067-b811-fd11adff3043', 'pico.tank.module.component.gt/011', 3, 'SensorOrderPermutation', 'If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('ec32fc3e-6ba2-7a29-5051-ef401d128abe', 'position.point.gt/000', 1, 'ValidEarthCoordinates', 'LatitudeMicroDeg SHALL be between -90,000,000 and 90,000,000 inclusive. LongitudeMicroDeg SHALL be between -180,000,000 and 180,000,000 inclusive.
+VALUES ('525aed20-421c-c179-df6c-81e00202fb07', 'position.point.gt/000', 1, 'ValidEarthCoordinates', 'LatitudeMicroDeg SHALL be between -90,000,000 and 90,000,000 inclusive. LongitudeMicroDeg SHALL be between -180,000,000 and 180,000,000 inclusive.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('df205b5c-e084-fc94-ffc9-c3af6c042663', 'relay.actor.config/002', 1, 'EventEnumConsistency', 'If EventType names a known enum, then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of that enum.
+VALUES ('477fb190-39e7-c1f8-44f4-b1f934f25b98', 'relay.actor.config/002', 1, 'EventEnumConsistency', 'If EventType names a known enum, then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of that enum.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('ec35488f-5c59-129b-26d4-7f7b391e721f', 'relay.actor.config/002', 2, 'StateEnumConsistency', 'If StateType names a known enum, then DeEnergizedState and EnergizedState SHALL both be valid values of that enum.
+VALUES ('8855166f-b09b-3be1-9bf2-c873cb5a8ed1', 'relay.actor.config/002', 2, 'StateEnumConsistency', 'If StateType names a known enum, then DeEnergizedState and EnergizedState SHALL both be valid values of that enum.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('7dfdead2-a0da-64f1-5ad3-6f28e94eeeec', 'relay.actor.config/002', 3, 'EventStateSemanticMatch', 'EnergizingEvent and DeEnergizingEvent SHALL correspond semantically to transitions into EnergizedState and DeEnergizedState respectively.
+VALUES ('d4ad4fad-e6d0-a1c2-5162-08e59b256a23', 'relay.actor.config/002', 3, 'EventStateSemanticMatch', 'EnergizingEvent and DeEnergizingEvent SHALL correspond semantically to transitions into EnergizedState and DeEnergizedState respectively.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('b45bc9f7-8091-e1fb-3d8c-243be72f4f05', 'relay.actor.config/002', 4, 'ClosedOpenWiringConsistency', 'If:
+VALUES ('1bbaf4a1-6a61-2fdd-c3d2-80c4f9792701', 'relay.actor.config/002', 4, 'ClosedOpenWiringConsistency', 'If:
 
   - StateType equals "relay.closed.or.open"
   - EventType equals "change.relay.state"
@@ -5277,23 +5424,23 @@ then:
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('1ec4fdb4-d266-507e-c998-55716030ffad', 'relay.actor.config/003', 1, 'AsyncCaptureConsistency', 'If AsyncCapture is true, then AsyncCaptureDelta SHALL be present.
+VALUES ('5ba1745f-054d-9471-35d7-96aae0e945f6', 'relay.actor.config/003', 1, 'AsyncCaptureConsistency', 'If AsyncCapture is true, then AsyncCaptureDelta SHALL be present.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('284d0442-9dfc-f7dd-2b11-5c36a319eb5c', 'relay.actor.config/003', 2, 'CapturePollingConsistency', 'If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.
+VALUES ('e20a64ee-5aa7-999d-51bf-ed2ada1c3448', 'relay.actor.config/003', 2, 'CapturePollingConsistency', 'If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('41343102-8fba-016e-a8a4-65da05e8c7e6', 'relay.actor.config/003', 3, 'RelayEventEnumConsistency', 'If EventType equals "change.relay.state", then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of change.relay.state:000.
+VALUES ('d48918b2-d637-9c21-5582-751c0ef633a9', 'relay.actor.config/003', 3, 'RelayEventEnumConsistency', 'If EventType equals "change.relay.state", then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of change.relay.state:000.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('2ac1a6aa-7138-63b9-a010-296bedb6aa53', 'relay.actor.config/003', 4, 'RelayStateEnumConsistency', 'If StateType equals "relay.closed.or.open", then DeEnergizedState and EnergizedState SHALL both be valid values of relay.closed.or.open:000.
+VALUES ('3fb51f9e-02ce-c935-b1a9-d143e4b1a77a', 'relay.actor.config/003', 4, 'RelayStateEnumConsistency', 'If StateType equals "relay.closed.or.open", then DeEnergizedState and EnergizedState SHALL both be valid values of relay.closed.or.open:000.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('ce3835f5-0dda-fff5-aae1-12aa11f4d0ec', 'relay.actor.config/003', 5, 'RelayEventStateMatch', 'If EventType equals "change.relay.state" and StateType equals "relay.closed.or.open", then:
+VALUES ('c45dab4c-4eed-fa8d-8a9e-e333f9eb132b', 'relay.actor.config/003', 5, 'RelayEventStateMatch', 'If EventType equals "change.relay.state" and StateType equals "relay.closed.or.open", then:
 
   - DeEnergizingEvent "CloseRelay" SHALL imply DeEnergizedState "RelayClosed"
   - DeEnergizingEvent "OpenRelay" SHALL imply DeEnergizedState "RelayOpen"
@@ -5302,89 +5449,89 @@ VALUES ('ce3835f5-0dda-fff5-aae1-12aa11f4d0ec', 'relay.actor.config/003', 5, 'Re
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('fb3f9d69-312f-6ed1-dcea-12b4515db6aa', 'report.event/002', 1, 'ReportIdentityPropagation', 'MessageId SHALL equal Report.Id.
+VALUES ('00b002a6-897c-92d0-41b4-287e46966594', 'report.event/002', 1, 'ReportIdentityPropagation', 'MessageId SHALL equal Report.Id.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('85436bde-2c2e-fb17-0a01-299fc72f05ac', 'report.event/002', 2, 'ReportCreatedTimePropagation', 'TimeCreatedMs SHALL equal Report.MessageCreatedMs.
+VALUES ('779803c9-ee7b-7d15-d966-b8204b9506f5', 'report.event/002', 2, 'ReportCreatedTimePropagation', 'TimeCreatedMs SHALL equal Report.MessageCreatedMs.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('c998542b-da88-4277-c9a2-ca7f54b403d2', 'report.event/002', 3, 'ReportSourcePropagation', 'Src SHALL equal Report.FromGNodeAlias.
+VALUES ('0af09583-c72f-6966-c9ea-d947b849ed5d', 'report.event/002', 3, 'ReportSourcePropagation', 'Src SHALL equal Report.FromGNodeAlias.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('d552a587-7fc1-51e5-5670-c5cc7f4bae1d', 'report.event/003', 3, 'ReportSourcePropagation', 'Src SHALL equal Report.FromGNodeAlias.
+VALUES ('98aa0f68-657a-3b09-b90b-243bce61f02f', 'report.event/003', 3, 'ReportSourcePropagation', 'Src SHALL equal Report.FromGNodeAlias.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('80f24977-a25b-cca4-c410-8f725ce577e9', 'scada.control.capabilities/000', 1, 'RelayNodeClassConsistency', 'All nodes in RelayNodes SHALL have ActorClass equal to Relay.
+VALUES ('f9ad2b39-bbe5-7239-ec2c-041e6c845c55', 'scada.control.capabilities/000', 1, 'RelayNodeClassConsistency', 'All nodes in RelayNodes SHALL have ActorClass equal to Relay.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('8c330e2b-d92d-5060-f05d-9a80f28ce51b', 'scada.control.capabilities/000', 2, 'DacNodeClassConsistency', 'All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.
+VALUES ('d3b94278-6764-f6b7-6d0b-a0d8106928a9', 'scada.control.capabilities/000', 2, 'DacNodeClassConsistency', 'All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('1b252413-4cae-c778-ba6a-b49dbdfff76d', 'scada.control.capabilities/000', 3, 'UniqueRelayNodeNames', 'Name values in RelayNodes SHALL be unique.
+VALUES ('38c624cc-b1fe-7354-9c6b-f0dcac0a20ce', 'scada.control.capabilities/000', 3, 'UniqueRelayNodeNames', 'Name values in RelayNodes SHALL be unique.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('b12e8b7d-2cb2-782c-f8a9-ae98c0a00bc5', 'scada.control.capabilities/000', 4, 'UniqueDacNodeNames', 'Name values in DacNodes SHALL be unique.
+VALUES ('395f8c81-6d9c-5e3f-49d4-60a14b9b95ae', 'scada.control.capabilities/000', 4, 'UniqueDacNodeNames', 'Name values in DacNodes SHALL be unique.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('dda66350-fb65-6a63-3816-08eae65c9619', 'scada.control.capabilities/000', 5, 'UniqueControlChannelAboutNames', 'AboutNodeName values in ControlChannels SHALL be unique.
+VALUES ('086ed17a-91fc-b775-be8b-be6b3aff23f3', 'scada.control.capabilities/000', 5, 'UniqueControlChannelAboutNames', 'AboutNodeName values in ControlChannels SHALL be unique.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('6691b591-bfc9-e145-b877-f4f0b9bb0a09', 'scada.control.capabilities/000', 6, 'ControlNodeChannelBijection', 'The set of node names defined by the union of RelayNodes.Name and DacNodes.Name SHALL equal exactly the set of ControlChannels.AboutNodeName values.
+VALUES ('7e9f986a-e28f-4eb2-3085-0bfc1e8a30e8', 'scada.control.capabilities/000', 6, 'ControlNodeChannelBijection', 'The set of node names defined by the union of RelayNodes.Name and DacNodes.Name SHALL equal exactly the set of ControlChannels.AboutNodeName values.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('4719d289-f335-dd67-5145-803416b45cc9', 'scada.control.capabilities/000', 7, 'RelayConfigNodeBijection', 'The set of ActorName values in I2cRelayComponent.ConfigList SHALL equal exactly the set of RelayNodes.Name values.
+VALUES ('0ae9768d-076c-ec4e-e032-35c6d5500532', 'scada.control.capabilities/000', 7, 'RelayConfigNodeBijection', 'The set of ActorName values in I2cRelayComponent.ConfigList SHALL equal exactly the set of RelayNodes.Name values.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('f6c58bf7-922b-a3f9-cd01-1daff85dcb0d', 'sim.pico.tank.module.component.gt/000', 1, 'PicoHardwareIdentityXor', 'Exactly one of the following SHALL hold:
+VALUES ('c2b3b71e-9346-c51a-3650-6d39e4624d28', 'sim.pico.tank.module.component.gt/000', 1, 'PicoHardwareIdentityXor', 'Exactly one of the following SHALL hold:
   - PicoHwUid is present
   - both PicoAHwUid and PicoBHwUid are present
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('03cfa4ef-2151-505d-b14a-b1f8671de16b', 'sim.pico.tank.module.component.gt/000', 2, 'PicoKOhmsConsistency', 'PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
+VALUES ('f70b9277-6b97-acb6-46f3-a3b1c0140a04', 'sim.pico.tank.module.component.gt/000', 2, 'PicoKOhmsConsistency', 'PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('200aeb19-3ea1-0f38-c82d-9c19f618b4a8', 'sim.pico.tank.module.component.gt/000', 3, 'SensorOrderPermutation', 'If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
+VALUES ('36124a42-129b-c60f-a052-53151c2477e3', 'sim.pico.tank.module.component.gt/000', 3, 'SensorOrderPermutation', 'If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('4daf6965-46be-8cd6-ed5f-ca9de251dd00', 'single.machine.state/000', 1, 'RecognizedStateEnumConsistency', 'If StateEnum equals "relay.closed.or.open", then State SHALL equal "RelayClosed" or "RelayOpen". More generally, if StateEnum is a recognized GridWorks enum, then State SHALL be a valid value of that enum.
+VALUES ('fe018db5-a67a-42b3-d74b-add2e78d3f8f', 'single.machine.state/000', 1, 'RecognizedStateEnumConsistency', 'If StateEnum equals "relay.closed.or.open", then State SHALL equal "RelayClosed" or "RelayOpen". More generally, if StateEnum is a recognized GridWorks enum, then State SHALL be a valid value of that enum.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('42b17df2-9804-1a4b-81bb-183d086142f8', 'spaceheat.node.gt/200', 1, 'InPowerMeteringRequiresNameplate', 'If InPowerMetering is true, NameplatePowerW SHALL be present.
+VALUES ('47b56d9b-1bdb-48ba-00c2-8552e025f44e', 'spaceheat.node.gt/200', 1, 'InPowerMeteringRequiresNameplate', 'If InPowerMetering is true, NameplatePowerW SHALL be present.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('f17d2235-3f6e-527f-4d0f-e24b4a625960', 'spaceheat.node.gt/300', 1, 'InPowerMeteringRequiresNameplate', 'If InPowerMetering is true, NameplatePowerW SHALL be present.
+VALUES ('ea3c3c06-6198-ffe2-975e-bf4e038d9160', 'spaceheat.node.gt/300', 1, 'InPowerMeteringRequiresNameplate', 'If InPowerMetering is true, NameplatePowerW SHALL be present.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('69a6dd9a-e24e-effb-aff1-b3c76c230033', 'spaceheat.node.gt/301', 1, 'InPowerMeteringRequiresNameplate', 'If InPowerMetering is true, NameplatePowerW SHALL be present. 
+VALUES ('e94b04fb-f4ca-e898-b39c-5003c15f01ca', 'spaceheat.node.gt/301', 1, 'InPowerMeteringRequiresNameplate', 'If InPowerMetering is true, NameplatePowerW SHALL be present. 
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('19efd748-9685-a036-3433-c1d91b3806a5', 'spaceheat.node.gt/301', 2, 'ActorHierarchyConstraints', 'If ActorClass is "NoActor", ActorHierarchyName SHALL be absent. If ActorClass is not "NoActor" and ActorHierarchyName is absent, then ActorClass SHALL be "PrimaryScada" or "SecondaryScada". If ActorHierarchyName is present, its final segment SHALL equal Name and all segments SHALL be unique.
+VALUES ('1b274f7b-e86b-bc90-c554-d8e88d2f31bf', 'spaceheat.node.gt/301', 2, 'ActorHierarchyConstraints', 'If ActorClass is "NoActor", ActorHierarchyName SHALL be absent. If ActorClass is not "NoActor" and ActorHierarchyName is absent, then ActorClass SHALL be "PrimaryScada" or "SecondaryScada". If ActorHierarchyName is present, its final segment SHALL equal Name and all segments SHALL be unique.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('0b04f36e-b4c5-52e3-aa88-0ac63d597d02', 'spaceheat.node.gt/301', 3, 'HandleConstraints', 'If Handle is present, its final segment SHALL equal Name and all segments SHALL be unique.
+VALUES ('7321421f-379f-92e7-2745-b197ac2497db', 'spaceheat.node.gt/301', 3, 'HandleConstraints', 'If Handle is present, its final segment SHALL equal Name and all segments SHALL be unique.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('cc68a2a5-083c-6aef-a31d-0935b28c9641', 'spaceheat.telemetry.quantity.projection/000', 1, 'EnumeratedProjectionMapping', 'The only valid TelemetryName → Quantity pairs in version 000 are:
+VALUES ('90f04c0b-e118-d383-8b41-4dc01d021852', 'spaceheat.telemetry.quantity.projection/000', 1, 'EnumeratedProjectionMapping', 'The only valid TelemetryName → Quantity pairs in version 000 are:
 
   Unknown → Unknown
 
@@ -5422,27 +5569,27 @@ Any other combination SHALL be invalid.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('4656bfd7-344c-7551-8e3c-a104be6f5d29', 'synced.readings/000', 1, 'ListLengthConsistency', 'len(ChannelNameList) SHALL equal len(ValueList).
+VALUES ('ec25dfff-a0a1-2edf-2d6c-9dd075be15b1', 'synced.readings/000', 1, 'ListLengthConsistency', 'len(ChannelNameList) SHALL equal len(ValueList).
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('be392494-1907-cbfe-2a0a-7882733dbfe2', 'synced.readings.bundle/001', 1, 'TerminalAssetAliasConstraint', 'AboutGNodeAlias SHALL identify a TerminalAsset and therefore SHALL end with the suffix ".ta".
+VALUES ('57081b00-d7be-d44e-7baf-a749c5efcedd', 'synced.readings.bundle/001', 1, 'TerminalAssetAliasConstraint', 'AboutGNodeAlias SHALL identify a TerminalAsset and therefore SHALL end with the suffix ".ta".
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('35220e59-9501-beba-eba7-f3a13a75eedd', 'synced.readings.bundle/001', 2, 'ChannelDefinitionBijection', 'ChannelName values SHALL be unique across ChannelReadingsList.
+VALUES ('1ecabdff-edca-84ac-3576-baa34939abe9', 'synced.readings.bundle/001', 2, 'ChannelDefinitionBijection', 'ChannelName values SHALL be unique across ChannelReadingsList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('af4d4c6b-6c3d-4eac-47fc-2cfcede4efd9', 'synced.readings.bundle/001', 3, 'StartTimestampBeforeEnd', 'StartTimestamp shall be less than EndTimestamp
+VALUES ('865b2a64-3abb-3b1c-4dff-27f0a14a4fda', 'synced.readings.bundle/001', 3, 'StartTimestampBeforeEnd', 'StartTimestamp shall be less than EndTimestamp
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('9ecb8a32-bbcc-e543-51ef-063a89fc6c0e', 'synced.readings.bundle/001', 4, 'TimestampAndValueLengthAlignment', 'The length of TimestampList shall be equal to the length of ValueList for each entry in ChannelReadingsList.
+VALUES ('427f8089-5c90-2b07-5206-e97911fd2ddb', 'synced.readings.bundle/001', 4, 'TimestampAndValueLengthAlignment', 'The length of TimestampList shall be equal to the length of ValueList for each entry in ChannelReadingsList.
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
 INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
-VALUES ('9618f276-6e64-a12d-4d42-146d522ef2ad', 'synced.readings.bundle/001', 5, 'UnitTypeAndValueRepresentationConsistency', 'For each entry in ChannelDefinitions:
+VALUES ('9650fa35-97b6-2867-ca87-916898b21c3d', 'synced.readings.bundle/001', 5, 'UnitTypeAndValueRepresentationConsistency', 'For each entry in ChannelDefinitions:
 
   - UnitType SHALL equal one of:
       gw1.unit
@@ -5454,265 +5601,271 @@ VALUES ('9618f276-6e64-a12d-4d42-146d522ef2ad', 'synced.readings.bundle/001', 5,
     spaceheat.telemetry.name → version 007
 ') ON CONFLICT (type_axioms_id) DO NOTHING;
 
+INSERT INTO type_axioms (type_axioms_id, type_version, number, axiom_name, statement)
+VALUES ('be986a2d-7e70-41ce-cf56-aaf3c1dce64e', 'bid/001', 1, 'ExpiryAfterMarketSlotEnd', 'BidExpiry SHALL be no later than the closing instant of MarketSlotName plus a tolerance window declared by the corresponding MarketType.') ON CONFLICT (type_axioms_id) DO NOTHING;
+
 -- ----------------------------------------------------------------------------
 -- TypeHelpers: Non-versioned reusable subtypes auto-promoted from inline nested objects (array items, oneOf branches). Synthesized at migration time. Origin metadata preserves provenance for round-trip YAML emission.
 -- ----------------------------------------------------------------------------
 INSERT INTO type_helpers (type_helpers_id, name, title, description, extra_allowed, origin_type_version, origin_path)
-VALUES ('2e14f24a-ac37-e7e3-ba53-ed3d2a2f5e45', 'scada.control.capabilities.RelayNode', NULL, 'Minimal projection of a relay ShNode required for control operations.
+VALUES ('13daddf9-6020-f036-8b16-35504ebce453', 'scada.control.capabilities.RelayNode', NULL, 'Minimal projection of a relay ShNode required for control operations.
 ', FALSE, 'scada.control.capabilities/000', '/properties/RelayNodes/items') ON CONFLICT (type_helpers_id) DO NOTHING;
 
 INSERT INTO type_helpers (type_helpers_id, name, title, description, extra_allowed, origin_type_version, origin_path)
-VALUES ('bbb0149f-80cd-b623-bc66-3b2db49cea25', 'scada.control.capabilities.DacNode', NULL, 'Minimal projection of a DAC ShNode required for control operations.
+VALUES ('dbb7d468-8be6-c6cc-8835-f18ea85611ea', 'scada.control.capabilities.DacNode', NULL, 'Minimal projection of a DAC ShNode required for control operations.
 ', FALSE, 'scada.control.capabilities/000', '/properties/DacNodes/items') ON CONFLICT (type_helpers_id) DO NOTHING;
 
 INSERT INTO type_helpers (type_helpers_id, name, title, description, extra_allowed, origin_type_version, origin_path)
-VALUES ('085bf6a7-eca6-2708-55d7-0b0bc3077ffc', 'scada.control.capabilities.ControlChannel', NULL, 'Minimal projection of a DataChannel required for observing control state.
+VALUES ('b6414288-3e05-67f6-d41b-a6172540f6b4', 'scada.control.capabilities.ControlChannel', NULL, 'Minimal projection of a DataChannel required for observing control state.
 ', FALSE, 'scada.control.capabilities/000', '/properties/ControlChannels/items') ON CONFLICT (type_helpers_id) DO NOTHING;
 
 INSERT INTO type_helpers (type_helpers_id, name, title, description, extra_allowed, origin_type_version, origin_path)
-VALUES ('99494577-01de-c443-18a8-cf4395379433', 'synced.readings.bundle.ChannelReading', NULL, NULL, NULL, 'synced.readings.bundle/001', '/properties/ChannelReadingsList/items') ON CONFLICT (type_helpers_id) DO NOTHING;
+VALUES ('97bc796e-afef-5959-1d86-1bd6d6d1236b', 'synced.readings.bundle.ChannelReading', NULL, NULL, NULL, 'synced.readings.bundle/001', '/properties/ChannelReadingsList/items') ON CONFLICT (type_helpers_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- TypeHelperAttributes: Properties of a TypeHelper. Same shape as TypeAttributes minus the oneOf machinery, since helpers are not versioned.
 -- ----------------------------------------------------------------------------
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('db2bd6dd-082e-4ed7-640f-2addd4447c25', 'scada.control.capabilities.RelayNode', 'Name', 0, 'Canonical node name of the relay.
+VALUES ('2ef9643a-2604-734e-08e5-9299fa0554a2', 'scada.control.capabilities.RelayNode', 'Name', 0, 'Canonical node name of the relay.
 ', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('fb63b91e-8067-d78a-bc77-c5b585f05046', 'scada.control.capabilities.RelayNode', 'ActorClass', 1, 'Actor class of the node. SHALL be Relay.
+VALUES ('4e12a135-98f7-34cf-5b3c-225b76a32546', 'scada.control.capabilities.RelayNode', 'ActorClass', 1, 'Actor class of the node. SHALL be Relay.
 ', TRUE, FALSE, NULL, NULL, 'gw1.actor.class/009', NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('9b1a2598-4fcc-3c76-6541-70477f89143b', 'scada.control.capabilities.RelayNode', 'DisplayName', 2, 'Human-readable label suitable for administrative interfaces.
+VALUES ('2d55b3b7-4432-f526-9ce2-8612d76f3cf6', 'scada.control.capabilities.RelayNode', 'DisplayName', 2, 'Human-readable label suitable for administrative interfaces.
 ', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c1923465-51c0-051f-a0e7-a8dda2866109', 'scada.control.capabilities.DacNode', 'Name', 0, 'Canonical node name of the DAC output.
+VALUES ('ed7b5306-d017-53ee-9725-ebbefe509e2c', 'scada.control.capabilities.DacNode', 'Name', 0, 'Canonical node name of the DAC output.
 ', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('627dcfc0-dac9-6329-b6ab-fdd3fc9bc7d2', 'scada.control.capabilities.DacNode', 'ActorClass', 1, 'Actor class of the node. SHALL be ZeroTenOutputer.
+VALUES ('80b935e9-c134-d59f-f864-ab3e698cd639', 'scada.control.capabilities.DacNode', 'ActorClass', 1, 'Actor class of the node. SHALL be ZeroTenOutputer.
 ', TRUE, FALSE, NULL, NULL, 'gw1.actor.class/009', NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('0213358e-8ed9-85e8-6422-114c6b6e4546', 'scada.control.capabilities.DacNode', 'DisplayName', 2, 'Human-readable label suitable for administrative interfaces.
+VALUES ('807d131a-627b-9fb3-0aa4-881f51be0156', 'scada.control.capabilities.DacNode', 'DisplayName', 2, 'Human-readable label suitable for administrative interfaces.
 ', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('e5a76f6e-e164-0c2a-33a6-3c9423d27a12', 'scada.control.capabilities.ControlChannel', 'Name', 0, 'Name of the telemetry channel.
+VALUES ('ab7e4a32-288b-8204-5bef-de7721d39f89', 'scada.control.capabilities.ControlChannel', 'Name', 0, 'Name of the telemetry channel.
 ', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('c7260cc9-bd9a-a2d0-653d-3cdbbce5f26d', 'scada.control.capabilities.ControlChannel', 'AboutNodeName', 1, 'Node name whose state is represented by this channel.
+VALUES ('ef588751-a3b4-6666-beee-3b66b1aee4df', 'scada.control.capabilities.ControlChannel', 'AboutNodeName', 1, 'Node name whose state is represented by this channel.
 ', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('972769a5-2081-dce6-f336-63b4e23e091c', 'synced.readings.bundle.ChannelReading', 'ChannelName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
+VALUES ('4bc03c19-5364-d094-1e2e-4304c7abcdcc', 'synced.readings.bundle.ChannelReading', 'ChannelName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('46d4ba0d-9bed-7f1b-306f-6effc4ce8e2d', 'synced.readings.bundle.ChannelReading', 'ValueList', 1, NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
+VALUES ('916d1e18-21ab-f062-27ea-c88acacb02f7', 'synced.readings.bundle.ChannelReading', 'ValueList', 1, NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('990c9790-3b7a-e565-8d6b-e212f5b972ca', 'synced.readings.bundle.ChannelReading', 'Unit', 2, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
+VALUES ('bfa458ce-0ac5-0d8f-e1b9-f724abba2658', 'synced.readings.bundle.ChannelReading', 'Unit', 2, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 INSERT INTO type_helper_attributes (type_helper_attributes_id, type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
-VALUES ('2e9badfb-3fd0-1f01-25bb-8fe838be18aa', 'synced.readings.bundle.ChannelReading', 'UnitType', 3, 'Name of the Sema vocabulary from which Unit is drawn.
+VALUES ('c898c56f-a3af-906a-c275-285146a09463', 'synced.readings.bundle.ChannelReading', 'UnitType', 3, 'Name of the Sema vocabulary from which Unit is drawn.
 ', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL) ON CONFLICT (type_helper_attributes_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- Projections: Named, deterministic enum-to-enum (or value-to-value) mappings used by AddProjected upgrade ops. Today: SpaceheatTelemetryQuantityProjection, Gw1UnitQuantityProjection.
 -- ----------------------------------------------------------------------------
 INSERT INTO projections (projections_id, name, description, from_enum_version, to_enum_version, raw_script)
-VALUES ('ca11f90a-6455-253a-97f0-a376bce3eb84', 'Gw1UnitQuantityProjection', 'Sema: https://schemas.electricity.works/types/gw1.unit.quantity.projection/000', NULL, NULL, NULL) ON CONFLICT (projections_id) DO NOTHING;
+VALUES ('2fa287fb-9788-0958-21b4-e3d9f4f3c7b9', 'Gw1UnitQuantityProjection', 'Sema: https://schemas.electricity.works/types/gw1.unit.quantity.projection/000', 'gw1.quantity/001', 'gw1.unit/001', NULL) ON CONFLICT (projections_id) DO NOTHING;
 
 INSERT INTO projections (projections_id, name, description, from_enum_version, to_enum_version, raw_script)
-VALUES ('d8ef61bf-1d4d-a6da-2143-997fa9168797', 'SpaceheatTelemetryQuantityProjection', 'Sema: https://schemas.electricity.works/types/spaceheat.telemetry.quantity.projection/000', NULL, NULL, NULL) ON CONFLICT (projections_id) DO NOTHING;
+VALUES ('de939257-1de9-1557-90d2-4c6295f381b9', 'SpaceheatTelemetryQuantityProjection', 'Sema: https://schemas.electricity.works/types/spaceheat.telemetry.quantity.projection/000', 'spaceheat.telemetry.name/007', 'gw1.quantity/001', NULL) ON CONFLICT (projections_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- ProjectionMappings: Per-symbol mappings for flat-lookup Projections. Empty when the parent Projection uses RawScript.
 -- ----------------------------------------------------------------------------
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('588985e2-2b35-e053-86c7-a05602e5a569', 'Gw1UnitQuantityProjection', 'Unknown', 'Unknown', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('81889a8e-9f93-7753-e6c1-5948e9f2349d', 'Gw1UnitQuantityProjection', 'Unknown', 'Unknown', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('b2eb1209-a762-a40f-7a5a-c02868c38e95', 'Gw1UnitQuantityProjection', 'Unitless', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('a2712ab3-d043-386c-d45c-2fd5ca68eff5', 'Gw1UnitQuantityProjection', 'Unitless', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('de98ee94-7726-c099-7f8c-7983eeeacd4b', 'Gw1UnitQuantityProjection', 'FahrenheitX100', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('ce717064-5ece-556b-e102-d58c349de97c', 'Gw1UnitQuantityProjection', 'FahrenheitX100', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('5968e41e-61eb-a23f-3bc4-f9696d1f578a', 'Gw1UnitQuantityProjection', 'Watts', 'Power', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('81063509-819f-51c6-dc59-b79cf329114f', 'Gw1UnitQuantityProjection', 'Watts', 'Power', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('a52a5f12-5a06-cf22-0a25-7bb27c047d07', 'Gw1UnitQuantityProjection', 'WattHours', 'Energy', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('53b3cf54-b7f8-b9bb-c19a-90e0fa0cd4ee', 'Gw1UnitQuantityProjection', 'WattHours', 'Energy', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('3dc681d3-bd4b-587a-55a0-1039eecb92c2', 'Gw1UnitQuantityProjection', 'Gallons', 'Volume', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('78fb4654-0858-7221-7526-8c1c3a86b9e2', 'Gw1UnitQuantityProjection', 'Gallons', 'Volume', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('b59b6383-05fd-a2e8-fc5a-735bbbe132e8', 'Gw1UnitQuantityProjection', 'GpmX100', 'FlowRate', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('eb64176b-c6db-231b-38c4-1b36666e94fd', 'Gw1UnitQuantityProjection', 'GpmX100', 'FlowRate', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('ae02911d-32c7-8bef-ba3c-e86e18c445d6', 'Gw1UnitQuantityProjection', 'Seconds', 'Time', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('ba753821-5450-d785-5878-ad7123e35f58', 'Gw1UnitQuantityProjection', 'Seconds', 'Time', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('632db9da-2359-ec2b-0127-d562e5ad3ea2', 'Gw1UnitQuantityProjection', 'SecondsX10', 'Time', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('bbc0db5e-fa26-c28b-41eb-0566a6f802ac', 'Gw1UnitQuantityProjection', 'SecondsX10', 'Time', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('e799feb2-7206-8223-5f04-07620047046c', 'Gw1UnitQuantityProjection', 'Milliseconds', 'Time', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('091903c8-5bb3-5e77-895e-eb4f649eba8c', 'Gw1UnitQuantityProjection', 'Milliseconds', 'Time', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('cada4357-826a-5c23-85f6-bddd1f7b6e68', 'SpaceheatTelemetryQuantityProjection', 'Unknown', 'Unknown', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('b6eb805b-ab7c-e5ad-7719-05d149b3ccbe', 'SpaceheatTelemetryQuantityProjection', 'Unknown', 'Unknown', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('53b664a8-4a30-db2b-d7fa-c6660805b2f1', 'SpaceheatTelemetryQuantityProjection', 'PowerW', 'Power', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('d392bdf1-5e79-dd82-ad41-c42f504856a3', 'SpaceheatTelemetryQuantityProjection', 'PowerW', 'Power', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('e7a2e3ff-824f-b89e-c3a8-d908e4e8bc8f', 'SpaceheatTelemetryQuantityProjection', 'WattHours', 'Energy', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('bfc0ca50-c53d-e578-1964-ffb924af65b6', 'SpaceheatTelemetryQuantityProjection', 'WattHours', 'Energy', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('90a5e34d-eab3-51d1-95c2-ddde83f4c782', 'SpaceheatTelemetryQuantityProjection', 'MilliWattHours', 'Energy', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('585ae0c8-775e-4ea9-5bd5-319ef9da99f7', 'SpaceheatTelemetryQuantityProjection', 'MilliWattHours', 'Energy', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('e14e2bf2-5bb1-9231-565b-be04b1849def', 'SpaceheatTelemetryQuantityProjection', 'WaterTempCTimes1000', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('2e517212-f770-a254-07af-a9b40f626f1c', 'SpaceheatTelemetryQuantityProjection', 'WaterTempCTimes1000', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('b0206bc2-640d-a073-0541-3ff1a915aa3f', 'SpaceheatTelemetryQuantityProjection', 'WaterTempFTimes1000', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('85355abb-1576-3a66-d2c6-59fba489e05e', 'SpaceheatTelemetryQuantityProjection', 'WaterTempFTimes1000', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('badd8df4-77c6-4a80-2efe-0f84f17aa4b1', 'SpaceheatTelemetryQuantityProjection', 'AirTempCTimes1000', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('8adac4a2-45ec-b167-4c9a-ee0fa189f66a', 'SpaceheatTelemetryQuantityProjection', 'AirTempCTimes1000', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('c7655f7a-ded7-e02a-1608-8574c0cbef0b', 'SpaceheatTelemetryQuantityProjection', 'AirTempFTimes1000', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('3ea7f4f9-1505-ac39-000b-4201155f093d', 'SpaceheatTelemetryQuantityProjection', 'AirTempFTimes1000', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('d7d8e8c0-0f37-2c89-adb1-0252b88aba3f', 'SpaceheatTelemetryQuantityProjection', 'CelsiusTimes100', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('870b1448-732a-2248-5e58-c794a25b99d7', 'SpaceheatTelemetryQuantityProjection', 'CelsiusTimes100', 'Temperature', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('e366598c-b6bc-f4de-6dde-a4397cfb9c74', 'SpaceheatTelemetryQuantityProjection', 'GpmTimes100', 'FlowRate', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('4b698f08-676e-25d8-ec54-636ebb3ed572', 'SpaceheatTelemetryQuantityProjection', 'GpmTimes100', 'FlowRate', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('0685b293-f33d-77a3-0c4e-c9bfe4f26685', 'SpaceheatTelemetryQuantityProjection', 'GallonsTimes100', 'Volume', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('3102ee1a-cd07-3a3b-9868-c73568d3912a', 'SpaceheatTelemetryQuantityProjection', 'GallonsTimes100', 'Volume', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('6ab7b962-b083-c0d9-d39e-dd1df986032e', 'SpaceheatTelemetryQuantityProjection', 'VoltageRmsMilliVolts', 'Voltage', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('d8dc4b79-fc0a-d839-460e-9e6ebe7253d0', 'SpaceheatTelemetryQuantityProjection', 'VoltageRmsMilliVolts', 'Voltage', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('b23e565c-6b63-63a8-8c85-964156d5b8cd', 'SpaceheatTelemetryQuantityProjection', 'VoltsTimesTen', 'Voltage', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('499d9640-4738-2d1d-de74-fa311c1fb6b5', 'SpaceheatTelemetryQuantityProjection', 'VoltsTimesTen', 'Voltage', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('37f91353-60b1-90f5-8de3-15eaa459ea53', 'SpaceheatTelemetryQuantityProjection', 'VoltsTimes100', 'Voltage', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('eeb0fc24-f87a-c52d-7149-f285716bedb5', 'SpaceheatTelemetryQuantityProjection', 'VoltsTimes100', 'Voltage', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('6c50165b-dbfe-fdad-af15-93157957e852', 'SpaceheatTelemetryQuantityProjection', 'MicroVolts', 'Voltage', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('cf6fd740-d2a5-454e-3fcc-1224acfa8774', 'SpaceheatTelemetryQuantityProjection', 'MicroVolts', 'Voltage', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('46cab77a-f5fe-fa6d-e6a2-645e1b077ab0', 'SpaceheatTelemetryQuantityProjection', 'CurrentRmsMicroAmps', 'Current', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('2432ebde-5a89-e48d-85b0-2c87777f6380', 'SpaceheatTelemetryQuantityProjection', 'CurrentRmsMicroAmps', 'Current', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('7b4200c6-e9b5-cfcb-94a4-92873458e665', 'SpaceheatTelemetryQuantityProjection', 'HzTimes100', 'Frequency', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('bba455b5-a507-e20d-b951-9267912ae875', 'SpaceheatTelemetryQuantityProjection', 'HzTimes100', 'Frequency', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('e2d4c518-7950-ae76-3a5a-92bab365f89e', 'SpaceheatTelemetryQuantityProjection', 'MicroHz', 'Frequency', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('d734ec95-d210-c9be-f400-f8ba004f3801', 'SpaceheatTelemetryQuantityProjection', 'MicroHz', 'Frequency', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('0e4af65f-9e9c-d068-c8ab-dad7b2a1f75a', 'SpaceheatTelemetryQuantityProjection', 'RelayState', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('d885452b-093f-2de4-8d19-910b7fcc01b8', 'SpaceheatTelemetryQuantityProjection', 'RelayState', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('8af8d383-d8fa-7a82-cf0b-699cdce9db9a', 'SpaceheatTelemetryQuantityProjection', 'ThermostatState', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('3d4f64b1-a842-64f4-8f6b-2d602571ab18', 'SpaceheatTelemetryQuantityProjection', 'ThermostatState', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('cbbc6ac4-c1e7-7aff-055c-d98c7e03ceb1', 'SpaceheatTelemetryQuantityProjection', 'StorageLayer', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('0211eb4d-a976-7b09-dee5-2890be6faba5', 'SpaceheatTelemetryQuantityProjection', 'StorageLayer', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('73af53dd-7ba2-4696-9cb4-6f345f5f855e', 'SpaceheatTelemetryQuantityProjection', 'BinaryState', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('0a96a9ba-9e7d-bbe8-3421-d11cd521a22b', 'SpaceheatTelemetryQuantityProjection', 'BinaryState', 'Unitless', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 INSERT INTO projection_mappings (projection_mappings_id, projection, from_symbol, to_symbol, description)
-VALUES ('1d089c56-37f8-c8ab-e01b-988cbc3c1bdc', 'SpaceheatTelemetryQuantityProjection', 'PercentKeep', 'Percent', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
+VALUES ('d990f591-029e-af45-5dda-971a25235223', 'SpaceheatTelemetryQuantityProjection', 'PercentKeep', 'Percent', NULL) ON CONFLICT (projection_mappings_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- TypeUpgrades: One row per ordered version pair (N, N+1) for a given type. Mirrors src/sema/runtime/types/old_versions/<type>_<NNN>.py.upgrade() methods.
 -- ----------------------------------------------------------------------------
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('f651cc74-83da-a172-f0e3-2761e5afecb6', 'data.channel.gt/001', 'data.channel.gt/002', '001 -> 002:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('c78f32ac-b9f1-abbe-73f9-84e2444b39ae', 'data.channel.gt/001', 'data.channel.gt/002', '001 -> 002:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('524c8692-236b-c39a-5ccd-d234e3522435', 'derived.channel.gt/000', 'derived.channel.gt/001', '000 -> 001: add InputChannelNames, EmissionMethod, and Parameters.', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('e316ca54-dddf-e65c-e9dd-f15850dfef4c', 'derived.channel.gt/000', 'derived.channel.gt/001', '000 -> 001: add InputChannelNames, EmissionMethod, and Parameters.', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('33ba62f9-dd36-ceeb-6890-856681d8ab4b', 'derived.channel.gt/001', 'derived.channel.gt/002', '001 -> 002:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('fcbb3be0-b08f-9104-c57f-51797fac6ec9', 'derived.channel.gt/001', 'derived.channel.gt/002', '001 -> 002:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('3b41d342-93b1-bdd7-146c-c3f862ef214a', 'fsm.atomic.report/000', 'fsm.atomic.report/001', '000 -> 001:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('790fda9e-cdcb-6cfc-d275-e0e42756273c', 'fsm.atomic.report/000', 'fsm.atomic.report/001', '000 -> 001:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('822df4e9-57bf-e06a-4bd9-d522db1c6c22', 'fsm.full.report/000', 'fsm.full.report/001', '000 -> 001: AtomicList: fsm.atomic.report:000 -> 001', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('36d5bca0-7bcb-56b3-c49a-68b4d04a6147', 'fsm.full.report/000', 'fsm.full.report/001', '000 -> 001: AtomicList: fsm.atomic.report:000 -> 001', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('c42bf2d7-97da-1a23-32fa-218f4ff31660', 'ha1.params/004', 'ha1.params/005', '004 -> 005:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('7681412d-fc50-3cbb-3086-41aa02213f99', 'ha1.params/004', 'ha1.params/005', '004 -> 005:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('149314fa-4783-679b-9808-9dc2def70156', 'ha1.params/005', 'ha1.params/006', '005 -> 006:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('9c93d413-1a6a-14cd-b909-166d89d30b9d', 'ha1.params/005', 'ha1.params/006', '005 -> 006:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('24a388ff-b218-46be-8ea5-e356bca8bb25', 'i2c.multichannel.dt.relay.component.gt/002', 'i2c.multichannel.dt.relay.component.gt/003', '002 -> 003: Add I2cBus', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('1d366672-69d1-cc25-462d-e775c8957b2e', 'i2c.multichannel.dt.relay.component.gt/002', 'i2c.multichannel.dt.relay.component.gt/003', '002 -> 003: Add I2cBus', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('11e743f0-ea23-b64c-5a2d-6f1666059ba7', 'i2c.multichannel.dt.relay.component.gt/003', 'i2c.multichannel.dt.relay.component.gt/004', '003 -> 004: ConfigList[]: relay.actor.config:002 -> 003', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('505de719-a5b3-a26f-9398-3893bbe450ca', 'i2c.multichannel.dt.relay.component.gt/003', 'i2c.multichannel.dt.relay.component.gt/004', '003 -> 004: ConfigList[]: relay.actor.config:002 -> 003', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('3e2792d7-f746-9a42-d68e-b1d7e0ea9e56', 'layout.lite/007', 'layout.lite/008', '007 -> 008:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('f4976d67-c104-2d63-eaaf-ac17cdd71fba', 'layout.lite/007', 'layout.lite/008', '007 -> 008:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('ab819258-9dee-2ed3-c151-d0719c7351f2', 'layout.lite/008', 'layout.lite/009', '008 -> 009:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('4ed379ca-3819-7543-8aaf-e594616fcb46', 'layout.lite/008', 'layout.lite/009', '008 -> 009:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('e9708608-faad-1bfe-fcd0-03854b66f538', 'layout.lite/009', 'layout.lite/010', '009 -> 010:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('5babf7e1-e8b3-c0a8-7b51-409884a6693f', 'layout.lite/009', 'layout.lite/010', '009 -> 010:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('d54a9b2d-9f5e-7a8e-30c4-8e2de73c4ea1', 'layout.lite/010', 'layout.lite/011', '010 -> 011:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('40e5c51a-c431-5d29-594a-00db430eb6d6', 'layout.lite/010', 'layout.lite/011', '010 -> 011:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('efbf62fd-900f-f297-9b82-97dd131a5b58', 'layout.lite/011', 'layout.lite/012', '011 -> 012:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('a44dc656-fab1-f712-f676-f056ebe5b3a0', 'layout.lite/011', 'layout.lite/012', '011 -> 012:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('adf68a78-478b-e0cb-43b6-5a704ef795fe', 'layout.lite/012', 'layout.lite/013', '012 -> 013: I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('8e0af24f-89c7-211f-f6c7-b7a24de5f256', 'layout.lite/012', 'layout.lite/013', '012 -> 013: I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('53a607ea-df0c-08bc-7d7b-d750e26b4f73', 'relay.actor.config/002', 'relay.actor.config/003', '002 -> 003 Require AsyncCaptureDelta when AsyncCapture is true', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('e72f8167-4649-4e6e-d85a-3c250e9cd386', 'relay.actor.config/002', 'relay.actor.config/003', '002 -> 003 Require AsyncCaptureDelta when AsyncCapture is true', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('edda3b0d-11c0-3896-d0f8-db803ee708d3', 'report/002', 'report/003', '002 -> 003: FsmReportList[]: fsm.full.report:000|001 -> 001', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('439fdd63-2760-3a42-3722-0ba098878437', 'report/002', 'report/003', '002 -> 003: FsmReportList[]: fsm.full.report:000|001 -> 001', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('65c748d1-f641-f591-cb29-b0eae3b3ab3c', 'report.event/002', 'report.event/003', '002 -> 003: Report: report:002 -> 003', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('8da58a50-4e0e-7355-b426-3c47023e156d', 'report.event/002', 'report.event/003', '002 -> 003: Report: report:002 -> 003', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('8953d04a-816e-6f60-d767-4661603133d8', 'spaceheat.node.gt/200', 'spaceheat.node.gt/300', '200 -> 300:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('365415a0-5753-9d35-6b9b-947abe74178a', 'spaceheat.node.gt/200', 'spaceheat.node.gt/300', '200 -> 300:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
-VALUES ('fc56671c-3797-1217-b849-a3e8c722a44d', 'spaceheat.node.gt/300', 'spaceheat.node.gt/301', '300 -> 301:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+VALUES ('70d6fb9e-da5f-184b-8c3a-339fbf148cec', 'spaceheat.node.gt/300', 'spaceheat.node.gt/301', '300 -> 301:', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
+
+INSERT INTO type_upgrades (type_upgrades_id, from_type_version, to_type_version, description, raw_script)
+VALUES ('f8198319-960a-2409-e7c4-713fb1751329', 'bid/000', 'bid/001', '000 -> 001: add BidExpiry (required), add BidNotes (optional), migrate MarketSlotName to market.slot.handle.', NULL) ON CONFLICT (type_upgrades_id) DO NOTHING;
 
 -- ----------------------------------------------------------------------------
 -- TypeUpgradeOps: Atomic operations within a TypeUpgrade. Most upgrades decompose into 1-4 ops. OpKind controls semantics (vocabulary: AddOptional, AddWithDefault, Remove, RequireToOptional, OptionalToRequire, EnumVersionBump, CoerceToEnum, UpgradeChild, UpgradeChildIf, UpgradeListItems, UpgradeListItemsIf, AddProjected, Custom).
 -- ----------------------------------------------------------------------------
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('f5e45055-b879-c5bd-ffd5-e89d1e7a2723', 'data.channel.gt/001 -> data.channel.gt/002', 0, 'AddProjected', 'Quantity', NULL, NULL, NULL, NULL, 'SpaceheatTelemetryQuantityProjection', NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('65c22b4a-e54b-151b-b243-6f1179929694', 'data.channel.gt/001 -> data.channel.gt/002', 0, 'AddProjected', 'Quantity', NULL, NULL, NULL, NULL, 'SpaceheatTelemetryQuantityProjection', NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('d325144b-fd93-cb60-49ca-e2168ed598d0', 'data.channel.gt/001 -> data.channel.gt/002', 1, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'upgraded_telemetry_name = SpaceheatTelemetryName[self.telemetry_name.name]
+VALUES ('ff30e9ce-c873-9808-3d89-4f3d6eb6f1d2', 'data.channel.gt/001 -> data.channel.gt/002', 1, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'upgraded_telemetry_name = SpaceheatTelemetryName[self.telemetry_name.name]
 data[''telemetry_name''] = upgraded_telemetry_name', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('c60ae211-8644-b69d-1902-f75aacef0e30', 'derived.channel.gt/000 -> derived.channel.gt/001', 0, 'AddWithDefault', 'Parameters', 'null', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('510ca9a4-4cd1-41ab-5d7c-abffa2fd7eb6', 'derived.channel.gt/000 -> derived.channel.gt/001', 0, 'AddWithDefault', 'Parameters', 'null', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('991e5ca9-05dc-719b-26e4-5fcffa756e66', 'derived.channel.gt/000 -> derived.channel.gt/001', 1, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'data[''input_channel_names''] = []
+VALUES ('df8a8530-a6e2-92ea-d4e0-37bb38d88efd', 'derived.channel.gt/000 -> derived.channel.gt/001', 1, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'data[''input_channel_names''] = []
 data[''emission_method''] = Gw1EmissionMethod.OnTrigger', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('6970e2e5-1f4c-5e67-d65c-f52bec9c362e', 'derived.channel.gt/001 -> derived.channel.gt/002', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.output_unit is None:
+VALUES ('8d130662-62d7-300e-6d8d-62e8fcf1db05', 'derived.channel.gt/001 -> derived.channel.gt/002', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.output_unit is None:
     data[''output_unit''] = ''Unknown''
     data[''output_quantity''] = Gw1Quantity.Unknown
 else:
@@ -5720,25 +5873,25 @@ else:
     data[''output_quantity''] = Gw1UnitQuantityProjection.project(Gw1Unit001(self.output_unit.value))', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('31cbe904-699f-4586-fe37-d3dea5f9990c', 'fsm.atomic.report/000 -> fsm.atomic.report/001', 0, 'Remove', 'action_type', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('e9c25dd3-c1d3-5c4b-ed75-6faae341cc37', 'fsm.atomic.report/000 -> fsm.atomic.report/001', 0, 'Remove', 'action_type', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('60510a0c-a567-ca6f-2417-27f74f8acc86', 'fsm.atomic.report/000 -> fsm.atomic.report/001', 1, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.report_type == FsmReportType.Action and self.action is not None:
+VALUES ('3c47ce61-1417-9a8c-be93-b91792bfb750', 'fsm.atomic.report/000 -> fsm.atomic.report/001', 1, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.report_type == FsmReportType.Action and self.action is not None:
     if self.action_type != ''RelayPinSet'':
         raise ValueError("FsmAtomicReport000.upgrade() only supports ActionType ''RelayPinSet''.")
     data[''action''] = FsmAtomicReportSimpleAction(value=RelayEnergizationState(self.action))', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('7d4089f0-3756-2caa-3b3b-87d8b7fddd9f', 'fsm.full.report/000 -> fsm.full.report/001', 0, 'UpgradeListItems', 'AtomicList', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('b77d2d7f-65b1-8e6c-2a2b-6342c64415fc', 'fsm.full.report/000 -> fsm.full.report/001', 0, 'UpgradeListItems', 'AtomicList', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('db903e1e-0340-666c-4f02-2639e5efbf7e', 'ha1.params/005 -> ha1.params/006', 0, 'AddWithDefault', 'HpTurnOnMinutes', '12', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('25131422-c5e3-2fd4-5ec0-5837b2278fa3', 'ha1.params/005 -> ha1.params/006', 0, 'AddWithDefault', 'HpTurnOnMinutes', '12', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('23306c94-a808-a6e1-7115-85601c8ee088', 'i2c.multichannel.dt.relay.component.gt/002 -> i2c.multichannel.dt.relay.component.gt/003', 0, 'AddWithDefault', 'I2cBus', '"default"', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('03d5484d-f904-e92c-f74a-1b85b40d00f1', 'i2c.multichannel.dt.relay.component.gt/002 -> i2c.multichannel.dt.relay.component.gt/003', 0, 'AddWithDefault', 'I2cBus', '"default"', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('8cf05dab-e846-3519-33a6-ccc9ba53fbf4', 'i2c.multichannel.dt.relay.component.gt/003 -> i2c.multichannel.dt.relay.component.gt/004', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'upgraded_configs = []
+VALUES ('cb6eb2cf-2f93-2323-be82-1cb71f2dc21a', 'i2c.multichannel.dt.relay.component.gt/003 -> i2c.multichannel.dt.relay.component.gt/004', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'upgraded_configs = []
 for cfg in self.config_list:
     if isinstance(cfg, RelayActorConfig002):
         upgraded_configs.append(cfg.upgrade())
@@ -5747,51 +5900,171 @@ for cfg in self.config_list:
 data[''config_list''] = upgraded_configs', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('64785f34-3fe9-31f2-0613-79ece68c87cf', 'layout.lite/007 -> layout.lite/008', 0, 'AddWithDefault', 'SystemMode', '"Heating"', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('1fedc223-de06-4183-1f3c-c5b2904b6156', 'layout.lite/007 -> layout.lite/008', 0, 'AddWithDefault', 'SystemMode', '"Heating"', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('33aace92-2c9e-3473-b814-0f05c615bd27', 'layout.lite/007 -> layout.lite/008', 1, 'AddWithDefault', 'SeasonalStorageMode', '"AllTanks"', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('96c73fdc-a62d-cf26-fc73-8332adccbea8', 'layout.lite/007 -> layout.lite/008', 1, 'AddWithDefault', 'SeasonalStorageMode', '"AllTanks"', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('0a8fb110-0dff-822c-84f8-2d10c3921484', 'layout.lite/008 -> layout.lite/009', 0, 'AddWithDefault', 'BufferShortCycling', 'false', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('4b6aba94-fe31-3b60-67b5-d48a36228fa1', 'layout.lite/008 -> layout.lite/009', 0, 'AddWithDefault', 'BufferShortCycling', 'false', NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('c47b25f7-3237-0aca-e6f6-48437d373cd2', 'layout.lite/009 -> layout.lite/010', 0, 'UpgradeChildIf', 'Ha1Params', NULL, '004', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('507c6345-e039-65a7-8ae8-9c82c3f32090', 'layout.lite/009 -> layout.lite/010', 0, 'UpgradeChildIf', 'Ha1Params', NULL, '004', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('9b6c6b27-be47-bf54-b75d-43ce51740165', 'layout.lite/010 -> layout.lite/011', 0, 'UpgradeChild', 'Ha1Params', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('a2f0ac21-28ac-e43b-394f-6bbe8023ccfb', 'layout.lite/010 -> layout.lite/011', 0, 'UpgradeChild', 'Ha1Params', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('58294202-ed99-d939-d289-a6253eafb0fd', 'layout.lite/011 -> layout.lite/012', 0, 'UpgradeListItemsIf', 'DerivedChannels', NULL, '000', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('1bf34c51-2798-e0c2-13e1-1d76c41ea16f', 'layout.lite/011 -> layout.lite/012', 0, 'UpgradeListItemsIf', 'DerivedChannels', NULL, '000', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('3709f37a-122e-fe16-e9c8-446a465263f0', 'layout.lite/011 -> layout.lite/012', 1, 'UpgradeListItems', 'DataChannels', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('bfe4cef5-9d94-b6b4-ed40-65c73424fc02', 'layout.lite/011 -> layout.lite/012', 1, 'UpgradeListItems', 'DataChannels', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('41d324d1-e4cb-e3e7-82e8-d866150c3c9b', 'layout.lite/011 -> layout.lite/012', 2, 'UpgradeListItemsIf', 'ShNodes', NULL, '300', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('f9d1ebb7-198f-6004-7f4a-96703dc89ed7', 'layout.lite/011 -> layout.lite/012', 2, 'UpgradeListItemsIf', 'ShNodes', NULL, '300', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('cdd4709d-4498-bd5d-b7f1-c5f0706467b3', 'layout.lite/011 -> layout.lite/012', 3, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.i2c_relay_component is not None:
+VALUES ('29d9d343-aef0-acd2-149f-10b643506acb', 'layout.lite/011 -> layout.lite/012', 3, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.i2c_relay_component is not None:
     data[''i2c_relay_component''] = self.i2c_relay_component.upgrade()', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('2fb6ec65-542a-fbe5-efea-2f4fa51bf4f2', 'layout.lite/012 -> layout.lite/013', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.i2c_relay_component is not None:
+VALUES ('5439f2ad-e82a-ae51-6d5d-d57eb3e9303f', 'layout.lite/012 -> layout.lite/013', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.i2c_relay_component is not None:
     upgraded_component = self.i2c_relay_component.upgrade()
     if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt004):
         raise TypeError(''Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt004'')
     data[''i2c_relay_component''] = upgraded_component', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('d484519d-da20-30e2-68ad-4f3da1eef145', 'relay.actor.config/002 -> relay.actor.config/003', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.async_capture:
+VALUES ('52320dce-0131-c5a7-eed7-1a852522250e', 'relay.actor.config/002 -> relay.actor.config/003', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.async_capture:
     if not self.async_capture_delta:
         data[''async_capture_delta''] = 1', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('52a77225-6eba-5073-d05c-8d24e651632d', 'report/002 -> report/003', 0, 'UpgradeListItemsIf', 'FsmReportList', NULL, '000', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('479ca82e-6f57-0e76-3236-7afa85f910b3', 'report/002 -> report/003', 0, 'UpgradeListItemsIf', 'FsmReportList', NULL, '000', NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('fa7b83c5-cb56-6e1c-be79-4a313ef589fa', 'report.event/002 -> report.event/003', 0, 'UpgradeChild', 'Report', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('b937d9a7-6a37-0d9b-6618-5c74ca0057bf', 'report.event/002 -> report.event/003', 0, 'UpgradeChild', 'Report', NULL, NULL, NULL, NULL, NULL, NULL, NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
 
 INSERT INTO type_upgrade_ops (type_upgrade_ops_id, type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
-VALUES ('fe0f913e-8bfb-01a5-0e29-255162bcc009', 'spaceheat.node.gt/200 -> spaceheat.node.gt/300', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'data[''actor_class''] = Gw1ActorClass009(data[''actor_class'']).value', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+VALUES ('02e70dc7-38e7-388e-ddfd-0df9c036d421', 'spaceheat.node.gt/200 -> spaceheat.node.gt/300', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'data[''actor_class''] = Gw1ActorClass009(data[''actor_class'']).value', NULL) ON CONFLICT (type_upgrade_ops_id) DO NOTHING;
+
+-- ----------------------------------------------------------------------------
+-- EnumUpgrades: Mirror of TypeUpgrades for enum value renames or splits when name preservation breaks. Today's 5 multi-version enums all preserved names, so this table starts empty.
+-- ----------------------------------------------------------------------------
+INSERT INTO enum_upgrades (enum_upgrades_id, from_enum_version, to_enum_version, description, raw_script)
+VALUES ('06ea7908-41af-3b89-5c8e-75fb6f5026c9', 'gw1.unit/000', 'gw1.unit/001', '000 -> 001: rename Btus to BTUs (case fix).', NULL) ON CONFLICT (enum_upgrades_id) DO NOTHING;
+
+INSERT INTO enum_upgrades (enum_upgrades_id, from_enum_version, to_enum_version, description, raw_script)
+VALUES ('82ab9d65-010a-79e2-7dec-df3a79b220c0', 'gw1.quantity/000', 'gw1.quantity/001', '000 -> 001: split AveragePowerWatts into AveragePower and InstantaneousPower.', NULL) ON CONFLICT (enum_upgrades_id) DO NOTHING;
+
+-- ----------------------------------------------------------------------------
+-- EnumUpgradeMappings: Per-symbol value renames for an EnumUpgrade. Empty when the parent EnumUpgrade preserves all names.
+-- ----------------------------------------------------------------------------
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('91a564ad-b3ec-992a-3435-8a29b1be4d43', 'gw1.unit/000-to-gw1.unit/001', 'FahrenheitX100', 'FahrenheitX100', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('7753c92b-934b-e20d-7bf7-8752d9bf743d', 'gw1.unit/000-to-gw1.unit/001', 'Gallons', 'Gallons', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('6596bbc1-458a-102b-800b-06f362e2b1d1', 'gw1.unit/000-to-gw1.unit/001', 'GpmX100', 'GpmX100', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('20259b97-07dc-950e-17b8-9b537b1e5e54', 'gw1.unit/000-to-gw1.unit/001', 'Unitless', 'Unitless', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('0b2b5f86-a9e8-ff1e-5300-d08cd6771180', 'gw1.unit/000-to-gw1.unit/001', 'Unknown', 'Unknown', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('2583108c-f854-a7a4-4869-aed51dc41a2a', 'gw1.unit/000-to-gw1.unit/001', 'WattHours', 'WattHours', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('dfebc91d-db77-35e2-beec-bba2afdb2332', 'gw1.unit/000-to-gw1.unit/001', 'Watts', 'Watts', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('042b79d5-96d3-8b52-b857-3f9408e4f5ce', 'gw1.quantity/000-to-gw1.quantity/001', 'Current', 'Current', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('b5b931c0-a857-b970-2920-5ede1bd19d22', 'gw1.quantity/000-to-gw1.quantity/001', 'Energy', 'Energy', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('6da92d7f-cb96-8cb8-2d0b-062e205290c2', 'gw1.quantity/000-to-gw1.quantity/001', 'FlowRate', 'FlowRate', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('4960f4a6-50ca-cfba-cd0b-341e0f547d0f', 'gw1.quantity/000-to-gw1.quantity/001', 'Frequency', 'Frequency', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('08df2d16-861e-d451-cc69-1d64ab013bfb', 'gw1.quantity/000-to-gw1.quantity/001', 'Percent', 'Percent', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('035535f2-4894-0f3b-56f8-722c3fe706fd', 'gw1.quantity/000-to-gw1.quantity/001', 'Power', 'Power', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('00980469-265f-ce46-5f60-1ecd2b8a2d8c', 'gw1.quantity/000-to-gw1.quantity/001', 'Temperature', 'Temperature', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('23868b7b-e082-dc4e-09da-aaf7c458178f', 'gw1.quantity/000-to-gw1.quantity/001', 'Unitless', 'Unitless', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('8df1e6ee-c69b-17ad-a4fe-d8c2317ca8bd', 'gw1.quantity/000-to-gw1.quantity/001', 'Unknown', 'Unknown', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('8c1d3b1a-0645-e347-6a88-87baf7f570aa', 'gw1.quantity/000-to-gw1.quantity/001', 'Voltage', 'Voltage', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('4797679f-fc2b-081b-5c14-379a21d73817', 'gw1.quantity/000-to-gw1.quantity/001', 'Volume', 'Volume', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('1ee293b6-3abd-02d4-9a1c-c12fc453f926', 'gw1.unit/000 -> gw1.unit/001', 'FahrenheitX100', 'FahrenheitX100', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('b30eeea8-f56a-9a46-05d9-c1b63fbb5a63', 'gw1.unit/000 -> gw1.unit/001', 'Gallons', 'Gallons', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('d0bf3ac7-26aa-fa2e-4b50-3d6ad9fbea35', 'gw1.unit/000 -> gw1.unit/001', 'GpmX100', 'GpmX100', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('731c7d81-7ab9-e7a7-66c9-2f0051c2cc41', 'gw1.unit/000 -> gw1.unit/001', 'Unitless', 'Unitless', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('b77c7ada-e4c6-2a90-57ed-8f51e4e85368', 'gw1.unit/000 -> gw1.unit/001', 'Unknown', 'Unknown', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('3b47a9dd-3fd7-e551-b3cd-917a6a9c743b', 'gw1.unit/000 -> gw1.unit/001', 'WattHours', 'WattHours', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('5a6a6ed5-3dbf-51d3-4902-19a3fc456bf1', 'gw1.unit/000 -> gw1.unit/001', 'Watts', 'Watts', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('2dae5d67-1987-8f10-898a-e71373419b75', 'gw1.quantity/000 -> gw1.quantity/001', 'Current', 'Current', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('e5b79b01-a75d-119b-622d-0b722ef02c93', 'gw1.quantity/000 -> gw1.quantity/001', 'Energy', 'Energy', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('a0c84ce2-736e-0e52-5127-5cb93e5c5421', 'gw1.quantity/000 -> gw1.quantity/001', 'FlowRate', 'FlowRate', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('3e01efda-4b48-0375-051d-fbb0f7f83f08', 'gw1.quantity/000 -> gw1.quantity/001', 'Frequency', 'Frequency', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('d323b2eb-d9c3-49c8-9997-4e2f1c4ab07e', 'gw1.quantity/000 -> gw1.quantity/001', 'Percent', 'Percent', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('b27f1d59-f162-ddea-370c-2972115d7593', 'gw1.quantity/000 -> gw1.quantity/001', 'Power', 'Power', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('113f4819-d803-7a5c-6d23-1a5c91c1442a', 'gw1.quantity/000 -> gw1.quantity/001', 'Temperature', 'Temperature', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('74be12af-2e07-0468-daad-d194d0dd3069', 'gw1.quantity/000 -> gw1.quantity/001', 'Unitless', 'Unitless', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('9f929eee-4878-b28e-5dba-417acc1b15e7', 'gw1.quantity/000 -> gw1.quantity/001', 'Unknown', 'Unknown', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('8b1edea8-5450-bd57-3bd5-de78576d3968', 'gw1.quantity/000 -> gw1.quantity/001', 'Voltage', 'Voltage', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
+
+INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
+VALUES ('58f361ad-a9c1-fc1f-9909-8b2ccf523699', 'gw1.quantity/000 -> gw1.quantity/001', 'Volume', 'Volume', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
 

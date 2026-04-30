@@ -90,26 +90,38 @@ def emit():
               "-- Regenerate with scripts/fix_lookup_functions.py after every effortless build.",
               "-- " + "=" * 76,
               ""]
+    rb = json.loads(RULEBOOK.read_text())
+    kinds = field_kind_index(rb)
+
     for lk in lookups:
         src_t = to_snake(lk["source_table"])
         tgt_t = to_snake(lk["target_table"])
         target_field = to_snake(lk["target_field"])
         local_fk = to_snake(lk["local_fk"])
-        match_field = to_snake(lk["match_field"])
+        match_field_snake = to_snake(lk["match_field"])
         ret = PG_TYPE[lk["datatype"]]
         cast = ret.lower() if ret != "TIMESTAMPTZ" else "timestamptz"
         fname = f"calc_{src_t}_{to_snake(lk['field_name'])}"
-        # Target field may be raw (read directly) or computed (call calc fn).
-        if lk["target_kind"] == "raw" or lk["target_kind"] == "relationship":
+
+        # Target field side
+        if lk["target_kind"] in ("raw", "relationship"):
             select_expr = f"{target_field}::{cast}"
         else:
             tgt_fn = f"calc_{tgt_t}_{target_field}"
             select_expr = f"{tgt_fn}({tgt_t}_id)::{cast}"
+
+        # Match field side — if Name (or any calc) on target table, call calc fn
+        match_kind = kinds.get((lk["target_table"], lk["match_field"]), "raw")
+        if match_kind in ("raw", "relationship"):
+            match_lhs = match_field_snake
+        else:
+            match_lhs = f"calc_{tgt_t}_{match_field_snake}({tgt_t}_id)"
+
         chunks.append(
             f"CREATE OR REPLACE FUNCTION {fname}(p_{src_t}_id TEXT)\n"
             f"RETURNS {ret} AS $$\n"
             f"  SELECT ({select_expr}) FROM {tgt_t}\n"
-            f"   WHERE {match_field} = (SELECT {local_fk} FROM {src_t} WHERE {src_t}_id = p_{src_t}_id)\n"
+            f"   WHERE {match_lhs} = (SELECT {local_fk} FROM {src_t} WHERE {src_t}_id = p_{src_t}_id)\n"
             f"   LIMIT 1;\n"
             f"$$ LANGUAGE sql STABLE;\n"
         )
