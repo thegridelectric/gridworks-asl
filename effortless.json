@@ -1,0 +1,16 @@
+{
+  "ShowHidden": false,
+  "ShowAllFiles": false,
+  "CurrentPath": null,
+  "SSoTmeProjectFiles": null,
+  "SSoTmeProjectId": "f9254277-ecc8-47f4-8a17-673c865abfe6",
+  "Name": "sema",
+  "ProjectSettings": [
+    {
+      "ProjectSettingId": "d973dfb7-8cb5-4b86-838d-d891160e7644",
+      "Name": "project-name",
+      "Value": "sema"
+    }
+  ],
+  "ProjectTranspilers": []
+}
