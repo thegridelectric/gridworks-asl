@@ -5,3 +5,317 @@
 -- Total Views: 19
 -- ============================================================================
 
+-- ----------------------------------------------------------------------------
+-- vw_owners: Entities (organizations or individuals) that own Types, Enums, and Formats. Sourced from definitions/owners.yaml.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_owners WITH (security_invoker = ON) AS
+SELECT
+  t.owners_id,                                                                  -- Primary key (auto-synthesized: Owners had no field named 'Id' or ending in 'Id').
+  t.name,                                                                       -- Owner identifier slug. Example: 'gridworks-energy'. Acts as the primary key.
+  t.owner_type,                                                                 -- Either 'organization' or 'individual'.
+  t.contact,                                                                    -- Primary contact email.
+  t.website,                                                                    -- Owner's website URL.
+  t.github,                                                                     -- Owner's GitHub URL (optional).
+  t.organization,                                                               -- Full legal/organization name.
+  t.description,                                                                -- Free-text description of the owner's domain or focus.
+  t.support_policy,                                                             -- How users get support from this owner.
+  t.license                                                                     -- License under which the owner's contributions are published (e.g. 'MIT').
+FROM owners t;
+
+-- ----------------------------------------------------------------------------
+-- vw_formats: JSON-Schema string formats with regex patterns and length bounds. Sourced from definitions/formats/*.yaml. Formats are not versioned.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_formats WITH (security_invoker = ON) AS
+SELECT
+  t.formats_id,                                                                 -- Primary key (auto-synthesized: Formats had no field named 'Id' or ending in 'Id').
+  t.name,                                                                       -- Format identifier slug. Example: 'uuid4.str'. Acts as the primary key.
+  t.owner,                                                                      -- Owner of this format.
+  t.schema_url,                                                                 -- Schema URL from JSON-Schema $id.
+  t.title,                                                                      -- Human-readable title.
+  t.description,                                                                -- Free-text description of the format.
+  t.pattern,                                                                    -- Regex pattern that valid values must match.
+  t.min_length,                                                                 -- Minimum string length, if constrained.
+  t.max_length,                                                                 -- Maximum string length, if constrained.
+  t.json_schema_format,                                                         -- JSON-Schema 'format' keyword if present (e.g. 'date-time', 'email').
+  t.created,                                                                    -- Created timestamp from registry.yaml.
+  t.raw_json                                                                    -- Escape hatch: any unmodeled JSON-Schema fields, serialized as JSON string.
+FROM formats t;
+
+-- ----------------------------------------------------------------------------
+-- vw_format_examples: Per-format examples and counterexamples (with order preserved). Sourced from format YAML 'examples' and 'counterexamples' arrays.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_format_examples WITH (security_invoker = ON) AS
+SELECT
+  t.format_examples_id,                                                         -- Primary key (auto-synthesized: FormatExamples had no field named 'Id' or ending in 'Id').
+  calc_format_examples_name(t.format_examples_id) AS name,                      -- Compound key combining the parent format, ordering index, and counterexample flag.
+  t.format,                                                                     -- Foreign key to the parent Format.
+  t.idx,                                                                        -- Preserves YAML ordering (0-indexed within examples or counterexamples).
+  t.is_counter,                                                                 -- True if this is a counterexample (must NOT match), false if a positive example.
+  t.value,                                                                      -- The example string itself.
+  t.description                                                                 -- Optional description (e.g. YAML inline comment).
+FROM format_examples t;
+
+-- ----------------------------------------------------------------------------
+-- vw_enums: Top-level enum definitions (name-level). Versioned enums have multiple EnumVersions; literal enums have one. Sourced from definitions/registry.yaml + definitions/enums/.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_enums WITH (security_invoker = ON) AS
+SELECT
+  t.enums_id,                                                                   -- Primary key (auto-synthesized: Enums had no field named 'Id' or ending in 'Id').
+  t.name,                                                                       -- Enum identifier slug. Example: 'gw1.actor.class'. Acts as the primary key.
+  t.owner,                                                                      -- Owner of this enum.
+  t.enum_type,                                                                  -- Either 'versioned' (additive-only multi-version) or 'literal' (single immutable version).
+  t.description,                                                                -- Name-level description (registry-level).
+  t.raw_json                                                                    -- Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded.
+FROM enums t;
+
+-- ----------------------------------------------------------------------------
+-- vw_enum_versions: Specific versions of an enum. Each enum can have multiple versions (e.g. gw1.actor.class has versions 009, 010, 011).
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_enum_versions WITH (security_invoker = ON) AS
+SELECT
+  t.enum_versions_id,                                                           -- Primary key (auto-synthesized: EnumVersions had no field named 'Id' or ending in 'Id').
+  calc_enum_versions_name(t.enum_versions_id) AS name,                          -- Compound key: <enum-name>/<version>.
+  t.enum,                                                                       -- Foreign key to the parent Enum.
+  t.version,                                                                    -- Three-digit version string. Example: '007'.
+  t.schema_url,                                                                 -- Schema URL from JSON-Schema $id.
+  t.title,                                                                      -- Human-readable title.
+  t.description,                                                                -- Version-specific description.
+  t.default_symbol,                                                             -- The default symbol value for this version.
+  t.status,                                                                     -- Lifecycle status (e.g. 'active', 'deprecated').
+  t.created,                                                                    -- Creation timestamp from registry.yaml.
+  t.raw_json                                                                    -- Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded.
+FROM enum_versions t;
+
+-- ----------------------------------------------------------------------------
+-- vw_enum_values: Individual symbol values within an EnumVersion (with order preserved and per-symbol descriptions).
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_enum_values WITH (security_invoker = ON) AS
+SELECT
+  t.enum_values_id,                                                             -- Primary key (auto-synthesized: EnumValues had no field named 'Id' or ending in 'Id').
+  calc_enum_values_name(t.enum_values_id) AS name,                              -- Compound key: <enum-version>:<symbol>.
+  t.enum_version,                                                               -- Foreign key to the parent EnumVersion.
+  t.symbol,                                                                     -- The literal symbol value, e.g. 'Power'.
+  t.idx,                                                                        -- Preserves YAML ordering of symbols.
+  t.description                                                                 -- Per-symbol description from value_descriptions map.
+FROM enum_values t;
+
+-- ----------------------------------------------------------------------------
+-- vw_types: Top-level type definitions (name-level). Each type can have multiple TypeVersions. Sourced from definitions/registry.yaml + definitions/types/.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_types WITH (security_invoker = ON) AS
+SELECT
+  t.types_id,                                                                   -- Primary key (auto-synthesized: Types had no field named 'Id' or ending in 'Id').
+  t.name,                                                                       -- Type identifier slug. Example: 'report'. Acts as the primary key.
+  t.owner,                                                                      -- Owner of this type.
+  t.title,                                                                      -- Name-level title.
+  t.description,                                                                -- Name-level description.
+  t.python_class_name,                                                          -- Tier-2 placeholder: ODXML-derived Python class name (populated when ODXML data absorbs in).
+  t.make_data_class,                                                            -- Tier-2 placeholder: ODXML invariant.
+  t.is_cac,                                                                     -- Tier-2 placeholder: ODXML invariant (component access control marker).
+  t.is_component                                                                -- Tier-2 placeholder: ODXML invariant.
+FROM types t;
+
+-- ----------------------------------------------------------------------------
+-- vw_type_versions: Specific versions of a type. Each declares its JSON-Schema shape. Versions follow a 3-digit suffix in the YAML files.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_type_versions WITH (security_invoker = ON) AS
+SELECT
+  t.type_versions_id,                                                           -- Primary key (auto-synthesized: TypeVersions had no field named 'Id' or ending in 'Id').
+  calc_type_versions_name(t.type_versions_id) AS name,                          -- Compound key: <type-name>/<version>.
+  t.type,                                                                       -- Foreign key to the parent Type.
+  t.version,                                                                    -- Three-digit version string. Example: '002'.
+  t.schema_url,                                                                 -- Schema URL from JSON-Schema $id.
+  t.title,                                                                      -- Human-readable title.
+  t.description,                                                                -- Version-specific description.
+  t.extra_allowed,                                                              -- From JSON-Schema additionalProperties (true=open, false=closed).
+  t.status,                                                                     -- Lifecycle status.
+  t.created,                                                                    -- Creation timestamp.
+  t.raw_json                                                                    -- Escape hatch: unmodeled top-level JSON-Schema fields (if/then/else, conditionals, etc.).
+FROM type_versions t;
+
+-- ----------------------------------------------------------------------------
+-- vw_type_attributes: The shape-of-record for every property declared on a TypeVersion. Polymorphic via mutually-exclusive FK columns: at most one of FormatRef / EnumVersionRef / SubTypeVersionRef / HelperRef is non-null per row.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_type_attributes WITH (security_invoker = ON) AS
+SELECT
+  t.type_attributes_id,                                                         -- Primary key (auto-synthesized: TypeAttributes had no field named 'Id' or ending in 'Id').
+  calc_type_attributes_name(t.type_attributes_id) AS name,                      -- Compound key: <type-version>.<attribute-name>.
+  t.type_version,                                                               -- Foreign key to the owning TypeVersion.
+  t.attribute_name,                                                             -- Property key in the JSON-Schema.
+  t.idx,                                                                        -- Preserves YAML ordering of properties.
+  t.description,                                                                -- Per-attribute description from JSON-Schema.
+  t.is_required,                                                                -- Derived from the parent TypeVersion's 'required' array.
+  t.is_list,                                                                    -- True if attribute is type=array. Refs then describe the item type.
+  t.primitive_type,                                                             -- Primitive JSON type when none of the *Ref columns apply: string, integer, number, boolean, null.
+  t.format_ref,                                                                 -- FK to a Format, when this attribute uses a $ref to /formats/X.
+  t.enum_version_ref,                                                           -- FK to an EnumVersion, when this attribute uses a $ref to /enums/X/NNN.
+  t.sub_type_version_ref,                                                       -- FK to another TypeVersion, when this attribute uses a $ref to /types/X/NNN.
+  t.helper_ref,                                                                 -- FK to a TypeHelper, when this attribute is an inline-nested object auto-promoted to a helper.
+  t.raw_json                                                                    -- Escape hatch: unmodeled JSON-Schema specifics, including oneOf bodies (v1 parking lot for n=1 cases).
+FROM type_attributes t;
+
+-- ----------------------------------------------------------------------------
+-- vw_type_examples: Per-TypeVersion full-instance examples (with order preserved). Sourced from JSON-Schema 'examples' arrays.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_type_examples WITH (security_invoker = ON) AS
+SELECT
+  t.type_examples_id,                                                           -- Primary key (auto-synthesized: TypeExamples had no field named 'Id' or ending in 'Id').
+  calc_type_examples_name(t.type_examples_id) AS name,                          -- Compound key: <type-version>[<idx>].
+  t.type_version,                                                               -- Foreign key to the parent TypeVersion.
+  t.idx,                                                                        -- Preserves YAML ordering.
+  t.example_json                                                                -- Full instance example, serialized as JSON string.
+FROM type_examples t;
+
+-- ----------------------------------------------------------------------------
+-- vw_type_axioms: Per-TypeVersion axioms (numbered invariants stated in natural language). Sourced from x-gridworks.axioms in YAML.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_type_axioms WITH (security_invoker = ON) AS
+SELECT
+  t.type_axioms_id,                                                             -- Primary key (auto-synthesized: TypeAxioms had no field named 'Id' or ending in 'Id').
+  calc_type_axioms_name(t.type_axioms_id) AS name,                              -- Compound key: <type-version>.axiom<number>.
+  t.type_version,                                                               -- Foreign key to the parent TypeVersion.
+  t.number,                                                                     -- Axiom number from YAML.
+  t.axiom_name,                                                                 -- Axiom name from YAML.
+  t.statement,                                                                  -- Axiom statement (the natural-language invariant).
+  t.axiom_description                                                           -- Optional per-axiom description (some axioms carry a description field beyond their statement).
+FROM type_axioms t;
+
+-- ----------------------------------------------------------------------------
+-- vw_type_helpers: Non-versioned reusable subtypes auto-promoted from inline nested objects (array items, oneOf branches). Synthesized at migration time. Origin metadata preserves provenance for round-trip YAML emission.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_type_helpers WITH (security_invoker = ON) AS
+SELECT
+  t.type_helpers_id,                                                            -- Primary key (auto-synthesized: TypeHelpers had no field named 'Id' or ending in 'Id').
+  t.name,                                                                       -- Synthesized helper name. Example: 'scada.control.capabilities.RelayNode'. Acts as the primary key.
+  t.title,                                                                      -- From inline 'description' if present.
+  t.description,                                                                -- Description of the helper.
+  t.extra_allowed,                                                              -- From inline additionalProperties.
+  t.origin_type_version,                                                        -- The TypeVersion whose YAML body originally introduced this helper.
+  t.origin_path                                                                 -- JSON-Pointer-ish path within origin (e.g. '/properties/RelayNodes/items') — used to re-inline on YAML emit.
+FROM type_helpers t;
+
+-- ----------------------------------------------------------------------------
+-- vw_type_helper_attributes: Properties of a TypeHelper. Same shape as TypeAttributes minus the oneOf machinery, since helpers are not versioned.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_type_helper_attributes WITH (security_invoker = ON) AS
+SELECT
+  t.type_helper_attributes_id,                                                  -- Primary key (auto-synthesized: TypeHelperAttributes had no field named 'Id' or ending in 'Id').
+  calc_type_helper_attributes_name(t.type_helper_attributes_id) AS name,        -- Compound key: <type-helper>.<attribute-name>.
+  t.type_helper,                                                                -- Foreign key to the parent TypeHelper.
+  t.attribute_name,                                                             -- Property key.
+  t.idx,                                                                        -- Preserves YAML ordering.
+  t.description,                                                                -- Per-attribute description.
+  t.is_required,                                                                -- From inline 'required' array.
+  t.is_list,                                                                    -- True if type=array.
+  t.primitive_type,                                                             -- Primitive JSON type when none of the *Ref columns apply.
+  t.format_ref,                                                                 -- FK to a Format, if this attribute references one.
+  t.enum_version_ref,                                                           -- FK to an EnumVersion, if this attribute references one.
+  t.sub_type_version_ref,                                                       -- FK to a TypeVersion, if this attribute references one.
+  t.helper_ref,                                                                 -- FK to another TypeHelper (supports nested helpers).
+  t.raw_json                                                                    -- Escape hatch for unmodeled JSON-Schema specifics.
+FROM type_helper_attributes t;
+
+-- ----------------------------------------------------------------------------
+-- vw_projections: Named, deterministic enum-to-enum (or value-to-value) mappings used by AddProjected upgrade ops. Today: SpaceheatTelemetryQuantityProjection, Gw1UnitQuantityProjection.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_projections WITH (security_invoker = ON) AS
+SELECT
+  t.projections_id,                                                             -- Primary key (auto-synthesized: Projections had no field named 'Id' or ending in 'Id').
+  t.name,                                                                       -- Projection name. Example: 'SpaceheatTelemetryQuantityProjection'. Acts as the primary key.
+  t.description,                                                                -- Description of what the projection computes.
+  t.from_enum_version,                                                          -- Source enum version.
+  t.to_enum_version,                                                            -- Target enum version.
+  t.raw_script                                                                  -- Populated only if the projection isn't a flat lookup (escape hatch).
+FROM projections t;
+
+-- ----------------------------------------------------------------------------
+-- vw_projection_mappings: Per-symbol mappings for flat-lookup Projections. Empty when the parent Projection uses RawScript.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_projection_mappings WITH (security_invoker = ON) AS
+SELECT
+  t.projection_mappings_id,                                                     -- Primary key (auto-synthesized: ProjectionMappings had no field named 'Id' or ending in 'Id').
+  calc_projection_mappings_name(t.projection_mappings_id) AS name,              -- Compound key: <projection>:<from-symbol>.
+  t.projection,                                                                 -- Foreign key to the parent Projection.
+  t.from_symbol,                                                                -- Source enum symbol.
+  t.to_symbol,                                                                  -- Target enum symbol.
+  t.description                                                                 -- Optional per-mapping description.
+FROM projection_mappings t;
+
+-- ----------------------------------------------------------------------------
+-- vw_type_upgrades: One row per ordered version pair (N, N+1) for a given type. Mirrors src/sema/runtime/types/old_versions/<type>_<NNN>.py.upgrade() methods.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_type_upgrades WITH (security_invoker = ON) AS
+SELECT
+  t.type_upgrades_id,                                                           -- Primary key (auto-synthesized: TypeUpgrades had no field named 'Id' or ending in 'Id').
+  calc_type_upgrades_name(t.type_upgrades_id) AS name,                          -- Compound key: <from-type-version> -> <to-type-version>.
+  t.from_type_version,                                                          -- Source TypeVersion.
+  t.to_type_version,                                                            -- Target TypeVersion.
+  t.description,                                                                -- Description (typically the docstring summary from the .py method).
+  t.raw_script                                                                  -- Whole-method escape hatch when no clean op decomposition is possible. Prefer per-op RawScript on TypeUpgradeOps.
+FROM type_upgrades t;
+
+-- ----------------------------------------------------------------------------
+-- vw_type_upgrade_ops: Atomic operations within a TypeUpgrade. Most upgrades decompose into 1-4 ops. OpKind controls semantics (vocabulary: AddOptional, AddWithDefault, Remove, RequireToOptional, OptionalToRequire, EnumVersionBump, CoerceToEnum, UpgradeChild, UpgradeChildIf, UpgradeListItems, UpgradeListItemsIf, AddProjected, Custom).
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_type_upgrade_ops WITH (security_invoker = ON) AS
+SELECT
+  t.type_upgrade_ops_id,                                                        -- Primary key (auto-synthesized: TypeUpgradeOps had no field named 'Id' or ending in 'Id').
+  calc_type_upgrade_ops_name(t.type_upgrade_ops_id) AS name,                    -- Compound key: <type-upgrade>#<idx>.
+  t.type_upgrade,                                                               -- Foreign key to the parent TypeUpgrade.
+  t.idx,                                                                        -- Execution order within the upgrade.
+  t.op_kind,                                                                    -- Op vocabulary: AddOptional, AddWithDefault, Remove, RequireToOptional, OptionalToRequire, EnumVersionBump, CoerceToEnum, UpgradeChild, UpgradeChildIf, UpgradeListItems, UpgradeListItemsIf, AddProjected, Custom.
+  t.field_name,                                                                 -- The attribute name being touched (most ops).
+  t.literal_value,                                                              -- JSON-encoded literal default (AddWithDefault) or source field name (AddProjected).
+  t.from_version,                                                               -- Source version for conditional upgrades (UpgradeChildIf, UpgradeListItemsIf).
+  t.to_version,                                                                 -- Target version for explicit version bumps.
+  t.enum_version_ref,                                                           -- FK for enum-related ops (EnumVersionBump, CoerceToEnum).
+  t.projection_ref,                                                             -- FK for AddProjected ops.
+  t.raw_script,                                                                 -- Per-op Python escape hatch for Custom ops. Snippet runs in scope of `self` and `data` dict.
+  t.description                                                                 -- Optional op-level description.
+FROM type_upgrade_ops t;
+
+-- ----------------------------------------------------------------------------
+-- vw_enum_upgrades: Mirror of TypeUpgrades for enum value renames or splits when name preservation breaks. Today's 5 multi-version enums all preserved names, so this table starts empty.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_enum_upgrades WITH (security_invoker = ON) AS
+SELECT
+  t.enum_upgrades_id,                                                           -- Primary key (auto-synthesized: EnumUpgrades had no field named 'Id' or ending in 'Id').
+  calc_enum_upgrades_name(t.enum_upgrades_id) AS name,                          -- Compound key: <from-enum-version> -> <to-enum-version>.
+  t.from_enum_version,                                                          -- Source EnumVersion.
+  t.to_enum_version,                                                            -- Target EnumVersion.
+  t.description,                                                                -- Description of the enum upgrade.
+  t.raw_script                                                                  -- Whole-upgrade escape hatch.
+FROM enum_upgrades t;
+
+-- ----------------------------------------------------------------------------
+-- vw_enum_upgrade_mappings: Per-symbol value renames for an EnumUpgrade. Empty when the parent EnumUpgrade preserves all names.
+-- Combines base table columns with calculated/lookup/aggregation fields.
+-- ----------------------------------------------------------------------------
+CREATE OR REPLACE VIEW vw_enum_upgrade_mappings WITH (security_invoker = ON) AS
+SELECT
+  t.enum_upgrade_mappings_id,                                                   -- Primary key (auto-synthesized: EnumUpgradeMappings had no field named 'Id' or ending in 'Id').
+  calc_enum_upgrade_mappings_name(t.enum_upgrade_mappings_id) AS name,          -- Compound key: <enum-upgrade>:<from-symbol>.
+  t.enum_upgrade,                                                               -- Foreign key to the parent EnumUpgrade.
+  t.from_symbol,                                                                -- Source enum symbol.
+  t.to_symbol,                                                                  -- Target enum symbol (or empty/null when symbol is removed).
+  t.description                                                                 -- Optional per-mapping description.
+FROM enum_upgrade_mappings t;
+

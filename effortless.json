@@ -1,7 +1,7 @@
 {
   "ShowHidden": false,
   "ShowAllFiles": false,
-  "CurrentPath": null,
+  "CurrentPath": "/postgres",
   "SSoTmeProjectFiles": null,
   "SSoTmeProjectId": "f9254277-ecc8-47f4-8a17-673c865abfe6",
   "Name": "sema",
@@ -18,9 +18,9 @@
       "RelativePath": "/postgres",
       "CommandLine": "rulebook-to-postgres -i ../effortless-rulebook/effortless-rulebook.json",
       "IsDisabled": false,
-      "PinnedVersion": "",
-      "LastVersionUsed": "v2026.04.23.1316",
-      "LastUrl": "https://effortless-rulebook-to-postgres-v2026-04-23-1316-cmvbd4phczmeg.7pktzg2z971j0.cpln.app"
+      "PinnedVersion": "v2026.04.30.0131",
+      "LastVersionUsed": "v2026.04.30.0131",
+      "LastUrl": "https://effortless-rulebook-to-postgres-v2026-04-30-0131-cmvbd4phczmeg.7pktzg2z971j0.cpln.app"
     },
     {
       "IsSSoTTranspiler": false,

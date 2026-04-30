@@ -17,6 +17,658 @@ SET check_function_bodies = off;
 -- These functions perform lookups via foreign key relationships
 -- ============================================================================
 
+-- get_owners_name
+-- Helper function: Get Name from Owners by OwnersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_owners_name(p_owners_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT name FROM owners WHERE owners_id = p_owners_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_owners_owner_type
+-- Helper function: Get OwnerType from Owners by OwnersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_owners_owner_type(p_owners_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT owner_type FROM owners WHERE owners_id = p_owners_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_owners_contact
+-- Helper function: Get Contact from Owners by OwnersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_owners_contact(p_owners_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT contact FROM owners WHERE owners_id = p_owners_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_owners_website
+-- Helper function: Get Website from Owners by OwnersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_owners_website(p_owners_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT website FROM owners WHERE owners_id = p_owners_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_owners_github
+-- Helper function: Get Github from Owners by OwnersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_owners_github(p_owners_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT github FROM owners WHERE owners_id = p_owners_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_owners_organization
+-- Helper function: Get Organization from Owners by OwnersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_owners_organization(p_owners_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT organization FROM owners WHERE owners_id = p_owners_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_owners_description
+-- Helper function: Get Description from Owners by OwnersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_owners_description(p_owners_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM owners WHERE owners_id = p_owners_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_owners_support_policy
+-- Helper function: Get SupportPolicy from Owners by OwnersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_owners_support_policy(p_owners_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT support_policy FROM owners WHERE owners_id = p_owners_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_owners_license
+-- Helper function: Get License from Owners by OwnersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_owners_license(p_owners_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT license FROM owners WHERE owners_id = p_owners_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_name
+-- Helper function: Get Name from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_name(p_formats_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT name FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_schema_url
+-- Helper function: Get SchemaUrl from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_schema_url(p_formats_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT schema_url FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_title
+-- Helper function: Get Title from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_title(p_formats_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT title FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_description
+-- Helper function: Get Description from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_description(p_formats_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_pattern
+-- Helper function: Get Pattern from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_pattern(p_formats_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT pattern FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_min_length
+-- Helper function: Get MinLength from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_min_length(p_formats_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT (SELECT min_length FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_max_length
+-- Helper function: Get MaxLength from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_max_length(p_formats_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT (SELECT max_length FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_json_schema_format
+-- Helper function: Get JsonSchemaFormat from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_json_schema_format(p_formats_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT json_schema_format FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_created
+-- Helper function: Get Created from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_created(p_formats_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT (SELECT created FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_formats_raw_json
+-- Helper function: Get RawJson from Formats by FormatsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_formats_raw_json(p_formats_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT raw_json FROM formats WHERE formats_id = p_formats_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_format_examples_name
+-- Field: FormatExamples.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_format_examples_name(p_format_examples_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(format, '') FROM format_examples WHERE format_examples_id = p_format_examples_id), '[', (SELECT idx FROM format_examples WHERE format_examples_id = p_format_examples_id), CASE WHEN COALESCE((SELECT is_counter FROM format_examples WHERE format_examples_id = p_format_examples_id), FALSE) THEN ('x')::text ELSE ('')::text END, ']'))::text;
+$$ LANGUAGE sql STABLE;
+
+-- get_enums_name
+-- Helper function: Get Name from Enums by EnumsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enums_name(p_enums_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT name FROM enums WHERE enums_id = p_enums_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enums_enum_type
+-- Helper function: Get EnumType from Enums by EnumsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enums_enum_type(p_enums_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT enum_type FROM enums WHERE enums_id = p_enums_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enums_description
+-- Helper function: Get Description from Enums by EnumsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enums_description(p_enums_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM enums WHERE enums_id = p_enums_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enums_raw_json
+-- Helper function: Get RawJson from Enums by EnumsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enums_raw_json(p_enums_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT raw_json FROM enums WHERE enums_id = p_enums_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_name
+-- Field: EnumVersions.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_name(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(enum, '') FROM enum_versions WHERE enum_versions_id = p_enum_versions_id), '/', (SELECT NULLIF(version, '') FROM enum_versions WHERE enum_versions_id = p_enum_versions_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_version
+-- Helper function: Get Version from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_version(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT version FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_schema_url
+-- Helper function: Get SchemaUrl from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_schema_url(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT schema_url FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_title
+-- Helper function: Get Title from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_title(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT title FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_description
+-- Helper function: Get Description from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_description(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_default_symbol
+-- Helper function: Get DefaultSymbol from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_default_symbol(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT default_symbol FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_status
+-- Helper function: Get Status from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_status(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT status FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_created
+-- Helper function: Get Created from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_created(p_enum_versions_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT (SELECT created FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_raw_json
+-- Helper function: Get RawJson from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_raw_json(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT raw_json FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_values_name
+-- Field: EnumValues.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_enum_values_name(p_enum_values_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(enum_version, '') FROM enum_values WHERE enum_values_id = p_enum_values_id), ':', (SELECT NULLIF(symbol, '') FROM enum_values WHERE enum_values_id = p_enum_values_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- get_types_name
+-- Helper function: Get Name from Types by TypesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_types_name(p_types_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT name FROM types WHERE types_id = p_types_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_types_title
+-- Helper function: Get Title from Types by TypesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_types_title(p_types_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT title FROM types WHERE types_id = p_types_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_types_description
+-- Helper function: Get Description from Types by TypesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_types_description(p_types_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM types WHERE types_id = p_types_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_types_python_class_name
+-- Helper function: Get PythonClassName from Types by TypesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_types_python_class_name(p_types_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT python_class_name FROM types WHERE types_id = p_types_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_types_make_data_class
+-- Helper function: Get MakeDataClass from Types by TypesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_types_make_data_class(p_types_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (SELECT make_data_class FROM types WHERE types_id = p_types_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_types_is_cac
+-- Helper function: Get IsCac from Types by TypesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_types_is_cac(p_types_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (SELECT is_cac FROM types WHERE types_id = p_types_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_types_is_component
+-- Helper function: Get IsComponent from Types by TypesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_types_is_component(p_types_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (SELECT is_component FROM types WHERE types_id = p_types_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_name
+-- Field: TypeVersions.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_name(p_type_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(type, '') FROM type_versions WHERE type_versions_id = p_type_versions_id), '/', (SELECT NULLIF(version, '') FROM type_versions WHERE type_versions_id = p_type_versions_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_version
+-- Helper function: Get Version from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_version(p_type_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT version FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_schema_url
+-- Helper function: Get SchemaUrl from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_schema_url(p_type_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT schema_url FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_title
+-- Helper function: Get Title from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_title(p_type_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT title FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_description
+-- Helper function: Get Description from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_description(p_type_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_extra_allowed
+-- Helper function: Get ExtraAllowed from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_extra_allowed(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (SELECT extra_allowed FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_status
+-- Helper function: Get Status from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_status(p_type_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT status FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_created
+-- Helper function: Get Created from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_created(p_type_versions_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT (SELECT created FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_raw_json
+-- Helper function: Get RawJson from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_raw_json(p_type_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT raw_json FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_helpers_name
+-- Helper function: Get Name from TypeHelpers by TypeHelpersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_helpers_name(p_type_helpers_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT name FROM type_helpers WHERE type_helpers_id = p_type_helpers_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_helpers_title
+-- Helper function: Get Title from TypeHelpers by TypeHelpersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_helpers_title(p_type_helpers_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT title FROM type_helpers WHERE type_helpers_id = p_type_helpers_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_helpers_description
+-- Helper function: Get Description from TypeHelpers by TypeHelpersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_helpers_description(p_type_helpers_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM type_helpers WHERE type_helpers_id = p_type_helpers_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_helpers_extra_allowed
+-- Helper function: Get ExtraAllowed from TypeHelpers by TypeHelpersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_helpers_extra_allowed(p_type_helpers_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (SELECT extra_allowed FROM type_helpers WHERE type_helpers_id = p_type_helpers_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_helpers_origin_path
+-- Helper function: Get OriginPath from TypeHelpers by TypeHelpersId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_helpers_origin_path(p_type_helpers_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT origin_path FROM type_helpers WHERE type_helpers_id = p_type_helpers_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_name
+-- Field: TypeAttributes.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_name(p_type_attributes_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(type_version, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id), '.', (SELECT NULLIF(attribute_name, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_examples_name
+-- Field: TypeExamples.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_examples_name(p_type_examples_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(type_version, '') FROM type_examples WHERE type_examples_id = p_type_examples_id), '[', (SELECT idx FROM type_examples WHERE type_examples_id = p_type_examples_id), ']'))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_axioms_name
+-- Field: TypeAxioms.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_axioms_name(p_type_axioms_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(type_version, '') FROM type_axioms WHERE type_axioms_id = p_type_axioms_id), '.axiom', (SELECT number FROM type_axioms WHERE type_axioms_id = p_type_axioms_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_name
+-- Field: TypeHelperAttributes.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_name(p_type_helper_attributes_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(type_helper, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id), '.', (SELECT NULLIF(attribute_name, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- get_projections_name
+-- Helper function: Get Name from Projections by ProjectionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_projections_name(p_projections_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT name FROM projections WHERE projections_id = p_projections_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_projections_description
+-- Helper function: Get Description from Projections by ProjectionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_projections_description(p_projections_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM projections WHERE projections_id = p_projections_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_projections_raw_script
+-- Helper function: Get RawScript from Projections by ProjectionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_projections_raw_script(p_projections_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT raw_script FROM projections WHERE projections_id = p_projections_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_projection_mappings_name
+-- Field: ProjectionMappings.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_projection_mappings_name(p_projection_mappings_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(projection, '') FROM projection_mappings WHERE projection_mappings_id = p_projection_mappings_id), ':', (SELECT NULLIF(from_symbol, '') FROM projection_mappings WHERE projection_mappings_id = p_projection_mappings_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrades_name
+-- Field: TypeUpgrades.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_name(p_type_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(from_type_version, '') FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id), ' -> ', (SELECT NULLIF(to_type_version, '') FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- get_type_upgrades_description
+-- Helper function: Get Description from TypeUpgrades by TypeUpgradesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_upgrades_description(p_type_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_upgrades_raw_script
+-- Helper function: Get RawScript from TypeUpgrades by TypeUpgradesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_upgrades_raw_script(p_type_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT raw_script FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrade_ops_name
+-- Field: TypeUpgradeOps.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrade_ops_name(p_type_upgrade_ops_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(type_upgrade, '') FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id), '#', (SELECT idx FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrades_name
+-- Field: EnumUpgrades.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_name(p_enum_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(from_enum_version, '') FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id), ' -> ', (SELECT NULLIF(to_enum_version, '') FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_upgrades_description
+-- Helper function: Get Description from EnumUpgrades by EnumUpgradesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_upgrades_description(p_enum_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_upgrades_raw_script
+-- Helper function: Get RawScript from EnumUpgrades by EnumUpgradesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_upgrades_raw_script(p_enum_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT raw_script FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrade_mappings_name
+-- Field: EnumUpgradeMappings.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrade_mappings_name(p_enum_upgrade_mappings_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(enum_upgrade, '') FROM enum_upgrade_mappings WHERE enum_upgrade_mappings_id = p_enum_upgrade_mappings_id), ':', (SELECT NULLIF(from_symbol, '') FROM enum_upgrade_mappings WHERE enum_upgrade_mappings_id = p_enum_upgrade_mappings_id)))::text;
+$$ LANGUAGE sql STABLE;
+
 -- ============================================================================
 -- MANY-SIDE RELATIONSHIP FUNCTIONS
 -- These functions aggregate child records for many-side relationships
