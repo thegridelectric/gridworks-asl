@@ -1,0 +1,36 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/linear.one.dimensional.calibration/001
+title: linear.one.dimensional.calibration
+type: object
+description: "Linear calibration applied to a measurement expressed in the derived channel's declared OutputUnit domain.\nThe transformation is interpreted as:\n\n    calibrated = M * x + B\n\nwhere:\n\n  - x is the input measurement first converted into the OutputUnit\n    scaling of the derived channel.\n\n  - M is dimensionless.\n\n  - B is expressed in OutputUnit scaling and therefore shares the\n    same integer scaling convention as the derived channel's output.\n\nThis type represents an affine correction applied after unit normalization and does not itself declare units.\n"
+properties:
+  M:
+    type: number
+    description: 'Dimensionless slope applied to the normalized input value. Must be finite.
+
+      '
+  B:
+    type: integer
+    description: 'Additive offset expressed in the derived channel''s OutputUnit scaling domain.
+
+      '
+  TypeName:
+    const: linear.one.dimensional.calibration
+  Version:
+    const: '001'
+required:
+- M
+- B
+- TypeName
+- Version
+additionalProperties: false
+examples:
+- M: 1.069
+  B: -430
+  TypeName: linear.one.dimensional.calibration
+  Version: '001'
+x-gridworks:
+  owner: gridworks-energy
+  extended_description: 'Instances of this type are typically used as Parameters for derived.channel.gt when Strategy equals "affine".
+
+    The calibration is interpreted in the OutputUnit scaling domain declared by the referencing derived channel.'

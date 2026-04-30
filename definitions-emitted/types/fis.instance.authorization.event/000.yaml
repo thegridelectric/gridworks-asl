@@ -1,0 +1,50 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/fis.instance.authorization.event/000
+title: fis.instance.authorization.event
+type: object
+description: 'Event emitted by the Fleet Index Service (FIS) recording an authorization decision for a runtime instance attempting to connect to a broker. This event provides an immutable audit record of instance-level authorization outcomes.
+
+  '
+properties:
+  EventId:
+    $ref: https://schemas.electricity.works/formats/uuid4.str
+  GNodeId:
+    $ref: https://schemas.electricity.works/formats/uuid4.str
+  GNodeAlias:
+    $ref: https://schemas.electricity.works/formats/left.right.dot
+  GNodeInstanceId:
+    $ref: https://schemas.electricity.works/formats/uuid4.str
+  Decision:
+    $ref: https://schemas.electricity.works/enums/fis.authorization.decision/000
+  Reason:
+    $ref: https://schemas.electricity.works/enums/fis.authorization.reason/000
+  Transport:
+    $ref: https://schemas.electricity.works/enums/g.node.instance.transport/000
+  ObservedPeerAddress:
+    type: string
+  ConnectionHandle:
+    type: string
+  DecidedAtUnixMs:
+    $ref: https://schemas.electricity.works/formats/utc.milliseconds
+  TypeName:
+    const: fis.instance.authorization.event
+  Version:
+    const: '000'
+required:
+- EventId
+- GNodeId
+- GNodeInstanceId
+- Decision
+- Reason
+- Transport
+- DecidedAtUnixMs
+- TypeName
+- Version
+additionalProperties: false
+x-gridworks:
+  owner: jessica-millar
+  extended_description: 'Authorization events are emitted asynchronously by FIS after evaluating a connection attempt. They provide a durable audit trail of authorization outcomes, including supersession events and denial decisions.
+
+    These events do not grant authority; they record authority decisions. Runtime enforcement occurs at the broker level.
+
+    '

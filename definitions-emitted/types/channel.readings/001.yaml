@@ -1,0 +1,40 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/channel.readings/001
+title: channel.readings
+type: object
+description: 'Timestamped integer readings for one channel within a SCADA reporting context, including the channel UUID.
+
+  '
+properties:
+  ChannelName:
+    $ref: https://schemas.electricity.works/formats/spaceheat.name
+  ChannelId:
+    $ref: https://schemas.electricity.works/formats/uuid4.str
+  ValueList:
+    type: array
+    items:
+      type: integer
+  ScadaReadTimeUnixMsList:
+    type: array
+    items:
+      $ref: https://schemas.electricity.works/formats/utc.milliseconds
+  TypeName:
+    const: channel.readings
+  Version:
+    const: '001'
+required:
+- ChannelName
+- ChannelId
+- ValueList
+- ScadaReadTimeUnixMsList
+- TypeName
+- Version
+additionalProperties: true
+x-gridworks:
+  owner: gridworks-energy
+  axioms:
+  - number: 1
+    name: ListLengthConsistency
+    statement: 'len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
+
+      '

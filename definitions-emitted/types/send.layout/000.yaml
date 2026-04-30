@@ -1,0 +1,42 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/send.layout/000
+title: send.layout
+type: object
+description: 'Request message asking a SCADA actor to send its current layout.lite.
+
+  '
+properties:
+  FromGNodeAlias:
+    $ref: https://schemas.electricity.works/formats/left.right.dot
+    description: 'GNode alias of the actor issuing the request.
+
+      '
+  FromName:
+    $ref: https://schemas.electricity.works/formats/spaceheat.name
+    description: 'Spaceheat actor name of the requester (legacy routing/addressing field).
+
+      '
+  ToName:
+    $ref: https://schemas.electricity.works/formats/spaceheat.name
+    description: 'Spaceheat actor name of the intended recipient (legacy routing/addressing field).
+
+      '
+  TypeName:
+    const: send.layout
+  Version:
+    const: '000'
+required:
+- FromGNodeAlias
+- FromName
+- ToName
+- TypeName
+- Version
+additionalProperties: false
+examples:
+- FromGNodeAlias: d1.isone.me.versant.keene.beech.admin
+  FromName: admin
+  ToName: scada
+  TypeName: send.layout
+  Version: '000'
+x-gridworks:
+  owner: gridworks-energy

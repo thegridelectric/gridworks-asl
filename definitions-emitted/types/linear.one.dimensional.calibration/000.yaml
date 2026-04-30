@@ -1,0 +1,33 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/linear.one.dimensional.calibration/000
+title: linear.one.dimensional.calibration
+type: object
+description: "Linear calibration applied to a raw sensor measurement.\nThe transformation is interpreted as:\n\n    calibrated_value = M * raw_value + B\n\nThis type represents empirical correction of a sensor's raw output into a physically meaningful quantity.\n"
+properties:
+  M:
+    type: number
+    description: 'Multiplicative slope applied to the raw input measurement.
+
+      '
+  B:
+    type: number
+    description: 'Additive offset applied after the multiplicative slope.
+
+      '
+  TypeName:
+    const: linear.one.dimensional.calibration
+  Version:
+    const: '000'
+required:
+- TypeName
+- Version
+additionalProperties: false
+examples:
+- TypeName: linear.one.dimensional.calibration
+  Version: '000'
+- M: 1.069
+  B: -4.3
+  TypeName: linear.one.dimensional.calibration
+  Version: '000'
+x-gridworks:
+  owner: gridworks-energy

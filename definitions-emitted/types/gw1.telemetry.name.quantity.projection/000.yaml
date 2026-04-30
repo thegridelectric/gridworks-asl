@@ -1,0 +1,43 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/gw1.telemetry.name.quantity.projection/000
+title: telemetry.name.quantity.projection
+type: object
+description: 'Canonical projection from spaceheat.telemetry.name to gw1.quantity.
+
+  This type declares the deterministic semantic relationship by which every legacy Spaceheat telemetry encoding maps to exactly one gw1.quantity value.
+
+  It exists to support safe transition from TelemetryName-based dimensional encoding toward explicit gw1.unit and gw1.quantity separation.
+
+  '
+properties:
+  TelemetryName:
+    $ref: https://schemas.electricity.works/enums/spaceheat.telemetry.name/006
+    description: 'Legacy telemetry encoding value.
+
+      '
+  Quantity:
+    $ref: https://schemas.electricity.works/enums/gw1.quantity/000
+    description: 'Canonical physical or logical quantity associated with the specified TelemetryName.
+
+      '
+  TypeName:
+    const: gw1.telemetry.name.quantity.projection
+  Version:
+    const: '000'
+required:
+- TelemetryName
+- Quantity
+- TypeName
+- Version
+additionalProperties: false
+examples:
+- TelemetryName: PowerW
+  Quantity: Power
+  TypeName: gw1.telemetry.name.quantity.projection
+  Version: '000'
+x-gridworks:
+  owner: gridworks-energy
+  axioms:
+  - number: 1
+    name: EnumeratedTelemetryProjectionMapping
+    statement: "The only valid TelemetryName → Quantity pairs in version 000 are:\n\n  Unknown → Unknown\n\n  PowerW → Power\n  WattHours → Energy\n  MilliWattHours → Energy\n\n  WaterTempCTimes1000 → Temperature\n  WaterTempFTimes1000 → Temperature\n  AirTempCTimes1000 → Temperature\n  AirTempFTimes1000 → Temperature\n  CelsiusTimes100 → Temperature\n\n  GpmTimes100 → FlowRate\n  GallonsTimes100 → Volume\n\n  VoltageRmsMilliVolts → Voltage\n  VoltsTimesTen → Voltage\n  VoltsTimes100 → Voltage\n  MicroVolts → Voltage\n\n  CurrentRmsMicroAmps → Current\n\n  HzTimes100 → Frequency\n  MicroHz → Frequency\n\n  RelayState → Unitless\n  ThermostatState → Unitless\n  StorageLayer → Unitless\n\n  PercentKeep → Percent\n\nAny other combination SHALL be invalid."

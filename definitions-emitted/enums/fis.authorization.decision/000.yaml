@@ -1,0 +1,23 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/enums/fis.authorization.decision/000
+title: fis.authorization.decision
+type: string
+description: 'Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.
+
+  This enum captures only the final decision result. Structured explanations are conveyed separately via fis.authorization.reason.
+
+  '
+enum:
+- Authorized
+- Denied
+default: Denied
+x-gridworks:
+  owner: jessica-millar
+  version: '000'
+  value_descriptions:
+    Authorized: 'The runtime instance is permitted to establish or continue broker connectivity under its presented identity.
+
+      '
+    Denied: 'The runtime instance is not permitted to establish or continue broker connectivity under its presented identity.
+
+      '

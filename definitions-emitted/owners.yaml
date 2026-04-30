@@ -1,0 +1,39 @@
+gridworks-energy:
+  type: organization
+  contact: gridworks@gridworks-consulting.com
+  website: https://gridworks.readthedocs.io
+  github: https://github.com/thegridelectric
+  organization: GridWorks Energy Consulting LLC
+  description: Transactive energy infrastructure and thermal storage systems
+  support_policy: Community support via GitHub issues
+  license: MIT
+jessica-millar:
+  type: individual
+  contact: jmillar@gridworks-consulting.com
+  website: https://gridworks-consulting.com
+  organization: GridWorks Energy Consulting LLC
+  description: Sema co-designer and GridWorks SCADA architect
+joe-strommen:
+  type: individual
+  contact: joe@2040energy.com
+  website: https://www.2040energy.com/
+  organization: 2040 Energy
+  description: Developer and systems designer focused on modular software architecture, contributing to GridWorks web app, data backend, and electronics boards; also building a heat pump company
+microerapower:
+  type: organization
+  contact: smb@microerapower.com
+  website: https://microerapower.com
+  organization: MicroEra Power
+  description: Tunable phase change materials for transactive thermal storage solutions
+smoothstone-computing:
+  type: organization
+  contact: anschweitzer@gmail.com
+  website: https://github.com/SmoothStoneComputing
+  github: https://github.com/SmoothStoneComputing
+  organization: Smooth Stone Computing
+  description: Software engineering and systems design; contributor to early Sema design
+thomas-defauw:
+  type: individual
+  contact: tdefauw@gridworks-consulting.com
+  organization: GridWorks Energy Consulting LLC
+  description: Software developer and data engineer contributing to GridWorks SCADA, FLOs, and Local Control systems across backend, telemetry, and analytics layers

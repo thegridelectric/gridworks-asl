@@ -1,0 +1,102 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/ha1.params/004
+title: ha1.params
+type: object
+description: 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 house-heating model.
+
+  '
+properties:
+  AlphaTimes10:
+    type: integer
+    description: 'Alpha coefficient scaled by 10.
+
+      '
+  BetaTimes100:
+    type: integer
+    description: 'Beta coefficient scaled by 100.
+
+      '
+  GammaEx6:
+    type: integer
+    description: 'Gamma coefficient scaled by 10^6.
+
+      '
+  IntermediatePowerKw:
+    type: number
+    description: 'Intermediate heating power in kW thermal.
+
+      '
+  IntermediateRswtF:
+    type: integer
+    description: 'Intermediate required source water temperature in degrees Fahrenheit.
+
+      '
+  DdPowerKw:
+    type: number
+    description: 'Design-day heating power in kW thermal.
+
+      '
+  DdRswtF:
+    type: integer
+    description: 'Design-day required source water temperature in degrees Fahrenheit.
+
+      '
+  DdDeltaTF:
+    type: integer
+    description: 'Design-day delta-T in degrees Fahrenheit.
+
+      '
+  HpMaxKwTh:
+    type: number
+    description: 'Maximum heat-pump thermal output in kW.
+
+      '
+  MaxEwtF:
+    type: integer
+    description: 'Maximum entering-water temperature in degrees Fahrenheit.
+
+      '
+  LoadOverestimationPercent:
+    type: integer
+    description: 'Percentage uplift applied to estimated load.
+
+      '
+  Version:
+    const: '004'
+  TypeName:
+    const: ha1.params
+required:
+- AlphaTimes10
+- BetaTimes100
+- GammaEx6
+- IntermediatePowerKw
+- IntermediateRswtF
+- DdPowerKw
+- DdRswtF
+- DdDeltaTF
+- HpMaxKwTh
+- MaxEwtF
+- LoadOverestimationPercent
+- Version
+- TypeName
+- Version
+additionalProperties: false
+examples:
+- AlphaTimes10: 55
+  BetaTimes100: -10
+  GammaEx6: 0
+  IntermediatePowerKw: 1.5
+  IntermediateRswtF: 100
+  DdPowerKw: 5.5
+  DdRswtF: 150
+  DdDeltaTF: 20
+  HpMaxKwTh: 14.0
+  MaxEwtF: 170
+  LoadOverestimationPercent: 0
+  TypeName: ha1.params
+  Version: '004'
+x-gridworks:
+  owner: gridworks-energy
+  extended_description: '`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. These values are exchanged across system boundaries so SCADA and downstream consumers can make consistent calculations from the same declared parameter set.
+
+    '
