@@ -195,8 +195,6 @@ def import_enums(ctx: MigrationContext, registry: dict[str, Any]) -> None:
             modeled = {"$schema", "$id", "title", "description", "type",
                        "enum", "default", "x-gridworks"}
             unmodeled = {k: v for k, v in doc.items() if k not in modeled}
-            if doc.get("type") and doc["type"] != "string":
-                unmodeled["type"] = doc["type"]
             extended = xg.get("extended_description")
             if extended:
                 unmodeled["x-gridworks-extended_description"] = extended
@@ -227,6 +225,7 @@ def import_enums(ctx: MigrationContext, registry: dict[str, Any]) -> None:
             "Name": enum_name,
             "Owner": yaml_owners.get(enum_name) or reg.get("owner"),
             "EnumType": reg.get("enum_type"),
+            "ValueType": reg.get("value_type"),
             "Description": reg.get("description"),
             "RawJson": None,
         })

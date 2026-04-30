@@ -237,12 +237,12 @@ def build_enum_yaml(enum: dict[str, Any], ev: dict[str, Any],
             raw = json.loads(ev["RawJson"])
         except json.JSONDecodeError:
             raw = {}
-    enum_type = raw.get("type", "string")
+    value_type = enum.get("ValueType") or "string"
     sorted_values = sorted(values, key=lambda r: r.get("Idx", 0))
 
     def _cast(v: str) -> Any:
         decoded = _decode_value(v)
-        if enum_type == "integer":
+        if value_type == "integer":
             try:
                 return int(decoded)
             except (TypeError, ValueError):
@@ -253,7 +253,7 @@ def build_enum_yaml(enum: dict[str, Any], ev: dict[str, Any],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "$id": ev.get("SchemaUrl"),
         "title": ev.get("Title") or enum["Name"],
-        "type": enum_type,
+        "type": value_type,
     }
     if ev.get("Description"):
         out["description"] = ev["Description"]

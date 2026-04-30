@@ -1017,6 +1017,13 @@
         "Description": "Either 'versioned' (additive-only multi-version) or 'literal' (single immutable version)."
       },
       {
+        "name": "ValueType",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "JSON Schema datatype of the enum's symbols. If present, SHALL be 'integer' and version YAML files SHALL have type: integer. If null, the enum SHALL be treated as string-valued."
+      },
+      {
         "name": "Description",
         "datatype": "string",
         "type": "raw",
@@ -1028,7 +1035,7 @@
         "datatype": "string",
         "type": "raw",
         "nullable": true,
-        "Description": "Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded."
+        "Description": "Escape hatch: any unmodeled YAML keys (e.g., x-gridworks extended_description). JSON-encoded."
       }
     ],
     "data": [
@@ -1036,6 +1043,7 @@
         "Name": "base.g.node.class",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Universal physical ontology classification for Grid Nodes",
         "RawJson": null
       },
@@ -1043,6 +1051,7 @@
         "Name": "buffer.regulation.mode",
         "Owner": "gridworks-energy",
         "EnumType": "literal",
+        "ValueType": null,
         "Description": "Operating mode that governs how tightly the House0 buffer tank is regulated.",
         "RawJson": null
       },
@@ -1050,6 +1059,7 @@
         "Name": "change.heatcall.source",
         "Owner": "gridworks-energy",
         "EnumType": "literal",
+        "ValueType": null,
         "Description": "Command enum for switching heat-call control authority between wall thermostat and SCADA.",
         "RawJson": null
       },
@@ -1057,6 +1067,7 @@
         "Name": "change.relay.state",
         "Owner": "gridworks-energy",
         "EnumType": "literal",
+        "ValueType": null,
         "Description": "FSM events for changing a simple relay between open and closed states.",
         "RawJson": null
       },
@@ -1064,6 +1075,7 @@
         "Name": "fis.authorization.decision",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.",
         "RawJson": null
       },
@@ -1071,6 +1083,7 @@
         "Name": "fis.authorization.reason",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Structured reason describing why the Fleet Index Service (FIS) produced a specific authorization decision.",
         "RawJson": null
       },
@@ -1078,6 +1091,7 @@
         "Name": "fsm.report.type",
         "Owner": "gridworks-energy",
         "EnumType": "literal",
+        "ValueType": null,
         "Description": "Enumeration of atomic FSM report categories.",
         "RawJson": null
       },
@@ -1085,6 +1099,7 @@
         "Name": "g.node.instance.status",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Lifecycle state of a runtime instance tracked by FIS",
         "RawJson": null
       },
@@ -1092,6 +1107,7 @@
         "Name": "g.node.instance.transport",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Transport protocol used by a runtime instance",
         "RawJson": null
       },
@@ -1099,6 +1115,7 @@
         "Name": "g.node.status",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Lifecycle status of a Grid Node within the registry",
         "RawJson": null
       },
@@ -1106,6 +1123,7 @@
         "Name": "gpm.from.hz.method",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Method used to convert measured pulse frequency into gallons per minute.",
         "RawJson": null
       },
@@ -1113,6 +1131,7 @@
         "Name": "gw.g.node.class",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "GridWorks-specific functional classification for GNodes",
         "RawJson": null
       },
@@ -1120,6 +1139,7 @@
         "Name": "gw1.actor.class",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Classification of actors in the GridWorks SCADA system.",
         "RawJson": null
       },
@@ -1127,6 +1147,7 @@
         "Name": "gw1.emission.method",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Method by which a derived or computed channel emits values.",
         "RawJson": null
       },
@@ -1134,6 +1155,7 @@
         "Name": "gw1.quantity",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "High-level physical or semantic quantity classification for telemetry values.",
         "RawJson": null
       },
@@ -1141,6 +1163,7 @@
         "Name": "gw1.seasonal.storage.mode",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Seasonal storage operating mode for layouts that distinguish all-tank from buffer-only operation.",
         "RawJson": null
       },
@@ -1148,6 +1171,7 @@
         "Name": "gw1.system.mode",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "System operational mode for HVAC control.",
         "RawJson": null
       },
@@ -1155,6 +1179,7 @@
         "Name": "gw1.heat.call.interpretation",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Defines how a source telemetry channel is interpreted to determine whether a zone is calling for heat.",
         "RawJson": null
       },
@@ -1162,6 +1187,7 @@
         "Name": "gw1.unit",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Measurement-unit vocabulary used for derived channels.",
         "RawJson": null
       },
@@ -1169,6 +1195,7 @@
         "Name": "heatcall.source",
         "Owner": "gridworks-energy",
         "EnumType": "literal",
+        "ValueType": null,
         "Description": "Source currently responsible for issuing a zone heat call.",
         "RawJson": null
       },
@@ -1176,6 +1203,7 @@
         "Name": "hz.calc.method",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Method used to estimate signal frequency from pulse timing data.",
         "RawJson": null
       },
@@ -1183,6 +1211,7 @@
         "Name": "market.price.unit",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Unit of the price axis for a market type.",
         "RawJson": null
       },
@@ -1190,6 +1219,7 @@
         "Name": "market.quantity.unit",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Unit of the quantity axis for a market type.",
         "RawJson": null
       },
@@ -1197,6 +1227,7 @@
         "Name": "market.type.name",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Categorizes different markets run by MarketMaker",
         "RawJson": null
       },
@@ -1204,6 +1235,7 @@
         "Name": "relay.closed.or.open",
         "Owner": "gridworks-energy",
         "EnumType": "literal",
+        "ValueType": null,
         "Description": "FSM states for a simple relay with open and closed positions.",
         "RawJson": null
       },
@@ -1211,6 +1243,7 @@
         "Name": "relay.energization.state",
         "Owner": "gridworks-energy",
         "EnumType": "literal",
+        "ValueType": "integer",
         "Description": "Two-state relay energization state.",
         "RawJson": null
       },
@@ -1218,6 +1251,7 @@
         "Name": "relay.open.or.closed",
         "Owner": "gridworks-energy",
         "EnumType": "literal",
+        "ValueType": null,
         "Description": "Binary contact state for a single-pole relay, independent of coil energization.",
         "RawJson": null
       },
@@ -1225,13 +1259,15 @@
         "Name": "relay.wiring.config",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
-        "Description": "Defines how a relay\u2019s COM, NO, and NC terminals are wired into a circuit.",
+        "ValueType": null,
+        "Description": "Defines how a relay’s COM, NO, and NC terminals are wired into a circuit.",
         "RawJson": null
       },
       {
         "Name": "spaceheat.make.model",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Make and model taxonomy used by Spaceheat SCADA for physical and simulated devices.",
         "RawJson": null
       },
@@ -1239,6 +1275,7 @@
         "Name": "spaceheat.telemetry.name",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Legacy Spaceheat telemetry-name vocabulary for raw channels.",
         "RawJson": null
       },
@@ -1246,6 +1283,7 @@
         "Name": "spaceheat.unit",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Legacy Spaceheat measurement-unit vocabulary used in channel configuration and telemetry payloads.",
         "RawJson": null
       },
@@ -1253,6 +1291,7 @@
         "Name": "temp.calc.method",
         "Owner": "gridworks-energy",
         "EnumType": "versioned",
+        "ValueType": null,
         "Description": "Method used to calculate temperature from thermistor voltage measurements.",
         "RawJson": null
       }
@@ -1663,14 +1702,14 @@
         "DefaultSymbol": "0",
         "Status": null,
         "Created": "2024-03-06T22:07:00Z",
-        "RawJson": "{\"type\": \"integer\"}"
+        "RawJson": null
       },
       {
         "Enum": "relay.open.or.closed",
         "Version": "000",
         "SchemaUrl": "https://schemas.electricity.works/enums/relay.open.or.closed/000",
         "Title": "relay.open.or.closed",
-        "Description": "Binary state of a single-pole relay contact. Describes whether the relay \ncontact is open (not conducting) or closed (conducting), regardless of \ncoil energization state.\n\nNote 1: The coil energization required to achieve a contact state depends \non relay type:\n- Normally Open (NO) relay: energized coil \u2192 closed contact\n- Normally Closed (NC) relay: de-energized coil \u2192 closed contact\n\nNote 2: This enum is specifically for single-pole relays with binary states.\nOther relay configurations (double-throw, multi-position, latching, etc.) \nrequire different state enumerations that capture their specific switching \npatterns.\n",
+        "Description": "Binary state of a single-pole relay contact. Describes whether the relay \ncontact is open (not conducting) or closed (conducting), regardless of \ncoil energization state.\n\nNote 1: The coil energization required to achieve a contact state depends \non relay type:\n- Normally Open (NO) relay: energized coil → closed contact\n- Normally Closed (NC) relay: de-energized coil → closed contact\n\nNote 2: This enum is specifically for single-pole relays with binary states.\nOther relay configurations (double-throw, multi-position, latching, etc.) \nrequire different state enumerations that capture their specific switching \npatterns.\n",
         "DefaultSymbol": "RelayClosed",
         "Status": null,
         "Created": "2025-10-14T16:07:00Z",
@@ -4402,7 +4441,7 @@
         "Version": "000",
         "SchemaUrl": "https://schemas.electricity.works/types/bid/000",
         "Title": "bid",
-        "Description": "A market-normalized, slot-specific price\u2013quantity schedule submitted by a market participant. A bid expresses willingness to inject or withdraw a quantity of a market-defined commodity as a function of price, subject to the rules of the MarketType associated with the specified MarketSlot.\nBids are economically admissible, cryptographically anchored messages that serve as the primary input to market aggregation and clearing. Differences between participant classes (e.g. leaf nodes, aggregators, fleets, generators) are expressed through MarketType rules and bidder authorization registries, not through differences in bid structure.\n",
+        "Description": "A market-normalized, slot-specific price–quantity schedule submitted by a market participant. A bid expresses willingness to inject or withdraw a quantity of a market-defined commodity as a function of price, subject to the rules of the MarketType associated with the specified MarketSlot.\nBids are economically admissible, cryptographically anchored messages that serve as the primary input to market aggregation and clearing. Differences between participant classes (e.g. leaf nodes, aggregators, fleets, generators) are expressed through MarketType rules and bidder authorization registries, not through differences in bid structure.\n",
         "ExtraAllowed": false,
         "Status": null,
         "Created": "2026-01-15T15:45:08Z",
@@ -4578,7 +4617,7 @@
         "Version": "004",
         "SchemaUrl": "https://schemas.electricity.works/types/g.node.gt/004",
         "Title": "g.node.gt",
-        "Description": "A GNode (\u201cGrid Node\u201d) is the fundamental identity object in the GridWorks  ecosystem. Every physical location, metered unit, device, service, or actor  interacting with the transactive system is represented as a GNode.\n",
+        "Description": "A GNode (“Grid Node”) is the fundamental identity object in the GridWorks  ecosystem. Every physical location, metered unit, device, service, or actor  interacting with the transactive system is represented as a GNode.\n",
         "ExtraAllowed": false,
         "Status": null,
         "Created": "2026-02-24T14:00:00Z",
@@ -4886,7 +4925,7 @@
         "Version": "000",
         "SchemaUrl": "https://schemas.electricity.works/types/position.point.gt/000",
         "Title": "position.point.gt",
-        "Description": "A geographic position for a physical Grid Node. Coordinates are stored in integer microdegrees (degrees \u00d7 1,000,000). This type is conceptually aligned with the IEC 61970/61968 CIM `PositionPoint` class, but simplified for GridWorks use cases, which require only a single latitude/longitude point.\n",
+        "Description": "A geographic position for a physical Grid Node. Coordinates are stored in integer microdegrees (degrees × 1,000,000). This type is conceptually aligned with the IEC 61970/61968 CIM `PositionPoint` class, but simplified for GridWorks use cases, which require only a single latitude/longitude point.\n",
         "ExtraAllowed": false,
         "Status": null,
         "Created": "2026-02-24T15:00:00Z",
@@ -5395,7 +5434,7 @@
       {
         "AttributeName": "PqPairs",
         "Idx": 2,
-        "Description": "Ordered list of price\u2013quantity pairs defining the bid curve. Prices SHALL be ordered according to MarketType rules and normalized to the market\u2019s declared price domain. Quantities represent willingness to inject or withdraw at the corresponding prices.\n",
+        "Description": "Ordered list of price–quantity pairs defining the bid curve. Prices SHALL be ordered according to MarketType rules and normalized to the market’s declared price domain. Quantities represent willingness to inject or withdraw at the corresponding prices.\n",
         "IsRequired": true,
         "IsList": true,
         "PrimitiveType": null,
@@ -5451,7 +5490,7 @@
       {
         "AttributeName": "SignedMarketFeeTxn",
         "Idx": 6,
-        "Description": "Cryptographic proof of payment of the market-defined bid submission fee. This value SHALL reference a signed transaction that satisfies the market\u2019s fee and admission rules for the specified MarketSlot.\nThe SignedMarketFeeTxn proves economic admissibility of the bid. It does NOT, by itself, prove physical feasibility, delivery capability, portfolio composition, or settlement commitment. Those guarantees, if any, are established by clearing, dispatch, and settlement processes external to this message.\n",
+        "Description": "Cryptographic proof of payment of the market-defined bid submission fee. This value SHALL reference a signed transaction that satisfies the market’s fee and admission rules for the specified MarketSlot.\nThe SignedMarketFeeTxn proves economic admissibility of the bid. It does NOT, by itself, prove physical feasibility, delivery capability, portfolio composition, or settlement commitment. Those guarantees, if any, are established by clearing, dispatch, and settlement processes external to this message.\n",
         "IsRequired": true,
         "IsList": false,
         "PrimitiveType": "string",
@@ -11107,7 +11146,7 @@
       {
         "AttributeName": "LatitudeMicroDeg",
         "Idx": 1,
-        "Description": "Latitude in microdegrees. Must fall between -90,000,000 and 90,000,000 inclusive (corresponding to -90.0\u00b0 to +90.0\u00b0 in WGS84).\n",
+        "Description": "Latitude in microdegrees. Must fall between -90,000,000 and 90,000,000 inclusive (corresponding to -90.0° to +90.0° in WGS84).\n",
         "IsRequired": true,
         "IsList": false,
         "PrimitiveType": "integer",
@@ -11121,7 +11160,7 @@
       {
         "AttributeName": "LongitudeMicroDeg",
         "Idx": 2,
-        "Description": "Longitude in microdegrees. Must fall between -180,000,000 and 180,000,000 inclusive (corresponding to -180.0\u00b0 to +180.0\u00b0 in WGS84).\n",
+        "Description": "Longitude in microdegrees. Must fall between -180,000,000 and 180,000,000 inclusive (corresponding to -180.0° to +180.0° in WGS84).\n",
         "IsRequired": true,
         "IsList": false,
         "PrimitiveType": "integer",
@@ -12087,7 +12126,7 @@
       {
         "AttributeName": "DacNodes",
         "Idx": 3,
-        "Description": "List of nodes representing controllable 0\u201310V outputs exposed by this SCADA. Each corresponds to a ShNode in layout.lite whose ActorClass is ZeroTenOutputer.\n",
+        "Description": "List of nodes representing controllable 0–10V outputs exposed by this SCADA. Each corresponds to a ShNode in layout.lite whose ActorClass is ZeroTenOutputer.\n",
         "IsRequired": true,
         "IsList": true,
         "PrimitiveType": null,
@@ -13440,8 +13479,8 @@
         "datatype": "string",
         "type": "calculated",
         "nullable": false,
-        "Description": "Compound key: <type-version>.axiom<number>.",
-        "formula": "={{TypeVersion}} & \".axiom\" & {{Number}}"
+        "Description": "Compound key: <type-version>.axiom<number>.<axiom-name>.",
+        "formula": "={{TypeVersion}} & \".axiom\" & {{Number}} & \".\" & {{AxiomName}}"
       },
       {
         "name": "TypeVersion",
@@ -13471,13 +13510,6 @@
         "type": "raw",
         "nullable": false,
         "Description": "Axiom statement (the natural-language invariant)."
-      },
-      {
-        "name": "AxiomDescription",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Optional per-axiom description (some axioms carry a description field beyond their statement)."
       }
     ],
     "data": [
@@ -13485,764 +13517,655 @@
         "TypeVersion": "analytics.channel.gt/000",
         "Number": 1,
         "AxiomName": "OutputUnitQuantityConsistency",
-        "Statement": "OutputQuantity SHALL equal the Quantity defined by the canonical gw1.float.unit.quantity.projection/000 instance for the specified OutputUnit.\n",
-        "AxiomDescription": null
+        "Statement": "OutputQuantity SHALL equal the Quantity defined by the canonical gw1.float.unit.quantity.projection/000 instance for the specified OutputUnit.\n"
       },
       {
         "TypeVersion": "bid/000",
         "Number": 1,
         "AxiomName": "MarketNormalizationAnchor",
-        "Statement": "The price of the first element in PqPairs SHALL equal the PriceMax defined by the MarketType associated with MarketSlotName.\n",
-        "AxiomDescription": null
+        "Statement": "The price of the first element in PqPairs SHALL equal the PriceMax defined by the MarketType associated with MarketSlotName.\n"
       },
       {
         "TypeVersion": "bid/000",
         "Number": 2,
         "AxiomName": "UnitConsistency",
-        "Statement": "PriceUnit and QuantityUnit SHALL match the units declared by the MarketType associated with MarketSlotName.\n",
-        "AxiomDescription": null
+        "Statement": "PriceUnit and QuantityUnit SHALL match the units declared by the MarketType associated with MarketSlotName.\n"
       },
       {
         "TypeVersion": "bid/000",
         "Number": 3,
         "AxiomName": "CurveAdmissibility",
-        "Statement": "The structure, ordering, and cardinality of PqPairs SHALL conform to the admissibility rules of the MarketType associated with MarketSlotName (including any constraints on price ordering, monotonicity, tick size, or maximum number of segments).\n",
-        "AxiomDescription": null
+        "Statement": "The structure, ordering, and cardinality of PqPairs SHALL conform to the admissibility rules of the MarketType associated with MarketSlotName (including any constraints on price ordering, monotonicity, tick size, or maximum number of segments).\n"
       },
       {
         "TypeVersion": "bid/000",
         "Number": 4,
         "AxiomName": "EconomicAdmission",
-        "Statement": null,
-        "AxiomDescription": "SignedMarketFeeTxn MUST be verifiable under the market\u2019s fee and admission policy for the specified MarketSlot.\n"
+        "Statement": "SignedMarketFeeTxn MUST be verifiable under the market’s fee and admission policy for the specified MarketSlot.\n"
       },
       {
         "TypeVersion": "channel.config/000",
         "Number": 1,
         "AxiomName": "CaptureAndPollingConsistency",
-        "Statement": "If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.\n",
-        "AxiomDescription": null
+        "Statement": "If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.\n"
       },
       {
         "TypeVersion": "channel.readings/001",
         "Number": 1,
         "AxiomName": "ListLengthConsistency",
-        "Statement": "len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).\n",
-        "AxiomDescription": null
+        "Statement": "len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).\n"
       },
       {
         "TypeVersion": "channel.readings/002",
         "Number": 1,
         "AxiomName": "ListLengthConsistency",
-        "Statement": "len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).\n",
-        "AxiomDescription": null
+        "Statement": "len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).\n"
       },
       {
         "TypeVersion": "connectivity.edge.gt/000",
         "Number": 1,
         "AxiomName": "NoSelfLoop",
-        "Statement": "FromGNodeId SHALL NOT equal ToGNodeId.\n",
-        "AxiomDescription": null
+        "Statement": "FromGNodeId SHALL NOT equal ToGNodeId.\n"
       },
       {
         "TypeVersion": "data.channel.gt/001",
         "Number": 1,
         "AxiomName": "PowerMeteringConstraint",
-        "Statement": "If InPowerMetering is true, TelemetryName SHALL equal PowerW.\n",
-        "AxiomDescription": null
+        "Statement": "If InPowerMetering is true, TelemetryName SHALL equal PowerW.\n"
       },
       {
         "TypeVersion": "data.channel.gt/002",
         "Number": 1,
         "AxiomName": "PowerMeteringConstraint",
-        "Statement": "If InPowerMetering is true, TelemetryName SHALL equal PowerW.\n",
-        "AxiomDescription": null
+        "Statement": "If InPowerMetering is true, TelemetryName SHALL equal PowerW.\n"
       },
       {
         "TypeVersion": "data.channel.gt/002",
         "Number": 2,
         "AxiomName": "TelemetryQuantityConsistency",
-        "Statement": "Quantity SHALL equal the Quantity defined by the canonical spaceheat.telemetry.quantity.projection/000 instance for the specified TelemetryName.\n",
-        "AxiomDescription": null
+        "Statement": "Quantity SHALL equal the Quantity defined by the canonical spaceheat.telemetry.quantity.projection/000 instance for the specified TelemetryName.\n"
       },
       {
         "TypeVersion": "derived.channel.gt/001",
         "Number": 1,
         "AxiomName": "EmissionSemanticsConsistency",
-        "Statement": "EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:\n\n  OnTrigger \u2192 neither EmitPeriodS nor AsyncEmitDelta present\n  Periodic \u2192 EmitPeriodS present, AsyncEmitDelta absent\n  AsyncAndPeriodic \u2192 both EmitPeriodS and AsyncEmitDelta present\n",
-        "AxiomDescription": null
+        "Statement": "EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:\n\n  OnTrigger → neither EmitPeriodS nor AsyncEmitDelta present\n  Periodic → EmitPeriodS present, AsyncEmitDelta absent\n  AsyncAndPeriodic → both EmitPeriodS and AsyncEmitDelta present\n"
       },
       {
         "TypeVersion": "derived.channel.gt/002",
         "Number": 1,
         "AxiomName": "EmissionSemanticsConsistency",
-        "Statement": "EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:\n\n  OnTrigger \u2192 neither EmitPeriodS nor AsyncEmitDelta present\n  Periodic \u2192 EmitPeriodS present, AsyncEmitDelta absent\n  AsyncAndPeriodic \u2192 both EmitPeriodS and AsyncEmitDelta present\n",
-        "AxiomDescription": null
+        "Statement": "EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:\n\n  OnTrigger → neither EmitPeriodS nor AsyncEmitDelta present\n  Periodic → EmitPeriodS present, AsyncEmitDelta absent\n  AsyncAndPeriodic → both EmitPeriodS and AsyncEmitDelta present\n"
       },
       {
         "TypeVersion": "derived.channel.gt/002",
         "Number": 2,
         "AxiomName": "OutputUnitQuantityConsistency",
-        "Statement": "OutputQuantity SHALL equal the Quantity defined by the canonical gw1.unit.quantity.projection:000 instance for the specified OutputUnit.\n",
-        "AxiomDescription": null
+        "Statement": "OutputQuantity SHALL equal the Quantity defined by the canonical gw1.unit.quantity.projection:000 instance for the specified OutputUnit.\n"
       },
       {
         "TypeVersion": "derived.channel.gt/002",
         "Number": 3,
         "AxiomName": "AffineStrategyRequiresCalibration",
-        "Statement": "If Strategy equals \"affine\", then:\n\n  - Parameters SHALL contain a key \"Calibration\".\n  - Parameters.Calibration SHALL be a valid\n    linear.one.dimensional.calibration instance.\n",
-        "AxiomDescription": null
+        "Statement": "If Strategy equals \"affine\", then:\n\n  - Parameters SHALL contain a key \"Calibration\".\n  - Parameters.Calibration SHALL be a valid\n    linear.one.dimensional.calibration instance.\n"
       },
       {
         "TypeVersion": "derived.channel.gt/002",
         "Number": 4,
         "AxiomName": "SystemModelRequiresParameters",
-        "Statement": "If Strategy equals \"system-model\", then:\n  - Parameters SHALL be present.\n  - Parameters SHALL contain a key \"EnergyModel\".\n  - Parameters.EnergyModel SHALL include:\n      - TypeName\n      - Version\n",
-        "AxiomDescription": null
+        "Statement": "If Strategy equals \"system-model\", then:\n  - Parameters SHALL be present.\n  - Parameters SHALL contain a key \"EnergyModel\".\n  - Parameters.EnergyModel SHALL include:\n      - TypeName\n      - Version\n"
       },
       {
         "TypeVersion": "fis.authority.manifest/000",
         "Number": 1,
         "AxiomName": "InstanceReferenceIntegrity",
-        "Statement": "For every element in GNodeInstanceList, there SHALL exist exactly one element in GNodeList whose GNodeId matches the instance's GNodeId.\n",
-        "AxiomDescription": null
+        "Statement": "For every element in GNodeInstanceList, there SHALL exist exactly one element in GNodeList whose GNodeId matches the instance's GNodeId.\n"
       },
       {
         "TypeVersion": "fis.authority.manifest/000",
         "Number": 2,
         "AxiomName": "SingleActiveInstancePerGNode",
-        "Statement": "For each element in GNodeList, exactly one element in GNodeInstanceList SHALL have matching GNodeId and Status equal to Active.\n",
-        "AxiomDescription": null
+        "Statement": "For each element in GNodeList, exactly one element in GNodeInstanceList SHALL have matching GNodeId and Status equal to Active.\n"
       },
       {
         "TypeVersion": "fis.authority.manifest/000",
         "Number": 3,
         "AxiomName": "ParentClosureUpToDeclaredRoots",
-        "Statement": "For every element in GNodeList, all alias prefixes of GNodeAlias SHALL also appear in GNodeList unless the prefix equals one of the aliases listed in ParentRootAliasList.\n",
-        "AxiomDescription": null
+        "Statement": "For every element in GNodeList, all alias prefixes of GNodeAlias SHALL also appear in GNodeList unless the prefix equals one of the aliases listed in ParentRootAliasList.\n"
       },
       {
         "TypeVersion": "fsm.atomic.report/000",
         "Number": 1,
         "AxiomName": "ActionPresenceConsistency",
-        "Statement": "Action and ActionType SHALL be present if and only if ReportType equals Action.\n",
-        "AxiomDescription": null
+        "Statement": "Action and ActionType SHALL be present if and only if ReportType equals Action.\n"
       },
       {
         "TypeVersion": "fsm.atomic.report/000",
         "Number": 2,
         "AxiomName": "ActionTypeConsistency",
-        "Statement": "If Action is present, ActionType SHALL also be present.\n",
-        "AxiomDescription": null
+        "Statement": "If Action is present, ActionType SHALL also be present.\n"
       },
       {
         "TypeVersion": "fsm.atomic.report/000",
         "Number": 3,
         "AxiomName": "EventPresenceConsistency",
-        "Statement": "EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.\n",
-        "AxiomDescription": null
+        "Statement": "EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.\n"
       },
       {
         "TypeVersion": "fsm.atomic.report/001",
         "Number": 1,
         "AxiomName": "ActionPresenceConsistency",
-        "Statement": "Action SHALL be present if and only if ReportType equals Action.\n",
-        "AxiomDescription": null
+        "Statement": "Action SHALL be present if and only if ReportType equals Action.\n"
       },
       {
         "TypeVersion": "fsm.atomic.report/001",
         "Number": 2,
         "AxiomName": "EventPresenceConsistency",
-        "Statement": "EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.\n",
-        "AxiomDescription": null
+        "Statement": "EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.\n"
       },
       {
         "TypeVersion": "g.node.gt/004",
         "Number": 1,
         "AxiomName": "ClassConsistency",
-        "Statement": "If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.\n",
-        "AxiomDescription": null
+        "Statement": "If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.\n"
       },
       {
         "TypeVersion": "g.node.gt/004",
         "Number": 2,
         "AxiomName": "PhysicalGNodeLocations",
-        "Statement": "If BaseClass != Logical, PositionPointId SHALL NOT be null.\n",
-        "AxiomDescription": null
+        "Statement": "If BaseClass != Logical, PositionPointId SHALL NOT be null.\n"
       },
       {
         "TypeVersion": "g.node.gt/004",
         "Number": 3,
         "AxiomName": "AliasTransitionConsistency",
-        "Statement": "If PrevAlias is not null, it SHALL differ from Alias. If PrevAlias is null, no alias transition is represented in this snapshot.\n",
-        "AxiomDescription": null
+        "Statement": "If PrevAlias is not null, it SHALL differ from Alias. If PrevAlias is null, no alias transition is represented in this snapshot.\n"
       },
       {
         "TypeVersion": "g.node.gt/004",
         "Number": 4,
         "AxiomName": "GNodeClassNamespacing",
-        "Statement": "GNodeClass SHALL be a non-empty string. It SHALL NOT contain whitespace.\n",
-        "AxiomDescription": null
+        "Statement": "GNodeClass SHALL be a non-empty string. It SHALL NOT contain whitespace.\n"
       },
       {
         "TypeVersion": "g.node.gt/004",
         "Number": 5,
         "AxiomName": "AliasSuffixSemantics",
-        "Statement": "Alias SHALL end with \".ta\" if and only if GNodeClass is \"TerminalAsset\". Alias SHALL end with \".scada\" if and only if GNodeClass is \"Scada\".\n",
-        "AxiomDescription": null
+        "Statement": "Alias SHALL end with \".ta\" if and only if GNodeClass is \"TerminalAsset\". Alias SHALL end with \".scada\" if and only if GNodeClass is \"Scada\".\n"
       },
       {
         "TypeVersion": "g.node.instance.gt/000",
         "Number": 1,
         "AxiomName": "RevocationTimestampConsistency",
-        "Statement": "RevokedAtUnixMs SHALL be present if and only if Status is Revoked or Ended.\n",
-        "AxiomDescription": null
+        "Statement": "RevokedAtUnixMs SHALL be present if and only if Status is Revoked or Ended.\n"
       },
       {
         "TypeVersion": "gw1.tank.temp.calibration.map/000",
         "Number": 1,
         "AxiomName": "ContiguousTankIndexConstraint",
-        "Statement": "Tank SHALL contain between 1 and 6 entries, and its keys SHALL be the contiguous integer strings starting at 1.\n",
-        "AxiomDescription": null
+        "Statement": "Tank SHALL contain between 1 and 6 entries, and its keys SHALL be the contiguous integer strings starting at 1.\n"
       },
       {
         "TypeVersion": "gw1.telemetry.name.quantity.projection/000",
         "Number": 1,
         "AxiomName": "EnumeratedTelemetryProjectionMapping",
-        "Statement": "The only valid TelemetryName \u2192 Quantity pairs in version 000 are:\n\n  Unknown \u2192 Unknown\n\n  PowerW \u2192 Power\n  WattHours \u2192 Energy\n  MilliWattHours \u2192 Energy\n\n  WaterTempCTimes1000 \u2192 Temperature\n  WaterTempFTimes1000 \u2192 Temperature\n  AirTempCTimes1000 \u2192 Temperature\n  AirTempFTimes1000 \u2192 Temperature\n  CelsiusTimes100 \u2192 Temperature\n\n  GpmTimes100 \u2192 FlowRate\n  GallonsTimes100 \u2192 Volume\n\n  VoltageRmsMilliVolts \u2192 Voltage\n  VoltsTimesTen \u2192 Voltage\n  VoltsTimes100 \u2192 Voltage\n  MicroVolts \u2192 Voltage\n\n  CurrentRmsMicroAmps \u2192 Current\n\n  HzTimes100 \u2192 Frequency\n  MicroHz \u2192 Frequency\n\n  RelayState \u2192 Unitless\n  ThermostatState \u2192 Unitless\n  StorageLayer \u2192 Unitless\n\n  PercentKeep \u2192 Percent\n\nAny other combination SHALL be invalid.",
-        "AxiomDescription": null
+        "Statement": "The only valid TelemetryName → Quantity pairs in version 000 are:\n\n  Unknown → Unknown\n\n  PowerW → Power\n  WattHours → Energy\n  MilliWattHours → Energy\n\n  WaterTempCTimes1000 → Temperature\n  WaterTempFTimes1000 → Temperature\n  AirTempCTimes1000 → Temperature\n  AirTempFTimes1000 → Temperature\n  CelsiusTimes100 → Temperature\n\n  GpmTimes100 → FlowRate\n  GallonsTimes100 → Volume\n\n  VoltageRmsMilliVolts → Voltage\n  VoltsTimesTen → Voltage\n  VoltsTimes100 → Voltage\n  MicroVolts → Voltage\n\n  CurrentRmsMicroAmps → Current\n\n  HzTimes100 → Frequency\n  MicroHz → Frequency\n\n  RelayState → Unitless\n  ThermostatState → Unitless\n  StorageLayer → Unitless\n\n  PercentKeep → Percent\n\nAny other combination SHALL be invalid."
       },
       {
         "TypeVersion": "gw1.unit.quantity.projection/000",
         "Number": 1,
         "AxiomName": "EnumeratedProjectionMapping",
-        "Statement": "For version 000, the projection is defined exhaustively as follows:\n\n  Unknown \u2192 Unknown\n  Unitless \u2192 Unitless\n  FahrenheitX100 \u2192 Temperature\n  Watts \u2192 Power\n  WattHours \u2192 Energy\n  Gallons \u2192 Volume\n  GpmX100 \u2192 FlowRate\n  Seconds \u2192 Time\n  SecondsX10 \u2192 Time\n\nAny other combination SHALL be invalid.",
-        "AxiomDescription": null
+        "Statement": "For version 000, the projection is defined exhaustively as follows:\n\n  Unknown → Unknown\n  Unitless → Unitless\n  FahrenheitX100 → Temperature\n  Watts → Power\n  WattHours → Energy\n  Gallons → Volume\n  GpmX100 → FlowRate\n  Seconds → Time\n  SecondsX10 → Time\n\nAny other combination SHALL be invalid."
       },
       {
         "TypeVersion": "i2c.multichannel.dt.relay.component.gt/002",
         "Number": 1,
         "AxiomName": "ActorAndRelayIndexUniqueness",
-        "Statement": "ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.\n",
-        "AxiomDescription": null
+        "Statement": "ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.\n"
       },
       {
         "TypeVersion": "i2c.multichannel.dt.relay.component.gt/003",
         "Number": 1,
         "AxiomName": "ActorAndRelayIndexUniqueness",
-        "Statement": "ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.\n",
-        "AxiomDescription": null
+        "Statement": "ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.\n"
       },
       {
         "TypeVersion": "i2c.multichannel.dt.relay.component.gt/004",
         "Number": 1,
         "AxiomName": "ActorAndRelayIndexUniqueness",
-        "Statement": "ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.\n",
-        "AxiomDescription": null
+        "Statement": "ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.\n"
       },
       {
         "TypeVersion": "i2c.thermistor.reader.component.gt/000",
         "Number": 1,
         "AxiomName": "ConfigUniquenessAndDeviceChannelConsistency",
-        "Statement": "Each ChannelName SHALL appear at most once in ConfigList. For each AdcChannel, at most one config in ConfigList may use Unit equal to Celcius.\n",
-        "AxiomDescription": null
+        "Statement": "Each ChannelName SHALL appear at most once in ConfigList. For each AdcChannel, at most one config in ConfigList may use Unit equal to Celcius.\n"
       },
       {
         "TypeVersion": "i2c.thermistor.reader.component.gt/000",
         "Number": 2,
         "AxiomName": "AddressValidity",
-        "Statement": "AdcAddress SHALL be a valid 7-bit I2C address in the range 0 through 127.",
-        "AxiomDescription": null
+        "Statement": "AdcAddress SHALL be a valid 7-bit I2C address in the range 0 through 127."
       },
       {
         "TypeVersion": "layout.lite/007",
         "Number": 1,
         "AxiomName": "DcNodeConsistency",
-        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n",
-        "AxiomDescription": null
+        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n"
       },
       {
         "TypeVersion": "layout.lite/007",
         "Number": 2,
         "AxiomName": "NodeHandleHierarchyConsistency",
-        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n",
-        "AxiomDescription": null
+        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n"
       },
       {
         "TypeVersion": "layout.lite/007",
         "Number": 3,
         "AxiomName": "CriticalZoneSubset",
-        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n",
-        "AxiomDescription": null
+        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n"
       },
       {
         "TypeVersion": "layout.lite/008",
         "Number": 1,
         "AxiomName": "DcNodeConsistency",
-        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n",
-        "AxiomDescription": null
+        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n"
       },
       {
         "TypeVersion": "layout.lite/008",
         "Number": 2,
         "AxiomName": "NodeHandleHierarchyConsistency",
-        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n",
-        "AxiomDescription": null
+        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n"
       },
       {
         "TypeVersion": "layout.lite/008",
         "Number": 3,
         "AxiomName": "CriticalZoneSubset",
-        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n",
-        "AxiomDescription": null
+        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n"
       },
       {
         "TypeVersion": "layout.lite/008",
         "Number": 4,
         "AxiomName": "DerivedNodeConsistency",
-        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n",
-        "AxiomDescription": null
+        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n"
       },
       {
         "TypeVersion": "layout.lite/009",
         "Number": 1,
         "AxiomName": "DcNodeConsistency",
-        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n",
-        "AxiomDescription": null
+        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n"
       },
       {
         "TypeVersion": "layout.lite/009",
         "Number": 2,
         "AxiomName": "NodeHandleHierarchyConsistency",
-        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n",
-        "AxiomDescription": null
+        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n"
       },
       {
         "TypeVersion": "layout.lite/009",
         "Number": 3,
         "AxiomName": "CriticalZoneSubset",
-        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n",
-        "AxiomDescription": null
+        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n"
       },
       {
         "TypeVersion": "layout.lite/009",
         "Number": 4,
         "AxiomName": "DerivedNodeConsistency",
-        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n",
-        "AxiomDescription": null
+        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n"
       },
       {
         "TypeVersion": "layout.lite/010",
         "Number": 1,
         "AxiomName": "DcNodeConsistency",
-        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n",
-        "AxiomDescription": null
+        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n"
       },
       {
         "TypeVersion": "layout.lite/010",
         "Number": 2,
         "AxiomName": "NodeHandleHierarchyConsistency",
-        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n",
-        "AxiomDescription": null
+        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n"
       },
       {
         "TypeVersion": "layout.lite/010",
         "Number": 3,
         "AxiomName": "CriticalZoneSubset",
-        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n",
-        "AxiomDescription": null
+        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n"
       },
       {
         "TypeVersion": "layout.lite/010",
         "Number": 4,
         "AxiomName": "DerivedNodeConsistency",
-        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n",
-        "AxiomDescription": null
+        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n"
       },
       {
         "TypeVersion": "layout.lite/011",
         "Number": 1,
         "AxiomName": "DcNodeConsistency",
-        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n",
-        "AxiomDescription": null
+        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n"
       },
       {
         "TypeVersion": "layout.lite/011",
         "Number": 2,
         "AxiomName": "NodeHandleHierarchyConsistency",
-        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n",
-        "AxiomDescription": null
+        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n"
       },
       {
         "TypeVersion": "layout.lite/011",
         "Number": 3,
         "AxiomName": "CriticalZoneSubset",
-        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n",
-        "AxiomDescription": null
+        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n"
       },
       {
         "TypeVersion": "layout.lite/011",
         "Number": 4,
         "AxiomName": "DerivedNodeConsistency",
-        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n",
-        "AxiomDescription": null
+        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n"
       },
       {
         "TypeVersion": "layout.lite/012",
         "Number": 1,
         "AxiomName": "DcNodeConsistency",
-        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n",
-        "AxiomDescription": null
+        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n"
       },
       {
         "TypeVersion": "layout.lite/012",
         "Number": 2,
         "AxiomName": "NodeHandleHierarchyConsistency",
-        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n",
-        "AxiomDescription": null
+        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n"
       },
       {
         "TypeVersion": "layout.lite/012",
         "Number": 3,
         "AxiomName": "CriticalZoneSubset",
-        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n",
-        "AxiomDescription": null
+        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n"
       },
       {
         "TypeVersion": "layout.lite/012",
         "Number": 4,
         "AxiomName": "DerivedNodeConsistency",
-        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n",
-        "AxiomDescription": null
+        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n"
       },
       {
         "TypeVersion": "layout.lite/013",
         "Number": 1,
         "AxiomName": "DcNodeConsistency",
-        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n",
-        "AxiomDescription": null
+        "Statement": "Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.\n"
       },
       {
         "TypeVersion": "layout.lite/013",
         "Number": 2,
         "AxiomName": "NodeHandleHierarchyConsistency",
-        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n",
-        "AxiomDescription": null
+        "Statement": "Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.\n"
       },
       {
         "TypeVersion": "layout.lite/013",
         "Number": 3,
         "AxiomName": "CriticalZoneSubset",
-        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n",
-        "AxiomDescription": null
+        "Statement": "CriticalZoneList SHALL be a subset of ZoneList.\n"
       },
       {
         "TypeVersion": "layout.lite/013",
         "Number": 4,
         "AxiomName": "DerivedNodeConsistency",
-        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n",
-        "AxiomDescription": null
+        "Statement": "Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.\n"
       },
       {
         "TypeVersion": "machine.states/000",
         "Number": 1,
         "AxiomName": "ListLengthConsistency",
-        "Statement": "len(StateList) SHALL equal len(UnixMsList).\n",
-        "AxiomDescription": null
+        "Statement": "len(StateList) SHALL equal len(UnixMsList).\n"
       },
       {
         "TypeVersion": "machine.states/000",
         "Number": 2,
         "AxiomName": "RecognizedStateEnumConsistency",
-        "Statement": "If StateEnum is a recognized GridWorks enum, then all elements of StateList SHALL be valid values of that enum.\n",
-        "AxiomDescription": null
+        "Statement": "If StateEnum is a recognized GridWorks enum, then all elements of StateList SHALL be valid values of that enum.\n"
       },
       {
         "TypeVersion": "pico.flow.module.component.gt/000",
         "Number": 1,
         "AxiomName": "HwUidPattern",
-        "Statement": "If HwUid is present, it SHALL match the pattern pico_xxxxxx where xxxxxx consists of six lowercase hexadecimal characters.\n",
-        "AxiomDescription": null
+        "Statement": "If HwUid is present, it SHALL match the pattern pico_xxxxxx where xxxxxx consists of six lowercase hexadecimal characters.\n"
       },
       {
         "TypeVersion": "pico.tank.module.component.gt/011",
         "Number": 1,
         "AxiomName": "PicoHardwareIdentityXor",
-        "Statement": "Exactly one of the following SHALL hold:\n  - PicoHwUid is present\n  - both PicoAHwUid and PicoBHwUid are present\n",
-        "AxiomDescription": null
+        "Statement": "Exactly one of the following SHALL hold:\n  - PicoHwUid is present\n  - both PicoAHwUid and PicoBHwUid are present\n"
       },
       {
         "TypeVersion": "pico.tank.module.component.gt/011",
         "Number": 2,
         "AxiomName": "PicoKOhmsConsistency",
-        "Statement": "PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.\n",
-        "AxiomDescription": null
+        "Statement": "PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.\n"
       },
       {
         "TypeVersion": "pico.tank.module.component.gt/011",
         "Number": 3,
         "AxiomName": "SensorOrderPermutation",
-        "Statement": "If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].\n",
-        "AxiomDescription": null
+        "Statement": "If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].\n"
       },
       {
         "TypeVersion": "position.point.gt/000",
         "Number": 1,
         "AxiomName": "ValidEarthCoordinates",
-        "Statement": "LatitudeMicroDeg SHALL be between -90,000,000 and 90,000,000 inclusive. LongitudeMicroDeg SHALL be between -180,000,000 and 180,000,000 inclusive.\n",
-        "AxiomDescription": null
+        "Statement": "LatitudeMicroDeg SHALL be between -90,000,000 and 90,000,000 inclusive. LongitudeMicroDeg SHALL be between -180,000,000 and 180,000,000 inclusive.\n"
       },
       {
         "TypeVersion": "relay.actor.config/002",
         "Number": 1,
         "AxiomName": "EventEnumConsistency",
-        "Statement": "If EventType names a known enum, then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of that enum.\n",
-        "AxiomDescription": null
+        "Statement": "If EventType names a known enum, then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of that enum.\n"
       },
       {
         "TypeVersion": "relay.actor.config/002",
         "Number": 2,
         "AxiomName": "StateEnumConsistency",
-        "Statement": "If StateType names a known enum, then DeEnergizedState and EnergizedState SHALL both be valid values of that enum.\n",
-        "AxiomDescription": null
+        "Statement": "If StateType names a known enum, then DeEnergizedState and EnergizedState SHALL both be valid values of that enum.\n"
       },
       {
         "TypeVersion": "relay.actor.config/002",
         "Number": 3,
         "AxiomName": "EventStateSemanticMatch",
-        "Statement": "EnergizingEvent and DeEnergizingEvent SHALL correspond semantically to transitions into EnergizedState and DeEnergizedState respectively.\n",
-        "AxiomDescription": null
+        "Statement": "EnergizingEvent and DeEnergizingEvent SHALL correspond semantically to transitions into EnergizedState and DeEnergizedState respectively.\n"
       },
       {
         "TypeVersion": "relay.actor.config/002",
         "Number": 4,
         "AxiomName": "ClosedOpenWiringConsistency",
-        "Statement": "If:\n\n  - StateType equals \"relay.closed.or.open\"\n  - EventType equals \"change.relay.state\"\n  - WiringConfig equals \"NormallyClosed\"\n\nthen:\n\n  - DeEnergizedState SHALL equal \"RelayClosed\"\n  - DeEnergizingEvent SHALL equal \"CloseRelay\"\n  - EnergizedState SHALL equal \"RelayOpen\"\n  - EnergizingEvent SHALL equal \"OpenRelay\"\n\nIf:\n\n  - StateType equals \"relay.closed.or.open\"\n  - EventType equals \"change.relay.state\"\n  - WiringConfig equals \"NormallyOpen\"\n\nthen:\n\n  - DeEnergizedState SHALL equal \"RelayOpen\"\n  - DeEnergizingEvent SHALL equal \"OpenRelay\"\n  - EnergizedState SHALL equal \"RelayClosed\"\n  - EnergizingEvent SHALL equal \"CloseRelay\"\n",
-        "AxiomDescription": null
+        "Statement": "If:\n\n  - StateType equals \"relay.closed.or.open\"\n  - EventType equals \"change.relay.state\"\n  - WiringConfig equals \"NormallyClosed\"\n\nthen:\n\n  - DeEnergizedState SHALL equal \"RelayClosed\"\n  - DeEnergizingEvent SHALL equal \"CloseRelay\"\n  - EnergizedState SHALL equal \"RelayOpen\"\n  - EnergizingEvent SHALL equal \"OpenRelay\"\n\nIf:\n\n  - StateType equals \"relay.closed.or.open\"\n  - EventType equals \"change.relay.state\"\n  - WiringConfig equals \"NormallyOpen\"\n\nthen:\n\n  - DeEnergizedState SHALL equal \"RelayOpen\"\n  - DeEnergizingEvent SHALL equal \"OpenRelay\"\n  - EnergizedState SHALL equal \"RelayClosed\"\n  - EnergizingEvent SHALL equal \"CloseRelay\"\n"
       },
       {
         "TypeVersion": "relay.actor.config/003",
         "Number": 1,
         "AxiomName": "AsyncCaptureConsistency",
-        "Statement": "If AsyncCapture is true, then AsyncCaptureDelta SHALL be present.\n",
-        "AxiomDescription": null
+        "Statement": "If AsyncCapture is true, then AsyncCaptureDelta SHALL be present.\n"
       },
       {
         "TypeVersion": "relay.actor.config/003",
         "Number": 2,
         "AxiomName": "CapturePollingConsistency",
-        "Statement": "If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.\n",
-        "AxiomDescription": null
+        "Statement": "If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.\n"
       },
       {
         "TypeVersion": "relay.actor.config/003",
         "Number": 3,
         "AxiomName": "RelayEventEnumConsistency",
-        "Statement": "If EventType equals \"change.relay.state\", then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of change.relay.state:000.\n",
-        "AxiomDescription": null
+        "Statement": "If EventType equals \"change.relay.state\", then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of change.relay.state:000.\n"
       },
       {
         "TypeVersion": "relay.actor.config/003",
         "Number": 4,
         "AxiomName": "RelayStateEnumConsistency",
-        "Statement": "If StateType equals \"relay.closed.or.open\", then DeEnergizedState and EnergizedState SHALL both be valid values of relay.closed.or.open:000.\n",
-        "AxiomDescription": null
+        "Statement": "If StateType equals \"relay.closed.or.open\", then DeEnergizedState and EnergizedState SHALL both be valid values of relay.closed.or.open:000.\n"
       },
       {
         "TypeVersion": "relay.actor.config/003",
         "Number": 5,
         "AxiomName": "RelayEventStateMatch",
-        "Statement": "If EventType equals \"change.relay.state\" and StateType equals \"relay.closed.or.open\", then:\n\n  - DeEnergizingEvent \"CloseRelay\" SHALL imply DeEnergizedState \"RelayClosed\"\n  - DeEnergizingEvent \"OpenRelay\" SHALL imply DeEnergizedState \"RelayOpen\"\n  - EnergizingEvent \"CloseRelay\" SHALL imply EnergizedState \"RelayClosed\"\n  - EnergizingEvent \"OpenRelay\" SHALL imply EnergizedState \"RelayOpen\"\n",
-        "AxiomDescription": null
+        "Statement": "If EventType equals \"change.relay.state\" and StateType equals \"relay.closed.or.open\", then:\n\n  - DeEnergizingEvent \"CloseRelay\" SHALL imply DeEnergizedState \"RelayClosed\"\n  - DeEnergizingEvent \"OpenRelay\" SHALL imply DeEnergizedState \"RelayOpen\"\n  - EnergizingEvent \"CloseRelay\" SHALL imply EnergizedState \"RelayClosed\"\n  - EnergizingEvent \"OpenRelay\" SHALL imply EnergizedState \"RelayOpen\"\n"
       },
       {
         "TypeVersion": "report.event/002",
         "Number": 1,
         "AxiomName": "ReportIdentityPropagation",
-        "Statement": "MessageId SHALL equal Report.Id.\n",
-        "AxiomDescription": null
+        "Statement": "MessageId SHALL equal Report.Id.\n"
       },
       {
         "TypeVersion": "report.event/002",
         "Number": 2,
         "AxiomName": "ReportCreatedTimePropagation",
-        "Statement": "TimeCreatedMs SHALL equal Report.MessageCreatedMs.\n",
-        "AxiomDescription": null
+        "Statement": "TimeCreatedMs SHALL equal Report.MessageCreatedMs.\n"
       },
       {
         "TypeVersion": "report.event/002",
         "Number": 3,
         "AxiomName": "ReportSourcePropagation",
-        "Statement": "Src SHALL equal Report.FromGNodeAlias.\n",
-        "AxiomDescription": null
+        "Statement": "Src SHALL equal Report.FromGNodeAlias.\n"
       },
       {
         "TypeVersion": "report.event/003",
         "Number": 3,
         "AxiomName": "ReportSourcePropagation",
-        "Statement": "Src SHALL equal Report.FromGNodeAlias.\n",
-        "AxiomDescription": null
+        "Statement": "Src SHALL equal Report.FromGNodeAlias.\n"
       },
       {
         "TypeVersion": "scada.control.capabilities/000",
         "Number": 1,
         "AxiomName": "RelayNodeClassConsistency",
-        "Statement": "All nodes in RelayNodes SHALL have ActorClass equal to Relay.\n",
-        "AxiomDescription": null
+        "Statement": "All nodes in RelayNodes SHALL have ActorClass equal to Relay.\n"
       },
       {
         "TypeVersion": "scada.control.capabilities/000",
         "Number": 2,
         "AxiomName": "DacNodeClassConsistency",
-        "Statement": "All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.\n",
-        "AxiomDescription": null
+        "Statement": "All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.\n"
       },
       {
         "TypeVersion": "scada.control.capabilities/000",
         "Number": 3,
         "AxiomName": "UniqueRelayNodeNames",
-        "Statement": "Name values in RelayNodes SHALL be unique.\n",
-        "AxiomDescription": null
+        "Statement": "Name values in RelayNodes SHALL be unique.\n"
       },
       {
         "TypeVersion": "scada.control.capabilities/000",
         "Number": 4,
         "AxiomName": "UniqueDacNodeNames",
-        "Statement": "Name values in DacNodes SHALL be unique.\n",
-        "AxiomDescription": null
+        "Statement": "Name values in DacNodes SHALL be unique.\n"
       },
       {
         "TypeVersion": "scada.control.capabilities/000",
         "Number": 5,
         "AxiomName": "UniqueControlChannelAboutNames",
-        "Statement": "AboutNodeName values in ControlChannels SHALL be unique.\n",
-        "AxiomDescription": null
+        "Statement": "AboutNodeName values in ControlChannels SHALL be unique.\n"
       },
       {
         "TypeVersion": "scada.control.capabilities/000",
         "Number": 6,
         "AxiomName": "ControlNodeChannelBijection",
-        "Statement": "The set of node names defined by the union of RelayNodes.Name and DacNodes.Name SHALL equal exactly the set of ControlChannels.AboutNodeName values.\n",
-        "AxiomDescription": null
+        "Statement": "The set of node names defined by the union of RelayNodes.Name and DacNodes.Name SHALL equal exactly the set of ControlChannels.AboutNodeName values.\n"
       },
       {
         "TypeVersion": "scada.control.capabilities/000",
         "Number": 7,
         "AxiomName": "RelayConfigNodeBijection",
-        "Statement": "The set of ActorName values in I2cRelayComponent.ConfigList SHALL equal exactly the set of RelayNodes.Name values.\n",
-        "AxiomDescription": null
+        "Statement": "The set of ActorName values in I2cRelayComponent.ConfigList SHALL equal exactly the set of RelayNodes.Name values.\n"
       },
       {
         "TypeVersion": "sim.pico.tank.module.component.gt/000",
         "Number": 1,
         "AxiomName": "PicoHardwareIdentityXor",
-        "Statement": "Exactly one of the following SHALL hold:\n  - PicoHwUid is present\n  - both PicoAHwUid and PicoBHwUid are present\n",
-        "AxiomDescription": null
+        "Statement": "Exactly one of the following SHALL hold:\n  - PicoHwUid is present\n  - both PicoAHwUid and PicoBHwUid are present\n"
       },
       {
         "TypeVersion": "sim.pico.tank.module.component.gt/000",
         "Number": 2,
         "AxiomName": "PicoKOhmsConsistency",
-        "Statement": "PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.\n",
-        "AxiomDescription": null
+        "Statement": "PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.\n"
       },
       {
         "TypeVersion": "sim.pico.tank.module.component.gt/000",
         "Number": 3,
         "AxiomName": "SensorOrderPermutation",
-        "Statement": "If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].\n",
-        "AxiomDescription": null
+        "Statement": "If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].\n"
       },
       {
         "TypeVersion": "single.machine.state/000",
         "Number": 1,
         "AxiomName": "RecognizedStateEnumConsistency",
-        "Statement": "If StateEnum equals \"relay.closed.or.open\", then State SHALL equal \"RelayClosed\" or \"RelayOpen\". More generally, if StateEnum is a recognized GridWorks enum, then State SHALL be a valid value of that enum.\n",
-        "AxiomDescription": null
+        "Statement": "If StateEnum equals \"relay.closed.or.open\", then State SHALL equal \"RelayClosed\" or \"RelayOpen\". More generally, if StateEnum is a recognized GridWorks enum, then State SHALL be a valid value of that enum.\n"
       },
       {
         "TypeVersion": "spaceheat.node.gt/200",
         "Number": 1,
         "AxiomName": "InPowerMeteringRequiresNameplate",
-        "Statement": "If InPowerMetering is true, NameplatePowerW SHALL be present.\n",
-        "AxiomDescription": null
+        "Statement": "If InPowerMetering is true, NameplatePowerW SHALL be present.\n"
       },
       {
         "TypeVersion": "spaceheat.node.gt/300",
         "Number": 1,
         "AxiomName": "InPowerMeteringRequiresNameplate",
-        "Statement": "If InPowerMetering is true, NameplatePowerW SHALL be present.\n",
-        "AxiomDescription": null
+        "Statement": "If InPowerMetering is true, NameplatePowerW SHALL be present.\n"
       },
       {
         "TypeVersion": "spaceheat.node.gt/301",
         "Number": 1,
         "AxiomName": "InPowerMeteringRequiresNameplate",
-        "Statement": "If InPowerMetering is true, NameplatePowerW SHALL be present. \n",
-        "AxiomDescription": null
+        "Statement": "If InPowerMetering is true, NameplatePowerW SHALL be present. \n"
       },
       {
         "TypeVersion": "spaceheat.node.gt/301",
         "Number": 2,
         "AxiomName": "ActorHierarchyConstraints",
-        "Statement": "If ActorClass is \"NoActor\", ActorHierarchyName SHALL be absent. If ActorClass is not \"NoActor\" and ActorHierarchyName is absent, then ActorClass SHALL be \"PrimaryScada\" or \"SecondaryScada\". If ActorHierarchyName is present, its final segment SHALL equal Name and all segments SHALL be unique.\n",
-        "AxiomDescription": null
+        "Statement": "If ActorClass is \"NoActor\", ActorHierarchyName SHALL be absent. If ActorClass is not \"NoActor\" and ActorHierarchyName is absent, then ActorClass SHALL be \"PrimaryScada\" or \"SecondaryScada\". If ActorHierarchyName is present, its final segment SHALL equal Name and all segments SHALL be unique.\n"
       },
       {
         "TypeVersion": "spaceheat.node.gt/301",
         "Number": 3,
         "AxiomName": "HandleConstraints",
-        "Statement": "If Handle is present, its final segment SHALL equal Name and all segments SHALL be unique.\n",
-        "AxiomDescription": null
+        "Statement": "If Handle is present, its final segment SHALL equal Name and all segments SHALL be unique.\n"
       },
       {
         "TypeVersion": "spaceheat.telemetry.quantity.projection/000",
         "Number": 1,
         "AxiomName": "EnumeratedProjectionMapping",
-        "Statement": "The only valid TelemetryName \u2192 Quantity pairs in version 000 are:\n\n  Unknown \u2192 Unknown\n\n  PowerW \u2192 Power\n  WattHours \u2192 Energy\n  MilliWattHours \u2192 Energy\n\n  WaterTempCTimes1000 \u2192 Temperature\n  WaterTempFTimes1000 \u2192 Temperature\n  AirTempCTimes1000 \u2192 Temperature\n  AirTempFTimes1000 \u2192 Temperature\n  CelsiusTimes100 \u2192 Temperature\n\n  GpmTimes100 \u2192 FlowRate\n  GallonsTimes100 \u2192 Volume\n\n  VoltageRmsMilliVolts \u2192 Voltage\n  VoltsTimesTen \u2192 Voltage\n  VoltsTimes100 \u2192 Voltage\n  MicroVolts \u2192 Voltage\n\n  CurrentRmsMicroAmps \u2192 Current\n\n  HzTimes100 \u2192 Frequency\n  MicroHz \u2192 Frequency\n\n  RelayState \u2192 Unitless\n  ThermostatState \u2192 Unitless\n  StorageLayer \u2192 Unitless\n  BinaryState \u2192 Unitless\n\n  PercentKeep \u2192 Percent\n\nAny other combination SHALL be invalid.\n",
-        "AxiomDescription": null
+        "Statement": "The only valid TelemetryName → Quantity pairs in version 000 are:\n\n  Unknown → Unknown\n\n  PowerW → Power\n  WattHours → Energy\n  MilliWattHours → Energy\n\n  WaterTempCTimes1000 → Temperature\n  WaterTempFTimes1000 → Temperature\n  AirTempCTimes1000 → Temperature\n  AirTempFTimes1000 → Temperature\n  CelsiusTimes100 → Temperature\n\n  GpmTimes100 → FlowRate\n  GallonsTimes100 → Volume\n\n  VoltageRmsMilliVolts → Voltage\n  VoltsTimesTen → Voltage\n  VoltsTimes100 → Voltage\n  MicroVolts → Voltage\n\n  CurrentRmsMicroAmps → Current\n\n  HzTimes100 → Frequency\n  MicroHz → Frequency\n\n  RelayState → Unitless\n  ThermostatState → Unitless\n  StorageLayer → Unitless\n  BinaryState → Unitless\n\n  PercentKeep → Percent\n\nAny other combination SHALL be invalid.\n"
       },
       {
         "TypeVersion": "synced.readings/000",
         "Number": 1,
         "AxiomName": "ListLengthConsistency",
-        "Statement": "len(ChannelNameList) SHALL equal len(ValueList).\n",
-        "AxiomDescription": null
+        "Statement": "len(ChannelNameList) SHALL equal len(ValueList).\n"
       },
       {
         "TypeVersion": "synced.readings.bundle/001",
         "Number": 1,
         "AxiomName": "TerminalAssetAliasConstraint",
-        "Statement": "AboutGNodeAlias SHALL identify a TerminalAsset and therefore SHALL end with the suffix \".ta\".\n",
-        "AxiomDescription": null
+        "Statement": "AboutGNodeAlias SHALL identify a TerminalAsset and therefore SHALL end with the suffix \".ta\".\n"
       },
       {
         "TypeVersion": "synced.readings.bundle/001",
         "Number": 2,
         "AxiomName": "ChannelDefinitionBijection",
-        "Statement": "ChannelName values SHALL be unique across ChannelReadingsList.\n",
-        "AxiomDescription": null
+        "Statement": "ChannelName values SHALL be unique across ChannelReadingsList.\n"
       },
       {
         "TypeVersion": "synced.readings.bundle/001",
         "Number": 3,
         "AxiomName": "StartTimestampBeforeEnd",
-        "Statement": "StartTimestamp shall be less than EndTimestamp\n",
-        "AxiomDescription": null
+        "Statement": "StartTimestamp shall be less than EndTimestamp\n"
       },
       {
         "TypeVersion": "synced.readings.bundle/001",
         "Number": 4,
         "AxiomName": "TimestampAndValueLengthAlignment",
-        "Statement": "The length of TimestampList shall be equal to the length of ValueList for each entry in ChannelReadingsList.\n",
-        "AxiomDescription": null
+        "Statement": "The length of TimestampList shall be equal to the length of ValueList for each entry in ChannelReadingsList.\n"
       },
       {
         "TypeVersion": "synced.readings.bundle/001",
         "Number": 5,
         "AxiomName": "UnitTypeAndValueRepresentationConsistency",
-        "Statement": "For each entry in ChannelDefinitions:\n\n  - UnitType SHALL equal one of:\n      gw1.unit\n      spaceheat.telemetry.name\n\n  - Unit SHALL be a valid value from the specified UnitType version:\n\n    gw1.unit \u2192 version 001\n    spaceheat.telemetry.name \u2192 version 007\n",
-        "AxiomDescription": null
+        "Statement": "For each entry in ChannelDefinitions:\n\n  - UnitType SHALL equal one of:\n      gw1.unit\n      spaceheat.telemetry.name\n\n  - Unit SHALL be a valid value from the specified UnitType version:\n\n    gw1.unit → version 001\n    spaceheat.telemetry.name → version 007\n"
       }
     ]
   },
@@ -14290,7 +14213,7 @@
         "datatype": "string",
         "type": "raw",
         "nullable": false,
-        "Description": "JSON-Pointer-ish path within origin (e.g. '/properties/RelayNodes/items') \u2014 used to re-inline on YAML emit."
+        "Description": "JSON-Pointer-ish path within origin (e.g. '/properties/RelayNodes/items') — used to re-inline on YAML emit."
       }
     ],
     "data": [
@@ -15620,23 +15543,23 @@
       },
       "migration_warnings": [
         "UnresolvedRef: analytics.channel.gt/000.ProducedBy ref=string",
-        "OpenObjectDeferredToRawJson: analytics.channel.gt/000.Parameters \u2014 object without properties parked in RawJson",
-        "OpenObjectDeferredToRawJson: derived.channel.gt/001.Parameters \u2014 object without properties parked in RawJson",
-        "OpenObjectDeferredToRawJson: derived.channel.gt/002.Parameters \u2014 object without properties parked in RawJson",
-        "OneOfDeferredToRawJson: fsm.atomic.report/001.Action \u2014 oneOf body parked in RawJson",
-        "YamlParseError: type-version definitions/types/gw.nolan.layout/000.yaml \u2014 ParserError: while parsing a block mapping",
-        "OpenObjectDeferredToRawJson: gw1.tank.temp.calibration.map/000.Tank \u2014 object without properties parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: layout.lite/008.TankModuleComponents \u2014 oneOf in items parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: layout.lite/009.TankModuleComponents \u2014 oneOf in items parked in RawJson",
-        "OneOfDeferredToRawJson: layout.lite/009.Ha1Params \u2014 oneOf body parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: layout.lite/010.ShNodes \u2014 oneOf in items parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: layout.lite/010.TankModuleComponents \u2014 oneOf in items parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: layout.lite/011.ShNodes \u2014 oneOf in items parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: layout.lite/011.DerivedChannels \u2014 oneOf in items parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: layout.lite/011.TankModuleComponents \u2014 oneOf in items parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: layout.lite/012.TankModuleComponents \u2014 oneOf in items parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: layout.lite/013.TankModuleComponents \u2014 oneOf in items parked in RawJson",
-        "OneOfInArrayItemsDeferredToRawJson: report/002.FsmReportList \u2014 oneOf in items parked in RawJson"
+        "OpenObjectDeferredToRawJson: analytics.channel.gt/000.Parameters — object without properties parked in RawJson",
+        "OpenObjectDeferredToRawJson: derived.channel.gt/001.Parameters — object without properties parked in RawJson",
+        "OpenObjectDeferredToRawJson: derived.channel.gt/002.Parameters — object without properties parked in RawJson",
+        "OneOfDeferredToRawJson: fsm.atomic.report/001.Action — oneOf body parked in RawJson",
+        "YamlParseError: type-version definitions/types/gw.nolan.layout/000.yaml — ParserError: while parsing a block mapping",
+        "OpenObjectDeferredToRawJson: gw1.tank.temp.calibration.map/000.Tank — object without properties parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: layout.lite/008.TankModuleComponents — oneOf in items parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: layout.lite/009.TankModuleComponents — oneOf in items parked in RawJson",
+        "OneOfDeferredToRawJson: layout.lite/009.Ha1Params — oneOf body parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: layout.lite/010.ShNodes — oneOf in items parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: layout.lite/010.TankModuleComponents — oneOf in items parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: layout.lite/011.ShNodes — oneOf in items parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: layout.lite/011.DerivedChannels — oneOf in items parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: layout.lite/011.TankModuleComponents — oneOf in items parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: layout.lite/012.TankModuleComponents — oneOf in items parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: layout.lite/013.TankModuleComponents — oneOf in items parked in RawJson",
+        "OneOfInArrayItemsDeferredToRawJson: report/002.FsmReportList — oneOf in items parked in RawJson"
       ],
       "migration_warning_count": 18,
       "module_2_row_counts": {
