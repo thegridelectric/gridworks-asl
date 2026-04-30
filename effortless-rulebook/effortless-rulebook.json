@@ -67,6 +67,46 @@
         "type": "raw",
         "nullable": true,
         "Description": "License under which the owner's contributions are published (e.g. 'MIT')."
+      },
+      {
+        "name": "IsOrganization",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when OwnerType is 'organization' (vs 'individual'). Cheap classifier for grouping owners.",
+        "formula": "=IF({{OwnerType}}=\"organization\", TRUE(), FALSE())"
+      },
+      {
+        "name": "HasGithub",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this owner has a Github URL on file.",
+        "formula": "=IF({{Github}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "FormatCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of Formats owned by this owner.",
+        "formula": "=COUNTIFS(Formats!{{Owner}}, Owners!{{Name}})"
+      },
+      {
+        "name": "EnumCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of Enums owned by this owner.",
+        "formula": "=COUNTIFS(Enums!{{Owner}}, Owners!{{Name}})"
+      },
+      {
+        "name": "TypeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of Types owned by this owner.",
+        "formula": "=COUNTIFS(Types!{{Owner}}, Owners!{{Name}})"
       }
     ],
     "data": [
@@ -226,6 +266,46 @@
         "type": "raw",
         "nullable": true,
         "Description": "Escape hatch: any unmodeled JSON-Schema fields, serialized as JSON string."
+      },
+      {
+        "name": "IsRetired",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this format has been replaced by another (ReplacedBy is set).",
+        "formula": "=IF({{ReplacedBy}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "HasPattern",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when a regex Pattern constraint is defined.",
+        "formula": "=IF({{Pattern}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "HasLengthBounds",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one of MinLength / MaxLength is defined.",
+        "formula": "=IF(OR({{MinLength}}>0, {{MaxLength}}>0), TRUE(), FALSE())"
+      },
+      {
+        "name": "ExampleCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of positive examples on this format (FormatExamples where IsCounter=false).",
+        "formula": "=COUNTIFS(FormatExamples!{{Format}}, Formats!{{Name}}, FormatExamples!{{IsCounter}}, FALSE())"
+      },
+      {
+        "name": "CounterExampleCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of counterexamples on this format (FormatExamples where IsCounter=true).",
+        "formula": "=COUNTIFS(FormatExamples!{{Format}}, Formats!{{Name}}, FormatExamples!{{IsCounter}}, TRUE())"
       }
     ],
     "data": [
@@ -431,6 +511,14 @@
         "type": "raw",
         "nullable": true,
         "Description": "Optional description (e.g. YAML inline comment)."
+      },
+      {
+        "name": "ExampleKind",
+        "datatype": "string",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "'counter' when IsCounter is true, else 'positive'. Convenience label.",
+        "formula": "=IF({{IsCounter}}, \"counter\", \"positive\")"
       }
     ],
     "data": [
