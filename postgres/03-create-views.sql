@@ -53,7 +53,10 @@ SELECT
   calc_formats_example_count(t.formats_id) AS example_count,                    -- Number of positive examples on this format (FormatExamples where IsCounter=false).
   calc_formats_counter_example_count(t.formats_id) AS counter_example_count,    -- Number of counterexamples on this format (FormatExamples where IsCounter=true).
   calc_formats_type_attribute_usage_count(t.formats_id) AS type_attribute_usage_count,-- Number of TypeAttributes that point at this Format via FormatRef.
-  calc_formats_type_helper_attribute_usage_count(t.formats_id) AS type_helper_attribute_usage_count-- Number of TypeHelperAttributes that point at this Format via FormatRef.
+  calc_formats_type_helper_attribute_usage_count(t.formats_id) AS type_helper_attribute_usage_count,-- Number of TypeHelperAttributes that point at this Format via FormatRef.
+  calc_formats_total_usage_count(t.formats_id) AS total_usage_count,            -- Total references across TypeAttributes + TypeHelperAttributes (sum of the two usage counts).
+  calc_formats_is_used(t.formats_id) AS is_used,                                -- True when at least one TypeAttribute or TypeHelperAttribute references this format.
+  calc_formats_is_unused(t.formats_id) AS is_unused                             -- True when no attribute references this format — candidate for removal.
 FROM formats t;
 
 -- ----------------------------------------------------------------------------
@@ -120,7 +123,15 @@ SELECT
   calc_enum_versions_incoming_projection_count(t.enum_versions_id) AS incoming_projection_count,-- Number of Projections landing on this version (i.e. where this is ToEnumVersion).
   calc_enum_versions_outgoing_upgrade_count(t.enum_versions_id) AS outgoing_upgrade_count,-- Number of EnumUpgrades that bump from this version.
   calc_enum_versions_incoming_upgrade_count(t.enum_versions_id) AS incoming_upgrade_count,-- Number of EnumUpgrades that bump to this version.
-  calc_enum_versions_type_upgrade_op_usage_count(t.enum_versions_id) AS type_upgrade_op_usage_count-- Number of TypeUpgradeOps referencing this version (via EnumVersionRef on EnumVersionBump / CoerceToEnum ops).
+  calc_enum_versions_type_upgrade_op_usage_count(t.enum_versions_id) AS type_upgrade_op_usage_count,-- Number of TypeUpgradeOps referencing this version (via EnumVersionRef on EnumVersionBump / CoerceToEnum ops).
+  calc_enum_versions_total_attribute_usage_count(t.enum_versions_id) AS total_attribute_usage_count,-- Total references across TypeAttributes + TypeHelperAttributes.
+  calc_enum_versions_is_used_by_attributes(t.enum_versions_id) AS is_used_by_attributes,-- True when at least one attribute references this enum version.
+  calc_enum_versions_has_incoming_projection(t.enum_versions_id) AS has_incoming_projection,-- True when at least one Projection lands on this version.
+  calc_enum_versions_has_outgoing_projection(t.enum_versions_id) AS has_outgoing_projection,-- True when at least one Projection starts from this version.
+  calc_enum_versions_has_incoming_upgrade(t.enum_versions_id) AS has_incoming_upgrade,-- True when at least one EnumUpgrade bumps to this version (this version was reached from a predecessor).
+  calc_enum_versions_has_outgoing_upgrade(t.enum_versions_id) AS has_outgoing_upgrade,-- True when at least one EnumUpgrade bumps from this version (this version has a successor).
+  calc_enum_versions_is_root(t.enum_versions_id) AS is_root,                    -- True when this version has no incoming upgrade — it was created fresh, not bumped from a predecessor.
+  calc_enum_versions_is_leaf(t.enum_versions_id) AS is_leaf                     -- True when this version has no outgoing upgrade — it has no successor and is a tip of the version chain.
 FROM enum_versions t;
 
 -- ----------------------------------------------------------------------------
@@ -186,7 +197,14 @@ SELECT
   calc_type_versions_type_helper_attribute_as_subtype_count(t.type_versions_id) AS type_helper_attribute_as_subtype_count,-- Number of TypeHelperAttributes that nest this version as a sub-type via SubTypeVersionRef.
   calc_type_versions_outgoing_upgrade_count(t.type_versions_id) AS outgoing_upgrade_count,-- Number of TypeUpgrades that bump from this version (this version has a successor).
   calc_type_versions_incoming_upgrade_count(t.type_versions_id) AS incoming_upgrade_count,-- Number of TypeUpgrades that bump to this version (this version was reached from a predecessor).
-  calc_type_versions_originated_helper_count(t.type_versions_id) AS originated_helper_count-- Number of TypeHelpers whose YAML body originally introduced them in this version.
+  calc_type_versions_originated_helper_count(t.type_versions_id) AS originated_helper_count,-- Number of TypeHelpers whose YAML body originally introduced them in this version.
+  calc_type_versions_total_subtype_usage_count(t.type_versions_id) AS total_subtype_usage_count,-- Total nest-as-subtype references across TypeAttributes + TypeHelperAttributes.
+  calc_type_versions_is_used_as_subtype(t.type_versions_id) AS is_used_as_subtype,-- True when at least one attribute nests this version as a sub-type.
+  calc_type_versions_has_incoming_upgrade(t.type_versions_id) AS has_incoming_upgrade,-- True when at least one TypeUpgrade bumps to this version.
+  calc_type_versions_has_outgoing_upgrade(t.type_versions_id) AS has_outgoing_upgrade,-- True when at least one TypeUpgrade bumps from this version (this version has a successor).
+  calc_type_versions_is_root(t.type_versions_id) AS is_root,                    -- True when this version has no incoming upgrade — it was created fresh.
+  calc_type_versions_is_leaf(t.type_versions_id) AS is_leaf,                    -- True when this version has no outgoing upgrade — a tip of the version chain.
+  calc_type_versions_originates_helpers(t.type_versions_id) AS originates_helpers-- True when at least one TypeHelper was originally introduced by this version's YAML body.
 FROM type_versions t;
 
 -- ----------------------------------------------------------------------------
@@ -260,7 +278,9 @@ SELECT
   calc_type_helpers_required_attribute_count(t.type_helpers_id) AS required_attribute_count,-- Number of TypeHelperAttributes on this helper where IsRequired=true.
   calc_type_helpers_is_closed(t.type_helpers_id) AS is_closed,                  -- True when ExtraAllowed is FALSE (the helper rejects unknown properties).
   calc_type_helpers_type_attribute_usage_count(t.type_helpers_id) AS type_attribute_usage_count,-- Number of TypeAttributes that point at this helper via HelperRef.
-  calc_type_helpers_type_helper_attribute_usage_count(t.type_helpers_id) AS type_helper_attribute_usage_count-- Number of TypeHelperAttributes that point at this helper via HelperRef (nested helpers).
+  calc_type_helpers_type_helper_attribute_usage_count(t.type_helpers_id) AS type_helper_attribute_usage_count,-- Number of TypeHelperAttributes that point at this helper via HelperRef (nested helpers).
+  calc_type_helpers_total_usage_count(t.type_helpers_id) AS total_usage_count,  -- Total references across TypeAttributes + TypeHelperAttributes (nested helpers).
+  calc_type_helpers_is_used(t.type_helpers_id) AS is_used                       -- True when at least one attribute references this helper.
 FROM type_helpers t;
 
 -- ----------------------------------------------------------------------------
@@ -302,7 +322,8 @@ SELECT
   calc_projections_mapping_count(t.projections_id) AS mapping_count,            -- Number of ProjectionMappings (FromSymbol -> ToSymbol pairs) declared on this projection.
   calc_projections_is_scripted(t.projections_id) AS is_scripted,                -- True when RawScript is set — projection isn't a flat lookup and falls back to a script.
   calc_projections_is_flat_lookup(t.projections_id) AS is_flat_lookup,          -- True when this projection is a pure flat lookup (no RawScript). The common, well-behaved case.
-  calc_projections_type_upgrade_op_usage_count(t.projections_id) AS type_upgrade_op_usage_count-- Number of TypeUpgradeOps referencing this projection via ProjectionRef (typically AddProjected ops).
+  calc_projections_type_upgrade_op_usage_count(t.projections_id) AS type_upgrade_op_usage_count,-- Number of TypeUpgradeOps referencing this projection via ProjectionRef (typically AddProjected ops).
+  calc_projections_is_used_in_upgrades(t.projections_id) AS is_used_in_upgrades -- True when at least one TypeUpgradeOp uses this projection (via AddProjected).
 FROM projections t;
 
 -- ----------------------------------------------------------------------------

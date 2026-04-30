@@ -308,6 +308,36 @@ RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE format_ref = (SELECT NULLIF(name, '') FROM formats WHERE formats_id = p_formats_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
+-- calc_formats_total_usage_count
+-- Field: Formats.TotalUsageCount
+-- Type: calculated | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_formats_total_usage_count(p_formats_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((COALESCE(CASE WHEN (calc_formats_type_attribute_usage_count(p_formats_id))::text ~ '^-?[0-9]*\.?[0-9]+$' THEN (calc_formats_type_attribute_usage_count(p_formats_id))::numeric ELSE NULL END, 0) + COALESCE(CASE WHEN (calc_formats_type_helper_attribute_usage_count(p_formats_id))::text ~ '^-?[0-9]*\.?[0-9]+$' THEN (calc_formats_type_helper_attribute_usage_count(p_formats_id))::numeric ELSE NULL END, 0)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_formats_is_used
+-- Field: Formats.IsUsed
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_formats_is_used(p_formats_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_formats_total_usage_count(p_formats_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_formats_is_unused
+-- Field: Formats.IsUnused
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_formats_is_unused(p_formats_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_formats_total_usage_count(p_formats_id))::NUMERIC > 0 THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- calc_format_examples_name
 -- Field: FormatExamples.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -541,6 +571,86 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_enum_versions_type_upgrade_op_usage_count(p_enum_versions_id TEXT)
 RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM type_upgrade_ops WHERE enum_version_ref = calc_enum_versions_name(p_enum_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_total_attribute_usage_count
+-- Field: EnumVersions.TotalAttributeUsageCount
+-- Type: calculated | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_total_attribute_usage_count(p_enum_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((COALESCE(CASE WHEN (calc_enum_versions_type_attribute_usage_count(p_enum_versions_id))::text ~ '^-?[0-9]*\.?[0-9]+$' THEN (calc_enum_versions_type_attribute_usage_count(p_enum_versions_id))::numeric ELSE NULL END, 0) + COALESCE(CASE WHEN (calc_enum_versions_type_helper_attribute_usage_count(p_enum_versions_id))::text ~ '^-?[0-9]*\.?[0-9]+$' THEN (calc_enum_versions_type_helper_attribute_usage_count(p_enum_versions_id))::numeric ELSE NULL END, 0)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_is_used_by_attributes
+-- Field: EnumVersions.IsUsedByAttributes
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_is_used_by_attributes(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_enum_versions_total_attribute_usage_count(p_enum_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_has_incoming_projection
+-- Field: EnumVersions.HasIncomingProjection
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_has_incoming_projection(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_enum_versions_incoming_projection_count(p_enum_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_has_outgoing_projection
+-- Field: EnumVersions.HasOutgoingProjection
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_has_outgoing_projection(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_enum_versions_outgoing_projection_count(p_enum_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_has_incoming_upgrade
+-- Field: EnumVersions.HasIncomingUpgrade
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_has_incoming_upgrade(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_enum_versions_incoming_upgrade_count(p_enum_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_has_outgoing_upgrade
+-- Field: EnumVersions.HasOutgoingUpgrade
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_has_outgoing_upgrade(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_enum_versions_outgoing_upgrade_count(p_enum_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_is_root
+-- Field: EnumVersions.IsRoot
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_is_root(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_enum_versions_incoming_upgrade_count(p_enum_versions_id))::NUMERIC > 0 THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_is_leaf
+-- Field: EnumVersions.IsLeaf
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_is_leaf(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_enum_versions_outgoing_upgrade_count(p_enum_versions_id))::NUMERIC > 0 THEN FALSE ELSE TRUE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- get_enum_versions_version
@@ -848,6 +958,76 @@ RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM type_helpers WHERE origin_type_version = calc_type_versions_name(p_type_versions_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_versions_total_subtype_usage_count
+-- Field: TypeVersions.TotalSubtypeUsageCount
+-- Type: calculated | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_total_subtype_usage_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((COALESCE(CASE WHEN (calc_type_versions_type_attribute_as_subtype_count(p_type_versions_id))::text ~ '^-?[0-9]*\.?[0-9]+$' THEN (calc_type_versions_type_attribute_as_subtype_count(p_type_versions_id))::numeric ELSE NULL END, 0) + COALESCE(CASE WHEN (calc_type_versions_type_helper_attribute_as_subtype_count(p_type_versions_id))::text ~ '^-?[0-9]*\.?[0-9]+$' THEN (calc_type_versions_type_helper_attribute_as_subtype_count(p_type_versions_id))::numeric ELSE NULL END, 0)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_is_used_as_subtype
+-- Field: TypeVersions.IsUsedAsSubtype
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_is_used_as_subtype(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_versions_total_subtype_usage_count(p_type_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_has_incoming_upgrade
+-- Field: TypeVersions.HasIncomingUpgrade
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_has_incoming_upgrade(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_versions_incoming_upgrade_count(p_type_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_has_outgoing_upgrade
+-- Field: TypeVersions.HasOutgoingUpgrade
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_has_outgoing_upgrade(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_versions_outgoing_upgrade_count(p_type_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_is_root
+-- Field: TypeVersions.IsRoot
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_is_root(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_versions_incoming_upgrade_count(p_type_versions_id))::NUMERIC > 0 THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_is_leaf
+-- Field: TypeVersions.IsLeaf
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_is_leaf(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_versions_outgoing_upgrade_count(p_type_versions_id))::NUMERIC > 0 THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_originates_helpers
+-- Field: TypeVersions.OriginatesHelpers
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_originates_helpers(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_versions_originated_helper_count(p_type_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- get_type_versions_version
 -- Helper function: Get Version from TypeVersions by TypeVersionsId
 -- Used for join-free cross-table references in aggregations
@@ -1085,6 +1265,26 @@ RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE helper_ref = (SELECT NULLIF(name, '') FROM type_helpers WHERE type_helpers_id = p_type_helpers_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_helpers_total_usage_count
+-- Field: TypeHelpers.TotalUsageCount
+-- Type: calculated | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_total_usage_count(p_type_helpers_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((COALESCE(CASE WHEN (calc_type_helpers_type_attribute_usage_count(p_type_helpers_id))::text ~ '^-?[0-9]*\.?[0-9]+$' THEN (calc_type_helpers_type_attribute_usage_count(p_type_helpers_id))::numeric ELSE NULL END, 0) + COALESCE(CASE WHEN (calc_type_helpers_type_helper_attribute_usage_count(p_type_helpers_id))::text ~ '^-?[0-9]*\.?[0-9]+$' THEN (calc_type_helpers_type_helper_attribute_usage_count(p_type_helpers_id))::numeric ELSE NULL END, 0)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_is_used
+-- Field: TypeHelpers.IsUsed
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_is_used(p_type_helpers_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_helpers_total_usage_count(p_type_helpers_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_helper_attributes_name
 -- Field: TypeHelperAttributes.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -1153,6 +1353,16 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_projections_type_upgrade_op_usage_count(p_projections_id TEXT)
 RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM type_upgrade_ops WHERE projection_ref = (SELECT NULLIF(name, '') FROM projections WHERE projections_id = p_projections_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_is_used_in_upgrades
+-- Field: Projections.IsUsedInUpgrades
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_projections_is_used_in_upgrades(p_projections_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_projections_type_upgrade_op_usage_count(p_projections_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- get_projections_name
