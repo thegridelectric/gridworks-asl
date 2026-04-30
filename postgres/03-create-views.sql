@@ -25,7 +25,21 @@ SELECT
   calc_owners_has_github(t.owners_id) AS has_github,                            -- True when this owner has a Github URL on file.
   calc_owners_format_count(t.owners_id) AS format_count,                        -- Number of Formats owned by this owner.
   calc_owners_enum_count(t.owners_id) AS enum_count,                            -- Number of Enums owned by this owner.
-  calc_owners_type_count(t.owners_id) AS type_count                             -- Number of Types owned by this owner.
+  calc_owners_type_count(t.owners_id) AS type_count,                            -- Number of Types owned by this owner.
+  calc_owners_draft_type_version_count(t.owners_id) AS draft_type_version_count,-- Number of draft TypeVersions across all this owner's Words. Drives §7 'drafts open: N' badge on the Vocabularies grid.
+  calc_owners_active_type_version_count(t.owners_id) AS active_type_version_count,-- Number of active TypeVersions.
+  calc_owners_deprecated_type_version_count(t.owners_id) AS deprecated_type_version_count,-- Number of deprecated TypeVersions.
+  calc_owners_draft_enum_version_count(t.owners_id) AS draft_enum_version_count,-- Number of draft EnumVersions across this owner's Enums.
+  calc_owners_active_enum_version_count(t.owners_id) AS active_enum_version_count,-- Number of active EnumVersions.
+  calc_owners_deprecated_enum_version_count(t.owners_id) AS deprecated_enum_version_count,-- Number of deprecated EnumVersions.
+  calc_owners_retired_type_count(t.owners_id) AS retired_type_count,            -- Number of retired Types (Words). Drives the red-strike count on the Vocabulary card.
+  calc_owners_retired_enum_count(t.owners_id) AS retired_enum_count,            -- Number of retired Enums (Words).
+  calc_owners_retired_format_count(t.owners_id) AS retired_format_count,        -- Number of retired Formats.
+  calc_owners_has_open_drafts(t.owners_id) AS has_open_drafts,                  -- True iff this owner has any draft Type or Enum versions. Drives the amber dot on the Vocabularies card.
+  calc_owners_has_published_artifacts(t.owners_id) AS has_published_artifacts,  -- True iff this owner has any artifacts at all (Types, Enums, or Formats). Drives empty-state vs populated rendering.
+  calc_owners_latest_type_version_at(t.owners_id) AS latest_type_version_at,    -- Most recent TypeVersions.Created among this owner's Words.
+  calc_owners_latest_enum_version_at(t.owners_id) AS latest_enum_version_at,    -- Most recent EnumVersions.Created among this owner's Enums.
+  calc_owners_latest_format_at(t.owners_id) AS latest_format_at                 -- Most recent Formats.Created among this owner's Formats.
 FROM owners t;
 
 -- ----------------------------------------------------------------------------
@@ -56,7 +70,8 @@ SELECT
   calc_formats_type_helper_attribute_usage_count(t.formats_id) AS type_helper_attribute_usage_count,-- Number of TypeHelperAttributes that point at this Format via FormatRef.
   calc_formats_total_usage_count(t.formats_id) AS total_usage_count,            -- Total references across TypeAttributes + TypeHelperAttributes (sum of the two usage counts).
   calc_formats_is_used(t.formats_id) AS is_used,                                -- True when at least one TypeAttribute or TypeHelperAttribute references this format.
-  calc_formats_is_unused(t.formats_id) AS is_unused                             -- True when no attribute references this format — candidate for removal.
+  calc_formats_is_unused(t.formats_id) AS is_unused,                            -- True when no attribute references this format — candidate for removal.
+  calc_formats_owner_name(t.formats_id) AS owner_name                           -- Owner of this Format, passed through from Formats.Owner. Symmetry with TypeVersions.OwnerName / EnumVersions.OwnerName so list views render owner uniformly.
 FROM formats t;
 
 -- ----------------------------------------------------------------------------
@@ -93,7 +108,13 @@ SELECT
   calc_enums_is_versioned(t.enums_id) AS is_versioned,                          -- True when EnumType is 'versioned' (additive-only multi-version enum).
   calc_enums_is_literal(t.enums_id) AS is_literal,                              -- True when EnumType is 'literal' (single immutable version, frozen vocabulary).
   calc_enums_is_integer_valued(t.enums_id) AS is_integer_valued,                -- True when ValueType is 'integer' (otherwise the enum's symbols are strings).
-  calc_enums_version_count(t.enums_id) AS version_count                         -- Number of EnumVersions for this enum.
+  calc_enums_version_count(t.enums_id) AS version_count,                        -- Number of EnumVersions for this enum.
+  calc_enums_draft_version_count(t.enums_id) AS draft_version_count,            -- Number of EnumVersions of this Word with Status='draft'.
+  calc_enums_active_version_count(t.enums_id) AS active_version_count,          -- Number of active EnumVersions.
+  calc_enums_deprecated_version_count(t.enums_id) AS deprecated_version_count,  -- Number of deprecated EnumVersions.
+  calc_enums_has_drafts(t.enums_id) AS has_drafts,                              -- True iff this Word has at least one draft Definition.
+  calc_enums_first_created(t.enums_id) AS first_created,                        -- When the first EnumVersion for this Word was created.
+  calc_enums_last_modified(t.enums_id) AS last_modified                         -- Latest EnumVersions.Created among this Word's Definitions.
 FROM enums t;
 
 -- ----------------------------------------------------------------------------
@@ -132,7 +153,14 @@ SELECT
   calc_enum_versions_has_incoming_upgrade(t.enum_versions_id) AS has_incoming_upgrade,-- True when at least one EnumUpgrade bumps to this version (this version was reached from a predecessor).
   calc_enum_versions_has_outgoing_upgrade(t.enum_versions_id) AS has_outgoing_upgrade,-- True when at least one EnumUpgrade bumps from this version (this version has a successor).
   calc_enum_versions_is_root(t.enum_versions_id) AS is_root,                    -- True when this version has no incoming upgrade — it was created fresh, not bumped from a predecessor.
-  calc_enum_versions_is_leaf(t.enum_versions_id) AS is_leaf                     -- True when this version has no outgoing upgrade — it has no successor and is a tip of the version chain.
+  calc_enum_versions_is_leaf(t.enum_versions_id) AS is_leaf,                    -- True when this version has no outgoing upgrade — it has no successor and is a tip of the version chain.
+  calc_enum_versions_owner_name(t.enum_versions_id) AS owner_name,              -- Owner of this EnumVersion's Word, passed through from Enums.Owner.
+  calc_enum_versions_word_is_retired(t.enum_versions_id) AS word_is_retired,    -- Whether this EnumVersion's Word is retired (Enums.IsRetired). Drives §4 red strike-through.
+  calc_enum_versions_word_description(t.enum_versions_id) AS word_description,  -- Description of the parent Enum.
+  t.last_modified,                                                              -- Most recent edit to this EnumVersion or its child EnumValues.
+  t.promoted_at,                                                                -- When Status flipped from draft to active.
+  t.deprecated_at,                                                              -- When Status flipped from active to deprecated.
+  calc_enum_versions_is_promotable(t.enum_versions_id) AS is_promotable         -- True iff this draft EnumVersion can be promoted: it is a draft and has at least one symbol.
 FROM enum_versions t;
 
 -- ----------------------------------------------------------------------------
@@ -167,7 +195,13 @@ SELECT
   t.is_cac,                                                                     -- Tier-2 placeholder: ODXML invariant (component access control marker).
   t.is_component,                                                               -- Tier-2 placeholder: ODXML invariant.
   calc_types_is_retired(t.types_id) AS is_retired,                              -- True when this type has been replaced by another (ReplacedBy is set).
-  calc_types_version_count(t.types_id) AS version_count                         -- Number of TypeVersions for this type.
+  calc_types_version_count(t.types_id) AS version_count,                        -- Number of TypeVersions for this type.
+  calc_types_draft_version_count(t.types_id) AS draft_version_count,            -- Number of TypeVersions of this Word with Status='draft'. Drives 'drafts open' badge on Word cards.
+  calc_types_active_version_count(t.types_id) AS active_version_count,          -- Number of active TypeVersions.
+  calc_types_deprecated_version_count(t.types_id) AS deprecated_version_count,  -- Number of deprecated TypeVersions.
+  calc_types_has_drafts(t.types_id) AS has_drafts,                              -- True iff this Word has at least one draft Definition. Drives the amber 'drafts open' badge on Word rows.
+  calc_types_first_created(t.types_id) AS first_created,                        -- When the first Definition for this Word was created. Drives 'Word age' displays.
+  calc_types_last_modified(t.types_id) AS last_modified                         -- Latest TypeVersions.Created among this Word's Definitions. Drives 'recently active' sort.
 FROM types t;
 
 -- ----------------------------------------------------------------------------
@@ -206,7 +240,16 @@ SELECT
   calc_type_versions_has_outgoing_upgrade(t.type_versions_id) AS has_outgoing_upgrade,-- True when at least one TypeUpgrade bumps from this version (this version has a successor).
   calc_type_versions_is_root(t.type_versions_id) AS is_root,                    -- True when this version has no incoming upgrade — it was created fresh.
   calc_type_versions_is_leaf(t.type_versions_id) AS is_leaf,                    -- True when this version has no outgoing upgrade — a tip of the version chain.
-  calc_type_versions_originates_helpers(t.type_versions_id) AS originates_helpers-- True when at least one TypeHelper was originally introduced by this version's YAML body.
+  calc_type_versions_originates_helpers(t.type_versions_id) AS originates_helpers,-- True when at least one TypeHelper was originally introduced by this version's YAML body.
+  calc_type_versions_owner_name(t.type_versions_id) AS owner_name,              -- Owner of this Definition's Word, passed through from Types.Owner. Lets list views render owner without joining.
+  calc_type_versions_word_title(t.type_versions_id) AS word_title,              -- Title of this Definition's Word, passed through from Types.Title. Used in breadcrumbs.
+  calc_type_versions_word_is_retired(t.type_versions_id) AS word_is_retired,    -- Whether this Definition's Word is retired (Types.IsRetired). Drives the red strike-through pill in §4 — distinct from version-level deprecation.
+  t.last_modified,                                                              -- Most recent edit to this Definition or any of its child rows. Null until the editor lands. Drives Activity-feed sort.
+  t.promoted_at,                                                                -- When Status flipped from draft to active. Null for never-promoted drafts. Activity feed renders 'promoted on...' distinct from 'created on...'.
+  t.deprecated_at,                                                              -- When Status flipped from active to deprecated. Null while still active or while still draft.
+  calc_type_versions_stale_reference_count(t.type_versions_id) AS stale_reference_count,-- Number of TypeAttributes on this Definition whose ref points at a retired/deprecated/draft target. Drives §7 promote-gating.
+  calc_type_versions_has_stale_references(t.type_versions_id) AS has_stale_references,-- True iff any of this Definition's attribute refs are stale.
+  calc_type_versions_is_promotable(t.type_versions_id) AS is_promotable         -- True iff this draft Definition can be promoted: it is a draft, has no stale references, and has at least one attribute. Gates the Promote CTA in §7.
 FROM type_versions t;
 
 -- ----------------------------------------------------------------------------
@@ -232,7 +275,15 @@ SELECT
   t.raw_json,                                                                   -- Escape hatch: unmodeled JSON-Schema specifics, including oneOf bodies (v1 parking lot for n=1 cases).
   calc_type_attributes_is_optional(t.type_attributes_id) AS is_optional,        -- True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.
   calc_type_attributes_has_default(t.type_attributes_id) AS has_default,        -- True when a JSON-encoded Default value is present for this attribute.
-  calc_type_attributes_ref_kind(t.type_attributes_id) AS ref_kind               -- Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive' when only PrimitiveType is set.
+  calc_type_attributes_ref_kind(t.type_attributes_id) AS ref_kind,              -- Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive' when only PrimitiveType is set.
+  calc_type_attributes_ref_format_is_retired(t.type_attributes_id) AS ref_format_is_retired,-- Whether the FormatRef target is retired. Null when FormatRef is unset.
+  calc_type_attributes_ref_enum_is_active(t.type_attributes_id) AS ref_enum_is_active,-- Whether the EnumVersionRef target has Status='active'. Null when EnumVersionRef is unset.
+  calc_type_attributes_ref_enum_is_draft(t.type_attributes_id) AS ref_enum_is_draft,-- Whether the EnumVersionRef target is still a draft. Promoting a draft TypeVersion that points at a draft EnumVersion is not allowed.
+  calc_type_attributes_ref_enum_word_is_retired(t.type_attributes_id) AS ref_enum_word_is_retired,-- Whether the EnumVersionRef's Word is retired.
+  calc_type_attributes_ref_subtype_is_active(t.type_attributes_id) AS ref_subtype_is_active,-- Whether the SubTypeVersionRef target has Status='active'.
+  calc_type_attributes_ref_subtype_is_draft(t.type_attributes_id) AS ref_subtype_is_draft,-- Whether the SubTypeVersionRef target is still a draft.
+  calc_type_attributes_ref_subtype_word_is_retired(t.type_attributes_id) AS ref_subtype_word_is_retired,-- Whether the SubTypeVersionRef's Word is retired.
+  calc_type_attributes_ref_is_stale(t.type_attributes_id) AS ref_is_stale       -- True iff this attribute's reference points at a retired Word, a deprecated/draft EnumVersion or TypeVersion. Rolls up into TypeVersions.HasStaleReferences and gates promote.
 FROM type_attributes t;
 
 -- ----------------------------------------------------------------------------
@@ -245,7 +296,8 @@ SELECT
   calc_type_examples_name(t.type_examples_id) AS name,                          -- Compound key: <type-version>[<idx>].
   t.type_version,                                                               -- Foreign key to the parent TypeVersion.
   t.idx,                                                                        -- Preserves YAML ordering.
-  t.example_json                                                                -- Full instance example, serialized as JSON string.
+  t.example_json,                                                               -- Full instance example, serialized as JSON string.
+  calc_type_examples_owner_name(t.type_examples_id) AS owner_name               -- Owner passthrough.
 FROM type_examples t;
 
 -- ----------------------------------------------------------------------------
@@ -260,7 +312,9 @@ SELECT
   t.number,                                                                     -- Axiom number from YAML.
   t.axiom_name,                                                                 -- Axiom name from YAML.
   t.statement,                                                                  -- Axiom statement (the natural-language invariant).
-  calc_type_axioms_has_statement(t.type_axioms_id) AS has_statement             -- True when the axiom carries a non-empty Statement.
+  calc_type_axioms_has_statement(t.type_axioms_id) AS has_statement,            -- True when the axiom carries a non-empty Statement.
+  calc_type_axioms_owner_name(t.type_axioms_id) AS owner_name,                  -- Owner passthrough via TypeVersion → Type → Owner.
+  calc_type_axioms_word_is_retired(t.type_axioms_id) AS word_is_retired         -- True iff the parent Definition's Word is retired (axiom inherits visual retirement).
 FROM type_axioms t;
 
 -- ----------------------------------------------------------------------------
@@ -282,7 +336,13 @@ SELECT
   calc_type_helpers_type_attribute_usage_count(t.type_helpers_id) AS type_attribute_usage_count,-- Number of TypeAttributes that point at this helper via HelperRef.
   calc_type_helpers_type_helper_attribute_usage_count(t.type_helpers_id) AS type_helper_attribute_usage_count,-- Number of TypeHelperAttributes that point at this helper via HelperRef (nested helpers).
   calc_type_helpers_total_usage_count(t.type_helpers_id) AS total_usage_count,  -- Total references across TypeAttributes + TypeHelperAttributes (nested helpers).
-  calc_type_helpers_is_used(t.type_helpers_id) AS is_used                       -- True when at least one attribute references this helper.
+  calc_type_helpers_is_used(t.type_helpers_id) AS is_used,                      -- True when at least one attribute references this helper.
+  calc_type_helpers_origin_owner_name(t.type_helpers_id) AS origin_owner_name,  -- Owner of the helper's origin Definition.
+  calc_type_helpers_origin_type_name(t.type_helpers_id) AS origin_type_name,    -- Word name of the helper's origin Definition.
+  calc_type_helpers_is_origin_draft(t.type_helpers_id) AS is_origin_draft,      -- Whether the origin Definition is still a draft. Gates the 'Edit helper' CTA in §9c.
+  calc_type_helpers_is_origin_active(t.type_helpers_id) AS is_origin_active,    -- Whether the origin Definition is active.
+  calc_type_helpers_is_origin_deprecated(t.type_helpers_id) AS is_origin_deprecated,-- Whether the origin Definition is deprecated.
+  calc_type_helpers_origin_word_is_retired(t.type_helpers_id) AS origin_word_is_retired-- Whether the origin Definition's Word is retired. Helpers inherit retirement of their origin Word.
 FROM type_helpers t;
 
 -- ----------------------------------------------------------------------------
@@ -306,7 +366,13 @@ SELECT
   t.helper_ref,                                                                 -- FK to another TypeHelper (supports nested helpers).
   t.raw_json,                                                                   -- Escape hatch for unmodeled JSON-Schema specifics.
   calc_type_helper_attributes_is_optional(t.type_helper_attributes_id) AS is_optional,-- True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.
-  calc_type_helper_attributes_ref_kind(t.type_helper_attributes_id) AS ref_kind -- Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive'.
+  calc_type_helper_attributes_ref_kind(t.type_helper_attributes_id) AS ref_kind,-- Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive'.
+  calc_type_helper_attributes_ref_format_is_retired(t.type_helper_attributes_id) AS ref_format_is_retired,-- Whether the FormatRef target is retired.
+  calc_type_helper_attributes_ref_enum_is_draft(t.type_helper_attributes_id) AS ref_enum_is_draft,-- Whether the EnumVersionRef target is still a draft.
+  calc_type_helper_attributes_ref_enum_word_is_retired(t.type_helper_attributes_id) AS ref_enum_word_is_retired,-- Whether the EnumVersionRef's Word is retired.
+  calc_type_helper_attributes_ref_subtype_is_draft(t.type_helper_attributes_id) AS ref_subtype_is_draft,-- Whether the SubTypeVersionRef target is still a draft.
+  calc_type_helper_attributes_ref_subtype_word_is_retired(t.type_helper_attributes_id) AS ref_subtype_word_is_retired,-- Whether the SubTypeVersionRef's Word is retired.
+  calc_type_helper_attributes_ref_is_stale(t.type_helper_attributes_id) AS ref_is_stale-- True iff this helper attribute's reference points at a retired/deprecated/draft target.
 FROM type_helper_attributes t;
 
 -- ----------------------------------------------------------------------------
@@ -325,7 +391,16 @@ SELECT
   calc_projections_is_scripted(t.projections_id) AS is_scripted,                -- True when RawScript is set — projection isn't a flat lookup and falls back to a script.
   calc_projections_is_flat_lookup(t.projections_id) AS is_flat_lookup,          -- True when this projection is a pure flat lookup (no RawScript). The common, well-behaved case.
   calc_projections_type_upgrade_op_usage_count(t.projections_id) AS type_upgrade_op_usage_count,-- Number of TypeUpgradeOps referencing this projection via ProjectionRef (typically AddProjected ops).
-  calc_projections_is_used_in_upgrades(t.projections_id) AS is_used_in_upgrades -- True when at least one TypeUpgradeOp uses this projection (via AddProjected).
+  calc_projections_is_used_in_upgrades(t.projections_id) AS is_used_in_upgrades,-- True when at least one TypeUpgradeOp uses this projection (via AddProjected).
+  calc_projections_from_owner_name(t.projections_id) AS from_owner_name,        -- Owner of the FromEnumVersion.
+  calc_projections_to_owner_name(t.projections_id) AS to_owner_name,            -- Owner of the ToEnumVersion.
+  calc_projections_from_enum_name(t.projections_id) AS from_enum_name,          -- Enum name of the FromEnumVersion.
+  calc_projections_to_enum_name(t.projections_id) AS to_enum_name,              -- Enum name of the ToEnumVersion.
+  calc_projections_from_is_draft(t.projections_id) AS from_is_draft,            -- Whether the FromEnumVersion is still a draft.
+  calc_projections_to_is_draft(t.projections_id) AS to_is_draft,                -- Whether the ToEnumVersion is still a draft.
+  calc_projections_has_draft_endpoints(t.projections_id) AS has_draft_endpoints,-- True iff either endpoint EnumVersion is still a draft.
+  calc_projections_is_cross_owner(t.projections_id) AS is_cross_owner,          -- True iff the projection crosses two different owners' enums (a meaningful editorial signal).
+  calc_projections_is_cross_enum(t.projections_id) AS is_cross_enum             -- True iff the projection crosses two different Enums (vs versions of the same Enum).
 FROM projections t;
 
 -- ----------------------------------------------------------------------------
@@ -358,7 +433,13 @@ SELECT
   t.raw_script,                                                                 -- Whole-method escape hatch when no clean op decomposition is possible. Prefer per-op RawScript on TypeUpgradeOps.
   calc_type_upgrades_op_count(t.type_upgrades_id) AS op_count,                  -- Number of TypeUpgradeOps that compose this upgrade.
   calc_type_upgrades_is_scripted(t.type_upgrades_id) AS is_scripted,            -- True when RawScript is set — the upgrade is a whole-method escape hatch instead of a clean op decomposition.
-  calc_type_upgrades_is_decomposed(t.type_upgrades_id) AS is_decomposed         -- True when RawScript is empty — the upgrade is composed of structured TypeUpgradeOps. The desired form.
+  calc_type_upgrades_is_decomposed(t.type_upgrades_id) AS is_decomposed,        -- True when RawScript is empty — the upgrade is composed of structured TypeUpgradeOps. The desired form.
+  calc_type_upgrades_from_word(t.type_upgrades_id) AS from_word,                -- Word name of FromTypeVersion (should equal ToWord — IsCrossWord catches violations).
+  calc_type_upgrades_to_word(t.type_upgrades_id) AS to_word,                    -- Word name of ToTypeVersion.
+  calc_type_upgrades_from_version(t.type_upgrades_id) AS from_version,          -- Version string (e.g. '000') of FromTypeVersion.
+  calc_type_upgrades_to_version(t.type_upgrades_id) AS to_version,              -- Version string (e.g. '001') of ToTypeVersion.
+  calc_type_upgrades_owner_name(t.type_upgrades_id) AS owner_name,              -- Owner of the upgrade (passes through FromTypeVersion).
+  calc_type_upgrades_is_cross_word(t.type_upgrades_id) AS is_cross_word         -- True iff the upgrade crosses two different Words — should always be FALSE; flags malformed upgrades.
 FROM type_upgrades t;
 
 -- ----------------------------------------------------------------------------
@@ -399,7 +480,13 @@ SELECT
   t.raw_script,                                                                 -- Whole-upgrade escape hatch.
   calc_enum_upgrades_mapping_count(t.enum_upgrades_id) AS mapping_count,        -- Number of EnumUpgradeMappings that compose this upgrade.
   calc_enum_upgrades_is_scripted(t.enum_upgrades_id) AS is_scripted,            -- True when RawScript is set (whole-upgrade escape hatch).
-  calc_enum_upgrades_is_decomposed(t.enum_upgrades_id) AS is_decomposed         -- True when RawScript is empty — upgrade is composed of structured mappings.
+  calc_enum_upgrades_is_decomposed(t.enum_upgrades_id) AS is_decomposed,        -- True when RawScript is empty — upgrade is composed of structured mappings.
+  calc_enum_upgrades_from_word(t.enum_upgrades_id) AS from_word,                -- Enum name of FromEnumVersion.
+  calc_enum_upgrades_to_word(t.enum_upgrades_id) AS to_word,                    -- Enum name of ToEnumVersion.
+  calc_enum_upgrades_from_version(t.enum_upgrades_id) AS from_version,          -- Version of FromEnumVersion.
+  calc_enum_upgrades_to_version(t.enum_upgrades_id) AS to_version,              -- Version of ToEnumVersion.
+  calc_enum_upgrades_owner_name(t.enum_upgrades_id) AS owner_name,              -- Owner of the upgrade.
+  calc_enum_upgrades_is_cross_word(t.enum_upgrades_id) AS is_cross_word         -- True iff the upgrade crosses two different Enum Words — flags malformed upgrades.
 FROM enum_upgrades t;
 
 -- ----------------------------------------------------------------------------

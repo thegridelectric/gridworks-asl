@@ -67,6 +67,157 @@ RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM types WHERE owner = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
+-- calc_owners_draft_type_version_count
+-- Field: Owners.DraftTypeVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_draft_type_version_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_active_type_version_count
+-- Field: Owners.ActiveTypeVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_active_type_version_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_deprecated_type_version_count
+-- Field: Owners.DeprecatedTypeVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_deprecated_type_version_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_draft_enum_version_count
+-- Field: Owners.DraftEnumVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_draft_enum_version_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_active_enum_version_count
+-- Field: Owners.ActiveEnumVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_active_enum_version_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_deprecated_enum_version_count
+-- Field: Owners.DeprecatedEnumVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_deprecated_enum_version_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_retired_type_count
+-- Field: Owners.RetiredTypeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_retired_type_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM types WHERE owner = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_retired_enum_count
+-- Field: Owners.RetiredEnumCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_retired_enum_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enums WHERE owner = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_retired_format_count
+-- Field: Owners.RetiredFormatCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_retired_format_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM formats WHERE owner = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_has_open_drafts
+-- Field: Owners.HasOpenDrafts
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_owners_has_open_drafts(p_owners_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN ((calc_owners_draft_type_version_count(p_owners_id))::NUMERIC > 0 OR (calc_owners_draft_enum_version_count(p_owners_id))::NUMERIC > 0) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_has_published_artifacts
+-- Field: Owners.HasPublishedArtifacts
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_owners_has_published_artifacts(p_owners_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN ((calc_owners_type_count(p_owners_id))::NUMERIC > 0 OR (calc_owners_enum_count(p_owners_id))::NUMERIC > 0 OR (calc_owners_format_count(p_owners_id))::NUMERIC > 0) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_latest_type_version_at
+-- Field: Owners.LatestTypeVersionAt
+-- Type: aggregation | DataType: datetime | Returns: TIMESTAMPTZ
+
+
+CREATE OR REPLACE FUNCTION calc_owners_latest_type_version_at(p_owners_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT ((SELECT MAX(created) FROM type_versions WHERE versions_owner_name = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::timestamptz;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_latest_enum_version_at
+-- Field: Owners.LatestEnumVersionAt
+-- Type: aggregation | DataType: datetime | Returns: TIMESTAMPTZ
+
+
+CREATE OR REPLACE FUNCTION calc_owners_latest_enum_version_at(p_owners_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT ((SELECT MAX(created) FROM enum_versions WHERE versions_owner_name = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::timestamptz;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_latest_format_at
+-- Field: Owners.LatestFormatAt
+-- Type: aggregation | DataType: datetime | Returns: TIMESTAMPTZ
+
+
+CREATE OR REPLACE FUNCTION calc_owners_latest_format_at(p_owners_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT ((SELECT MAX(created) FROM formats WHERE owner = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::timestamptz;
+$$ LANGUAGE sql STABLE;
+
+-- calc_formats_owner_name
+-- Field: Formats.OwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Name from related Owners
+
+
+CREATE OR REPLACE FUNCTION calc_formats_owner_name(p_formats_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT name::text FROM owners WHERE owners_id = (SELECT owner FROM formats WHERE formats_id = p_formats_id));
+$$ LANGUAGE sql STABLE;
+
 -- get_owners_name
 -- Helper function: Get Name from Owners by OwnersId
 -- Used for join-free cross-table references in aggregations
@@ -453,6 +604,99 @@ RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM enum_versions WHERE enum = (SELECT NULLIF(name, '') FROM enums WHERE enums_id = p_enums_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
+-- calc_enums_draft_version_count
+-- Field: Enums.DraftVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enums_draft_version_count(p_enums_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enum_versions WHERE enum = (SELECT NULLIF(name, '') FROM enums WHERE enums_id = p_enums_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enums_active_version_count
+-- Field: Enums.ActiveVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enums_active_version_count(p_enums_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enum_versions WHERE enum = (SELECT NULLIF(name, '') FROM enums WHERE enums_id = p_enums_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enums_deprecated_version_count
+-- Field: Enums.DeprecatedVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enums_deprecated_version_count(p_enums_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enum_versions WHERE enum = (SELECT NULLIF(name, '') FROM enums WHERE enums_id = p_enums_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enums_has_drafts
+-- Field: Enums.HasDrafts
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enums_has_drafts(p_enums_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_enums_draft_version_count(p_enums_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enums_first_created
+-- Field: Enums.FirstCreated
+-- Type: aggregation | DataType: datetime | Returns: TIMESTAMPTZ
+
+
+CREATE OR REPLACE FUNCTION calc_enums_first_created(p_enums_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT ((SELECT MIN(created) FROM enum_versions WHERE enum = (SELECT NULLIF(name, '') FROM enums WHERE enums_id = p_enums_id)))::timestamptz;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enums_last_modified
+-- Field: Enums.LastModified
+-- Type: aggregation | DataType: datetime | Returns: TIMESTAMPTZ
+
+
+CREATE OR REPLACE FUNCTION calc_enums_last_modified(p_enums_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT ((SELECT MAX(created) FROM enum_versions WHERE enum = (SELECT NULLIF(name, '') FROM enums WHERE enums_id = p_enums_id)))::timestamptz;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_owner_name
+-- Field: EnumVersions.OwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Owner from related Enums
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_owner_name(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT owner::text FROM enums WHERE enums_id = (SELECT enum FROM enum_versions WHERE enum_versions_id = p_enum_versions_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_word_is_retired
+-- Field: EnumVersions.WordIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsRetired from related Enums
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_word_is_retired(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_enums_is_retired((SELECT enum FROM enum_versions WHERE enum_versions_id = p_enum_versions_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_word_description
+-- Field: EnumVersions.WordDescription
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Description from related Enums
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_word_description(p_enum_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description::text FROM enums WHERE enums_id = (SELECT enum FROM enum_versions WHERE enum_versions_id = p_enum_versions_id));
+$$ LANGUAGE sql STABLE;
+
 -- calc_enum_versions_name
 -- Field: EnumVersions.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -663,6 +907,16 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (calc_enum_versions_outgoing_upgrade_count(p_enum_versions_id))::NUMERIC > 0 THEN FALSE ELSE TRUE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_enum_versions_is_promotable
+-- Field: EnumVersions.IsPromotable
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_is_promotable(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_enum_versions_is_draft(p_enum_versions_id) AND (calc_enum_versions_value_count(p_enum_versions_id))::NUMERIC > 0) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- get_enum_versions_version
 -- Helper function: Get Version from EnumVersions by EnumVersionsId
 -- Used for join-free cross-table references in aggregations
@@ -733,6 +987,33 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION get_enum_versions_raw_json(p_enum_versions_id TEXT)
 RETURNS TEXT AS $$
   SELECT (SELECT raw_json FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_last_modified
+-- Helper function: Get LastModified from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_last_modified(p_enum_versions_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT (SELECT last_modified FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_promoted_at
+-- Helper function: Get PromotedAt from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_promoted_at(p_enum_versions_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT (SELECT promoted_at FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enum_versions_deprecated_at
+-- Helper function: Get DeprecatedAt from EnumVersions by EnumVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enum_versions_deprecated_at(p_enum_versions_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT (SELECT deprecated_at FROM enum_versions WHERE enum_versions_id = p_enum_versions_id);
 $$ LANGUAGE sql STABLE;
 
 -- calc_enum_values_name
@@ -836,6 +1117,99 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_types_version_count(p_types_id TEXT)
 RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM type_versions WHERE type = (SELECT NULLIF(name, '') FROM types WHERE types_id = p_types_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_types_draft_version_count
+-- Field: Types.DraftVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_types_draft_version_count(p_types_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_versions WHERE type = (SELECT NULLIF(name, '') FROM types WHERE types_id = p_types_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_types_active_version_count
+-- Field: Types.ActiveVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_types_active_version_count(p_types_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_versions WHERE type = (SELECT NULLIF(name, '') FROM types WHERE types_id = p_types_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_types_deprecated_version_count
+-- Field: Types.DeprecatedVersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_types_deprecated_version_count(p_types_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_versions WHERE type = (SELECT NULLIF(name, '') FROM types WHERE types_id = p_types_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_types_has_drafts
+-- Field: Types.HasDrafts
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_types_has_drafts(p_types_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_types_draft_version_count(p_types_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_types_first_created
+-- Field: Types.FirstCreated
+-- Type: aggregation | DataType: datetime | Returns: TIMESTAMPTZ
+
+
+CREATE OR REPLACE FUNCTION calc_types_first_created(p_types_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT ((SELECT MIN(created) FROM type_versions WHERE type = (SELECT NULLIF(name, '') FROM types WHERE types_id = p_types_id)))::timestamptz;
+$$ LANGUAGE sql STABLE;
+
+-- calc_types_last_modified
+-- Field: Types.LastModified
+-- Type: aggregation | DataType: datetime | Returns: TIMESTAMPTZ
+
+
+CREATE OR REPLACE FUNCTION calc_types_last_modified(p_types_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT ((SELECT MAX(created) FROM type_versions WHERE type = (SELECT NULLIF(name, '') FROM types WHERE types_id = p_types_id)))::timestamptz;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_owner_name
+-- Field: TypeVersions.OwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Owner from related Types
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_owner_name(p_type_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT owner::text FROM types WHERE types_id = (SELECT type FROM type_versions WHERE type_versions_id = p_type_versions_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_word_title
+-- Field: TypeVersions.WordTitle
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Title from related Types
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_word_title(p_type_versions_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT title::text FROM types WHERE types_id = (SELECT type FROM type_versions WHERE type_versions_id = p_type_versions_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_word_is_retired
+-- Field: TypeVersions.WordIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsRetired from related Types
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_word_is_retired(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_types_is_retired((SELECT type FROM type_versions WHERE type_versions_id = p_type_versions_id));
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_versions_name
@@ -1048,6 +1422,113 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (calc_type_versions_originated_helper_count(p_type_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_versions_stale_reference_count
+-- Field: TypeVersions.StaleReferenceCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_stale_reference_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_attributes WHERE type_version = calc_type_versions_name(p_type_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_has_stale_references
+-- Field: TypeVersions.HasStaleReferences
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_has_stale_references(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_versions_stale_reference_count(p_type_versions_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_is_promotable
+-- Field: TypeVersions.IsPromotable
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_is_promotable(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_versions_is_draft(p_type_versions_id) AND NOT (calc_type_versions_has_stale_references(p_type_versions_id)) AND (calc_type_versions_attribute_count(p_type_versions_id))::NUMERIC > 0) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_format_is_retired
+-- Field: TypeAttributes.RefFormatIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsRetired from related Formats
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_format_is_retired(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_formats_is_retired((SELECT format_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_enum_is_active
+-- Field: TypeAttributes.RefEnumIsActive
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsActive from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_enum_is_active(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_enum_versions_is_active((SELECT enum_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_enum_is_draft
+-- Field: TypeAttributes.RefEnumIsDraft
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsDraft from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_enum_is_draft(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_enum_versions_is_draft((SELECT enum_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_enum_word_is_retired
+-- Field: TypeAttributes.RefEnumWordIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: WordIsRetired from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_enum_word_is_retired(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_enum_versions_word_is_retired((SELECT enum_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_subtype_is_active
+-- Field: TypeAttributes.RefSubtypeIsActive
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsActive from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_subtype_is_active(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_is_active((SELECT sub_type_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_subtype_is_draft
+-- Field: TypeAttributes.RefSubtypeIsDraft
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsDraft from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_subtype_is_draft(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_is_draft((SELECT sub_type_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_subtype_word_is_retired
+-- Field: TypeAttributes.RefSubtypeWordIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: WordIsRetired from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_subtype_word_is_retired(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_word_is_retired((SELECT sub_type_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id));
+$$ LANGUAGE sql STABLE;
+
 -- get_type_versions_version
 -- Helper function: Get Version from TypeVersions by TypeVersionsId
 -- Used for join-free cross-table references in aggregations
@@ -1118,6 +1599,33 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION get_type_versions_raw_json(p_type_versions_id TEXT)
 RETURNS TEXT AS $$
   SELECT (SELECT raw_json FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_last_modified
+-- Helper function: Get LastModified from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_last_modified(p_type_versions_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT (SELECT last_modified FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_promoted_at
+-- Helper function: Get PromotedAt from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_promoted_at(p_type_versions_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT (SELECT promoted_at FROM type_versions WHERE type_versions_id = p_type_versions_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_type_versions_deprecated_at
+-- Helper function: Get DeprecatedAt from TypeVersions by TypeVersionsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_type_versions_deprecated_at(p_type_versions_id TEXT)
+RETURNS TIMESTAMPTZ AS $$
+  SELECT (SELECT deprecated_at FROM type_versions WHERE type_versions_id = p_type_versions_id);
 $$ LANGUAGE sql STABLE;
 
 -- get_type_helpers_name
@@ -1205,6 +1713,27 @@ RETURNS TEXT AS $$
   SELECT (CASE WHEN (SELECT NULLIF(format_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN ('format')::text ELSE (CASE WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN ('enum')::text ELSE (CASE WHEN (SELECT NULLIF(sub_type_version_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN ('subtype')::text ELSE (CASE WHEN (SELECT NULLIF(helper_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN ('helper')::text ELSE ('primitive')::text END)::text END)::text END)::text END)::text;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_attributes_ref_is_stale
+-- Field: TypeAttributes.RefIsStale
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_is_stale(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_attributes_ref_format_is_retired(p_type_attributes_id) = TRUE OR calc_type_attributes_ref_enum_is_draft(p_type_attributes_id) = TRUE OR calc_type_attributes_ref_enum_word_is_retired(p_type_attributes_id) = TRUE OR calc_type_attributes_ref_subtype_is_draft(p_type_attributes_id) = TRUE OR calc_type_attributes_ref_subtype_word_is_retired(p_type_attributes_id) = TRUE) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_examples_owner_name
+-- Field: TypeExamples.OwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: OwnerName from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_examples_owner_name(p_type_examples_id TEXT)
+RETURNS TEXT AS $$
+  SELECT calc_type_versions_owner_name((SELECT type_version FROM type_examples WHERE type_examples_id = p_type_examples_id));
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_examples_name
 -- Field: TypeExamples.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -1213,6 +1742,28 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_examples_name(p_type_examples_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(type_version, '') FROM type_examples WHERE type_examples_id = p_type_examples_id), '[', (SELECT idx FROM type_examples WHERE type_examples_id = p_type_examples_id), ']'))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_axioms_owner_name
+-- Field: TypeAxioms.OwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: OwnerName from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_axioms_owner_name(p_type_axioms_id TEXT)
+RETURNS TEXT AS $$
+  SELECT calc_type_versions_owner_name((SELECT type_version FROM type_axioms WHERE type_axioms_id = p_type_axioms_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_axioms_word_is_retired
+-- Field: TypeAxioms.WordIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: WordIsRetired from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_axioms_word_is_retired(p_type_axioms_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_word_is_retired((SELECT type_version FROM type_axioms WHERE type_axioms_id = p_type_axioms_id));
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_axioms_name
@@ -1233,6 +1784,72 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_axioms_has_statement(p_type_axioms_id TEXT)
 RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(statement, '') FROM type_axioms WHERE type_axioms_id = p_type_axioms_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_origin_owner_name
+-- Field: TypeHelpers.OriginOwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: OwnerName from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_origin_owner_name(p_type_helpers_id TEXT)
+RETURNS TEXT AS $$
+  SELECT calc_type_versions_owner_name((SELECT origin_type_version FROM type_helpers WHERE type_helpers_id = p_type_helpers_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_origin_type_name
+-- Field: TypeHelpers.OriginTypeName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Type from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_origin_type_name(p_type_helpers_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT type::text FROM type_versions WHERE type_versions_id = (SELECT origin_type_version FROM type_helpers WHERE type_helpers_id = p_type_helpers_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_is_origin_draft
+-- Field: TypeHelpers.IsOriginDraft
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsDraft from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_is_origin_draft(p_type_helpers_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_is_draft((SELECT origin_type_version FROM type_helpers WHERE type_helpers_id = p_type_helpers_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_is_origin_active
+-- Field: TypeHelpers.IsOriginActive
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsActive from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_is_origin_active(p_type_helpers_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_is_active((SELECT origin_type_version FROM type_helpers WHERE type_helpers_id = p_type_helpers_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_is_origin_deprecated
+-- Field: TypeHelpers.IsOriginDeprecated
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsDeprecated from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_is_origin_deprecated(p_type_helpers_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_is_deprecated((SELECT origin_type_version FROM type_helpers WHERE type_helpers_id = p_type_helpers_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_origin_word_is_retired
+-- Field: TypeHelpers.OriginWordIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: WordIsRetired from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_origin_word_is_retired(p_type_helpers_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_word_is_retired((SELECT origin_type_version FROM type_helpers WHERE type_helpers_id = p_type_helpers_id));
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_helpers_attribute_count
@@ -1305,6 +1922,61 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (calc_type_helpers_total_usage_count(p_type_helpers_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_helper_attributes_ref_format_is_retired
+-- Field: TypeHelperAttributes.RefFormatIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsRetired from related Formats
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_format_is_retired(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_formats_is_retired((SELECT format_ref FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_enum_is_draft
+-- Field: TypeHelperAttributes.RefEnumIsDraft
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsDraft from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_enum_is_draft(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_enum_versions_is_draft((SELECT enum_version_ref FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_enum_word_is_retired
+-- Field: TypeHelperAttributes.RefEnumWordIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: WordIsRetired from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_enum_word_is_retired(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_enum_versions_word_is_retired((SELECT enum_version_ref FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_subtype_is_draft
+-- Field: TypeHelperAttributes.RefSubtypeIsDraft
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsDraft from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_subtype_is_draft(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_is_draft((SELECT sub_type_version_ref FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_subtype_word_is_retired
+-- Field: TypeHelperAttributes.RefSubtypeWordIsRetired
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: WordIsRetired from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_subtype_word_is_retired(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_type_versions_word_is_retired((SELECT sub_type_version_ref FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id));
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_helper_attributes_name
 -- Field: TypeHelperAttributes.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -1333,6 +2005,82 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_kind(p_type_helper_attributes_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CASE WHEN (SELECT NULLIF(format_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('format')::text ELSE (CASE WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('enum')::text ELSE (CASE WHEN (SELECT NULLIF(sub_type_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('subtype')::text ELSE (CASE WHEN (SELECT NULLIF(helper_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('helper')::text ELSE ('primitive')::text END)::text END)::text END)::text END)::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_is_stale
+-- Field: TypeHelperAttributes.RefIsStale
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_is_stale(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_helper_attributes_ref_format_is_retired(p_type_helper_attributes_id) = TRUE OR calc_type_helper_attributes_ref_enum_is_draft(p_type_helper_attributes_id) = TRUE OR calc_type_helper_attributes_ref_enum_word_is_retired(p_type_helper_attributes_id) = TRUE OR calc_type_helper_attributes_ref_subtype_is_draft(p_type_helper_attributes_id) = TRUE OR calc_type_helper_attributes_ref_subtype_word_is_retired(p_type_helper_attributes_id) = TRUE) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_from_owner_name
+-- Field: Projections.FromOwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: OwnerName from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_projections_from_owner_name(p_projections_id TEXT)
+RETURNS TEXT AS $$
+  SELECT calc_enum_versions_owner_name((SELECT from_enum_version FROM projections WHERE projections_id = p_projections_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_to_owner_name
+-- Field: Projections.ToOwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: OwnerName from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_projections_to_owner_name(p_projections_id TEXT)
+RETURNS TEXT AS $$
+  SELECT calc_enum_versions_owner_name((SELECT to_enum_version FROM projections WHERE projections_id = p_projections_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_from_enum_name
+-- Field: Projections.FromEnumName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Enum from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_projections_from_enum_name(p_projections_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT enum::text FROM enum_versions WHERE enum_versions_id = (SELECT from_enum_version FROM projections WHERE projections_id = p_projections_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_to_enum_name
+-- Field: Projections.ToEnumName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Enum from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_projections_to_enum_name(p_projections_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT enum::text FROM enum_versions WHERE enum_versions_id = (SELECT to_enum_version FROM projections WHERE projections_id = p_projections_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_from_is_draft
+-- Field: Projections.FromIsDraft
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsDraft from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_projections_from_is_draft(p_projections_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_enum_versions_is_draft((SELECT from_enum_version FROM projections WHERE projections_id = p_projections_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_to_is_draft
+-- Field: Projections.ToIsDraft
+-- Type: lookup | DataType: boolean | Returns: BOOLEAN
+-- Lookup: IsDraft from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_projections_to_is_draft(p_projections_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT calc_enum_versions_is_draft((SELECT to_enum_version FROM projections WHERE projections_id = p_projections_id));
 $$ LANGUAGE sql STABLE;
 
 -- calc_projections_mapping_count
@@ -1383,6 +2131,36 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_projections_is_used_in_upgrades(p_projections_id TEXT)
 RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (calc_projections_type_upgrade_op_usage_count(p_projections_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_has_draft_endpoints
+-- Field: Projections.HasDraftEndpoints
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_projections_has_draft_endpoints(p_projections_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_projections_from_is_draft(p_projections_id) = TRUE OR calc_projections_to_is_draft(p_projections_id) = TRUE) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_is_cross_owner
+-- Field: Projections.IsCrossOwner
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_projections_is_cross_owner(p_projections_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN calc_projections_from_owner_name(p_projections_id) <> calc_projections_to_owner_name(p_projections_id) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_is_cross_enum
+-- Field: Projections.IsCrossEnum
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_projections_is_cross_enum(p_projections_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN calc_projections_from_enum_name(p_projections_id) <> calc_projections_to_enum_name(p_projections_id) THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- get_projections_name
@@ -1442,6 +2220,61 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(from_symbol, '') FROM projection_mappings WHERE projection_mappings_id = p_projection_mappings_id) = (SELECT NULLIF(to_symbol, '') FROM projection_mappings WHERE projection_mappings_id = p_projection_mappings_id) THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_upgrades_from_word
+-- Field: TypeUpgrades.FromWord
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Type from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_from_word(p_type_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT type::text FROM type_versions WHERE type_versions_id = (SELECT from_type_version FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrades_to_word
+-- Field: TypeUpgrades.ToWord
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Type from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_to_word(p_type_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT type::text FROM type_versions WHERE type_versions_id = (SELECT to_type_version FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrades_from_version
+-- Field: TypeUpgrades.FromVersion
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Version from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_from_version(p_type_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT version::text FROM type_versions WHERE type_versions_id = (SELECT from_type_version FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrades_to_version
+-- Field: TypeUpgrades.ToVersion
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Version from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_to_version(p_type_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT version::text FROM type_versions WHERE type_versions_id = (SELECT to_type_version FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrades_owner_name
+-- Field: TypeUpgrades.OwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: OwnerName from related TypeVersions
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_owner_name(p_type_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT calc_type_versions_owner_name((SELECT from_type_version FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_upgrades_name
 -- Field: TypeUpgrades.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -1480,6 +2313,16 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_upgrades_is_decomposed(p_type_upgrades_id TEXT)
 RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id) IS NOT NULL THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrades_is_cross_word
+-- Field: TypeUpgrades.IsCrossWord
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_is_cross_word(p_type_upgrades_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN calc_type_upgrades_from_word(p_type_upgrades_id) <> calc_type_upgrades_to_word(p_type_upgrades_id) THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- get_type_upgrades_description
@@ -1540,6 +2383,61 @@ RETURNS TEXT AS $$
   SELECT (CASE WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id) IS NOT NULL THEN ('enum')::text ELSE (CASE WHEN (SELECT NULLIF(projection_ref, '') FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id) IS NOT NULL THEN ('projection')::text ELSE ('none')::text END)::text END)::text;
 $$ LANGUAGE sql STABLE;
 
+-- calc_enum_upgrades_from_word
+-- Field: EnumUpgrades.FromWord
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Enum from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_from_word(p_enum_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT enum::text FROM enum_versions WHERE enum_versions_id = (SELECT from_enum_version FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrades_to_word
+-- Field: EnumUpgrades.ToWord
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Enum from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_to_word(p_enum_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT enum::text FROM enum_versions WHERE enum_versions_id = (SELECT to_enum_version FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrades_from_version
+-- Field: EnumUpgrades.FromVersion
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Version from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_from_version(p_enum_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT version::text FROM enum_versions WHERE enum_versions_id = (SELECT from_enum_version FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrades_to_version
+-- Field: EnumUpgrades.ToVersion
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: Version from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_to_version(p_enum_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT version::text FROM enum_versions WHERE enum_versions_id = (SELECT to_enum_version FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrades_owner_name
+-- Field: EnumUpgrades.OwnerName
+-- Type: lookup | DataType: string | Returns: TEXT
+-- Lookup: OwnerName from related EnumVersions
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_owner_name(p_enum_upgrades_id TEXT)
+RETURNS TEXT AS $$
+  SELECT calc_enum_versions_owner_name((SELECT from_enum_version FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id));
+$$ LANGUAGE sql STABLE;
+
 -- calc_enum_upgrades_name
 -- Field: EnumUpgrades.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -1578,6 +2476,16 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_enum_upgrades_is_decomposed(p_enum_upgrades_id TEXT)
 RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id) IS NOT NULL THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrades_is_cross_word
+-- Field: EnumUpgrades.IsCrossWord
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_is_cross_word(p_enum_upgrades_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN calc_enum_upgrades_from_word(p_enum_upgrades_id) <> calc_enum_upgrades_to_word(p_enum_upgrades_id) THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- get_enum_upgrades_description
