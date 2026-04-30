@@ -2,25 +2,25 @@
 
 **Schema:** `public`
 **Database:** `demo`
-**Timestamp:** 2026-04-30 06:44:53 UTC
+**Timestamp:** 2026-04-30 06:52:34 UTC
 
 ## Parsing Rulebook
 
 Found **19** tables in rulebook
 
-  - **Owners** (9 fields, 1 records)
-  - **Formats** (11 fields, 0 records)
-  - **FormatExamples** (6 fields, 0 records)
-  - **Enums** (4 fields, 0 records)
-  - **EnumVersions** (9 fields, 0 records)
-  - **EnumValues** (5 fields, 0 records)
-  - **Types** (8 fields, 0 records)
-  - **TypeVersions** (10 fields, 0 records)
-  - **TypeAttributes** (13 fields, 0 records)
-  - **TypeExamples** (4 fields, 0 records)
-  - **TypeAxioms** (5 fields, 0 records)
-  - **TypeHelpers** (6 fields, 0 records)
-  - **TypeHelperAttributes** (13 fields, 0 records)
+  - **Owners** (9 fields, 6 records)
+  - **Formats** (11 fields, 11 records)
+  - **FormatExamples** (6 fields, 82 records)
+  - **Enums** (4 fields, 32 records)
+  - **EnumVersions** (9 fields, 38 records)
+  - **EnumValues** (5 fields, 331 records)
+  - **Types** (8 fields, 46 records)
+  - **TypeVersions** (10 fields, 68 records)
+  - **TypeAttributes** (13 fields, 570 records)
+  - **TypeExamples** (4 fields, 35 records)
+  - **TypeAxioms** (5 fields, 109 records)
+  - **TypeHelpers** (6 fields, 4 records)
+  - **TypeHelperAttributes** (13 fields, 12 records)
   - **Projections** (5 fields, 0 records)
   - **ProjectionMappings** (5 fields, 0 records)
   - **TypeUpgrades** (5 fields, 0 records)
@@ -32,7 +32,7 @@ Generated **19** table definitions with **96** raw fields
 Generated **0** calculation functions
 Generated **19** views
 Enabled RLS on **19** tables
-Generated insert statements for **1** records
+Generated insert statements for **1344** records
 ## Script Generation Complete
 
 Generated files:

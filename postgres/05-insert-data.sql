@@ -10,3 +10,5512 @@
 INSERT INTO owners (name, owner_type, contact, website, github, organization, description, support_policy, license)
 VALUES ('gridworks-energy', 'organization', 'gridworks@gridworks-consulting.com', 'https://gridworks.readthedocs.io', 'https://github.com/thegridelectric', 'GridWorks Energy Consulting LLC', 'Transactive energy infrastructure and thermal storage systems', 'Community support via GitHub issues', 'MIT');
 
+INSERT INTO owners (name, owner_type, contact, website, github, organization, description, support_policy, license)
+VALUES ('jessica-millar', 'individual', 'jmillar@gridworks-consulting.com', 'https://gridworks-consulting.com', NULL, 'GridWorks Energy Consulting LLC', 'Sema co-designer and GridWorks SCADA architect', NULL, NULL);
+
+INSERT INTO owners (name, owner_type, contact, website, github, organization, description, support_policy, license)
+VALUES ('joe-strommen', 'individual', 'joe@2040energy.com', 'https://www.2040energy.com/', NULL, '2040 Energy', 'Developer and systems designer focused on modular software architecture, contributing to GridWorks web app, data backend, and electronics boards; also building a heat pump company', NULL, NULL);
+
+INSERT INTO owners (name, owner_type, contact, website, github, organization, description, support_policy, license)
+VALUES ('microerapower', 'organization', 'smb@microerapower.com', 'https://microerapower.com', NULL, 'MicroEra Power', 'Tunable phase change materials for transactive thermal storage solutions', NULL, NULL);
+
+INSERT INTO owners (name, owner_type, contact, website, github, organization, description, support_policy, license)
+VALUES ('smoothstone-computing', 'organization', 'anschweitzer@gmail.com', 'https://github.com/SmoothStoneComputing', 'https://github.com/SmoothStoneComputing', 'Smooth Stone Computing', 'Software engineering and systems design; contributor to early Sema design', NULL, NULL);
+
+INSERT INTO owners (name, owner_type, contact, website, github, organization, description, support_policy, license)
+VALUES ('thomas-defauw', 'individual', 'tdefauw@gridworks-consulting.com', NULL, NULL, 'GridWorks Energy Consulting LLC', 'Software developer and data engineer contributing to GridWorks SCADA, FLOs, and Local Control systems across backend, telemetry, and analytics layers', NULL, NULL);
+
+-- ----------------------------------------------------------------------------
+-- Formats: JSON-Schema string formats with regex patterns and length bounds. Sourced from definitions/formats/*.yaml. Formats are not versioned.
+-- ----------------------------------------------------------------------------
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('handle.name', 'gridworks-energy', 'https://schemas.electricity.works/formats/handle.name', 'handle.name', 'Dot-separated hierarchical identifier composed of lowercase segments.
+Each segment must begin with a lowercase alphabetic character and may
+contain lowercase alphanumeric characters with optional internal
+hyphen-separated words. Hierarchy is expressed from left to right,
+with the most significant component appearing first.
+', '^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)*$', NULL, NULL, NULL, '2024-09-02T15:00:00Z', NULL);
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('left.right.dot', 'gridworks-energy', 'https://schemas.electricity.works/formats/left.right.dot', 'left.right.dot', 'Dot-separated hierarchical identifier composed of lowercase
+alphanumeric segments. The first segment must begin with a
+lowercase alphabetic character. Subsequent segments may begin
+with either a lowercase letter or digit. Hierarchy is expressed
+from left to right, with the most significant component appearing first.
+', '^[a-z][a-z0-9]*(\.[a-z0-9]+)*$', 1, NULL, NULL, '2024-09-02T15:00:00Z', NULL);
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('market.slot.name', 'gridworks-energy', 'https://schemas.electricity.works/formats/market.slot.name', 'market.slot.name', 'Dot-separated identifier for a specific market slot.
+The first segment identifies the market commodity class and MUST be one of `e`, `r`, or `d`. The second segment identifies the market type. The final segment is a 10-digit Unix timestamp in seconds giving the slot start. The middle segments identify the market maker alias and must satisfy the left-right-dot naming rules.
+The slot start timestamp MUST align to the duration required by the market type.
+', '^[erd]\.[a-z0-9]+(?:\.[a-z0-9]+)*(?:\.[a-z0-9]+)+\.[0-9]{10}$', NULL, NULL, NULL, '2024-12-05T19:25:00Z', NULL);
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('non.negative.int', 'gridworks-energy', 'https://schemas.electricity.works/formats/non.negative.int', 'non.negative.int', 'Non-negative integer validated non-coercively at the serialized boundary. The serialized value must already be an integer greater than or equal to 0. Strings such as "0" and numeric floats such as 0.0 are not accepted.
+', NULL, NULL, NULL, NULL, '2024-09-02T15:00:00Z', '{"minimum": 0}');
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('positive.int', 'gridworks-energy', 'https://schemas.electricity.works/formats/positive.int', 'positive.int', 'Positive integer validated non-coercively at the serialized boundary. The serialized value must already be an integer greater than 0. Strings such as "1" and numeric floats such as 1.0 are not accepted.
+', NULL, NULL, NULL, NULL, '2024-09-02T15:00:00Z', '{"minimum": 1}');
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('spaceheat.name', 'gridworks-energy', 'https://schemas.electricity.works/formats/spaceheat.name', 'spaceheat.name', 'Single-segment identifier composed of lowercase alphanumeric
+characters with optional internal hyphen-separated words.
+Must begin with a lowercase alphabetic character.
+', '^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$', 1, 64, NULL, '2024-09-02T15:00:00Z', NULL);
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('utc.iso8601.millis', 'gridworks-energy', 'https://schemas.electricity.works/formats/utc.iso8601.millis', 'utc.iso8601.millis', 'UTC timestamp in ISO 8601 format with exactly three digits of fractional seconds (millisecond precision) and a ''Z'' suffix.
+', '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$', NULL, NULL, NULL, '2026-02-22T16:43:00Z', NULL);
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('utc.iso8601.seconds', 'gridworks-energy', 'https://schemas.electricity.works/formats/utc.iso8601.seconds', 'utc.iso8601.seconds', 'UTC timestamp in ISO 8601 format with second precision (no fractional seconds) and a ''Z'' suffix.
+', '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$', NULL, NULL, NULL, '2026-02-22T16:43:00Z', NULL);
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('utc.milliseconds', 'gridworks-energy', 'https://schemas.electricity.works/formats/utc.milliseconds', 'utc.milliseconds', 'UTC timestamp expressed as whole milliseconds since the Unix epoch
+(1970-01-01T00:00:00Z). Value is restricted to the range
+2000-01-01T00:00:00Z through 3000-01-01T00:00:00Z.
+', NULL, NULL, NULL, NULL, '2024-09-02T15:00:00Z', '{"minimum": 946684800000, "maximum": 32503680000000}');
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('utc.seconds', 'gridworks-energy', 'https://schemas.electricity.works/formats/utc.seconds', 'utc.seconds', 'UTC timestamp expressed as whole seconds since the Unix epoch
+(1970-01-01T00:00:00Z). Value is restricted to the range
+2000-01-01T00:00:00Z through 3000-01-01T00:00:00Z.
+', NULL, NULL, NULL, NULL, '2024-09-02T15:00:00Z', '{"minimum": 946684800, "maximum": 32503680000}');
+
+INSERT INTO formats (name, owner, schema_url, title, description, pattern, min_length, max_length, json_schema_format, created, raw_json)
+VALUES ('uuid4.str', 'gridworks-energy', 'https://schemas.electricity.works/formats/uuid4.str', 'uuid4.str', 'Canonical lowercase UUID version 4 string in standard hyphenated 8-4-4-4-12 format. Enforces version (4) and variant (RFC 4122) and requires lowercase for consistency.
+', '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', 36, 36, NULL, '2024-09-02T15:00:00Z', NULL);
+
+-- ----------------------------------------------------------------------------
+-- FormatExamples: Per-format examples and counterexamples (with order preserved). Sourced from format YAML 'examples' and 'counterexamples' arrays.
+-- ----------------------------------------------------------------------------
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 0, FALSE, 'main-tank', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 1, FALSE, 'sensor-1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 2, FALSE, 'hp-odu.pump-relay', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 0, TRUE, '', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 1, TRUE, '1st-floor', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 2, TRUE, 'Main-Tank', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 3, TRUE, 'sensor_1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 4, TRUE, 'sensor 1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 5, TRUE, 'tank.', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 6, TRUE, '.tank', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 7, TRUE, 'a..b', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 8, TRUE, 'a.-b', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 9, TRUE, 'a.b-', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 10, TRUE, 'a--b', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 11, TRUE, 'a.b--c', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 12, TRUE, 'a.1b', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 13, TRUE, 'a.b.c3-', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('handle.name', 14, TRUE, 'a.b.c#', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('left.right.dot', 0, FALSE, 'beech.1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('left.right.dot', 1, FALSE, 'hw1.isone.me.versant.keene.beech', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('left.right.dot', 0, TRUE, 'scada.multipurpose-sensor', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('left.right.dot', 1, TRUE, '2be.or.not', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('left.right.dot', 2, TRUE, 'a..b', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('left.right.dot', 3, TRUE, '', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('market.slot.name', 0, FALSE, 'e.rt60gate5.d1.isone.ver.keene.1673539200', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('non.negative.int', 0, FALSE, '0', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('non.negative.int', 1, FALSE, '1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('non.negative.int', 2, FALSE, '17', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('non.negative.int', 0, TRUE, '-1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('non.negative.int', 1, TRUE, '0.0', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('non.negative.int', 2, TRUE, '1.0', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('non.negative.int', 3, TRUE, '0', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('positive.int', 0, FALSE, '1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('positive.int', 1, FALSE, '7', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('positive.int', 2, FALSE, '432', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('positive.int', 0, TRUE, '0', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('positive.int', 1, TRUE, '-1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('positive.int', 2, TRUE, '1.0', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('positive.int', 3, TRUE, '1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('spaceheat.name', 0, FALSE, 'scada', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('spaceheat.name', 1, FALSE, 'tank1-depth2', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('spaceheat.name', 0, TRUE, 'Tank1', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('spaceheat.name', 1, TRUE, '1st-tank', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('spaceheat.name', 2, TRUE, 'tank_depth', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('spaceheat.name', 3, TRUE, 'tank.', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('spaceheat.name', 4, TRUE, 'tank--depth', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('spaceheat.name', 5, TRUE, '-tank', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('spaceheat.name', 6, TRUE, 'tank-', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.millis', 0, FALSE, '2025-02-26T00:00:00.000Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.millis', 1, FALSE, '2025-02-26T00:01:23.456Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.millis', 0, TRUE, '2025-02-26T00:00:00Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.millis', 1, TRUE, '2025-02-26T00:00:00.00Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.millis', 2, TRUE, '2025-02-26T00:00:00.1234Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.millis', 3, TRUE, '2025-02-26T00:00:00.123+00:00', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.seconds', 0, FALSE, '2025-02-26T00:00:00Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.seconds', 1, FALSE, '2025-02-26T00:01:23Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.seconds', 0, TRUE, '2025-02-26T00:00:00.000Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.seconds', 1, TRUE, '2025-02-26T00:00:00.00Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.seconds', 2, TRUE, '2025-02-26T00:00:00.123Z', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.iso8601.seconds', 3, TRUE, '2025-02-26T00:00:00+00:00', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.milliseconds', 0, FALSE, '1609459200000', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.milliseconds', 1, FALSE, '1609459200500', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.milliseconds', 2, FALSE, '1735689600123', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.milliseconds', 0, TRUE, '0', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.milliseconds', 1, TRUE, '946684799999', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.milliseconds', 2, TRUE, '32503680000001', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.milliseconds', 3, TRUE, '1609459200000.5', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.seconds', 0, FALSE, '1609459200', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.seconds', 1, FALSE, '1735689600', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.seconds', 0, TRUE, '0', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.seconds', 1, TRUE, '946684799', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.seconds', 2, TRUE, '32503680001', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('utc.seconds', 3, TRUE, '1609459200.5', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('uuid4.str', 0, FALSE, '9cff2689-eadc-4577-94ea-6d86d0d23e9e', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('uuid4.str', 1, FALSE, '4e5a6b1c-2d3e-4f5a-8b9c-1d2e3f4a5b6c', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('uuid4.str', 2, FALSE, 'f47ac10b-58cc-4372-a567-0e02b2c3d479', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('uuid4.str', 0, TRUE, 'not-a-uuid', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('uuid4.str', 1, TRUE, '6ba7b810-9dad-11d1-80b4-00c04fd430c', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('uuid4.str', 2, TRUE, '6ba7b810-9dad-11d1-80b4-00c04fd430c88', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('uuid4.str', 3, TRUE, '6ba7b810-9dad-21d1-80b4-00c04fd430c8', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('uuid4.str', 4, TRUE, '6ba7b810-9dad-11d1-70b4-00c04fd430c8', NULL);
+
+INSERT INTO format_examples (format, idx, is_counter, value, description)
+VALUES ('uuid4.str', 5, TRUE, '6BA7B810-9DAD-11D1-80B4-00C04FD430C8', NULL);
+
+-- ----------------------------------------------------------------------------
+-- Enums: Top-level enum definitions (name-level). Versioned enums have multiple EnumVersions; literal enums have one. Sourced from definitions/registry.yaml + definitions/enums/.
+-- ----------------------------------------------------------------------------
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('base.g.node.class', 'gridworks-energy', 'versioned', 'Universal physical ontology classification for Grid Nodes');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('buffer.regulation.mode', 'gridworks-energy', 'literal', 'Operating mode that governs how tightly the House0 buffer tank is regulated.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('change.heatcall.source', 'gridworks-energy', 'literal', 'Command enum for switching heat-call control authority between wall thermostat and SCADA.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('change.relay.state', 'gridworks-energy', 'literal', 'FSM events for changing a simple relay between open and closed states.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('fis.authorization.decision', 'jessica-millar', 'versioned', 'Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('fis.authorization.reason', 'jessica-millar', 'versioned', 'Structured reason describing why the Fleet Index Service (FIS) produced a specific authorization decision.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('fsm.report.type', 'gridworks-energy', 'literal', 'Enumeration of atomic FSM report categories.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('g.node.instance.status', 'gridworks-energy', 'versioned', 'Lifecycle state of a runtime instance tracked by FIS');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('g.node.instance.transport', 'gridworks-energy', 'versioned', 'Transport protocol used by a runtime instance');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('g.node.status', 'gridworks-energy', 'versioned', 'Lifecycle status of a Grid Node within the registry');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('gpm.from.hz.method', 'gridworks-energy', 'versioned', 'Method used to convert measured pulse frequency into gallons per minute.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('gw.g.node.class', 'gridworks-energy', 'versioned', 'GridWorks-specific functional classification for GNodes');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('gw1.actor.class', 'gridworks-energy', 'versioned', 'Classification of actors in the GridWorks SCADA system.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('gw1.emission.method', 'gridworks-energy', 'versioned', 'Method by which a derived or computed channel emits values.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('gw1.quantity', 'gridworks-energy', 'versioned', 'High-level physical or semantic quantity classification for telemetry values.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('gw1.seasonal.storage.mode', 'gridworks-energy', 'versioned', 'Seasonal storage operating mode for layouts that distinguish all-tank from buffer-only operation.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('gw1.system.mode', 'gridworks-energy', 'versioned', 'System operational mode for HVAC control.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('gw1.heat.call.interpretation', 'gridworks-energy', 'versioned', 'Defines how a source telemetry channel is interpreted to determine whether a zone is calling for heat.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('gw1.unit', 'gridworks-energy', 'versioned', 'Measurement-unit vocabulary used for derived channels.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('heatcall.source', 'gridworks-energy', 'literal', 'Source currently responsible for issuing a zone heat call.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('hz.calc.method', 'gridworks-energy', 'versioned', 'Method used to estimate signal frequency from pulse timing data.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('market.price.unit', 'gridworks-energy', 'versioned', 'Unit of the price axis for a market type.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('market.quantity.unit', 'gridworks-energy', 'versioned', 'Unit of the quantity axis for a market type.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('market.type.name', 'gridworks-energy', 'versioned', 'Categorizes different markets run by MarketMaker');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('relay.closed.or.open', 'gridworks-energy', 'literal', 'FSM states for a simple relay with open and closed positions.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('relay.energization.state', 'gridworks-energy', 'literal', 'Two-state relay energization state.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('relay.open.or.closed', 'gridworks-energy', 'literal', 'Binary contact state for a single-pole relay, independent of coil energization.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('relay.wiring.config', 'gridworks-energy', 'versioned', 'Defines how a relay’s COM, NO, and NC terminals are wired into a circuit.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('spaceheat.make.model', 'gridworks-energy', 'versioned', 'Make and model taxonomy used by Spaceheat SCADA for physical and simulated devices.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('spaceheat.telemetry.name', 'gridworks-energy', 'versioned', 'Legacy Spaceheat telemetry-name vocabulary for raw channels.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('spaceheat.unit', 'gridworks-energy', 'versioned', 'Legacy Spaceheat measurement-unit vocabulary used in channel configuration and telemetry payloads.');
+
+INSERT INTO enums (name, owner, enum_type, description)
+VALUES ('temp.calc.method', 'gridworks-energy', 'versioned', 'Method used to calculate temperature from thermistor voltage measurements.');
+
+-- ----------------------------------------------------------------------------
+-- EnumVersions: Specific versions of an enum. Each enum can have multiple versions (e.g. gw1.actor.class has versions 009, 010, 011).
+-- ----------------------------------------------------------------------------
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('base.g.node.class', '000', 'https://schemas.electricity.works/enums/base.g.node.class/000', 'base.g.node.class', 'Ontology classification for Grid Nodes (GNodes) used to describe their structural relationship to the physical electric grid. Values identify whether a node represents a physical metered boundary, a physical topological structure, a market coordination constraint, or a purely logical entity.
+Every GNode SHALL declare exactly one base.g.node.class value.
+', 'Logical', NULL, '2026-02-22T16:43:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('buffer.regulation.mode', '000', 'https://schemas.electricity.works/enums/buffer.regulation.mode/000', 'buffer.regulation.mode', 'Governs how the House0 buffer tank is operated.
+', 'Normal', NULL, '2026-03-16T14:14:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('change.heatcall.source', '000', 'https://schemas.electricity.works/enums/change.heatcall.source/000', 'change.heatcall.source', 'Source responsible for issuing the heat call signal to a zone. Used to represent control authority in systems where a relay selects between SCADA and a local wall thermostat.
+', 'WallThermostat', NULL, '2026-03-27T21:31:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('change.relay.state', '000', 'https://schemas.electricity.works/enums/change.relay.state/000', 'change.relay.state', 'Canonical FSM events for transitioning a simple relay between open and closed states. These events correspond to control actions applied to the relay.
+', 'OpenRelay', NULL, '2024-09-17T20:17:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('fis.authorization.decision', '000', 'https://schemas.electricity.works/enums/fis.authorization.decision/000', 'fis.authorization.decision', 'Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.
+This enum captures only the final decision result. Structured explanations are conveyed separately via fis.authorization.reason.
+', 'Denied', NULL, '2026-03-16T14:14:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('fis.authorization.reason', '000', 'https://schemas.electricity.works/enums/fis.authorization.reason/000', 'fis.authorization.reason', 'Structured reason describing why the Fleet Index Service (FIS) produced a specific authorization decision.
+Reasons provide audit-level diagnostic clarity and are machine-readable.
+', 'SecurityViolation', NULL, '2026-03-16T14:14:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('fsm.report.type', '000', 'https://schemas.electricity.works/enums/fsm.report.type/000', 'fsm.report.type', 'Enumeration of atomic FSM report categories.
+', 'Other', NULL, '2024-10-08T17:17:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('g.node.instance.status', '000', 'https://schemas.electricity.works/enums/g.node.instance.status/000', 'g.node.instance.status', 'Lifecycle state of a runtime instance representing a durable Grid Node. This enum describes the authority status of a specific GNodeInstanceId as tracked by the GridWorks Fleet Index Service (FIS).
+Each GNodeInstanceId SHALL be in exactly one status at any given time.
+', 'Active', NULL, '2026-03-04T17:00:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('g.node.instance.transport', '000', 'https://schemas.electricity.works/enums/g.node.instance.transport/000', 'g.node.instance.transport', 'Messaging transport protocol through which a runtime instance connected and established authority. This enum captures transport-layer context for audit and operational diagnostics.
+', 'RabbitAmqp', NULL, '2026-03-03T17:00:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('g.node.status', '000', 'https://schemas.electricity.works/enums/g.node.status/000', 'g.node.status', 'Lifecycle status of a Grid Node (GNode) within coordinated systems.
+', 'Pending', NULL, '2026-02-22T16:43:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gpm.from.hz.method', '000', 'https://schemas.electricity.works/enums/gpm.from.hz.method/000', 'gpm.from.hz.method', 'Method used to convert measured pulse frequency into gallons per minute for supported flow-meter components.
+', 'Constant', NULL, '2024-10-23T19:32:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw.g.node.class', '000', 'https://schemas.electricity.works/enums/gw.g.node.class/000', 'gw.g.node.class', 'GridWorks functional classification for Grid Nodes (GNodes). Defines the operational or service-level role a GNode performs within the GridWorks ecosystem.
+This enum is specific to GridWorks. Other organizations MAY define their own functional taxonomies under separate namespaces (e.g., acme.g.node.class). Structural interoperability across organizations is governed by base.g.node.class, not by this enum.
+', 'Unknown', NULL, '2026-02-23T17:08:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.actor.class', '009', 'https://schemas.electricity.works/enums/gw1.actor.class/009', 'gw1.actor.class', 'Classification of actors in the GridWorks SCADA system.
+', 'NoActor', NULL, '2026-01-15T18:00:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.actor.class', '010', 'https://schemas.electricity.works/enums/gw1.actor.class/010', 'gw1.actor.class', 'Classification of actors in the GridWorks SCADA system.
+', 'NoActor', NULL, '2026-02-17T20:00:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.actor.class', '011', 'https://schemas.electricity.works/enums/gw1.actor.class/011', 'gw1.actor.class', 'Classification of actors in the GridWorks SCADA system.
+', 'NoActor', NULL, '2026-02-18T21:34:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.emission.method', '000', 'https://schemas.electricity.works/enums/gw1.emission.method/000', 'gw1.emission.method', 'Method by which a derived or computed channel emits values.
+', 'OnTrigger', NULL, '2026-02-02T22:17:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.heat.call.interpretation', '000', 'https://schemas.electricity.works/enums/gw1.heat.call.interpretation/000', 'gw1.heat.call.interpretation', 'Defines how a source telemetry channel is interpreted to determine whether a zone is calling for heat.
+', 'DigitalZeroIsActive', NULL, '2026-03-16T14:14:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.quantity', '000', 'https://schemas.electricity.works/enums/gw1.quantity/000', 'gw1.quantity', 'High-level physical or semantic quantity classification associated with a telemetry value. Quantity expresses the physical dimension or logical interpretation independent of unit scaling.
+', 'Unknown', NULL, '2026-02-17T19:54:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.quantity', '001', 'https://schemas.electricity.works/enums/gw1.quantity/001', 'gw1.quantity', 'High-level physical or semantic quantity classification associated with a telemetry value. Quantity expresses the physical dimension or logical interpretation independent of unit scaling.
+', 'Unknown', NULL, '2026-03-31T09:18:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.seasonal.storage.mode', '000', 'https://schemas.electricity.works/enums/gw1.seasonal.storage.mode/000', 'gw1.seasonal.storage.mode', 'Seasonal storage operating mode for layouts that distinguish between all-tank operation and buffer-only operation.
+', 'AllTanks', NULL, '2026-01-14T18:04:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.system.mode', '000', 'https://schemas.electricity.works/enums/gw1.system.mode/000', 'gw1.system.mode', '**SCADA system operational mode.** This enum declares the degree of physical actuation authority exercised by SCADA over connected hardware. It is communicated to other actors (e.g. LTN, admin tools, analytics) to establish shared expectations about whether and how physical control actions may occur.
+', 'Heating', NULL, '2026-01-14T18:04:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.unit', '000', 'https://schemas.electricity.works/enums/gw1.unit/000', 'gw1.unit', 'Canonical measurement unit associated with a GridWorks telemetry value. This enum defines the structural unit representation used at the serialization boundary. Scaling conventions (e.g., X100) are encoded explicitly in the unit name to preserve mechanical interpretability.
+', 'Unknown', NULL, '2025-12-25T22:18:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('gw1.unit', '001', 'https://schemas.electricity.works/enums/gw1.unit/001', 'gw1.unit', 'Canonical measurement unit associated with a GridWorks telemetry value. This enum defines the structural unit representation used at the serialization boundary. Scaling conventions are encoded explicitly in the unit name.
+', 'Unknown', NULL, '2026-03-04T20:35:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('heatcall.source', '000', 'https://schemas.electricity.works/enums/heatcall.source/000', 'heatcall.source', 'Source responsible for issuing the heat call signal to a zone. Used to represent control authority in systems where a relay selects between SCADA and a local wall thermostat.
+', 'WallThermostat', NULL, '2026-03-27T21:31:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('hz.calc.method', '001', 'https://schemas.electricity.works/enums/hz.calc.method/001', 'hz.calc.method', 'Method used to estimate signal frequency from pulse timing data.
+', 'BasicExpWeightedAvg', NULL, '2024-10-23T19:32:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('market.price.unit', '000', 'https://schemas.electricity.works/enums/market.price.unit/000', 'market.price.unit', 'Unit of the price axis for a MarketType. This unit defines the dimensional interpretation of bid prices and clearing prices within the associated MarketSlot.
+Price units represent compensation per unit of the declared QuantityUnit over the market settlement interval. All bids and clearing results for a given MarketSlot SHALL use the PriceUnit declared by its MarketType.
+', 'USDPerMWh', NULL, '2024-12-05T19:25:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('market.quantity.unit', '000', 'https://schemas.electricity.works/enums/market.quantity.unit/000', 'market.quantity.unit', 'Unit of the quantity axis for a MarketType. This unit defines the dimensional meaning of quantities submitted in bids and cleared in the associated MarketSlot.
+Quantity units represent average power over the market settlement interval unless otherwise specified by the MarketType definition. All bids and clearing results for a given MarketSlot SHALL use the QuantityUnit declared by its MarketType.
+', 'AvgMW', NULL, '2024-12-05T19:25:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('market.type.name', '000', 'https://schemas.electricity.works/enums/market.type.name/000', 'market.type.name', 'Categorizes different markets run by MarketMaker', 'unknown', NULL, '2022-10-17T16:55:39Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('relay.closed.or.open', '000', 'https://schemas.electricity.works/enums/relay.closed.or.open/000', 'relay.closed.or.open', 'Canonical FSM states for a simple relay with two positions: closed (energized) and open (de-energized). These states represent the logical relay condition, not raw electrical readings.
+', 'RelayClosed', NULL, '2024-09-17T20:17:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('relay.energization.state', '000', 'https://schemas.electricity.works/enums/relay.energization.state/000', 'relay.energization.state', 'Two-state relay energization state.
+', 0, NULL, '2024-03-06T22:07:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('relay.open.or.closed', '000', 'https://schemas.electricity.works/enums/relay.open.or.closed/000', 'relay.open.or.closed', 'Binary state of a single-pole relay contact. Describes whether the relay 
+contact is open (not conducting) or closed (conducting), regardless of 
+coil energization state.
+
+Note 1: The coil energization required to achieve a contact state depends 
+on relay type:
+- Normally Open (NO) relay: energized coil → closed contact
+- Normally Closed (NC) relay: de-energized coil → closed contact
+
+Note 2: This enum is specifically for single-pole relays with binary states.
+Other relay configurations (double-throw, multi-position, latching, etc.) 
+require different state enumerations that capture their specific switching 
+patterns.
+', 'RelayClosed', NULL, '2025-10-14T16:07:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('relay.wiring.config', '000', 'https://schemas.electricity.works/enums/relay.wiring.config/000', 'relay.wiring.config', 'Wiring configuration of a relay contact set. Defines how the relay''s common (COM), normally open (NO), and normally closed (NC) terminals are used within a circuit.
+', 'NormallyClosed', NULL, '2024-09-17T19:18:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('spaceheat.make.model', '003', 'https://schemas.electricity.works/enums/spaceheat.make.model/003', 'spaceheat.make.model', 'Make and model taxonomy used by Spaceheat SCADA for hardware devices and simulated components.
+', 'UnknownMake__UnknownModel', NULL, '2024-10-18T15:21:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('spaceheat.make.model', '007', 'https://schemas.electricity.works/enums/spaceheat.make.model/007', 'spaceheat.make.model', 'Make and model taxonomy used by Spaceheat SCADA for hardware devices and simulated components.
+', 'UnknownMake__UnknownModel', NULL, '2026-01-03T14:27:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('spaceheat.telemetry.name', '006', 'https://schemas.electricity.works/enums/spaceheat.telemetry.name/006', 'spaceheat.telemetry.name', 'Specifies the canonical name of telemetry values produced by legacy Spaceheat SCADA systems.
+This enum historically encoded both physical quantity and unit scaling within a single string (e.g., WaterTempCTimes1000, GpmTimes100). It remains supported for backward compatibility and stable integration with existing deployed systems.
+Newer Sema vocabulary separates quantity classification (gw1.quantity) from unit representation (gw1.unit) to make dimensional semantics explicit and mechanically verifiable. Future designs SHOULD prefer those explicit fields over introducing new values into this enum.
+This enum remains authoritative for existing Spaceheat channel definitions but is not intended to expand indefinitely.
+', 'Unknown', NULL, '2025-09-24T14:28:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('spaceheat.telemetry.name', '007', 'https://schemas.electricity.works/enums/spaceheat.telemetry.name/007', 'spaceheat.telemetry.name', 'Specifies the canonical name of telemetry values produced by legacy Spaceheat SCADA systems.
+This enum historically encoded both physical quantity and unit scaling within a single string (e.g., WaterTempCTimes1000, GpmTimes100). It remains supported for backward compatibility and stable integration with existing deployed systems.
+Newer Sema vocabulary separates quantity classification (gw1.quantity) from unit representation (gw1.unit) to make dimensional semantics explicit and mechanically verifiable. Future designs SHOULD prefer those explicit fields over introducing new values into this enum.
+This enum remains authoritative for existing Spaceheat channel definitions but is not intended to expand indefinitely.
+', 'Unknown', NULL, '2026-03-30T17:12:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('spaceheat.unit', '001', 'https://schemas.electricity.works/enums/spaceheat.unit/001', 'spaceheat.unit', 'Canonical measurement unit used by legacy Spaceheat SCADA channel configuration and telemetry payloads.
+', 'Unknown', NULL, '2024-09-02T15:00:00Z');
+
+INSERT INTO enum_versions (enum, version, schema_url, title, description, default_symbol, status, created)
+VALUES ('temp.calc.method', '000', 'https://schemas.electricity.works/enums/temp.calc.method/000', 'temp.calc.method', 'Method used to calculate temperature from voltage-derived thermistor measurements.
+', 'SimpleBeta', NULL, '2024-10-21T23:19:00Z');
+
+-- ----------------------------------------------------------------------------
+-- EnumValues: Individual symbol values within an EnumVersion (with order preserved and per-symbol descriptions).
+-- ----------------------------------------------------------------------------
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('base.g.node.class/000', 'TerminalAsset', 0, 'A physical transactive asset such as a heat pump, hot water heater, residential battery,  electric vehicle, or any other end-use device located behind an atomic metered point.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('base.g.node.class/000', 'LeafTransactiveNode', 1, 'The atomic metered unit of the grid. Represents the smallest indivisible metering boundary capable of participating in markets or entering Dispatch Contracts on behalf of a TerminalAsset. Every TerminalAsset is associated with exactly one LeafTransactiveNode.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('base.g.node.class/000', 'ConnectivityNode', 2, 'A physical topological node in the electric power system where conductors join, split, or change configuration. Conceptually aligned with the ConnectivityNode in the IEC 61970/61968 CIM (Common Information Model), but simplified for distribution-level modeling and OPF applications.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('base.g.node.class/000', 'MarketMaker', 3, 'A physical constraint point in the conductor topology that requires localized market coordination. Identified as a grid location (e.g., feeder constraint, transformer limit) where a MarketMaker actor computes local prices for balancing and constraint compliance. See [market-maker](https://gridworks.readthedocs.io/en/latest/market-maker.html).
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('base.g.node.class/000', 'Logical', 4, 'A non-physical Grid Node whose identity carries no inherent conductor-topology or metering semantics. Used for purely logical or service-level nodes such as SCADA, forecasting services, market-maker actors, simulation nodes, or organizational microservices. Logical nodes may coordinate with or operate on physical nodes, but do not themselves represent physical grid structure.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('buffer.regulation.mode/000', 'Normal', 0, 'Normal mode uses the full range of the buffer thermal store. Charging begins when the buffer is declared empty, as determined by the lowest available buffer temperature sensor dropping below a threshold temperature. The buffer is declared full when the highest buffer temperature sensor rises above a threshold temperature. Thresholds are derived from required source water temperature calculations that account for house performance and weather forecasts.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('buffer.regulation.mode/000', 'Tight', 1, 'Tight mode keeps the buffer within a narrowly regulated temperature band, permitting frequent charge and discharge transitions to maintain relatively constant buffer energy. Heat pump short-cycling is prevented by alternating between charging the buffer and the store.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('change.heatcall.source/000', 'WallThermostat', 0, 'Heat call is controlled by the local wall thermostat.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('change.heatcall.source/000', 'Scada', 1, 'Heat call is controlled by the SCADA system.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('change.relay.state/000', 'CloseRelay', 0, 'Command to close the relay (energize circuit).');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('change.relay.state/000', 'OpenRelay', 1, 'Command to open the relay (de-energize circuit).');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.decision/000', 'Authorized', 0, 'The runtime instance is permitted to establish or continue broker connectivity under its presented identity.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.decision/000', 'Denied', 1, 'The runtime instance is not permitted to establish or continue broker connectivity under its presented identity.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'NewInstance', 0, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'IdempotentReconnect', 1, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'SupersededPrevious', 2, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'MalformedRequest', 3, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'UnknownGNode', 4, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'InactiveGNode', 5, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'AliasMismatch', 6, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'ClassMismatch', 7, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'InstanceRevoked', 8, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fis.authorization.reason/000', 'SecurityViolation', 9, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fsm.report.type/000', 'Other', 0, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fsm.report.type/000', 'Event', 1, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('fsm.report.type/000', 'Action', 2, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('g.node.instance.status/000', 'Active', 0, 'This runtime instance currently holds authoritative execution rights for the associated GNodeId. At most one instance per GNodeId may be Active at any time.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('g.node.instance.status/000', 'Revoked', 1, 'This runtime instance previously held authority but was superseded or explicitly revoked. A Revoked instance SHALL NOT regain authority without generating a new GNodeInstanceId.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('g.node.instance.status/000', 'Ended', 2, 'This runtime instance terminated cleanly and voluntarily relinquished authority. Ended indicates normal shutdown rather than conflict resolution or forced revocation.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('g.node.instance.transport/000', 'RabbitAmqp', 0, 'The instance connected using the AMQP protocol over RabbitMQ, typically via TLS on port 5671.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('g.node.instance.transport/000', 'RabbitMqtt', 1, 'The instance connected using the MQTT protocol over RabbitMQ, typically via TLS on port 8883 or 1883 depending on configuration.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('g.node.status/000', 'Pending', 0, 'The GNode has been created but is not yet authorized to participate in system coordination.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('g.node.status/000', 'Active', 1, 'The GNode is authorized to participate in system coordination.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('g.node.status/000', 'Suspended', 2, 'The GNode is temporarily disabled. It retains identity but does not participate in active coordination. A Suspended GNode MAY transition back to Active.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('g.node.status/000', 'PermanentlyDeactivated', 3, 'The GNode has been permanently retired and does not participate in active coordination. It may not change back to another state.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gpm.from.hz.method/000', 'Constant', 0, 'Apply a fixed conversion relationship from frequency to gallons per minute.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw.g.node.class/000', 'Unknown', 0, 'A GNode whose class has not yet been assigned.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw.g.node.class/000', 'TerminalAsset', 1, 'A physical transactive asset such as a heat pump, hot water heater, residential battery,  electric vehicle, or any other end-use device located behind an atomic metered point.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw.g.node.class/000', 'ConnectivityNode', 2, 'A physical topological node in the electric power system where conductors join, split, or change configuration. Conceptually aligned with the ConnectivityNode in the IEC 61970/61968 CIM (Common Information Model), but simplified for distribution-level modeling and OPF applications.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw.g.node.class/000', 'LeafTransactiveNode', 3, 'The atomic metered unit of the grid. Represents the smallest indivisible metering boundary capable of participating in markets or entering Dispatch Contracts on behalf of a TerminalAsset. Every TerminalAsset is associated with exactly one LeafTransactiveNode.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw.g.node.class/000', 'MarketMaker', 4, 'A physical constraint point in the conductor topology that requires localized market coordination. Identified as a grid location (e.g., feeder constraint, transformer limit) where a MarketMaker actor computes local prices for balancing and constraint compliance. See [market-maker](https://gridworks.readthedocs.io/en/latest/market-maker.html).
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw.g.node.class/000', 'Scada', 5, 'A GNode responsible for local telemetry, data acquisition, and control of a TerminalAsset.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw.g.node.class/000', 'PriceForecastService', 6, 'A service that provides forward price projections for planning, bidding, or dispatch optimization.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw.g.node.class/000', 'WeatherForecastService', 7, 'A service that provides meteorological forecasts used for load and generation prediction.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw.g.node.class/000', 'TimeCoordinator', 8, 'A service responsible for maintaining simulation time or orchestrated  test time across actors.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'NoActor', 0, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'PrimaryScada', 1, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'SecondaryScada', 2, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'PowerMeter', 3, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'LocalControl', 4, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'LeafAlly', 5, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'DerivedGenerator', 6, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'PicoCycler', 7, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'HpBoss', 8, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'I2cRelayMultiplexer', 9, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'I2cZeroTenMultiplexer', 10, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'Hubitat', 11, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'Relay', 12, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'MultipurposeSensor', 13, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'HoneywellThermostat', 14, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'ApiTankModule', 15, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'ApiFlowModule', 16, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'ZeroTenOutputer', 17, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'ApiBtuMeter', 18, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/009', 'SiegLoop', 19, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'NoActor', 0, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'PrimaryScada', 1, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'SecondaryScada', 2, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'PowerMeter', 3, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'LocalControl', 4, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'LeafAlly', 5, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'DerivedGenerator', 6, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'PicoCycler', 7, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'HpBoss', 8, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'I2cRelayMultiplexer', 9, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'I2cZeroTenMultiplexer', 10, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'Hubitat', 11, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'Relay', 12, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'MultipurposeSensor', 13, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'HoneywellThermostat', 14, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'ApiTankModule', 15, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'ApiFlowModule', 16, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'ZeroTenOutputer', 17, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'ApiBtuMeter', 18, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'SiegLoop', 19, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'GpioSensor', 20, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'I2cBus', 21, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/010', 'I2cRelayBoard', 22, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'NoActor', 0, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'PrimaryScada', 1, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'SecondaryScada', 2, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'PowerMeter', 3, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'LocalControl', 4, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'LeafAlly', 5, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'DerivedGenerator', 6, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'PicoCycler', 7, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'HpBoss', 8, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'I2cRelayMultiplexer', 9, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'I2cZeroTenMultiplexer', 10, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'Hubitat', 11, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'Relay', 12, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'MultipurposeSensor', 13, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'HoneywellThermostat', 14, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'ApiTankModule', 15, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'ApiFlowModule', 16, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'ZeroTenOutputer', 17, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'ApiBtuMeter', 18, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'SiegLoop', 19, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'GpioSensor', 20, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'I2cBus', 21, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'I2cRelayBoard', 22, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.actor.class/011', 'I2cThermistorReader', 23, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.emission.method/000', 'OnTrigger', 0, 'Emit values only when triggered by the governing event or computation.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.emission.method/000', 'Periodic', 1, 'Emit values on a periodic schedule.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.emission.method/000', 'AsyncAndPeriodic', 2, 'Emit values both asynchronously on trigger and on a periodic schedule.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.heat.call.interpretation/000', 'DigitalZeroIsActive', 0, 'The source channel is treated as a digital signal where a value of zero indicates an active call for heat. This is typically used for opto-isolated GPIO inputs connected to 24 VAC thermostat circuits that pull the input low when energized.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.heat.call.interpretation/000', 'DigitalOneIsActive', 1, 'The source channel is treated as a digital signal where a value of one indicates an active call for heat.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.heat.call.interpretation/000', 'GreaterThanThreshold', 2, 'The source channel is treated as a scalar measurement. A zone is considered to be calling for heat when the absolute value of the source reading exceeds the configured threshold. This mode is typically used for legacy white-wire power measurements.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Unknown', 0, 'Quantity classification has not been specified.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Unitless', 1, 'Dimensionless logical or numerical value.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Power', 2, 'Rate of energy transfer per unit time.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Energy', 3, 'Accumulated or stored energy.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Temperature', 4, 'Thermal state measurement.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'FlowRate', 5, 'Volumetric or mass flow rate.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Volume', 6, 'Physical volume measurement.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Voltage', 7, 'Electrical potential difference.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Current', 8, 'Electrical current.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Percent', 9, 'Fractional ratio expressed as a percentage.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/000', 'Frequency', 10, 'Cycles per unit time.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Unknown', 0, 'Quantity classification has not been specified.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Unitless', 1, 'Dimensionless logical or numerical value.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Power', 2, 'Rate of energy transfer per unit time.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Energy', 3, 'Accumulated or stored energy.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Temperature', 4, 'Thermal state measurement.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'FlowRate', 5, 'Volumetric or mass flow rate.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Volume', 6, 'Physical volume measurement.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Voltage', 7, 'Electrical potential difference.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Current', 8, 'Electrical current.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Percent', 9, 'Fractional ratio expressed as a percentage.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Frequency', 10, 'Cycles per unit time.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.quantity/001', 'Time', 11, 'Elapsed or absolute time quantity.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.seasonal.storage.mode/000', 'AllTanks', 0, 'Operate using the full seasonal storage tank set.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.seasonal.storage.mode/000', 'BufferOnly', 1, 'Operate using only the buffer tank.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.system.mode/000', 'Heating', 0, 'Normal operational mode. SCADA may actively energize and de-energize actuators in order to provide heating or cooling services. In this mode, SCADA may accept and execute Dispatch Contracts originating from the Leaf Transactive Node (LTN), subject to local safety constraints and configuration.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.system.mode/000', 'Standby', 1, 'Intentional idle mode with active inhibition. SCADA retains control authority over actuators but uses it only to prevent heating or cooling from occurring. This mode is typically used when the system is intentionally paused (e.g. seasonal shutdown, manual override, or safety condition) while still ensuring that uncontrolled equipment such as boilers or heat pumps do not engage.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.system.mode/000', 'MonitorOnly', 2, 'Absolute non-actuation mode. SCADA MUST NOT issue any physical control actions, including relay changes or analog output updates. Telemetry collection, reporting, forecasting, and contract accounting may continue, but all actuators are left untouched. This mode provides a strong guarantee that no physical intervention will be performed by SCADA.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/000', 'Unknown', 0, 'Unit has not been specified or is not known.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/000', 'Unitless', 1, 'Dimensionless quantity (e.g., digital input state, normalized ratio).
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/000', 'FahrenheitX100', 2, 'Temperature in degrees Fahrenheit multiplied by 100 to preserve integer transport precision.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/000', 'Watts', 3, 'Instantaneous power in watts.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/000', 'WattHours', 4, 'Energy in watt-hours.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/000', 'Gallons', 5, 'Volume in U.S. gallons.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/000', 'GpmX100', 6, 'Flow rate in gallons per minute multiplied by 100 to preserve integer transport precision.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'Unknown', 0, 'Unit has not been specified or is not known.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'Unitless', 1, 'Dimensionless quantity.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'FahrenheitX100', 2, 'Temperature in degrees Fahrenheit multiplied by 100.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'Watts', 3, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'WattHours', 4, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'Gallons', 5, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'GpmX100', 6, 'Flow rate in gallons per minute multiplied by 100.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'Seconds', 7, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'SecondsX10', 8, 'Time measured in tenths of a second.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('gw1.unit/001', 'Milliseconds', 9, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('heatcall.source/000', 'WallThermostat', 0, 'Heat call is controlled by the local wall thermostat.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('heatcall.source/000', 'Scada', 1, 'Heat call is controlled by the SCADA system.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('hz.calc.method/001', 'BasicExpWeightedAvg', 0, 'Estimate frequency using a basic exponentially weighted average.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('hz.calc.method/001', 'BasicButterWorth', 1, 'Estimate frequency using a basic Butterworth-style filter.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('hz.calc.method/001', 'UniformWindow', 2, 'Estimate frequency using a uniform window over recent pulses.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.price.unit/000', 'USDPerMWh', 0, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.quantity.unit/000', 'AvgMW', 0, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.quantity.unit/000', 'AvgkW', 1, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.type.name/000', 'unknown', 0, 'Default unknown');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.type.name/000', 'rt5gate5', 1, 'Real-time energy, 5 minute MarketSlots, gate closing 5 minutes prior to start');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.type.name/000', 'rt60gate5', 2, 'Real-time energy, 60 minute MarketSlots, gate closing 5 minutes prior to start');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.type.name/000', 'da60', 3, 'Day-ahead energy, 60 minute MarketSlots');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.type.name/000', 'rt60gate30', 4, 'Real-time energy, 60 minute MarketSlots, gate closing 30 minutes prior to start');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.type.name/000', 'rt15gate5', 5, 'Real-time energy, 15 minute MarketSlots, gate closing 5 minutes prior to start');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.type.name/000', 'rt30gate5', 6, 'Real-time energy, 30 minute MarketSlots, gate closing 5 minutes prior to start');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('market.type.name/000', 'rt60gate30b', 7, 'Real-time energy, 30 minute MarketSlots, gate closing 5 minutes prior to start, QuantityUnit AvgkW');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('relay.closed.or.open/000', 'RelayClosed', 0, 'Relay is closed; circuit is energized (power on).');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('relay.closed.or.open/000', 'RelayOpen', 1, 'Relay is open; circuit is de-energized (power off).');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('relay.energization.state/000', 0, 0, 'DeEnergized');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('relay.energization.state/000', 1, 1, 'Energized');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('relay.open.or.closed/000', 'RelayClosed', 0, 'Relay contact is closed (conducting)');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('relay.open.or.closed/000', 'RelayOpen', 1, 'Relay contact is open (not conducting)');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('relay.wiring.config/000', 'NormallyClosed', 0, 'Circuit is closed when the relay is de-energized. Wiring uses COM and NC.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('relay.wiring.config/000', 'NormallyOpen', 1, 'Circuit is open when the relay is de-energized. Wiring uses COM and NO.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('relay.wiring.config/000', 'DoubleThrow', 2, 'Both NC and NO are used. Energizing the relay switches the circuit between two distinct paths (e.g., SCADA vs wall thermostat control).');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'UnknownMake__UnknownModel', 0, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'EGAUGE__4030', 1, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'NCD__PR814SPST', 2, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'Adafruit__642', 3, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__TSNAP1', 4, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__WATERTEMPHIGHPRECISION', 5, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__SIMPM1', 6, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'SCHNEIDERELECTRIC__IEM3455', 7, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__SIMBOOL30AMPRELAY', 8, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'OPENENERGY__EMONPI', 9, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__SIMTSNAP1', 10, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'ATLAS__EZFLO', 11, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'HUBITAT__C7__LAN1', 12, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__TANK_MODULE_1', 13, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'FIBARO__ANALOG_TEMP_SENSOR', 14, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'AMPHENOL__NTC_10K_THERMISTOR_MA100GG103BN', 15, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'YHDC__SCT013100', 16, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'MAGNELAB__SCT0300050', 17, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__MULTITEMP1', 18, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'KRIDA__EMR16I2CV3', 19, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'OMEGA__FTB8007HWPT', 20, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'ISTEC_4440', 21, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'OMEGA__FTB8010HWPT', 22, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'BELIMO__BALLVALVE232VS', 23, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'BELIMO__DIVERTERB332L', 24, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'TACO__0034EPLUS', 25, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'TACO__007E', 26, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'ARMSTRONG__COMPASSH', 27, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'HONEYWELL__T6ZWAVETHERMOSTAT', 28, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'PRMFILTRATION__WM075', 29, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'BELLGOSSETT__ECOCIRC20_18', 30, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'TEWA__TT0P10KC3T1051500', 31, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'EKM__HOTSPWM075HD', 32, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__SIMMULTITEMP', 33, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__SIMTOTALIZER', 34, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'KRIDA__DOUBLEEMR16I2CV3', 35, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__SIMDOUBLE16PINI2CRELAY', 36, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__TANKMODULE2', 37, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__PICOFLOWHALL', 38, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/003', 'GRIDWORKS__PICOFLOWREED', 39, NULL);
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'UnknownMake__UnknownModel', 0, 'Unknown device make and model.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'EGAUGE__4030', 1, 'eGauge 4030 power meter.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'NCD__PR814SPST', 2, 'NCD PR8-14-SPST relay board.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'Adafruit__642', 3, 'Adafruit 642 waterproof temperature sensor.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__TSNAP1', 4, 'GridWorks TSnap1 SCADA hardware.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__WATERTEMPHIGHPRECISION', 5, 'GridWorks high-precision water temperature device.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__SIMPM1', 6, 'GridWorks simulated power meter.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'SCHNEIDERELECTRIC__IEM3455', 7, 'Schneider Electric IEM3455 power meter.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__SIMBOOL30AMPRELAY', 8, 'GridWorks simulated 30A relay.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'OPENENERGY__EMONPI', 9, 'OpenEnergy EmonPi.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__SIMTSNAP1', 10, 'GridWorks simulated TSnap1.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'ATLAS__EZFLO', 11, 'Atlas EZ Flo meter.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'HUBITAT__C7__LAN1', 12, 'Hubitat C7 LAN integration.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__TANK_MODULE_1', 13, 'GridWorks Tank Module 1.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'FIBARO__ANALOG_TEMP_SENSOR', 14, 'Fibaro analog temperature sensor.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'AMPHENOL__NTC_10K_THERMISTOR_MA100GG103BN', 15, 'Amphenol 10K NTC thermistor.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'YHDC__SCT013100', 16, 'YHDC SCT013-100 current transformer.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'MAGNELAB__SCT0300050', 17, 'Magnelab SCT-0300-050 current transformer.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__MULTITEMP1', 18, 'GridWorks MultiTemp1.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'KRIDA__EMR16I2CV3', 19, 'Krida EMR16 I2C V3 relay board.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'OMEGA__FTB8007HWPT', 20, 'Omega FTB8007HW-PT flow meter.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'ISTEC_4440', 21, 'Istec 4440 flow meter.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'OMEGA__FTB8010HWPT', 22, 'Omega FTB8010HW-PT flow meter.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'BELIMO__BALLVALVE232VS', 23, 'Belimo Ball Valve 232VS.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'BELIMO__DIVERTERB332L', 24, 'Belimo Diverter B332L.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'TACO__0034EPLUS', 25, 'Taco 0034ePlus pump.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'TACO__007E', 26, 'Taco 007e pump.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'ARMSTRONG__COMPASSH', 27, 'Armstrong CompassH pump.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'HONEYWELL__T6ZWAVETHERMOSTAT', 28, 'Honeywell T6 Z-Wave thermostat.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'PRMFILTRATION__WM075', 29, 'PRM Filtration WM075 flow meter.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'BELLGOSSETT__ECOCIRC20_18', 30, 'Bell & Gossett Ecocirc 20-18 pump.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'TEWA__TT0P10KC3T1051500', 31, 'Tewa TT0P-10KC3-T105-1500 thermistor.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'EKM__HOTSPWM075HD', 32, 'EKM HOT-SPWM-075-HD flow meter.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__SIMMULTITEMP', 33, 'GridWorks simulated multi-temperature sensor.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__SIMTOTALIZER', 34, 'GridWorks simulated totalizer.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'KRIDA__DOUBLEEMR16I2CV3', 35, 'Krida double EMR16 I2C V3 relay board.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__SIMDOUBLE16PINI2CRELAY', 36, 'GridWorks simulated double 16-pin I2C relay.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__TANKMODULE2', 37, 'GridWorks Tank Module 2.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__PICOFLOWHALL', 38, 'GridWorks Pico flow hall sensor.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__PICOFLOWREED', 39, 'GridWorks Pico flow reed sensor.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'SAIER__SENHZG1WA', 40, 'Saier SEN-HZG1WA flow sensor.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'DFROBOT__DFR0971_TIMES2', 41, 'Two DFRobot DFR0971 analog output devices.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__TANKMODULE3', 42, 'GridWorks Tank Module 3.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__GW101', 43, 'GridWorks GW101 device.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.make.model/007', 'GRIDWORKS__SCADA_GW108', 44, 'GridWorks SCADA GW108 device.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'Unknown', 0, 'Default Value - unknown telemetry name.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'PowerW', 1, 'Power in Watts.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'RelayState', 2, 'The Telemetry reading belongs to [1 (''Energized''), 0 (''DeEnergized'')] (relay.energization.state enum).');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'WaterTempCTimes1000', 3, 'Water temperature, in Degrees Celcius multiplied by 1000. Example: 43200 means 43.2 deg Celcius.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'WaterTempFTimes1000', 4, 'Water temperature, in Degrees F multiplied by 1000. Example: 142100 means 142.1 deg Fahrenheit.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'GpmTimes100', 5, 'Gallons Per Minute multiplied by 100. Example: 433 means 4.33 gallons per minute.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'CurrentRmsMicroAmps', 6, 'Current measurement in Root Mean Square MicroAmps.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'GallonsTimes100', 7, 'Gallons multipled by 100. This is useful for flow meters that report cumulative gallons as their raw output. Example: 55300 means 55.3 gallons.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'VoltageRmsMilliVolts', 8, 'Voltage in Root Mean Square MilliVolts.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'MilliWattHours', 9, 'Energy in MilliWattHours.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'MicroHz', 10, 'Frequency in MicroHz. Example: 59,965,332 means 59.965332 Hz.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'AirTempCTimes1000', 11, 'Air temperature, in Degrees Celsius multiplied by 1000. Example: 6234 means 6.234 deg Celcius.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'AirTempFTimes1000', 12, 'Air temperature, in Degrees F multiplied by 1000. Example: 69329 means 69.329 deg Fahrenheit.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'ThermostatState', 13, 'Thermostat State: 0 means idle, 1 means heating, 2 means pending heat');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'MicroVolts', 14, 'Microvolts RMS');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'VoltsTimesTen', 15, 'VoltsTimesTen value');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'WattHours', 16, 'WattHours value');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'StorageLayer', 17, 'StorageLayer value');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'PercentKeep', 18, 'Percentage of the flow in the Siegenthaler loop that returns to the heat pump');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'CelsiusTimes100', 19, 'Temperature in celsius times 100');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'VoltsTimes100', 20, 'Voltage times 100');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/006', 'HzTimes100', 21, 'Frequency times 100');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'Unknown', 0, 'Default Value - unknown telemetry name.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'PowerW', 1, 'Power in Watts.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'RelayState', 2, 'The Telemetry reading belongs to [1 (''Energized''), 0 (''DeEnergized'')] (relay.energization.state enum).');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'WaterTempCTimes1000', 3, 'Water temperature, in Degrees Celcius multiplied by 1000. Example: 43200 means 43.2 deg Celcius.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'WaterTempFTimes1000', 4, 'Water temperature, in Degrees F multiplied by 1000. Example: 142100 means 142.1 deg Fahrenheit.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'GpmTimes100', 5, 'Gallons Per Minute multiplied by 100. Example: 433 means 4.33 gallons per minute.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'CurrentRmsMicroAmps', 6, 'Current measurement in Root Mean Square MicroAmps.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'GallonsTimes100', 7, 'Gallons multipled by 100. This is useful for flow meters that report cumulative gallons as their raw output. Example: 55300 means 55.3 gallons.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'VoltageRmsMilliVolts', 8, 'Voltage in Root Mean Square MilliVolts.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'MilliWattHours', 9, 'Energy in MilliWattHours.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'MicroHz', 10, 'Frequency in MicroHz. Example: 59,965,332 means 59.965332 Hz.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'AirTempCTimes1000', 11, 'Air temperature, in Degrees Celsius multiplied by 1000. Example: 6234 means 6.234 deg Celcius.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'AirTempFTimes1000', 12, 'Air temperature, in Degrees F multiplied by 1000. Example: 69329 means 69.329 deg Fahrenheit.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'ThermostatState', 13, 'Thermostat State: 0 means idle, 1 means heating, 2 means pending heat');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'MicroVolts', 14, 'Microvolts RMS');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'VoltsTimesTen', 15, 'VoltsTimesTen value');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'WattHours', 16, 'WattHours value');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'StorageLayer', 17, 'StorageLayer value');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'PercentKeep', 18, 'Percentage of the flow in the Siegenthaler loop that returns to the heat pump');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'CelsiusTimes100', 19, 'Temperature in celsius times 100');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'VoltsTimes100', 20, 'Voltage times 100');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'HzTimes100', 21, 'Frequency times 100');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.telemetry.name/007', 'BinaryState', 22, 'In [0,1], generic');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'Unknown', 0, 'Unit has not been specified or is not known.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'Unitless', 1, 'Dimensionless value.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'W', 2, 'Power in watts.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'Celcius', 3, 'Temperature in degrees Celsius using the legacy enum spelling.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'Fahrenheit', 4, 'Temperature in degrees Fahrenheit.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'Gpm', 5, 'Flow rate in gallons per minute.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'WattHours', 6, 'Energy in watt-hours.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'AmpsRms', 7, 'Current in RMS amps.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'VoltsRms', 8, 'Voltage in RMS volts.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'Gallons', 9, 'Volume in gallons.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('spaceheat.unit/001', 'ThermostatStateEnum', 10, 'Thermostat state encoded as an enum-valued quantity.');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('temp.calc.method/000', 'SimpleBetaForPico', 0, 'Use the beta method with the Pico-specific fixed-resistance assumption.
+');
+
+INSERT INTO enum_values (enum_version, symbol, idx, description)
+VALUES ('temp.calc.method/000', 'SimpleBeta', 1, 'Use the beta method with ThermistorBeta as the required parameter.
+');
+
+-- ----------------------------------------------------------------------------
+-- Types: Top-level type definitions (name-level). Each type can have multiple TypeVersions. Sourced from definitions/registry.yaml + definitions/types/.
+-- ----------------------------------------------------------------------------
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('analytics.channel.gt', 'joe-strommen', NULL, 'Canonical definition of a computed telemetry channel scoped to a single terminal asset and produced outside SCADA systems.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('bid', 'gridworks-energy', NULL, 'Market-normalized, slot-specific price-quantity schedule submitted by a market participant.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('channel.config', 'gridworks-energy', NULL, 'Base configuration for a component telemetry channel, including sampling cadence, async reporting, scaling exponent, and serialized unit.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('channel.readings', 'gridworks-energy', NULL, 'Timestamped integer readings for one channel within a SCADA reporting context.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('connectivity.edge.gt', 'gridworks-energy', NULL, 'Directed topological edge connecting two Grid Nodes in the physical electric network', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('data.channel.gt', 'gridworks-energy', NULL, 'Canonical definition of a telemetry channel representing directly captured measurements', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('derived.channel.gt', 'gridworks-energy', NULL, 'Canonical definition of computed telemetry channels within a GridWorks system.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('fis.authority.manifest', 'jessica-millar', NULL, 'Coherent snapshot of the authority plane as maintained by the Fleet Index Service (FIS) at a specific point in time.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('fis.instance.authorization.event', 'jessica-millar', NULL, 'Event emitted by the Fleet Index Service (FIS) recording an authorization decision for a runtime instance attempting to connect to a broker.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('fsm.atomic.report', 'gridworks-energy', NULL, 'Single atomic FSM report item representing either an event or an action.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('fsm.full.report', 'gridworks-energy', NULL, 'Full FSM report emitted for one trigger, including its ordered atomic report items.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('g.node.gt', 'gridworks-energy', NULL, 'Fundamental identity object representing physical and logical grid nodes', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('g.node.instance.gt', 'gridworks-energy', NULL, 'Runtime execution instance of a GNode identity', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('gridworks.ack', 'smoothstone-computing', NULL, 'Versionless acknowledgement message keyed by the message identifier being acknowledged.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('gridworks.ping', 'smoothstone-computing', NULL, 'Versionless message used for liveness/heartbeat checks.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('gw1.tank.temp.calibration', 'gridworks-energy', NULL, 'Linear calibration coefficients for converting raw tank probe readings into calibrated temperatures.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('gw1.tank.temp.calibration.map', 'gridworks-energy', NULL, 'Buffer and per-tank calibration map for converting raw probe readings into calibrated temperatures.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('gw1.telemetry.name.quantity.projection', 'gridworks-energy', NULL, 'Canonical projection from spaceheat.telemetry.name to gw1.quantity.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('gw1.unit.quantity.projection', 'gridworks-energy', NULL, 'Canonical projection from gw1.unit to gw1.quantity.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('ha1.params', 'gridworks-energy', NULL, 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('i2c.multichannel.dt.relay.component.gt', 'gridworks-energy', NULL, 'Configuration for a multi-channel I2C relay board component.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('i2c.thermistor.channel.config', 'gridworks-energy', NULL, 'Per-channel configuration for a thermistor input read through an I2C ADC.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('i2c.thermistor.reader.component.gt', 'gridworks-energy', NULL, 'Configuration for an I2C thermistor reader component that samples one ADC device and publishes one or more thermistor-backed temperature channels.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('layout.lite', 'gridworks-energy', NULL, 'Runtime projection of the active SCADA context used to interpret reports, snapshots, and control-adjacent messages.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('linear.one.dimensional.calibration', 'gridworks-energy', NULL, 'Affine calibration mapping a scalar measurement to a corrected scalar value using a linear transformation (M * x + B), with semantics defined relative to the measurement domain of the referencing context.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('machine.states', 'gridworks-energy', NULL, 'Sequence of machine states observed for one state machine during a reporting interval.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('pico.flow.module.component.gt', 'gridworks-energy', NULL, 'Configuration for a Pico-based flow module component.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('pico.tank.module.component.gt', 'gridworks-energy', NULL, 'Configuration for a Pico-based tank temperature module component.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('position.point.gt', 'gridworks-energy', NULL, 'Geographic position expressed in integer microdegrees (WGS84)', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('price.quantity.unitless', 'gridworks-energy', NULL, 'Integer price and quantity pair for market bidding and dispatch curves, with both values serialized at x1000 scaling.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('power.watts', 'gridworks-energy', NULL, 'Immediate real-time power measurement message for instantaneous transmission.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('relay.actor.config', 'gridworks-energy', NULL, 'Configuration for a relay-backed actor controlling a physical or logical switching device.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('report', 'gridworks-energy', NULL, 'Primary telemetry and state reporting message produced by a SCADA node for a specific reporting slot.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('report.event', 'gridworks-energy', NULL, 'Event wrapper for a report payload with message tracking metadata.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('scada.control.capabilities', 'gridworks-energy', NULL, 'Projection of the SCADA control surface including controllable nodes, state channels, and relay semantic configuration.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('send.control.capabilities', 'gridworks-energy', NULL, 'Request message asking a SCADA actor to publish its scada.control.capabilities projection.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('send.layout', 'gridworks-energy', NULL, 'Request message asking a SCADA actor to send its current layout.lite.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('sim.pico.tank.module.component.gt', 'gridworks-energy', NULL, 'Simulation configuration corresponding to pico.tank.module.component.gt.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('single.machine.state', 'gridworks-energy', NULL, 'Latest known state for a single state machine at a specific timestamp.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('single.reading', 'gridworks-energy', NULL, 'Latest known reading for a single channel at a specific SCADA read time.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('snapshot.spaceheat', 'gridworks-energy', NULL, 'Point-in-time snapshot containing the latest known readings and machine states captured by a Spaceheat SCADA.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('spaceheat.node.gt', 'gridworks-energy', NULL, 'A Spaceheat node representing a named element in the SCADA system.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('spaceheat.telemetry.quantity.projection', 'gridworks-energy', NULL, 'Canonical projection from legacy TelemetryName encodings to gw1.quantity.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('synced.readings', 'gridworks-energy', NULL, 'Compact synchronized reading payload consisting of a single SCADA read time and parallel channel and value lists.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('synced.readings.bundle', 'joe-strommen', NULL, 'Time-aligned sequence of synchronized multi-channel readings with embedded channel semantics sufficient for independent interpretation.', NULL, NULL, NULL, NULL);
+
+INSERT INTO types (name, owner, title, description, python_class_name, make_data_class, is_cac, is_component)
+VALUES ('gw.nolan.layout', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- ----------------------------------------------------------------------------
+-- TypeVersions: Specific versions of a type. Each declares its JSON-Schema shape. Versions follow a 3-digit suffix in the YAML files.
+-- ----------------------------------------------------------------------------
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('analytics.channel.gt', '000', 'https://schemas.electricity.works/types/analytics.channel.gt/000', 'analytics.channel.gt', 'Canonical definition of a computed telemetry channel scoped to a single terminal asset and produced outside SCADA systems.
+An analytics.channel.gt declares a computation over message streams, telemetry, or system behavior associated with a specific terminal asset. These channels represent analytics-derived signals such as persistence delay, heartbeat-based health, or other observational metrics.
+Unlike derived.channel.gt, analytics.channel.gt is not computed by a GridWorks GNode. Its semantic authority lies in external analytics systems.
+', FALSE, NULL, '2026-04-02T00:00:00Z', '{"x-gridworks-extended_description": "`analytics.channel.gt` defines computed telemetry channels whose semantic authority lies outside SCADA systems and whose scope is a single terminal asset.\nValues associated with `analytics.channel.gt` SHALL be represented as floating point numbers, with the unit defined by OutputUnit.\nMulti-terminal-asset computations (e.g. aggregation across assets or GNode-based selection) are intentionally excluded from this type and should be represented by a separate aggregation type."}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('bid', '000', 'https://schemas.electricity.works/types/bid/000', 'bid', 'A market-normalized, slot-specific price–quantity schedule submitted by a market participant. A bid expresses willingness to inject or withdraw a quantity of a market-defined commodity as a function of price, subject to the rules of the MarketType associated with the specified MarketSlot.
+Bids are economically admissible, cryptographically anchored messages that serve as the primary input to market aggregation and clearing. Differences between participant classes (e.g. leaf nodes, aggregators, fleets, generators) are expressed through MarketType rules and bidder authorization registries, not through differences in bid structure.
+', FALSE, NULL, '2026-01-15T15:45:08Z', '{"x-gridworks-extended_description": "The bid type is the foundational economic message of the GridWorks market architecture. By enforcing strict normalization against MarketType-defined price and quantity domains, bids enable a self-scaling market maker strategy in which aggregation, clearing, and dispatch logic can be applied uniformly across participant classes and market layers.\nAll bids share a common structure and validation contract. Differences in physical assets, aggregation scope, or operational responsibility are expressed through external registries, MarketType definitions, and settlement processes rather than through specialized bid schemas.\nThis design supports permissioned or permissionless participation, economic rate-limiting via fees, and bounded computational complexity, while preserving extensibility for future market products and clearing mechanisms.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('channel.config', '000', 'https://schemas.electricity.works/types/channel.config/000', 'channel.config', 'Base channel configuration used by component definitions to describe how a telemetry channel is sampled, scaled, and serialized.
+', FALSE, NULL, '2024-09-22T11:32:00Z', '{"x-gridworks-extended_description": "`channel.config` captures both periodic sampling behavior and optional asynchronous emission behavior for a telemetry channel.\n`PollPeriodMs` and `CapturePeriodS` describe different stages of SCADA behavior. `PollPeriodMs` is the cadence at which SCADA polls the hardware device or upstream source for a value. `CapturePeriodS` is the cadence at which SCADA emits that channel value into the telemetry stream.\nThese cadences may differ. For example, SCADA may poll a device frequently to maintain fresh local state while only reporting the value periodically or when an async trigger condition is met.\nIn current runtime practice, `AsyncCapture` may be true even when `AsyncCaptureDelta` is omitted. This means asynchronous capture is enabled, but the threshold semantics are not fully specified in the payload itself.\nWhen `AsyncCaptureDelta` is present, the intended interpretation is: publish asynchronously when the magnitude of the change since the last published value is greater than or equal to `AsyncCaptureDelta`.\n`Exponent` describes how to interpret the serialized integer reading relative to `Unit`. For example, if `Unit` is `Gpm` and `Exponent` is `2`, then a reading value of `432` represents `4.32 Gpm`.\nA future published version may strengthen this contract by requiring `AsyncCaptureDelta` whenever `AsyncCapture` is true, once runtime behavior consistently provides that value.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('channel.readings', '001', 'https://schemas.electricity.works/types/channel.readings/001', 'channel.readings', 'Timestamped integer readings for one channel within a SCADA reporting context, including the channel UUID.
+', TRUE, NULL, '2024-10-06T17:49:32Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('channel.readings', '002', 'https://schemas.electricity.works/types/channel.readings/002', 'channel.readings', 'Timestamped integer readings for one channel within a SCADA reporting context.
+', FALSE, NULL, '2024-10-12T17:43:44Z', '{"x-gridworks-extended_description": "ChannelName SHALL reference a channel definition known to both the reporting node and the receiving system. Channel definitions may be declared using data.channel.gt (for raw telemetry) or derived.channel.gt (for computed channels).\nThis type transmits timestamped values only. It does not encode channel units, quantities, or derivation semantics. Those properties are resolved by consulting the corresponding channel definition.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('connectivity.edge.gt', '000', 'https://schemas.electricity.works/types/connectivity.edge.gt/000', 'connectivity.edge.gt', 'Directed topological edge connecting two Grid Nodes (GNodes) in the physical electric network. This type encodes copper-level adjacency used for graph-based modeling, Kirchhoff power flow calculations, and constraint propagation.
+A ConnectivityEdge represents an oriented structural relationship between two distinct GNodes. Direction SHALL be interpreted as the positive reference direction for flow modeling and graph traversal. Physical power MAY flow in either direction subject to system conditions.
+For a given pair of GNodes, only one structural ConnectivityEdge SHALL exist. Reverse flow SHALL be represented by sign conventions in power quantities and SHALL NOT be modeled by introducing a secondConnectivityEdge reversing the same GNode pair.
+ConnectivityEdge does not encode electrical impedance, capacity, or switching state. It defines structural topology only.
+', FALSE, NULL, '2026-02-23T00:00:00Z', '{"x-gridworks-extended_description": "ConnectivityEdge represents structural conductor adjacency only. Most edges correspond directly to parent\u2013child relationships in the GNode hierarchy (for example, substation to feeder or feeder to downstream connectivity node). In these cases, the directed edge makes explicit the physical copper relationship already implied by the structural topology.\nHowever, real distribution systems may contain tie-lines, loops, and alternate routing paths. The graph formed by ConnectivityEdge objects MAY therefore contain cycles. Acyclicity is not assumed.\nThe directed orientation of a ConnectivityEdge establishes a positive reference direction for flow modeling and graph traversal. It does NOT restrict physical power flow to a single direction. Reverse flow SHALL be represented by sign conventions in power quantities rather than by duplicating edges in the opposite direction.\nStatus expresses lifecycle participation of the edge in the registry and coordination system. It SHALL NOT be interpreted as operational switching state (e.g., breaker open or closed). Operational configuration of the active network graph MUST be modeled using separate types designed for dynamic topology state.\nConceptually, ConnectivityEdge aligns with the conductor adjacency relationships represented in IEC 61970/61968 CIM (Common Information Model), where network topology is derived from connections between ConnectivityNodes through conducting equipment. ConnectivityEdge provides a simplified, distribution-level abstraction suitable for graph-based modeling and transactive coordination without adopting the full CIM equipment hierarchy."}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('data.channel.gt', '001', 'https://schemas.electricity.works/types/data.channel.gt/001', 'data.channel.gt', 'Canonical definition of a telemetry channel representing directly captured measurements within a GridWorks system.
+A data.channel.gt declares the semantic identity of a telemetry stream, including what is measured, which node it describes, and which node captures the measurement. To interpret a channel.readings instance, consumers SHALL resolve ChannelName against the channel definitions for the relevant terminal asset / SCADA context (typically by matching data.channel.gt.Name).
+', FALSE, NULL, '2025-09-24T14:29:00Z', '{"x-gridworks-extended_description": "data.channel.gt defines primary telemetry channels corresponding to directly observed measurements from physical devices or sensors.\nIn contrast, derived.channel.gt defines computed channels whose values are produced from one or more input channels according to a declared strategy.\nTelemetry is transported using channel.readings, which includes a ChannelName and aligned lists of values and timestamps. channel.readings does not carry the full channel definition; consumers interpret channel.readings by resolving ChannelName against the channel definition set for the relevant SCADA / terminal asset context (data.channel.gt and derived.channel.gt), typically by Name equality.\nreport messages aggregate channel.readings (ChannelReadingList) along with state transitions and FSM outputs for transmission from SCADA nodes associated with terminal assets.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('data.channel.gt', '002', 'https://schemas.electricity.works/types/data.channel.gt/002', 'data.channel.gt', 'Canonical definition of a telemetry channel representing directly captured measurements within a GridWorks system.
+A data.channel.gt declares the semantic identity of a telemetry stream, including what is measured, which node it describes, and which node captures the measurement. To interpret a channel.readings instance, consumers SHALL resolve ChannelName against the channel definitions for the relevant terminal asset / SCADA context (typically by matching data.channel.gt.Name).
+', FALSE, NULL, '2026-03-30T21:27:05Z', '{"x-gridworks-extended_description": "data.channel.gt defines primary telemetry channels corresponding to directly observed measurements from physical devices or sensors.\nIn contrast, derived.channel.gt defines computed channels whose values are produced from one or more input channels according to a declared strategy.\nTelemetry is transported using channel.readings, which includes a ChannelName and aligned lists of values and timestamps. channel.readings does not carry the full channel definition; consumers interpret channel.readings by resolving ChannelName against the channel definition set for the relevant SCADA / terminal asset context (data.channel.gt and derived.channel.gt), typically by Name equality.\nreport messages aggregate channel.readings (ChannelReadingList) along with state transitions and FSM outputs for transmission from SCADA nodes associated with terminal assets.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('derived.channel.gt', '000', 'https://schemas.electricity.works/types/derived.channel.gt/000', 'derived.channel.gt', 'Canonical definition of a derived telemetry channel within a GridWorks system.
+A derived channel declares a computed telemetry stream whose values are produced from a named computation strategy rather than from direct physical measurement. Derived channels represent transformations, aggregations, or model-based computations over other telemetry streams.
+In the GridWorks SCADA lexicon, channels define the semantic identity of telemetry streams. data.channel.gt defines directly observed measurements, while derived.channel.gt defines computed streams.
+', FALSE, NULL, '2026-01-03T14:27:00Z', '{"x-gridworks-extended_description": "derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes."}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('derived.channel.gt', '001', 'https://schemas.electricity.works/types/derived.channel.gt/001', 'derived.channel.gt', 'Canonical definition of a derived telemetry channel within a GridWorks system.
+A derived.channel.gt declares a computed telemetry stream whose values are produced from one or more input channels according to a declared strategy. Derived channels do not represent directly captured measurements; instead, they represent transformations, aggregations, or computations over other telemetry streams.
+', FALSE, NULL, '2026-02-02T23:00:00Z', '{"x-gridworks-extended_description": "derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('derived.channel.gt', '002', 'https://schemas.electricity.works/types/derived.channel.gt/002', 'derived.channel.gt', 'Canonical definition of a derived telemetry channel within a GridWorks system.
+A derived.channel.gt declares a computed telemetry stream whose values are produced from one or more input channels according to a declared strategy. Derived channels do not represent directly captured measurements; instead, they represent transformations, aggregations, or computations over other telemetry streams.
+', FALSE, NULL, '2026-03-04T19:00:00Z', '{"x-gridworks-extended_description": "`derived.channel.gt` defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\nTelemetry values associated with `derived.channel.gt` are intended to be represented as integers, with any required scaling encoded in the OutputUnit.\nThis convention supports deterministic and efficient serialization while preserving mechanical interpretability of values. Alternative representations (e.g., floating point values) are expected to be introduced through separate vocabularies rather than modifying the semantics of `derived.channel.gt`.\nInstances of `channel.readings` referencing a derived channel SHALL be interpreted by resolving ChannelName against `derived.channel.gt`.Name within the relevant terminal asset / SCADA context.\nTogether, `data.channel.gt` and `derived.channel.gt` form the semantic backbone for telemetry reporting. `channel.readings` transports values, and `report` aggregates those readings for transmission from SCADA nodes."}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('fis.authority.manifest', '000', 'https://schemas.electricity.works/types/fis.authority.manifest/000', 'fis.authority.manifest', 'A coherent snapshot of the authority plane as maintained by the Fleet Index Service (FIS) at a specific point in time.
+This manifest encodes design-level invariants of Grid Node identity and runtime instance authority. It is intended for audit, verification, and architectural clarity. It is not part of the runtime authorization enforcement path.
+', FALSE, NULL, '2026-04-06T16:00:00Z', '{"x-gridworks-extended_description": "This manifest formalizes authority-plane design invariants without embedding database implementation details.\nThe SingleActiveInstancePerGNode invariant expresses the single-writer authority model enforced operationally by FIS. ParentClosureUpToDeclaredRoots ensures that the GNode alias hierarchy is structurally coherent within the manifest scope.\nThis type is intended for architectural verification, regression testing, and diagnostic inspection. It is not required for runtime authorization enforcement.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('fis.instance.authorization.event', '000', 'https://schemas.electricity.works/types/fis.instance.authorization.event/000', 'fis.instance.authorization.event', 'Event emitted by the Fleet Index Service (FIS) recording an authorization decision for a runtime instance attempting to connect to a broker. This event provides an immutable audit record of instance-level authorization outcomes.
+', FALSE, NULL, '2026-04-06T16:00:00Z', '{"x-gridworks-extended_description": "Authorization events are emitted asynchronously by FIS after evaluating a connection attempt. They provide a durable audit trail of authorization outcomes, including supersession events and denial decisions.\nThese events do not grant authority; they record authority decisions. Runtime enforcement occurs at the broker level.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('fsm.atomic.report', '000', 'https://schemas.electricity.works/types/fsm.atomic.report/000', 'fsm.atomic.report', 'Single atomic FSM report item representing either an event or an action emitted by a state machine transition.
+', TRUE, NULL, '2024-10-08T17:17:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('fsm.atomic.report', '001', 'https://schemas.electricity.works/types/fsm.atomic.report/001', 'fsm.atomic.report', 'Single atomic FSM report item representing either an event or an action emitted by a state machine transition. An action represents a side-effect applied to the physical or logical system.
+', TRUE, NULL, '2025-04-23T18:03:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('fsm.full.report', '000', 'https://schemas.electricity.works/types/fsm.full.report/000', 'fsm.full.report', 'Full FSM report emitted for a trigger, including the ordered list of atomic report items produced by the state machine.
+', TRUE, NULL, '2024-10-08T17:41:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('fsm.full.report', '001', 'https://schemas.electricity.works/types/fsm.full.report/001', 'fsm.full.report', 'Full FSM report emitted for a trigger, including the ordered list of atomic report items produced by the state machine.
+', TRUE, NULL, '2025-04-23T18:03:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('g.node.gt', '004', 'https://schemas.electricity.works/types/g.node.gt/004', 'g.node.gt', 'A GNode (“Grid Node”) is the fundamental identity object in the GridWorks  ecosystem. Every physical location, metered unit, device, service, or actor  interacting with the transactive system is represented as a GNode.
+', FALSE, NULL, '2026-02-24T14:00:00Z', '{"x-gridworks-extended_description": "Grid Nodes (GNodes) provide the stable identity layer for distributed coordination in the GridWorks ecosystem. Each GNode participates in a hierarchical alias structure that encodes topology, routing semantics, and coordination scope.\nGNodes may represent physical grid structure (e.g., metered boundaries, connectivity nodes, constraint points) or logical and service roles (e.g., SCADA agents, forecasting services, market participants). BaseClass defines the universal structural ontology required for interoperability. GNodeClass expresses organization-specific functional roles and does not alter structural semantics.\n`g.node.gt` is an immutable serialized snapshot of declared node state. Any change to a GNode (alias updates, status changes, relocations, or classification changes) SHALL be represented by publishing a new `g.node.gt` message rather than mutating a previously published instance. This preserves durable identity (GNodeId) while allowing controlled evolution of descriptive attributes.\nGNode is designed as the atomic unit of coordination in a recursively composable grid architecture. Systems of arbitrary scale are formed by composing GNodes into hierarchical or heterarchical structures. This allows optimal power flow (OPF), market clearing, and constraint coordination mechanisms to operate centrally, regionally, or in distributed configurations without altering the underlying identity model.\nConceptually, GNode aligns with node abstractions in IEC 61970/61968 CIM (e.g., ConnectivityNode and TopologicalNode), while unifying physical and logical coordination entities within a single identity abstraction suitable for graph-based modeling and transactive coordination.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('g.node.instance.gt', '000', 'https://schemas.electricity.works/types/g.node.instance.gt/000', 'g.node.instance.gt', 'Durable snapshot of a runtime instance representing a Grid Node. Each instance record corresponds bijectively to a persistent FIS database record tracking runtime authority and transport connection state.
+', FALSE, NULL, '2026-03-04T17:00:00Z', '{"x-gridworks-extended_description": "The g.node.instance.gt type represents a durable record of runtime authority for a Grid Node. It is maintained by the Fleet Index Service (FIS) and serves as an auditable snapshot of instance lifecycle events.\nWhile this type represents a single runtime instance, the broader system enforces a single-writer authority model: at most one instance per GNodeId is permitted to hold Status = Active at any time. That invariant is enforced at the runtime and database layer and is not validated within this schema itself.\nThe distinction between Active, Revoked, and Ended enables audit differentiation between normal shutdown, supersession by a newer instance, and forced authority revocation.\nConnectionHandle and ObservedPeerAddress are transport-observed values used for operational diagnostics and forensic analysis. Their structure is transport-specific and intentionally opaque to preserve neutrality across messaging systems.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('gridworks.ack', '000', 'https://schemas.electricity.works/types/gridworks.ack', 'gridworks.ack', 'Versionless acknowledgement message used to confirm receipt of a prior GridWorks message by its message identifier.
+', FALSE, NULL, NULL, '{"IsVersionless": true}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('gridworks.ping', '000', 'https://schemas.electricity.works/types/gridworks.ping', 'gridworks.ping', 'Versionless message used for liveness and heartbeat checks between GridWorks components.
+', FALSE, NULL, NULL, '{"IsVersionless": true}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('gw1.tank.temp.calibration', '000', 'https://schemas.electricity.works/types/gw1.tank.temp.calibration/000', 'gw1.tank.temp.calibration', 'Linear calibration coefficients for converting three raw tank probe readings into calibrated temperatures.
+', FALSE, NULL, '2025-12-25T22:18:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('gw1.tank.temp.calibration.map', '000', 'https://schemas.electricity.works/types/gw1.tank.temp.calibration.map/000', 'gw1.tank.temp.calibration.map', 'Buffer and per-tank calibration map for converting raw probe readings into calibrated temperatures.
+', FALSE, NULL, '2025-12-25T22:18:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('gw1.telemetry.name.quantity.projection', '000', 'https://schemas.electricity.works/types/gw1.telemetry.name.quantity.projection/000', 'telemetry.name.quantity.projection', 'Canonical projection from spaceheat.telemetry.name to gw1.quantity.
+This type declares the deterministic semantic relationship by which every legacy Spaceheat telemetry encoding maps to exactly one gw1.quantity value.
+It exists to support safe transition from TelemetryName-based dimensional encoding toward explicit gw1.unit and gw1.quantity separation.
+', FALSE, NULL, '2026-03-16T14:14:56Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('gw1.unit.quantity.projection', '000', 'https://schemas.electricity.works/types/gw1.unit.quantity.projection/000', 'gw1.unit.quantity.projection', 'Canonical projection from gw1.unit to gw1.quantity. This type declares the deterministic semantic relationship by which every gw1.unit maps to exactly one gw1.quantity.
+The projection defines the physical dimension abstraction associated with each unit and ensures consistent dimensional reasoning across telemetry, derived channels, and market contracts.
+', FALSE, NULL, '2026-03-31T09:18:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('ha1.params', '004', 'https://schemas.electricity.works/types/ha1.params/004', 'ha1.params', 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 house-heating model.
+', FALSE, NULL, '2025-12-04T15:54:00Z', '{"x-gridworks-extended_description": "`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. These values are exchanged across system boundaries so SCADA and downstream consumers can make consistent calculations from the same declared parameter set.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('ha1.params', '005', 'https://schemas.electricity.works/types/ha1.params/005', 'ha1.params', 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 house-heating model.
+', FALSE, NULL, '2026-01-16T15:53:00Z', '{"x-gridworks-extended_description": "`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. Version `005` extends the earlier shape with COP-model coefficients and minimum-COP parameters so SCADA and downstream consumers can apply the same heat-pump performance assumptions.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('ha1.params', '006', 'https://schemas.electricity.works/types/ha1.params/006', 'ha1.params', 'Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model.
+', FALSE, NULL, '2026-02-25T14:23:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt', '002', 'https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002', 'i2c.multichannel.dt.relay.component.gt', 'Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
+This includes relay-actor configuration fields specific to the I2C relay board.
+', TRUE, NULL, '2024-12-31T15:42:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt', '003', 'https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/003', 'i2c.multichannel.dt.relay.component.gt', 'Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
+This includes relay-actor configuration fields specific to the I2C relay board together with the logical I2C bus name used to address it at runtime.
+', TRUE, NULL, '2026-01-28T15:17:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt', '004', 'https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004', 'i2c.multichannel.dt.relay.component.gt', 'Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.
+This includes relay-actor configuration fields specific to the I2C relay board together with the logical I2C bus name used to address it at runtime.
+', TRUE, NULL, '2026-04-01T10:49:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('i2c.thermistor.channel.config', '000', 'https://schemas.electricity.works/types/i2c.thermistor.channel.config/000', 'i2c.thermistor.channel.config', 'Channel configuration for one thermistor input read through an I2C ADC.
+This type extends the base channel configuration with the ADC pin selection, thermistor beta parameter, and whether the channel should also be forwarded into derived-channel processing.
+', FALSE, NULL, '2026-03-30T16:07:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt', '000', 'https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/000', 'i2c.thermistor.reader.component.gt', 'Configuration for an I2C thermistor reader component that samples one ADC device and publishes one or more thermistor-backed temperature channels.
+', FALSE, NULL, '2026-03-30T16:07:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('layout.lite', '007', 'https://schemas.electricity.works/types/layout.lite/007', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
+', FALSE, NULL, '2026-01-14T14:08:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including active HA1 parameters.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('layout.lite', '008', 'https://schemas.electricity.works/types/layout.lite/008', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
+', FALSE, NULL, '2026-01-15T18:00:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('layout.lite', '009', 'https://schemas.electricity.works/types/layout.lite/009', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
+', FALSE, NULL, '2026-01-16T15:53:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('layout.lite', '010', 'https://schemas.electricity.works/types/layout.lite/010', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings. 
+', FALSE, NULL, '2026-02-18T21:34:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('layout.lite', '011', 'https://schemas.electricity.works/types/layout.lite/011', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
+', FALSE, NULL, '2026-02-25T19:23:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('layout.lite', '012', 'https://schemas.electricity.works/types/layout.lite/012', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
+', FALSE, NULL, '2026-03-31T10:42:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('layout.lite', '013', 'https://schemas.electricity.works/types/layout.lite/013', 'layout.lite', 'Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.
+`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.
+', FALSE, NULL, '2026-04-01T10:49:00Z', '{"x-gridworks-extended_description": "`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('linear.one.dimensional.calibration', '000', 'https://schemas.electricity.works/types/linear.one.dimensional.calibration/000', 'linear.one.dimensional.calibration', 'Linear calibration applied to a raw sensor measurement.
+The transformation is interpreted as:
+
+    calibrated_value = M * raw_value + B
+
+This type represents empirical correction of a sensor''s raw output into a physically meaningful quantity.
+', FALSE, NULL, '2026-02-06T17:06:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('linear.one.dimensional.calibration', '001', 'https://schemas.electricity.works/types/linear.one.dimensional.calibration/001', 'linear.one.dimensional.calibration', 'Linear calibration applied to a measurement expressed in the derived channel''s declared OutputUnit domain.
+The transformation is interpreted as:
+
+    calibrated = M * x + B
+
+where:
+
+  - x is the input measurement first converted into the OutputUnit
+    scaling of the derived channel.
+
+  - M is dimensionless.
+
+  - B is expressed in OutputUnit scaling and therefore shares the
+    same integer scaling convention as the derived channel''s output.
+
+This type represents an affine correction applied after unit normalization and does not itself declare units.
+', FALSE, NULL, '2026-03-16T20:55:00Z', '{"x-gridworks-extended_description": "Instances of this type are typically used as Parameters for derived.channel.gt when Strategy equals \"affine\".\nThe calibration is interpreted in the OutputUnit scaling domain declared by the referencing derived channel."}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('machine.states', '000', 'https://schemas.electricity.works/types/machine.states/000', 'machine.states', 'Sequence of machine states observed for one state machine during a reporting interval.
+', FALSE, NULL, '2024-11-09T16:36:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('pico.flow.module.component.gt', '000', 'https://schemas.electricity.works/types/pico.flow.module.component.gt/000', 'pico.flow.module.component.gt', 'Configuration for a Pico-based flow module component in a Spaceheat SCADA deployment.
+This type includes the common component identity fields inherited from ComponentGt together with flow-meter specific capture, conversion, and publication parameters.
+', FALSE, NULL, '2024-10-23T19:32:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('pico.tank.module.component.gt', '011', 'https://schemas.electricity.works/types/pico.tank.module.component.gt/011', 'pico.tank.module.component.gt', 'Configuration for a Pico-based tank temperature module component in a Spaceheat SCADA deployment.
+', TRUE, NULL, '2025-12-05T02:59:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('position.point.gt', '000', 'https://schemas.electricity.works/types/position.point.gt/000', 'position.point.gt', 'A geographic position for a physical Grid Node. Coordinates are stored in integer microdegrees (degrees × 1,000,000). This type is conceptually aligned with the IEC 61970/61968 CIM `PositionPoint` class, but simplified for GridWorks use cases, which require only a single latitude/longitude point.
+', FALSE, NULL, '2026-02-24T15:00:00Z', '{"x-gridworks-extended_description": "PositionPoint represents the physical location of a GNode that has spatial meaning within the electric grid, such as TerminalAssets, LeafTransactiveNodes, MarketMaker constraint points, and ConnectivityNodes. Coordinates are expressed in WGS84 (EPSG:4326), the standard global geodetic reference system used by GPS and commonly adopted in utility GIS, mapping, and DERMS integrations.\nThis type corresponds to a simplified form of the IEC 61970/61968 CIM `PositionPoint` class. The CIM model supports elevation, coordinate-system definitions, and collections of points for geometric shapes. GridWorks intentionally restricts this type to a single latitude/longitude pair to provide a deterministic and minimal spatial anchor for coordination.\nPosition accuracy is not prescribed by this type. The microdegree representation provides sufficient precision to distinguish distribution-level assets (e.g., residential footprints, poles, transformers, substations). The actual positional accuracy of a PositionPoint depends entirely on the source of the underlying geographic data."}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('power.watts', '000', 'https://schemas.electricity.works/types/power.watts/000', 'power.watts', 'Immediate real-time power measurement message for instantaneous transmission.
+Positive values indicate power withdrawal from the grid. Negative values indicate power injection to the grid.
+', FALSE, NULL, '2022-10-17T16:55:39Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('price.quantity.unitless', '001', 'https://schemas.electricity.works/types/price.quantity.unitless/001', 'price.quantity.unitless', 'Integer price and quantity pair for market bidding and dispatch curves.
+Both values are serialized as strict integers scaled by 1000.
+', FALSE, NULL, '2025-10-30T17:29:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('relay.actor.config', '002', 'https://schemas.electricity.works/types/relay.actor.config/002', 'relay.actor.config', 'Configuration for a relay-backed Spaceheat actor associated with one relay on a multi-channel relay board.
+A relay.actor.config binds a specific relay index on a relay component to a named actor and declares the event/state semantics associated with energizing and de-energizing that relay. The config also carries the channel capture settings required to report the relay-controlled actor''s state into the telemetry system.
+', FALSE, NULL, '2024-12-31T15:38:00Z', '{"x-gridworks-extended_description": "relay.actor.config specializes generic channel capture configuration for relay-backed actors in hydronic control systems.\nThis type binds one relay position on a relay board to a specific actor and declares the event/state semantics associated with switching that relay. These semantics are important for distributed coordination because different layouts may realize the same functional role using different underlying hardware node names, while preserving identical actor-level meaning.\nTypical uses include selecting the source of a heat call, enabling or disabling control authority, or switching physical flow or heating elements between named operating states.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('relay.actor.config', '003', 'https://schemas.electricity.works/types/relay.actor.config/003', 'relay.actor.config', 'Configuration for a relay-backed Spaceheat actor associated with one relay on a multi-channel relay board.
+A relay.actor.config binds a specific relay index on a relay component to a named actor and declares the event/state semantics associated with energizing and de-energizing that relay. The config also carries the channel capture settings required to report the relay-controlled actor''s state into the telemetry system.
+', FALSE, NULL, '2026-04-01T10:49:00Z', '{"x-gridworks-extended_description": "relay.actor.config specializes generic channel capture configuration for relay-backed actors in hydronic control systems.\nThis type binds one relay position on a relay board to a specific actor and declares the event/state semantics associated with switching that relay. These semantics are important for distributed coordination because different layouts may realize the same functional role using different underlying hardware node names while preserving identical actor-level meaning.\nIn this registry, the declared relay event/state semantics are based on change.relay.state and relay.closed.or.open.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('report', '002', 'https://schemas.electricity.works/types/report/002', 'report', 'Primary telemetry and state reporting message produced by a SCADA node for a specific reporting slot. A report contains all meaningful channel readings, state transitions, and FSM outputs observed during the slot period.
+', FALSE, NULL, '2025-04-23T18:03:00Z', '{"x-gridworks-extended_description": "Reports are sent at fixed slot intervals (typically 5 minutes) and provide a durable historical record of telemetry and state changes observed during that period.\nGridWorks SCADA devices emit most channel readings asynchronously when values change beyond configured thresholds. Each reading is timestamped at the moment of observation by the SCADA device. Reports preserve these original timestamps without resampling or aggregation.\nAs a result, a report represents a batched event log for the slot period rather than a sampled snapshot. Consumers can reconstruct the precise timing of state transitions (e.g., relay changes) and value updates within the slot window.\nThis differs from snapshot messages, which represent the most recent value of each channel at a single point in time and are optimized for near-real-time visualization rather than historical accuracy.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('report', '003', 'https://schemas.electricity.works/types/report/003', 'report', 'Historical telemetry and state report for a fixed reporting interval. A Report contains all meaningful channel readings and machine state transitions observed during a single SlotDurationS window.
+Reports are the authoritative historical record of SCADA behavior. They are emitted periodically (typically every 5 minutes) and contain timestamped readings for each channel that changed or reported during the interval.
+', FALSE, NULL, '2026-03-30T19:01:47Z', '{"x-gridworks-extended_description": "Reports provide the durable historical record of SCADA telemetry. They differ from snapshots in that they preserve all timestamped readings within a fixed interval rather than only the most recent value.\nReports are optimized for replay, auditing, debugging, and analytics. Snapshots are optimized for real-time visualization.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('report.event', '002', 'https://schemas.electricity.works/types/report.event/002', 'report.event', 'Event wrapper for a report payload with message tracking metadata.
+', FALSE, NULL, '2025-04-23T18:03:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('report.event', '003', 'https://schemas.electricity.works/types/report.event/003', 'report.event', 'Event wrapper for a report payload with message tracking metadata.
+', FALSE, NULL, '2026-03-30T19:01:47Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('scada.control.capabilities', '000', 'https://schemas.electricity.works/types/scada.control.capabilities/000', 'scada.control.capabilities', 'Projection of the control surface exposed by a SCADA node. This type declares controllable relay and DAC nodes, the telemetry channels that represent their observed state, and the relay semantic configuration required for dispatch construction.
+This is a control-focused projection derived from layout.lite and does not represent the full system topology.
+', FALSE, NULL, '2026-03-02T18:00:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('send.control.capabilities', '000', 'https://schemas.electricity.works/types/send.control.capabilities/000', 'send.control.capabilities', 'Request message asking a SCADA actor to send its current scada.control.capabilities.
+', FALSE, NULL, '2026-03-02T18:15:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('send.layout', '000', 'https://schemas.electricity.works/types/send.layout/000', 'send.layout', 'Request message asking a SCADA actor to send its current layout.lite.
+', FALSE, NULL, '2024-12-09T15:00:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('send.layout', '001', 'https://schemas.electricity.works/types/send.layout/001', 'send.layout', 'Request message asking a SCADA actor to send its current layout.lite.
+', FALSE, NULL, '2026-03-02T17:00:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('sim.pico.tank.module.component.gt', '000', 'https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000', 'sim.pico.tank.module.component.gt', 'Simulation configuration corresponding to pico.tank.module.component.gt.
+', TRUE, NULL, '2026-01-03T14:27:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('single.machine.state', '000', 'https://schemas.electricity.works/types/single.machine.state/000', 'single.machine.state', 'Latest known state for a single state machine at a specific timestamp.
+', FALSE, NULL, '2026-03-30T19:01:47Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('single.reading', '000', 'https://schemas.electricity.works/types/single.reading/000', 'single.reading', 'Latest known reading for a single channel at a specific SCADA read time.
+', FALSE, NULL, '2026-03-30T19:01:47Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('snapshot.spaceheat', '003', 'https://schemas.electricity.works/types/snapshot.spaceheat/003', 'snapshot.spaceheat', 'Point-in-time snapshot containing the latest known readings and machine states captured by a Spaceheat SCADA.
+', FALSE, NULL, '2026-03-30T19:01:47Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('spaceheat.node.gt', '200', 'https://schemas.electricity.works/types/spaceheat.node.gt/200', 'spaceheat.node.gt', 'A Spaceheat node representing a named element in the SCADA system.
+', TRUE, NULL, '2026-01-14T14:08:00Z', '{"x-gridworks-extended_description": "Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('spaceheat.node.gt', '300', 'https://schemas.electricity.works/types/spaceheat.node.gt/300', 'spaceheat.node.gt', 'A Spaceheat node representing a named element in the SCADA system.
+', TRUE, NULL, '2026-01-15T18:00:00Z', '{"x-gridworks-extended_description": "Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('spaceheat.node.gt', '301', 'https://schemas.electricity.works/types/spaceheat.node.gt/301', 'spaceheat.node.gt', 'A Spaceheat node representing a named element in the SCADA system.
+', TRUE, NULL, '2026-02-18T21:34:00Z', '{"x-gridworks-extended_description": "Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\n"}');
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('spaceheat.telemetry.quantity.projection', '000', 'https://schemas.electricity.works/types/spaceheat.telemetry.quantity.projection/000', 'spaceheat.telemetry.quantity.projection', 'Canonical projection from spaceheat.telemetry.name to gw1.quantity. This type defines the authoritative dimensional abstraction associated with each telemetry semantic category in version 007 of spaceheat.telemetry.name.
+This projection exists to make dimensional semantics explicit at the serialization boundary and to support safe evolution toward gw1.unit.
+', FALSE, NULL, '2026-03-30T17:12:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('synced.readings', '000', 'https://schemas.electricity.works/types/synced.readings/000', 'synced.readings', 'Compact synchronized reading payload consisting of a single SCADA read time and parallel channel and value lists.
+Each value in ValueList is aligned by index with ChannelNameList, such that ValueList[i] is the reading for ChannelNameList[i] captured at ScadaReadTimeUnixMs.
+', FALSE, NULL, '2026-03-30T00:00:00Z', NULL);
+
+INSERT INTO type_versions (type, version, schema_url, title, description, extra_allowed, status, created, raw_json)
+VALUES ('synced.readings.bundle', '001', 'https://schemas.electricity.works/types/synced.readings.bundle/001', 'synced.readings.bundle', 'Time-aligned sequence of synchronized multi-channel readings with embedded channel semantics sufficient for independent interpretation.
+For each channel, values in its associated ValueList are ordered to align by index with TimestampList, such that the value at index i corresponds to TimestampList[i].
+ChannelDefinitions provides the measurement unit required to interpret values for each channel.
+', FALSE, NULL, '2026-04-03T16:00:00Z', '{"x-gridworks-extended_description": "\n`synced.readings.bundle` represents a rectangular, time-aligned dataset across multiple channels.\nChannelName values are identifiers defined within a GridWorks SCADA layout context (e.g. layout.lite or gw.nolan.layout). They are not globally standardized vocabulary and SHALL be interpreted only within the context in which they were produced.\nChannelDefinitions provides a minimal projection of channel semantics, including `Name`, `Id`, `Unit` and `UnitType`, sufficient to interpret the numeric values in this bundle without requiring access to the full layout.\nThe `Id` together with the channel TypeName (e.g. `data.channel.gt`, `derived.channel.gt`, or `analytics.channel.gt`) enables resolution of the authoritative channel definition. This bundle is not a source of semantic authority; it provides a convenient projection for transport, indexing, and querying.\nIn GridWorks systems, full channel definitions are typically available in layout artifacts such as `layout.lite`, which include additional information such as `AboutNodeName`, `CapturedByNodeName`, and derivation strategy. Those details are intentionally omitted here to keep this type lightweight and focused on boundary interpretation.\nAll channels share a common `TimestampList`. For any index i, values across all channels correspond to the same point in time.\n"}');
+
+-- ----------------------------------------------------------------------------
+-- TypeAttributes: The shape-of-record for every property declared on a TypeVersion. Polymorphic via mutually-exclusive FK columns: at most one of FormatRef / EnumVersionRef / SubTypeVersionRef / HelperRef is non-null per row.
+-- ----------------------------------------------------------------------------
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('analytics.channel.gt/000', 'Id', 0, 'Globally unique identifier for this analytics channel definition.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('analytics.channel.gt/000', 'Name', 1, 'Identifier of the channel within the terminal asset context.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('analytics.channel.gt/000', 'DisplayName', 2, 'Human-readable name for UI and visualization.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('analytics.channel.gt/000', 'TerminalAssetAlias', 3, 'Canonical alias of the terminal asset whose behavior this channel characterizes.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('analytics.channel.gt/000', 'ProducedBy', 4, 'Declares the system responsible for producing this channel.
+', TRUE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"$ref": "string", "description": "Declares the system responsible for producing this channel.\n"}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('analytics.channel.gt/000', 'Strategy', 5, 'Identifier of the computation strategy used to produce this channel.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('analytics.channel.gt/000', 'OutputUnit', 6, 'Measurement unit of the output values.
+', TRUE, FALSE, NULL, NULL, 'gw1.unit/001', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('analytics.channel.gt/000', 'OutputQuantity', 7, 'Canonical quantity of the output.
+', TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('analytics.channel.gt/000', 'Parameters', 8, 'Optional strategy-specific configuration.
+Parameters define:
+  - which message types are consumed
+  - filtering conditions (e.g. requires CreatedTimestamp)
+  - aggregation windows or thresholds
+  - any other computation-specific inputs
+', FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OpenObjectDeferredToRawJson", "schema": {"type": "object", "additionalProperties": true, "description": "Optional strategy-specific configuration.\nParameters define:\n  - which message types are consumed\n  - filtering conditions (e.g. requires CreatedTimestamp)\n  - aggregation windows or thresholds\n  - any other computation-specific inputs\n"}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('bid/000', 'BidderAlias', 0, 'Canonical alias of the market participant submitting this bid. This alias is used to associate the bid with authorization, fee-payment credentials, and market participation rules defined outside this message.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('bid/000', 'MarketSlotName', 1, 'Identifier of the market slot for which this bid applies. The MarketSlot determines the applicable MarketType, settlement interval, and market rules used to validate and clear the bid.
+', TRUE, FALSE, NULL, 'market.slot.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('bid/000', 'PqPairs', 2, 'Ordered list of price–quantity pairs defining the bid curve. Prices SHALL be ordered according to MarketType rules and normalized to the market’s declared price domain. Quantities represent willingness to inject or withdraw at the corresponding prices.
+', TRUE, TRUE, NULL, NULL, NULL, 'price.quantity.unitless/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('bid/000', 'InjectionIsPositive', 3, 'Sign convention for quantities in this bid. If true, positive quantities represent injection into the market; if false, positive quantities represent withdrawal. The interpretation of this convention is governed by the associated MarketType.
+', TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('bid/000', 'PriceUnit', 4, 'Unit of the price axis for this bid. MUST match the PriceUnit declared by the MarketType associated with the MarketSlot.
+', TRUE, FALSE, NULL, NULL, 'market.price.unit/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('bid/000', 'QuantityUnit', 5, 'Unit of the quantity axis for this bid. MUST match the QuantityUnit declared by the MarketType associated with the MarketSlot.
+', TRUE, FALSE, NULL, NULL, 'market.quantity.unit/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('bid/000', 'SignedMarketFeeTxn', 6, 'Cryptographic proof of payment of the market-defined bid submission fee. This value SHALL reference a signed transaction that satisfies the market’s fee and admission rules for the specified MarketSlot.
+The SignedMarketFeeTxn proves economic admissibility of the bid. It does NOT, by itself, prove physical feasibility, delivery capability, portfolio composition, or settlement commitment. Those guarantees, if any, are established by clearing, dispatch, and settlement processes external to this message.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.config/000', 'ChannelName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.config/000', 'PollPeriodMs', 1, 'How often SCADA polls the underlying hardware device or source for a fresh value, in milliseconds. This applies to devices that do not emit readings on their own and must instead be queried by SCADA.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.config/000', 'CapturePeriodS', 2, 'How often SCADA reports or emits the channel value into the telemetry stream, in seconds. This is distinct from hardware polling cadence.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.config/000', 'AsyncCapture', 3, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.config/000', 'AsyncCaptureDelta', 4, 'Optional threshold for asynchronous emission. If present, an async capture is triggered when the magnitude of the change since the last published value is greater than or equal to AsyncCaptureDelta, expressed in Unit-scaled values.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.config/000', 'Exponent', 5, 'Base-10 scaling exponent applied to the serialized integer reading in combination with Unit. For example, if Unit is Gpm and Exponent is 2, then a reading of 432 represents 4.32 Gpm.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.config/000', 'Unit', 6, NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.readings/001', 'ChannelName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.readings/001', 'ChannelId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.readings/001', 'ValueList', 2, NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.readings/001', 'ScadaReadTimeUnixMsList', 3, NULL, TRUE, TRUE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.readings/002', 'ChannelName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.readings/002', 'ValueList', 1, 'Reading values aligned with ScadaReadTimeUnixMsList.', TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('channel.readings/002', 'ScadaReadTimeUnixMsList', 2, 'SCADA read times (UTC ms) aligned with ValueList.', TRUE, TRUE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('connectivity.edge.gt/000', 'Id', 0, 'Globally unique identifier for this ConnectivityEdge.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('connectivity.edge.gt/000', 'FromGNodeId', 1, 'Unique identifier of the upstream GNode in the directed relationship. This node is the source of the positive reference direction.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('connectivity.edge.gt/000', 'ToGNodeId', 2, 'Unique identifier of the downstream GNode in the directed relationship. This node is the target of the positive reference direction.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('connectivity.edge.gt/000', 'FromGNodeAlias', 3, 'Canonical alias of the upstream GNode. Provided for readability, registry lookup, and human interpretability. MUST correspond to FromGNodeId.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('connectivity.edge.gt/000', 'ToGNodeAlias', 4, 'Canonical alias of the downstream GNode. Provided for readability, registry lookup, and human interpretability. MUST correspond to ToGNodeId.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('connectivity.edge.gt/000', 'Status', 5, 'Lifecycle status of this ConnectivityEdge within the registry and coordination system. An edge with Status "Active" participates in topology modeling and graph-based computations. Edges with Status "Suspended" or "PermanentlyDeactivated" SHALL be excluded from active coordination and SHALL NOT be included in topology or power-flow graph construction.
+Status represents administrative lifecycle state only and SHALL NOT be used to represent operational switching state (e.g., breaker open or closed).
+', TRUE, FALSE, NULL, NULL, 'g.node.status/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/001', 'Name', 0, 'Short identifier of the channel within the context of a SCADA or terminal asset configuration.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/001', 'DisplayName', 1, 'Human-readable name for display and UI purposes.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/001', 'AboutNodeName', 2, 'Name of the node whose state or behavior this channel describes.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/001', 'CapturedByNodeName', 3, 'Name of the node responsible for observing and reporting this telemetry.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/001', 'TelemetryName', 4, 'Semantic category of measurement represented by this channel.
+', TRUE, FALSE, NULL, NULL, 'spaceheat.telemetry.name/006', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/001', 'TerminalAssetAlias', 5, 'Canonical alias of the terminal asset within which this channel exists.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/001', 'InPowerMetering', 6, 'Indicates whether this channel participates in power metering calculations. If true, TelemetryName SHALL equal PowerW.
+', FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/001', 'StartS', 7, 'Optional timestamp indicating when this channel became active or valid. Interpretation of this value is implementation-specific.
+', FALSE, FALSE, NULL, 'utc.seconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/001', 'Id', 8, 'Globally unique identifier for this channel definition.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'Name', 0, 'Short identifier of the channel within the context of a SCADA or terminal asset configuration.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'DisplayName', 1, 'Human-readable name for display and UI purposes.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'AboutNodeName', 2, 'Name of the node whose state or behavior this channel describes.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'CapturedByNodeName', 3, 'Name of the node responsible for observing and reporting this telemetry.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'TelemetryName', 4, 'Legacy semantic identifier describing what is measured and how it is encoded. TelemetryName values may include unit conventions and scaling semantics (e.g., Times100, Times1000) inherited from earlier system implementations.
+TelemetryName determines the canonical gw1.quantity via the spaceheat.telemetry.quantity.projection/000 type.
+', TRUE, FALSE, NULL, NULL, 'spaceheat.telemetry.name/007', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'Quantity', 5, 'Canonical physical dimension of the telemetry stream (e.g., Power, Temperature, FlowRate).
+Quantity SHALL equal the value defined by the spaceheat.telemetry.quantity.projection/000 for the given TelemetryName.
+', TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'TerminalAssetAlias', 6, 'Canonical alias of the terminal asset within which this channel exists.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'InPowerMetering', 7, 'Indicates whether this channel participates in power metering calculations. If true, TelemetryName SHALL equal PowerW.
+', FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'StartS', 8, 'Optional timestamp indicating when this channel became active or valid. Interpretation of this value is implementation-specific.
+', FALSE, FALSE, NULL, 'utc.seconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('data.channel.gt/002', 'Id', 9, 'Globally unique identifier for this channel definition.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/000', 'Id', 0, 'Globally unique identifier for this derived channel definition.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/000', 'Name', 1, 'Short identifier of the derived channel within the terminal asset or SCADA context.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/000', 'CreatedByNodeName', 2, 'Name of the node responsible for computing this derived channel.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/000', 'Strategy', 3, 'Identifier of the computation strategy used to produce this channel.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/000', 'OutputUnit', 4, 'Measurement unit of the derived output values.
+', FALSE, FALSE, NULL, NULL, 'gw1.unit/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/000', 'DisplayName', 5, 'Human-readable name for display and UI purposes.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/000', 'TerminalAssetAlias', 6, 'Canonical alias of the terminal asset within which this derived channel exists.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'Id', 0, 'Globally unique identifier for this derived channel definition.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'Name', 1, 'Short identifier of the derived channel within the terminal asset or SCADA context.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'CreatedByNodeName', 2, 'Name of the node responsible for computing this derived channel.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'Strategy', 3, 'Identifier of the computation strategy used to produce this channel.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'InputChannelNames', 4, 'Names of input channels consumed by the computation strategy.
+', TRUE, TRUE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'OutputUnit', 5, 'Measurement unit of the derived output values.
+', FALSE, FALSE, NULL, NULL, 'gw1.unit/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'EmissionMethod', 6, 'Defines how and when derived values are emitted (e.g., OnTrigger, Periodic, AsyncAndPeriodic).
+', TRUE, FALSE, NULL, NULL, 'gw1.emission.method/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'AsyncEmitDelta', 7, 'Minimum delta required to emit asynchronously. Required for AsyncAndPeriodic. Must not be present for OnTrigger or Periodic.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'EmitPeriodS', 8, 'Periodic emission interval in seconds. Required for Periodic and AsyncAndPeriodic. Must not be present for OnTrigger.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'Parameters', 9, 'Optional strategy-specific configuration parameters.
+', FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OpenObjectDeferredToRawJson", "schema": {"type": "object", "additionalProperties": true, "description": "Optional strategy-specific configuration parameters.\n"}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'DisplayName', 10, 'Human-readable name for display and UI purposes.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/001', 'TerminalAssetAlias', 11, 'Canonical alias of the terminal asset within which this derived channel exists.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'Id', 0, 'Globally unique identifier for this derived channel definition.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'Name', 1, 'Short identifier of the derived channel within the terminal asset or SCADA context.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'CreatedByNodeName', 2, 'Name of the node responsible for computing this derived channel.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'Strategy', 3, 'Identifier of the computation strategy used to produce this channel.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'InputChannelNames', 4, 'Names of input channels consumed by the computation strategy.
+', TRUE, TRUE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'OutputUnit', 5, 'Measurement unit of the derived output values.
+', TRUE, FALSE, NULL, NULL, 'gw1.unit/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'OutputQuantity', 6, 'Canonical physical dimension of the derived output. OutputQuantity SHALL equal the quantity defined by the canonical gw1.unit.quantity.projection/000 instance for the specified OutputUnit.
+', TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'EmissionMethod', 7, 'Defines how and when derived values are emitted (e.g., OnTrigger, Periodic, AsyncAndPeriodic).
+', TRUE, FALSE, NULL, NULL, 'gw1.emission.method/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'AsyncEmitDelta', 8, 'Minimum delta required to emit asynchronously. Required for AsyncAndPeriodic. Must not be present for OnTrigger or Periodic.
+', FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'EmitPeriodS', 9, 'Periodic emission interval in seconds. Required for Periodic and AsyncAndPeriodic. Must not be present for OnTrigger.
+', FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'Parameters', 10, 'Optional strategy-specific configuration parameters.
+', FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OpenObjectDeferredToRawJson", "schema": {"type": "object", "additionalProperties": true, "description": "Optional strategy-specific configuration parameters.\n"}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'DisplayName', 11, 'Human-readable name for display and UI purposes.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('derived.channel.gt/002', 'TerminalAssetAlias', 12, 'Canonical alias of the terminal asset within which this derived channel exists.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.authority.manifest/000', 'SnapshotId', 0, 'Globally unique identifier for this authority snapshot.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.authority.manifest/000', 'SnapshotTakenAtUnixMs', 1, 'Timestamp at which the manifest snapshot was generated.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.authority.manifest/000', 'ParentRootAliasList', 2, 'List of alias prefixes considered valid parent roots for this manifest. GNodeList SHALL be closed under parent alias relationship up to one of these roots.
+', TRUE, TRUE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.authority.manifest/000', 'GNodeList', 3, 'List of Grid Nodes included in this manifest.
+', TRUE, TRUE, NULL, NULL, NULL, 'g.node.gt/004', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.authority.manifest/000', 'GNodeInstanceList', 4, 'List of runtime instance records associated with GNodes in this manifest.
+', TRUE, TRUE, NULL, NULL, NULL, 'g.node.instance.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'EventId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'GNodeId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'GNodeAlias', 2, NULL, FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'GNodeInstanceId', 3, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'Decision', 4, NULL, TRUE, FALSE, NULL, NULL, 'fis.authorization.decision/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'Reason', 5, NULL, TRUE, FALSE, NULL, NULL, 'fis.authorization.reason/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'Transport', 6, NULL, TRUE, FALSE, NULL, NULL, 'g.node.instance.transport/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'ObservedPeerAddress', 7, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'ConnectionHandle', 8, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fis.instance.authorization.event/000', 'DecidedAtUnixMs', 9, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'MachineHandle', 0, NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'StateEnum', 1, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'ReportType', 2, NULL, TRUE, FALSE, NULL, NULL, 'fsm.report.type/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'ActionType', 3, 'Optional identifier describing the type of action. Not constrained by an enum in version 000.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'Action', 4, 'Scalar value associated with the action.
+', FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'EventEnum', 5, NULL, FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'Event', 6, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'FromState', 7, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'ToState', 8, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'UnixTimeMs', 9, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/000', 'TriggerId', 10, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'MachineHandle', 0, 'Identifier of the state machine instance emitting this report.
+', TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'StateEnum', 1, 'Name of the state machine enum defining the current state space.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'ReportType', 2, 'Indicates whether this report represents an Event, an Action, or Other.
+', TRUE, FALSE, NULL, NULL, 'fsm.report.type/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'Action', 3, 'Structured payload describing a side-effect produced by the state machine. The structure of this object determines the type of action being executed.
+', FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfDeferredToRawJson", "oneOf": [{"type": "object", "description": "Relay energization command. Sets a relay to either energized or de-energized state.\n", "properties": {"Value": {"$ref": "https://schemas.electricity.works/enums/relay.energization.state/000", "description": "Target energization state of the relay.\n"}}, "required": ["Value"], "additionalProperties": false}, {"type": "object", "description": "I2C bit write operation. Writes a single bit value to a specified register on an I2C device.\n", "properties": {"I2cBus": {"$ref": "https://schemas.electricity.works/formats/spaceheat.name", "description": "Logical name of the I2C bus.\n"}, "Address": {"type": "integer", "description": "I2C device address.\n"}, "I2cRegister": {"type": "integer", "description": "Register address within the device.\n"}, "Bit": {"type": "integer", "description": "Bit position within the register.\n"}, "Value": {"type": "integer", "description": "Bit value to write (typically 0 or 1).\n"}}, "required": ["I2cBus", "Address", "I2cRegister", "Bit", "Value"], "additionalProperties": false}]}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'EventEnum', 4, 'Identifier describing the type of event.
+', FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'Event', 5, 'Event payload or label emitted by the state machine.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'FromState', 6, 'State prior to the transition.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'ToState', 7, 'State after the transition.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'UnixTimeMs', 8, 'Timestamp of the report in milliseconds since Unix epoch.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.atomic.report/001', 'TriggerId', 9, 'Unique identifier for the triggering event or transition.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.full.report/000', 'FromName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.full.report/000', 'TriggerId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.full.report/000', 'AtomicList', 2, NULL, TRUE, TRUE, NULL, NULL, NULL, 'fsm.atomic.report/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.full.report/001', 'FromName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.full.report/001', 'TriggerId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('fsm.full.report/001', 'AtomicList', 2, NULL, TRUE, TRUE, NULL, NULL, NULL, 'fsm.atomic.report/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.gt/004', 'GNodeId', 0, 'Globally unique identifier for this GNode. Immutable for the lifetime of the GNode.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.gt/004', 'Alias', 1, 'Human-readable hierarchical identifier. Forms the basis of the GNodeTree topology. Alias may change over time as the physical or conceptual topology is refined.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.gt/004', 'BaseClass', 2, 'Universal structural ontology classification for the GNode. Defines the physical or logical topology role used for interoperability, copper-tree construction, and market coordination across organizations.
+', TRUE, FALSE, NULL, NULL, 'base.g.node.class/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.gt/004', 'GNodeClass', 3, 'Functional or role-based classification for the GNode. Interpreted according to the namespace of the registering organization. This field is a free-form string, not a universal enum. 
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.gt/004', 'Status', 4, 'Lifecycle status of the GNode within the registry.
+', TRUE, FALSE, NULL, NULL, 'g.node.status/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.gt/004', 'PrevAlias', 5, 'Previous Alias value during alias transitions. Required only when Alias changes. Must be null if Alias has not changed.
+', FALSE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.gt/004', 'PositionPointId', 6, 'Reference to a PositionPoint GT type giving physical location (WGS84 microdegrees). Required for physical GNodes; null for logical/service nodes.
+', FALSE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.gt/004', 'DisplayName', 7, 'Optional human-friendly label for UI or documentation.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.instance.gt/000', 'GNodeId', 0, 'Durable identifier of the Grid Node whose runtime instance is represented by this record.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.instance.gt/000', 'GNodeInstanceId', 1, 'Unique identifier for this runtime process instance.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.instance.gt/000', 'Status', 2, 'Current lifecycle state of this runtime instance.
+', TRUE, FALSE, NULL, NULL, 'g.node.instance.status/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.instance.gt/000', 'Transport', 3, 'Messaging transport through which this instance connected.
+', TRUE, FALSE, NULL, NULL, 'g.node.instance.transport/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.instance.gt/000', 'ConnectedAtUnixMs', 4, 'Timestamp when this runtime instance was authorized.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.instance.gt/000', 'RevokedAtUnixMs', 5, 'Timestamp when authority was revoked or ended. MUST be absent if Status is Active.
+', FALSE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.instance.gt/000', 'ConnectionHandle', 6, 'Opaque transport-level connection identifier as reported by the broker (e.g., RabbitMQ connection name).
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('g.node.instance.gt/000', 'ObservedPeerAddress', 7, 'Remote address as observed by the broker at connection time.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gridworks.ack/000', 'AckMessageID', 0, 'Message identifier of the message being acknowledged.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gridworks.ping/000', 'MessageId', 0, 'Unique identifier for this ping message.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.tank.temp.calibration/000', 'Depth1M', 0, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.tank.temp.calibration/000', 'Depth1B', 1, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.tank.temp.calibration/000', 'Depth2M', 2, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.tank.temp.calibration/000', 'Depth2B', 3, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.tank.temp.calibration/000', 'Depth3M', 4, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.tank.temp.calibration/000', 'Depth3B', 5, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.tank.temp.calibration.map/000', 'Buffer', 0, NULL, TRUE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.tank.temp.calibration.map/000', 'Tank', 1, NULL, TRUE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OpenObjectDeferredToRawJson", "schema": {"type": "object", "propertyNames": {"pattern": "^[1-9][0-9]*$"}, "additionalProperties": {"$ref": "https://schemas.electricity.works/types/gw1.tank.temp.calibration/000"}}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.telemetry.name.quantity.projection/000', 'TelemetryName', 0, 'Legacy telemetry encoding value.
+', TRUE, FALSE, NULL, NULL, 'spaceheat.telemetry.name/006', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.telemetry.name.quantity.projection/000', 'Quantity', 1, 'Canonical physical or logical quantity associated with the specified TelemetryName.
+', TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.unit.quantity.projection/000', 'Unit', 0, 'The concrete measurement unit.
+', TRUE, FALSE, NULL, NULL, 'gw1.unit/001', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('gw1.unit.quantity.projection/000', 'Quantity', 1, 'The abstract physical quantity associated with Unit.
+', TRUE, FALSE, NULL, NULL, 'gw1.quantity/001', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'AlphaTimes10', 0, 'Alpha coefficient scaled by 10.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'BetaTimes100', 1, 'Beta coefficient scaled by 100.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'GammaEx6', 2, 'Gamma coefficient scaled by 10^6.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'IntermediatePowerKw', 3, 'Intermediate heating power in kW thermal.
+', TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'IntermediateRswtF', 4, 'Intermediate required source water temperature in degrees Fahrenheit.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'DdPowerKw', 5, 'Design-day heating power in kW thermal.
+', TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'DdRswtF', 6, 'Design-day required source water temperature in degrees Fahrenheit.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'DdDeltaTF', 7, 'Design-day delta-T in degrees Fahrenheit.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'HpMaxKwTh', 8, 'Maximum heat-pump thermal output in kW.
+', TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'MaxEwtF', 9, 'Maximum entering-water temperature in degrees Fahrenheit.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'LoadOverestimationPercent', 10, 'Percentage uplift applied to estimated load.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/004', 'Version', 12, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'AlphaTimes10', 0, 'Alpha coefficient scaled by 10.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'BetaTimes100', 1, 'Beta coefficient scaled by 100.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'GammaEx6', 2, 'Gamma coefficient scaled by 10^6.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'IntermediatePowerKw', 3, 'Intermediate heating power in kW thermal.
+', TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'IntermediateRswtF', 4, 'Intermediate required source water temperature in degrees Fahrenheit.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'DdPowerKw', 5, 'Design-day heating power in kW thermal.
+', TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'DdRswtF', 6, 'Design-day required source water temperature in degrees Fahrenheit.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'DdDeltaTF', 7, 'Design-day delta-T in degrees Fahrenheit.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'HpMaxKwTh', 8, 'Maximum heat-pump thermal output in kW.
+', TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'MaxEwtF', 9, 'Maximum entering-water temperature in degrees Fahrenheit.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'LoadOverestimationPercent', 10, 'Percentage uplift applied to estimated load.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'CopIntercept', 11, 'Constant term in the COP model.
+', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'CopOatCoeff', 12, 'Outdoor-air-temperature coefficient in the COP model.
+', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'CopLwtCoeff', 13, 'Leaving-water-temperature coefficient in the COP model.
+', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'CopMin', 14, 'Minimum coefficient of performance allowed by the COP model.
+', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'CopMinOatF', 15, 'Outdoor-air temperature threshold used with the minimum COP rule, in degrees Fahrenheit.
+', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/005', 'Version', 17, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'AlphaTimes10', 0, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'BetaTimes100', 1, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'GammaEx6', 2, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'IntermediatePowerKw', 3, NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'IntermediateRswtF', 4, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'DdPowerKw', 5, NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'DdRswtF', 6, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'DdDeltaTF', 7, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'HpMaxKwEl', 8, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'HpMaxKwTh', 9, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'MaxEwtF', 10, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'LoadOverestimationPercent', 11, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'CopIntercept', 12, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'CopOatCoeff', 13, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'CopLwtCoeff', 14, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'CopMin', 15, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'CopMinOatF', 16, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'HpTurnOnMinutes', 17, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('ha1.params/006', 'Version', 19, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/002', 'ComponentId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/002', 'ComponentAttributeClassId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/002', 'ConfigList', 2, NULL, TRUE, TRUE, NULL, NULL, NULL, 'relay.actor.config/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/002', 'DisplayName', 3, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/002', 'HwUid', 4, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/002', 'I2cAddressList', 5, NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003', 'ComponentId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003', 'ComponentAttributeClassId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003', 'ConfigList', 2, NULL, TRUE, TRUE, NULL, NULL, NULL, 'relay.actor.config/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003', 'DisplayName', 3, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003', 'HwUid', 4, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003', 'I2cBus', 5, 'Spaceheat node name of the I2C bus actor that hosts this relay board.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003', 'I2cAddressList', 6, 'Integer I2C addresses used by the relay board hardware.
+', TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/004', 'ComponentId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/004', 'ComponentAttributeClassId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/004', 'ConfigList', 2, NULL, TRUE, TRUE, NULL, NULL, NULL, 'relay.actor.config/003', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/004', 'DisplayName', 3, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/004', 'HwUid', 4, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/004', 'I2cBus', 5, 'Spaceheat node name of the I2C bus actor that hosts this relay board.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.multichannel.dt.relay.component.gt/004', 'I2cAddressList', 6, 'Integer I2C addresses used by the relay board hardware.
+', TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'ChannelName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'PollPeriodMs', 1, 'How often SCADA polls the underlying hardware device or source for a fresh value, in milliseconds.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'CapturePeriodS', 2, 'How often SCADA reports or emits the channel value into the telemetry stream, in seconds.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'AsyncCapture', 3, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'AsyncCaptureDelta', 4, 'Optional threshold for asynchronous emission, expressed in Unit-scaled values.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'Exponent', 5, 'Base-10 scaling exponent applied to the serialized integer reading in combination with Unit.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'Unit', 6, NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'AdcChannel', 7, 'ADC input pin used for this thermistor channel.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'SendToDerived', 8, 'Whether this raw thermistor reading should also be provided to derived channel logic.
+', FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.channel.config/000', 'ThermistorBeta', 9, 'Beta parameter of the thermistor used to convert resistance to temperature.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'ComponentId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'ComponentAttributeClassId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'ConfigList', 2, 'Thermistor channel configurations attached to this ADC reader.
+', TRUE, TRUE, NULL, NULL, NULL, 'i2c.thermistor.channel.config/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'DisplayName', 3, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'HwUid', 4, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'Bus', 5, 'Logical bus name identifying the I2C bus on which this ADC is attached.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'AdcAddress', 6, '7-bit I2C address of the ADC device.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'AdcReferenceVolts', 7, 'Reference voltage used by the ADC when converting measured voltage to a serialized reading.
+', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'SeriesResistanceKOhms', 8, 'Series resistance, in kilo-ohms, used in the thermistor divider circuit.
+', TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('i2c.thermistor.reader.component.gt/000', 'TempCalcMethod', 9, NULL, TRUE, FALSE, NULL, NULL, 'temp.calc.method/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'ZoneList', 4, 'Ordered list of zones known to the running deployment.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'CriticalZoneList', 5, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'TotalStoreTanks', 6, 'Number of store tanks configured for this deployment.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'ShNodes', 7, 'Spaceheat nodes available in the running SCADA context.
+', TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/200', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'DataChannels', 8, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'DerivedChannels', 9, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'TankModuleComponents', 10, 'Tank module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, 'pico.tank.module.component.gt/011', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'FlowModuleComponents', 11, 'Flow module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'Ha1Params', 12, 'Active HA1 parameter set used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/004', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'I2cRelayComponent', 13, 'Relay component configuration used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/007', 'TMap', 14, 'Optional tank temperature calibration map emitted with the runtime context.
+', FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'ZoneList', 6, 'Ordered list of zones known to the running deployment.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'CriticalZoneList', 7, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'TotalStoreTanks', 8, 'Number of store tanks configured for this deployment.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'ShNodes', 9, 'Spaceheat nodes available in the running SCADA context.
+', TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/300', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'DataChannels', 10, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'DerivedChannels', 11, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'TankModuleComponents', 12, 'Tank module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'FlowModuleComponents', 13, 'Flow module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'Ha1Params', 14, 'Active HA1 parameter set used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/004', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'I2cRelayComponent', 15, 'Relay component configuration used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/008', 'TMap', 16, 'Optional tank temperature calibration map emitted with the runtime context.
+', FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+', TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+', TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/300', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfDeferredToRawJson", "oneOf": [{"$ref": "https://schemas.electricity.works/types/ha1.params/004"}, {"$ref": "https://schemas.electricity.works/types/ha1.params/005"}]}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'I2cRelayComponent', 16, 'Relay component configuration used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/009', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+', FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+', TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/spaceheat.node.gt/300"}, {"$ref": "https://schemas.electricity.works/types/spaceheat.node.gt/301"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/005', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
+', FALSE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/010', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+', FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+', TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/spaceheat.node.gt/300"}, {"$ref": "https://schemas.electricity.works/types/spaceheat.node.gt/301"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/derived.channel.gt/000"}, {"$ref": "https://schemas.electricity.works/types/derived.channel.gt/001"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/006', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
+', FALSE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/011', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+', FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+', TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+', TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/301', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/006', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
+', FALSE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/003', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/012', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+', FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this runtime context.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'MessageCreatedMs', 1, 'Timestamp at which this layout projection was created.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'MessageId', 2, 'Unique identifier for this emitted layout projection.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'Strategy', 3, 'Strategy / manifold variant name used by the running SCADA deployment.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'SystemMode', 4, 'Active system mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.system.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'SeasonalStorageMode', 5, 'Active seasonal storage mode for the running SCADA deployment.
+', TRUE, FALSE, NULL, NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'BufferShortCycling', 6, 'Whether buffer short cycling behavior is enabled.
+', TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'ZoneList', 7, 'Ordered list of zones known to the running deployment.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'CriticalZoneList', 8, 'Ordered list of critical zones. SHALL be a subset of ZoneList.
+', TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'TotalStoreTanks', 9, 'Number of store tanks configured for this deployment.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'ShNodes', 10, 'Spaceheat nodes available in the running SCADA context.
+', TRUE, TRUE, NULL, NULL, NULL, 'spaceheat.node.gt/301', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'DataChannels', 11, 'Raw telemetry channel definitions used to interpret channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'data.channel.gt/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'DerivedChannels', 12, 'Derived telemetry channel definitions used to interpret derived channel names appearing in reports and snapshots.
+', TRUE, TRUE, NULL, NULL, NULL, 'derived.channel.gt/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'TankModuleComponents', 13, 'Tank module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"}, {"$ref": "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'FlowModuleComponents', 14, 'Flow module components present in the running deployment.
+', TRUE, TRUE, NULL, NULL, NULL, 'pico.flow.module.component.gt/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'Ha1Params', 15, 'Active HA1 parameter set used by the running deployment.
+', TRUE, FALSE, NULL, NULL, NULL, 'ha1.params/006', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'I2cRelayComponent', 16, 'Optional relay component configuration used by the running deployment.
+', FALSE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/004', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('layout.lite/013', 'TMap', 17, 'Optional tank temperature calibration map emitted with the runtime context.
+', FALSE, FALSE, NULL, NULL, NULL, 'gw1.tank.temp.calibration.map/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('linear.one.dimensional.calibration/000', 'M', 0, 'Multiplicative slope applied to the raw input measurement.
+', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('linear.one.dimensional.calibration/000', 'B', 1, 'Additive offset applied after the multiplicative slope.
+', FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('linear.one.dimensional.calibration/001', 'M', 0, 'Dimensionless slope applied to the normalized input value. Must be finite.
+', TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('linear.one.dimensional.calibration/001', 'B', 1, 'Additive offset expressed in the derived channel''s OutputUnit scaling domain.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('machine.states/000', 'MachineHandle', 0, NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('machine.states/000', 'StateEnum', 1, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('machine.states/000', 'StateList', 2, NULL, TRUE, TRUE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('machine.states/000', 'UnixMsList', 3, NULL, TRUE, TRUE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'ComponentId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'ComponentAttributeClassId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'ConfigList', 2, 'Channel configuration entries inherited from ComponentGt.
+', TRUE, TRUE, NULL, NULL, NULL, 'channel.config/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'DisplayName', 3, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'HwUid', 4, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'Enabled', 5, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'SerialNumber', 6, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'FlowNodeName', 7, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'FlowMeterType', 8, 'Make/model of the configured flow meter.
+', TRUE, FALSE, NULL, NULL, 'spaceheat.make.model/003', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'HzCalcMethod', 9, 'Method used to compute frequency from captured pulse data.
+', TRUE, FALSE, NULL, NULL, 'hz.calc.method/001', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'GpmFromHzMethod', 10, 'Method used to convert computed frequency into flow rate.
+', TRUE, FALSE, NULL, NULL, 'gpm.from.hz.method/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'ConstantGallonsPerTick', 11, NULL, TRUE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'SendHz', 12, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'SendGallons', 13, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'SendTickLists', 14, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'NoFlowMs', 15, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'AsyncCaptureThresholdGpmTimes100', 16, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'PublishEmptyTicklistAfterS', 17, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'PublishAnyTicklistAfterS', 18, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'PublishTicklistPeriodS', 19, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'PublishTicklistLength', 20, NULL, FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'ExpAlpha', 21, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.flow.module.component.gt/000', 'CutoffFrequency', 22, NULL, FALSE, FALSE, 'number', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'ComponentId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'ComponentAttributeClassId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'ConfigList', 2, 'Channel configuration entries inherited from ComponentGt.
+', TRUE, TRUE, NULL, NULL, NULL, 'channel.config/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'DisplayName', 3, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'HwUid', 4, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'Enabled', 5, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'PicoHwUid', 6, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'PicoAHwUid', 7, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'PicoBHwUid', 8, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'TempCalcMethod', 9, NULL, TRUE, FALSE, NULL, NULL, 'temp.calc.method/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'ThermistorBeta', 10, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'SendMicroVolts', 11, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'Samples', 12, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'NumSampleAverages', 13, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'PicoKOhms', 14, NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'SerialNumber', 15, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'AsyncCaptureDeltaMicroVolts', 16, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('pico.tank.module.component.gt/011', 'SensorOrder', 17, NULL, FALSE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('position.point.gt/000', 'Id', 0, 'Globally unique identifier for this PositionPoint. Serves as the primary key in the Grid Node Registry.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('position.point.gt/000', 'LatitudeMicroDeg', 1, 'Latitude in microdegrees. Must fall between -90,000,000 and 90,000,000 inclusive (corresponding to -90.0° to +90.0° in WGS84).
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('position.point.gt/000', 'LongitudeMicroDeg', 2, 'Longitude in microdegrees. Must fall between -180,000,000 and 180,000,000 inclusive (corresponding to -180.0° to +180.0° in WGS84).
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('power.watts/000', 'Watts', 0, 'Instantaneous power in watts. Positive means consuming from the grid and negative means generating to the grid.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('price.quantity.unitless/001', 'PriceX1000', 0, 'Price value scaled by 1000.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('price.quantity.unitless/001', 'QuantityX1000', 1, 'Quantity value scaled by 1000.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'ChannelName', 0, 'Name of the telemetry channel associated with this relay actor.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'PollPeriodMs', 1, 'Polling period in milliseconds used to check the relay state.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'CapturePeriodS', 2, 'Period in seconds for periodic capture of the relay state channel.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'AsyncCapture', 3, 'If true, state changes SHALL be captured asynchronously in addition to periodic capture.
+', TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'AsyncCaptureDelta', 4, 'Minimum change required to trigger asynchronous capture. For relay-backed state channels this is typically 1.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'Exponent', 5, 'Base-10 exponent applied to the channel value representation.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'Unit', 6, 'Unit associated with the channel represented by this relay actor config.
+', TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'RelayIdx', 7, 'One-based relay index on the associated relay board component.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'ActorName', 8, 'Canonical Spaceheat node name of the actor controlled by this relay.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'WiringConfig', 9, 'Wiring configuration of the relay contact arrangement used by this actor.
+', TRUE, FALSE, NULL, NULL, 'relay.wiring.config/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'EventType', 10, 'Semantic event category emitted when the relay changes the controlled actor''s state.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'DeEnergizingEvent', 11, 'Event value associated with transition caused by relay de-energization.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'EnergizingEvent', 12, 'Event value associated with transition caused by relay energization.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'StateType', 13, 'Semantic state category controlled by this relay.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'DeEnergizedState', 14, 'State value associated with the de-energized relay position.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/002', 'EnergizedState', 15, 'State value associated with the energized relay position.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'ChannelName', 0, 'Name of the telemetry channel associated with this relay actor.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'PollPeriodMs', 1, 'Polling period in milliseconds used to check the relay state.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'CapturePeriodS', 2, 'Period in seconds for periodic capture of the relay state channel.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'AsyncCapture', 3, 'If true, state changes SHALL be captured asynchronously in addition to periodic capture.
+', TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'AsyncCaptureDelta', 4, 'Minimum change required to trigger asynchronous capture. For relay-backed state channels this is typically 1.
+', FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'Exponent', 5, 'Base-10 exponent applied to the channel value representation.
+', TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'Unit', 6, 'Unit associated with the channel represented by this relay actor config.
+', TRUE, FALSE, NULL, NULL, 'spaceheat.unit/001', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'RelayIdx', 7, 'One-based relay index on the associated relay board component.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'ActorName', 8, 'Canonical Spaceheat node name of the actor controlled by this relay.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'WiringConfig', 9, 'Wiring configuration of the relay contact arrangement used by this actor.
+', TRUE, FALSE, NULL, NULL, 'relay.wiring.config/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'EventType', 10, 'Semantic event category emitted when the relay changes the controlled actor''s state.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'DeEnergizingEvent', 11, 'Event value associated with transition caused by relay de-energization.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'EnergizingEvent', 12, 'Event value associated with transition caused by relay energization.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'StateType', 13, 'Semantic state category controlled by this relay.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'DeEnergizedState', 14, 'State value associated with the de-energized relay position.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('relay.actor.config/003', 'EnergizedState', 15, 'State value associated with the energized relay position.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'FromGNodeAlias', 0, 'GNode alias of the entity sending this report.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'FromGNodeInstanceId', 1, 'Unique identifier of the specific runtime instance producing this report.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'AboutGNodeAlias', 2, 'GNode alias of the entity about which this report is describing telemetry.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'SlotStartUnixS', 3, 'Start time of the reporting period in Unix seconds.
+', TRUE, FALSE, NULL, 'utc.seconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'SlotDurationS', 4, 'Duration of the reporting slot in seconds.
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'ChannelReadingList', 5, 'Telemetry readings observed during this reporting slot.
+', TRUE, TRUE, NULL, NULL, NULL, 'channel.readings/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'StateList', 6, 'State transitions observed during this reporting slot.
+', TRUE, TRUE, NULL, NULL, NULL, 'machine.states/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'FsmReportList', 7, 'Finite state machine reports generated during this slot.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, NULL, '{"MIGRATION_WARNING": "OneOfInArrayItemsDeferredToRawJson", "items": {"oneOf": [{"$ref": "https://schemas.electricity.works/types/fsm.full.report/000"}, {"$ref": "https://schemas.electricity.works/types/fsm.full.report/001"}]}}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'MessageCreatedMs', 8, 'Timestamp at which this report was created by the reporting node.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'Id', 9, 'Globally unique identifier for this report message.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/002', 'Version', 11, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'FromGNodeAlias', 0, 'Canonical alias of the GNode emitting this report.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'FromGNodeInstanceId', 1, 'Unique identifier of the specific running instance of the GNode that produced this report.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'AboutGNodeAlias', 2, 'Canonical alias of the GNode whose behavior is being reported. In most deployments this equals FromGNodeAlias, but may differ in proxy or aggregation scenarios.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'SlotStartUnixS', 3, 'Start timestamp (UTC seconds) of the reporting interval.
+', TRUE, FALSE, NULL, 'utc.seconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'SlotDurationS', 4, 'Duration of the reporting interval in seconds. Typical value is 300 (5 minutes).
+', TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'ChannelReadingList', 5, 'All channel readings observed during the reporting interval. Each ChannelReadings element may contain multiple timestamped values for a single channel.
+', TRUE, TRUE, NULL, NULL, NULL, 'channel.readings/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'StateList', 6, 'Machine state transitions observed during the reporting interval.
+', TRUE, TRUE, NULL, NULL, NULL, 'machine.states/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'FsmReportList', 7, 'Full finite-state-machine reports emitted during this interval.
+', TRUE, TRUE, NULL, NULL, NULL, 'fsm.full.report/001', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'MessageCreatedMs', 8, 'Timestamp (UTC milliseconds) at which this report message was created by the SCADA process.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report/003', 'Id', 9, 'Globally unique identifier for this report message.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report.event/002', 'MessageId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report.event/002', 'TimeCreatedMs', 1, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report.event/002', 'Src', 2, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report.event/002', 'Report', 3, NULL, TRUE, FALSE, NULL, NULL, NULL, 'report/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report.event/002', 'Version', 5, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report.event/003', 'MessageId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report.event/003', 'TimeCreatedMs', 1, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report.event/003', 'Src', 2, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('report.event/003', 'Report', 3, NULL, TRUE, FALSE, NULL, NULL, NULL, 'report/003', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities/000', 'FromGNodeAlias', 0, 'GNode alias of the SCADA actor publishing this capability projection.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities/000', 'MessageCreatedMs', 1, 'Timestamp at which this projection was created.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities/000', 'RelayNodes', 2, 'List of nodes representing controllable relays exposed by this SCADA. Each corresponds to a ShNode in layout.lite whose ActorClass is Relay.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, 'scada.control.capabilities.RelayNode', NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities/000', 'DacNodes', 3, 'List of nodes representing controllable 0–10V outputs exposed by this SCADA. Each corresponds to a ShNode in layout.lite whose ActorClass is ZeroTenOutputer.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, 'scada.control.capabilities.DacNode', NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities/000', 'ControlChannels', 4, 'Telemetry channels corresponding to controllable nodes.
+Each entry is a projection of a DataChannel from layout.lite whose AboutNodeName references a node listed in RelayNodes or DacNodes. These channels represent the observed state of the corresponding control.
+', TRUE, TRUE, NULL, NULL, NULL, NULL, 'scada.control.capabilities.ControlChannel', NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities/000', 'I2cRelayComponent', 5, 'Relay semantic configuration component providing event and state mappings required for dispatch construction.
+', TRUE, FALSE, NULL, NULL, NULL, 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('send.control.capabilities/000', 'FromGNodeAlias', 0, 'GNode alias of the actor issuing the request. Typically an admin actor
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('send.control.capabilities/000', 'MessageCreatedMs', 1, 'Timestamp at which this request was created by the requesting node.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('send.layout/000', 'FromGNodeAlias', 0, 'GNode alias of the actor issuing the request.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('send.layout/000', 'FromName', 1, 'Spaceheat actor name of the requester (legacy routing/addressing field).
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('send.layout/000', 'ToName', 2, 'Spaceheat actor name of the intended recipient (legacy routing/addressing field).
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('send.layout/001', 'FromGNodeAlias', 0, 'GNode alias of the actor issuing the request.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('send.layout/001', 'MessageCreatedMs', 1, 'Timestamp at which this request was created by the requesting node.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'ComponentId', 0, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'ComponentAttributeClassId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'ConfigList', 2, 'Channel configuration entries inherited from ComponentGt.
+', TRUE, TRUE, NULL, NULL, NULL, 'channel.config/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'DisplayName', 3, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'HwUid', 4, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'Enabled', 5, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'PicoHwUid', 6, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'PicoAHwUid', 7, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'PicoBHwUid', 8, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'TempCalcMethod', 9, NULL, TRUE, FALSE, NULL, NULL, 'temp.calc.method/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'ThermistorBeta', 10, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'SendMicroVolts', 11, NULL, TRUE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'Samples', 12, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'NumSampleAverages', 13, NULL, TRUE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'PicoKOhms', 14, NULL, FALSE, FALSE, NULL, 'positive.int', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'SerialNumber', 15, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'AsyncCaptureDeltaMicroVolts', 16, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'SensorOrder', 17, NULL, FALSE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'SimulatesTypeName', 18, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"const": "pico.tank.module.component.gt"}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('sim.pico.tank.module.component.gt/000', 'SimulatesVersion', 19, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, '{"const": "011"}');
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('single.machine.state/000', 'MachineHandle', 0, NULL, TRUE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('single.machine.state/000', 'StateEnum', 1, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('single.machine.state/000', 'State', 2, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('single.machine.state/000', 'UnixMs', 3, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('single.machine.state/000', 'Cause', 4, NULL, FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('single.reading/000', 'ChannelName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('single.reading/000', 'Value', 1, NULL, TRUE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('single.reading/000', 'ScadaReadTimeUnixMs', 2, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('snapshot.spaceheat/003', 'FromGNodeAlias', 0, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('snapshot.spaceheat/003', 'FromGNodeInstanceId', 1, NULL, TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('snapshot.spaceheat/003', 'SnapshotTimeUnixMs', 2, NULL, TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('snapshot.spaceheat/003', 'LatestReadingList', 3, NULL, TRUE, TRUE, NULL, NULL, NULL, 'single.reading/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('snapshot.spaceheat/003', 'LatestStateList', 4, NULL, TRUE, TRUE, NULL, NULL, NULL, 'single.machine.state/000', NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/200', 'Name', 0, 'Unique name identifying this node within the Spaceheat system. This name is used as the primary reference point for binding channels, actors, and control logic.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/200', 'ActorHierarchyName', 1, 'Hierarchical name in the actor command tree. This is used when the node participates in structured actor control and command routing.
+', FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/200', 'Handle', 2, 'Handle used for actor-to-actor communication. When present, this defines the addressable identity of the node within the actor messaging layer.
+', FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/200', 'ActorClass', 3, 'Actor-class string associated with this node.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/200', 'DisplayName', 4, 'Human-readable display name for this node, intended for UI presentation and operator interaction.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/200', 'ComponentId', 5, 'Identifier of the physical component associated with this node. This links the node to hardware defined elsewhere in the system.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/200', 'NameplatePowerW', 6, 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
+', FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/200', 'InPowerMetering', 7, 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.
+', FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/200', 'ShNodeId', 8, 'Immutable unique identifier for this Spaceheat node. This identifier is stable across deployments and renaming.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/300', 'Name', 0, 'Unique name identifying this node within the Spaceheat system. This name is used as the primary reference point for binding channels, actors, and control logic.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/300', 'ActorHierarchyName', 1, 'Hierarchical name in the actor command tree. This is used when the node participates in structured actor control and command routing.
+', FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/300', 'Handle', 2, 'Handle used for actor-to-actor communication. When present, this defines the addressable identity of the node within the actor messaging layer.
+', FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/300', 'ActorClass', 3, 'Class of the software actor associated with this node. This determines the behavior, capabilities, and runtime role of the node within the SCADA.
+', TRUE, FALSE, NULL, NULL, 'gw1.actor.class/009', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/300', 'DisplayName', 4, 'Human-readable display name for this node, intended for UI presentation and operator interaction.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/300', 'ComponentId', 5, 'Identifier of the physical component associated with this node. This links the node to hardware defined elsewhere in the system.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/300', 'NameplatePowerW', 6, 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
+', FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/300', 'InPowerMetering', 7, 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.
+', FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/300', 'ShNodeId', 8, 'Immutable unique identifier for this Spaceheat node. This identifier is stable across deployments and renaming.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'Name', 0, 'Unique name identifying this node within the Spaceheat system. This name is used as the primary reference point for binding channels, actors, and control logic.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'ActorHierarchyName', 1, 'Hierarchical name in the actor command tree. This is used when the node participates in structured actor control and command routing.
+', FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'Handle', 2, 'Handle used for actor-to-actor communication. When present, this defines the addressable identity of the node within the actor messaging layer.
+', FALSE, FALSE, NULL, 'handle.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'ActorClass', 3, 'Class of the software actor associated with this node. This determines the behavior, capabilities, and runtime role of the node within the SCADA.
+', TRUE, FALSE, NULL, NULL, 'gw1.actor.class/011', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'DisplayName', 4, 'Human-readable display name for this node, intended for UI presentation and operator interaction.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'ComponentId', 5, 'Identifier of the physical component associated with this node. This links the node to hardware defined elsewhere in the system.
+', FALSE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'BoardComponentId', 6, 'Identifier of the board-level component associated with this node. This allows grouping of nodes by embedded hardware platform or control board.
+', FALSE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'NameplatePowerW', 7, 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
+', FALSE, FALSE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'InPowerMetering', 8, 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.
+', FALSE, FALSE, 'boolean', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.node.gt/301', 'ShNodeId', 9, 'Immutable unique identifier for this Spaceheat node. This identifier is stable across deployments and renaming.
+', TRUE, FALSE, NULL, 'uuid4.str', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.telemetry.quantity.projection/000', 'TelemetryName', 0, NULL, TRUE, FALSE, NULL, NULL, 'spaceheat.telemetry.name/007', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('spaceheat.telemetry.quantity.projection/000', 'Quantity', 1, NULL, TRUE, FALSE, NULL, NULL, 'gw1.quantity/000', NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings/000', 'ChannelNameList', 0, 'Ordered list of channel names whose readings are included in this payload.
+', TRUE, TRUE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings/000', 'ValueList', 1, 'Ordered list of integer readings aligned by index with ChannelNameList.
+', TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings/000', 'ScadaReadTimeUnixMs', 2, 'UTC millisecond timestamp at which these synchronized readings were captured.
+', TRUE, FALSE, NULL, 'utc.milliseconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings.bundle/001', 'AboutGNodeAlias', 0, NULL, TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings.bundle/001', 'StartTimestamp', 1, NULL, TRUE, FALSE, NULL, 'utc.iso8601.seconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings.bundle/001', 'EndTimestamp', 2, NULL, TRUE, FALSE, NULL, 'utc.iso8601.seconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings.bundle/001', 'TimestampList', 3, NULL, TRUE, TRUE, NULL, 'utc.iso8601.seconds', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_attributes (type_version, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings.bundle/001', 'ChannelReadingsList', 4, NULL, TRUE, TRUE, NULL, NULL, NULL, NULL, 'synced.readings.bundle.ChannelReading', NULL);
+
+-- ----------------------------------------------------------------------------
+-- TypeExamples: Per-TypeVersion full-instance examples (with order preserved). Sourced from JSON-Schema 'examples' arrays.
+-- ----------------------------------------------------------------------------
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('analytics.channel.gt/000', 0, '{
+  "Id": "9c2f2a3a-6f5a-4f9d-8e4b-1b7c2d1e6a11",
+  "Name": "persistence-delay",
+  "DisplayName": "Persistence Delay Orange1",
+  "TerminalAssetAlias": "d1.isone.ct.newhaven.orange1.ta",
+  "ProducedBy": "GridWorksData",
+  "Strategy": "persistence-delay",
+  "OutputUnit": "Milliseconds",
+  "OutputQuantity": "Time",
+  "TypeName": "analytics.channel.gt",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('channel.readings/002', 0, '{"ChannelName": "hp-odu-pwr", "ValueList": [3215, 3315, 4200], "ScadaReadTimeUnixMsList": [1735689600123, 1735689601123, 1735689602123], "TypeName": "channel.readings", "Version": "002"}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('connectivity.edge.gt/000', 0, '{
+  "Id": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+  "FromGNodeId": "86f3c021-e217-4197-b55f-547a7ab88c30",
+  "ToGNodeId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "FromGNodeAlias": "d1.isone.me.versant.keene",
+  "ToGNodeAlias": "d1.isone.me.versant.keene.beech",
+  "Status": "Active",
+  "TypeName": "connectivity.edge.gt",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('data.channel.gt/001', 0, '{
+  "Name": "primary-flow",
+  "DisplayName": "Primary Flow Gpm X 100",
+  "AboutNodeName": "primary-flow",
+  "CapturedByNodeName": "primary-btu",
+  "TelemetryName": "GpmTimes100",
+  "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
+  "Id": "9c33d7af-59e0-415b-8208-ecf64916a64b",
+  "TypeName": "data.channel.gt",
+  "Version": "001"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('data.channel.gt/002', 0, '{
+  "Name": "vdc-relay",
+  "DisplayName": "5V DC Bus Relay State",
+  "AboutNodeName": "vdc-relay-gpio-23",
+  "CapturedByNodeName": "vdc-relay-gpio-23",
+  "TelemetryName": "RelayState",
+  "Quantity": "Unitless",
+  "TerminalAssetAlias": "hw1.isone.me.versant.keene.spruce.ta",
+  "Id": "57d123f9-8bc5-4667-9668-4529235b224c",
+  "TypeName": "data.channel.gt",
+  "Version": "002"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('derived.channel.gt/000', 0, '{
+  "CreatedByNodeName": "derived-generator",
+  "DisplayName": "Usable Energy Wh",
+  "Id": "23bf86b8-266a-4244-9b72-914179ab85aa",
+  "Name": "usable-energy",
+  "OutputUnit": "WattHours",
+  "Strategy": "layer-by-layer",
+  "TerminalAssetAlias": "d1.isone.ct.newhaven.orange1.ta",
+  "TypeName": "derived.channel.gt",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('derived.channel.gt/001', 0, '{
+  "CreatedByNodeName": "derived-generator",
+  "DisplayName": "Required Energy Wh",
+  "Id": "26c5f643-96cc-4ede-b958-75d626790c01",
+  "Name": "required-energy",
+  "OutputUnit": "WattHours",
+  "Strategy": "system-model",
+  "EmissionMethod": "Periodic",
+  "EmitPeriodS": 60,
+  "InputChannelNames": [],
+  "Parameters": {
+    "EnergyModel": {
+      "TypeName": "gw0.required.energy.layered",
+      "Version": "000"
+    }
+  },
+  "TerminalAssetAlias": "d1.isone.ct.newhaven.orange1.ta",
+  "TypeName": "derived.channel.gt",
+  "Version": "001"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('derived.channel.gt/002', 0, '{
+  "CreatedByNodeName": "derived-generator",
+  "DisplayName": "Required Energy Wh",
+  "Id": "26c5f643-96cc-4ede-b958-75d626790c01",
+  "Name": "required-energy",
+  "OutputUnit": "WattHours"
+  "OutputQuantity": "Energy",
+  "Strategy": "system-model",
+  "EmissionMethod": "Periodic",
+  "EmitPeriodS": 60,
+  "InputChannelNames": [],
+  "Parameters": {
+    "EnergyModel": {
+      "TypeName": "gw0.required.energy.layered",
+      "Version": "000"
+    }
+  },
+  "TerminalAssetAlias": "d1.isone.ct.newhaven.orange1.ta",
+  "TypeName": "derived.channel.gt",
+  "Version": "002"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('fsm.atomic.report/000', 0, '{
+  "MachineHandle": "auto.pico-cycler.vdc-relay-gpio-23",
+  "StateEnum": "relay.closed.or.open",
+  "ReportType": "Action",
+  "ActionType": "RelayPinSet",
+  "Action": 1,
+  "UnixTimeMs": 1774956898001,
+  "TriggerId": "2f18a5a0-cdf9-4782-95a9-5fbb44d3512f",
+  "TypeName": "fsm.atomic.report",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('fsm.atomic.report/001', 0, '{
+  "MachineHandle": "auto.pico-cycler.vdc-relay-gpio-23",
+  "StateEnum": "relay.closed.or.open",
+  "ReportType": "Action",
+  "Action": {
+    "Value": 1
+  },
+  "UnixTimeMs": 1774956898001,
+  "TriggerId": "2f18a5a0-cdf9-4782-95a9-5fbb44d3512f",
+  "TypeName": "fsm.atomic.report",
+  "Version": "001"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('g.node.gt/004', 0, '{
+  "GNodeId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "Alias": "d1.isone.me.versant.keene.beech",
+  "BaseClass": "LeafTransactiveNode",
+  "GNodeClass": "LeafTransactiveNode",
+  "Status": "Active",
+  "PositionPointId": "198ca6af-5a4b-43a2-a8a9-7546deabc731",
+  "DisplayName": "Beech Street Meter",
+  "TypeName": "g.node.gt",
+  "Version": "004"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('g.node.gt/004', 1, '{
+  "GNodeId": "dcb05390-5bca-40ef-b63d-7908ccb33d9b",
+  "Alias": "d1.isone.me.ws",
+  "BaseClass": "Logical",
+  "GNodeClass": "WeatherForecastService",
+  "Status": "Active",
+  "DisplayName": "New England Weather Forecast Service",
+  "TypeName": "g.node.gt",
+  "Version": "004"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('g.node.instance.gt/000', 0, '{
+  "GNodeId": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+  "GNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+  "Status": "Active",
+  "Transport": "RabbitAmqp",
+  "ConnectedAtUnixMs": 1762634100033,
+  "ConnectionHandle": "142.202.11.202:49085 -> 172.19.0.2:5671",
+  "ObservedPeerAddress": "142.202.11.202",
+  "TypeName": "g.node.instance.gt",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('gw1.telemetry.name.quantity.projection/000', 0, '{
+  "TelemetryName": "PowerW",
+  "Quantity": "Power",
+  "TypeName": "gw1.telemetry.name.quantity.projection",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('gw1.unit.quantity.projection/000', 0, '{
+  "Unit": "Watts",
+  "Quantity": "Power",
+  "TypeName": "gw1.unit.quantity.projection",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('ha1.params/004', 0, '{
+  "AlphaTimes10": 55,
+  "BetaTimes100": -10,
+  "GammaEx6": 0,
+  "IntermediatePowerKw": 1.5,
+  "IntermediateRswtF": 100,
+  "DdPowerKw": 5.5,
+  "DdRswtF": 150,
+  "DdDeltaTF": 20,
+  "HpMaxKwTh": 14.0,
+  "MaxEwtF": 170,
+  "LoadOverestimationPercent": 0,
+  "TypeName": "ha1.params",
+  "Version": "004"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('ha1.params/005', 0, '{
+  "AlphaTimes10": 55,
+  "BetaTimes100": -10,
+  "GammaEx6": 0,
+  "IntermediatePowerKw": 1.5,
+  "IntermediateRswtF": 100,
+  "DdPowerKw": 5.5,
+  "DdRswtF": 150,
+  "DdDeltaTF": 20,
+  "HpMaxKwTh": 14.0,
+  "MaxEwtF": 170,
+  "LoadOverestimationPercent": 0,
+  "CopIntercept": 3.2,
+  "CopOatCoeff": 0.02,
+  "CopLwtCoeff": -0.01,
+  "CopMin": 1.4,
+  "CopMinOatF": -5.0,
+  "TypeName": "ha1.params",
+  "Version": "005"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('linear.one.dimensional.calibration/000', 0, '{
+  "TypeName": "linear.one.dimensional.calibration",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('linear.one.dimensional.calibration/000', 1, '{
+  "M": 1.069,
+  "B": -4.3,
+  "TypeName": "linear.one.dimensional.calibration",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('linear.one.dimensional.calibration/001', 0, '{
+  "M": 1.069,
+  "B": -430,
+  "TypeName": "linear.one.dimensional.calibration",
+  "Version": "001"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('position.point.gt/000', 0, '{
+  "Id": "198ca6af-5a4b-43a2-a8a9-7546deabc731",
+  "LatitudeMicroDeg": 45657842,
+  "LongitudeMicroDeg": -68708913,
+  "TypeName": "position.point.gt",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('price.quantity.unitless/001', 0, '{
+  "PriceX1000": 12500,
+  "QuantityX1000": -3000,
+  "TypeName": "price.quantity.unitless",
+  "Version": "001"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('relay.actor.config/002', 0, '{
+  "ActorName": "relay17",
+  "AsyncCapture": true,
+  "CapturePeriodS": 300,
+  "ChannelName": "zone1-down-failsafe-relay17",
+  "DeEnergizedState": "WallThermostat",
+  "DeEnergizingEvent": "SwitchToWallThermostat",
+  "EnergizedState": "Scada",
+  "EnergizingEvent": "SwitchToScada",
+  "EventType": "change.heatcall.source",
+  "Exponent": 0,
+  "PollPeriodMs": 200,
+  "RelayIdx": 17,
+  "WiringConfig": "DoubleThrow"
+  "Unit": "Unitless",
+  "StateType": "heatcall.source",
+  "TypeName": "relay.actor.config",
+  "Version": "002",
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('relay.actor.config/003', 0, '{
+  "ActorName": "relay17",
+  "AsyncCapture": true,
+  "AsyncCaptureDelta": 1,
+  "CapturePeriodS": 300,
+  "ChannelName": "zone1-down-failsafe-relay17",
+  "DeEnergizedState": "RelayClosed",
+  "DeEnergizingEvent": "CloseRelay",
+  "EnergizedState": "RelayOpen",
+  "EnergizingEvent": "OpenRelay",
+  "EventType": "change.relay.state",
+  "Exponent": 0,
+  "PollPeriodMs": 200,
+  "RelayIdx": 17,
+  "StateType": "relay.closed.or.open",
+  "TypeName": "relay.actor.config",
+  "Unit": "Unitless",
+  "Version": "003",
+  "WiringConfig": "NormallyClosed"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('report/002', 0, '{
+  "FromGNodeAlias": "hw1.isone.me.versant.keene.beech.scada",
+  "FromGNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+  "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
+  "SlotStartUnixS": 1762633800,
+  "SlotDurationS": 300,
+  "ChannelReadingList": [{
+          "ChannelName": "hp-lwt",
+          "ValueList": [
+              19900,
+              19700
+          ],
+          "ScadaReadTimeUnixMsList": [
+              1762633800195,
+              1762634056082
+          ],
+          "TypeName": "channel.readings",
+          "Version": "002"
+      }],
+  "StateList": [{
+          "MachineHandle": "ltn.la.relay6",
+          "StateEnum": "relay.closed.or.open",
+          "StateList": [
+              "RelayOpen"
+          ],
+          "UnixMsList": [
+              1762634098098
+          ],
+          "TypeName": "machine.states",
+          "Version": "000"
+      }],
+  "FsmReportList": [],
+  "MessageCreatedMs": 1762634100033,
+  "Id": "7499defd-c54a-4061-a37a-17f3c84f88a2",
+  "TypeName": "report",
+  "Version": "002"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('report/003', 0, '{
+  "FromGNodeAlias": "hw1.isone.me.versant.keene.beech.scada",
+  "FromGNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+  "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
+  "SlotStartUnixS": 1762633800,
+  "SlotDurationS": 300,
+  "ChannelReadingList": [{
+          "ChannelName": "hp-lwt",
+          "ValueList": [
+              19900,
+              19700
+          ],
+          "ScadaReadTimeUnixMsList": [
+              1762633800195,
+              1762634056082
+          ],
+          "TypeName": "channel.readings",
+          "Version": "002"
+      }],
+  "StateList": [{
+          "MachineHandle": "ltn.la.relay6",
+          "StateEnum": "relay.closed.or.open",
+          "StateList": [
+              "RelayOpen"
+          ],
+          "UnixMsList": [
+              1762634098098
+          ],
+          "TypeName": "machine.states",
+          "Version": "000"
+      }],
+  "FsmReportList": [],
+  "MessageCreatedMs": 1762634100033,
+  "Id": "7499defd-c54a-4061-a37a-17f3c84f88a2",
+  "TypeName": "report",
+  "Version": "003"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('send.control.capabilities/000', 0, '{
+  "FromGNodeAlias": "d1.isone.me.versant.keene.beech.admin",
+  "MessageCreatedMs": 1762634100033,
+  "TypeName": "send.control.capabilities",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('send.layout/000', 0, '{
+  "FromGNodeAlias": "d1.isone.me.versant.keene.beech.admin",
+  "FromName": "admin",
+  "ToName": "scada",
+  "TypeName": "send.layout",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('send.layout/001', 0, '{
+  "FromGNodeAlias": "d1.isone.me.versant.keene.beech.admin",
+  "MessageCreatedMs": 1762634100033,
+  "TypeName": "send.layout",
+  "Version": "001"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('single.machine.state/000', 0, '{
+  "MachineHandle": "auto.local-control.local-control-normal.relay6",
+  "StateEnum": "relay.closed.or.open",
+  "State": "RelayClosed",
+  "UnixMs": 1764873285123,
+  "TypeName": "single.machine.state",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('snapshot.spaceheat/003', 0, '{
+  "FromGNodeAlias": "d1.isone.me.versant.keene.peach.scada",
+  "FromGNodeInstanceId": "e4cbf56c-6918-4504-ad77-2da01fbe2c1b",
+  "SnapshotTimeUnixMs": 1774893120000,
+  "LatestReadingList": [
+    {
+      "ChannelName": "elt-buffer-top-pwr",
+      "Value": 4487,
+      "ScadaReadTimeUnixMs": 1774893119500,
+      "TypeName": "single.reading",
+      "Version": "000"
+    },
+    {
+      "ChannelName": "elt-buffer-bottom-pwr",
+      "Value": 0,
+      "ScadaReadTimeUnixMs": 1774893119500,
+      "TypeName": "single.reading",
+      "Version": "000"
+    },
+    {
+      "ChannelName": "buffer-depth1",
+      "Value": 14920,
+      "ScadaReadTimeUnixMs": 1774893119400,
+      "TypeName": "single.reading",
+      "Version": "000"
+    },
+    {
+      "ChannelName": "buffer-depth2",
+      "Value": 14110,
+      "ScadaReadTimeUnixMs": 1774893119400,
+      "TypeName": "single.reading",
+      "Version": "000"
+    },
+    {
+      "ChannelName": "buffer-depth3",
+      "Value": 13280,
+      "ScadaReadTimeUnixMs": 1774893119400,
+      "TypeName": "single.reading",
+      "Version": "000"
+    },
+    {
+      "ChannelName": "buffer-depth1-device",
+      "Value": 65111,
+      "ScadaReadTimeUnixMs": 1774893119400,
+      "TypeName": "single.reading",
+      "Version": "000"
+    },
+    {
+      "ChannelName": "buffer-depth2-device",
+      "Value": 60556,
+      "ScadaReadTimeUnixMs": 1774893119400,
+      "TypeName": "single.reading",
+      "Version": "000"
+    },
+    {
+      "ChannelName": "buffer-depth3-device",
+      "Value": 55556,
+      "ScadaReadTimeUnixMs": 1774893119400,
+      "TypeName": "single.reading",
+      "Version": "000"
+    },
+    {
+      "ChannelName": "zone1-bedrooms-heat-call",
+      "Value": 1,
+      "ScadaReadTimeUnixMs": 1774893119200,
+      "TypeName": "single.reading",
+      "Version": "000"
+    },
+    {
+      "ChannelName": "zone2-living-rm-heat-call",
+      "Value": 0,
+      "ScadaReadTimeUnixMs": 1774893119200,
+      "TypeName": "single.reading",
+      "Version": "000"
+    }
+  ],
+  "LatestStateList": [
+    {
+      "MachineHandle": "auto.local-control.local-control-normal.relay6",
+      "StateEnum": "relay.closed.or.open",
+      "State": "RelayClosed",
+      "UnixMs": 1774893119050,
+      "TypeName": "single.machine.state",
+      "Version": "000"
+    }
+  ],
+  "TypeName": "snapshot.spaceheat",
+  "Version": "003"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('spaceheat.node.gt/301', 0, '{
+  "Name": "s",
+  "ActorClass": "PrimaryScada",
+  "DisplayName": "Spruce Scada",
+  "ShNodeId": "8f3c27de-6a41-4bb0-9df2-51b7ac94e203",
+  "TypeName": "spaceheat.node.gt",
+  "Version": "301"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('spaceheat.node.gt/301', 1, '{
+  "ActorClass": "Relay",
+  "ActorHierarchyName": "s.relay1",
+  "ComponentId": "7a2f6d84-9cb1-4e73-b8a6-3f1d52ce8049",
+  "DisplayName": "5VDC Relay",
+  "Handle": "auto.pico-cycler.relay1",
+  "Name": "relay1",
+  "ShNodeId": "d84f1ab6-73ce-4b92-8f45-1ea769c2053d",
+  "TypeName": "spaceheat.node.gt",
+  "Version": "301"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('synced.readings/000', 0, '{
+  "ChannelNameList": ["hp-odu-pwr", "buffer-depth1"],
+  "ValueList": [3215, 4973],
+  "ScadaReadTimeUnixMs": 1735689600123,
+  "TypeName": "synced.readings",
+  "Version": "000"
+}');
+
+INSERT INTO type_examples (type_version, idx, example_json)
+VALUES ('synced.readings.bundle/001', 0, '{
+  "AboutGNodeAlias": "dw1.isone.me.versant.keene.apple.ta",
+  "StartTimestamp": "2025-02-26T00:00:00Z",
+  "EndTimestamp": "2025-02-26T00:02:00Z",
+  "TimestampList": [
+    "2025-02-26T00:00:00Z",
+    "2025-02-26T00:01:00Z",
+    "2025-02-26T00:02:00Z"
+  ],
+  "ChannelReadingsList": [
+    {
+      "ChannelName": "buffer-depth1",
+      "ValueList": [4973, 4966, 4979],
+      "Unit": "FahrenheitX100",
+      "UnitType": "gw1.unit"
+    },
+    {
+      "ChannelName": "hp-ewt",
+      "ValueList": [18234, 18179, 18157],
+      "Unit": "WaterTempCTimes1000",
+      "UnitType": "spaceheat.telemetry.name"
+    },
+    {
+      "ChannelName": "hp-idu-pwr",
+      "ValueList": [14, 14, 14],
+      "Unit": "Watts",
+      "UnitType": "gw1.unit"
+    },
+    {
+      "ChannelName": "persistence-delay",
+      "ValueList": [231, 102, 3650238],
+      "Unit": "Milliseconds",
+      "UnitType": "gw1.unit"
+    }
+  ],
+  "TypeName": "synced.readings.bundle",
+  "Version": "001"
+}');
+
+-- ----------------------------------------------------------------------------
+-- TypeAxioms: Per-TypeVersion axioms (numbered invariants stated in natural language). Sourced from x-gridworks.axioms in YAML.
+-- ----------------------------------------------------------------------------
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('analytics.channel.gt/000', 1, 'OutputUnitQuantityConsistency', 'OutputQuantity SHALL equal the Quantity defined by the canonical gw1.float.unit.quantity.projection/000 instance for the specified OutputUnit.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('bid/000', 1, 'MarketNormalizationAnchor', 'The price of the first element in PqPairs SHALL equal the PriceMax defined by the MarketType associated with MarketSlotName.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('bid/000', 2, 'UnitConsistency', 'PriceUnit and QuantityUnit SHALL match the units declared by the MarketType associated with MarketSlotName.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('bid/000', 3, 'CurveAdmissibility', 'The structure, ordering, and cardinality of PqPairs SHALL conform to the admissibility rules of the MarketType associated with MarketSlotName (including any constraints on price ordering, monotonicity, tick size, or maximum number of segments).
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('bid/000', 4, 'EconomicAdmission', NULL);
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('channel.config/000', 1, 'CaptureAndPollingConsistency', 'If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('channel.readings/001', 1, 'ListLengthConsistency', 'len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('channel.readings/002', 1, 'ListLengthConsistency', 'len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('connectivity.edge.gt/000', 1, 'NoSelfLoop', 'FromGNodeId SHALL NOT equal ToGNodeId.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('data.channel.gt/001', 1, 'PowerMeteringConstraint', 'If InPowerMetering is true, TelemetryName SHALL equal PowerW.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('data.channel.gt/002', 1, 'PowerMeteringConstraint', 'If InPowerMetering is true, TelemetryName SHALL equal PowerW.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('data.channel.gt/002', 2, 'TelemetryQuantityConsistency', 'Quantity SHALL equal the Quantity defined by the canonical spaceheat.telemetry.quantity.projection/000 instance for the specified TelemetryName.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('derived.channel.gt/001', 1, 'EmissionSemanticsConsistency', 'EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:
+
+  OnTrigger → neither EmitPeriodS nor AsyncEmitDelta present
+  Periodic → EmitPeriodS present, AsyncEmitDelta absent
+  AsyncAndPeriodic → both EmitPeriodS and AsyncEmitDelta present
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('derived.channel.gt/002', 1, 'EmissionSemanticsConsistency', 'EmissionMethod SHALL determine the presence of EmitPeriodS and AsyncEmitDelta as follows:
+
+  OnTrigger → neither EmitPeriodS nor AsyncEmitDelta present
+  Periodic → EmitPeriodS present, AsyncEmitDelta absent
+  AsyncAndPeriodic → both EmitPeriodS and AsyncEmitDelta present
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('derived.channel.gt/002', 2, 'OutputUnitQuantityConsistency', 'OutputQuantity SHALL equal the Quantity defined by the canonical gw1.unit.quantity.projection:000 instance for the specified OutputUnit.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('derived.channel.gt/002', 3, 'AffineStrategyRequiresCalibration', 'If Strategy equals "affine", then:
+
+  - Parameters SHALL contain a key "Calibration".
+  - Parameters.Calibration SHALL be a valid
+    linear.one.dimensional.calibration instance.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('derived.channel.gt/002', 4, 'SystemModelRequiresParameters', 'If Strategy equals "system-model", then:
+  - Parameters SHALL be present.
+  - Parameters SHALL contain a key "EnergyModel".
+  - Parameters.EnergyModel SHALL include:
+      - TypeName
+      - Version
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('fis.authority.manifest/000', 1, 'InstanceReferenceIntegrity', 'For every element in GNodeInstanceList, there SHALL exist exactly one element in GNodeList whose GNodeId matches the instance''s GNodeId.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('fis.authority.manifest/000', 2, 'SingleActiveInstancePerGNode', 'For each element in GNodeList, exactly one element in GNodeInstanceList SHALL have matching GNodeId and Status equal to Active.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('fis.authority.manifest/000', 3, 'ParentClosureUpToDeclaredRoots', 'For every element in GNodeList, all alias prefixes of GNodeAlias SHALL also appear in GNodeList unless the prefix equals one of the aliases listed in ParentRootAliasList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('fsm.atomic.report/000', 1, 'ActionPresenceConsistency', 'Action and ActionType SHALL be present if and only if ReportType equals Action.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('fsm.atomic.report/000', 2, 'ActionTypeConsistency', 'If Action is present, ActionType SHALL also be present.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('fsm.atomic.report/000', 3, 'EventPresenceConsistency', 'EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('fsm.atomic.report/001', 1, 'ActionPresenceConsistency', 'Action SHALL be present if and only if ReportType equals Action.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('fsm.atomic.report/001', 2, 'EventPresenceConsistency', 'EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType equals Event.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('g.node.gt/004', 1, 'ClassConsistency', 'If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('g.node.gt/004', 2, 'PhysicalGNodeLocations', 'If BaseClass != Logical, PositionPointId SHALL NOT be null.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('g.node.gt/004', 3, 'AliasTransitionConsistency', 'If PrevAlias is not null, it SHALL differ from Alias. If PrevAlias is null, no alias transition is represented in this snapshot.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('g.node.gt/004', 4, 'GNodeClassNamespacing', 'GNodeClass SHALL be a non-empty string. It SHALL NOT contain whitespace.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('g.node.gt/004', 5, 'AliasSuffixSemantics', 'Alias SHALL end with ".ta" if and only if GNodeClass is "TerminalAsset". Alias SHALL end with ".scada" if and only if GNodeClass is "Scada".
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('g.node.instance.gt/000', 1, 'RevocationTimestampConsistency', 'RevokedAtUnixMs SHALL be present if and only if Status is Revoked or Ended.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('gw1.tank.temp.calibration.map/000', 1, 'ContiguousTankIndexConstraint', 'Tank SHALL contain between 1 and 6 entries, and its keys SHALL be the contiguous integer strings starting at 1.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('gw1.telemetry.name.quantity.projection/000', 1, 'EnumeratedTelemetryProjectionMapping', 'The only valid TelemetryName → Quantity pairs in version 000 are:
+
+  Unknown → Unknown
+
+  PowerW → Power
+  WattHours → Energy
+  MilliWattHours → Energy
+
+  WaterTempCTimes1000 → Temperature
+  WaterTempFTimes1000 → Temperature
+  AirTempCTimes1000 → Temperature
+  AirTempFTimes1000 → Temperature
+  CelsiusTimes100 → Temperature
+
+  GpmTimes100 → FlowRate
+  GallonsTimes100 → Volume
+
+  VoltageRmsMilliVolts → Voltage
+  VoltsTimesTen → Voltage
+  VoltsTimes100 → Voltage
+  MicroVolts → Voltage
+
+  CurrentRmsMicroAmps → Current
+
+  HzTimes100 → Frequency
+  MicroHz → Frequency
+
+  RelayState → Unitless
+  ThermostatState → Unitless
+  StorageLayer → Unitless
+
+  PercentKeep → Percent
+
+Any other combination SHALL be invalid.');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('gw1.unit.quantity.projection/000', 1, 'EnumeratedProjectionMapping', 'For version 000, the projection is defined exhaustively as follows:
+
+  Unknown → Unknown
+  Unitless → Unitless
+  FahrenheitX100 → Temperature
+  Watts → Power
+  WattHours → Energy
+  Gallons → Volume
+  GpmX100 → FlowRate
+  Seconds → Time
+  SecondsX10 → Time
+
+Any other combination SHALL be invalid.');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('i2c.multichannel.dt.relay.component.gt/002', 1, 'ActorAndRelayIndexUniqueness', 'ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003', 1, 'ActorAndRelayIndexUniqueness', 'ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('i2c.multichannel.dt.relay.component.gt/004', 1, 'ActorAndRelayIndexUniqueness', 'ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('i2c.thermistor.reader.component.gt/000', 1, 'ConfigUniquenessAndDeviceChannelConsistency', 'Each ChannelName SHALL appear at most once in ConfigList. For each AdcChannel, at most one config in ConfigList may use Unit equal to Celcius.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('i2c.thermistor.reader.component.gt/000', 2, 'AddressValidity', 'AdcAddress SHALL be a valid 7-bit I2C address in the range 0 through 127.');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/007', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/007', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/007', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/008', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/008', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/008', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/008', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/009', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/009', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/009', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/009', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/010', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/010', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/010', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/010', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/011', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/011', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/011', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/011', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/012', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/012', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/012', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/012', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/013', 1, 'DcNodeConsistency', 'Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/013', 2, 'NodeHandleHierarchyConsistency', 'Every ShNode with a dotted handle SHALL have its immediate boss present as another ShNode in the same payload.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/013', 3, 'CriticalZoneSubset', 'CriticalZoneList SHALL be a subset of ZoneList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('layout.lite/013', 4, 'DerivedNodeConsistency', 'Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose ActorClass is active.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('machine.states/000', 1, 'ListLengthConsistency', 'len(StateList) SHALL equal len(UnixMsList).
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('machine.states/000', 2, 'RecognizedStateEnumConsistency', 'If StateEnum is a recognized GridWorks enum, then all elements of StateList SHALL be valid values of that enum.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('pico.flow.module.component.gt/000', 1, 'HwUidPattern', 'If HwUid is present, it SHALL match the pattern pico_xxxxxx where xxxxxx consists of six lowercase hexadecimal characters.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('pico.tank.module.component.gt/011', 1, 'PicoHardwareIdentityXor', 'Exactly one of the following SHALL hold:
+  - PicoHwUid is present
+  - both PicoAHwUid and PicoBHwUid are present
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('pico.tank.module.component.gt/011', 2, 'PicoKOhmsConsistency', 'PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('pico.tank.module.component.gt/011', 3, 'SensorOrderPermutation', 'If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('position.point.gt/000', 1, 'ValidEarthCoordinates', 'LatitudeMicroDeg SHALL be between -90,000,000 and 90,000,000 inclusive. LongitudeMicroDeg SHALL be between -180,000,000 and 180,000,000 inclusive.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('relay.actor.config/002', 1, 'EventEnumConsistency', 'If EventType names a known enum, then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of that enum.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('relay.actor.config/002', 2, 'StateEnumConsistency', 'If StateType names a known enum, then DeEnergizedState and EnergizedState SHALL both be valid values of that enum.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('relay.actor.config/002', 3, 'EventStateSemanticMatch', 'EnergizingEvent and DeEnergizingEvent SHALL correspond semantically to transitions into EnergizedState and DeEnergizedState respectively.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('relay.actor.config/002', 4, 'ClosedOpenWiringConsistency', 'If:
+
+  - StateType equals "relay.closed.or.open"
+  - EventType equals "change.relay.state"
+  - WiringConfig equals "NormallyClosed"
+
+then:
+
+  - DeEnergizedState SHALL equal "RelayClosed"
+  - DeEnergizingEvent SHALL equal "CloseRelay"
+  - EnergizedState SHALL equal "RelayOpen"
+  - EnergizingEvent SHALL equal "OpenRelay"
+
+If:
+
+  - StateType equals "relay.closed.or.open"
+  - EventType equals "change.relay.state"
+  - WiringConfig equals "NormallyOpen"
+
+then:
+
+  - DeEnergizedState SHALL equal "RelayOpen"
+  - DeEnergizingEvent SHALL equal "OpenRelay"
+  - EnergizedState SHALL equal "RelayClosed"
+  - EnergizingEvent SHALL equal "CloseRelay"
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('relay.actor.config/003', 1, 'AsyncCaptureConsistency', 'If AsyncCapture is true, then AsyncCaptureDelta SHALL be present.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('relay.actor.config/003', 2, 'CapturePollingConsistency', 'If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of PollPeriodMs.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('relay.actor.config/003', 3, 'RelayEventEnumConsistency', 'If EventType equals "change.relay.state", then DeEnergizingEvent and EnergizingEvent SHALL both be valid values of change.relay.state:000.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('relay.actor.config/003', 4, 'RelayStateEnumConsistency', 'If StateType equals "relay.closed.or.open", then DeEnergizedState and EnergizedState SHALL both be valid values of relay.closed.or.open:000.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('relay.actor.config/003', 5, 'RelayEventStateMatch', 'If EventType equals "change.relay.state" and StateType equals "relay.closed.or.open", then:
+
+  - DeEnergizingEvent "CloseRelay" SHALL imply DeEnergizedState "RelayClosed"
+  - DeEnergizingEvent "OpenRelay" SHALL imply DeEnergizedState "RelayOpen"
+  - EnergizingEvent "CloseRelay" SHALL imply EnergizedState "RelayClosed"
+  - EnergizingEvent "OpenRelay" SHALL imply EnergizedState "RelayOpen"
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('report.event/002', 1, 'ReportIdentityPropagation', 'MessageId SHALL equal Report.Id.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('report.event/002', 2, 'ReportCreatedTimePropagation', 'TimeCreatedMs SHALL equal Report.MessageCreatedMs.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('report.event/002', 3, 'ReportSourcePropagation', 'Src SHALL equal Report.FromGNodeAlias.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('report.event/003', 3, 'ReportSourcePropagation', 'Src SHALL equal Report.FromGNodeAlias.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('scada.control.capabilities/000', 1, 'RelayNodeClassConsistency', 'All nodes in RelayNodes SHALL have ActorClass equal to Relay.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('scada.control.capabilities/000', 2, 'DacNodeClassConsistency', 'All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('scada.control.capabilities/000', 3, 'UniqueRelayNodeNames', 'Name values in RelayNodes SHALL be unique.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('scada.control.capabilities/000', 4, 'UniqueDacNodeNames', 'Name values in DacNodes SHALL be unique.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('scada.control.capabilities/000', 5, 'UniqueControlChannelAboutNames', 'AboutNodeName values in ControlChannels SHALL be unique.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('scada.control.capabilities/000', 6, 'ControlNodeChannelBijection', 'The set of node names defined by the union of RelayNodes.Name and DacNodes.Name SHALL equal exactly the set of ControlChannels.AboutNodeName values.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('scada.control.capabilities/000', 7, 'RelayConfigNodeBijection', 'The set of ActorName values in I2cRelayComponent.ConfigList SHALL equal exactly the set of RelayNodes.Name values.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('sim.pico.tank.module.component.gt/000', 1, 'PicoHardwareIdentityXor', 'Exactly one of the following SHALL hold:
+  - PicoHwUid is present
+  - both PicoAHwUid and PicoBHwUid are present
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('sim.pico.tank.module.component.gt/000', 2, 'PicoKOhmsConsistency', 'PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('sim.pico.tank.module.component.gt/000', 3, 'SensorOrderPermutation', 'If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('single.machine.state/000', 1, 'RecognizedStateEnumConsistency', 'If StateEnum equals "relay.closed.or.open", then State SHALL equal "RelayClosed" or "RelayOpen". More generally, if StateEnum is a recognized GridWorks enum, then State SHALL be a valid value of that enum.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('spaceheat.node.gt/200', 1, 'InPowerMeteringRequiresNameplate', 'If InPowerMetering is true, NameplatePowerW SHALL be present.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('spaceheat.node.gt/300', 1, 'InPowerMeteringRequiresNameplate', 'If InPowerMetering is true, NameplatePowerW SHALL be present.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('spaceheat.node.gt/301', 1, 'InPowerMeteringRequiresNameplate', 'If InPowerMetering is true, NameplatePowerW SHALL be present. 
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('spaceheat.node.gt/301', 2, 'ActorHierarchyConstraints', 'If ActorClass is "NoActor", ActorHierarchyName SHALL be absent. If ActorClass is not "NoActor" and ActorHierarchyName is absent, then ActorClass SHALL be "PrimaryScada" or "SecondaryScada". If ActorHierarchyName is present, its final segment SHALL equal Name and all segments SHALL be unique.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('spaceheat.node.gt/301', 3, 'HandleConstraints', 'If Handle is present, its final segment SHALL equal Name and all segments SHALL be unique.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('spaceheat.telemetry.quantity.projection/000', 1, 'EnumeratedProjectionMapping', 'The only valid TelemetryName → Quantity pairs in version 000 are:
+
+  Unknown → Unknown
+
+  PowerW → Power
+  WattHours → Energy
+  MilliWattHours → Energy
+
+  WaterTempCTimes1000 → Temperature
+  WaterTempFTimes1000 → Temperature
+  AirTempCTimes1000 → Temperature
+  AirTempFTimes1000 → Temperature
+  CelsiusTimes100 → Temperature
+
+  GpmTimes100 → FlowRate
+  GallonsTimes100 → Volume
+
+  VoltageRmsMilliVolts → Voltage
+  VoltsTimesTen → Voltage
+  VoltsTimes100 → Voltage
+  MicroVolts → Voltage
+
+  CurrentRmsMicroAmps → Current
+
+  HzTimes100 → Frequency
+  MicroHz → Frequency
+
+  RelayState → Unitless
+  ThermostatState → Unitless
+  StorageLayer → Unitless
+  BinaryState → Unitless
+
+  PercentKeep → Percent
+
+Any other combination SHALL be invalid.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('synced.readings/000', 1, 'ListLengthConsistency', 'len(ChannelNameList) SHALL equal len(ValueList).
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('synced.readings.bundle/001', 1, 'TerminalAssetAliasConstraint', 'AboutGNodeAlias SHALL identify a TerminalAsset and therefore SHALL end with the suffix ".ta".
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('synced.readings.bundle/001', 2, 'ChannelDefinitionBijection', 'ChannelName values SHALL be unique across ChannelReadingsList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('synced.readings.bundle/001', 3, 'StartTimestampBeforeEnd', 'StartTimestamp shall be less than EndTimestamp
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('synced.readings.bundle/001', 4, 'TimestampAndValueLengthAlignment', 'The length of TimestampList shall be equal to the length of ValueList for each entry in ChannelReadingsList.
+');
+
+INSERT INTO type_axioms (type_version, number, axiom_name, statement)
+VALUES ('synced.readings.bundle/001', 5, 'UnitTypeAndValueRepresentationConsistency', 'For each entry in ChannelDefinitions:
+
+  - UnitType SHALL equal one of:
+      gw1.unit
+      spaceheat.telemetry.name
+
+  - Unit SHALL be a valid value from the specified UnitType version:
+
+    gw1.unit → version 001
+    spaceheat.telemetry.name → version 007
+');
+
+-- ----------------------------------------------------------------------------
+-- TypeHelpers: Non-versioned reusable subtypes auto-promoted from inline nested objects (array items, oneOf branches). Synthesized at migration time. Origin metadata preserves provenance for round-trip YAML emission.
+-- ----------------------------------------------------------------------------
+INSERT INTO type_helpers (name, title, description, extra_allowed, origin_type_version, origin_path)
+VALUES ('scada.control.capabilities.RelayNode', NULL, 'Minimal projection of a relay ShNode required for control operations.
+', FALSE, 'scada.control.capabilities/000', '/properties/RelayNodes/items');
+
+INSERT INTO type_helpers (name, title, description, extra_allowed, origin_type_version, origin_path)
+VALUES ('scada.control.capabilities.DacNode', NULL, 'Minimal projection of a DAC ShNode required for control operations.
+', FALSE, 'scada.control.capabilities/000', '/properties/DacNodes/items');
+
+INSERT INTO type_helpers (name, title, description, extra_allowed, origin_type_version, origin_path)
+VALUES ('scada.control.capabilities.ControlChannel', NULL, 'Minimal projection of a DataChannel required for observing control state.
+', FALSE, 'scada.control.capabilities/000', '/properties/ControlChannels/items');
+
+INSERT INTO type_helpers (name, title, description, extra_allowed, origin_type_version, origin_path)
+VALUES ('synced.readings.bundle.ChannelReading', NULL, NULL, NULL, 'synced.readings.bundle/001', '/properties/ChannelReadingsList/items');
+
+-- ----------------------------------------------------------------------------
+-- TypeHelperAttributes: Properties of a TypeHelper. Same shape as TypeAttributes minus the oneOf machinery, since helpers are not versioned.
+-- ----------------------------------------------------------------------------
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities.RelayNode', 'Name', 0, 'Canonical node name of the relay.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities.RelayNode', 'ActorClass', 1, 'Actor class of the node. SHALL be Relay.
+', TRUE, FALSE, NULL, NULL, 'gw1.actor.class/009', NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities.RelayNode', 'DisplayName', 2, 'Human-readable label suitable for administrative interfaces.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities.DacNode', 'Name', 0, 'Canonical node name of the DAC output.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities.DacNode', 'ActorClass', 1, 'Actor class of the node. SHALL be ZeroTenOutputer.
+', TRUE, FALSE, NULL, NULL, 'gw1.actor.class/009', NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities.DacNode', 'DisplayName', 2, 'Human-readable label suitable for administrative interfaces.
+', FALSE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities.ControlChannel', 'Name', 0, 'Name of the telemetry channel.
+', TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('scada.control.capabilities.ControlChannel', 'AboutNodeName', 1, 'Node name whose state is represented by this channel.
+', TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings.bundle.ChannelReading', 'ChannelName', 0, NULL, TRUE, FALSE, NULL, 'spaceheat.name', NULL, NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings.bundle.ChannelReading', 'ValueList', 1, NULL, TRUE, TRUE, 'integer', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings.bundle.ChannelReading', 'Unit', 2, NULL, TRUE, FALSE, 'string', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, description, is_required, is_list, primitive_type, format_ref, enum_version_ref, sub_type_version_ref, helper_ref, raw_json)
+VALUES ('synced.readings.bundle.ChannelReading', 'UnitType', 3, 'Name of the Sema vocabulary from which Unit is drawn.
+', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
+
