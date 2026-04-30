@@ -8,6 +8,7 @@ This directory sits **outside** [effortless-rulebook/](../effortless-rulebook/) 
 
 | Emitter | Reads | Writes | Status |
 |---|---|---|---|
+| [yaml/](yaml/) | rulebook | `definitions-emitted/` — JSON-Schema YAML, round-trips with [yaml/yaml_to_rulebook.py](yaml/yaml_to_rulebook.py) | real |
 | [python/](python/) | rulebook | `python/out/` — Pydantic classes for types, IntEnum/StrEnum for enums, format validators | scaffold |
 | [golang/](golang/) | rulebook | `golang/out/` — Go structs and typed enum constants | scaffold |
 | [html/](html/) | rulebook | `html/out/sema.html` — single-page documentation of the entire platform | scaffold |
@@ -21,14 +22,17 @@ Each emitter is a self-contained subdirectory with:
 
 [shared/loader.py](shared/loader.py) — minimal rulebook accessors (`load_rulebook`, `by_table`, `index_by`, `group_by`). Each emitter imports from here so that table-shape changes ripple in one place.
 
+## The yaml/ folder is the round-trip pair
+
+Unlike the other emitter folders, `yaml/` contains both an emitter and an inject tool:
+
+- [yaml/rulebook_to_yaml.py](yaml/rulebook_to_yaml.py) — emits `definitions-emitted/` from the rulebook
+- [yaml/yaml_to_rulebook.py](yaml/yaml_to_rulebook.py) — one-shot importer: reads `definitions/*.yaml` into the rulebook
+- [yaml/yaml_round_trip_check.py](yaml/yaml_round_trip_check.py) — golden test: `definitions/` ↔ `definitions-emitted/`
+
+Both directions live together because they're a pair — the emitter is only meaningful as the inverse of the inject tool, and the round-trip test asserts they agree.
+
 ## What lives elsewhere — and why
-
-The YAML round-trip emitters predate this directory and stay in their original home:
-
-- [src/sema/tools/rulebook_to_yaml.py](../src/sema/tools/rulebook_to_yaml.py) — emits `definitions-emitted/`
-- [src/sema/tools/yaml_to_rulebook.py](../src/sema/tools/yaml_to_rulebook.py) — one-shot importer
-
-They may move under `rulebook-emitters/yaml/` once the new emitters here stabilize. Until then, they stay put — the goal is a new home for **new** emitters, not a parallel mineshaft.
 
 The legacy ODXML/XSLT pipeline under [code_gen/GridworksCore/](../code_gen/GridworksCore/) is not consumed here; it's slated for decommission per [YAML-ODXML-RULEBOOK-MIGRATION-PLAN.md](../YAML-ODXML-RULEBOOK-MIGRATION-PLAN.md) Phase 6.
 

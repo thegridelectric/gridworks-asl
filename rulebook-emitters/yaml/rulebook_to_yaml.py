@@ -28,7 +28,7 @@ from typing import Any
 import yaml
 
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 RULEBOOK_PATH = ROOT / "effortless-rulebook" / "effortless-rulebook.json"
 DEFAULT_OUTPUT_DIR = ROOT / "definitions-emitted"
 

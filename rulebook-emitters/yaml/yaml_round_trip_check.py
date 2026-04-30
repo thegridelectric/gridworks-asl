@@ -5,9 +5,9 @@ structural differences. Comments and whitespace are not preserved on round-trip;
 this test asserts canonical-equivalence of the modeled content only.
 
 Run:
-  python -m sema.tools.yaml_to_rulebook && \
-  python -m sema.tools.rulebook_to_yaml && \
-  python -m sema.tools.yaml_round_trip_check
+  python rulebook-emitters/yaml/yaml_to_rulebook.py && \
+  python rulebook-emitters/yaml/rulebook_to_yaml.py && \
+  python rulebook-emitters/yaml/yaml_round_trip_check.py
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ from typing import Any
 import yaml
 
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 SOURCE_DIR = ROOT / "definitions"
 EMIT_DIR = ROOT / "definitions-emitted"
 

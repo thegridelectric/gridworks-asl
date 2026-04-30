@@ -61,7 +61,7 @@ The Explorer doesn't get built on a green field — there's existing scaffolding
 
 - The emitters themselves — they're independent CLIs invoked manually. The Explorer is a separate process with a separate purpose (live editing vs. static codegen).
 - [code_gen/GridworksCore/](code_gen/GridworksCore/) — slated for decommission, not consumed.
-- The YAML round-trip tools at [src/sema/tools/rulebook_to_yaml.py](src/sema/tools/rulebook_to_yaml.py) — they're a pre-existing pipeline; the Explorer leaves them alone.
+- The YAML round-trip tools at [rulebook-emitters/yaml/](rulebook-emitters/yaml/) — they're a pre-existing pipeline; the Explorer leaves them alone.
 
 **Implication for the roadmap:** Phase 2's "data layer" task is not greenfield. It's a thin FastAPI app that imports `shared.loader`, queries postgres, and serves both. Phase 5's edit forms can crib their field-list shapes from the python emitter's planned output — when the python emitter implements real emission, the Explorer's response models become a `from rulebook_emitters.python.out import …` away.
 
