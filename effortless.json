@@ -7,10 +7,25 @@
   "Name": "sema",
   "ProjectSettings": [
     {
-      "ProjectSettingId": "d973dfb7-8cb5-4b86-838d-d891160e7644",
       "Name": "project-name",
       "Value": "sema"
     }
   ],
-  "ProjectTranspilers": []
+  "ProjectTranspilers": [
+    {
+      "IsSSoTTranspiler": false,
+      "Name": "rulebooktopostgres",
+      "RelativePath": "/postgres",
+      "CommandLine": "rulebook-to-postgres -i ../effortless-rulebook/effortless-rulebook.json",
+      "IsDisabled": false,
+      "PinnedVersion": "v2026.04.23.1316"
+    },
+    {
+      "IsSSoTTranspiler": false,
+      "Name": "execute",
+      "RelativePath": "/postgres",
+      "CommandLine": "-exec ./init-db.sh",
+      "IsDisabled": false
+    }
+  ]
 }
