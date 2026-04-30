@@ -2,82 +2,289 @@
   "$schema": "https://example.com/cmcc-schema/v1",
   "Name": "Sema",
   "Description": "Hand-authored rulebook for the sema type/enum/format/version-upgrade ontology. Replaces the legacy YAML and ODXML pipelines. See YAML-ODXML-RULEBOOK-MIGRATION-PLAN.md.",
+
   "Owners": {
-    "Description": "Table: Owners — entities (organizations or individuals) that own Types, Enums, and Formats. Sourced from definitions/owners.yaml.",
+    "Description": "Entities (organizations or individuals) that own Types, Enums, and Formats. Sourced from definitions/owners.yaml.",
     "schema": [
-      {
-        "name": "Name",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": false,
-        "Description": "Owner identifier slug. Example: 'gridworks-energy'. Acts as the primary key."
-      },
-      {
-        "name": "OwnerType",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Either 'organization' or 'individual'."
-      },
-      {
-        "name": "Contact",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Primary contact email."
-      },
-      {
-        "name": "Website",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Owner's website URL."
-      },
-      {
-        "name": "Github",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Owner's GitHub URL (optional)."
-      },
-      {
-        "name": "Organization",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Full legal/organization name."
-      },
-      {
-        "name": "Description",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Free-text description of the owner's domain or focus."
-      },
-      {
-        "name": "SupportPolicy",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "How users get support from this owner (e.g. 'Community support via GitHub issues')."
-      },
-      {
-        "name": "License",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "License under which the owner's contributions are published (e.g. 'MIT')."
-      }
+      { "name": "Name", "datatype": "string", "type": "raw", "nullable": false, "Description": "Owner identifier slug. Example: 'gridworks-energy'. Acts as the primary key." },
+      { "name": "OwnerType", "datatype": "string", "type": "raw", "nullable": true, "Description": "Either 'organization' or 'individual'." },
+      { "name": "Contact", "datatype": "string", "type": "raw", "nullable": true, "Description": "Primary contact email." },
+      { "name": "Website", "datatype": "string", "type": "raw", "nullable": true, "Description": "Owner's website URL." },
+      { "name": "Github", "datatype": "string", "type": "raw", "nullable": true, "Description": "Owner's GitHub URL (optional)." },
+      { "name": "Organization", "datatype": "string", "type": "raw", "nullable": true, "Description": "Full legal/organization name." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Free-text description of the owner's domain or focus." },
+      { "name": "SupportPolicy", "datatype": "string", "type": "raw", "nullable": true, "Description": "How users get support from this owner." },
+      { "name": "License", "datatype": "string", "type": "raw", "nullable": true, "Description": "License under which the owner's contributions are published (e.g. 'MIT')." }
     ],
     "data": []
   },
+
+  "Formats": {
+    "Description": "JSON-Schema string formats with regex patterns and length bounds. Sourced from definitions/formats/*.yaml. Formats are not versioned.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "raw", "nullable": false, "Description": "Format identifier slug. Example: 'uuid4.str'. Acts as the primary key." },
+      { "name": "Owner", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Owner of this format.", "RelatedTo": "Owners" },
+      { "name": "SchemaUrl", "datatype": "string", "type": "raw", "nullable": true, "Description": "Schema URL from JSON-Schema $id." },
+      { "name": "Title", "datatype": "string", "type": "raw", "nullable": true, "Description": "Human-readable title." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Free-text description of the format." },
+      { "name": "Pattern", "datatype": "string", "type": "raw", "nullable": true, "Description": "Regex pattern that valid values must match." },
+      { "name": "MinLength", "datatype": "integer", "type": "raw", "nullable": true, "Description": "Minimum string length, if constrained." },
+      { "name": "MaxLength", "datatype": "integer", "type": "raw", "nullable": true, "Description": "Maximum string length, if constrained." },
+      { "name": "JsonSchemaFormat", "datatype": "string", "type": "raw", "nullable": true, "Description": "JSON-Schema 'format' keyword if present (e.g. 'date-time', 'email')." },
+      { "name": "Created", "datatype": "datetime", "type": "raw", "nullable": true, "Description": "Created timestamp from registry.yaml." },
+      { "name": "RawJson", "datatype": "string", "type": "raw", "nullable": true, "Description": "Escape hatch: any unmodeled JSON-Schema fields, serialized as JSON string." }
+    ],
+    "data": []
+  },
+
+  "FormatExamples": {
+    "Description": "Per-format examples and counterexamples (with order preserved). Sourced from format YAML 'examples' and 'counterexamples' arrays.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key combining the parent format, ordering index, and counterexample flag.", "formula": "={{Format}} & \"[\" & {{Idx}} & IF({{IsCounter}}, \"x\", \"\") & \"]\"" },
+      { "name": "Format", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent Format.", "RelatedTo": "Formats" },
+      { "name": "Idx", "datatype": "integer", "type": "raw", "nullable": false, "Description": "Preserves YAML ordering (0-indexed within examples or counterexamples)." },
+      { "name": "IsCounter", "datatype": "boolean", "type": "raw", "nullable": false, "Description": "True if this is a counterexample (must NOT match), false if a positive example." },
+      { "name": "Value", "datatype": "string", "type": "raw", "nullable": false, "Description": "The example string itself." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Optional description (e.g. YAML inline comment)." }
+    ],
+    "data": []
+  },
+
+  "Enums": {
+    "Description": "Top-level enum definitions (name-level). Versioned enums have multiple EnumVersions; literal enums have one. Sourced from definitions/registry.yaml + definitions/enums/.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "raw", "nullable": false, "Description": "Enum identifier slug. Example: 'gw1.actor.class'. Acts as the primary key." },
+      { "name": "Owner", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Owner of this enum.", "RelatedTo": "Owners" },
+      { "name": "EnumType", "datatype": "string", "type": "raw", "nullable": false, "Description": "Either 'versioned' (additive-only multi-version) or 'literal' (single immutable version)." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Name-level description (registry-level)." }
+    ],
+    "data": []
+  },
+
+  "EnumVersions": {
+    "Description": "Specific versions of an enum. Each enum can have multiple versions (e.g. gw1.actor.class has versions 009, 010, 011).",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <enum-name>/<version>.", "formula": "={{Enum}} & \"/\" & {{Version}}" },
+      { "name": "Enum", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent Enum.", "RelatedTo": "Enums" },
+      { "name": "Version", "datatype": "string", "type": "raw", "nullable": false, "Description": "Three-digit version string. Example: '007'." },
+      { "name": "SchemaUrl", "datatype": "string", "type": "raw", "nullable": true, "Description": "Schema URL from JSON-Schema $id." },
+      { "name": "Title", "datatype": "string", "type": "raw", "nullable": true, "Description": "Human-readable title." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Version-specific description." },
+      { "name": "DefaultSymbol", "datatype": "string", "type": "raw", "nullable": true, "Description": "The default symbol value for this version." },
+      { "name": "Status", "datatype": "string", "type": "raw", "nullable": true, "Description": "Lifecycle status (e.g. 'active', 'deprecated')." },
+      { "name": "Created", "datatype": "datetime", "type": "raw", "nullable": true, "Description": "Creation timestamp from registry.yaml." }
+    ],
+    "data": []
+  },
+
+  "EnumValues": {
+    "Description": "Individual symbol values within an EnumVersion (with order preserved and per-symbol descriptions).",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <enum-version>:<symbol>.", "formula": "={{EnumVersion}} & \":\" & {{Symbol}}" },
+      { "name": "EnumVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent EnumVersion.", "RelatedTo": "EnumVersions" },
+      { "name": "Symbol", "datatype": "string", "type": "raw", "nullable": false, "Description": "The literal symbol value, e.g. 'Power'." },
+      { "name": "Idx", "datatype": "integer", "type": "raw", "nullable": false, "Description": "Preserves YAML ordering of symbols." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Per-symbol description from value_descriptions map." }
+    ],
+    "data": []
+  },
+
+  "Types": {
+    "Description": "Top-level type definitions (name-level). Each type can have multiple TypeVersions. Sourced from definitions/registry.yaml + definitions/types/.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "raw", "nullable": false, "Description": "Type identifier slug. Example: 'report'. Acts as the primary key." },
+      { "name": "Owner", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Owner of this type.", "RelatedTo": "Owners" },
+      { "name": "Title", "datatype": "string", "type": "raw", "nullable": true, "Description": "Name-level title." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Name-level description." },
+      { "name": "PythonClassName", "datatype": "string", "type": "raw", "nullable": true, "Description": "Tier-2 placeholder: ODXML-derived Python class name (populated when ODXML data absorbs in)." },
+      { "name": "MakeDataClass", "datatype": "boolean", "type": "raw", "nullable": true, "Description": "Tier-2 placeholder: ODXML invariant." },
+      { "name": "IsCac", "datatype": "boolean", "type": "raw", "nullable": true, "Description": "Tier-2 placeholder: ODXML invariant (component access control marker)." },
+      { "name": "IsComponent", "datatype": "boolean", "type": "raw", "nullable": true, "Description": "Tier-2 placeholder: ODXML invariant." }
+    ],
+    "data": []
+  },
+
+  "TypeVersions": {
+    "Description": "Specific versions of a type. Each declares its JSON-Schema shape. Versions follow a 3-digit suffix in the YAML files.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <type-name>/<version>.", "formula": "={{Type}} & \"/\" & {{Version}}" },
+      { "name": "Type", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent Type.", "RelatedTo": "Types" },
+      { "name": "Version", "datatype": "string", "type": "raw", "nullable": false, "Description": "Three-digit version string. Example: '002'." },
+      { "name": "SchemaUrl", "datatype": "string", "type": "raw", "nullable": true, "Description": "Schema URL from JSON-Schema $id." },
+      { "name": "Title", "datatype": "string", "type": "raw", "nullable": true, "Description": "Human-readable title." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Version-specific description." },
+      { "name": "ExtraAllowed", "datatype": "boolean", "type": "raw", "nullable": true, "Description": "From JSON-Schema additionalProperties (true=open, false=closed)." },
+      { "name": "Status", "datatype": "string", "type": "raw", "nullable": true, "Description": "Lifecycle status." },
+      { "name": "Created", "datatype": "datetime", "type": "raw", "nullable": true, "Description": "Creation timestamp." },
+      { "name": "RawJson", "datatype": "string", "type": "raw", "nullable": true, "Description": "Escape hatch: unmodeled top-level JSON-Schema fields (if/then/else, conditionals, etc.)." }
+    ],
+    "data": []
+  },
+
+  "TypeAttributes": {
+    "Description": "The shape-of-record for every property declared on a TypeVersion. Polymorphic via mutually-exclusive FK columns: at most one of FormatRef / EnumVersionRef / SubTypeVersionRef / HelperRef is non-null per row.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <type-version>.<attribute-name>.", "formula": "={{TypeVersion}} & \".\" & {{AttributeName}}" },
+      { "name": "TypeVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the owning TypeVersion.", "RelatedTo": "TypeVersions" },
+      { "name": "AttributeName", "datatype": "string", "type": "raw", "nullable": false, "Description": "Property key in the JSON-Schema." },
+      { "name": "Idx", "datatype": "integer", "type": "raw", "nullable": false, "Description": "Preserves YAML ordering of properties." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Per-attribute description from JSON-Schema." },
+      { "name": "IsRequired", "datatype": "boolean", "type": "raw", "nullable": false, "Description": "Derived from the parent TypeVersion's 'required' array." },
+      { "name": "IsList", "datatype": "boolean", "type": "raw", "nullable": false, "Description": "True if attribute is type=array. Refs then describe the item type." },
+      { "name": "PrimitiveType", "datatype": "string", "type": "raw", "nullable": true, "Description": "Primitive JSON type when none of the *Ref columns apply: string, integer, number, boolean, null." },
+      { "name": "FormatRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK to a Format, when this attribute uses a $ref to /formats/X.", "RelatedTo": "Formats" },
+      { "name": "EnumVersionRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK to an EnumVersion, when this attribute uses a $ref to /enums/X/NNN.", "RelatedTo": "EnumVersions" },
+      { "name": "SubTypeVersionRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK to another TypeVersion, when this attribute uses a $ref to /types/X/NNN.", "RelatedTo": "TypeVersions" },
+      { "name": "HelperRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK to a TypeHelper, when this attribute is an inline-nested object auto-promoted to a helper.", "RelatedTo": "TypeHelpers" },
+      { "name": "RawJson", "datatype": "string", "type": "raw", "nullable": true, "Description": "Escape hatch: unmodeled JSON-Schema specifics, including oneOf bodies (v1 parking lot for n=1 cases)." }
+    ],
+    "data": []
+  },
+
+  "TypeExamples": {
+    "Description": "Per-TypeVersion full-instance examples (with order preserved). Sourced from JSON-Schema 'examples' arrays.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <type-version>[<idx>].", "formula": "={{TypeVersion}} & \"[\" & {{Idx}} & \"]\"" },
+      { "name": "TypeVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent TypeVersion.", "RelatedTo": "TypeVersions" },
+      { "name": "Idx", "datatype": "integer", "type": "raw", "nullable": false, "Description": "Preserves YAML ordering." },
+      { "name": "ExampleJson", "datatype": "string", "type": "raw", "nullable": false, "Description": "Full instance example, serialized as JSON string." }
+    ],
+    "data": []
+  },
+
+  "TypeAxioms": {
+    "Description": "Per-TypeVersion axioms (numbered invariants stated in natural language). Sourced from x-gridworks.axioms in YAML.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <type-version>.axiom<number>.", "formula": "={{TypeVersion}} & \".axiom\" & {{Number}}" },
+      { "name": "TypeVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent TypeVersion.", "RelatedTo": "TypeVersions" },
+      { "name": "Number", "datatype": "integer", "type": "raw", "nullable": false, "Description": "Axiom number from YAML." },
+      { "name": "AxiomName", "datatype": "string", "type": "raw", "nullable": false, "Description": "Axiom name from YAML." },
+      { "name": "Statement", "datatype": "string", "type": "raw", "nullable": false, "Description": "Axiom statement (the natural-language invariant)." }
+    ],
+    "data": []
+  },
+
+  "TypeHelpers": {
+    "Description": "Non-versioned reusable subtypes auto-promoted from inline nested objects (array items, oneOf branches). Synthesized at migration time. Origin metadata preserves provenance for round-trip YAML emission.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "raw", "nullable": false, "Description": "Synthesized helper name. Example: 'scada.control.capabilities.RelayNode'. Acts as the primary key." },
+      { "name": "Title", "datatype": "string", "type": "raw", "nullable": true, "Description": "From inline 'description' if present." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Description of the helper." },
+      { "name": "ExtraAllowed", "datatype": "boolean", "type": "raw", "nullable": true, "Description": "From inline additionalProperties." },
+      { "name": "OriginTypeVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "The TypeVersion whose YAML body originally introduced this helper.", "RelatedTo": "TypeVersions" },
+      { "name": "OriginPath", "datatype": "string", "type": "raw", "nullable": false, "Description": "JSON-Pointer-ish path within origin (e.g. '/properties/RelayNodes/items') — used to re-inline on YAML emit." }
+    ],
+    "data": []
+  },
+
+  "TypeHelperAttributes": {
+    "Description": "Properties of a TypeHelper. Same shape as TypeAttributes minus the oneOf machinery, since helpers are not versioned.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <type-helper>.<attribute-name>.", "formula": "={{TypeHelper}} & \".\" & {{AttributeName}}" },
+      { "name": "TypeHelper", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent TypeHelper.", "RelatedTo": "TypeHelpers" },
+      { "name": "AttributeName", "datatype": "string", "type": "raw", "nullable": false, "Description": "Property key." },
+      { "name": "Idx", "datatype": "integer", "type": "raw", "nullable": false, "Description": "Preserves YAML ordering." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Per-attribute description." },
+      { "name": "IsRequired", "datatype": "boolean", "type": "raw", "nullable": false, "Description": "From inline 'required' array." },
+      { "name": "IsList", "datatype": "boolean", "type": "raw", "nullable": false, "Description": "True if type=array." },
+      { "name": "PrimitiveType", "datatype": "string", "type": "raw", "nullable": true, "Description": "Primitive JSON type when none of the *Ref columns apply." },
+      { "name": "FormatRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK to a Format, if this attribute references one.", "RelatedTo": "Formats" },
+      { "name": "EnumVersionRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK to an EnumVersion, if this attribute references one.", "RelatedTo": "EnumVersions" },
+      { "name": "SubTypeVersionRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK to a TypeVersion, if this attribute references one.", "RelatedTo": "TypeVersions" },
+      { "name": "HelperRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK to another TypeHelper (supports nested helpers).", "RelatedTo": "TypeHelpers" },
+      { "name": "RawJson", "datatype": "string", "type": "raw", "nullable": true, "Description": "Escape hatch for unmodeled JSON-Schema specifics." }
+    ],
+    "data": []
+  },
+
+  "Projections": {
+    "Description": "Named, deterministic enum-to-enum (or value-to-value) mappings used by AddProjected upgrade ops. Today: SpaceheatTelemetryQuantityProjection, Gw1UnitQuantityProjection.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "raw", "nullable": false, "Description": "Projection name. Example: 'SpaceheatTelemetryQuantityProjection'. Acts as the primary key." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Description of what the projection computes." },
+      { "name": "FromEnumVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Source enum version.", "RelatedTo": "EnumVersions" },
+      { "name": "ToEnumVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Target enum version.", "RelatedTo": "EnumVersions" },
+      { "name": "RawScript", "datatype": "string", "type": "raw", "nullable": true, "Description": "Populated only if the projection isn't a flat lookup (escape hatch)." }
+    ],
+    "data": []
+  },
+
+  "ProjectionMappings": {
+    "Description": "Per-symbol mappings for flat-lookup Projections. Empty when the parent Projection uses RawScript.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <projection>:<from-symbol>.", "formula": "={{Projection}} & \":\" & {{FromSymbol}}" },
+      { "name": "Projection", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent Projection.", "RelatedTo": "Projections" },
+      { "name": "FromSymbol", "datatype": "string", "type": "raw", "nullable": false, "Description": "Source enum symbol." },
+      { "name": "ToSymbol", "datatype": "string", "type": "raw", "nullable": false, "Description": "Target enum symbol." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Optional per-mapping description." }
+    ],
+    "data": []
+  },
+
+  "TypeUpgrades": {
+    "Description": "One row per ordered version pair (N, N+1) for a given type. Mirrors src/sema/runtime/types/old_versions/<type>_<NNN>.py.upgrade() methods.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <from-type-version> -> <to-type-version>.", "formula": "={{FromTypeVersion}} & \" -> \" & {{ToTypeVersion}}" },
+      { "name": "FromTypeVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Source TypeVersion.", "RelatedTo": "TypeVersions" },
+      { "name": "ToTypeVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Target TypeVersion.", "RelatedTo": "TypeVersions" },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Description (typically the docstring summary from the .py method)." },
+      { "name": "RawScript", "datatype": "string", "type": "raw", "nullable": true, "Description": "Whole-method escape hatch when no clean op decomposition is possible. Prefer per-op RawScript on TypeUpgradeOps." }
+    ],
+    "data": []
+  },
+
+  "TypeUpgradeOps": {
+    "Description": "Atomic operations within a TypeUpgrade. Most upgrades decompose into 1-4 ops. OpKind controls semantics (vocabulary: AddOptional, AddWithDefault, Remove, RequireToOptional, OptionalToRequire, EnumVersionBump, CoerceToEnum, UpgradeChild, UpgradeChildIf, UpgradeListItems, UpgradeListItemsIf, AddProjected, Custom).",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <type-upgrade>#<idx>.", "formula": "={{TypeUpgrade}} & \"#\" & {{Idx}}" },
+      { "name": "TypeUpgrade", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent TypeUpgrade.", "RelatedTo": "TypeUpgrades" },
+      { "name": "Idx", "datatype": "integer", "type": "raw", "nullable": false, "Description": "Execution order within the upgrade." },
+      { "name": "OpKind", "datatype": "string", "type": "raw", "nullable": false, "Description": "Op vocabulary: AddOptional, AddWithDefault, Remove, RequireToOptional, OptionalToRequire, EnumVersionBump, CoerceToEnum, UpgradeChild, UpgradeChildIf, UpgradeListItems, UpgradeListItemsIf, AddProjected, Custom." },
+      { "name": "FieldName", "datatype": "string", "type": "raw", "nullable": true, "Description": "The attribute name being touched (most ops)." },
+      { "name": "LiteralValue", "datatype": "string", "type": "raw", "nullable": true, "Description": "JSON-encoded literal default (AddWithDefault) or source field name (AddProjected)." },
+      { "name": "FromVersion", "datatype": "string", "type": "raw", "nullable": true, "Description": "Source version for conditional upgrades (UpgradeChildIf, UpgradeListItemsIf)." },
+      { "name": "ToVersion", "datatype": "string", "type": "raw", "nullable": true, "Description": "Target version for explicit version bumps." },
+      { "name": "EnumVersionRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK for enum-related ops (EnumVersionBump, CoerceToEnum).", "RelatedTo": "EnumVersions" },
+      { "name": "ProjectionRef", "datatype": "string", "type": "relationship", "nullable": true, "Description": "FK for AddProjected ops.", "RelatedTo": "Projections" },
+      { "name": "RawScript", "datatype": "string", "type": "raw", "nullable": true, "Description": "Per-op Python escape hatch for Custom ops. Snippet runs in scope of `self` and `data` dict." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Optional op-level description." }
+    ],
+    "data": []
+  },
+
+  "EnumUpgrades": {
+    "Description": "Mirror of TypeUpgrades for enum value renames or splits when name preservation breaks. Today's 5 multi-version enums all preserved names, so this table starts empty.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <from-enum-version> -> <to-enum-version>.", "formula": "={{FromEnumVersion}} & \" -> \" & {{ToEnumVersion}}" },
+      { "name": "FromEnumVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Source EnumVersion.", "RelatedTo": "EnumVersions" },
+      { "name": "ToEnumVersion", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Target EnumVersion.", "RelatedTo": "EnumVersions" },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Description of the enum upgrade." },
+      { "name": "RawScript", "datatype": "string", "type": "raw", "nullable": true, "Description": "Whole-upgrade escape hatch." }
+    ],
+    "data": []
+  },
+
+  "EnumUpgradeMappings": {
+    "Description": "Per-symbol value renames for an EnumUpgrade. Empty when the parent EnumUpgrade preserves all names.",
+    "schema": [
+      { "name": "Name", "datatype": "string", "type": "calculated", "nullable": false, "Description": "Compound key: <enum-upgrade>:<from-symbol>.", "formula": "={{EnumUpgrade}} & \":\" & {{FromSymbol}}" },
+      { "name": "EnumUpgrade", "datatype": "string", "type": "relationship", "nullable": false, "Description": "Foreign key to the parent EnumUpgrade.", "RelatedTo": "EnumUpgrades" },
+      { "name": "FromSymbol", "datatype": "string", "type": "raw", "nullable": false, "Description": "Source enum symbol." },
+      { "name": "ToSymbol", "datatype": "string", "type": "raw", "nullable": false, "Description": "Target enum symbol (or empty/null when symbol is removed)." },
+      { "name": "Description", "datatype": "string", "type": "raw", "nullable": true, "Description": "Optional per-mapping description." }
+    ],
+    "data": []
+  },
+
   "_meta": {
-    "_CMCC_Summary": "Hand-authored rulebook (no Airtable). Source of truth for sema ontology. Tier-1 schema only — Owners is the smoke-test table; other 18 tables follow.",
+    "_CMCC_Summary": "Hand-authored rulebook (no Airtable). Tier-1 schema covering all 19 tables: Module 1 (schema-of-record, 13 tables) + Module 2 (version upgrades, 6 tables). Aggregation calc fields (LatestVersion, IsCurrent, IsDefault) deferred to second pass once base shape verifies clean.",
     "_conversion_metadata": {
       "source": "hand-authored",
-      "table_count": 1,
-      "phase": "0b - Owners-only smoke test",
-      "next_phase": "0.5 - full Tier-1 schema (19 tables)"
+      "table_count": 19,
+      "phase": "0.5 - full Tier-1 schema",
+      "module_1_tables": ["Owners", "Formats", "FormatExamples", "Enums", "EnumVersions", "EnumValues", "Types", "TypeVersions", "TypeAttributes", "TypeExamples", "TypeAxioms", "TypeHelpers", "TypeHelperAttributes"],
+      "module_2_tables": ["Projections", "ProjectionMappings", "TypeUpgrades", "TypeUpgradeOps", "EnumUpgrades", "EnumUpgradeMappings"],
+      "next_phase": "1 - yaml-to-rulebook migrator (populate data[] from definitions/*.yaml)"
     }
   }
 }
