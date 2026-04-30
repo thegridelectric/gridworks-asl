@@ -107,6 +107,118 @@
         "nullable": false,
         "Description": "Number of Types owned by this owner.",
         "formula": "=COUNTIFS(Types!{{Owner}}, Owners!{{Name}})"
+      },
+      {
+        "name": "DraftTypeVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of draft TypeVersions across all this owner's Words. Drives \u00a77 'drafts open: N' badge on the Vocabularies grid.",
+        "formula": "=COUNTIFS(TypeVersions!{{OwnerName}}, Owners!{{Name}}, TypeVersions!{{IsDraft}}, TRUE())"
+      },
+      {
+        "name": "ActiveTypeVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of active TypeVersions.",
+        "formula": "=COUNTIFS(TypeVersions!{{OwnerName}}, Owners!{{Name}}, TypeVersions!{{IsActive}}, TRUE())"
+      },
+      {
+        "name": "DeprecatedTypeVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of deprecated TypeVersions.",
+        "formula": "=COUNTIFS(TypeVersions!{{OwnerName}}, Owners!{{Name}}, TypeVersions!{{IsDeprecated}}, TRUE())"
+      },
+      {
+        "name": "DraftEnumVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of draft EnumVersions across this owner's Enums.",
+        "formula": "=COUNTIFS(EnumVersions!{{OwnerName}}, Owners!{{Name}}, EnumVersions!{{IsDraft}}, TRUE())"
+      },
+      {
+        "name": "ActiveEnumVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of active EnumVersions.",
+        "formula": "=COUNTIFS(EnumVersions!{{OwnerName}}, Owners!{{Name}}, EnumVersions!{{IsActive}}, TRUE())"
+      },
+      {
+        "name": "DeprecatedEnumVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of deprecated EnumVersions.",
+        "formula": "=COUNTIFS(EnumVersions!{{OwnerName}}, Owners!{{Name}}, EnumVersions!{{IsDeprecated}}, TRUE())"
+      },
+      {
+        "name": "RetiredTypeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of retired Types (Words). Drives the red-strike count on the Vocabulary card.",
+        "formula": "=COUNTIFS(Types!{{Owner}}, Owners!{{Name}}, Types!{{IsRetired}}, TRUE())"
+      },
+      {
+        "name": "RetiredEnumCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of retired Enums (Words).",
+        "formula": "=COUNTIFS(Enums!{{Owner}}, Owners!{{Name}}, Enums!{{IsRetired}}, TRUE())"
+      },
+      {
+        "name": "RetiredFormatCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of retired Formats.",
+        "formula": "=COUNTIFS(Formats!{{Owner}}, Owners!{{Name}}, Formats!{{IsRetired}}, TRUE())"
+      },
+      {
+        "name": "HasOpenDrafts",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this owner has any draft Type or Enum versions. Drives the amber dot on the Vocabularies card.",
+        "formula": "=IF(OR({{DraftTypeVersionCount}}>0, {{DraftEnumVersionCount}}>0), TRUE(), FALSE())"
+      },
+      {
+        "name": "HasPublishedArtifacts",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this owner has any artifacts at all (Types, Enums, or Formats). Drives empty-state vs populated rendering.",
+        "formula": "=IF(OR({{TypeCount}}>0, {{EnumCount}}>0, {{FormatCount}}>0), TRUE(), FALSE())"
+      },
+      {
+        "name": "LatestTypeVersionAt",
+        "datatype": "datetime",
+        "type": "aggregation",
+        "nullable": true,
+        "Description": "Most recent TypeVersions.Created among this owner's Words.",
+        "formula": "=MAXIFS(TypeVersions!{{Created}}, TypeVersions!{{OwnerName}}, Owners!{{Name}})"
+      },
+      {
+        "name": "LatestEnumVersionAt",
+        "datatype": "datetime",
+        "type": "aggregation",
+        "nullable": true,
+        "Description": "Most recent EnumVersions.Created among this owner's Enums.",
+        "formula": "=MAXIFS(EnumVersions!{{Created}}, EnumVersions!{{OwnerName}}, Owners!{{Name}})"
+      },
+      {
+        "name": "LatestFormatAt",
+        "datatype": "datetime",
+        "type": "aggregation",
+        "nullable": true,
+        "Description": "Most recent Formats.Created among this owner's Formats.",
+        "formula": "=MAXIFS(Formats!{{Created}}, Formats!{{Owner}}, Owners!{{Name}})"
       }
     ],
     "data": [
@@ -346,6 +458,14 @@
         "nullable": false,
         "Description": "True when no attribute references this format \u2014 candidate for removal.",
         "formula": "=IF({{TotalUsageCount}}>0, FALSE(), TRUE())"
+      },
+      {
+        "name": "OwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner of this Format, passed through from Formats.Owner. Symmetry with TypeVersions.OwnerName / EnumVersions.OwnerName so list views render owner uniformly.",
+        "formula": "=INDEX(Owners!{{Name}}, MATCH({{Owner}}, Owners!{{Name}}, 0))"
       }
     ],
     "data": [
@@ -1231,6 +1351,54 @@
         "nullable": false,
         "Description": "Number of EnumVersions for this enum.",
         "formula": "=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}})"
+      },
+      {
+        "name": "DraftVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of EnumVersions of this Word with Status='draft'.",
+        "formula": "=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}}, EnumVersions!{{IsDraft}}, TRUE())"
+      },
+      {
+        "name": "ActiveVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of active EnumVersions.",
+        "formula": "=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}}, EnumVersions!{{IsActive}}, TRUE())"
+      },
+      {
+        "name": "DeprecatedVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of deprecated EnumVersions.",
+        "formula": "=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}}, EnumVersions!{{IsDeprecated}}, TRUE())"
+      },
+      {
+        "name": "HasDrafts",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this Word has at least one draft Definition.",
+        "formula": "=IF({{DraftVersionCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "FirstCreated",
+        "datatype": "datetime",
+        "type": "aggregation",
+        "nullable": true,
+        "Description": "When the first EnumVersion for this Word was created.",
+        "formula": "=MINIFS(EnumVersions!{{Created}}, EnumVersions!{{Enum}}, Enums!{{Name}})"
+      },
+      {
+        "name": "LastModified",
+        "datatype": "datetime",
+        "type": "aggregation",
+        "nullable": true,
+        "Description": "Latest EnumVersions.Created among this Word's Definitions.",
+        "formula": "=MAXIFS(EnumVersions!{{Created}}, EnumVersions!{{Enum}}, Enums!{{Name}})"
       }
     ],
     "data": [
@@ -1758,6 +1926,59 @@
         "nullable": false,
         "Description": "True when this version has no outgoing upgrade \u2014 it has no successor and is a tip of the version chain.",
         "formula": "=IF({{OutgoingUpgradeCount}}>0, FALSE(), TRUE())"
+      },
+      {
+        "name": "OwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner of this EnumVersion's Word, passed through from Enums.Owner.",
+        "formula": "=INDEX(Enums!{{Owner}}, MATCH({{Enum}}, Enums!{{Name}}, 0))"
+      },
+      {
+        "name": "WordIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether this EnumVersion's Word is retired (Enums.IsRetired). Drives \u00a74 red strike-through.",
+        "formula": "=INDEX(Enums!{{IsRetired}}, MATCH({{Enum}}, Enums!{{Name}}, 0))"
+      },
+      {
+        "name": "WordDescription",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Description of the parent Enum.",
+        "formula": "=INDEX(Enums!{{Description}}, MATCH({{Enum}}, Enums!{{Name}}, 0))"
+      },
+      {
+        "name": "LastModified",
+        "datatype": "datetime",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Most recent edit to this EnumVersion or its child EnumValues."
+      },
+      {
+        "name": "PromotedAt",
+        "datatype": "datetime",
+        "type": "raw",
+        "nullable": true,
+        "Description": "When Status flipped from draft to active."
+      },
+      {
+        "name": "DeprecatedAt",
+        "datatype": "datetime",
+        "type": "raw",
+        "nullable": true,
+        "Description": "When Status flipped from active to deprecated."
+      },
+      {
+        "name": "IsPromotable",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this draft EnumVersion can be promoted: it is a draft and has at least one symbol.",
+        "formula": "=IF(AND({{IsDraft}}, {{ValueCount}}>0), TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -4302,6 +4523,54 @@
         "nullable": false,
         "Description": "Number of TypeVersions for this type.",
         "formula": "=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}})"
+      },
+      {
+        "name": "DraftVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeVersions of this Word with Status='draft'. Drives 'drafts open' badge on Word cards.",
+        "formula": "=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}}, TypeVersions!{{IsDraft}}, TRUE())"
+      },
+      {
+        "name": "ActiveVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of active TypeVersions.",
+        "formula": "=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}}, TypeVersions!{{IsActive}}, TRUE())"
+      },
+      {
+        "name": "DeprecatedVersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of deprecated TypeVersions.",
+        "formula": "=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}}, TypeVersions!{{IsDeprecated}}, TRUE())"
+      },
+      {
+        "name": "HasDrafts",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this Word has at least one draft Definition. Drives the amber 'drafts open' badge on Word rows.",
+        "formula": "=IF({{DraftVersionCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "FirstCreated",
+        "datatype": "datetime",
+        "type": "aggregation",
+        "nullable": true,
+        "Description": "When the first Definition for this Word was created. Drives 'Word age' displays.",
+        "formula": "=MINIFS(TypeVersions!{{Created}}, TypeVersions!{{Type}}, Types!{{Name}})"
+      },
+      {
+        "name": "LastModified",
+        "datatype": "datetime",
+        "type": "aggregation",
+        "nullable": true,
+        "Description": "Latest TypeVersions.Created among this Word's Definitions. Drives 'recently active' sort.",
+        "formula": "=MAXIFS(TypeVersions!{{Created}}, TypeVersions!{{Type}}, Types!{{Name}})"
       }
     ],
     "data": [
@@ -5047,6 +5316,75 @@
         "nullable": false,
         "Description": "True when at least one TypeHelper was originally introduced by this version's YAML body.",
         "formula": "=IF({{OriginatedHelperCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "OwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner of this Definition's Word, passed through from Types.Owner. Lets list views render owner without joining.",
+        "formula": "=INDEX(Types!{{Owner}}, MATCH({{Type}}, Types!{{Name}}, 0))"
+      },
+      {
+        "name": "WordTitle",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Title of this Definition's Word, passed through from Types.Title. Used in breadcrumbs.",
+        "formula": "=INDEX(Types!{{Title}}, MATCH({{Type}}, Types!{{Name}}, 0))"
+      },
+      {
+        "name": "WordIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether this Definition's Word is retired (Types.IsRetired). Drives the red strike-through pill in \u00a74 \u2014 distinct from version-level deprecation.",
+        "formula": "=INDEX(Types!{{IsRetired}}, MATCH({{Type}}, Types!{{Name}}, 0))"
+      },
+      {
+        "name": "LastModified",
+        "datatype": "datetime",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Most recent edit to this Definition or any of its child rows. Null until the editor lands. Drives Activity-feed sort."
+      },
+      {
+        "name": "PromotedAt",
+        "datatype": "datetime",
+        "type": "raw",
+        "nullable": true,
+        "Description": "When Status flipped from draft to active. Null for never-promoted drafts. Activity feed renders 'promoted on...' distinct from 'created on...'."
+      },
+      {
+        "name": "DeprecatedAt",
+        "datatype": "datetime",
+        "type": "raw",
+        "nullable": true,
+        "Description": "When Status flipped from active to deprecated. Null while still active or while still draft."
+      },
+      {
+        "name": "StaleReferenceCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeAttributes on this Definition whose ref points at a retired/deprecated/draft target. Drives \u00a77 promote-gating.",
+        "formula": "=COUNTIFS(TypeAttributes!{{TypeVersion}}, TypeVersions!{{Name}}, TypeAttributes!{{RefIsStale}}, TRUE())"
+      },
+      {
+        "name": "HasStaleReferences",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff any of this Definition's attribute refs are stale.",
+        "formula": "=IF({{StaleReferenceCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsPromotable",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this draft Definition can be promoted: it is a draft, has no stale references, and has at least one attribute. Gates the Promote CTA in \u00a77.",
+        "formula": "=IF(AND({{IsDraft}}, NOT({{HasStaleReferences}}), {{AttributeCount}}>0), TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -5930,6 +6268,70 @@
         "nullable": false,
         "Description": "Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive' when only PrimitiveType is set.",
         "formula": "=IF({{FormatRef}}, \"format\", IF({{EnumVersionRef}}, \"enum\", IF({{SubTypeVersionRef}}, \"subtype\", IF({{HelperRef}}, \"helper\", \"primitive\"))))"
+      },
+      {
+        "name": "RefFormatIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the FormatRef target is retired. Null when FormatRef is unset.",
+        "formula": "=INDEX(Formats!{{IsRetired}}, MATCH({{FormatRef}}, Formats!{{Name}}, 0))"
+      },
+      {
+        "name": "RefEnumIsActive",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the EnumVersionRef target has Status='active'. Null when EnumVersionRef is unset.",
+        "formula": "=INDEX(EnumVersions!{{IsActive}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefEnumIsDraft",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the EnumVersionRef target is still a draft. Promoting a draft TypeVersion that points at a draft EnumVersion is not allowed.",
+        "formula": "=INDEX(EnumVersions!{{IsDraft}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefEnumWordIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the EnumVersionRef's Word is retired.",
+        "formula": "=INDEX(EnumVersions!{{WordIsRetired}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefSubtypeIsActive",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the SubTypeVersionRef target has Status='active'.",
+        "formula": "=INDEX(TypeVersions!{{IsActive}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefSubtypeIsDraft",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the SubTypeVersionRef target is still a draft.",
+        "formula": "=INDEX(TypeVersions!{{IsDraft}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefSubtypeWordIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the SubTypeVersionRef's Word is retired.",
+        "formula": "=INDEX(TypeVersions!{{WordIsRetired}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefIsStale",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this attribute's reference points at a retired Word, a deprecated/draft EnumVersion or TypeVersion. Rolls up into TypeVersions.HasStaleReferences and gates promote.",
+        "formula": "=IF(OR({{RefFormatIsRetired}}=TRUE(), {{RefEnumIsDraft}}=TRUE(), {{RefEnumWordIsRetired}}=TRUE(), {{RefSubtypeIsDraft}}=TRUE(), {{RefSubtypeWordIsRetired}}=TRUE()), TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -14517,6 +14919,14 @@
         "type": "raw",
         "nullable": false,
         "Description": "Full instance example, serialized as JSON string."
+      },
+      {
+        "name": "OwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner passthrough.",
+        "formula": "=INDEX(TypeVersions!{{OwnerName}}, MATCH({{TypeVersion}}, TypeVersions!{{Name}}, 0))"
       }
     ],
     "data": [
@@ -14744,6 +15154,22 @@
         "nullable": false,
         "Description": "True when the axiom carries a non-empty Statement.",
         "formula": "=IF({{Statement}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "OwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner passthrough via TypeVersion \u2192 Type \u2192 Owner.",
+        "formula": "=INDEX(TypeVersions!{{OwnerName}}, MATCH({{TypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "WordIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "True iff the parent Definition's Word is retired (axiom inherits visual retirement).",
+        "formula": "=INDEX(TypeVersions!{{WordIsRetired}}, MATCH({{TypeVersion}}, TypeVersions!{{Name}}, 0))"
       }
     ],
     "data": [
@@ -15504,6 +15930,54 @@
         "nullable": false,
         "Description": "True when at least one attribute references this helper.",
         "formula": "=IF({{TotalUsageCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "OriginOwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner of the helper's origin Definition.",
+        "formula": "=INDEX(TypeVersions!{{OwnerName}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "OriginTypeName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Word name of the helper's origin Definition.",
+        "formula": "=INDEX(TypeVersions!{{Type}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "IsOriginDraft",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the origin Definition is still a draft. Gates the 'Edit helper' CTA in \u00a79c.",
+        "formula": "=INDEX(TypeVersions!{{IsDraft}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "IsOriginActive",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the origin Definition is active.",
+        "formula": "=INDEX(TypeVersions!{{IsActive}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "IsOriginDeprecated",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the origin Definition is deprecated.",
+        "formula": "=INDEX(TypeVersions!{{IsDeprecated}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "OriginWordIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the origin Definition's Word is retired. Helpers inherit retirement of their origin Word.",
+        "formula": "=INDEX(TypeVersions!{{WordIsRetired}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
       }
     ],
     "data": [
@@ -15656,6 +16130,54 @@
         "nullable": false,
         "Description": "Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive'.",
         "formula": "=IF({{FormatRef}}, \"format\", IF({{EnumVersionRef}}, \"enum\", IF({{SubTypeVersionRef}}, \"subtype\", IF({{HelperRef}}, \"helper\", \"primitive\"))))"
+      },
+      {
+        "name": "RefFormatIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the FormatRef target is retired.",
+        "formula": "=INDEX(Formats!{{IsRetired}}, MATCH({{FormatRef}}, Formats!{{Name}}, 0))"
+      },
+      {
+        "name": "RefEnumIsDraft",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the EnumVersionRef target is still a draft.",
+        "formula": "=INDEX(EnumVersions!{{IsDraft}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefEnumWordIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the EnumVersionRef's Word is retired.",
+        "formula": "=INDEX(EnumVersions!{{WordIsRetired}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefSubtypeIsDraft",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the SubTypeVersionRef target is still a draft.",
+        "formula": "=INDEX(TypeVersions!{{IsDraft}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefSubtypeWordIsRetired",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the SubTypeVersionRef's Word is retired.",
+        "formula": "=INDEX(TypeVersions!{{WordIsRetired}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "RefIsStale",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this helper attribute's reference points at a retired/deprecated/draft target.",
+        "formula": "=IF(OR({{RefFormatIsRetired}}=TRUE(), {{RefEnumIsDraft}}=TRUE(), {{RefEnumWordIsRetired}}=TRUE(), {{RefSubtypeIsDraft}}=TRUE(), {{RefSubtypeWordIsRetired}}=TRUE()), TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -15908,6 +16430,78 @@
         "nullable": false,
         "Description": "True when at least one TypeUpgradeOp uses this projection (via AddProjected).",
         "formula": "=IF({{TypeUpgradeOpUsageCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "FromOwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner of the FromEnumVersion.",
+        "formula": "=INDEX(EnumVersions!{{OwnerName}}, MATCH({{FromEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "ToOwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner of the ToEnumVersion.",
+        "formula": "=INDEX(EnumVersions!{{OwnerName}}, MATCH({{ToEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "FromEnumName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Enum name of the FromEnumVersion.",
+        "formula": "=INDEX(EnumVersions!{{Enum}}, MATCH({{FromEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "ToEnumName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Enum name of the ToEnumVersion.",
+        "formula": "=INDEX(EnumVersions!{{Enum}}, MATCH({{ToEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "FromIsDraft",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the FromEnumVersion is still a draft.",
+        "formula": "=INDEX(EnumVersions!{{IsDraft}}, MATCH({{FromEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "ToIsDraft",
+        "datatype": "boolean",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Whether the ToEnumVersion is still a draft.",
+        "formula": "=INDEX(EnumVersions!{{IsDraft}}, MATCH({{ToEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "HasDraftEndpoints",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff either endpoint EnumVersion is still a draft.",
+        "formula": "=IF(OR({{FromIsDraft}}=TRUE(), {{ToIsDraft}}=TRUE()), TRUE(), FALSE())"
+      },
+      {
+        "name": "IsCrossOwner",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff the projection crosses two different owners' enums (a meaningful editorial signal).",
+        "formula": "=IF({{FromOwnerName}}<>{{ToOwnerName}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsCrossEnum",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff the projection crosses two different Enums (vs versions of the same Enum).",
+        "formula": "=IF({{FromEnumName}}<>{{ToEnumName}}, TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -16249,6 +16843,54 @@
         "nullable": false,
         "Description": "True when RawScript is empty \u2014 the upgrade is composed of structured TypeUpgradeOps. The desired form.",
         "formula": "=IF({{RawScript}}, FALSE(), TRUE())"
+      },
+      {
+        "name": "FromWord",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Word name of FromTypeVersion (should equal ToWord \u2014 IsCrossWord catches violations).",
+        "formula": "=INDEX(TypeVersions!{{Type}}, MATCH({{FromTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "ToWord",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Word name of ToTypeVersion.",
+        "formula": "=INDEX(TypeVersions!{{Type}}, MATCH({{ToTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "FromVersion",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Version string (e.g. '000') of FromTypeVersion.",
+        "formula": "=INDEX(TypeVersions!{{Version}}, MATCH({{FromTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "ToVersion",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Version string (e.g. '001') of ToTypeVersion.",
+        "formula": "=INDEX(TypeVersions!{{Version}}, MATCH({{ToTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "OwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner of the upgrade (passes through FromTypeVersion).",
+        "formula": "=INDEX(TypeVersions!{{OwnerName}}, MATCH({{FromTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "IsCrossWord",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff the upgrade crosses two different Words \u2014 should always be FALSE; flags malformed upgrades.",
+        "formula": "=IF({{FromWord}}<>{{ToWord}}, TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -16882,6 +17524,54 @@
         "nullable": false,
         "Description": "True when RawScript is empty \u2014 upgrade is composed of structured mappings.",
         "formula": "=IF({{RawScript}}, FALSE(), TRUE())"
+      },
+      {
+        "name": "FromWord",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Enum name of FromEnumVersion.",
+        "formula": "=INDEX(EnumVersions!{{Enum}}, MATCH({{FromEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "ToWord",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Enum name of ToEnumVersion.",
+        "formula": "=INDEX(EnumVersions!{{Enum}}, MATCH({{ToEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "FromVersion",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Version of FromEnumVersion.",
+        "formula": "=INDEX(EnumVersions!{{Version}}, MATCH({{FromEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "ToVersion",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Version of ToEnumVersion.",
+        "formula": "=INDEX(EnumVersions!{{Version}}, MATCH({{ToEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "OwnerName",
+        "datatype": "string",
+        "type": "lookup",
+        "nullable": true,
+        "Description": "Owner of the upgrade.",
+        "formula": "=INDEX(EnumVersions!{{OwnerName}}, MATCH({{FromEnumVersion}}, EnumVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "IsCrossWord",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff the upgrade crosses two different Enum Words \u2014 flags malformed upgrades.",
+        "formula": "=IF({{FromWord}}<>{{ToWord}}, TRUE(), FALSE())"
       }
     ],
     "data": []
