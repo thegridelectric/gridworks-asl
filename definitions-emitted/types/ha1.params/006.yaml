@@ -42,10 +42,12 @@ properties:
     type: number
   HpTurnOnMinutes:
     type: integer
-  Version:
-    const: '006'
+    default: 12
   TypeName:
     const: ha1.params
+  Version:
+    type: string
+    default: '006'
 required:
 - AlphaTimes10
 - BetaTimes100
@@ -58,7 +60,6 @@ required:
 - MaxEwtF
 - LoadOverestimationPercent
 - HpTurnOnMinutes
-- Version
 - TypeName
 - Version
 additionalProperties: false

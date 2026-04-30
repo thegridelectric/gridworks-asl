@@ -20,5 +20,5 @@ enum:
 - SecurityViolation
 default: SecurityViolation
 x-gridworks:
-  owner: jessica-millar
+  owner: gridworks-energy
   version: '000'

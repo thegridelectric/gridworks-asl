@@ -8,15 +8,16 @@ description: 'UTC timestamp expressed as whole milliseconds since the Unix epoch
   2000-01-01T00:00:00Z through 3000-01-01T00:00:00Z.
 
   '
+type: integer
 examples:
-- '1609459200000'
-- '1609459200500'
-- '1735689600123'
+- 1609459200000
+- 1609459200500
+- 1735689600123
 counterexamples:
-- '0'
-- '946684799999'
-- '32503680000001'
-- '1609459200000.5'
+- 0
+- 946684799999
+- 32503680000001
+- 1609459200000.5
 x-gridworks:
   owner: gridworks-energy
 minimum: 946684800000

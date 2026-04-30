@@ -12,7 +12,7 @@ enum:
 - Denied
 default: Denied
 x-gridworks:
-  owner: jessica-millar
+  owner: gridworks-energy
   version: '000'
   value_descriptions:
     Authorized: 'The runtime instance is permitted to establish or continue broker connectivity under its presented identity.

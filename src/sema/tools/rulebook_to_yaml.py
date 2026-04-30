@@ -70,28 +70,40 @@ def ref_for_type_version(key: str) -> str:
 def attr_to_property(attr: dict[str, Any]) -> dict[str, Any]:
     """Build a single JSON-Schema property dict from a TypeAttributes (or TypeHelperAttributes) row."""
     raw = attr.get("RawJson")
+    parked: dict[str, Any] = {}
     if raw:
-        # RawJson holds the verbatim unmodeled body (oneOf, anyOf, const, open object…)
         try:
             parked = json.loads(raw)
         except json.JSONDecodeError:
-            parked = None
-        if isinstance(parked, dict):
-            if parked.get("MIGRATION_WARNING") == "OneOfDeferredToRawJson":
-                prop = {"oneOf": parked["oneOf"]}
-            elif parked.get("MIGRATION_WARNING") == "OneOfInArrayItemsDeferredToRawJson":
-                prop = {"type": "array", "items": parked["items"]}
-            elif parked.get("MIGRATION_WARNING") == "AnyOfDeferredToRawJson":
-                prop = {"anyOf": parked["anyOf"]}
-            elif parked.get("MIGRATION_WARNING") == "OpenObjectDeferredToRawJson":
-                prop = parked.get("schema") or {}
-            elif "const" in parked:
-                prop = {"const": parked["const"]}
-            else:
-                prop = parked
+            parked = {}
+    if isinstance(parked, dict):
+        if parked.get("MIGRATION_WARNING") == "OneOfDeferredToRawJson":
+            prop = {"oneOf": parked["oneOf"]}
             if attr.get("Description"):
                 prop.setdefault("description", attr["Description"])
             return prop
+        if parked.get("MIGRATION_WARNING") == "OneOfInArrayItemsDeferredToRawJson":
+            prop = {"type": "array", "items": parked["items"]}
+            if attr.get("Description"):
+                prop.setdefault("description", attr["Description"])
+            return prop
+        if parked.get("MIGRATION_WARNING") == "AnyOfDeferredToRawJson":
+            prop = {"anyOf": parked["anyOf"]}
+            if attr.get("Description"):
+                prop.setdefault("description", attr["Description"])
+            return prop
+        if parked.get("MIGRATION_WARNING") == "OpenObjectDeferredToRawJson":
+            prop = parked.get("schema") or {}
+            if attr.get("Description"):
+                prop.setdefault("description", attr["Description"])
+            return prop
+        if "const" in parked:
+            prop = {"const": parked["const"]}
+            if attr.get("Description"):
+                prop.setdefault("description", attr["Description"])
+            return prop
+
+    extras = parked.get("extras", {}) if isinstance(parked, dict) else {}
 
     prop: dict[str, Any] = {}
     is_list = bool(attr.get("IsList"))
@@ -115,6 +127,9 @@ def attr_to_property(attr: dict[str, Any]) -> dict[str, Any]:
 
     if attr.get("Description"):
         prop["description"] = attr["Description"]
+
+    for k, v in extras.items():
+        prop.setdefault(k, v)
     return prop
 
 
@@ -161,7 +176,25 @@ def build_helper_inline(helper: dict[str, Any],
 # ---------------------------------------------------- per-file builders
 
 
+def _decode_value(s: Any) -> Any:
+    """FormatExamples.Value / EnumValues.Symbol may be JSON-encoded; round-trip the original type if so."""
+    if not isinstance(s, str):
+        return s
+    try:
+        return json.loads(s)
+    except (json.JSONDecodeError, ValueError):
+        return s
+
+
 def build_format_yaml(fmt: dict[str, Any], examples: list[dict[str, Any]]) -> dict[str, Any]:
+    raw = {}
+    if fmt.get("RawJson"):
+        try:
+            raw = json.loads(fmt["RawJson"])
+        except json.JSONDecodeError:
+            raw = {}
+    fmt_type = raw.get("type", "string")
+
     out: dict[str, Any] = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "$id": fmt.get("SchemaUrl"),
@@ -169,8 +202,7 @@ def build_format_yaml(fmt: dict[str, Any], examples: list[dict[str, Any]]) -> di
     }
     if fmt.get("Description"):
         out["description"] = fmt["Description"]
-    if fmt.get("Pattern") or fmt.get("MinLength") or fmt.get("MaxLength") or fmt.get("JsonSchemaFormat"):
-        out["type"] = "string"
+    out["type"] = fmt_type
     if fmt.get("Pattern"):
         out["pattern"] = fmt["Pattern"]
     if fmt.get("MinLength") is not None:
@@ -183,43 +215,69 @@ def build_format_yaml(fmt: dict[str, Any], examples: list[dict[str, Any]]) -> di
     pos = sorted([e for e in examples if not e.get("IsCounter")], key=lambda r: r.get("Idx", 0))
     neg = sorted([e for e in examples if e.get("IsCounter")], key=lambda r: r.get("Idx", 0))
     if pos:
-        out["examples"] = [e["Value"] for e in pos]
+        out["examples"] = [_decode_value(e["Value"]) for e in pos]
     if neg:
-        out["counterexamples"] = [e["Value"] for e in neg]
+        out["counterexamples"] = [_decode_value(e["Value"]) for e in neg]
 
     if fmt.get("Owner"):
         out["x-gridworks"] = {"owner": fmt["Owner"]}
 
-    if fmt.get("RawJson"):
-        try:
-            for k, v in json.loads(fmt["RawJson"]).items():
-                out.setdefault(k, v)
-        except json.JSONDecodeError:
-            pass
+    for k, v in raw.items():
+        if k != "type":
+            out.setdefault(k, v)
 
     return _strip_nones(out)
 
 
 def build_enum_yaml(enum: dict[str, Any], ev: dict[str, Any],
                     values: list[dict[str, Any]]) -> dict[str, Any]:
+    raw = {}
+    if ev.get("RawJson"):
+        try:
+            raw = json.loads(ev["RawJson"])
+        except json.JSONDecodeError:
+            raw = {}
+    enum_type = raw.get("type", "string")
     sorted_values = sorted(values, key=lambda r: r.get("Idx", 0))
+
+    def _cast(v: str) -> Any:
+        decoded = _decode_value(v)
+        if enum_type == "integer":
+            try:
+                return int(decoded)
+            except (TypeError, ValueError):
+                return decoded
+        return decoded
+
     out: dict[str, Any] = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "$id": ev.get("SchemaUrl"),
         "title": ev.get("Title") or enum["Name"],
-        "type": "string",
+        "type": enum_type,
     }
     if ev.get("Description"):
         out["description"] = ev["Description"]
-    out["enum"] = [v["Symbol"] for v in sorted_values]
-    if ev.get("DefaultSymbol"):
-        out["default"] = ev["DefaultSymbol"]
-    value_descriptions = {v["Symbol"]: v["Description"] for v in sorted_values if v.get("Description")}
-    xg: dict[str, Any] = {"owner": enum.get("Owner")}
+    out["enum"] = [_cast(v["Symbol"]) for v in sorted_values]
+    if ev.get("DefaultSymbol") is not None:
+        out["default"] = _cast(ev["DefaultSymbol"])
+    value_descriptions = {_cast(v["Symbol"]): v["Description"]
+                          for v in sorted_values if v.get("Description")}
+    xg: dict[str, Any] = {}
+    if enum.get("Owner"):
+        xg["owner"] = enum["Owner"]
     xg["version"] = ev["Version"]
     if value_descriptions:
         xg["value_descriptions"] = value_descriptions
+    extended = raw.get("x-gridworks-extended_description")
+    if extended:
+        xg["extended_description"] = extended
     out["x-gridworks"] = xg
+
+    for k, v in raw.items():
+        if k in ("type", "x-gridworks-extended_description"):
+            continue
+        out.setdefault(k, v)
+
     return _strip_nones(out)
 
 
@@ -260,12 +318,25 @@ def build_type_yaml(
         if attr.get("IsRequired"):
             required.append(attr["AttributeName"])
 
-    # auto-emit TypeName / Version const properties
-    properties["TypeName"] = {"const": type_row["Name"]}
-    required.append("TypeName")
-    if not is_versionless:
+    # auto-emit TypeName / Version const properties unless the source already declared them
+    if "TypeName" not in properties:
+        properties["TypeName"] = {"const": type_row["Name"]}
+    if not is_versionless and "Version" not in properties:
         properties["Version"] = {"const": tv["Version"]}
-        required.append("Version")
+
+    # Always order [...real, TypeName, Version] in required; properties dict order
+    # follows the same convention via dict-rebuild below.
+    non_id_required = [r for r in required if r not in ("TypeName", "Version")]
+    tail = ["TypeName"] + (["Version"] if not is_versionless else [])
+    required = non_id_required + tail
+    if "TypeName" in properties or "Version" in properties:
+        ordered: dict[str, Any] = {k: v for k, v in properties.items()
+                                    if k not in ("TypeName", "Version")}
+        if "TypeName" in properties:
+            ordered["TypeName"] = properties["TypeName"]
+        if "Version" in properties and not is_versionless:
+            ordered["Version"] = properties["Version"]
+        properties = ordered
 
     out["properties"] = properties
     out["required"] = required
@@ -285,10 +356,12 @@ def build_type_yaml(
     if type_row.get("Owner"):
         xg["owner"] = type_row["Owner"]
     if axioms:
-        xg["axioms"] = [
-            {"number": a["Number"], "name": a["AxiomName"], "statement": a["Statement"]}
-            for a in sorted(axioms, key=lambda r: r.get("Number") or 0)
-        ]
+        xg["axioms"] = []
+        for a in sorted(axioms, key=lambda r: r.get("Number") or 0):
+            ax_row = {"number": a["Number"], "name": a["AxiomName"], "statement": a["Statement"]}
+            if a.get("AxiomDescription"):
+                ax_row["description"] = a["AxiomDescription"]
+            xg["axioms"].append(ax_row)
     if raw_json:
         try:
             parked = json.loads(raw_json)

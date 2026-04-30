@@ -36,11 +36,14 @@ properties:
     description: 'Reference voltage used by the ADC when converting measured voltage to a serialized reading.
 
       '
+    exclusiveMinimum: 0
+    default: 3.3
   SeriesResistanceKOhms:
     type: number
     description: 'Series resistance, in kilo-ohms, used in the thermistor divider circuit.
 
       '
+    exclusiveMinimum: 0
   TempCalcMethod:
     $ref: https://schemas.electricity.works/enums/temp.calc.method/000
   TypeName:

@@ -55,11 +55,13 @@ properties:
     description: 'Minimum delta required to emit asynchronously. Required for AsyncAndPeriodic. Must not be present for OnTrigger or Periodic.
 
       '
+    minimum: 1
   EmitPeriodS:
     type: integer
     description: 'Periodic emission interval in seconds. Required for Periodic and AsyncAndPeriodic. Must not be present for OnTrigger.
 
       '
+    minimum: 1
   Parameters:
     type: object
     additionalProperties: true

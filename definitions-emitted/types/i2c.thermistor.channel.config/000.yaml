@@ -39,11 +39,17 @@ properties:
     description: 'ADC input pin used for this thermistor channel.
 
       '
+    enum:
+    - P0
+    - P1
+    - P2
+    - P3
   SendToDerived:
     type: boolean
     description: 'Whether this raw thermistor reading should also be provided to derived channel logic.
 
       '
+    default: false
   ThermistorBeta:
     $ref: https://schemas.electricity.works/formats/positive.int
     description: 'Beta parameter of the thermistor used to convert resistance to temperature.

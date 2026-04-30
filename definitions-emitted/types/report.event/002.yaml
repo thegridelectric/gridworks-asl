@@ -14,16 +14,16 @@ properties:
     $ref: https://schemas.electricity.works/formats/left.right.dot
   Report:
     $ref: https://schemas.electricity.works/types/report/002
-  Version:
-    const: '002'
   TypeName:
     const: report.event
+  Version:
+    type: string
+    default: '002'
 required:
 - MessageId
 - TimeCreatedMs
 - Src
 - Report
-- Version
 - TypeName
 - Version
 additionalProperties: false

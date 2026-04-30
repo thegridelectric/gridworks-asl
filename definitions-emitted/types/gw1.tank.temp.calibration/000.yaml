@@ -8,16 +8,22 @@ description: 'Linear calibration coefficients for converting three raw tank prob
 properties:
   Depth1M:
     type: number
+    default: 1.0
   Depth1B:
     type: number
+    default: 0.0
   Depth2M:
     type: number
+    default: 1.0
   Depth2B:
     type: number
+    default: 0.0
   Depth3M:
     type: number
+    default: 1.0
   Depth3B:
     type: number
+    default: 0.0
   TypeName:
     const: gw1.tank.temp.calibration
   Version:

@@ -64,10 +64,11 @@ properties:
     description: 'Globally unique identifier for this report message.
 
       '
-  Version:
-    const: '002'
   TypeName:
     const: report
+  Version:
+    type: string
+    default: '002'
 required:
 - FromGNodeAlias
 - FromGNodeInstanceId
@@ -79,7 +80,6 @@ required:
 - FsmReportList
 - MessageCreatedMs
 - Id
-- Version
 - TypeName
 - Version
 additionalProperties: false

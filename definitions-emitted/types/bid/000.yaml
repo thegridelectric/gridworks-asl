@@ -25,6 +25,7 @@ properties:
     description: 'Ordered list of price–quantity pairs defining the bid curve. Prices SHALL be ordered according to MarketType rules and normalized to the market’s declared price domain. Quantities represent willingness to inject or withdraw at the corresponding prices.
 
       '
+    minItems: 1
   InjectionIsPositive:
     type: boolean
     description: 'Sign convention for quantities in this bid. If true, positive quantities represent injection into the market; if false, positive quantities represent withdrawal. The interpretation of this convention is governed by the associated MarketType.
@@ -82,6 +83,9 @@ x-gridworks:
       '
   - number: 4
     name: EconomicAdmission
+    description: 'SignedMarketFeeTxn MUST be verifiable under the market’s fee and admission policy for the specified MarketSlot.
+
+      '
   extended_description: 'The bid type is the foundational economic message of the GridWorks market architecture. By enforcing strict normalization against MarketType-defined price and quantity domains, bids enable a self-scaling market maker strategy in which aggregation, clearing, and dispatch logic can be applied uniformly across participant classes and market layers.
 
     All bids share a common structure and validation contract. Differences in physical assets, aggregation scope, or operational responsibility are expressed through external registries, MarketType definitions, and settlement processes rather than through specialized bid schemas.

@@ -41,11 +41,13 @@ properties:
     description: 'Opaque transport-level connection identifier as reported by the broker (e.g., RabbitMQ connection name).
 
       '
+    minLength: 1
   ObservedPeerAddress:
     type: string
     description: 'Remote address as observed by the broker at connection time.
 
       '
+    minLength: 1
   TypeName:
     const: g.node.instance.gt
   Version:

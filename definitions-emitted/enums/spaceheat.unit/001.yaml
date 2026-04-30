@@ -33,3 +33,8 @@ x-gridworks:
     VoltsRms: Voltage in RMS volts.
     Gallons: Volume in gallons.
     ThermostatStateEnum: Thermostat state encoded as an enum-valued quantity.
+  extended_description: 'This enum is used in component ChannelConfig objects, where it is paired with an Exponent field to express the serialized unit and scaling of a telemetry channel.
+
+    It is a legacy Spaceheat unit vocabulary. In the near future it is expected to be replaced by a new layout mechanism based on gw1.unit.
+
+    '

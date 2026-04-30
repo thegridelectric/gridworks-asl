@@ -4,14 +4,15 @@ title: positive.int
 description: 'Positive integer validated non-coercively at the serialized boundary. The serialized value must already be an integer greater than 0. Strings such as "1" and numeric floats such as 1.0 are not accepted.
 
   '
+type: integer
 examples:
-- '1'
-- '7'
-- '432'
+- 1
+- 7
+- 432
 counterexamples:
-- '0'
-- '-1'
-- '1.0'
+- 0
+- -1
+- 1.0
 - '1'
 x-gridworks:
   owner: gridworks-energy

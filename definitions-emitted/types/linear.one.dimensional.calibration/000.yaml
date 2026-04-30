@@ -9,11 +9,13 @@ properties:
     description: 'Multiplicative slope applied to the raw input measurement.
 
       '
+    default: 1.0
   B:
     type: number
     description: 'Additive offset applied after the multiplicative slope.
 
       '
+    default: 0.0
   TypeName:
     const: linear.one.dimensional.calibration
   Version:

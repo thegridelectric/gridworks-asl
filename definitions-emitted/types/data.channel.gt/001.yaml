@@ -43,6 +43,7 @@ properties:
     description: 'Indicates whether this channel participates in power metering calculations. If true, TelemetryName SHALL equal PowerW.
 
       '
+    default: false
   StartS:
     $ref: https://schemas.electricity.works/formats/utc.seconds
     description: 'Optional timestamp indicating when this channel became active or valid. Interpretation of this value is implementation-specific.

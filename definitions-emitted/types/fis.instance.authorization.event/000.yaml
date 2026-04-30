@@ -22,8 +22,10 @@ properties:
     $ref: https://schemas.electricity.works/enums/g.node.instance.transport/000
   ObservedPeerAddress:
     type: string
+    minLength: 1
   ConnectionHandle:
     type: string
+    minLength: 1
   DecidedAtUnixMs:
     $ref: https://schemas.electricity.works/formats/utc.milliseconds
   TypeName:

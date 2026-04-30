@@ -31,7 +31,6 @@ properties:
 
       '
   ProducedBy:
-    $ref: string
     description: 'Declares the system responsible for producing this channel.
 
       '
@@ -82,7 +81,7 @@ examples:
   TypeName: analytics.channel.gt
   Version: '000'
 x-gridworks:
-  owner: joe-strommen
+  owner: gridworks-energy
   axioms:
   - number: 1
     name: OutputUnitQuantityConsistency

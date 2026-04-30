@@ -46,6 +46,7 @@ properties:
     description: 'Nameplate power rating in watts for this node, used for power estimation, metering, and system-level energy calculations.
 
       '
+    minimum: 0
   InPowerMetering:
     type: boolean
     description: 'Indicates whether this node participates in power metering calculations. When true, NameplatePowerW is required.

@@ -86,10 +86,11 @@ properties:
     description: 'Outdoor-air temperature threshold used with the minimum COP rule, in degrees Fahrenheit.
 
       '
-  Version:
-    const: '005'
   TypeName:
     const: ha1.params
+  Version:
+    type: string
+    default: '005'
 required:
 - AlphaTimes10
 - BetaTimes100
@@ -102,7 +103,6 @@ required:
 - HpMaxKwTh
 - MaxEwtF
 - LoadOverestimationPercent
-- Version
 - TypeName
 - Version
 additionalProperties: false

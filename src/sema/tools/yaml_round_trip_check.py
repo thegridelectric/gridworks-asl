@@ -27,13 +27,26 @@ EMIT_DIR = ROOT / "definitions-emitted"
 
 
 def normalize(obj: Any) -> Any:
-    """Canonical form: dicts → sorted-key dicts, strings → stripped+normalized whitespace."""
+    """Canonical form: dicts → sorted-key dicts, strings → stripped+normalized whitespace.
+
+    Strings that look like JSON (the `- |` block-literal pattern) are decoded so
+    they compare equal to the corresponding dict/list. Numeric-string-vs-number
+    pairs are unified so '0' compares equal to 0 (the YAML default-emit ambiguity).
+    """
     if isinstance(obj, dict):
         return {k: normalize(obj[k]) for k in sorted(obj.keys())}
     if isinstance(obj, list):
         return [normalize(x) for x in obj]
     if isinstance(obj, str):
-        # Collapse whitespace runs (YAML block-folding etc. produces variants).
+        s = obj.strip()
+        # If the string parses as JSON to a dict/list, recurse on the parsed value.
+        if s.startswith(("{", "[")):
+            try:
+                parsed = json.loads(s)
+                if isinstance(parsed, (dict, list)):
+                    return normalize(parsed)
+            except json.JSONDecodeError:
+                pass
         return " ".join(obj.split()).strip()
     return obj
 

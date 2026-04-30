@@ -96,7 +96,7 @@ examples:
   TypeName: synced.readings.bundle
   Version: '001'
 x-gridworks:
-  owner: joe-strommen
+  owner: gridworks-energy
   axioms:
   - number: 1
     name: TerminalAssetAliasConstraint

@@ -68,11 +68,13 @@ properties:
     description: 'Event value associated with transition caused by relay de-energization.
 
       '
+    minLength: 1
   EnergizingEvent:
     type: string
     description: 'Event value associated with transition caused by relay energization.
 
       '
+    minLength: 1
   StateType:
     $ref: https://schemas.electricity.works/formats/left.right.dot
     description: 'Semantic state category controlled by this relay.
@@ -83,11 +85,13 @@ properties:
     description: 'State value associated with the de-energized relay position.
 
       '
+    minLength: 1
   EnergizedState:
     type: string
     description: 'State value associated with the energized relay position.
 
       '
+    minLength: 1
   TypeName:
     const: relay.actor.config
   Version:

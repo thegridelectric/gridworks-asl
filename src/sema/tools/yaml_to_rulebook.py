@@ -140,10 +140,12 @@ def import_formats(ctx: MigrationContext, registry: dict[str, Any]) -> None:
         name = fmt_dir.stem
         fmt = load_yaml_safe(fmt_dir, ctx, "format") or {}
         reg = fmt_registry.get(name, {})
-        modeled = {"$schema", "$id", "title", "description", "type",
+        modeled = {"$schema", "$id", "title", "description",
                    "pattern", "minLength", "maxLength", "format",
                    "examples", "counterexamples", "x-gridworks"}
         unmodeled = {k: v for k, v in fmt.items() if k not in modeled}
+        if fmt.get("type") and fmt["type"] != "string":
+            unmodeled["type"] = fmt["type"]
         ctx.rows["Formats"].append({
             "Name": name,
             "Owner": reg.get("owner") or (fmt.get("x-gridworks") or {}).get("owner"),
@@ -160,24 +162,18 @@ def import_formats(ctx: MigrationContext, registry: dict[str, Any]) -> None:
         for idx, ex in enumerate(fmt.get("examples") or []):
             ctx.rows["FormatExamples"].append({
                 "Format": name, "Idx": idx, "IsCounter": False,
-                "Value": str(ex), "Description": None,
+                "Value": json.dumps(ex), "Description": None,
             })
         for idx, ex in enumerate(fmt.get("counterexamples") or []):
             ctx.rows["FormatExamples"].append({
                 "Format": name, "Idx": idx, "IsCounter": True,
-                "Value": str(ex), "Description": None,
+                "Value": json.dumps(ex), "Description": None,
             })
 
 
 def import_enums(ctx: MigrationContext, registry: dict[str, Any]) -> None:
     enum_registry = (registry.get("enums") or {})
-    for enum_name, reg in enum_registry.items():
-        ctx.rows["Enums"].append({
-            "Name": enum_name,
-            "Owner": reg.get("owner"),
-            "EnumType": reg.get("enum_type"),
-            "Description": reg.get("description"),
-        })
+    yaml_owners: dict[str, str] = {}
 
     for enum_dir in sorted((DEFINITIONS_DIR / "enums").iterdir()):
         if not enum_dir.is_dir():
@@ -191,33 +187,78 @@ def import_enums(ctx: MigrationContext, registry: dict[str, Any]) -> None:
             reg = (enum_registry.get(enum_name) or {})
             reg_versions = reg.get("versions") or {}
             ver_meta = reg_versions.get(version) or reg
+            xg = doc.get("x-gridworks") or {}
+            yaml_owner = xg.get("owner")
+            if yaml_owner:
+                yaml_owners.setdefault(enum_name, yaml_owner)
+
+            modeled = {"$schema", "$id", "title", "description", "type",
+                       "enum", "default", "x-gridworks"}
+            unmodeled = {k: v for k, v in doc.items() if k not in modeled}
+            if doc.get("type") and doc["type"] != "string":
+                unmodeled["type"] = doc["type"]
+            extended = xg.get("extended_description")
+            if extended:
+                unmodeled["x-gridworks-extended_description"] = extended
+
             ctx.rows["EnumVersions"].append({
                 "Enum": enum_name,
                 "Version": version,
                 "SchemaUrl": doc.get("$id"),
                 "Title": doc.get("title"),
                 "Description": doc.get("description"),
-                "DefaultSymbol": doc.get("default"),
+                "DefaultSymbol": str(doc["default"]) if doc.get("default") is not None else None,
                 "Status": ver_meta.get("status"),
                 "Created": ver_meta.get("created"),
+                "RawJson": json.dumps(unmodeled) if unmodeled else None,
             })
-            value_descriptions = ((doc.get("x-gridworks") or {}).get("value_descriptions") or {})
+            value_descriptions = xg.get("value_descriptions") or {}
             ev_key = f"{enum_name}/{version}"
             for idx, sym in enumerate(doc.get("enum") or []):
                 ctx.rows["EnumValues"].append({
                     "EnumVersion": ev_key,
-                    "Symbol": sym,
+                    "Symbol": str(sym),
                     "Idx": idx,
                     "Description": value_descriptions.get(sym),
                 })
 
+    for enum_name, reg in enum_registry.items():
+        ctx.rows["Enums"].append({
+            "Name": enum_name,
+            "Owner": yaml_owners.get(enum_name) or reg.get("owner"),
+            "EnumType": reg.get("enum_type"),
+            "Description": reg.get("description"),
+            "RawJson": None,
+        })
+
 
 def import_types(ctx: MigrationContext, registry: dict[str, Any]) -> None:
     type_registry = (registry.get("types") or {})
+    yaml_owners: dict[str, str] = {}
+    types_root = DEFINITIONS_DIR / "types"
+    for entry in types_root.iterdir():
+        if entry.is_dir():
+            for ver_path in entry.glob("*.yaml"):
+                try:
+                    doc = yaml.safe_load(ver_path.read_text())
+                except yaml.YAMLError:
+                    continue
+                xg = (doc or {}).get("x-gridworks") or {}
+                if xg.get("owner"):
+                    yaml_owners.setdefault(entry.name, xg["owner"])
+        elif entry.suffix == ".yaml":
+            try:
+                doc = yaml.safe_load(entry.read_text())
+            except yaml.YAMLError:
+                continue
+            xg = (doc or {}).get("x-gridworks") or {}
+            if xg.get("owner"):
+                yaml_owners.setdefault(entry.stem, xg["owner"])
+
     for type_name, reg in type_registry.items():
         ctx.rows["Types"].append({
             "Name": type_name,
-            "Owner": reg.get("owner"),
+            "Owner": yaml_owners.get(type_name) or reg.get("owner"),
             "Title": reg.get("title"),
             "Description": reg.get("description"),
             "PythonClassName": None,
@@ -295,6 +336,8 @@ def _import_type_version(
 
     for idx, attr_name in enumerate(properties.keys()):
         prop = properties[attr_name] or {}
+        # Skip ONLY const-form TypeName/Version (identity markers per plan §6).
+        # If a YAML declares Version as non-const (e.g., ha1.params), keep it as a real attribute.
         if "const" in prop and attr_name in ("TypeName", "Version"):
             continue
         attr_row = _build_attribute_row(
@@ -328,7 +371,21 @@ def _import_type_version(
             "Number": ax.get("number"),
             "AxiomName": ax.get("name"),
             "Statement": ax.get("statement"),
+            "AxiomDescription": ax.get("description"),
         })
+
+
+_MODELED_PER_ATTR = {"description", "type", "$ref", "items", "oneOf", "anyOf",
+                     "properties", "required", "additionalProperties", "const"}
+
+
+def _extract_extras(prop: dict[str, Any]) -> dict[str, Any]:
+    """Collect attribute-level JSON-Schema keys not covered by the structured columns.
+
+    Examples: minimum, maximum, minLength, maxLength, minItems, maxItems, default,
+    pattern, multipleOf, etc. These round-trip via TypeAttributes.RawJson.extras.
+    """
+    return {k: v for k, v in prop.items() if k not in _MODELED_PER_ATTR}
 
 
 def _build_attribute_row(
@@ -348,6 +405,7 @@ def _build_attribute_row(
     Returns a row dict missing the TypeVersion / TypeHelper FK column —
     callers fill that in.
     """
+    extras = _extract_extras(prop)
     row = {
         "AttributeName": attr_name,
         "Idx": idx,
@@ -359,7 +417,7 @@ def _build_attribute_row(
         "EnumVersionRef": None,
         "SubTypeVersionRef": None,
         "HelperRef": None,
-        "RawJson": None,
+        "RawJson": json.dumps({"extras": extras}) if extras else None,
     }
 
     if "const" in prop:

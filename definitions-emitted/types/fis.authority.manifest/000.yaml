@@ -25,6 +25,7 @@ properties:
     description: 'List of alias prefixes considered valid parent roots for this manifest. GNodeList SHALL be closed under parent alias relationship up to one of these roots.
 
       '
+    minItems: 1
   GNodeList:
     type: array
     items:
@@ -32,6 +33,7 @@ properties:
     description: 'List of Grid Nodes included in this manifest.
 
       '
+    minItems: 1
   GNodeInstanceList:
     type: array
     items:
@@ -39,6 +41,7 @@ properties:
     description: 'List of runtime instance records associated with GNodes in this manifest.
 
       '
+    minItems: 1
   TypeName:
     const: fis.authority.manifest
   Version:
