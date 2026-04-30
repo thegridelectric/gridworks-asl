@@ -5519,3 +5519,278 @@ INSERT INTO type_helper_attributes (type_helper, attribute_name, idx, descriptio
 VALUES ('synced.readings.bundle.ChannelReading', 'UnitType', 3, 'Name of the Sema vocabulary from which Unit is drawn.
 ', TRUE, FALSE, NULL, 'left.right.dot', NULL, NULL, NULL, NULL);
 
+-- ----------------------------------------------------------------------------
+-- Projections: Named, deterministic enum-to-enum (or value-to-value) mappings used by AddProjected upgrade ops. Today: SpaceheatTelemetryQuantityProjection, Gw1UnitQuantityProjection.
+-- ----------------------------------------------------------------------------
+INSERT INTO projections (name, description, from_enum_version, to_enum_version, raw_script)
+VALUES ('Gw1UnitQuantityProjection', 'Sema: https://schemas.electricity.works/types/gw1.unit.quantity.projection/000', NULL, NULL, NULL);
+
+INSERT INTO projections (name, description, from_enum_version, to_enum_version, raw_script)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'Sema: https://schemas.electricity.works/types/spaceheat.telemetry.quantity.projection/000', NULL, NULL, NULL);
+
+-- ----------------------------------------------------------------------------
+-- ProjectionMappings: Per-symbol mappings for flat-lookup Projections. Empty when the parent Projection uses RawScript.
+-- ----------------------------------------------------------------------------
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'Unknown', 'Unknown', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'Unitless', 'Unitless', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'FahrenheitX100', 'Temperature', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'Watts', 'Power', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'WattHours', 'Energy', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'Gallons', 'Volume', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'GpmX100', 'FlowRate', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'Seconds', 'Time', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'SecondsX10', 'Time', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('Gw1UnitQuantityProjection', 'Milliseconds', 'Time', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'Unknown', 'Unknown', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'PowerW', 'Power', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'WattHours', 'Energy', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'MilliWattHours', 'Energy', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'WaterTempCTimes1000', 'Temperature', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'WaterTempFTimes1000', 'Temperature', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'AirTempCTimes1000', 'Temperature', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'AirTempFTimes1000', 'Temperature', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'CelsiusTimes100', 'Temperature', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'GpmTimes100', 'FlowRate', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'GallonsTimes100', 'Volume', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'VoltageRmsMilliVolts', 'Voltage', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'VoltsTimesTen', 'Voltage', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'VoltsTimes100', 'Voltage', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'MicroVolts', 'Voltage', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'CurrentRmsMicroAmps', 'Current', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'HzTimes100', 'Frequency', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'MicroHz', 'Frequency', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'RelayState', 'Unitless', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'ThermostatState', 'Unitless', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'StorageLayer', 'Unitless', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'BinaryState', 'Unitless', NULL);
+
+INSERT INTO projection_mappings (projection, from_symbol, to_symbol, description)
+VALUES ('SpaceheatTelemetryQuantityProjection', 'PercentKeep', 'Percent', NULL);
+
+-- ----------------------------------------------------------------------------
+-- TypeUpgrades: One row per ordered version pair (N, N+1) for a given type. Mirrors src/sema/runtime/types/old_versions/<type>_<NNN>.py.upgrade() methods.
+-- ----------------------------------------------------------------------------
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('data.channel.gt/001', 'data.channel.gt/002', '001 -> 002:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('derived.channel.gt/000', 'derived.channel.gt/001', '000 -> 001: add InputChannelNames, EmissionMethod, and Parameters.', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('derived.channel.gt/001', 'derived.channel.gt/002', '001 -> 002:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('fsm.atomic.report/000', 'fsm.atomic.report/001', '000 -> 001:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('fsm.full.report/000', 'fsm.full.report/001', '000 -> 001: AtomicList: fsm.atomic.report:000 -> 001', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('ha1.params/004', 'ha1.params/005', '004 -> 005:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('ha1.params/005', 'ha1.params/006', '005 -> 006:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('i2c.multichannel.dt.relay.component.gt/002', 'i2c.multichannel.dt.relay.component.gt/003', '002 -> 003: Add I2cBus', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003', 'i2c.multichannel.dt.relay.component.gt/004', '003 -> 004: ConfigList[]: relay.actor.config:002 -> 003', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('layout.lite/007', 'layout.lite/008', '007 -> 008:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('layout.lite/008', 'layout.lite/009', '008 -> 009:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('layout.lite/009', 'layout.lite/010', '009 -> 010:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('layout.lite/010', 'layout.lite/011', '010 -> 011:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('layout.lite/011', 'layout.lite/012', '011 -> 012:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('layout.lite/012', 'layout.lite/013', '012 -> 013: I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('relay.actor.config/002', 'relay.actor.config/003', '002 -> 003 Require AsyncCaptureDelta when AsyncCapture is true', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('report/002', 'report/003', '002 -> 003: FsmReportList[]: fsm.full.report:000|001 -> 001', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('report.event/002', 'report.event/003', '002 -> 003: Report: report:002 -> 003', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('spaceheat.node.gt/200', 'spaceheat.node.gt/300', '200 -> 300:', NULL);
+
+INSERT INTO type_upgrades (from_type_version, to_type_version, description, raw_script)
+VALUES ('spaceheat.node.gt/300', 'spaceheat.node.gt/301', '300 -> 301:', NULL);
+
+-- ----------------------------------------------------------------------------
+-- TypeUpgradeOps: Atomic operations within a TypeUpgrade. Most upgrades decompose into 1-4 ops. OpKind controls semantics (vocabulary: AddOptional, AddWithDefault, Remove, RequireToOptional, OptionalToRequire, EnumVersionBump, CoerceToEnum, UpgradeChild, UpgradeChildIf, UpgradeListItems, UpgradeListItemsIf, AddProjected, Custom).
+-- ----------------------------------------------------------------------------
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('data.channel.gt/001 -> data.channel.gt/002', 0, 'AddProjected', 'Quantity', NULL, NULL, NULL, NULL, 'SpaceheatTelemetryQuantityProjection', NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('data.channel.gt/001 -> data.channel.gt/002', 1, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'upgraded_telemetry_name = SpaceheatTelemetryName[self.telemetry_name.name]
+data[''telemetry_name''] = upgraded_telemetry_name', NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('derived.channel.gt/000 -> derived.channel.gt/001', 0, 'AddWithDefault', 'Parameters', 'null', NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('derived.channel.gt/000 -> derived.channel.gt/001', 1, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'data[''input_channel_names''] = []
+data[''emission_method''] = Gw1EmissionMethod.OnTrigger', NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('derived.channel.gt/001 -> derived.channel.gt/002', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.output_unit is None:
+    data[''output_unit''] = ''Unknown''
+    data[''output_quantity''] = Gw1Quantity.Unknown
+else:
+    data[''output_unit''] = self.output_unit.value
+    data[''output_quantity''] = Gw1UnitQuantityProjection.project(Gw1Unit001(self.output_unit.value))', NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('fsm.atomic.report/000 -> fsm.atomic.report/001', 0, 'Remove', 'action_type', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('fsm.atomic.report/000 -> fsm.atomic.report/001', 1, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.report_type == FsmReportType.Action and self.action is not None:
+    if self.action_type != ''RelayPinSet'':
+        raise ValueError("FsmAtomicReport000.upgrade() only supports ActionType ''RelayPinSet''.")
+    data[''action''] = FsmAtomicReportSimpleAction(value=RelayEnergizationState(self.action))', NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('fsm.full.report/000 -> fsm.full.report/001', 0, 'UpgradeListItems', 'AtomicList', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('ha1.params/005 -> ha1.params/006', 0, 'AddWithDefault', 'HpTurnOnMinutes', '12', NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('i2c.multichannel.dt.relay.component.gt/002 -> i2c.multichannel.dt.relay.component.gt/003', 0, 'AddWithDefault', 'I2cBus', '"default"', NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('i2c.multichannel.dt.relay.component.gt/003 -> i2c.multichannel.dt.relay.component.gt/004', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'upgraded_configs = []
+for cfg in self.config_list:
+    if isinstance(cfg, RelayActorConfig002):
+        upgraded_configs.append(cfg.upgrade())
+    else:
+        upgraded_configs.append(cfg)
+data[''config_list''] = upgraded_configs', NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/007 -> layout.lite/008', 0, 'AddWithDefault', 'SystemMode', '"Heating"', NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/007 -> layout.lite/008', 1, 'AddWithDefault', 'SeasonalStorageMode', '"AllTanks"', NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/008 -> layout.lite/009', 0, 'AddWithDefault', 'BufferShortCycling', 'false', NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/009 -> layout.lite/010', 0, 'UpgradeChildIf', 'Ha1Params', NULL, '004', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/010 -> layout.lite/011', 0, 'UpgradeChild', 'Ha1Params', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/011 -> layout.lite/012', 0, 'UpgradeListItemsIf', 'DerivedChannels', NULL, '000', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/011 -> layout.lite/012', 1, 'UpgradeListItems', 'DataChannels', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/011 -> layout.lite/012', 2, 'UpgradeListItemsIf', 'ShNodes', NULL, '300', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/011 -> layout.lite/012', 3, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.i2c_relay_component is not None:
+    data[''i2c_relay_component''] = self.i2c_relay_component.upgrade()', NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('layout.lite/012 -> layout.lite/013', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.i2c_relay_component is not None:
+    upgraded_component = self.i2c_relay_component.upgrade()
+    if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt004):
+        raise TypeError(''Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt004'')
+    data[''i2c_relay_component''] = upgraded_component', NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('relay.actor.config/002 -> relay.actor.config/003', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'if self.async_capture:
+    if not self.async_capture_delta:
+        data[''async_capture_delta''] = 1', NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('report/002 -> report/003', 0, 'UpgradeListItemsIf', 'FsmReportList', NULL, '000', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('report.event/002 -> report.event/003', 0, 'UpgradeChild', 'Report', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO type_upgrade_ops (type_upgrade, idx, op_kind, field_name, literal_value, from_version, to_version, enum_version_ref, projection_ref, raw_script, description)
+VALUES ('spaceheat.node.gt/200 -> spaceheat.node.gt/300', 0, 'Custom', NULL, NULL, NULL, NULL, NULL, NULL, 'data[''actor_class''] = Gw1ActorClass009(data[''actor_class'']).value', NULL);
+

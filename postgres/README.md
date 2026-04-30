@@ -2,7 +2,7 @@
 
 **Schema:** `public`
 **Database:** `demo`
-**Timestamp:** 2026-04-30 06:52:34 UTC
+**Timestamp:** 2026-04-30 06:56:28 UTC
 
 ## Parsing Rulebook
 
@@ -21,10 +21,10 @@ Found **19** tables in rulebook
   - **TypeAxioms** (5 fields, 109 records)
   - **TypeHelpers** (6 fields, 4 records)
   - **TypeHelperAttributes** (13 fields, 12 records)
-  - **Projections** (5 fields, 0 records)
-  - **ProjectionMappings** (5 fields, 0 records)
-  - **TypeUpgrades** (5 fields, 0 records)
-  - **TypeUpgradeOps** (12 fields, 0 records)
+  - **Projections** (5 fields, 2 records)
+  - **ProjectionMappings** (5 fields, 33 records)
+  - **TypeUpgrades** (5 fields, 20 records)
+  - **TypeUpgradeOps** (12 fields, 25 records)
   - **EnumUpgrades** (5 fields, 0 records)
   - **EnumUpgradeMappings** (5 fields, 0 records)
 
@@ -32,7 +32,7 @@ Generated **19** table definitions with **96** raw fields
 Generated **0** calculation functions
 Generated **19** views
 Enabled RLS on **19** tables
-Generated insert statements for **1344** records
+Generated insert statements for **1424** records
 ## Script Generation Complete
 
 Generated files:
