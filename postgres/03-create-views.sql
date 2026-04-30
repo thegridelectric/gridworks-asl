@@ -282,7 +282,10 @@ SELECT
   t.description,                                                                -- Description of what the projection computes.
   t.from_enum_version,                                                          -- Source enum version.
   t.to_enum_version,                                                            -- Target enum version.
-  t.raw_script                                                                  -- Populated only if the projection isn't a flat lookup (escape hatch).
+  t.raw_script,                                                                 -- Populated only if the projection isn't a flat lookup (escape hatch).
+  calc_projections_mapping_count(t.projections_id) AS mapping_count,            -- Number of ProjectionMappings (FromSymbol -> ToSymbol pairs) declared on this projection.
+  calc_projections_is_scripted(t.projections_id) AS is_scripted,                -- True when RawScript is set — projection isn't a flat lookup and falls back to a script.
+  calc_projections_is_flat_lookup(t.projections_id) AS is_flat_lookup           -- True when this projection is a pure flat lookup (no RawScript). The common, well-behaved case.
 FROM projections t;
 
 -- ----------------------------------------------------------------------------
@@ -296,7 +299,9 @@ SELECT
   t.projection,                                                                 -- Foreign key to the parent Projection.
   t.from_symbol,                                                                -- Source enum symbol.
   t.to_symbol,                                                                  -- Target enum symbol.
-  t.description                                                                 -- Optional per-mapping description.
+  t.description,                                                                -- Optional per-mapping description.
+  calc_projection_mappings_is_removal(t.projection_mappings_id) AS is_removal,  -- True when ToSymbol is empty/null — the source symbol is dropped during projection.
+  calc_projection_mappings_is_identity(t.projection_mappings_id) AS is_identity -- True when FromSymbol equals ToSymbol — the projection passes the symbol through unchanged.
 FROM projection_mappings t;
 
 -- ----------------------------------------------------------------------------

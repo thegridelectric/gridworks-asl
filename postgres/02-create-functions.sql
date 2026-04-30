@@ -955,6 +955,36 @@ RETURNS TEXT AS $$
   SELECT (CASE WHEN (SELECT NULLIF(format_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('format')::text ELSE (CASE WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('enum')::text ELSE (CASE WHEN (SELECT NULLIF(sub_type_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('subtype')::text ELSE (CASE WHEN (SELECT NULLIF(helper_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('helper')::text ELSE ('primitive')::text END)::text END)::text END)::text END)::text;
 $$ LANGUAGE sql STABLE;
 
+-- calc_projections_mapping_count
+-- Field: Projections.MappingCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_projections_mapping_count(p_projections_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM projection_mappings WHERE projection = (SELECT NULLIF(name, '') FROM projections WHERE projections_id = p_projections_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_is_scripted
+-- Field: Projections.IsScripted
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_projections_is_scripted(p_projections_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM projections WHERE projections_id = p_projections_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_is_flat_lookup
+-- Field: Projections.IsFlatLookup
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_projections_is_flat_lookup(p_projections_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM projections WHERE projections_id = p_projections_id) IS NOT NULL THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- get_projections_name
 -- Helper function: Get Name from Projections by ProjectionsId
 -- Used for join-free cross-table references in aggregations
@@ -990,6 +1020,26 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_projection_mappings_name(p_projection_mappings_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(projection, '') FROM projection_mappings WHERE projection_mappings_id = p_projection_mappings_id), ':', (SELECT NULLIF(from_symbol, '') FROM projection_mappings WHERE projection_mappings_id = p_projection_mappings_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projection_mappings_is_removal
+-- Field: ProjectionMappings.IsRemoval
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_projection_mappings_is_removal(p_projection_mappings_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(to_symbol, '') FROM projection_mappings WHERE projection_mappings_id = p_projection_mappings_id) IS NOT NULL THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projection_mappings_is_identity
+-- Field: ProjectionMappings.IsIdentity
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_projection_mappings_is_identity(p_projection_mappings_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(from_symbol, '') FROM projection_mappings WHERE projection_mappings_id = p_projection_mappings_id) = (SELECT NULLIF(to_symbol, '') FROM projection_mappings WHERE projection_mappings_id = p_projection_mappings_id) THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_upgrades_name
