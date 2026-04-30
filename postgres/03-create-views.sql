@@ -51,7 +51,9 @@ SELECT
   calc_formats_has_pattern(t.formats_id) AS has_pattern,                        -- True when a regex Pattern constraint is defined.
   calc_formats_has_length_bounds(t.formats_id) AS has_length_bounds,            -- True when at least one of MinLength / MaxLength is defined.
   calc_formats_example_count(t.formats_id) AS example_count,                    -- Number of positive examples on this format (FormatExamples where IsCounter=false).
-  calc_formats_counter_example_count(t.formats_id) AS counter_example_count     -- Number of counterexamples on this format (FormatExamples where IsCounter=true).
+  calc_formats_counter_example_count(t.formats_id) AS counter_example_count,    -- Number of counterexamples on this format (FormatExamples where IsCounter=true).
+  calc_formats_type_attribute_usage_count(t.formats_id) AS type_attribute_usage_count,-- Number of TypeAttributes that point at this Format via FormatRef.
+  calc_formats_type_helper_attribute_usage_count(t.formats_id) AS type_helper_attribute_usage_count-- Number of TypeHelperAttributes that point at this Format via FormatRef.
 FROM formats t;
 
 -- ----------------------------------------------------------------------------
@@ -111,7 +113,14 @@ SELECT
   calc_enum_versions_is_active(t.enum_versions_id) AS is_active,                -- True when Status is 'active'.
   calc_enum_versions_is_deprecated(t.enum_versions_id) AS is_deprecated,        -- True when Status is 'deprecated'.
   calc_enum_versions_has_default_symbol(t.enum_versions_id) AS has_default_symbol,-- True when DefaultSymbol is set on this version.
-  calc_enum_versions_value_count(t.enum_versions_id) AS value_count             -- Number of EnumValues (symbols) declared in this version.
+  calc_enum_versions_value_count(t.enum_versions_id) AS value_count,            -- Number of EnumValues (symbols) declared in this version.
+  calc_enum_versions_type_attribute_usage_count(t.enum_versions_id) AS type_attribute_usage_count,-- Number of TypeAttributes that point at this EnumVersion via EnumVersionRef.
+  calc_enum_versions_type_helper_attribute_usage_count(t.enum_versions_id) AS type_helper_attribute_usage_count,-- Number of TypeHelperAttributes that point at this EnumVersion via EnumVersionRef.
+  calc_enum_versions_outgoing_projection_count(t.enum_versions_id) AS outgoing_projection_count,-- Number of Projections starting from this version (i.e. where this is FromEnumVersion).
+  calc_enum_versions_incoming_projection_count(t.enum_versions_id) AS incoming_projection_count,-- Number of Projections landing on this version (i.e. where this is ToEnumVersion).
+  calc_enum_versions_outgoing_upgrade_count(t.enum_versions_id) AS outgoing_upgrade_count,-- Number of EnumUpgrades that bump from this version.
+  calc_enum_versions_incoming_upgrade_count(t.enum_versions_id) AS incoming_upgrade_count,-- Number of EnumUpgrades that bump to this version.
+  calc_enum_versions_type_upgrade_op_usage_count(t.enum_versions_id) AS type_upgrade_op_usage_count-- Number of TypeUpgradeOps referencing this version (via EnumVersionRef on EnumVersionBump / CoerceToEnum ops).
 FROM enum_versions t;
 
 -- ----------------------------------------------------------------------------
@@ -172,7 +181,12 @@ SELECT
   calc_type_versions_attribute_count(t.type_versions_id) AS attribute_count,    -- Number of TypeAttributes declared on this version.
   calc_type_versions_required_attribute_count(t.type_versions_id) AS required_attribute_count,-- Number of TypeAttributes on this version where IsRequired=true.
   calc_type_versions_axiom_count(t.type_versions_id) AS axiom_count,            -- Number of natural-language axioms declared on this version.
-  calc_type_versions_example_count(t.type_versions_id) AS example_count         -- Number of TypeExamples attached to this version.
+  calc_type_versions_example_count(t.type_versions_id) AS example_count,        -- Number of TypeExamples attached to this version.
+  calc_type_versions_type_attribute_as_subtype_count(t.type_versions_id) AS type_attribute_as_subtype_count,-- Number of TypeAttributes that nest this version as a sub-type via SubTypeVersionRef.
+  calc_type_versions_type_helper_attribute_as_subtype_count(t.type_versions_id) AS type_helper_attribute_as_subtype_count,-- Number of TypeHelperAttributes that nest this version as a sub-type via SubTypeVersionRef.
+  calc_type_versions_outgoing_upgrade_count(t.type_versions_id) AS outgoing_upgrade_count,-- Number of TypeUpgrades that bump from this version (this version has a successor).
+  calc_type_versions_incoming_upgrade_count(t.type_versions_id) AS incoming_upgrade_count,-- Number of TypeUpgrades that bump to this version (this version was reached from a predecessor).
+  calc_type_versions_originated_helper_count(t.type_versions_id) AS originated_helper_count-- Number of TypeHelpers whose YAML body originally introduced them in this version.
 FROM type_versions t;
 
 -- ----------------------------------------------------------------------------
@@ -244,7 +258,9 @@ SELECT
   t.origin_path,                                                                -- JSON-Pointer-ish path within origin (e.g. '/properties/RelayNodes/items') — used to re-inline on YAML emit.
   calc_type_helpers_attribute_count(t.type_helpers_id) AS attribute_count,      -- Number of TypeHelperAttributes declared on this helper.
   calc_type_helpers_required_attribute_count(t.type_helpers_id) AS required_attribute_count,-- Number of TypeHelperAttributes on this helper where IsRequired=true.
-  calc_type_helpers_is_closed(t.type_helpers_id) AS is_closed                   -- True when ExtraAllowed is FALSE (the helper rejects unknown properties).
+  calc_type_helpers_is_closed(t.type_helpers_id) AS is_closed,                  -- True when ExtraAllowed is FALSE (the helper rejects unknown properties).
+  calc_type_helpers_type_attribute_usage_count(t.type_helpers_id) AS type_attribute_usage_count,-- Number of TypeAttributes that point at this helper via HelperRef.
+  calc_type_helpers_type_helper_attribute_usage_count(t.type_helpers_id) AS type_helper_attribute_usage_count-- Number of TypeHelperAttributes that point at this helper via HelperRef (nested helpers).
 FROM type_helpers t;
 
 -- ----------------------------------------------------------------------------
@@ -285,7 +301,8 @@ SELECT
   t.raw_script,                                                                 -- Populated only if the projection isn't a flat lookup (escape hatch).
   calc_projections_mapping_count(t.projections_id) AS mapping_count,            -- Number of ProjectionMappings (FromSymbol -> ToSymbol pairs) declared on this projection.
   calc_projections_is_scripted(t.projections_id) AS is_scripted,                -- True when RawScript is set — projection isn't a flat lookup and falls back to a script.
-  calc_projections_is_flat_lookup(t.projections_id) AS is_flat_lookup           -- True when this projection is a pure flat lookup (no RawScript). The common, well-behaved case.
+  calc_projections_is_flat_lookup(t.projections_id) AS is_flat_lookup,          -- True when this projection is a pure flat lookup (no RawScript). The common, well-behaved case.
+  calc_projections_type_upgrade_op_usage_count(t.projections_id) AS type_upgrade_op_usage_count-- Number of TypeUpgradeOps referencing this projection via ProjectionRef (typically AddProjected ops).
 FROM projections t;
 
 -- ----------------------------------------------------------------------------

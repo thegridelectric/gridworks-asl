@@ -288,6 +288,26 @@ RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM format_examples WHERE format = (SELECT NULLIF(name, '') FROM formats WHERE formats_id = p_formats_id) AND is_counter = TRUE))::integer;
 $$ LANGUAGE sql STABLE;
 
+-- calc_formats_type_attribute_usage_count
+-- Field: Formats.TypeAttributeUsageCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_formats_type_attribute_usage_count(p_formats_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_attributes WHERE format_ref = (SELECT NULLIF(name, '') FROM formats WHERE formats_id = p_formats_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_formats_type_helper_attribute_usage_count
+-- Field: Formats.TypeHelperAttributeUsageCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_formats_type_helper_attribute_usage_count(p_formats_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE format_ref = (SELECT NULLIF(name, '') FROM formats WHERE formats_id = p_formats_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
 -- calc_format_examples_name
 -- Field: FormatExamples.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -451,6 +471,76 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_enum_versions_value_count(p_enum_versions_id TEXT)
 RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM enum_values WHERE enum_version = calc_enum_versions_name(p_enum_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_type_attribute_usage_count
+-- Field: EnumVersions.TypeAttributeUsageCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_type_attribute_usage_count(p_enum_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_attributes WHERE enum_version_ref = calc_enum_versions_name(p_enum_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_type_helper_attribute_usage_count
+-- Field: EnumVersions.TypeHelperAttributeUsageCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_type_helper_attribute_usage_count(p_enum_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE enum_version_ref = calc_enum_versions_name(p_enum_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_outgoing_projection_count
+-- Field: EnumVersions.OutgoingProjectionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_outgoing_projection_count(p_enum_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM projections WHERE from_enum_version = calc_enum_versions_name(p_enum_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_incoming_projection_count
+-- Field: EnumVersions.IncomingProjectionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_incoming_projection_count(p_enum_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM projections WHERE to_enum_version = calc_enum_versions_name(p_enum_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_outgoing_upgrade_count
+-- Field: EnumVersions.OutgoingUpgradeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_outgoing_upgrade_count(p_enum_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enum_upgrades WHERE from_enum_version = calc_enum_versions_name(p_enum_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_incoming_upgrade_count
+-- Field: EnumVersions.IncomingUpgradeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_incoming_upgrade_count(p_enum_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enum_upgrades WHERE to_enum_version = calc_enum_versions_name(p_enum_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_type_upgrade_op_usage_count
+-- Field: EnumVersions.TypeUpgradeOpUsageCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_type_upgrade_op_usage_count(p_enum_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_upgrade_ops WHERE enum_version_ref = calc_enum_versions_name(p_enum_versions_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
 -- get_enum_versions_version
@@ -708,6 +798,56 @@ RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM type_examples WHERE type_version = calc_type_versions_name(p_type_versions_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_versions_type_attribute_as_subtype_count
+-- Field: TypeVersions.TypeAttributeAsSubtypeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_type_attribute_as_subtype_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_attributes WHERE sub_type_version_ref = calc_type_versions_name(p_type_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_type_helper_attribute_as_subtype_count
+-- Field: TypeVersions.TypeHelperAttributeAsSubtypeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_type_helper_attribute_as_subtype_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE sub_type_version_ref = calc_type_versions_name(p_type_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_outgoing_upgrade_count
+-- Field: TypeVersions.OutgoingUpgradeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_outgoing_upgrade_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_upgrades WHERE from_type_version = calc_type_versions_name(p_type_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_incoming_upgrade_count
+-- Field: TypeVersions.IncomingUpgradeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_incoming_upgrade_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_upgrades WHERE to_type_version = calc_type_versions_name(p_type_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_originated_helper_count
+-- Field: TypeVersions.OriginatedHelperCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_originated_helper_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_helpers WHERE origin_type_version = calc_type_versions_name(p_type_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
 -- get_type_versions_version
 -- Helper function: Get Version from TypeVersions by TypeVersionsId
 -- Used for join-free cross-table references in aggregations
@@ -925,6 +1065,26 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN COALESCE((SELECT extra_allowed FROM type_helpers WHERE type_helpers_id = p_type_helpers_id), FALSE) THEN FALSE ELSE TRUE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_helpers_type_attribute_usage_count
+-- Field: TypeHelpers.TypeAttributeUsageCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_type_attribute_usage_count(p_type_helpers_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_attributes WHERE helper_ref = (SELECT NULLIF(name, '') FROM type_helpers WHERE type_helpers_id = p_type_helpers_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_type_helper_attribute_usage_count
+-- Field: TypeHelpers.TypeHelperAttributeUsageCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_type_helper_attribute_usage_count(p_type_helpers_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE helper_ref = (SELECT NULLIF(name, '') FROM type_helpers WHERE type_helpers_id = p_type_helpers_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_helper_attributes_name
 -- Field: TypeHelperAttributes.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -983,6 +1143,16 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_projections_is_flat_lookup(p_projections_id TEXT)
 RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM projections WHERE projections_id = p_projections_id) IS NOT NULL THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_projections_type_upgrade_op_usage_count
+-- Field: Projections.TypeUpgradeOpUsageCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_projections_type_upgrade_op_usage_count(p_projections_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_upgrade_ops WHERE projection_ref = (SELECT NULLIF(name, '') FROM projections WHERE projections_id = p_projections_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
 -- get_projections_name
