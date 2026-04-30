@@ -1,0 +1,58 @@
+kind: workload
+name: WORKLOAD_NAME
+description: sema Registry Explorer — FastAPI + React SPA on a single port
+tags: {}
+spec:
+  type: serverless
+  containers:
+    - name: app
+      image: /org/ORG_NAME/image/IMAGE_NAME_TAG
+      inheritEnv: false
+      ports:
+        - number: 8765
+          protocol: http
+      env:
+        - name: PORT
+          value: "8765"
+        - name: SEMA_DATABASE_URL
+          value: cpln://secret/sema.SEMA_DATABASE_URL
+        - name: MAGICLINK_BASE_URL
+          value: "https://magiclink.effortlessapi.com"
+        - name: MAGICLINK_TENANT_ID
+          value: cpln://secret/sema.MAGICLINK_TENANT_ID
+        - name: MAGICLINK_PUBLIC_KEY_PEM
+          value: cpln://secret/sema.MAGICLINK_PUBLIC_KEY_PEM
+        - name: SEMA_CORS_ORIGINS
+          value: "*"
+      cpu: 500m
+      memory: 512Mi
+  defaultOptions:
+    autoscaling:
+      maxConcurrency: 1000
+      maxScale: 3
+      metric: concurrency
+      minScale: 0
+      scaleToZeroDelay: 900
+      target: 100
+    capacityAI: true
+    debug: false
+    suspend: false
+    timeoutSeconds: 120
+  firewallConfig:
+    external:
+      inboundAllowCIDR:
+        - 0.0.0.0/0
+      inboundBlockedCIDR: []
+      outboundAllowCIDR:
+        - 0.0.0.0/0
+      outboundAllowHostname: []
+      outboundAllowPort: []
+      outboundBlockedCIDR: []
+    internal:
+      inboundAllowType: same-gvc
+      inboundAllowWorkload: []
+  loadBalancer:
+    direct:
+      enabled: false
+      ports: []
+  supportDynamicTags: false

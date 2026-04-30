@@ -1,0 +1,70 @@
+name: Deploy sema Explorer to Control Plane
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - app/**
+      - effortless-rulebook/**
+      - rulebook-emitters/**
+      - postgres/migrations/**
+      - Dockerfile
+      - .dockerignore
+      - .cpln/cpln-app-workload.yaml
+      - .github/workflows/deploy-app.yaml
+  workflow_dispatch:
+
+env:
+  CPLN_ORG: ${{ vars.CPLN_ORG }}
+  CPLN_GVC: ${{ vars.CPLN_GVC_NAME }}
+  CPLN_WORKLOAD: ${{ vars.CPLN_APP_WORKLOAD_NAME }}
+  CPLN_IMAGE: ${{ vars.CPLN_APP_IMAGE_NAME }}
+  CPLN_TOKEN: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+  BASE_ADMIN_URL: ${{ secrets.BASE_ADMIN_URL }}
+
+jobs:
+  migrate-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set short SHA
+        run: echo "SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)" >> $GITHUB_ENV
+
+      # Forward-only migrations against the prod base.
+      # Runs BEFORE the new image is rolled, so a failed migration
+      # blocks a bad deploy. init-db.sh is never invoked here.
+      - name: Apply prod migrations
+        if: env.BASE_ADMIN_URL != ''
+        run: |
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+          chmod +x postgres/migrations/migrate-prod.sh
+          postgres/migrations/migrate-prod.sh "$BASE_ADMIN_URL"
+
+      - name: Install Control Plane CLI
+        run: |
+          sudo npm install -g @controlplane/cli
+          cpln --version
+
+      - name: Build and push image
+        run: |
+          cpln profile update default --token "${CPLN_TOKEN}"
+          cpln image docker-login
+          cpln image build \
+            --name "${CPLN_IMAGE}:${SHORT_SHA}" \
+            --dockerfile Dockerfile \
+            --push
+
+      - name: Render workload YAML
+        working-directory: ./.cpln
+        run: |
+          sed -i "s|WORKLOAD_NAME|${CPLN_WORKLOAD}|g" cpln-app-workload.yaml
+          sed -i "s|IMAGE_NAME_TAG|${CPLN_IMAGE}:${SHORT_SHA}|g" cpln-app-workload.yaml
+          sed -i "s|ORG_NAME|${CPLN_ORG}|g" cpln-app-workload.yaml
+          cat cpln-app-workload.yaml
+
+      - name: Apply workload
+        working-directory: ./.cpln
+        run: cpln apply -f cpln-app-workload.yaml --gvc "${CPLN_GVC}"
