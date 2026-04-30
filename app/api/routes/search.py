@@ -8,15 +8,17 @@ from ..models import SearchHit
 router = APIRouter(prefix="/api/search", tags=["search"])
 
 
+# (view, label, title_col, desc_col) — None means "this view doesn't expose
+# that column, fall back to NULL". Matches what vw_* actually publishes.
 _TARGETS = [
-    ("vw_owners", "owner", "name", "description"),
+    ("vw_owners", "owner", None, "description"),
     ("vw_types", "type", "title", "description"),
     ("vw_type_versions", "type_version", "title", "description"),
-    ("vw_enums", "enum", "title", "description"),
+    ("vw_enums", "enum", None, "description"),
     ("vw_enum_versions", "enum_version", "title", "description"),
     ("vw_formats", "format", "title", "description"),
-    ("vw_type_helpers", "helper", "name", None),
-    ("vw_type_axioms", "type_axiom", "name", "statement"),
+    ("vw_type_helpers", "helper", "title", "description"),
+    ("vw_type_axioms", "type_axiom", None, "statement"),
 ]
 
 

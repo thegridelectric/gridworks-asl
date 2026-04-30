@@ -429,7 +429,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/type-upgrades/{name}": {
+    "/api/type-upgrades/{word}/{from_version}-to-{to_version}": {
         parameters: {
             query?: never;
             header?: never;
@@ -437,7 +437,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get Type Upgrade */
-        get: operations["get_type_upgrade_api_type_upgrades__name__get"];
+        get: operations["get_type_upgrade_api_type_upgrades__word___from_version__to__to_version__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -446,7 +446,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/type-upgrades/{name}/ops": {
+    "/api/type-upgrades/{word}/{from_version}-to-{to_version}/ops": {
         parameters: {
             query?: never;
             header?: never;
@@ -454,7 +454,7 @@ export interface paths {
             cookie?: never;
         };
         /** List Type Upgrade Ops */
-        get: operations["list_type_upgrade_ops_api_type_upgrades__name__ops_get"];
+        get: operations["list_type_upgrade_ops_api_type_upgrades__word___from_version__to__to_version__ops_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -480,7 +480,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/enum-upgrades/{name}": {
+    "/api/enum-upgrades/{word}/{from_version}-to-{to_version}": {
         parameters: {
             query?: never;
             header?: never;
@@ -488,7 +488,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get Enum Upgrade */
-        get: operations["get_enum_upgrade_api_enum_upgrades__name__get"];
+        get: operations["get_enum_upgrade_api_enum_upgrades__word___from_version__to__to_version__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -497,7 +497,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/enum-upgrades/{name}/mappings": {
+    "/api/enum-upgrades/{word}/{from_version}-to-{to_version}/mappings": {
         parameters: {
             query?: never;
             header?: never;
@@ -505,7 +505,7 @@ export interface paths {
             cookie?: never;
         };
         /** List Enum Upgrade Mappings */
-        get: operations["list_enum_upgrade_mappings_api_enum_upgrades__name__mappings_get"];
+        get: operations["list_enum_upgrade_mappings_api_enum_upgrades__word___from_version__to__to_version__mappings_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -589,6 +589,30 @@ export interface components {
             is_retired?: boolean | null;
             /** Version Count */
             version_count?: number | null;
+            /** Enum Type */
+            enum_type?: string | null;
+            /** Value Type */
+            value_type?: string | null;
+            /** Is Versioned */
+            is_versioned?: boolean | null;
+            /** Is Literal */
+            is_literal?: boolean | null;
+            /** Is Integer Valued */
+            is_integer_valued?: boolean | null;
+            /** Draft Version Count */
+            draft_version_count?: number | null;
+            /** Active Version Count */
+            active_version_count?: number | null;
+            /** Deprecated Version Count */
+            deprecated_version_count?: number | null;
+            /** Has Drafts */
+            has_drafts?: boolean | null;
+            /** First Created */
+            first_created?: string | null;
+            /** Last Modified */
+            last_modified?: string | null;
+            /** Raw Json */
+            raw_json?: string | null;
         } & {
             [key: string]: unknown;
         };
@@ -598,10 +622,32 @@ export interface components {
             enum_upgrades_id: string;
             /** Name */
             name: string;
+            /** Description */
+            description?: string | null;
             /** From Enum Version */
             from_enum_version?: string | null;
             /** To Enum Version */
             to_enum_version?: string | null;
+            /** Raw Script */
+            raw_script?: string | null;
+            /** Mapping Count */
+            mapping_count?: number | null;
+            /** Is Scripted */
+            is_scripted?: boolean | null;
+            /** Is Decomposed */
+            is_decomposed?: boolean | null;
+            /** From Word */
+            from_word?: string | null;
+            /** To Word */
+            to_word?: string | null;
+            /** From Version */
+            from_version?: string | null;
+            /** To Version */
+            to_version?: string | null;
+            /** Owner Name */
+            owner_name?: string | null;
+            /** Is Cross Word */
+            is_cross_word?: boolean | null;
         } & {
             [key: string]: unknown;
         };
@@ -617,6 +663,16 @@ export interface components {
             from_value?: string | null;
             /** To Value */
             to_value?: string | null;
+            /** From Symbol */
+            from_symbol?: string | null;
+            /** To Symbol */
+            to_symbol?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Is Removal */
+            is_removal?: boolean | null;
+            /** Is Identity */
+            is_identity?: boolean | null;
         } & {
             [key: string]: unknown;
         };
@@ -628,12 +684,16 @@ export interface components {
             name: string;
             /** Enum Version */
             enum_version?: string | null;
+            /** Symbol */
+            symbol?: string | null;
             /** Title */
             title?: string | null;
             /** Description */
             description?: string | null;
             /** Idx */
             idx?: number | null;
+            /** Is Default */
+            is_default?: boolean | null;
         } & {
             [key: string]: unknown;
         };
@@ -647,12 +707,18 @@ export interface components {
             enum: string;
             /** Version */
             version: string;
+            /** Schema Url */
+            schema_url?: string | null;
             /** Title */
             title?: string | null;
             /** Description */
             description?: string | null;
+            /** Default Symbol */
+            default_symbol?: string | null;
             /** Status */
             status?: string | null;
+            /** Created */
+            created?: string | null;
             /** Is Active */
             is_active?: boolean | null;
             /** Is Deprecated */
@@ -663,8 +729,12 @@ export interface components {
             value_count?: number | null;
             /** Total Attribute Usage Count */
             total_attribute_usage_count?: number | null;
+            /** Is Used */
+            is_used?: boolean | null;
             /** Owner Name */
             owner_name?: string | null;
+            /** Word Is Retired */
+            word_is_retired?: boolean | null;
         } & {
             [key: string]: unknown;
         };
@@ -713,6 +783,10 @@ export interface components {
             is_counter?: boolean | null;
             /** Example Kind */
             example_kind?: string | null;
+            /** Idx */
+            idx?: number | null;
+            /** Description */
+            description?: string | null;
         } & {
             [key: string]: unknown;
         };
@@ -797,10 +871,42 @@ export interface components {
             projections_id: string;
             /** Name */
             name: string;
+            /** Description */
+            description?: string | null;
             /** From Enum Version */
             from_enum_version?: string | null;
             /** To Enum Version */
             to_enum_version?: string | null;
+            /** Raw Script */
+            raw_script?: string | null;
+            /** Mapping Count */
+            mapping_count?: number | null;
+            /** Is Scripted */
+            is_scripted?: boolean | null;
+            /** Is Flat Lookup */
+            is_flat_lookup?: boolean | null;
+            /** Type Upgrade Op Usage Count */
+            type_upgrade_op_usage_count?: number | null;
+            /** Is Used In Upgrades */
+            is_used_in_upgrades?: boolean | null;
+            /** From Owner Name */
+            from_owner_name?: string | null;
+            /** To Owner Name */
+            to_owner_name?: string | null;
+            /** From Enum Name */
+            from_enum_name?: string | null;
+            /** To Enum Name */
+            to_enum_name?: string | null;
+            /** From Is Draft */
+            from_is_draft?: boolean | null;
+            /** To Is Draft */
+            to_is_draft?: boolean | null;
+            /** Has Draft Endpoints */
+            has_draft_endpoints?: boolean | null;
+            /** Is Cross Owner */
+            is_cross_owner?: boolean | null;
+            /** Is Cross Enum */
+            is_cross_enum?: boolean | null;
         } & {
             [key: string]: unknown;
         };
@@ -816,6 +922,16 @@ export interface components {
             from_value?: string | null;
             /** To Value */
             to_value?: string | null;
+            /** From Symbol */
+            from_symbol?: string | null;
+            /** To Symbol */
+            to_symbol?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Is Removal */
+            is_removal?: boolean | null;
+            /** Is Identity */
+            is_identity?: boolean | null;
         } & {
             [key: string]: unknown;
         };
@@ -926,6 +1042,8 @@ export interface components {
             ref_subtype_word_is_retired?: boolean | null;
             /** Ref Is Stale */
             ref_is_stale?: boolean | null;
+            /** Raw Json */
+            raw_json?: string | null;
         } & {
             [key: string]: unknown;
         };
@@ -937,10 +1055,14 @@ export interface components {
             name: string;
             /** Type Version */
             type_version?: string | null;
+            /** Number */
+            number?: number | null;
+            /** Axiom Name */
+            axiom_name?: string | null;
             /** Statement */
             statement?: string | null;
-            /** Idx */
-            idx?: number | null;
+            /** Has Statement */
+            has_statement?: boolean | null;
         } & {
             [key: string]: unknown;
         };
@@ -963,16 +1085,42 @@ export interface components {
             type_helpers_id: string;
             /** Name */
             name: string;
+            /** Title */
+            title?: string | null;
+            /** Description */
+            description?: string | null;
             /** Origin Type Version */
             origin_type_version?: string | null;
             /** Origin Path */
             origin_path?: string | null;
+            /** Origin Owner Name */
+            origin_owner_name?: string | null;
+            /** Origin Type Name */
+            origin_type_name?: string | null;
+            /** Is Origin Draft */
+            is_origin_draft?: boolean | null;
+            /** Is Origin Active */
+            is_origin_active?: boolean | null;
+            /** Is Origin Deprecated */
+            is_origin_deprecated?: boolean | null;
+            /** Origin Word Is Retired */
+            origin_word_is_retired?: boolean | null;
             /** Extra Allowed */
             extra_allowed?: boolean | null;
             /** Is Closed */
             is_closed?: boolean | null;
+            /** Attribute Count */
+            attribute_count?: number | null;
+            /** Required Attribute Count */
+            required_attribute_count?: number | null;
             /** Total Usage Count */
             total_usage_count?: number | null;
+            /** Type Attribute Usage Count */
+            type_attribute_usage_count?: number | null;
+            /** Type Helper Attribute Usage Count */
+            type_helper_attribute_usage_count?: number | null;
+            /** Is Used */
+            is_used?: boolean | null;
         } & {
             [key: string]: unknown;
         };
@@ -1027,10 +1175,32 @@ export interface components {
             type_upgrades_id: string;
             /** Name */
             name: string;
+            /** Description */
+            description?: string | null;
             /** From Type Version */
             from_type_version?: string | null;
             /** To Type Version */
             to_type_version?: string | null;
+            /** Raw Script */
+            raw_script?: string | null;
+            /** Op Count */
+            op_count?: number | null;
+            /** Is Scripted */
+            is_scripted?: boolean | null;
+            /** Is Decomposed */
+            is_decomposed?: boolean | null;
+            /** From Word */
+            from_word?: string | null;
+            /** To Word */
+            to_word?: string | null;
+            /** From Version */
+            from_version?: string | null;
+            /** To Version */
+            to_version?: string | null;
+            /** Owner Name */
+            owner_name?: string | null;
+            /** Is Cross Word */
+            is_cross_word?: boolean | null;
         } & {
             [key: string]: unknown;
         };
@@ -1046,6 +1216,28 @@ export interface components {
             op_kind?: string | null;
             /** Idx */
             idx?: number | null;
+            /** Field Name */
+            field_name?: string | null;
+            /** Literal Value */
+            literal_value?: string | null;
+            /** From Version */
+            from_version?: string | null;
+            /** To Version */
+            to_version?: string | null;
+            /** Enum Version Ref */
+            enum_version_ref?: string | null;
+            /** Projection Ref */
+            projection_ref?: string | null;
+            /** Raw Script */
+            raw_script?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Is Custom */
+            is_custom?: boolean | null;
+            /** Has Raw Script */
+            has_raw_script?: boolean | null;
+            /** Reference Kind */
+            reference_kind?: string | null;
         } & {
             [key: string]: unknown;
         };
@@ -1125,6 +1317,8 @@ export interface components {
             has_stale_references?: boolean | null;
             /** Is Promotable */
             is_promotable?: boolean | null;
+            /** Raw Json */
+            raw_json?: string | null;
         } & {
             [key: string]: unknown;
         };
@@ -1888,12 +2082,14 @@ export interface operations {
             };
         };
     };
-    get_type_upgrade_api_type_upgrades__name__get: {
+    get_type_upgrade_api_type_upgrades__word___from_version__to__to_version__get: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                name: string;
+                word: string;
+                from_version: string;
+                to_version: string;
             };
             cookie?: never;
         };
@@ -1919,12 +2115,14 @@ export interface operations {
             };
         };
     };
-    list_type_upgrade_ops_api_type_upgrades__name__ops_get: {
+    list_type_upgrade_ops_api_type_upgrades__word___from_version__to__to_version__ops_get: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                name: string;
+                word: string;
+                from_version: string;
+                to_version: string;
             };
             cookie?: never;
         };
@@ -1970,12 +2168,14 @@ export interface operations {
             };
         };
     };
-    get_enum_upgrade_api_enum_upgrades__name__get: {
+    get_enum_upgrade_api_enum_upgrades__word___from_version__to__to_version__get: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                name: string;
+                word: string;
+                from_version: string;
+                to_version: string;
             };
             cookie?: never;
         };
@@ -2001,12 +2201,14 @@ export interface operations {
             };
         };
     };
-    list_enum_upgrade_mappings_api_enum_upgrades__name__mappings_get: {
+    list_enum_upgrade_mappings_api_enum_upgrades__word___from_version__to__to_version__mappings_get: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                name: string;
+                word: string;
+                from_version: string;
+                to_version: string;
             };
             cookie?: never;
         };

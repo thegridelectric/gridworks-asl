@@ -104,6 +104,7 @@ class TypeVersion(_Row):
     stale_reference_count: int | None = None
     has_stale_references: bool | None = None
     is_promotable: bool | None = None
+    raw_json: str | None = None
 
 
 class TypeAttribute(_Row):
@@ -133,14 +134,17 @@ class TypeAttribute(_Row):
     ref_subtype_is_draft: bool | None = None
     ref_subtype_word_is_retired: bool | None = None
     ref_is_stale: bool | None = None
+    raw_json: str | None = None
 
 
 class TypeAxiom(_Row):
     type_axioms_id: str
     name: str
     type_version: str | None = None
+    number: int | None = None
+    axiom_name: str | None = None
     statement: str | None = None
-    idx: int | None = None
+    has_statement: bool | None = None
 
 
 class TypeExample(_Row):
@@ -160,6 +164,18 @@ class Enum(_Row):
     replaced_by: str | None = None
     is_retired: bool | None = None
     version_count: int | None = None
+    enum_type: str | None = None
+    value_type: str | None = None
+    is_versioned: bool | None = None
+    is_literal: bool | None = None
+    is_integer_valued: bool | None = None
+    draft_version_count: int | None = None
+    active_version_count: int | None = None
+    deprecated_version_count: int | None = None
+    has_drafts: bool | None = None
+    first_created: datetime | None = None
+    last_modified: datetime | None = None
+    raw_json: str | None = None
 
 
 class EnumVersion(_Row):
@@ -167,24 +183,31 @@ class EnumVersion(_Row):
     name: str
     enum: str
     version: str
+    schema_url: str | None = None
     title: str | None = None
     description: str | None = None
+    default_symbol: str | None = None
     status: str | None = None
+    created: datetime | None = None
     is_active: bool | None = None
     is_deprecated: bool | None = None
     is_draft: bool | None = None
     value_count: int | None = None
     total_attribute_usage_count: int | None = None
+    is_used: bool | None = None
     owner_name: str | None = None
+    word_is_retired: bool | None = None
 
 
 class EnumValue(_Row):
     enum_values_id: str
     name: str
     enum_version: str | None = None
+    symbol: str | None = None
     title: str | None = None
     description: str | None = None
     idx: int | None = None
+    is_default: bool | None = None
 
 
 class Format(_Row):
@@ -210,16 +233,31 @@ class FormatExample(_Row):
     value: str | None = None
     is_counter: bool | None = None
     example_kind: str | None = None
+    idx: int | None = None
+    description: str | None = None
 
 
 class TypeHelper(_Row):
     type_helpers_id: str
     name: str
+    title: str | None = None
+    description: str | None = None
     origin_type_version: str | None = None
     origin_path: str | None = None
+    origin_owner_name: str | None = None
+    origin_type_name: str | None = None
+    is_origin_draft: bool | None = None
+    is_origin_active: bool | None = None
+    is_origin_deprecated: bool | None = None
+    origin_word_is_retired: bool | None = None
     extra_allowed: bool | None = None
     is_closed: bool | None = None
+    attribute_count: int | None = None
+    required_attribute_count: int | None = None
     total_usage_count: int | None = None
+    type_attribute_usage_count: int | None = None
+    type_helper_attribute_usage_count: int | None = None
+    is_used: bool | None = None
 
 
 class TypeHelperAttribute(_Row):
@@ -249,8 +287,24 @@ class TypeHelperAttribute(_Row):
 class Projection(_Row):
     projections_id: str
     name: str
+    description: str | None = None
     from_enum_version: str | None = None
     to_enum_version: str | None = None
+    raw_script: str | None = None
+    mapping_count: int | None = None
+    is_scripted: bool | None = None
+    is_flat_lookup: bool | None = None
+    type_upgrade_op_usage_count: int | None = None
+    is_used_in_upgrades: bool | None = None
+    from_owner_name: str | None = None
+    to_owner_name: str | None = None
+    from_enum_name: str | None = None
+    to_enum_name: str | None = None
+    from_is_draft: bool | None = None
+    to_is_draft: bool | None = None
+    has_draft_endpoints: bool | None = None
+    is_cross_owner: bool | None = None
+    is_cross_enum: bool | None = None
 
 
 class ProjectionMapping(_Row):
@@ -259,13 +313,29 @@ class ProjectionMapping(_Row):
     projection: str | None = None
     from_value: str | None = None
     to_value: str | None = None
+    from_symbol: str | None = None
+    to_symbol: str | None = None
+    description: str | None = None
+    is_removal: bool | None = None
+    is_identity: bool | None = None
 
 
 class TypeUpgrade(_Row):
     type_upgrades_id: str
     name: str
+    description: str | None = None
     from_type_version: str | None = None
     to_type_version: str | None = None
+    raw_script: str | None = None
+    op_count: int | None = None
+    is_scripted: bool | None = None
+    is_decomposed: bool | None = None
+    from_word: str | None = None
+    to_word: str | None = None
+    from_version: str | None = None
+    to_version: str | None = None
+    owner_name: str | None = None
+    is_cross_word: bool | None = None
 
 
 class TypeUpgradeOp(_Row):
@@ -274,13 +344,35 @@ class TypeUpgradeOp(_Row):
     type_upgrade: str | None = None
     op_kind: str | None = None
     idx: int | None = None
+    field_name: str | None = None
+    literal_value: str | None = None
+    from_version: str | None = None
+    to_version: str | None = None
+    enum_version_ref: str | None = None
+    projection_ref: str | None = None
+    raw_script: str | None = None
+    description: str | None = None
+    is_custom: bool | None = None
+    has_raw_script: bool | None = None
+    reference_kind: str | None = None
 
 
 class EnumUpgrade(_Row):
     enum_upgrades_id: str
     name: str
+    description: str | None = None
     from_enum_version: str | None = None
     to_enum_version: str | None = None
+    raw_script: str | None = None
+    mapping_count: int | None = None
+    is_scripted: bool | None = None
+    is_decomposed: bool | None = None
+    from_word: str | None = None
+    to_word: str | None = None
+    from_version: str | None = None
+    to_version: str | None = None
+    owner_name: str | None = None
+    is_cross_word: bool | None = None
 
 
 class EnumUpgradeMapping(_Row):
@@ -289,6 +381,11 @@ class EnumUpgradeMapping(_Row):
     enum_upgrade: str | None = None
     from_value: str | None = None
     to_value: str | None = None
+    from_symbol: str | None = None
+    to_symbol: str | None = None
+    description: str | None = None
+    is_removal: bool | None = None
+    is_identity: bool | None = None
 
 
 class SearchHit(BaseModel):

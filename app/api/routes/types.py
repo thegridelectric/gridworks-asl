@@ -94,7 +94,7 @@ async def list_type_version_attributes(
 )
 async def list_type_version_axioms(type_name: str, version: str) -> list[TypeAxiom]:
     rows = await db.fetch_all(
-        "SELECT * FROM vw_type_axioms WHERE type_version = %s ORDER BY idx, name",
+        "SELECT * FROM vw_type_axioms WHERE type_version = %s ORDER BY number, name",
         _full_name(type_name, version),
     )
     return [TypeAxiom(**r) for r in rows]
