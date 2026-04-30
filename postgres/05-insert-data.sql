@@ -10,12 +10,3 @@
 INSERT INTO owners (name, owner_type, contact, website, github, organization, description, support_policy, license)
 VALUES ('gridworks-energy', 'organization', 'gridworks@gridworks-consulting.com', 'https://gridworks.readthedocs.io', 'https://github.com/thegridelectric', 'GridWorks Energy Consulting LLC', 'Transactive energy infrastructure and thermal storage systems', 'Community support via GitHub issues', 'MIT');
 
--- ----------------------------------------------------------------------------
--- ERBVersionsTest: Table: ERBVersions
--- ----------------------------------------------------------------------------
-INSERT INTO erb_versions_test (erb_version_id, name, message, notes, commit_date, is_published)
-VALUES ('v2026-01-13t20-40-29-764z', 'v2026-01-13T20:40:29.764Z', 'Initial commit.', '', '2026-01-13', TRUE) ON CONFLICT (erb_version_id) DO NOTHING;
-
-INSERT INTO erb_versions_test (erb_version_id, name, message, notes, commit_date, is_published)
-VALUES ('v2026-01-16t02-52-34-068z', 'v2026-01-16T02:52:34.068Z', 'test', '', '2026-01-16', TRUE) ON CONFLICT (erb_version_id) DO NOTHING;
-

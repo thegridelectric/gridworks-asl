@@ -2,11 +2,11 @@
 
 **Schema:** `public`
 **Database:** `demo`
-**Timestamp:** 2026-04-30 05:32:21 UTC
+**Timestamp:** 2026-04-30 06:44:53 UTC
 
 ## Parsing Rulebook
 
-Found **20** tables in rulebook
+Found **19** tables in rulebook
 
   - **Owners** (9 fields, 1 records)
   - **Formats** (11 fields, 0 records)
@@ -27,13 +27,12 @@ Found **20** tables in rulebook
   - **TypeUpgradeOps** (12 fields, 0 records)
   - **EnumUpgrades** (5 fields, 0 records)
   - **EnumUpgradeMappings** (5 fields, 0 records)
-  - **ERBVersionsTest** (6 fields, 2 records)
 
-Generated **20** table definitions with **102** raw fields
+Generated **19** table definitions with **96** raw fields
 Generated **0** calculation functions
-Generated **20** views
-Enabled RLS on **20** tables
-Generated insert statements for **3** records
+Generated **19** views
+Enabled RLS on **19** tables
+Generated insert statements for **1** records
 ## Script Generation Complete
 
 Generated files:
