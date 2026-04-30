@@ -90,7 +90,7 @@ def apply_batch(batch: dict[str, list[dict]]) -> tuple[int, int]:
 # ----------------------------------------------------------------------------
 # BATCH — edited per invocation
 # ----------------------------------------------------------------------------
-BATCH: dict[str, list[dict]] = {
+_PREVIOUS_BATCHES_BATCH2: dict[str, list[dict]] = {
     "Enums": [
         field(
             "IsRetired", "calculated", "boolean",
@@ -154,6 +154,103 @@ BATCH: dict[str, list[dict]] = {
             "HasDescription", "calculated", "boolean",
             "True when a per-symbol Description is present.",
             formula='=IF({{Description}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+    ],
+}
+
+
+BATCH: dict[str, list[dict]] = {
+    "Types": [
+        field(
+            "IsRetired", "calculated", "boolean",
+            "True when this type has been replaced by another (ReplacedBy is set).",
+            formula='=IF({{ReplacedBy}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "VersionCount", "aggregation", "integer",
+            "Number of TypeVersions for this type.",
+            formula="=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}})",
+            nullable=False,
+        ),
+    ],
+    "TypeVersions": [
+        field(
+            "IsActive", "calculated", "boolean",
+            "True when Status is 'active'.",
+            formula='=IF({{Status}}="active", TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "IsDeprecated", "calculated", "boolean",
+            "True when Status is 'deprecated'.",
+            formula='=IF({{Status}}="deprecated", TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "IsClosed", "calculated", "boolean",
+            "True when ExtraAllowed is FALSE (additionalProperties: false in JSON-Schema).",
+            formula='=IF({{ExtraAllowed}}, FALSE(), TRUE())',
+            nullable=False,
+        ),
+        field(
+            "AttributeCount", "aggregation", "integer",
+            "Number of TypeAttributes declared on this version.",
+            formula="=COUNTIFS(TypeAttributes!{{TypeVersion}}, TypeVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "RequiredAttributeCount", "aggregation", "integer",
+            "Number of TypeAttributes on this version where IsRequired=true.",
+            formula="=COUNTIFS(TypeAttributes!{{TypeVersion}}, TypeVersions!{{Name}}, TypeAttributes!{{IsRequired}}, TRUE())",
+            nullable=False,
+        ),
+        field(
+            "AxiomCount", "aggregation", "integer",
+            "Number of natural-language axioms declared on this version.",
+            formula="=COUNTIFS(TypeAxioms!{{TypeVersion}}, TypeVersions!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "ExampleCount", "aggregation", "integer",
+            "Number of TypeExamples attached to this version.",
+            formula="=COUNTIFS(TypeExamples!{{TypeVersion}}, TypeVersions!{{Name}})",
+            nullable=False,
+        ),
+    ],
+    "TypeAttributes": [
+        field(
+            "IsOptional", "calculated", "boolean",
+            "True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.",
+            formula='=IF({{IsRequired}}, FALSE(), TRUE())',
+            nullable=False,
+        ),
+        field(
+            "HasDefault", "calculated", "boolean",
+            "True when a JSON-encoded Default value is present for this attribute.",
+            formula='=IF({{Default}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "RefKind", "calculated", "string",
+            "Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive' when only PrimitiveType is set.",
+            formula=(
+                '=IF({{FormatRef}}, "format", '
+                'IF({{EnumVersionRef}}, "enum", '
+                'IF({{SubTypeVersionRef}}, "subtype", '
+                'IF({{HelperRef}}, "helper", "primitive"))))'
+            ),
+            nullable=False,
+        ),
+    ],
+    # TypeExamples: no useful first-layer inference beyond Name — ExampleJson is opaque
+    # text. Revisit at higher-order if we want JSON-parsing scalars.
+    "TypeAxioms": [
+        field(
+            "HasStatement", "calculated", "boolean",
+            "True when the axiom carries a non-empty Statement.",
+            formula='=IF({{Statement}}, TRUE(), FALSE())',
             nullable=False,
         ),
     ],

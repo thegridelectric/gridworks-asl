@@ -4118,6 +4118,22 @@
         "type": "raw",
         "nullable": true,
         "Description": "Tier-2 placeholder: ODXML invariant."
+      },
+      {
+        "name": "IsRetired",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this type has been replaced by another (ReplacedBy is set).",
+        "formula": "=IF({{ReplacedBy}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "VersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeVersions for this type.",
+        "formula": "=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}})"
       }
     ],
     "data": [
@@ -4703,6 +4719,62 @@
         "type": "raw",
         "nullable": true,
         "Description": "Escape hatch: unmodeled top-level JSON-Schema fields (if/then/else, conditionals, etc.)."
+      },
+      {
+        "name": "IsActive",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when Status is 'active'.",
+        "formula": "=IF({{Status}}=\"active\", TRUE(), FALSE())"
+      },
+      {
+        "name": "IsDeprecated",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when Status is 'deprecated'.",
+        "formula": "=IF({{Status}}=\"deprecated\", TRUE(), FALSE())"
+      },
+      {
+        "name": "IsClosed",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when ExtraAllowed is FALSE (additionalProperties: false in JSON-Schema).",
+        "formula": "=IF({{ExtraAllowed}}, FALSE(), TRUE())"
+      },
+      {
+        "name": "AttributeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeAttributes declared on this version.",
+        "formula": "=COUNTIFS(TypeAttributes!{{TypeVersion}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "RequiredAttributeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeAttributes on this version where IsRequired=true.",
+        "formula": "=COUNTIFS(TypeAttributes!{{TypeVersion}}, TypeVersions!{{Name}}, TypeAttributes!{{IsRequired}}, TRUE())"
+      },
+      {
+        "name": "AxiomCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of natural-language axioms declared on this version.",
+        "formula": "=COUNTIFS(TypeAxioms!{{TypeVersion}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "ExampleCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeExamples attached to this version.",
+        "formula": "=COUNTIFS(TypeExamples!{{TypeVersion}}, TypeVersions!{{Name}})"
       }
     ],
     "data": [
@@ -5562,6 +5634,30 @@
         "type": "raw",
         "nullable": true,
         "Description": "Escape hatch: unmodeled JSON-Schema specifics, including oneOf bodies (v1 parking lot for n=1 cases)."
+      },
+      {
+        "name": "IsOptional",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.",
+        "formula": "=IF({{IsRequired}}, FALSE(), TRUE())"
+      },
+      {
+        "name": "HasDefault",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when a JSON-encoded Default value is present for this attribute.",
+        "formula": "=IF({{Default}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "RefKind",
+        "datatype": "string",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive' when only PrimitiveType is set.",
+        "formula": "=IF({{FormatRef}}, \"format\", IF({{EnumVersionRef}}, \"enum\", IF({{SubTypeVersionRef}}, \"subtype\", IF({{HelperRef}}, \"helper\", \"primitive\"))))"
       }
     ],
     "data": [
@@ -14368,6 +14464,14 @@
         "type": "raw",
         "nullable": false,
         "Description": "Axiom statement (the natural-language invariant)."
+      },
+      {
+        "name": "HasStatement",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when the axiom carries a non-empty Statement.",
+        "formula": "=IF({{Statement}}, TRUE(), FALSE())"
       }
     ],
     "data": [
