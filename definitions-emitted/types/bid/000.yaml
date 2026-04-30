@@ -83,7 +83,7 @@ x-gridworks:
       '
   - number: 4
     name: EconomicAdmission
-    description: 'SignedMarketFeeTxn MUST be verifiable under the market’s fee and admission policy for the specified MarketSlot.
+    statement: 'SignedMarketFeeTxn MUST be verifiable under the market’s fee and admission policy for the specified MarketSlot.
 
       '
   extended_description: 'The bid type is the foundational economic message of the GridWorks market architecture. By enforcing strict normalization against MarketType-defined price and quantity domains, bids enable a self-scaling market maker strategy in which aggregation, clearing, and dispatch logic can be applied uniformly across participant classes and market layers.

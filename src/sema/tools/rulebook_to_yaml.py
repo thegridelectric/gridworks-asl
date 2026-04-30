@@ -128,6 +128,12 @@ def attr_to_property(attr: dict[str, Any]) -> dict[str, Any]:
     if attr.get("Description"):
         prop["description"] = attr["Description"]
 
+    if attr.get("Default") is not None:
+        try:
+            prop["default"] = json.loads(attr["Default"])
+        except json.JSONDecodeError:
+            prop["default"] = attr["Default"]
+
     for k, v in extras.items():
         prop.setdefault(k, v)
     return prop

@@ -203,6 +203,25 @@ Allowed values:
 If `status` is omitted, it SHALL be interpreted as `"active"`.
 
 
+### Word Retirement (`replaced_by`)
+
+A registry entry (format, enum, or type) MAY include a top-level `replaced_by` field naming another registry entry of the same kind that supersedes it.
+
+```
+<word-name>:
+  ...
+  replaced_by: <successor-word-name>
+```
+
+Rules:
+
+- `replaced_by` is a registry-level retirement marker. The unit of retirement is the **word** (a registry entry), not a per-version, per-value, or per-attribute element.
+- Per-version YAML schemas, individual enum values, and type properties are **immutable** and SHALL NOT carry their own `replaced_by` (or equivalent) marker.
+- If `replaced_by` is present, the named successor SHALL exist as a registry entry of the same kind (format → format, enum → enum, type → type) and SHALL NOT itself be retired.
+- A retired word's existing schemas remain valid for reading historical data; new producers SHOULD migrate to the successor.
+- `replaced_by` MAY be combined with `status: "deprecated"`, but neither implies the other: `status` describes lifecycle stability, `replaced_by` names the migration target.
+
+
 ### Registry Format Entries
 
 Formats are immutable and unversioned. Each format entry MUST include:

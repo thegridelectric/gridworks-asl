@@ -152,6 +152,7 @@ def import_formats(ctx: MigrationContext, registry: dict[str, Any]) -> None:
             "SchemaUrl": fmt.get("$id"),
             "Title": fmt.get("title"),
             "Description": fmt.get("description") or reg.get("description"),
+            "ReplacedBy": reg.get("replaced_by"),
             "Pattern": fmt.get("pattern"),
             "MinLength": fmt.get("minLength"),
             "MaxLength": fmt.get("maxLength"),
@@ -227,6 +228,7 @@ def import_enums(ctx: MigrationContext, registry: dict[str, Any]) -> None:
             "EnumType": reg.get("enum_type"),
             "ValueType": reg.get("value_type"),
             "Description": reg.get("description"),
+            "ReplacedBy": reg.get("replaced_by"),
             "RawJson": None,
         })
 
@@ -260,6 +262,7 @@ def import_types(ctx: MigrationContext, registry: dict[str, Any]) -> None:
             "Owner": yaml_owners.get(type_name) or reg.get("owner"),
             "Title": reg.get("title"),
             "Description": reg.get("description"),
+            "ReplacedBy": reg.get("replaced_by"),
             "PythonClassName": None,
             "MakeDataClass": None,
             "IsCac": None,
@@ -381,10 +384,12 @@ _MODELED_PER_ATTR = {"description", "type", "$ref", "items", "oneOf", "anyOf",
 def _extract_extras(prop: dict[str, Any]) -> dict[str, Any]:
     """Collect attribute-level JSON-Schema keys not covered by the structured columns.
 
-    Examples: minimum, maximum, minLength, maxLength, minItems, maxItems, default,
+    Examples: minimum, maximum, minLength, maxLength, minItems, maxItems,
     pattern, multipleOf, etc. These round-trip via TypeAttributes.RawJson.extras.
+
+    The `default` keyword is excluded — it has its own first-class TypeAttributes.Default column.
     """
-    return {k: v for k, v in prop.items() if k not in _MODELED_PER_ATTR}
+    return {k: v for k, v in prop.items() if k not in _MODELED_PER_ATTR and k != "default"}
 
 
 def _build_attribute_row(
@@ -405,10 +410,12 @@ def _build_attribute_row(
     callers fill that in.
     """
     extras = _extract_extras(prop)
+    default_str = json.dumps(prop["default"]) if "default" in prop else None
     row = {
         "AttributeName": attr_name,
         "Idx": idx,
         "Description": prop.get("description"),
+        "Default": default_str,
         "IsRequired": is_required,
         "IsList": False,
         "PrimitiveType": None,
