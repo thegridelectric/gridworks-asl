@@ -27,7 +27,9 @@ npm run gen:api   # generate src/api/schema.d.ts from FastAPI's OpenAPI
 npm run dev
 ```
 
-Open <http://localhost:5173/>. Vite proxies `/api/*` to `http://127.0.0.1:8765`, so the browser never has to think about CORS.
+Open <http://localhost:8766/>. Vite proxies `/api/*` to `http://127.0.0.1:8765`, so the browser never has to think about CORS.
+
+> Or, from the project root, `./start.sh` nukes whatever's on `:8765` / `:8766` and restarts both halves from scratch (logs land in `.logs/`).
 
 Useful URLs while the backend is up:
 
@@ -100,7 +102,7 @@ app/
     │       └── Owner.tsx               /v/{owner} — wired to /api/owners/{name}
     ├── package.json
     ├── tsconfig.json
-    └── vite.config.ts       proxies /api → 127.0.0.1:8765
+    └── vite.config.ts       listens on :8766, proxies /api → 127.0.0.1:8765
 ```
 
 Phase 2 ships a competent shell with two real wired routes (Workbench, Owner) and stubs for the rest of the §8 URL contract. Phase 3 builds out the read-only navigation surface against `vw_*`.
