@@ -241,7 +241,10 @@ SELECT
   t.description,                                                                -- Description of the helper.
   t.extra_allowed,                                                              -- From inline additionalProperties.
   t.origin_type_version,                                                        -- The TypeVersion whose YAML body originally introduced this helper.
-  t.origin_path                                                                 -- JSON-Pointer-ish path within origin (e.g. '/properties/RelayNodes/items') — used to re-inline on YAML emit.
+  t.origin_path,                                                                -- JSON-Pointer-ish path within origin (e.g. '/properties/RelayNodes/items') — used to re-inline on YAML emit.
+  calc_type_helpers_attribute_count(t.type_helpers_id) AS attribute_count,      -- Number of TypeHelperAttributes declared on this helper.
+  calc_type_helpers_required_attribute_count(t.type_helpers_id) AS required_attribute_count,-- Number of TypeHelperAttributes on this helper where IsRequired=true.
+  calc_type_helpers_is_closed(t.type_helpers_id) AS is_closed                   -- True when ExtraAllowed is FALSE (the helper rejects unknown properties).
 FROM type_helpers t;
 
 -- ----------------------------------------------------------------------------
@@ -263,7 +266,9 @@ SELECT
   t.enum_version_ref,                                                           -- FK to an EnumVersion, if this attribute references one.
   t.sub_type_version_ref,                                                       -- FK to a TypeVersion, if this attribute references one.
   t.helper_ref,                                                                 -- FK to another TypeHelper (supports nested helpers).
-  t.raw_json                                                                    -- Escape hatch for unmodeled JSON-Schema specifics.
+  t.raw_json,                                                                   -- Escape hatch for unmodeled JSON-Schema specifics.
+  calc_type_helper_attributes_is_optional(t.type_helper_attributes_id) AS is_optional,-- True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.
+  calc_type_helper_attributes_ref_kind(t.type_helper_attributes_id) AS ref_kind -- Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive'.
 FROM type_helper_attributes t;
 
 -- ----------------------------------------------------------------------------

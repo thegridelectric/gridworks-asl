@@ -895,6 +895,36 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(statement, '') FROM type_axioms WHERE type_axioms_id = p_type_axioms_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_helpers_attribute_count
+-- Field: TypeHelpers.AttributeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_attribute_count(p_type_helpers_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE type_helper = (SELECT NULLIF(name, '') FROM type_helpers WHERE type_helpers_id = p_type_helpers_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_required_attribute_count
+-- Field: TypeHelpers.RequiredAttributeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_required_attribute_count(p_type_helpers_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE type_helper = (SELECT NULLIF(name, '') FROM type_helpers WHERE type_helpers_id = p_type_helpers_id) AND is_required = TRUE))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helpers_is_closed
+-- Field: TypeHelpers.IsClosed
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_is_closed(p_type_helpers_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN COALESCE((SELECT extra_allowed FROM type_helpers WHERE type_helpers_id = p_type_helpers_id), FALSE) THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_helper_attributes_name
 -- Field: TypeHelperAttributes.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -903,6 +933,26 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_helper_attributes_name(p_type_helper_attributes_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(type_helper, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id), '.', (SELECT NULLIF(attribute_name, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_is_optional
+-- Field: TypeHelperAttributes.IsOptional
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_is_optional(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN COALESCE((SELECT is_required FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id), FALSE) THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_kind
+-- Field: TypeHelperAttributes.RefKind
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_kind(p_type_helper_attributes_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(format_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('format')::text ELSE (CASE WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('enum')::text ELSE (CASE WHEN (SELECT NULLIF(sub_type_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('subtype')::text ELSE (CASE WHEN (SELECT NULLIF(helper_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN ('helper')::text ELSE ('primitive')::text END)::text END)::text END)::text END)::text;
 $$ LANGUAGE sql STABLE;
 
 -- get_projections_name
