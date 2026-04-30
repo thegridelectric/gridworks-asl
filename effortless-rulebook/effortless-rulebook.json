@@ -1,5 +1,83 @@
-{"project":
-  {
-    "name":"sema"
+{
+  "$schema": "https://example.com/cmcc-schema/v1",
+  "Name": "Sema",
+  "Description": "Hand-authored rulebook for the sema type/enum/format/version-upgrade ontology. Replaces the legacy YAML and ODXML pipelines. See YAML-ODXML-RULEBOOK-MIGRATION-PLAN.md.",
+  "Owners": {
+    "Description": "Table: Owners — entities (organizations or individuals) that own Types, Enums, and Formats. Sourced from definitions/owners.yaml.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Owner identifier slug. Example: 'gridworks-energy'. Acts as the primary key."
+      },
+      {
+        "name": "OwnerType",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Either 'organization' or 'individual'."
+      },
+      {
+        "name": "Contact",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Primary contact email."
+      },
+      {
+        "name": "Website",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Owner's website URL."
+      },
+      {
+        "name": "Github",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Owner's GitHub URL (optional)."
+      },
+      {
+        "name": "Organization",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Full legal/organization name."
+      },
+      {
+        "name": "Description",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Free-text description of the owner's domain or focus."
+      },
+      {
+        "name": "SupportPolicy",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "How users get support from this owner (e.g. 'Community support via GitHub issues')."
+      },
+      {
+        "name": "License",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "License under which the owner's contributions are published (e.g. 'MIT')."
+      }
+    ],
+    "data": []
+  },
+  "_meta": {
+    "_CMCC_Summary": "Hand-authored rulebook (no Airtable). Source of truth for sema ontology. Tier-1 schema only — Owners is the smoke-test table; other 18 tables follow.",
+    "_conversion_metadata": {
+      "source": "hand-authored",
+      "table_count": 1,
+      "phase": "0b - Owners-only smoke test",
+      "next_phase": "0.5 - full Tier-1 schema (19 tables)"
+    }
   }
 }
