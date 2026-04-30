@@ -17,6 +17,56 @@ SET check_function_bodies = off;
 -- These functions perform lookups via foreign key relationships
 -- ============================================================================
 
+-- calc_owners_is_organization
+-- Field: Owners.IsOrganization
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_owners_is_organization(p_owners_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(owner_type, '') FROM owners WHERE owners_id = p_owners_id) = 'organization' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_has_github
+-- Field: Owners.HasGithub
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_owners_has_github(p_owners_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(github, '') FROM owners WHERE owners_id = p_owners_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_format_count
+-- Field: Owners.FormatCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_format_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM formats WHERE owner = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_enum_count
+-- Field: Owners.EnumCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_enum_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enums WHERE owner = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_owners_type_count
+-- Field: Owners.TypeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_owners_type_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM types WHERE owner = (SELECT NULLIF(name, '') FROM owners WHERE owners_id = p_owners_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
 -- get_owners_name
 -- Helper function: Get Name from Owners by OwnersId
 -- Used for join-free cross-table references in aggregations
@@ -188,6 +238,56 @@ RETURNS TEXT AS $$
   SELECT (SELECT raw_json FROM formats WHERE formats_id = p_formats_id);
 $$ LANGUAGE sql STABLE;
 
+-- calc_formats_is_retired
+-- Field: Formats.IsRetired
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_formats_is_retired(p_formats_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(replaced_by, '') FROM formats WHERE formats_id = p_formats_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_formats_has_pattern
+-- Field: Formats.HasPattern
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_formats_has_pattern(p_formats_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(pattern, '') FROM formats WHERE formats_id = p_formats_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_formats_has_length_bounds
+-- Field: Formats.HasLengthBounds
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_formats_has_length_bounds(p_formats_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (((SELECT min_length FROM formats WHERE formats_id = p_formats_id))::NUMERIC > 0 OR ((SELECT max_length FROM formats WHERE formats_id = p_formats_id))::NUMERIC > 0) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_formats_example_count
+-- Field: Formats.ExampleCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_formats_example_count(p_formats_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM format_examples WHERE format = (SELECT NULLIF(name, '') FROM formats WHERE formats_id = p_formats_id) AND is_counter = FALSE))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_formats_counter_example_count
+-- Field: Formats.CounterExampleCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_formats_counter_example_count(p_formats_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM format_examples WHERE format = (SELECT NULLIF(name, '') FROM formats WHERE formats_id = p_formats_id) AND is_counter = TRUE))::integer;
+$$ LANGUAGE sql STABLE;
+
 -- calc_format_examples_name
 -- Field: FormatExamples.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -196,6 +296,16 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_format_examples_name(p_format_examples_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(format, '') FROM format_examples WHERE format_examples_id = p_format_examples_id), '[', (SELECT idx FROM format_examples WHERE format_examples_id = p_format_examples_id), CASE WHEN COALESCE((SELECT is_counter FROM format_examples WHERE format_examples_id = p_format_examples_id), FALSE) THEN ('x')::text ELSE ('')::text END, ']'))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_format_examples_example_kind
+-- Field: FormatExamples.ExampleKind
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_format_examples_example_kind(p_format_examples_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CASE WHEN COALESCE((SELECT is_counter FROM format_examples WHERE format_examples_id = p_format_examples_id), FALSE) THEN ('counter')::text ELSE ('positive')::text END)::text;
 $$ LANGUAGE sql STABLE;
 
 -- get_enums_name
@@ -214,6 +324,15 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION get_enums_enum_type(p_enums_id TEXT)
 RETURNS TEXT AS $$
   SELECT (SELECT enum_type FROM enums WHERE enums_id = p_enums_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_enums_value_type
+-- Helper function: Get ValueType from Enums by EnumsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_enums_value_type(p_enums_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT value_type FROM enums WHERE enums_id = p_enums_id);
 $$ LANGUAGE sql STABLE;
 
 -- get_enums_description
@@ -543,7 +662,7 @@ $$ LANGUAGE sql STABLE;
 
 CREATE OR REPLACE FUNCTION calc_type_axioms_name(p_type_axioms_id TEXT)
 RETURNS TEXT AS $$
-  SELECT (CONCAT((SELECT NULLIF(type_version, '') FROM type_axioms WHERE type_axioms_id = p_type_axioms_id), '.axiom', (SELECT number FROM type_axioms WHERE type_axioms_id = p_type_axioms_id)))::text;
+  SELECT (CONCAT((SELECT NULLIF(type_version, '') FROM type_axioms WHERE type_axioms_id = p_type_axioms_id), '.axiom', (SELECT number FROM type_axioms WHERE type_axioms_id = p_type_axioms_id), '.', (SELECT NULLIF(axiom_name, '') FROM type_axioms WHERE type_axioms_id = p_type_axioms_id)))::text;
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_helper_attributes_name

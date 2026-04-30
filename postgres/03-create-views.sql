@@ -20,7 +20,12 @@ SELECT
   t.organization,                                                               -- Full legal/organization name.
   t.description,                                                                -- Free-text description of the owner's domain or focus.
   t.support_policy,                                                             -- How users get support from this owner.
-  t.license                                                                     -- License under which the owner's contributions are published (e.g. 'MIT').
+  t.license,                                                                    -- License under which the owner's contributions are published (e.g. 'MIT').
+  calc_owners_is_organization(t.owners_id) AS is_organization,                  -- True when OwnerType is 'organization' (vs 'individual'). Cheap classifier for grouping owners.
+  calc_owners_has_github(t.owners_id) AS has_github,                            -- True when this owner has a Github URL on file.
+  calc_owners_format_count(t.owners_id) AS format_count,                        -- Number of Formats owned by this owner.
+  calc_owners_enum_count(t.owners_id) AS enum_count,                            -- Number of Enums owned by this owner.
+  calc_owners_type_count(t.owners_id) AS type_count                             -- Number of Types owned by this owner.
 FROM owners t;
 
 -- ----------------------------------------------------------------------------
@@ -35,12 +40,18 @@ SELECT
   t.schema_url,                                                                 -- Schema URL from JSON-Schema $id.
   t.title,                                                                      -- Human-readable title.
   t.description,                                                                -- Free-text description of the format.
+  t.replaced_by,                                                                -- Optional pointer to another Format that retires this one. If non-null, this format has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).
   t.pattern,                                                                    -- Regex pattern that valid values must match.
   t.min_length,                                                                 -- Minimum string length, if constrained.
   t.max_length,                                                                 -- Maximum string length, if constrained.
   t.json_schema_format,                                                         -- JSON-Schema 'format' keyword if present (e.g. 'date-time', 'email').
   t.created,                                                                    -- Created timestamp from registry.yaml.
-  t.raw_json                                                                    -- Escape hatch: any unmodeled JSON-Schema fields, serialized as JSON string.
+  t.raw_json,                                                                   -- Escape hatch: any unmodeled JSON-Schema fields, serialized as JSON string.
+  calc_formats_is_retired(t.formats_id) AS is_retired,                          -- True when this format has been replaced by another (ReplacedBy is set).
+  calc_formats_has_pattern(t.formats_id) AS has_pattern,                        -- True when a regex Pattern constraint is defined.
+  calc_formats_has_length_bounds(t.formats_id) AS has_length_bounds,            -- True when at least one of MinLength / MaxLength is defined.
+  calc_formats_example_count(t.formats_id) AS example_count,                    -- Number of positive examples on this format (FormatExamples where IsCounter=false).
+  calc_formats_counter_example_count(t.formats_id) AS counter_example_count     -- Number of counterexamples on this format (FormatExamples where IsCounter=true).
 FROM formats t;
 
 -- ----------------------------------------------------------------------------
@@ -55,7 +66,8 @@ SELECT
   t.idx,                                                                        -- Preserves YAML ordering (0-indexed within examples or counterexamples).
   t.is_counter,                                                                 -- True if this is a counterexample (must NOT match), false if a positive example.
   t.value,                                                                      -- The example string itself.
-  t.description                                                                 -- Optional description (e.g. YAML inline comment).
+  t.description,                                                                -- Optional description (e.g. YAML inline comment).
+  calc_format_examples_example_kind(t.format_examples_id) AS example_kind       -- 'counter' when IsCounter is true, else 'positive'. Convenience label.
 FROM format_examples t;
 
 -- ----------------------------------------------------------------------------
@@ -68,8 +80,10 @@ SELECT
   t.name,                                                                       -- Enum identifier slug. Example: 'gw1.actor.class'. Acts as the primary key.
   t.owner,                                                                      -- Owner of this enum.
   t.enum_type,                                                                  -- Either 'versioned' (additive-only multi-version) or 'literal' (single immutable version).
+  t.value_type,                                                                 -- JSON Schema datatype of the enum's symbols. If present, SHALL be 'integer' and version YAML files SHALL have type: integer. If null, the enum SHALL be treated as string-valued.
   t.description,                                                                -- Name-level description (registry-level).
-  t.raw_json                                                                    -- Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded.
+  t.replaced_by,                                                                -- Optional pointer to another Enum that retires this one. If non-null, this enum has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).
+  t.raw_json                                                                    -- Escape hatch: any unmodeled YAML keys (e.g., x-gridworks extended_description). JSON-encoded.
 FROM enums t;
 
 -- ----------------------------------------------------------------------------
@@ -116,6 +130,7 @@ SELECT
   t.owner,                                                                      -- Owner of this type.
   t.title,                                                                      -- Name-level title.
   t.description,                                                                -- Name-level description.
+  t.replaced_by,                                                                -- Optional pointer to another Type that retires this one. If non-null, this type has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).
   t.python_class_name,                                                          -- Tier-2 placeholder: ODXML-derived Python class name (populated when ODXML data absorbs in).
   t.make_data_class,                                                            -- Tier-2 placeholder: ODXML invariant.
   t.is_cac,                                                                     -- Tier-2 placeholder: ODXML invariant (component access control marker).
@@ -153,6 +168,7 @@ SELECT
   t.attribute_name,                                                             -- Property key in the JSON-Schema.
   t.idx,                                                                        -- Preserves YAML ordering of properties.
   t.description,                                                                -- Per-attribute description from JSON-Schema.
+  t."default",                                                                  -- JSON-encoded default value for this attribute (e.g., '"002"', '12', 'false', '1.0', 'null'). Mirrors the JSON Schema 'default:' keyword. Encode as JSON string for typing-uniformity (matches TypeUpgradeOps.LiteralValue convention).
   t.is_required,                                                                -- Derived from the parent TypeVersion's 'required' array.
   t.is_list,                                                                    -- True if attribute is type=array. Refs then describe the item type.
   t.primitive_type,                                                             -- Primitive JSON type when none of the *Ref columns apply: string, integer, number, boolean, null.
@@ -183,12 +199,11 @@ FROM type_examples t;
 CREATE OR REPLACE VIEW vw_type_axioms WITH (security_invoker = ON) AS
 SELECT
   t.type_axioms_id,                                                             -- Primary key (auto-synthesized: TypeAxioms had no field named 'Id' or ending in 'Id').
-  calc_type_axioms_name(t.type_axioms_id) AS name,                              -- Compound key: <type-version>.axiom<number>.
+  calc_type_axioms_name(t.type_axioms_id) AS name,                              -- Compound key: <type-version>.axiom<number>.<axiom-name>.
   t.type_version,                                                               -- Foreign key to the parent TypeVersion.
   t.number,                                                                     -- Axiom number from YAML.
   t.axiom_name,                                                                 -- Axiom name from YAML.
-  t.statement,                                                                  -- Axiom statement (the natural-language invariant).
-  t.axiom_description                                                           -- Optional per-axiom description (some axioms carry a description field beyond their statement).
+  t.statement                                                                   -- Axiom statement (the natural-language invariant).
 FROM type_axioms t;
 
 -- ----------------------------------------------------------------------------
