@@ -120,7 +120,7 @@ x-gridworks:
 
     - number: 4
       name: "EconomicAdmission"
-      description: >
+      statement: >
         SignedMarketFeeTxn MUST be verifiable under the market’s fee and
         admission policy for the specified MarketSlot.
 
