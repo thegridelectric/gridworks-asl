@@ -31,6 +31,7 @@ DROP FUNCTION IF EXISTS calc_enum_versions_incoming_projection_count(TEXT) CASCA
 DROP FUNCTION IF EXISTS calc_enum_versions_incoming_upgrade_count(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_versions_is_active(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_versions_is_deprecated(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_versions_is_draft(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_versions_is_leaf(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_versions_is_root(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_versions_is_used_by_attributes(TEXT) CASCADE;
@@ -106,6 +107,7 @@ DROP FUNCTION IF EXISTS calc_type_versions_incoming_upgrade_count(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_versions_is_active(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_versions_is_closed(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_versions_is_deprecated(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_type_versions_is_draft(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_versions_is_leaf(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_versions_is_root(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_versions_is_used_as_subtype(TEXT) CASCADE;

@@ -483,6 +483,16 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(status, '') FROM enum_versions WHERE enum_versions_id = p_enum_versions_id) = 'deprecated' THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_enum_versions_is_draft
+-- Field: EnumVersions.IsDraft
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_is_draft(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(status, '') FROM enum_versions WHERE enum_versions_id = p_enum_versions_id) = 'draft' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- calc_enum_versions_has_default_symbol
 -- Field: EnumVersions.HasDefaultSymbol
 -- Type: calculated | DataType: boolean | Returns: BOOLEAN
@@ -856,6 +866,16 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_versions_is_deprecated(p_type_versions_id TEXT)
 RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(status, '') FROM type_versions WHERE type_versions_id = p_type_versions_id) = 'deprecated' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_is_draft
+-- Field: TypeVersions.IsDraft
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_is_draft(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(status, '') FROM type_versions WHERE type_versions_id = p_type_versions_id) = 'draft' THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_versions_is_closed

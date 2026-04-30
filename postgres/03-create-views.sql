@@ -115,6 +115,7 @@ SELECT
   t.raw_json,                                                                   -- Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded.
   calc_enum_versions_is_active(t.enum_versions_id) AS is_active,                -- True when Status is 'active'.
   calc_enum_versions_is_deprecated(t.enum_versions_id) AS is_deprecated,        -- True when Status is 'deprecated'.
+  calc_enum_versions_is_draft(t.enum_versions_id) AS is_draft,                  -- True when Status is 'draft'. Drives the Editor's 'Edit unlocked' affordance.
   calc_enum_versions_has_default_symbol(t.enum_versions_id) AS has_default_symbol,-- True when DefaultSymbol is set on this version.
   calc_enum_versions_value_count(t.enum_versions_id) AS value_count,            -- Number of EnumValues (symbols) declared in this version.
   calc_enum_versions_type_attribute_usage_count(t.enum_versions_id) AS type_attribute_usage_count,-- Number of TypeAttributes that point at this EnumVersion via EnumVersionRef.
@@ -188,6 +189,7 @@ SELECT
   t.raw_json,                                                                   -- Escape hatch: unmodeled top-level JSON-Schema fields (if/then/else, conditionals, etc.).
   calc_type_versions_is_active(t.type_versions_id) AS is_active,                -- True when Status is 'active'.
   calc_type_versions_is_deprecated(t.type_versions_id) AS is_deprecated,        -- True when Status is 'deprecated'.
+  calc_type_versions_is_draft(t.type_versions_id) AS is_draft,                  -- True when Status is 'draft'. Drives the Editor's 'Edit unlocked' affordance.
   calc_type_versions_is_closed(t.type_versions_id) AS is_closed,                -- True when ExtraAllowed is FALSE (additionalProperties: false in JSON-Schema).
   calc_type_versions_attribute_count(t.type_versions_id) AS attribute_count,    -- Number of TypeAttributes declared on this version.
   calc_type_versions_required_attribute_count(t.type_versions_id) AS required_attribute_count,-- Number of TypeAttributes on this version where IsRequired=true.
