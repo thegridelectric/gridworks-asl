@@ -322,6 +322,30 @@
         "nullable": false,
         "Description": "Number of TypeHelperAttributes that point at this Format via FormatRef.",
         "formula": "=COUNTIFS(TypeHelperAttributes!{{FormatRef}}, Formats!{{Name}})"
+      },
+      {
+        "name": "TotalUsageCount",
+        "datatype": "integer",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Total references across TypeAttributes + TypeHelperAttributes (sum of the two usage counts).",
+        "formula": "={{TypeAttributeUsageCount}}+{{TypeHelperAttributeUsageCount}}"
+      },
+      {
+        "name": "IsUsed",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one TypeAttribute or TypeHelperAttribute references this format.",
+        "formula": "=IF({{TotalUsageCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsUnused",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when no attribute references this format \u2014 candidate for removal.",
+        "formula": "=IF({{TotalUsageCount}}>0, FALSE(), TRUE())"
       }
     ],
     "data": [
@@ -1662,6 +1686,70 @@
         "nullable": false,
         "Description": "Number of TypeUpgradeOps referencing this version (via EnumVersionRef on EnumVersionBump / CoerceToEnum ops).",
         "formula": "=COUNTIFS(TypeUpgradeOps!{{EnumVersionRef}}, EnumVersions!{{Name}})"
+      },
+      {
+        "name": "TotalAttributeUsageCount",
+        "datatype": "integer",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Total references across TypeAttributes + TypeHelperAttributes.",
+        "formula": "={{TypeAttributeUsageCount}}+{{TypeHelperAttributeUsageCount}}"
+      },
+      {
+        "name": "IsUsedByAttributes",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one attribute references this enum version.",
+        "formula": "=IF({{TotalAttributeUsageCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "HasIncomingProjection",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one Projection lands on this version.",
+        "formula": "=IF({{IncomingProjectionCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "HasOutgoingProjection",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one Projection starts from this version.",
+        "formula": "=IF({{OutgoingProjectionCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "HasIncomingUpgrade",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one EnumUpgrade bumps to this version (this version was reached from a predecessor).",
+        "formula": "=IF({{IncomingUpgradeCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "HasOutgoingUpgrade",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one EnumUpgrade bumps from this version (this version has a successor).",
+        "formula": "=IF({{OutgoingUpgradeCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsRoot",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this version has no incoming upgrade \u2014 it was created fresh, not bumped from a predecessor.",
+        "formula": "=IF({{IncomingUpgradeCount}}>0, FALSE(), TRUE())"
+      },
+      {
+        "name": "IsLeaf",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this version has no outgoing upgrade \u2014 it has no successor and is a tip of the version chain.",
+        "formula": "=IF({{OutgoingUpgradeCount}}>0, FALSE(), TRUE())"
       }
     ],
     "data": [
@@ -4887,6 +4975,62 @@
         "nullable": false,
         "Description": "Number of TypeHelpers whose YAML body originally introduced them in this version.",
         "formula": "=COUNTIFS(TypeHelpers!{{OriginTypeVersion}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "TotalSubtypeUsageCount",
+        "datatype": "integer",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Total nest-as-subtype references across TypeAttributes + TypeHelperAttributes.",
+        "formula": "={{TypeAttributeAsSubtypeCount}}+{{TypeHelperAttributeAsSubtypeCount}}"
+      },
+      {
+        "name": "IsUsedAsSubtype",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one attribute nests this version as a sub-type.",
+        "formula": "=IF({{TotalSubtypeUsageCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "HasIncomingUpgrade",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one TypeUpgrade bumps to this version.",
+        "formula": "=IF({{IncomingUpgradeCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "HasOutgoingUpgrade",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one TypeUpgrade bumps from this version (this version has a successor).",
+        "formula": "=IF({{OutgoingUpgradeCount}}>0, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsRoot",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this version has no incoming upgrade \u2014 it was created fresh.",
+        "formula": "=IF({{IncomingUpgradeCount}}>0, FALSE(), TRUE())"
+      },
+      {
+        "name": "IsLeaf",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this version has no outgoing upgrade \u2014 a tip of the version chain.",
+        "formula": "=IF({{OutgoingUpgradeCount}}>0, FALSE(), TRUE())"
+      },
+      {
+        "name": "OriginatesHelpers",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one TypeHelper was originally introduced by this version's YAML body.",
+        "formula": "=IF({{OriginatedHelperCount}}>0, TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -15328,6 +15472,22 @@
         "nullable": false,
         "Description": "Number of TypeHelperAttributes that point at this helper via HelperRef (nested helpers).",
         "formula": "=COUNTIFS(TypeHelperAttributes!{{HelperRef}}, TypeHelpers!{{Name}})"
+      },
+      {
+        "name": "TotalUsageCount",
+        "datatype": "integer",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Total references across TypeAttributes + TypeHelperAttributes (nested helpers).",
+        "formula": "={{TypeAttributeUsageCount}}+{{TypeHelperAttributeUsageCount}}"
+      },
+      {
+        "name": "IsUsed",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one attribute references this helper.",
+        "formula": "=IF({{TotalUsageCount}}>0, TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -15724,6 +15884,14 @@
         "nullable": false,
         "Description": "Number of TypeUpgradeOps referencing this projection via ProjectionRef (typically AddProjected ops).",
         "formula": "=COUNTIFS(TypeUpgradeOps!{{ProjectionRef}}, Projections!{{Name}})"
+      },
+      {
+        "name": "IsUsedInUpgrades",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when at least one TypeUpgradeOp uses this projection (via AddProjected).",
+        "formula": "=IF({{TypeUpgradeOpUsageCount}}>0, TRUE(), FALSE())"
       }
     ],
     "data": [

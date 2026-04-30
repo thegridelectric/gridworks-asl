@@ -419,10 +419,7 @@ _PREVIOUS_BATCHES_BATCH6: dict[str, list[dict]] = {
 }
 
 
-# ----------------------------------------------------------------------------
-# BATCH 7 — higher-order inferences: cross-FK usage counts, lifecycle reach
-# ----------------------------------------------------------------------------
-BATCH: dict[str, list[dict]] = {
+_PREVIOUS_BATCHES_BATCH7A: dict[str, list[dict]] = {
     "Formats": [
         field(
             "TypeAttributeUsageCount", "aggregation", "integer",
@@ -532,6 +529,149 @@ BATCH: dict[str, list[dict]] = {
             "TypeUpgradeOpUsageCount", "aggregation", "integer",
             "Number of TypeUpgradeOps referencing this projection via ProjectionRef (typically AddProjected ops).",
             formula="=COUNTIFS(TypeUpgradeOps!{{ProjectionRef}}, Projections!{{Name}})",
+            nullable=False,
+        ),
+    ],
+}
+
+
+# ----------------------------------------------------------------------------
+# BATCH 7b — cross-derived booleans referencing same-row aggregations from 7a
+# ----------------------------------------------------------------------------
+BATCH: dict[str, list[dict]] = {
+    "Formats": [
+        field(
+            "TotalUsageCount", "calculated", "integer",
+            "Total references across TypeAttributes + TypeHelperAttributes (sum of the two usage counts).",
+            formula="={{TypeAttributeUsageCount}}+{{TypeHelperAttributeUsageCount}}",
+            nullable=False,
+        ),
+        field(
+            "IsUsed", "calculated", "boolean",
+            "True when at least one TypeAttribute or TypeHelperAttribute references this format.",
+            formula="=IF({{TotalUsageCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+        field(
+            "IsUnused", "calculated", "boolean",
+            "True when no attribute references this format — candidate for removal.",
+            formula="=IF({{TotalUsageCount}}>0, FALSE(), TRUE())",
+            nullable=False,
+        ),
+    ],
+    "EnumVersions": [
+        field(
+            "TotalAttributeUsageCount", "calculated", "integer",
+            "Total references across TypeAttributes + TypeHelperAttributes.",
+            formula="={{TypeAttributeUsageCount}}+{{TypeHelperAttributeUsageCount}}",
+            nullable=False,
+        ),
+        field(
+            "IsUsedByAttributes", "calculated", "boolean",
+            "True when at least one attribute references this enum version.",
+            formula="=IF({{TotalAttributeUsageCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+        field(
+            "HasIncomingProjection", "calculated", "boolean",
+            "True when at least one Projection lands on this version.",
+            formula="=IF({{IncomingProjectionCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+        field(
+            "HasOutgoingProjection", "calculated", "boolean",
+            "True when at least one Projection starts from this version.",
+            formula="=IF({{OutgoingProjectionCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+        field(
+            "HasIncomingUpgrade", "calculated", "boolean",
+            "True when at least one EnumUpgrade bumps to this version (this version was reached from a predecessor).",
+            formula="=IF({{IncomingUpgradeCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+        field(
+            "HasOutgoingUpgrade", "calculated", "boolean",
+            "True when at least one EnumUpgrade bumps from this version (this version has a successor).",
+            formula="=IF({{OutgoingUpgradeCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+        field(
+            "IsRoot", "calculated", "boolean",
+            "True when this version has no incoming upgrade — it was created fresh, not bumped from a predecessor.",
+            formula="=IF({{IncomingUpgradeCount}}>0, FALSE(), TRUE())",
+            nullable=False,
+        ),
+        field(
+            "IsLeaf", "calculated", "boolean",
+            "True when this version has no outgoing upgrade — it has no successor and is a tip of the version chain.",
+            formula="=IF({{OutgoingUpgradeCount}}>0, FALSE(), TRUE())",
+            nullable=False,
+        ),
+    ],
+    "TypeVersions": [
+        field(
+            "TotalSubtypeUsageCount", "calculated", "integer",
+            "Total nest-as-subtype references across TypeAttributes + TypeHelperAttributes.",
+            formula="={{TypeAttributeAsSubtypeCount}}+{{TypeHelperAttributeAsSubtypeCount}}",
+            nullable=False,
+        ),
+        field(
+            "IsUsedAsSubtype", "calculated", "boolean",
+            "True when at least one attribute nests this version as a sub-type.",
+            formula="=IF({{TotalSubtypeUsageCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+        field(
+            "HasIncomingUpgrade", "calculated", "boolean",
+            "True when at least one TypeUpgrade bumps to this version.",
+            formula="=IF({{IncomingUpgradeCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+        field(
+            "HasOutgoingUpgrade", "calculated", "boolean",
+            "True when at least one TypeUpgrade bumps from this version (this version has a successor).",
+            formula="=IF({{OutgoingUpgradeCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+        field(
+            "IsRoot", "calculated", "boolean",
+            "True when this version has no incoming upgrade — it was created fresh.",
+            formula="=IF({{IncomingUpgradeCount}}>0, FALSE(), TRUE())",
+            nullable=False,
+        ),
+        field(
+            "IsLeaf", "calculated", "boolean",
+            "True when this version has no outgoing upgrade — a tip of the version chain.",
+            formula="=IF({{OutgoingUpgradeCount}}>0, FALSE(), TRUE())",
+            nullable=False,
+        ),
+        field(
+            "OriginatesHelpers", "calculated", "boolean",
+            "True when at least one TypeHelper was originally introduced by this version's YAML body.",
+            formula="=IF({{OriginatedHelperCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+    ],
+    "TypeHelpers": [
+        field(
+            "TotalUsageCount", "calculated", "integer",
+            "Total references across TypeAttributes + TypeHelperAttributes (nested helpers).",
+            formula="={{TypeAttributeUsageCount}}+{{TypeHelperAttributeUsageCount}}",
+            nullable=False,
+        ),
+        field(
+            "IsUsed", "calculated", "boolean",
+            "True when at least one attribute references this helper.",
+            formula="=IF({{TotalUsageCount}}>0, TRUE(), FALSE())",
+            nullable=False,
+        ),
+    ],
+    "Projections": [
+        field(
+            "IsUsedInUpgrades", "calculated", "boolean",
+            "True when at least one TypeUpgradeOp uses this projection (via AddProjected).",
+            formula="=IF({{TypeUpgradeOpUsageCount}}>0, TRUE(), FALSE())",
             nullable=False,
         ),
     ],
