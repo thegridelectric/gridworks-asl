@@ -1151,6 +1151,46 @@
         "type": "raw",
         "nullable": true,
         "Description": "Escape hatch: any unmodeled YAML keys (e.g., x-gridworks extended_description). JSON-encoded."
+      },
+      {
+        "name": "IsRetired",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this enum has been replaced by another (ReplacedBy is set).",
+        "formula": "=IF({{ReplacedBy}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsVersioned",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when EnumType is 'versioned' (additive-only multi-version enum).",
+        "formula": "=IF({{EnumType}}=\"versioned\", TRUE(), FALSE())"
+      },
+      {
+        "name": "IsLiteral",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when EnumType is 'literal' (single immutable version, frozen vocabulary).",
+        "formula": "=IF({{EnumType}}=\"literal\", TRUE(), FALSE())"
+      },
+      {
+        "name": "IsIntegerValued",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when ValueType is 'integer' (otherwise the enum's symbols are strings).",
+        "formula": "=IF({{ValueType}}=\"integer\", TRUE(), FALSE())"
+      },
+      {
+        "name": "VersionCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of EnumVersions for this enum.",
+        "formula": "=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}})"
       }
     ],
     "data": [
@@ -1518,6 +1558,38 @@
         "type": "raw",
         "nullable": true,
         "Description": "Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded."
+      },
+      {
+        "name": "IsActive",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when Status is 'active'.",
+        "formula": "=IF({{Status}}=\"active\", TRUE(), FALSE())"
+      },
+      {
+        "name": "IsDeprecated",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when Status is 'deprecated'.",
+        "formula": "=IF({{Status}}=\"deprecated\", TRUE(), FALSE())"
+      },
+      {
+        "name": "HasDefaultSymbol",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when DefaultSymbol is set on this version.",
+        "formula": "=IF({{DefaultSymbol}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "ValueCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of EnumValues (symbols) declared in this version.",
+        "formula": "=COUNTIFS(EnumValues!{{EnumVersion}}, EnumVersions!{{Name}})"
       }
     ],
     "data": [
@@ -1980,6 +2052,14 @@
         "type": "raw",
         "nullable": true,
         "Description": "Per-symbol description from value_descriptions map."
+      },
+      {
+        "name": "HasDescription",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when a per-symbol Description is present.",
+        "formula": "=IF({{Description}}, TRUE(), FALSE())"
       }
     ],
     "data": [

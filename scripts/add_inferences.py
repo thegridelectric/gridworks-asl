@@ -91,75 +91,69 @@ def apply_batch(batch: dict[str, list[dict]]) -> tuple[int, int]:
 # BATCH — edited per invocation
 # ----------------------------------------------------------------------------
 BATCH: dict[str, list[dict]] = {
-    "Owners": [
-        field(
-            "IsOrganization", "calculated", "boolean",
-            "True when OwnerType is 'organization' (vs 'individual'). Cheap classifier for grouping owners.",
-            formula='=IF({{OwnerType}}="organization", TRUE(), FALSE())',
-            nullable=False,
-        ),
-        field(
-            "HasGithub", "calculated", "boolean",
-            "True when this owner has a Github URL on file.",
-            formula='=IF({{Github}}, TRUE(), FALSE())',
-            nullable=False,
-        ),
-        field(
-            "FormatCount", "aggregation", "integer",
-            "Number of Formats owned by this owner.",
-            formula="=COUNTIFS(Formats!{{Owner}}, Owners!{{Name}})",
-            nullable=False,
-        ),
-        field(
-            "EnumCount", "aggregation", "integer",
-            "Number of Enums owned by this owner.",
-            formula="=COUNTIFS(Enums!{{Owner}}, Owners!{{Name}})",
-            nullable=False,
-        ),
-        field(
-            "TypeCount", "aggregation", "integer",
-            "Number of Types owned by this owner.",
-            formula="=COUNTIFS(Types!{{Owner}}, Owners!{{Name}})",
-            nullable=False,
-        ),
-    ],
-    "Formats": [
+    "Enums": [
         field(
             "IsRetired", "calculated", "boolean",
-            "True when this format has been replaced by another (ReplacedBy is set).",
+            "True when this enum has been replaced by another (ReplacedBy is set).",
             formula='=IF({{ReplacedBy}}, TRUE(), FALSE())',
             nullable=False,
         ),
         field(
-            "HasPattern", "calculated", "boolean",
-            "True when a regex Pattern constraint is defined.",
-            formula='=IF({{Pattern}}, TRUE(), FALSE())',
+            "IsVersioned", "calculated", "boolean",
+            "True when EnumType is 'versioned' (additive-only multi-version enum).",
+            formula='=IF({{EnumType}}="versioned", TRUE(), FALSE())',
             nullable=False,
         ),
         field(
-            "HasLengthBounds", "calculated", "boolean",
-            "True when at least one of MinLength / MaxLength is defined.",
-            formula="=IF(OR({{MinLength}}>0, {{MaxLength}}>0), TRUE(), FALSE())",
+            "IsLiteral", "calculated", "boolean",
+            "True when EnumType is 'literal' (single immutable version, frozen vocabulary).",
+            formula='=IF({{EnumType}}="literal", TRUE(), FALSE())',
             nullable=False,
         ),
         field(
-            "ExampleCount", "aggregation", "integer",
-            "Number of positive examples on this format (FormatExamples where IsCounter=false).",
-            formula="=COUNTIFS(FormatExamples!{{Format}}, Formats!{{Name}}, FormatExamples!{{IsCounter}}, FALSE())",
+            "IsIntegerValued", "calculated", "boolean",
+            "True when ValueType is 'integer' (otherwise the enum's symbols are strings).",
+            formula='=IF({{ValueType}}="integer", TRUE(), FALSE())',
             nullable=False,
         ),
         field(
-            "CounterExampleCount", "aggregation", "integer",
-            "Number of counterexamples on this format (FormatExamples where IsCounter=true).",
-            formula="=COUNTIFS(FormatExamples!{{Format}}, Formats!{{Name}}, FormatExamples!{{IsCounter}}, TRUE())",
+            "VersionCount", "aggregation", "integer",
+            "Number of EnumVersions for this enum.",
+            formula="=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}})",
             nullable=False,
         ),
     ],
-    "FormatExamples": [
+    "EnumVersions": [
         field(
-            "ExampleKind", "calculated", "string",
-            "'counter' when IsCounter is true, else 'positive'. Convenience label.",
-            formula='=IF({{IsCounter}}, "counter", "positive")',
+            "IsActive", "calculated", "boolean",
+            "True when Status is 'active'.",
+            formula='=IF({{Status}}="active", TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "IsDeprecated", "calculated", "boolean",
+            "True when Status is 'deprecated'.",
+            formula='=IF({{Status}}="deprecated", TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "HasDefaultSymbol", "calculated", "boolean",
+            "True when DefaultSymbol is set on this version.",
+            formula='=IF({{DefaultSymbol}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+        field(
+            "ValueCount", "aggregation", "integer",
+            "Number of EnumValues (symbols) declared in this version.",
+            formula="=COUNTIFS(EnumValues!{{EnumVersion}}, EnumVersions!{{Name}})",
+            nullable=False,
+        ),
+    ],
+    "EnumValues": [
+        field(
+            "HasDescription", "calculated", "boolean",
+            "True when a per-symbol Description is present.",
+            formula='=IF({{Description}}, TRUE(), FALSE())',
             nullable=False,
         ),
     ],
