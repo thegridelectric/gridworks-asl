@@ -1,10 +1,12 @@
 # Registry Explorer — Navigation Plan
 
-> **Scope.** This plan defines the navigation architecture and UX guiding principles for an `/app/` version of the sema Registry Explorer — an admin-developer tool for seeing, editing, managing, navigating, exploring, documenting, and expanding the entire sema model. It is *only* a navigation/IA plan; it does not pick a stack, design components in detail, or specify backend wiring. Treat it as the spine that everything else hangs off of.
+> **Scope.** This plan defines the navigation architecture, UX guiding principles, and implementation roadmap for an `/app/` version of the sema Registry Explorer — an admin-developer tool for seeing, editing, managing, navigating, exploring, documenting, and expanding the entire sema model. Treat it as the spine that everything else hangs off of.
 >
 > **Audience for now.** Administrative-level developers who need full-surface access to the registry. Future role-tailoring is discussed in §7, but the v1 surface is unified.
 >
-> **Status.** Draft, second pass. Grounded in the actual rulebook at [effortless-rulebook/effortless-rulebook.json](effortless-rulebook/effortless-rulebook.json). Intended to be vetted in a separate conversation/agent before any implementation work begins.
+> **Stack (locked).** **React + TypeScript** on the front end; **FastAPI (Python)** on the back end. The API is intentionally thin — most computation already lives in postgres `vw_*` views and in the Python tooling under [rulebook-emitters/](rulebook-emitters/) and [src/sema/](src/sema/). FastAPI reads `vw_*` for live data, writes to base tables, and reuses [rulebook-emitters/shared/loader.py](rulebook-emitters/shared/loader.py) for any direct rulebook-JSON reads (e.g. schema introspection). Pydantic models from [rulebook-emitters/python/](rulebook-emitters/python/) become FastAPI response models when that emitter graduates from scaffold.
+>
+> **Status.** Draft, third pass — adds detailed roadmap (§12) and locks the stack. Grounded in the actual rulebook at [effortless-rulebook/effortless-rulebook.json](effortless-rulebook/effortless-rulebook.json) and the emitter scaffolding under [rulebook-emitters/](rulebook-emitters/).
 
 ---
 
@@ -33,6 +35,35 @@ So later sections aren't asserting things the rulebook can't back up:
 | TypeHelpers | **No version chain — scoped to a TypeVersion** | None — they travel with their `OriginTypeVersion` | `TypeHelpers`, `TypeHelperAttributes` |
 
 **Migration surface:** `TypeUpgrades` + `TypeUpgradeOps` between two `TypeVersions`; **also** `EnumUpgrades` + `EnumUpgradeMappings` between two `EnumVersions`. The plan covers both.
+
+---
+
+## 0.5. The emitter infrastructure the Explorer leverages
+
+The Explorer doesn't get built on a green field — there's existing scaffolding under [rulebook-emitters/](rulebook-emitters/) that the API and Phase 1 work both lean on.
+
+**What exists today:**
+
+| Path | Role | Status |
+|---|---|---|
+| [rulebook-emitters/shared/loader.py](rulebook-emitters/shared/loader.py) | Canonical accessors for the rulebook JSON: `load_rulebook`, `by_table`, `schema_for`, `index_by`, `group_by`, `table_summary`. Single point of failure if table shape changes. | Working |
+| [rulebook-emitters/python/](rulebook-emitters/python/) | Will emit Pydantic classes for Types, IntEnum/StrEnum for Enums, format validators. | Scaffold (`out/TODO.txt`) |
+| [rulebook-emitters/golang/](rulebook-emitters/golang/) | Will emit Go structs and typed enum constants. | Scaffold |
+| [rulebook-emitters/html/](rulebook-emitters/html/) | Single-page documentation of the entire platform. | Scaffold (`out/sema.html` exists but minimal) |
+
+**What the Explorer reuses:**
+
+- **`shared/loader.py` from FastAPI** — for any read where the JSON is the right source of truth (e.g. `_meta`, raw schema introspection that doesn't hit `vw_*` views). The API process imports it directly; no copy-paste.
+- **The python emitter's output (when it graduates)** — its emitted Pydantic classes become FastAPI's response models for `TypeVersions`, `EnumVersions`, etc. Until then, FastAPI hand-rolls thin Pydantic models that mirror the `vw_*` view columns. Swap-in is mechanical.
+- **The HTML emitter is the read-only ancestor of the Explorer** — anything it can render (a static doc site of the registry) the Explorer must also render, just interactively. If a question like "where do TypeHelpers live in the docs?" has an answer in `html/`, the Explorer's Read mode owes the same answer.
+
+**What the Explorer does NOT touch:**
+
+- The emitters themselves — they're independent CLIs invoked manually. The Explorer is a separate process with a separate purpose (live editing vs. static codegen).
+- [code_gen/GridworksCore/](code_gen/GridworksCore/) — slated for decommission, not consumed.
+- The YAML round-trip tools at [src/sema/tools/rulebook_to_yaml.py](src/sema/tools/rulebook_to_yaml.py) — they're a pre-existing pipeline; the Explorer leaves them alone.
+
+**Implication for the roadmap:** Phase 2's "data layer" task is not greenfield. It's a thin FastAPI app that imports `shared.loader`, queries postgres, and serves both. Phase 5's edit forms can crib their field-list shapes from the python emitter's planned output — when the python emitter implements real emission, the Explorer's response models become a `from rulebook_emitters.python.out import …` away.
 
 ---
 
@@ -284,13 +315,16 @@ The editor must enforce one-of via a single picker — **"What does this field r
 To keep the plan focused on navigation, these are explicitly out of scope for now and worth their own future passes:
 
 - **Auth / write-permissions model** — who can promote a draft, who can retire a Word. The current rulebook has no user concept; `Owners` are organizational, not auth principals.
+  - *Architectural note for when this lands.* Because the DAG already computes derived predicates as calc fields on the `vw_*` views, postgres RLS policies become unusually simple: instead of writing JOIN-heavy policies that traverse normalized tables to figure out who can see what, policies can read directly from a calc field — `USING (IsVIP)`, `USING (IsPublished)`, `USING (Owner = current_setting('app.owner'))`. The definition of "what makes someone a VIP / what counts as published / who owns this row" is encapsulated *once* in the rulebook formula and is then transparent to every policy that depends on it. Change the definition, and every policy follows. This is a real benefit of the ERB foundation and should shape the eventual auth design.
 - **Concurrent-edit / locking** — what happens when two editors fork the same Definition simultaneously. Trivially: forks always create a new `NNN`, so two simultaneous forks just produce `/001` and `/002` instead of colliding. But two editors editing the same draft is a real problem.
 - **The `OpKind` / mapping vocabulary for migration scaffolding** — §5 step 8 hand-waves at "structural delta → pre-filled `TypeUpgradeOps`." Doing this well requires enumerating which `OpKind` values the rulebook supports, which deltas they correspond to, and how `EnumUpgradeMappings` are auto-suggested. Probably the riskiest single piece of the plan; deserves its own spec before implementation.
 - **Generated-code preview** — showing what `effortless build` would emit for a draft. Powerful but a layer on top of the Explorer.
 - **Bulk operations** — "fork all 12 Words in this vocabulary to next version." Likely needed eventually, deliberately deferred.
 - **External publishing** — pushing a promoted Definition to `schemas.electricity.works`.
 - **Portable pins / recent-views** — v1 is client-local. If they need to be portable, the rulebook needs a `UserPreferences`-style table (and a User concept first — see auth bullet).
-- **Stack / framework choice** — frontend framework, backend (talking to postgres `vw_*` views vs. the rulebook JSON directly), build pipeline integration. Pick after the IA is signed off.
+- **Build pipeline integration** — whether the FastAPI server (or its OpenAPI client export) becomes a transpiler entry in [effortless.json](effortless.json). Out of scope for v1; the Explorer runs alongside the build, not inside it.
+
+(Stack itself was previously deferred here; it's now locked — see the Scope blurb at the top and §12 Phase 0.)
 
 ---
 
@@ -307,18 +341,15 @@ A phase-ordered punch list for the agent that picks this up to build. Tasks with
 
 ---
 
-### Phase 0 — Decisions to land before any code (⛔)
+### Phase 0 — Decisions (locked) ✅
 
-These are blocking. None require code; all require a yes/no from the user.
+All five Phase 0 gates resolved as of the third pass. Recorded here so an implementing agent doesn't re-litigate them.
 
-- [ ] ❓ **Confirm the editorial vocabulary** (Vocabulary / Word / Definition / Field / Choice set / Format / Helper / Translation / Migration). Reject early if the team prefers different terms — every screen and URL inherits these names.
-- [ ] ❓ **Confirm the Status vocabulary** (§3): `draft` → `active` → `deprecated`. No `retired` at the version level (Word-level retirement already lives on `ReplacedBy`).
-- [ ] ❓ **Pick the stack** (§11). At minimum: frontend framework, routing approach, form library, and whether the data layer reads postgres `vw_*` views directly or proxies through a thin API. Document in a separate ADR; do not bury in the plan.
-- [ ] ❓ **Pick the data path.** Two viable options:
-  - (a) Direct: a thin server reads `vw_*` views and writes to base tables. Closer to the rulebook truth.
-  - (b) Indirect: an API layer that the Explorer calls, with the rulebook JSON as a fallback read source.
-  Option (a) is cheaper and matches the project's "always read from views, write to base tables" rule. Default to (a) unless a reason emerges.
-- [ ] ❓ **Confirm the `/app/` location.** Where does the Explorer live in the repo? Suggested: `app/` at the project root, peer to `postgres/`, `definitions/`, `src/`. Confirm before scaffolding.
+- [x] **Editorial vocabulary** — Vocabulary / Word / Definition / Field / Choice set / Format / Helper / Translation / Migration (§1).
+- [x] **Status vocabulary** — `draft` → `active` → `deprecated` (§3). No `retired` at the version level.
+- [x] **Stack** — **React + TypeScript** front end; **FastAPI (Python)** back end. Form library: pick during Phase 5 (likely `react-hook-form` + `zod` for the four-FK picker validation, but defer until edit work starts). OpenAPI → typed React client via auto-generation (e.g. `openapi-typescript`).
+- [x] **Data path** — FastAPI reads postgres `vw_*` views, writes to base tables. Imports [rulebook-emitters/shared/loader.py](rulebook-emitters/shared/loader.py) for any direct rulebook-JSON reads (schema introspection, `_meta`).
+- [x] **Layout** — `app/api/` (FastAPI) + `app/web/` (React + TS), both peer to [postgres/](postgres/) and [rulebook-emitters/](rulebook-emitters/).
 
 ### Phase 1 — Lifecycle precondition (🧱 ⛔)
 
@@ -333,13 +364,27 @@ This is the §3 work. Without it, every "draft vs published" affordance in the p
 
 ### Phase 2 — Project scaffolding (🎨 🔌)
 
-Stack-agnostic. Whatever framework was picked in Phase 0, this phase stands up the empty shell.
+Stand up the empty shell on the locked stack. Reuses [rulebook-emitters/shared/loader.py](rulebook-emitters/shared/loader.py) where possible — see §0.5.
 
-- [ ] Initialize the `/app/` project per stack choice; commit the scaffold separately from rulebook work.
-- [ ] Wire the data layer to `postgresql://postgres@localhost:5432/sema`. Smoke test: read one row from `vw_Owners`.
-- [ ] Define a typed read-model for each of the 23 tables (or a code-generated equivalent). At minimum, the read-models must surface every calc field the plan references: `IsRetired`, `IsLeaf`, `IsRoot`, `IsActive`, `IsDraft`, `IsDeprecated`, `IsClosed`, `IsUsedAsSubtype`, `RefKind`, `AttributeCount`, `AxiomCount`, `ExampleCount`, `TotalSubtypeUsageCount`, `TotalUsageCount`, `TotalAttributeUsageCount`, `IncomingUpgradeCount`, `OutgoingUpgradeCount`, `HasIncomingUpgrade`, `HasOutgoingUpgrade`, `TypeCount`, `EnumCount`, `FormatCount`, `ExampleKind`.
-- [ ] Implement the URL routing skeleton matching §8. Every route renders a placeholder for now; the goal is to lock the URL contract before screens land.
-- [ ] Build a generic three-pane shell layout component (§4). Empty panels, but the slots are real.
+**Backend — `app/api/`:**
+
+- [ ] Initialize a FastAPI project. Suggested layout: `app/api/main.py` (app + router mount), `app/api/routes/` (one module per resource — `owners.py`, `types.py`, `enums.py`, `formats.py`, `helpers.py`, `projections.py`, `upgrades.py`, `search.py`), `app/api/db.py` (psycopg/asyncpg connection helpers), `app/api/models.py` (Pydantic response models), `app/api/loader.py` (re-export from `rulebook_emitters.shared.loader` for direct-JSON reads).
+- [ ] Wire the data layer to `postgresql://postgres@localhost:5432/sema`. Smoke test: `GET /api/owners` returns rows from `vw_Owners`.
+- [ ] Define hand-rolled Pydantic response models for each of the 23 tables, mirroring `vw_*` view columns. At minimum, the models must surface every calc field the plan references: `IsRetired`, `IsLeaf`, `IsRoot`, `IsActive`, `IsDraft`, `IsDeprecated`, `IsClosed`, `IsUsedAsSubtype`, `RefKind`, `AttributeCount`, `AxiomCount`, `ExampleCount`, `TotalSubtypeUsageCount`, `TotalUsageCount`, `TotalAttributeUsageCount`, `IncomingUpgradeCount`, `OutgoingUpgradeCount`, `HasIncomingUpgrade`, `HasOutgoingUpgrade`, `TypeCount`, `EnumCount`, `FormatCount`, `ExampleKind`. Mark with a `# TODO: replace with rulebook-emitters/python/out/ when emitter graduates`.
+- [ ] Verify FastAPI's OpenAPI doc renders at `/docs` and includes every endpoint.
+- [ ] Add CORS for the React dev server origin.
+
+**Frontend — `app/web/`:**
+
+- [ ] Initialize a React + TypeScript project (Vite suggested for speed; framework-router optional — Phase 8 URLs are file-system-friendly under either Next.js or React Router).
+- [ ] Auto-generate a typed client from FastAPI's OpenAPI schema (e.g. `openapi-typescript` + a thin fetch wrapper, or `openapi-fetch`). Wire it to call the FastAPI dev server.
+- [ ] Implement the URL routing skeleton matching §8. Every route renders a placeholder; goal is to lock the URL contract before screens land.
+- [ ] Build a generic three-pane shell layout component (§4). Empty panels, real slots.
+
+**Cross-cutting:**
+
+- [ ] Decide on a single `app/` README that documents how to run both halves (FastAPI dev server + Vite/Next dev server) and how the typed-client regen works.
+- [ ] Commit the scaffold as one or two commits, separate from any rulebook work.
 
 ### Phase 3 — Read-only navigation (🎨 🔌)
 
@@ -446,9 +491,12 @@ If any of these are encountered during build, stop and surface to the user — t
 
 ## How to use this plan
 
-This is meant to be the spine. The detailed roadmap is §12; this is the high-level summary:
-1. Confirm the editorial vocabulary (Vocabulary / Word / Definition / Field / Choice set / Format / Helper / Translation / Migration) — or replace with the team's preferred terms.
-2. Resolve §3 (lifecycle precondition): nail down the Status vocabulary, write the backfill, add the `IsDraft` calc field to the rulebook. (§12 Phase 1.)
-3. Wireframe the **Workbench**, the **Word timeline**, and the **Definition detail (read + edit + diff)** — three screens that exercise the whole pattern. (§12 Phases 3, 5, 7.)
-4. Spec the three fork flavors (§9) in detail — the SQL writes each triggers, the redirect, the diff scaffolding. (§12 Phase 6.)
-5. Then, and only then, talk frameworks and stack. (§12 Phase 0 ❓.)
+This is the spine. §12 is the detailed roadmap; this is the order of operations at a glance:
+
+1. **Phase 1 first (rulebook).** Resolve §3: add `IsDraft` calc fields to `TypeVersions` and `EnumVersions`, backfill all current null `Status` values to `active`, run `effortless build`, verify in postgres. This is rulebook work, no app code yet — and per [CLAUDE.md](CLAUDE.md), the build commit must contain only generated output.
+2. **Phase 2 (scaffold).** Stand up `app/api/` (FastAPI) and `app/web/` (React + TS) per §12 Phase 2. Smoke test the FastAPI → postgres path and the React → FastAPI typed-client path. URL skeleton in place per §8.
+3. **Phase 3 (read-only Explorer).** Build the navigation surface end-to-end against postgres `vw_*` views. After Phase 3, the Explorer is a competent read-only registry browser — useful even before any edit features land.
+4. **Phases 4–7 (the loop).** Backlinks → edit forms → fork actions → diff/promote. Closes the §5 loop.
+5. **Phase 8 (migrations).** Gated on the `OpKind` vocabulary spec — see §11. Ship Phase 7 without it if needed.
+
+The editorial vocabulary (§1), Status vocabulary (§3), and stack (Scope blurb + §12 Phase 0) are all locked in this pass. The first agent to start implementation should begin at Phase 1.
