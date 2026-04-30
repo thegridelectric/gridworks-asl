@@ -15176,6 +15176,30 @@
         "type": "raw",
         "nullable": false,
         "Description": "JSON-Pointer-ish path within origin (e.g. '/properties/RelayNodes/items') \u2014 used to re-inline on YAML emit."
+      },
+      {
+        "name": "AttributeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeHelperAttributes declared on this helper.",
+        "formula": "=COUNTIFS(TypeHelperAttributes!{{TypeHelper}}, TypeHelpers!{{Name}})"
+      },
+      {
+        "name": "RequiredAttributeCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeHelperAttributes on this helper where IsRequired=true.",
+        "formula": "=COUNTIFS(TypeHelperAttributes!{{TypeHelper}}, TypeHelpers!{{Name}}, TypeHelperAttributes!{{IsRequired}}, TRUE())"
+      },
+      {
+        "name": "IsClosed",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when ExtraAllowed is FALSE (the helper rejects unknown properties).",
+        "formula": "=IF({{ExtraAllowed}}, FALSE(), TRUE())"
       }
     ],
     "data": [
@@ -15312,6 +15336,22 @@
         "type": "raw",
         "nullable": true,
         "Description": "Escape hatch for unmodeled JSON-Schema specifics."
+      },
+      {
+        "name": "IsOptional",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.",
+        "formula": "=IF({{IsRequired}}, FALSE(), TRUE())"
+      },
+      {
+        "name": "RefKind",
+        "datatype": "string",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive'.",
+        "formula": "=IF({{FormatRef}}, \"format\", IF({{EnumVersionRef}}, \"enum\", IF({{SubTypeVersionRef}}, \"subtype\", IF({{HelperRef}}, \"helper\", \"primitive\"))))"
       }
     ],
     "data": [

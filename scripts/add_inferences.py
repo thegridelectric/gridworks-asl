@@ -160,7 +160,7 @@ _PREVIOUS_BATCHES_BATCH2: dict[str, list[dict]] = {
 }
 
 
-BATCH: dict[str, list[dict]] = {
+_PREVIOUS_BATCHES_BATCH3: dict[str, list[dict]] = {
     "Types": [
         field(
             "IsRetired", "calculated", "boolean",
@@ -251,6 +251,49 @@ BATCH: dict[str, list[dict]] = {
             "HasStatement", "calculated", "boolean",
             "True when the axiom carries a non-empty Statement.",
             formula='=IF({{Statement}}, TRUE(), FALSE())',
+            nullable=False,
+        ),
+    ],
+}
+
+
+BATCH: dict[str, list[dict]] = {
+    "TypeHelpers": [
+        field(
+            "AttributeCount", "aggregation", "integer",
+            "Number of TypeHelperAttributes declared on this helper.",
+            formula="=COUNTIFS(TypeHelperAttributes!{{TypeHelper}}, TypeHelpers!{{Name}})",
+            nullable=False,
+        ),
+        field(
+            "RequiredAttributeCount", "aggregation", "integer",
+            "Number of TypeHelperAttributes on this helper where IsRequired=true.",
+            formula="=COUNTIFS(TypeHelperAttributes!{{TypeHelper}}, TypeHelpers!{{Name}}, TypeHelperAttributes!{{IsRequired}}, TRUE())",
+            nullable=False,
+        ),
+        field(
+            "IsClosed", "calculated", "boolean",
+            "True when ExtraAllowed is FALSE (the helper rejects unknown properties).",
+            formula='=IF({{ExtraAllowed}}, FALSE(), TRUE())',
+            nullable=False,
+        ),
+    ],
+    "TypeHelperAttributes": [
+        field(
+            "IsOptional", "calculated", "boolean",
+            "True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.",
+            formula='=IF({{IsRequired}}, FALSE(), TRUE())',
+            nullable=False,
+        ),
+        field(
+            "RefKind", "calculated", "string",
+            "Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive'.",
+            formula=(
+                '=IF({{FormatRef}}, "format", '
+                'IF({{EnumVersionRef}}, "enum", '
+                'IF({{SubTypeVersionRef}}, "subtype", '
+                'IF({{HelperRef}}, "helper", "primitive"))))'
+            ),
             nullable=False,
         ),
     ],
