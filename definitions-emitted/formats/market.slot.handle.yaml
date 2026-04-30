@@ -1,0 +1,10 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/formats/market.slot.handle
+title: Market Slot Handle
+description: Successor to market.slot.name. Adds a checksum suffix so a slot handle is self-validating without a registry lookup.
+type: string
+pattern: ^[a-z][a-z0-9.]*\.[a-f0-9]{4}$
+minLength: 6
+maxLength: 80
+x-gridworks:
+  owner: gridworks-energy

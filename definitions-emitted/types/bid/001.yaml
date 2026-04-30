@@ -1,0 +1,49 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/bid/001
+title: bid (draft v001)
+type: object
+description: Proposed evolution of bid/000. Adds explicit BidExpiry and an optional BidNotes free-text field. Also adopts market.slot.handle (the successor format) for MarketSlotName.
+properties:
+  BidderAlias:
+    $ref: https://schemas.electricity.works/formats/left.right.dot
+    description: Canonical alias of the market participant submitting this bid.
+  MarketSlotName:
+    $ref: https://schemas.electricity.works/formats/market.slot.handle
+    description: Identifier of the market slot. Now uses the new market.slot.handle format (successor to market.slot.name).
+  PqPairs:
+    type: array
+    items:
+      $ref: https://schemas.electricity.works/types/price.quantity.unitless/001
+    description: Ordered list of price-quantity pairs.
+  PriceUnit:
+    $ref: https://schemas.electricity.works/enums/market.price.unit/000
+    description: Currency/unit for prices.
+  QuantityUnit:
+    $ref: https://schemas.electricity.works/enums/market.quantity.unit/000
+    description: Unit for quantities.
+  BidExpiry:
+    $ref: https://schemas.electricity.works/formats/utc.iso8601.millis
+    description: 'NEW in /001: hard expiry timestamp; bids must clear before this instant or be rejected.'
+  BidNotes:
+    type: string
+    description: 'NEW in /001: optional free-text annotation, unstructured.'
+  TypeName:
+    const: bid
+  Version:
+    const: '001'
+required:
+- BidderAlias
+- MarketSlotName
+- PqPairs
+- PriceUnit
+- QuantityUnit
+- BidExpiry
+- TypeName
+- Version
+additionalProperties: false
+x-gridworks:
+  owner: gridworks-energy
+  axioms:
+  - number: 1
+    name: ExpiryAfterMarketSlotEnd
+    statement: BidExpiry SHALL be no later than the closing instant of MarketSlotName plus a tolerance window declared by the corresponding MarketType.

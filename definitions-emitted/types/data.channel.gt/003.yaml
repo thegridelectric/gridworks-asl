@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/data.channel.gt/003
+title: Data Channel (draft v003)
+type: object
+description: Adds RetentionWindowDays — channels become self-describing about their data-retention guarantees.
+properties:
+  Name:
+    $ref: https://schemas.electricity.works/formats/spaceheat.name
+    description: Channel name.
+  RetentionWindowDays:
+    type: int
+    description: 'NEW in /003: how many days of samples this channel commits to keeping.'
+  TypeName:
+    const: data.channel.gt
+  Version:
+    const: '003'
+required:
+- Name
+- RetentionWindowDays
+- TypeName
+- Version
+additionalProperties: false
+x-gridworks:
+  owner: gridworks-energy

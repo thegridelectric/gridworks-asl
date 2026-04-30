@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/enums/gw1.unit/002
+title: GridWorks Unit (draft v002)
+type: string
+description: Adds KiloWattHours and MegaWatts to the canonical unit set.
+enum:
+- Unitless
+- W
+- Wh
+- Celsius
+- Gpm
+- KiloWattHours
+- MegaWatts
+x-gridworks:
+  owner: gridworks-energy
+  version: '002'
+  value_descriptions:
+    Unitless: Dimensionless quantity.
+    W: Watts.
+    Wh: Watt-hours.
+    Celsius: Degrees Celsius.
+    Gpm: Gallons per minute.
+    KiloWattHours: 'NEW in /002: kilowatt-hours, for accumulated energy reporting.'
+    MegaWatts: 'NEW in /002: megawatts, for utility-scale power.'

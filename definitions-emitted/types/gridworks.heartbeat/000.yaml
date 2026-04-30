@@ -1,0 +1,32 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/gridworks.heartbeat/000
+title: Gridworks Heartbeat
+type: object
+description: Periodic liveness signal carrying observed clock skew and queue-depth metrics.
+properties:
+  FromGNodeAlias:
+    $ref: https://schemas.electricity.works/formats/left.right.dot
+    description: Sender's canonical alias.
+  HeartbeatTimestamp:
+    $ref: https://schemas.electricity.works/formats/utc.iso8601.millis
+    description: Wall-clock at signal emission.
+  ObservedSkewMs:
+    type: int
+    description: Observed offset vs upstream NTP, in ms.
+  QueueDepth:
+    type: int
+    description: Outbound queue depth at emission.
+  TypeName:
+    const: gridworks.heartbeat
+  Version:
+    const: '000'
+required:
+- FromGNodeAlias
+- HeartbeatTimestamp
+- ObservedSkewMs
+- QueueDepth
+- TypeName
+- Version
+additionalProperties: false
+x-gridworks:
+  owner: smoothstone-computing

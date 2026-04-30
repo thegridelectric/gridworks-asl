@@ -8,8 +8,14 @@ description: 'Event wrapper for a report payload with message tracking metadata.
 properties:
   MessageId:
     $ref: https://schemas.electricity.works/formats/uuid4.str
+  EventName:
+    type: string
+    description: Short descriptive name.
   TimeCreatedMs:
     $ref: https://schemas.electricity.works/formats/utc.milliseconds
+  Severity:
+    $ref: https://schemas.electricity.works/enums/fis.authorization.decision/000
+    description: 'NEW in /002: severity from a controlled vocabulary.'
   Src:
     $ref: https://schemas.electricity.works/formats/left.right.dot
   Report:
@@ -21,7 +27,9 @@ properties:
     default: '002'
 required:
 - MessageId
+- EventName
 - TimeCreatedMs
+- Severity
 - Src
 - Report
 - TypeName

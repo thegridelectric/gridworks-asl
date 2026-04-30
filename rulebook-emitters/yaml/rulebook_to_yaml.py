@@ -505,6 +505,28 @@ def _write_yaml(path: Path, doc: Any) -> None:
         )
 
 
+def handle(inputs: dict[str, str], params: list[str]) -> dict[str, str]:
+    """Effortless tool entry point — used by effortless-tools/server.py.
+
+    Inputs: {relative_path: text} — picks the first .json as the rulebook.
+    Returns: {relative_path: text} — every emitted YAML file.
+    """
+    import tempfile
+
+    rulebook_text = next((v for k, v in inputs.items() if k.lower().endswith(".json")), None)
+    if rulebook_text is None:
+        if len(inputs) == 1:
+            rulebook_text = next(iter(inputs.values()))
+        else:
+            raise ValueError(f"no .json input found in {list(inputs)}")
+
+    rulebook = json.loads(rulebook_text)
+    with tempfile.TemporaryDirectory() as tmp:
+        out = Path(tmp)
+        emit(rulebook, out)
+        return {str(p.relative_to(out)): p.read_text() for p in out.rglob("*") if p.is_file()}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)

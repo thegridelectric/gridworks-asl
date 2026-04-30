@@ -1,0 +1,14 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/formats/microera.feed.tag
+title: MicroEra feed tag
+description: Tag identifying a MicroEra data feed. Lowercase letters, digits, hyphens; up to 32 characters.
+type: string
+pattern: ^[a-z0-9-]{3,32}$
+minLength: 3
+maxLength: 32
+examples:
+- boston-grid-east
+counterexamples:
+- Boston-Grid-East
+x-gridworks:
+  owner: microerapower

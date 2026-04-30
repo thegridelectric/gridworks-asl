@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/report.event/004
+title: Report Event (draft v004)
+type: object
+description: Adds Severity, an enumerated severity classification. Forks from /003 (current leaf).
+properties:
+  EventName:
+    type: string
+    description: Short descriptive name.
+  Severity:
+    $ref: https://schemas.electricity.works/enums/fis.authorization.decision/000
+    description: 'NEW in /002: severity from a controlled vocabulary.'
+  TypeName:
+    const: report.event
+  Version:
+    const: '004'
+required:
+- EventName
+- Severity
+- TypeName
+- Version
+additionalProperties: false
+x-gridworks:
+  owner: gridworks-energy

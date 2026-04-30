@@ -1,0 +1,19 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/enums/defauw.action/000
+title: DeFauw Action
+type: string
+description: Initial release.
+enum:
+- Hold
+- Advance
+- Retreat
+- Reset
+default: Hold
+x-gridworks:
+  owner: thomas-defauw
+  version: '000'
+  value_descriptions:
+    Hold: Take no action.
+    Advance: Advance to the next signal.
+    Retreat: Step back one signal.
+    Reset: Return to initial state.

@@ -1,0 +1,16 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/enums/relay.closed.or.open/001
+title: Relay closed-or-open (draft v001 — Word being retired)
+type: string
+description: Draft addition of Unknown, but the Word itself is being retired in favor of relay.open.or.closed. Demonstrates that drafts can exist on retired Words (their history is still legible).
+enum:
+- Closed
+- Open
+- Unknown
+x-gridworks:
+  owner: gridworks-energy
+  version: '001'
+  value_descriptions:
+    Closed: Relay is closed (current flowing).
+    Open: Relay is open (no current).
+    Unknown: Relay state is indeterminate.

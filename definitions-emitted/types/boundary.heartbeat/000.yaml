@@ -1,0 +1,28 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://schemas.electricity.works/types/boundary.heartbeat/000
+title: Boundary Heartbeat
+type: object
+description: Periodic boundary liveness probe with monotonic sequence number.
+properties:
+  PeerAlias:
+    $ref: https://schemas.electricity.works/formats/left.right.dot
+    description: The peer org's alias on the other side of the boundary.
+  Sequence:
+    type: int
+    description: Monotonically increasing sequence number.
+  EmittedAt:
+    $ref: https://schemas.electricity.works/formats/utc.iso8601.millis
+    description: When the heartbeat left the sender.
+  TypeName:
+    const: boundary.heartbeat
+  Version:
+    const: '000'
+required:
+- PeerAlias
+- Sequence
+- EmittedAt
+- TypeName
+- Version
+additionalProperties: false
+x-gridworks:
+  owner: joe-strommen
