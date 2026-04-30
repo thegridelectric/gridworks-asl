@@ -21,3 +21,9 @@ effortless.env
 
 # start.sh runtime artifacts
 .logs/
+
+# App-level secrets (per-process .env, magic-links tenant record).
+# Tracked example/config lives in .env.example next to each .env.
+app/**/.env
+.env
+.secrets/
