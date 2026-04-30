@@ -14441,7 +14441,22 @@
         "Description": "Populated only if the projection isn't a flat lookup (escape hatch)."
       }
     ],
-    "data": []
+    "data": [
+      {
+        "Name": "Gw1UnitQuantityProjection",
+        "Description": "Sema: https://schemas.electricity.works/types/gw1.unit.quantity.projection/000",
+        "FromEnumVersion": null,
+        "ToEnumVersion": null,
+        "RawScript": null
+      },
+      {
+        "Name": "SpaceheatTelemetryQuantityProjection",
+        "Description": "Sema: https://schemas.electricity.works/types/spaceheat.telemetry.quantity.projection/000",
+        "FromEnumVersion": null,
+        "ToEnumVersion": null,
+        "RawScript": null
+      }
+    ]
   },
   "ProjectionMappings": {
     "Description": "Per-symbol mappings for flat-lookup Projections. Empty when the parent Projection uses RawScript.",
@@ -14484,7 +14499,206 @@
         "Description": "Optional per-mapping description."
       }
     ],
-    "data": []
+    "data": [
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "Unknown",
+        "ToSymbol": "Unknown",
+        "Description": null
+      },
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "Unitless",
+        "ToSymbol": "Unitless",
+        "Description": null
+      },
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "FahrenheitX100",
+        "ToSymbol": "Temperature",
+        "Description": null
+      },
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "Watts",
+        "ToSymbol": "Power",
+        "Description": null
+      },
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "WattHours",
+        "ToSymbol": "Energy",
+        "Description": null
+      },
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "Gallons",
+        "ToSymbol": "Volume",
+        "Description": null
+      },
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "GpmX100",
+        "ToSymbol": "FlowRate",
+        "Description": null
+      },
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "Seconds",
+        "ToSymbol": "Time",
+        "Description": null
+      },
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "SecondsX10",
+        "ToSymbol": "Time",
+        "Description": null
+      },
+      {
+        "Projection": "Gw1UnitQuantityProjection",
+        "FromSymbol": "Milliseconds",
+        "ToSymbol": "Time",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "Unknown",
+        "ToSymbol": "Unknown",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "PowerW",
+        "ToSymbol": "Power",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "WattHours",
+        "ToSymbol": "Energy",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "MilliWattHours",
+        "ToSymbol": "Energy",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "WaterTempCTimes1000",
+        "ToSymbol": "Temperature",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "WaterTempFTimes1000",
+        "ToSymbol": "Temperature",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "AirTempCTimes1000",
+        "ToSymbol": "Temperature",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "AirTempFTimes1000",
+        "ToSymbol": "Temperature",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "CelsiusTimes100",
+        "ToSymbol": "Temperature",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "GpmTimes100",
+        "ToSymbol": "FlowRate",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "GallonsTimes100",
+        "ToSymbol": "Volume",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "VoltageRmsMilliVolts",
+        "ToSymbol": "Voltage",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "VoltsTimesTen",
+        "ToSymbol": "Voltage",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "VoltsTimes100",
+        "ToSymbol": "Voltage",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "MicroVolts",
+        "ToSymbol": "Voltage",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "CurrentRmsMicroAmps",
+        "ToSymbol": "Current",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "HzTimes100",
+        "ToSymbol": "Frequency",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "MicroHz",
+        "ToSymbol": "Frequency",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "RelayState",
+        "ToSymbol": "Unitless",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "ThermostatState",
+        "ToSymbol": "Unitless",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "StorageLayer",
+        "ToSymbol": "Unitless",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "BinaryState",
+        "ToSymbol": "Unitless",
+        "Description": null
+      },
+      {
+        "Projection": "SpaceheatTelemetryQuantityProjection",
+        "FromSymbol": "PercentKeep",
+        "ToSymbol": "Percent",
+        "Description": null
+      }
+    ]
   },
   "TypeUpgrades": {
     "Description": "One row per ordered version pair (N, N+1) for a given type. Mirrors src/sema/runtime/types/old_versions/<type>_<NNN>.py.upgrade() methods.",
@@ -14528,7 +14742,128 @@
         "Description": "Whole-method escape hatch when no clean op decomposition is possible. Prefer per-op RawScript on TypeUpgradeOps."
       }
     ],
-    "data": []
+    "data": [
+      {
+        "FromTypeVersion": "data.channel.gt/001",
+        "ToTypeVersion": "data.channel.gt/002",
+        "Description": "001 -> 002:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "derived.channel.gt/000",
+        "ToTypeVersion": "derived.channel.gt/001",
+        "Description": "000 -> 001: add InputChannelNames, EmissionMethod, and Parameters.",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "derived.channel.gt/001",
+        "ToTypeVersion": "derived.channel.gt/002",
+        "Description": "001 -> 002:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "fsm.atomic.report/000",
+        "ToTypeVersion": "fsm.atomic.report/001",
+        "Description": "000 -> 001:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "fsm.full.report/000",
+        "ToTypeVersion": "fsm.full.report/001",
+        "Description": "000 -> 001: AtomicList: fsm.atomic.report:000 -> 001",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "ha1.params/004",
+        "ToTypeVersion": "ha1.params/005",
+        "Description": "004 -> 005:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "ha1.params/005",
+        "ToTypeVersion": "ha1.params/006",
+        "Description": "005 -> 006:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "i2c.multichannel.dt.relay.component.gt/002",
+        "ToTypeVersion": "i2c.multichannel.dt.relay.component.gt/003",
+        "Description": "002 -> 003: Add I2cBus",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "i2c.multichannel.dt.relay.component.gt/003",
+        "ToTypeVersion": "i2c.multichannel.dt.relay.component.gt/004",
+        "Description": "003 -> 004: ConfigList[]: relay.actor.config:002 -> 003",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "layout.lite/007",
+        "ToTypeVersion": "layout.lite/008",
+        "Description": "007 -> 008:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "layout.lite/008",
+        "ToTypeVersion": "layout.lite/009",
+        "Description": "008 -> 009:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "layout.lite/009",
+        "ToTypeVersion": "layout.lite/010",
+        "Description": "009 -> 010:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "layout.lite/010",
+        "ToTypeVersion": "layout.lite/011",
+        "Description": "010 -> 011:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "layout.lite/011",
+        "ToTypeVersion": "layout.lite/012",
+        "Description": "011 -> 012:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "layout.lite/012",
+        "ToTypeVersion": "layout.lite/013",
+        "Description": "012 -> 013: I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "relay.actor.config/002",
+        "ToTypeVersion": "relay.actor.config/003",
+        "Description": "002 -> 003 Require AsyncCaptureDelta when AsyncCapture is true",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "report/002",
+        "ToTypeVersion": "report/003",
+        "Description": "002 -> 003: FsmReportList[]: fsm.full.report:000|001 -> 001",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "report.event/002",
+        "ToTypeVersion": "report.event/003",
+        "Description": "002 -> 003: Report: report:002 -> 003",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "spaceheat.node.gt/200",
+        "ToTypeVersion": "spaceheat.node.gt/300",
+        "Description": "200 -> 300:",
+        "RawScript": null
+      },
+      {
+        "FromTypeVersion": "spaceheat.node.gt/300",
+        "ToTypeVersion": "spaceheat.node.gt/301",
+        "Description": "300 -> 301:",
+        "RawScript": null
+      }
+    ]
   },
   "TypeUpgradeOps": {
     "Description": "Atomic operations within a TypeUpgrade. Most upgrades decompose into 1-4 ops. OpKind controls semantics (vocabulary: AddOptional, AddWithDefault, Remove, RequireToOptional, OptionalToRequire, EnumVersionBump, CoerceToEnum, UpgradeChild, UpgradeChildIf, UpgradeListItems, UpgradeListItemsIf, AddProjected, Custom).",
@@ -14622,7 +14957,333 @@
         "Description": "Optional op-level description."
       }
     ],
-    "data": []
+    "data": [
+      {
+        "TypeUpgrade": "data.channel.gt/001 -> data.channel.gt/002",
+        "Idx": 0,
+        "OpKind": "AddProjected",
+        "FieldName": "Quantity",
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": "SpaceheatTelemetryQuantityProjection",
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "data.channel.gt/001 -> data.channel.gt/002",
+        "Idx": 1,
+        "OpKind": "Custom",
+        "FieldName": null,
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": "upgraded_telemetry_name = SpaceheatTelemetryName[self.telemetry_name.name]\ndata['telemetry_name'] = upgraded_telemetry_name",
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "derived.channel.gt/000 -> derived.channel.gt/001",
+        "Idx": 0,
+        "OpKind": "AddWithDefault",
+        "FieldName": "Parameters",
+        "LiteralValue": "null",
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "derived.channel.gt/000 -> derived.channel.gt/001",
+        "Idx": 1,
+        "OpKind": "Custom",
+        "FieldName": null,
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": "data['input_channel_names'] = []\ndata['emission_method'] = Gw1EmissionMethod.OnTrigger",
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "derived.channel.gt/001 -> derived.channel.gt/002",
+        "Idx": 0,
+        "OpKind": "Custom",
+        "FieldName": null,
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": "if self.output_unit is None:\n    data['output_unit'] = 'Unknown'\n    data['output_quantity'] = Gw1Quantity.Unknown\nelse:\n    data['output_unit'] = self.output_unit.value\n    data['output_quantity'] = Gw1UnitQuantityProjection.project(Gw1Unit001(self.output_unit.value))",
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "fsm.atomic.report/000 -> fsm.atomic.report/001",
+        "Idx": 0,
+        "OpKind": "Remove",
+        "FieldName": "action_type",
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "fsm.atomic.report/000 -> fsm.atomic.report/001",
+        "Idx": 1,
+        "OpKind": "Custom",
+        "FieldName": null,
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": "if self.report_type == FsmReportType.Action and self.action is not None:\n    if self.action_type != 'RelayPinSet':\n        raise ValueError(\"FsmAtomicReport000.upgrade() only supports ActionType 'RelayPinSet'.\")\n    data['action'] = FsmAtomicReportSimpleAction(value=RelayEnergizationState(self.action))",
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "fsm.full.report/000 -> fsm.full.report/001",
+        "Idx": 0,
+        "OpKind": "UpgradeListItems",
+        "FieldName": "AtomicList",
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "ha1.params/005 -> ha1.params/006",
+        "Idx": 0,
+        "OpKind": "AddWithDefault",
+        "FieldName": "HpTurnOnMinutes",
+        "LiteralValue": "12",
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "i2c.multichannel.dt.relay.component.gt/002 -> i2c.multichannel.dt.relay.component.gt/003",
+        "Idx": 0,
+        "OpKind": "AddWithDefault",
+        "FieldName": "I2cBus",
+        "LiteralValue": "\"default\"",
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "i2c.multichannel.dt.relay.component.gt/003 -> i2c.multichannel.dt.relay.component.gt/004",
+        "Idx": 0,
+        "OpKind": "Custom",
+        "FieldName": null,
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": "upgraded_configs = []\nfor cfg in self.config_list:\n    if isinstance(cfg, RelayActorConfig002):\n        upgraded_configs.append(cfg.upgrade())\n    else:\n        upgraded_configs.append(cfg)\ndata['config_list'] = upgraded_configs",
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/007 -> layout.lite/008",
+        "Idx": 0,
+        "OpKind": "AddWithDefault",
+        "FieldName": "SystemMode",
+        "LiteralValue": "\"Heating\"",
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/007 -> layout.lite/008",
+        "Idx": 1,
+        "OpKind": "AddWithDefault",
+        "FieldName": "SeasonalStorageMode",
+        "LiteralValue": "\"AllTanks\"",
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/008 -> layout.lite/009",
+        "Idx": 0,
+        "OpKind": "AddWithDefault",
+        "FieldName": "BufferShortCycling",
+        "LiteralValue": "false",
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/009 -> layout.lite/010",
+        "Idx": 0,
+        "OpKind": "UpgradeChildIf",
+        "FieldName": "Ha1Params",
+        "LiteralValue": null,
+        "FromVersion": "004",
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/010 -> layout.lite/011",
+        "Idx": 0,
+        "OpKind": "UpgradeChild",
+        "FieldName": "Ha1Params",
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/011 -> layout.lite/012",
+        "Idx": 0,
+        "OpKind": "UpgradeListItemsIf",
+        "FieldName": "DerivedChannels",
+        "LiteralValue": null,
+        "FromVersion": "000",
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/011 -> layout.lite/012",
+        "Idx": 1,
+        "OpKind": "UpgradeListItems",
+        "FieldName": "DataChannels",
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/011 -> layout.lite/012",
+        "Idx": 2,
+        "OpKind": "UpgradeListItemsIf",
+        "FieldName": "ShNodes",
+        "LiteralValue": null,
+        "FromVersion": "300",
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/011 -> layout.lite/012",
+        "Idx": 3,
+        "OpKind": "Custom",
+        "FieldName": null,
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": "if self.i2c_relay_component is not None:\n    data['i2c_relay_component'] = self.i2c_relay_component.upgrade()",
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "layout.lite/012 -> layout.lite/013",
+        "Idx": 0,
+        "OpKind": "Custom",
+        "FieldName": null,
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": "if self.i2c_relay_component is not None:\n    upgraded_component = self.i2c_relay_component.upgrade()\n    if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt004):\n        raise TypeError('Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt004')\n    data['i2c_relay_component'] = upgraded_component",
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "relay.actor.config/002 -> relay.actor.config/003",
+        "Idx": 0,
+        "OpKind": "Custom",
+        "FieldName": null,
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": "if self.async_capture:\n    if not self.async_capture_delta:\n        data['async_capture_delta'] = 1",
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "report/002 -> report/003",
+        "Idx": 0,
+        "OpKind": "UpgradeListItemsIf",
+        "FieldName": "FsmReportList",
+        "LiteralValue": null,
+        "FromVersion": "000",
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "report.event/002 -> report.event/003",
+        "Idx": 0,
+        "OpKind": "UpgradeChild",
+        "FieldName": "Report",
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": null,
+        "Description": null
+      },
+      {
+        "TypeUpgrade": "spaceheat.node.gt/200 -> spaceheat.node.gt/300",
+        "Idx": 0,
+        "OpKind": "Custom",
+        "FieldName": null,
+        "LiteralValue": null,
+        "FromVersion": null,
+        "ToVersion": null,
+        "EnumVersionRef": null,
+        "ProjectionRef": null,
+        "RawScript": "data['actor_class'] = Gw1ActorClass009(data['actor_class']).value",
+        "Description": null
+      }
+    ]
   },
   "EnumUpgrades": {
     "Description": "Mirror of TypeUpgrades for enum value renames or splits when name preservation breaks. Today's 5 multi-version enums all preserved names, so this table starts empty.",
@@ -14777,7 +15438,13 @@
         "OneOfInArrayItemsDeferredToRawJson: layout.lite/013.TankModuleComponents \u2014 oneOf in items parked in RawJson",
         "OneOfInArrayItemsDeferredToRawJson: report/002.FsmReportList \u2014 oneOf in items parked in RawJson"
       ],
-      "migration_warning_count": 18
+      "migration_warning_count": 18,
+      "module_2_row_counts": {
+        "Projections": 2,
+        "ProjectionMappings": 33,
+        "TypeUpgrades": 20,
+        "TypeUpgradeOps": 25
+      }
     }
   }
 }
