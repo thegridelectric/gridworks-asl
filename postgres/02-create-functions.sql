@@ -1052,6 +1052,36 @@ RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(from_type_version, '') FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id), ' -> ', (SELECT NULLIF(to_type_version, '') FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id)))::text;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_upgrades_op_count
+-- Field: TypeUpgrades.OpCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_op_count(p_type_upgrades_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_upgrade_ops WHERE type_upgrade = calc_type_upgrades_name(p_type_upgrades_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrades_is_scripted
+-- Field: TypeUpgrades.IsScripted
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_is_scripted(p_type_upgrades_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrades_is_decomposed
+-- Field: TypeUpgrades.IsDecomposed
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrades_is_decomposed(p_type_upgrades_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM type_upgrades WHERE type_upgrades_id = p_type_upgrades_id) IS NOT NULL THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- get_type_upgrades_description
 -- Helper function: Get Description from TypeUpgrades by TypeUpgradesId
 -- Used for join-free cross-table references in aggregations
@@ -1080,6 +1110,36 @@ RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(type_upgrade, '') FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id), '#', (SELECT idx FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id)))::text;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_upgrade_ops_is_custom
+-- Field: TypeUpgradeOps.IsCustom
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrade_ops_is_custom(p_type_upgrade_ops_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(op_kind, '') FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id) = 'Custom' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrade_ops_has_raw_script
+-- Field: TypeUpgradeOps.HasRawScript
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrade_ops_has_raw_script(p_type_upgrade_ops_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_upgrade_ops_reference_kind
+-- Field: TypeUpgradeOps.ReferenceKind
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_upgrade_ops_reference_kind(p_type_upgrade_ops_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id) IS NOT NULL THEN ('enum')::text ELSE (CASE WHEN (SELECT NULLIF(projection_ref, '') FROM type_upgrade_ops WHERE type_upgrade_ops_id = p_type_upgrade_ops_id) IS NOT NULL THEN ('projection')::text ELSE ('none')::text END)::text END)::text;
+$$ LANGUAGE sql STABLE;
+
 -- calc_enum_upgrades_name
 -- Field: EnumUpgrades.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -1088,6 +1148,36 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_enum_upgrades_name(p_enum_upgrades_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(from_enum_version, '') FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id), ' -> ', (SELECT NULLIF(to_enum_version, '') FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrades_mapping_count
+-- Field: EnumUpgrades.MappingCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_mapping_count(p_enum_upgrades_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enum_upgrade_mappings WHERE enum_upgrade = calc_enum_upgrades_name(p_enum_upgrades_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrades_is_scripted
+-- Field: EnumUpgrades.IsScripted
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_is_scripted(p_enum_upgrades_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrades_is_decomposed
+-- Field: EnumUpgrades.IsDecomposed
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrades_is_decomposed(p_enum_upgrades_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(raw_script, '') FROM enum_upgrades WHERE enum_upgrades_id = p_enum_upgrades_id) IS NOT NULL THEN FALSE ELSE TRUE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- get_enum_upgrades_description
@@ -1116,6 +1206,26 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_enum_upgrade_mappings_name(p_enum_upgrade_mappings_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(enum_upgrade, '') FROM enum_upgrade_mappings WHERE enum_upgrade_mappings_id = p_enum_upgrade_mappings_id), ':', (SELECT NULLIF(from_symbol, '') FROM enum_upgrade_mappings WHERE enum_upgrade_mappings_id = p_enum_upgrade_mappings_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrade_mappings_is_removal
+-- Field: EnumUpgradeMappings.IsRemoval
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrade_mappings_is_removal(p_enum_upgrade_mappings_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(to_symbol, '') FROM enum_upgrade_mappings WHERE enum_upgrade_mappings_id = p_enum_upgrade_mappings_id) IS NOT NULL THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_upgrade_mappings_is_identity
+-- Field: EnumUpgradeMappings.IsIdentity
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_upgrade_mappings_is_identity(p_enum_upgrade_mappings_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(from_symbol, '') FROM enum_upgrade_mappings WHERE enum_upgrade_mappings_id = p_enum_upgrade_mappings_id) = (SELECT NULLIF(to_symbol, '') FROM enum_upgrade_mappings WHERE enum_upgrade_mappings_id = p_enum_upgrade_mappings_id) THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- ============================================================================

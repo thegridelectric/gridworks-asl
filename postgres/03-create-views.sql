@@ -315,7 +315,10 @@ SELECT
   t.from_type_version,                                                          -- Source TypeVersion.
   t.to_type_version,                                                            -- Target TypeVersion.
   t.description,                                                                -- Description (typically the docstring summary from the .py method).
-  t.raw_script                                                                  -- Whole-method escape hatch when no clean op decomposition is possible. Prefer per-op RawScript on TypeUpgradeOps.
+  t.raw_script,                                                                 -- Whole-method escape hatch when no clean op decomposition is possible. Prefer per-op RawScript on TypeUpgradeOps.
+  calc_type_upgrades_op_count(t.type_upgrades_id) AS op_count,                  -- Number of TypeUpgradeOps that compose this upgrade.
+  calc_type_upgrades_is_scripted(t.type_upgrades_id) AS is_scripted,            -- True when RawScript is set — the upgrade is a whole-method escape hatch instead of a clean op decomposition.
+  calc_type_upgrades_is_decomposed(t.type_upgrades_id) AS is_decomposed         -- True when RawScript is empty — the upgrade is composed of structured TypeUpgradeOps. The desired form.
 FROM type_upgrades t;
 
 -- ----------------------------------------------------------------------------
@@ -336,7 +339,10 @@ SELECT
   t.enum_version_ref,                                                           -- FK for enum-related ops (EnumVersionBump, CoerceToEnum).
   t.projection_ref,                                                             -- FK for AddProjected ops.
   t.raw_script,                                                                 -- Per-op Python escape hatch for Custom ops. Snippet runs in scope of `self` and `data` dict.
-  t.description                                                                 -- Optional op-level description.
+  t.description,                                                                -- Optional op-level description.
+  calc_type_upgrade_ops_is_custom(t.type_upgrade_ops_id) AS is_custom,          -- True when OpKind is 'Custom' — falls back to per-op RawScript, the escape hatch.
+  calc_type_upgrade_ops_has_raw_script(t.type_upgrade_ops_id) AS has_raw_script,-- True when this op carries an inline RawScript snippet (typically only Custom ops).
+  calc_type_upgrade_ops_reference_kind(t.type_upgrade_ops_id) AS reference_kind -- Which cross-table reference this op carries: 'enum' (EnumVersionRef), 'projection' (ProjectionRef), or 'none'.
 FROM type_upgrade_ops t;
 
 -- ----------------------------------------------------------------------------
@@ -350,7 +356,10 @@ SELECT
   t.from_enum_version,                                                          -- Source EnumVersion.
   t.to_enum_version,                                                            -- Target EnumVersion.
   t.description,                                                                -- Description of the enum upgrade.
-  t.raw_script                                                                  -- Whole-upgrade escape hatch.
+  t.raw_script,                                                                 -- Whole-upgrade escape hatch.
+  calc_enum_upgrades_mapping_count(t.enum_upgrades_id) AS mapping_count,        -- Number of EnumUpgradeMappings that compose this upgrade.
+  calc_enum_upgrades_is_scripted(t.enum_upgrades_id) AS is_scripted,            -- True when RawScript is set (whole-upgrade escape hatch).
+  calc_enum_upgrades_is_decomposed(t.enum_upgrades_id) AS is_decomposed         -- True when RawScript is empty — upgrade is composed of structured mappings.
 FROM enum_upgrades t;
 
 -- ----------------------------------------------------------------------------
@@ -364,6 +373,8 @@ SELECT
   t.enum_upgrade,                                                               -- Foreign key to the parent EnumUpgrade.
   t.from_symbol,                                                                -- Source enum symbol.
   t.to_symbol,                                                                  -- Target enum symbol (or empty/null when symbol is removed).
-  t.description                                                                 -- Optional per-mapping description.
+  t.description,                                                                -- Optional per-mapping description.
+  calc_enum_upgrade_mappings_is_removal(t.enum_upgrade_mappings_id) AS is_removal,-- True when ToSymbol is empty/null — the source symbol is dropped in this upgrade.
+  calc_enum_upgrade_mappings_is_identity(t.enum_upgrade_mappings_id) AS is_identity-- True when FromSymbol equals ToSymbol — the symbol passes through unchanged.
 FROM enum_upgrade_mappings t;
 

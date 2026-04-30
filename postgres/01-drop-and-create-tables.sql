@@ -13,7 +13,12 @@ SET timezone = 'UTC';
 -- ============================================================================
 
 -- Drop functions (order: first, because views depend on them)
+DROP FUNCTION IF EXISTS calc_enum_upgrade_mappings_is_identity(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_upgrade_mappings_is_removal(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_upgrade_mappings_name(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_upgrades_is_decomposed(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_upgrades_is_scripted(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_upgrades_mapping_count(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_upgrades_name(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_values_has_description(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_values_name(TEXT) CASCADE;
@@ -58,8 +63,14 @@ DROP FUNCTION IF EXISTS calc_type_helper_attributes_ref_kind(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_helpers_attribute_count(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_helpers_is_closed(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_helpers_required_attribute_count(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_type_upgrade_ops_has_raw_script(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_type_upgrade_ops_is_custom(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_upgrade_ops_name(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_type_upgrade_ops_reference_kind(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_type_upgrades_is_decomposed(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_type_upgrades_is_scripted(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_upgrades_name(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_type_upgrades_op_count(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_versions_attribute_count(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_versions_axiom_count(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_type_versions_example_count(TEXT) CASCADE;
