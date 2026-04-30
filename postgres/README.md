@@ -2,19 +2,38 @@
 
 **Schema:** `public`
 **Database:** `demo`
-**Timestamp:** 2026-04-30 04:50:24 UTC
+**Timestamp:** 2026-04-30 05:32:21 UTC
 
 ## Parsing Rulebook
 
-Found **1** tables in rulebook
+Found **20** tables in rulebook
 
-  - **Owners** (9 fields, 0 records)
+  - **Owners** (9 fields, 1 records)
+  - **Formats** (11 fields, 0 records)
+  - **FormatExamples** (6 fields, 0 records)
+  - **Enums** (4 fields, 0 records)
+  - **EnumVersions** (9 fields, 0 records)
+  - **EnumValues** (5 fields, 0 records)
+  - **Types** (8 fields, 0 records)
+  - **TypeVersions** (10 fields, 0 records)
+  - **TypeAttributes** (13 fields, 0 records)
+  - **TypeExamples** (4 fields, 0 records)
+  - **TypeAxioms** (5 fields, 0 records)
+  - **TypeHelpers** (6 fields, 0 records)
+  - **TypeHelperAttributes** (13 fields, 0 records)
+  - **Projections** (5 fields, 0 records)
+  - **ProjectionMappings** (5 fields, 0 records)
+  - **TypeUpgrades** (5 fields, 0 records)
+  - **TypeUpgradeOps** (12 fields, 0 records)
+  - **EnumUpgrades** (5 fields, 0 records)
+  - **EnumUpgradeMappings** (5 fields, 0 records)
+  - **ERBVersionsTest** (6 fields, 2 records)
 
-Generated **1** table definitions with **9** raw fields
+Generated **20** table definitions with **102** raw fields
 Generated **0** calculation functions
-Generated **1** views
-Enabled RLS on **1** tables
-Generated insert statements for **0** records
+Generated **20** views
+Enabled RLS on **20** tables
+Generated insert statements for **3** records
 ## Script Generation Complete
 
 Generated files:
