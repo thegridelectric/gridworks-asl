@@ -608,6 +608,26 @@ RETURNS BOOLEAN AS $$
   SELECT (SELECT is_component FROM types WHERE types_id = p_types_id);
 $$ LANGUAGE sql STABLE;
 
+-- calc_types_is_retired
+-- Field: Types.IsRetired
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_types_is_retired(p_types_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(replaced_by, '') FROM types WHERE types_id = p_types_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_types_version_count
+-- Field: Types.VersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_types_version_count(p_types_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_versions WHERE type = (SELECT NULLIF(name, '') FROM types WHERE types_id = p_types_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_versions_name
 -- Field: TypeVersions.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -616,6 +636,76 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_versions_name(p_type_versions_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(type, '') FROM type_versions WHERE type_versions_id = p_type_versions_id), '/', (SELECT NULLIF(version, '') FROM type_versions WHERE type_versions_id = p_type_versions_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_is_active
+-- Field: TypeVersions.IsActive
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_is_active(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(status, '') FROM type_versions WHERE type_versions_id = p_type_versions_id) = 'active' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_is_deprecated
+-- Field: TypeVersions.IsDeprecated
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_is_deprecated(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(status, '') FROM type_versions WHERE type_versions_id = p_type_versions_id) = 'deprecated' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_is_closed
+-- Field: TypeVersions.IsClosed
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_is_closed(p_type_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN COALESCE((SELECT extra_allowed FROM type_versions WHERE type_versions_id = p_type_versions_id), FALSE) THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_attribute_count
+-- Field: TypeVersions.AttributeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_attribute_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_attributes WHERE type_version = calc_type_versions_name(p_type_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_required_attribute_count
+-- Field: TypeVersions.RequiredAttributeCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_required_attribute_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_attributes WHERE type_version = calc_type_versions_name(p_type_versions_id) AND is_required = TRUE))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_axiom_count
+-- Field: TypeVersions.AxiomCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_axiom_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_axioms WHERE type_version = calc_type_versions_name(p_type_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_example_count
+-- Field: TypeVersions.ExampleCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_example_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_examples WHERE type_version = calc_type_versions_name(p_type_versions_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
 -- get_type_versions_version
@@ -745,6 +835,36 @@ RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(type_version, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id), '.', (SELECT NULLIF(attribute_name, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id)))::text;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_attributes_is_optional
+-- Field: TypeAttributes.IsOptional
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_is_optional(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN COALESCE((SELECT is_required FROM type_attributes WHERE type_attributes_id = p_type_attributes_id), FALSE) THEN FALSE ELSE TRUE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_has_default
+-- Field: TypeAttributes.HasDefault
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_has_default(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF("default", '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_kind
+-- Field: TypeAttributes.RefKind
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_kind(p_type_attributes_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(format_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN ('format')::text ELSE (CASE WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN ('enum')::text ELSE (CASE WHEN (SELECT NULLIF(sub_type_version_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN ('subtype')::text ELSE (CASE WHEN (SELECT NULLIF(helper_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN ('helper')::text ELSE ('primitive')::text END)::text END)::text END)::text END)::text;
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_examples_name
 -- Field: TypeExamples.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -763,6 +883,16 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_axioms_name(p_type_axioms_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(type_version, '') FROM type_axioms WHERE type_axioms_id = p_type_axioms_id), '.axiom', (SELECT number FROM type_axioms WHERE type_axioms_id = p_type_axioms_id), '.', (SELECT NULLIF(axiom_name, '') FROM type_axioms WHERE type_axioms_id = p_type_axioms_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_axioms_has_statement
+-- Field: TypeAxioms.HasStatement
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_axioms_has_statement(p_type_axioms_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(statement, '') FROM type_axioms WHERE type_axioms_id = p_type_axioms_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_helper_attributes_name

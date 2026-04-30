@@ -144,7 +144,9 @@ SELECT
   t.python_class_name,                                                          -- Tier-2 placeholder: ODXML-derived Python class name (populated when ODXML data absorbs in).
   t.make_data_class,                                                            -- Tier-2 placeholder: ODXML invariant.
   t.is_cac,                                                                     -- Tier-2 placeholder: ODXML invariant (component access control marker).
-  t.is_component                                                                -- Tier-2 placeholder: ODXML invariant.
+  t.is_component,                                                               -- Tier-2 placeholder: ODXML invariant.
+  calc_types_is_retired(t.types_id) AS is_retired,                              -- True when this type has been replaced by another (ReplacedBy is set).
+  calc_types_version_count(t.types_id) AS version_count                         -- Number of TypeVersions for this type.
 FROM types t;
 
 -- ----------------------------------------------------------------------------
@@ -163,7 +165,14 @@ SELECT
   t.extra_allowed,                                                              -- From JSON-Schema additionalProperties (true=open, false=closed).
   t.status,                                                                     -- Lifecycle status.
   t.created,                                                                    -- Creation timestamp.
-  t.raw_json                                                                    -- Escape hatch: unmodeled top-level JSON-Schema fields (if/then/else, conditionals, etc.).
+  t.raw_json,                                                                   -- Escape hatch: unmodeled top-level JSON-Schema fields (if/then/else, conditionals, etc.).
+  calc_type_versions_is_active(t.type_versions_id) AS is_active,                -- True when Status is 'active'.
+  calc_type_versions_is_deprecated(t.type_versions_id) AS is_deprecated,        -- True when Status is 'deprecated'.
+  calc_type_versions_is_closed(t.type_versions_id) AS is_closed,                -- True when ExtraAllowed is FALSE (additionalProperties: false in JSON-Schema).
+  calc_type_versions_attribute_count(t.type_versions_id) AS attribute_count,    -- Number of TypeAttributes declared on this version.
+  calc_type_versions_required_attribute_count(t.type_versions_id) AS required_attribute_count,-- Number of TypeAttributes on this version where IsRequired=true.
+  calc_type_versions_axiom_count(t.type_versions_id) AS axiom_count,            -- Number of natural-language axioms declared on this version.
+  calc_type_versions_example_count(t.type_versions_id) AS example_count         -- Number of TypeExamples attached to this version.
 FROM type_versions t;
 
 -- ----------------------------------------------------------------------------
@@ -186,7 +195,10 @@ SELECT
   t.enum_version_ref,                                                           -- FK to an EnumVersion, when this attribute uses a $ref to /enums/X/NNN.
   t.sub_type_version_ref,                                                       -- FK to another TypeVersion, when this attribute uses a $ref to /types/X/NNN.
   t.helper_ref,                                                                 -- FK to a TypeHelper, when this attribute is an inline-nested object auto-promoted to a helper.
-  t.raw_json                                                                    -- Escape hatch: unmodeled JSON-Schema specifics, including oneOf bodies (v1 parking lot for n=1 cases).
+  t.raw_json,                                                                   -- Escape hatch: unmodeled JSON-Schema specifics, including oneOf bodies (v1 parking lot for n=1 cases).
+  calc_type_attributes_is_optional(t.type_attributes_id) AS is_optional,        -- True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.
+  calc_type_attributes_has_default(t.type_attributes_id) AS has_default,        -- True when a JSON-encoded Default value is present for this attribute.
+  calc_type_attributes_ref_kind(t.type_attributes_id) AS ref_kind               -- Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive' when only PrimitiveType is set.
 FROM type_attributes t;
 
 -- ----------------------------------------------------------------------------
@@ -213,7 +225,8 @@ SELECT
   t.type_version,                                                               -- Foreign key to the parent TypeVersion.
   t.number,                                                                     -- Axiom number from YAML.
   t.axiom_name,                                                                 -- Axiom name from YAML.
-  t.statement                                                                   -- Axiom statement (the natural-language invariant).
+  t.statement,                                                                  -- Axiom statement (the natural-language invariant).
+  calc_type_axioms_has_statement(t.type_axioms_id) AS has_statement             -- True when the axiom carries a non-empty Statement.
 FROM type_axioms t;
 
 -- ----------------------------------------------------------------------------
