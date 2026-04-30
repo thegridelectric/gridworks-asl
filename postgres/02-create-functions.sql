@@ -353,6 +353,56 @@ RETURNS TEXT AS $$
   SELECT (SELECT raw_json FROM enums WHERE enums_id = p_enums_id);
 $$ LANGUAGE sql STABLE;
 
+-- calc_enums_is_retired
+-- Field: Enums.IsRetired
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enums_is_retired(p_enums_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(replaced_by, '') FROM enums WHERE enums_id = p_enums_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enums_is_versioned
+-- Field: Enums.IsVersioned
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enums_is_versioned(p_enums_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(enum_type, '') FROM enums WHERE enums_id = p_enums_id) = 'versioned' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enums_is_literal
+-- Field: Enums.IsLiteral
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enums_is_literal(p_enums_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(enum_type, '') FROM enums WHERE enums_id = p_enums_id) = 'literal' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enums_is_integer_valued
+-- Field: Enums.IsIntegerValued
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enums_is_integer_valued(p_enums_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(value_type, '') FROM enums WHERE enums_id = p_enums_id) = 'integer' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enums_version_count
+-- Field: Enums.VersionCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enums_version_count(p_enums_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enum_versions WHERE enum = (SELECT NULLIF(name, '') FROM enums WHERE enums_id = p_enums_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
 -- calc_enum_versions_name
 -- Field: EnumVersions.Name
 -- Type: calculated | DataType: string | Returns: TEXT
@@ -361,6 +411,46 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_enum_versions_name(p_enum_versions_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(enum, '') FROM enum_versions WHERE enum_versions_id = p_enum_versions_id), '/', (SELECT NULLIF(version, '') FROM enum_versions WHERE enum_versions_id = p_enum_versions_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_is_active
+-- Field: EnumVersions.IsActive
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_is_active(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(status, '') FROM enum_versions WHERE enum_versions_id = p_enum_versions_id) = 'active' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_is_deprecated
+-- Field: EnumVersions.IsDeprecated
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_is_deprecated(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(status, '') FROM enum_versions WHERE enum_versions_id = p_enum_versions_id) = 'deprecated' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_has_default_symbol
+-- Field: EnumVersions.HasDefaultSymbol
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_has_default_symbol(p_enum_versions_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(default_symbol, '') FROM enum_versions WHERE enum_versions_id = p_enum_versions_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_versions_value_count
+-- Field: EnumVersions.ValueCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_enum_versions_value_count(p_enum_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM enum_values WHERE enum_version = calc_enum_versions_name(p_enum_versions_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
 -- get_enum_versions_version
@@ -443,6 +533,16 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_enum_values_name(p_enum_values_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(enum_version, '') FROM enum_values WHERE enum_values_id = p_enum_values_id), ':', (SELECT NULLIF(symbol, '') FROM enum_values WHERE enum_values_id = p_enum_values_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_enum_values_has_description
+-- Field: EnumValues.HasDescription
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_enum_values_has_description(p_enum_values_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(description, '') FROM enum_values WHERE enum_values_id = p_enum_values_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- get_types_name

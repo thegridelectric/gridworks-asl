@@ -83,7 +83,12 @@ SELECT
   t.value_type,                                                                 -- JSON Schema datatype of the enum's symbols. If present, SHALL be 'integer' and version YAML files SHALL have type: integer. If null, the enum SHALL be treated as string-valued.
   t.description,                                                                -- Name-level description (registry-level).
   t.replaced_by,                                                                -- Optional pointer to another Enum that retires this one. If non-null, this enum has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).
-  t.raw_json                                                                    -- Escape hatch: any unmodeled YAML keys (e.g., x-gridworks extended_description). JSON-encoded.
+  t.raw_json,                                                                   -- Escape hatch: any unmodeled YAML keys (e.g., x-gridworks extended_description). JSON-encoded.
+  calc_enums_is_retired(t.enums_id) AS is_retired,                              -- True when this enum has been replaced by another (ReplacedBy is set).
+  calc_enums_is_versioned(t.enums_id) AS is_versioned,                          -- True when EnumType is 'versioned' (additive-only multi-version enum).
+  calc_enums_is_literal(t.enums_id) AS is_literal,                              -- True when EnumType is 'literal' (single immutable version, frozen vocabulary).
+  calc_enums_is_integer_valued(t.enums_id) AS is_integer_valued,                -- True when ValueType is 'integer' (otherwise the enum's symbols are strings).
+  calc_enums_version_count(t.enums_id) AS version_count                         -- Number of EnumVersions for this enum.
 FROM enums t;
 
 -- ----------------------------------------------------------------------------
@@ -102,7 +107,11 @@ SELECT
   t.default_symbol,                                                             -- The default symbol value for this version.
   t.status,                                                                     -- Lifecycle status (e.g. 'active', 'deprecated').
   t.created,                                                                    -- Creation timestamp from registry.yaml.
-  t.raw_json                                                                    -- Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded.
+  t.raw_json,                                                                   -- Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded.
+  calc_enum_versions_is_active(t.enum_versions_id) AS is_active,                -- True when Status is 'active'.
+  calc_enum_versions_is_deprecated(t.enum_versions_id) AS is_deprecated,        -- True when Status is 'deprecated'.
+  calc_enum_versions_has_default_symbol(t.enum_versions_id) AS has_default_symbol,-- True when DefaultSymbol is set on this version.
+  calc_enum_versions_value_count(t.enum_versions_id) AS value_count             -- Number of EnumValues (symbols) declared in this version.
 FROM enum_versions t;
 
 -- ----------------------------------------------------------------------------
@@ -116,7 +125,8 @@ SELECT
   t.enum_version,                                                               -- Foreign key to the parent EnumVersion.
   t.symbol,                                                                     -- The literal symbol value, e.g. 'Power'.
   t.idx,                                                                        -- Preserves YAML ordering of symbols.
-  t.description                                                                 -- Per-symbol description from value_descriptions map.
+  t.description,                                                                -- Per-symbol description from value_descriptions map.
+  calc_enum_values_has_description(t.enum_values_id) AS has_description         -- True when a per-symbol Description is present.
 FROM enum_values t;
 
 -- ----------------------------------------------------------------------------

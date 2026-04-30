@@ -15,8 +15,18 @@ SET timezone = 'UTC';
 -- Drop functions (order: first, because views depend on them)
 DROP FUNCTION IF EXISTS calc_enum_upgrade_mappings_name(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_upgrades_name(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_values_has_description(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_values_name(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_versions_has_default_symbol(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_versions_is_active(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_versions_is_deprecated(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_enum_versions_name(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enum_versions_value_count(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enums_is_integer_valued(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enums_is_literal(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enums_is_retired(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enums_is_versioned(TEXT) CASCADE;
+DROP FUNCTION IF EXISTS calc_enums_version_count(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_format_examples_example_kind(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_format_examples_name(TEXT) CASCADE;
 DROP FUNCTION IF EXISTS calc_formats_counter_example_count(TEXT) CASCADE;
