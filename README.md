@@ -85,18 +85,23 @@ Example structure:
 ```
 repo/
   sema/
+    base.py
+    codec.py
+    property_format.py
+    enums/
+    types/
     definitions/
+      registry.yaml
+      formats/
+      enums/
+      types/
     indexes/
       dependency_closure.yaml
       reverse_dependencies.yaml
       lookup.yaml
       versions.yaml
-    types/
-    enums/
-    formats/
-    base.py
-    codec.py
-    property_format.py
+    tests/
+      test_property_format.py
 ```
 
 
@@ -134,7 +139,7 @@ Example output:
 ```
 Sema CLI
 Interface: textual
-Subcommands: reverse, seed, info
+Subcommands: reverse, snapshot, info
 ```
 
 ### Reverse Dependency Analysis
@@ -161,19 +166,60 @@ This is useful for:
 
 Sema generates snapshots from a small set of initial targets.
 
-A seed request defines the starting vocabulary:
+A seed request defines the starting vocabulary. Use
+[`template_seed_request.yaml`](template_seed_request.yaml) at the repository
+root as the starting template.
 
 ```yaml
 initial_targets:
-  - "analytics.channel.gt:000"
-  - "synced.readings.bundle:000"
-```
-From this, Sema tooling:
- - Computes the **transitive dependency closure**
- - Resolves all required formats, enums, and types
- - Produces a complete, self-contained snapshot
+  types:
+    synced.readings.bundle: {}
 
-The result is a sema/ directory containing all vocabulary required to interpret the selected types.
+    snapshot.spaceheat:
+      include_all_versions: true
+
+    layout.lite:
+      versions: ["011", "013"]
+
+  enums:
+    relay.energization.state:
+      versions: ["000"]
+```
+
+For each type or enum target:
+
+- `{}` selects the latest registry version
+- `include_all_versions: true` selects every registry-declared version
+- `versions: ["011", "013"]` selects explicit versions; intermediate type versions are added during expansion
+
+Build a snapshot in two steps:
+
+```bash
+uv run sema snapshot prepare template_seed_request.yaml
+uv run sema snapshot build --package-name gjk
+```
+
+The prepare step:
+
+- computes the **transitive dependency closure**
+- resolves all required formats, enums, and types
+- writes definitions under `output/sema/definitions`
+- writes restricted indexes under `output/sema/indexes`
+- writes `output/sema/indexes/seed_expanded.yaml`
+- creates `output/sema/indexes/local_names.yaml` if it does not already exist
+
+Edit `output/sema/indexes/local_names.yaml` between prepare and build to choose
+local Python class names for generated types and enums.
+
+The build step:
+
+- reads `output/sema/indexes/seed_expanded.yaml`
+- reads `output/sema/indexes/local_names.yaml`
+- writes the runtime snapshot under `output/sema`
+
+The generated files under `output/sema` are intended to be copied into the
+target repository under `src/<package-name>/sema`. The `--package-name` value is
+used in generated imports, for example `from gjk.sema.enums import ...`.
 
 
 ### Local Reasoning and Indexes
@@ -186,6 +232,8 @@ Each snapshot includes an `indexes/` directory containing precomputed dependency
 - `reverse_dependencies.yaml`
 - `lookup.yaml`
 - `versions.yaml`
+- `seed_expanded.yaml`
+- `local_names.yaml`
 
 These indexes enable tools to reason about the vocabulary efficiently without recomputing graph relationships.
 

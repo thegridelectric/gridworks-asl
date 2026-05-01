@@ -1,15 +1,18 @@
 # seed_request_template.yaml
 
-# List of root targets for closure expansion.
-# Each entry must be:
-#   - "<type_or_enum>:<version>"
-#   - "<format_name>" (for formats)
+# Root type and enum targets for closure expansion.
+# Empty options select only the latest version.
+# include_all_versions selects every registry-declared version.
+# versions selects explicit versions; intermediate type versions are added by expansion.
 
 initial_targets:
-  - "analytics.channel.gt:000"
-  - "layout.lite.013"
-  - "layout.lite:011"
-  - "report.event:003"
-  - "report.event:002"
-  - "snapshot.spaceheat:003"
-  - "synced.readings.bundle:000"
+  types:
+    analytics.channel.gt:
+      versions: ["000"]
+    layout.lite:
+      versions: ["011", "013"]
+    report.event:
+      versions: ["003"]
+    snapshot.spaceheat:
+      include_all_versions: true
+    synced.readings.bundle: {}

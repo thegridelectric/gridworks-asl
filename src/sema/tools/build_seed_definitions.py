@@ -9,14 +9,16 @@ from pathlib import Path
 
 import yaml
 
-
 ROOT = Path(__file__).resolve().parents[3]
 OUTPUT_DIR = Path(__file__).resolve().parents[3] / "output"
 DEFAULT_SEED = OUTPUT_DIR / "seed_expanded.yaml"
 REGISTRY_PATH = ROOT / "definitions" / "registry.yaml"
 PACKAGE_NAME_PATTERN = re.compile(r"^[a-z_][a-z0-9_]*$")
-LOOKUP_HEADER = """# GENERATED FILE — DO NOT EDIT
-# Generated from snapshot definitions/registry.yaml
+INDEX_HEADER = """# GENERATED FILE - DO NOT EDIT
+# Generated from definitions/registry.yaml
+"""
+LOOKUP_HEADER = """# GENERATED FILE - DO NOT EDIT
+# Generated from definitions/registry.yaml
 #
 # ------------------------------------------------------------------
 # LOCAL LOOKUP (NON-AUTHORITATIVE)
@@ -25,15 +27,7 @@ LOOKUP_HEADER = """# GENERATED FILE — DO NOT EDIT
 # to schema files within this snapshot.
 # ------------------------------------------------------------------
 """
-DEPENDENCY_CLOSURE_HEADER = """# GENERATED FILE — DO NOT EDIT
-# Generated from snapshot definitions/registry.yaml
-"""
-REVERSE_DEPENDENCIES_HEADER = """# GENERATED FILE — DO NOT EDIT
-# Generated from snapshot definitions/registry.yaml
-"""
-VERSIONS_HEADER = """# GENERATED FILE — DO NOT EDIT
-# Generated from snapshot definitions/registry.yaml
-"""
+
 
 def load_seed(seed_path: Path) -> dict:
     with seed_path.open() as handle:
@@ -53,8 +47,12 @@ def validate_package_name(name: str) -> str:
 
 def resolve_target_path(package_name: str, target_path: str | None) -> Path:
     if target_path:
-        return Path(target_path).resolve()
-    return OUTPUT_DIR / package_name
+        base = Path(target_path).resolve()
+    else:
+        base = OUTPUT_DIR / package_name
+    if base.name == "sema":
+        return base
+    return base / "sema"
 
 
 def _is_version_key(value: object) -> bool:
@@ -278,39 +276,37 @@ def _is_metadata_mapping(mapping: dict) -> bool:
 
 def write_restricted_indexes(target_root: Path, restricted: dict) -> None:
     indexes_root = target_root / "indexes"
-    ensure_clean_dir(indexes_root)
-    _write_yaml_with_header(indexes_root / "lookup.yaml", LOOKUP_HEADER, build_restricted_lookup(restricted))
+    indexes_root.mkdir(parents=True, exist_ok=True)
+    _write_yaml_with_header(
+        indexes_root / "lookup.yaml",
+        LOOKUP_HEADER,
+        build_restricted_lookup(restricted),
+    )
     _write_yaml_with_header(
         indexes_root / "dependency_closure.yaml",
-        DEPENDENCY_CLOSURE_HEADER,
+        INDEX_HEADER,
         build_restricted_dependency_closure(restricted),
+        sort_keys=True,
     )
     _write_yaml_with_header(
         indexes_root / "reverse_dependencies.yaml",
-        REVERSE_DEPENDENCIES_HEADER,
+        INDEX_HEADER,
         build_restricted_reverse_dependencies(restricted),
     )
     (indexes_root / "versions.yaml").write_text(build_restricted_versions_text(restricted))
 
 
-def write_snapshot_readme(target_root: Path, seed: dict) -> None:
-    initial_targets = seed.get("initial_targets", [])
-    lines = [
-        "# Sema Snapshot",
-        "",
-        "This is a Sema snapshot built as the transitive closure of:",
-        "",
-    ]
-    for target in initial_targets:
-        lines.append(f"- `{target}`")
-    lines.append("")
-    (target_root / "README.md").write_text("\n".join(lines))
-
-
-def _write_yaml_with_header(path: Path, header: str, payload: dict) -> None:
+def _write_yaml_with_header(
+    path: Path,
+    header: str,
+    payload: dict,
+    *,
+    sort_keys: bool = False,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w") as handle:
         handle.write(header + "\n")
-        yaml.dump(payload, handle, sort_keys=False, default_flow_style=False)
+        yaml.dump(payload, handle, sort_keys=sort_keys, default_flow_style=False)
 
 
 def build_restricted_lookup(registry: dict) -> dict:
@@ -326,15 +322,15 @@ def build_restricted_lookup(registry: dict) -> dict:
                 "versioning_strategy": "none",
                 "schema": f"definitions/types/{type_name}.yaml",
             }
-        else:
-            output["types"][type_name] = {
-                "latest_version": type_def["latest_version"],
-                "versioning_strategy": type_def["versioning_strategy"],
-                "versions": {
-                    version: f"definitions/types/{type_name}/{version}.yaml"
-                    for version in type_def["versions"]
-                },
-            }
+            continue
+        output["types"][type_name] = {
+            "latest_version": type_def["latest_version"],
+            "versioning_strategy": type_def["versioning_strategy"],
+            "versions": {
+                version: f"definitions/types/{type_name}/{version}.yaml"
+                for version in type_def["versions"]
+            },
+        }
 
     for enum_name, enum_def in registry["enums"].items():
         if enum_def["enum_type"] == "literal":
@@ -342,15 +338,15 @@ def build_restricted_lookup(registry: dict) -> dict:
                 "enum_type": "literal",
                 "schema": f"definitions/enums/{enum_name}/000.yaml",
             }
-        else:
-            output["enums"][enum_name] = {
-                "enum_type": "versioned",
-                "latest_version": enum_def["latest_version"],
-                "versions": {
-                    version: f"definitions/enums/{enum_name}/{version}.yaml"
-                    for version in enum_def["versions"]
-                },
-            }
+            continue
+        output["enums"][enum_name] = {
+            "enum_type": "versioned",
+            "latest_version": enum_def["latest_version"],
+            "versions": {
+                version: f"definitions/enums/{enum_name}/{version}.yaml"
+                for version in enum_def["versions"]
+            },
+        }
 
     for format_name in registry["formats"]:
         output["formats"][format_name] = f"definitions/formats/{format_name}.yaml"
@@ -401,12 +397,6 @@ def _compute_closure(type_name: str, version: str, registry: dict) -> dict:
 
 
 def build_restricted_reverse_dependencies(registry: dict) -> dict:
-    reverse: dict[str, dict] = {
-        "types": {},
-        "enums": {},
-        "formats": {},
-    }
-
     type_reverse: dict[str, dict[str, set[str]]] = {}
     enum_reverse: dict[str, dict[str, set[str]]] = {}
     format_reverse: dict[str, set[str]] = {}
@@ -428,24 +418,26 @@ def build_restricted_reverse_dependencies(registry: dict) -> dict:
                 else:
                     format_reverse.setdefault(dep_name, set()).add(source)
 
+    reverse: dict[str, dict] = {
+        "types": {},
+        "enums": {},
+        "formats": {},
+    }
     for name in sorted(type_reverse):
         reverse["types"][name] = {}
         for version in sorted(type_reverse[name], key=int):
             reverse["types"][name][version] = {"used_by": sorted(type_reverse[name][version])}
-
     for name in sorted(enum_reverse):
         reverse["enums"][name] = {}
         for version in sorted(enum_reverse[name], key=int):
             reverse["enums"][name][version] = {"used_by": sorted(enum_reverse[name][version])}
-
     for name in sorted(format_reverse):
         reverse["formats"][name] = {"used_by": sorted(format_reverse[name])}
-
     return reverse
 
 
 def build_restricted_versions_text(registry: dict) -> str:
-    lines: list[str] = [VERSIONS_HEADER, "", "types:"]
+    lines: list[str] = [INDEX_HEADER, "", "types:"]
 
     for type_name, type_def in registry["types"].items():
         lines.append(f"  {type_name}:")
@@ -460,7 +452,6 @@ def build_restricted_versions_text(registry: dict) -> str:
         lines.append(f'    latest_version: "{type_def["latest_version"]}"')
         lines.append(f'    versioning_strategy: "{strategy}"')
         lines.append("    versions:")
-
         for version, version_info in type_def.get("versions", {}).items():
             lines.append(f'      "{version}":')
             append_summary(
@@ -468,7 +459,6 @@ def build_restricted_versions_text(registry: dict) -> str:
                 "        ",
                 fallback_summary(version, version_info, type_def["latest_version"]),
             )
-
         lines.append("")
 
     if lines[-1] == "":
@@ -478,20 +468,19 @@ def build_restricted_versions_text(registry: dict) -> str:
     lines.append("enums:")
 
     for enum_name, enum_def in registry["enums"].items():
-        top_enum_type = enum_def["enum_type"]
+        enum_type = enum_def["enum_type"]
         lines.append(f"  {enum_name}:")
-        lines.append(f'    enum_type: "{top_enum_type}"')
-        lines.append(f"    note: {quote(enum_note(top_enum_type))}")
+        lines.append(f'    enum_type: "{enum_type}"')
+        lines.append(f"    note: {quote(enum_note(enum_type))}")
         lines.append("    versions:")
 
-        if top_enum_type == "literal":
+        if enum_type == "literal":
             lines.append('      "000": {}')
             lines.append("")
             continue
 
         version_keys = list(enum_def.get("versions", {}).keys())
         initial_version = version_keys[-1] if version_keys else "000"
-
         for version, version_info in enum_def.get("versions", {}).items():
             if version == initial_version and "added_values" not in version_info:
                 lines.append(f'      "{version}": {{}}')
@@ -499,7 +488,6 @@ def build_restricted_versions_text(registry: dict) -> str:
             lines.append(f'      "{version}":')
             if "added_values" in version_info:
                 append_added_values(lines, "        ", version_info["added_values"])
-
         lines.append("")
 
     if lines[-1] == "":
@@ -590,12 +578,10 @@ def append_summary(lines: list[str], indent: str, summary: str) -> None:
     for part in summary_lines:
         lines.append(f"{indent}  {part}")
 
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description=(
-            "Build a seed-scoped snapshot package containing restricted definitions, "
-            "registry, indexes, and README."
-        )
+        description="Build seed-scoped Sema definitions under a sema/ directory."
     )
     parser.add_argument("--source", type=Path, default=Path("."))
     parser.add_argument("--package-name", required=True)
@@ -613,9 +599,7 @@ def main() -> None:
     copy_seed_definitions(target_path, seed)
     restricted_registry = build_restricted_registry(seed, load_registry())
     write_restricted_registry(target_path, restricted_registry)
-    write_restricted_indexes(target_path, restricted_registry)
-    write_snapshot_readme(target_path, seed)
-    print(f"Built seed snapshot at {target_path}")
+    print(f"Built seed definitions at {target_path / 'definitions'}")
     print(f"Selection source: {args.seed}")
 
 
