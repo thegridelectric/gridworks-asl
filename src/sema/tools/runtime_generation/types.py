@@ -8,6 +8,7 @@ from sema.tools.runtime_generation.helpers import (
     class_name_for_node,
     import_path_and_symbol_for_node,
     load_schema_for_node,
+    module_name_for_node,
     pascal_to_snake,
     target_path_for_node,
 )
@@ -50,6 +51,8 @@ def generate_types(
         target_path.write_text(
             render_type(node, schema, dag, latest, registry, package_name, local_names)
         )
+        write_axiom_logic_artifact(target_root, node, schema, latest, package_name, local_names)
+        write_upgrade_logic_artifact(target_root, node, dag, latest, package_name, local_names)
     (target_root / "types" / "__init__.py").write_text("")
     (target_root / "types" / "old_versions" / "__init__.py").write_text("")
 
@@ -175,14 +178,20 @@ def render_type(
     if axioms:
         ctx.needs_model_validator = True
         for axiom in axioms:
+            axiom_number = axiom["number"]
+            type_module_name = module_name_for_node(node, latest_map, local_names)
+            ctx.imports.add(
+                f"from {package_name}.sema.logic.axioms.{type_module_name} "
+                f"import check_axiom_{axiom_number} as _check_axiom_{axiom_number}"
+            )
             axiom_methods.append(
                 f'''    @model_validator(mode="after")
-    def check_axiom_{axiom["number"]}(self) -> "{class_name}":
+    def check_axiom_{axiom_number}(self) -> "{class_name}":
         """
-        Axiom {axiom["number"]}: {axiom["name"]}
+        Axiom {axiom_number}: {axiom["name"]}
         {" ".join(str(axiom["statement"]).split())}
         """
-        return self
+        return _check_axiom_{axiom_number}(self)
 '''
             )
 
@@ -307,11 +316,125 @@ def _render_upgrade_method(node, dag, latest_map, package_name: str, ctx: TypeCo
         ctx.local_names,
     )
     ctx.imports.add(f"from {module_path} import {symbol_name}")
+    upgrade_module_name = upgrade_logic_module_name(node, next_node, latest_map, ctx.local_names)
+    ctx.imports.add(
+        f"from {package_name}.sema.logic.upgrades.{upgrade_module_name} "
+        "import upgrade as _upgrade"
+    )
     class_name = class_name_for_node(node, latest_map, ctx.local_names)
     _, name, version = node
     _, _, next_version = next_node
     return (
         f'    def upgrade(self) -> {symbol_name}:\n'
         f'        """Upgrade {name}:{version} -> {next_version}."""\n'
-        f'        raise NotImplementedError("{class_name}.upgrade() not implemented")\n'
+        "        return _upgrade(self)\n"
     )
+
+
+def upgrade_logic_module_name(node, next_node, latest_map, local_names: dict[str, Any] | None = None) -> str:
+    source_module = module_name_for_node(node, latest_map, local_names)
+    _, _, next_version = next_node
+    return f"{source_module}_to_{next_version}"
+
+
+def type_import_path_for_node(
+    node,
+    latest_map,
+    package_name: str,
+    local_names: dict[str, Any] | None = None,
+) -> tuple[str, str]:
+    module_path, symbol_name = import_path_and_symbol_for_node(
+        node,
+        latest_map,
+        package_name,
+        local_names,
+    )
+    return module_path, symbol_name
+
+
+def write_axiom_logic_artifact(
+    target_root,
+    node,
+    schema: dict,
+    latest_map,
+    package_name: str,
+    local_names: dict[str, Any] | None = None,
+) -> None:
+    axioms = schema.get("x-gridworks", {}).get("axioms", [])
+    if not axioms:
+        return
+
+    module_name = module_name_for_node(node, latest_map, local_names)
+    module_path, class_name = type_import_path_for_node(node, latest_map, package_name, local_names)
+    target_path = target_root / "logic" / "axioms" / f"{module_name}.py"
+
+    lines = [
+        "from __future__ import annotations",
+        "",
+        "from typing import TYPE_CHECKING",
+        "",
+        "if TYPE_CHECKING:",
+        f"    from {module_path} import {class_name}",
+        "",
+    ]
+    for index, axiom in enumerate(axioms):
+        if index:
+            lines.append("")
+        axiom_number = axiom["number"]
+        lines.extend(
+            [
+                f'def check_axiom_{axiom_number}(self: "{class_name}") -> "{class_name}":',
+                "    return self",
+            ]
+        )
+    lines.append("")
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    target_path.write_text("\n".join(lines))
+
+
+def write_upgrade_logic_artifact(
+    target_root,
+    node,
+    dag,
+    latest_map,
+    package_name: str,
+    local_names: dict[str, Any] | None = None,
+) -> None:
+    if node not in dag.upgrades:
+        return
+
+    next_node = dag.upgrades[node]
+    module_name = upgrade_logic_module_name(node, next_node, latest_map, local_names)
+    target_path = target_root / "logic" / "upgrades" / f"{module_name}.py"
+
+    source_module_path, source_class_name = type_import_path_for_node(
+        node,
+        latest_map,
+        package_name,
+        local_names,
+    )
+    target_module_path, target_class_name = type_import_path_for_node(
+        next_node,
+        latest_map,
+        package_name,
+        local_names,
+    )
+    _, source_name, source_version = node
+    _, _, target_version = next_node
+    lines = [
+        "from __future__ import annotations",
+        "",
+        "from typing import TYPE_CHECKING",
+        "",
+        "if TYPE_CHECKING:",
+        f"    from {source_module_path} import {source_class_name}",
+        f"    from {target_module_path} import {target_class_name}",
+        "",
+        f'def upgrade(self: "{source_class_name}") -> "{target_class_name}":',
+        "    raise NotImplementedError(",
+        f'        "{source_name}:{source_version} -> {target_version} upgrade not implemented"',
+        "    )",
+        "",
+    ]
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    target_path.write_text("\n".join(lines))

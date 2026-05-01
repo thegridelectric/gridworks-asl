@@ -90,6 +90,9 @@ repo/
     property_format.py
     enums/
     types/
+    logic/
+      axioms/
+      upgrades/
     definitions/
       registry.yaml
       formats/
