@@ -77,4 +77,31 @@ if compgen -G "${SCRIPT_DIR}/function-overrides/*.sql" > /dev/null 2>&1; then
     done
 fi
 
+
+# ---------------------------------------------------------------------------
+# Localhost-only: re-seed auth.trusted_tenants from .secrets/sema-tenant.json
+# ---------------------------------------------------------------------------
+# 01b-customize-schema.sql wipes this table on every run, and prod gets
+# its row registered via the bases API (DEPLOY.md §3, step 3). On
+# localhost the secret lives at .secrets/sema-tenant.json (gitignored);
+# if that file is present, upsert the row so login keeps working after
+# every `effortless build`. Skipped silently on prod / wherever the file
+# isn't present.
+TENANT_FILE="${SCRIPT_DIR}/../.secrets/sema-tenant.json"
+if [[ -f "$TENANT_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    echo "Seeding auth.trusted_tenants from .secrets/sema-tenant.json"
+    TID=$(jq -r '.tenant_id' "$TENANT_FILE")
+    PEM_TMP=$(mktemp)
+    jq -r '.public_key_pem' "$TENANT_FILE" > "$PEM_TMP"
+    psql "$CONNECTION_STRING" -v ON_ERROR_STOP=1 \
+        -v "tid=$TID" -v "pem=$(cat "$PEM_TMP")" <<'SQL'
+INSERT INTO auth.trusted_tenants (tenant_id, public_key_pem)
+VALUES (:'tid', :'pem')
+ON CONFLICT (tenant_id) DO UPDATE SET public_key_pem = EXCLUDED.public_key_pem;
+SQL
+    rm -f "$PEM_TMP"
+    echo "✓ trusted_tenants seeded"
+    echo ""
+fi
+
 echo "Database initialization complete!"

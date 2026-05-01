@@ -139,7 +139,12 @@ function LoginForm({ cfg }: { cfg: AuthConfig }) {
       }
       setJwt(jwt);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "verify_failed");
+      const raw = err instanceof Error ? err.message : "verify_failed";
+      setError(
+        raw === "not_an_app_user"
+          ? "This email is not authorized to use this app."
+          : raw,
+      );
     } finally {
       setBusy(false);
     }

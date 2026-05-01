@@ -134,6 +134,20 @@ async def verify_code(payload: VerifyCodeIn) -> VerifyCodeOut:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=body.get("error", "invalid_code"),
         )
+
+    # AppUsers allowlist: the magic-link code was valid, but only emails
+    # registered in the AppUsers table are allowed in. Read from vw_app_users
+    # (always views, never base tables).
+    allowed = await db.fetch_one(
+        "SELECT 1 FROM vw_app_users WHERE name = %s",
+        payload.email.lower(),
+    )
+    if allowed is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="not_an_app_user",
+        )
+
     return VerifyCodeOut(
         ok=True,
         jwt=body["jwt"],
@@ -223,8 +237,24 @@ async def current_user(
     if claims.get("tenant_id") != tenant_claim:
         raise _unauthorized("tenant_mismatch")
 
+    email = str(claims.get("email", "")).lower()
+
+    # AppUsers allowlist: a valid JWT is necessary but not sufficient — the
+    # email must also be registered. Catches pre-allowlist tokens that were
+    # minted before AppUsers existed.
+    allowed = await db.fetch_one(
+        "SELECT 1 FROM vw_app_users WHERE name = %s",
+        email,
+    )
+    log.warning(
+        "current_user DEBUG: email=%r claims_keys=%s allowed=%s",
+        email, sorted(claims.keys()), allowed is not None,
+    )
+    if allowed is None:
+        raise _unauthorized("not_an_app_user")
+
     return CurrentUser(
-        email=str(claims.get("email", "")).lower(),
+        email=email,
         tenant_id=str(claims["tenant_id"]),
         iss=str(claims["iss"]),
         exp=claims.get("exp"),
