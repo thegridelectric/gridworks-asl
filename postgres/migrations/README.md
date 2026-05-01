@@ -54,7 +54,7 @@ you pass `--allow-localhost` — localhost is supposed to be rebuilt via
   Migrations are the *delta* between two regenerations.
 - Localhost bootstrap. That's `postgres/init-db.sh`.
 - Customizations that are idempotent and safe to drop/recreate every
-  build (e.g. `auth.trusted_tenants`, `app.jwt_*()` helpers). Those live
-  in `postgres/01b-customize-schema.sql` so they're re-applied by
-  `init-db.sh` on every localhost rebuild *and* picked up by prod via
-  the migrations dir whenever they change.
+  build (e.g. the local `auth.trusted_tenants` mirror). Those live in
+  `postgres/01b-customize-schema.sql` so they're re-applied by
+  `init-db.sh` on every localhost rebuild. In prod, bases owns the
+  `auth` schema and 01b's `IF NOT EXISTS` guards make it a no-op there.

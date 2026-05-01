@@ -11,9 +11,16 @@ import sys
 from pathlib import Path
 from typing import Any
 
-# Make rulebook-emitters/ importable as `rulebook_emitters`.
+# Make rulebook-emitters/ importable. In dev, the layout is
+# <repo>/app/api/loader.py + <repo>/rulebook-emitters/, so parents[2] is
+# the repo root. In Docker the layout is /app/api/loader.py +
+# /app/rulebook-emitters/ — parents[2] would be `/`, which doesn't
+# work. SEMA_EMITTERS_DIR is the explicit override the container sets;
+# the parents[2]-based default keeps local dev a no-op.
 _REPO_ROOT = Path(__file__).resolve().parents[2]
-_EMITTERS_DIR = _REPO_ROOT / "rulebook-emitters"
+_EMITTERS_DIR = Path(
+    os.getenv("SEMA_EMITTERS_DIR") or (_REPO_ROOT / "rulebook-emitters")
+).resolve()
 if str(_EMITTERS_DIR) not in sys.path:
     sys.path.insert(0, str(_EMITTERS_DIR))
 

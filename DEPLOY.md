@@ -55,8 +55,9 @@ Mechanically:
               │ POST /api/tenants/T/     │   │                         │
               │      send-code           │   │ auth.trusted_tenants    │
               │ POST /api/tenants/T/     │   │   row (T, public_key)   │
-              │      verify-code         │   │ app.jwt_*() helpers     │
-              └──────────────────────────┘   └─────────────────────────┘
+              │      verify-code         │   │ auth.set_jwt / .email() │
+              └──────────────────────────┘   │   (installed by bases)  │
+                                             └─────────────────────────┘
 ```
 
 One tenant (`T`) is shared between **localhost Postgres** and the **prod
@@ -64,6 +65,15 @@ bases base**. Same `(tenant_id, public_key_pem)` row goes into
 `auth.trusted_tenants` on both. JWTs minted at
 `/api/tenants/T/verify-code` verify cleanly on either DB. (See the
 `magic-links` skill, "Sharing one tenant across multiple databases".)
+
+**Auth scope today: pure entry gate.** Sema has no row-level security.
+The FastAPI `current_user` dependency verifies the Bearer JWT in process
+and that's it — verified claims never propagate to postgres. If/when
+sema adds RLS-protected tables, swap to a per-request connection helper
+that calls `SELECT auth.set_jwt(:token)` so `auth.email()` /
+`auth.role()` work inside USING/WITH CHECK clauses (those helpers are
+installed by bases in prod, and we'd mirror them in a 02b customization
+locally).
 
 ---
 
@@ -75,11 +85,11 @@ bases base**. Same `(tenant_id, public_key_pem)` row goes into
 | `.dockerignore` | Keep `node_modules/`, `.venv/`, `.logs/`, `__pycache__/` out of context |
 | `.cpln/cpln-app-workload.yaml` | Control Plane workload spec (placeholder-templated, sed'd by CI) |
 | `.github/workflows/deploy-app.yaml` | Build → push image → apply workload on push to `main` |
-| `postgres/01b-customize-schema.sql` | Hand-written: `auth.trusted_tenants` + `app.jwt_*()` helpers (re-applied on every `init-db.sh`) |
+| `postgres/01b-customize-schema.sql` | Hand-written: local `auth.trusted_tenants` mirror matching bases' shape exactly (`tenant_id`, `public_key_pem`, `created_at`). Re-applied on every `init-db.sh`. |
 | `postgres/migrations/migrate-prod.sh` | Forward-only migration runner. Tracks state in `public.schema_migrations`. |
 | `postgres/migrations/0001_initial_baseline.sql` | Marker only — recorded the day prod was bootstrapped |
 | `postgres/migrations/NNNN-*.sql` | One file per rulebook change post-bootstrap |
-| `app/api/auth.py` | FastAPI: magic-links proxy routes + Bearer middleware that `SET LOCAL app.jwt_claims` |
+| `app/api/auth.py` | FastAPI: magic-links proxy routes + Bearer-verifying `current_user` dependency (looks up `public_key_pem` in `auth.trusted_tenants`, RS256-verifies in process). No `SET LOCAL` — auth is just a gate. |
 | `app/web/src/lib/auth.ts` | Browser: JWT in `localStorage`, `Authorization: Bearer` injected on every `/api/*` fetch |
 
 ---
@@ -102,26 +112,32 @@ cd postgres
 ./init-db.sh "$BASE_ADMIN_URL"
 cd ..
 
-# 2. Register the magic-links tenant in the prod base.
-psql "$BASE_ADMIN_URL" <<SQL
-INSERT INTO auth.trusted_tenants (tenant_id, public_key_pem, is_active)
-VALUES ('$MAGICLINK_TENANT_ID', '$MAGICLINK_PUBLIC_KEY_PEM', true)
-ON CONFLICT (tenant_id) DO UPDATE
-  SET public_key_pem = EXCLUDED.public_key_pem,
-      is_active = true;
-SQL
+# 2. Toggle bases' Magic-Links auth schema on (one-time, superuser-only —
+#    installs auth.trusted_tenants + auth.set_jwt / auth.email() / etc.).
+curl -sS "https://bases.effortlessapi.com/bases/$BASE_ID/auth/toggle-magic-links" \
+  -H "Authorization: Bearer $BASES_JWT" \
+  -H "Content-Type: application/json" \
+  -d '{"enabled":true}'
 
-# 3. Apply the bases two-role privilege template (anon + admin roles).
+# 3. Register the magic-links tenant in the prod base via the bases API
+#    (the auth.trusted_tenants table is owned by bases' superuser, so we
+#    cannot INSERT directly — use the API instead).
+curl -sS "https://bases.effortlessapi.com/bases/$BASE_ID/auth/trusted-tenants" \
+  -H "Authorization: Bearer $BASES_JWT" \
+  -H "Content-Type: application/json" \
+  -d "{\"tenant_id\":\"$MAGICLINK_TENANT_ID\",\"public_key_pem\":\"$MAGICLINK_PUBLIC_KEY_PEM\"}"
+
+# 4. Apply the bases two-role privilege template (anon + admin roles).
 curl -sS "https://bases.effortlessapi.com/bases/$BASE_ID/auth/apply-privileges-template" \
-  -H "Authorization: Bearer $SELF_JWT" \
+  -H "Authorization: Bearer $BASES_JWT" \
   -H "Content-Type: application/json" \
   -d '{"force":false,"returnCredentials":true}'
 
-# 4. Record the bootstrap so future migrate-prod.sh runs know where to start.
-psql "$BASE_ADMIN_URL" -f postgres/migrations/0001_initial_baseline.sql
+# 5. Record the bootstrap so future migrate-prod.sh runs know where to start.
+postgres/migrations/migrate-prod.sh "$BASE_ADMIN_URL"
 ```
 
-After step 4, **never run `init-db.sh "$BASE_ADMIN_URL"` again.**
+After step 5, **never run `init-db.sh "$BASE_ADMIN_URL"` again.**
 From now on, every rulebook change goes through:
 
 ```bash
@@ -158,13 +174,14 @@ postgres/migrations/migrate-prod.sh "$BASE_ADMIN_URL"
 
 The tenant lives in two places: magic-links (private key) and
 `auth.trusted_tenants` (public key, on each DB that accepts its JWTs).
+The bases-shaped table has no `is_active` flag — revocation is just
+deletion.
 
-- **Pause issuance:** `UPDATE auth.trusted_tenants SET is_active=false
-  WHERE tenant_id=...`. Outstanding JWTs from that tenant stop being
-  honored on the next request.
-- **Rotate:** mint a new tenant on magic-links, insert its row alongside
-  the old one (zero-downtime), point the app's env vars at the new
-  `MAGICLINK_TENANT_ID`, then deactivate the old row once everyone has
-  re-logged-in.
-- **Revoke:** `DELETE FROM auth.trusted_tenants WHERE tenant_id=...`
-  on every DB.
+- **Rotate:** mint a new tenant on magic-links, register its row
+  alongside the old one for zero-downtime overlap (POST a second row to
+  `/bases/{base_id}/auth/trusted-tenants` in prod, INSERT locally),
+  point the app's env vars at the new `MAGICLINK_TENANT_ID`, then
+  delete the old row once outstanding sessions have rotated.
+- **Revoke:** `DELETE FROM auth.trusted_tenants WHERE tenant_id=...` on
+  localhost; in prod use the bases API (the table is owned by bases'
+  superuser).

@@ -7,9 +7,17 @@
 --
 -- On the day prod is bootstrapped:
 --   1. ./postgres/init-db.sh "$BASE_ADMIN_URL"   ← creates the schema
---   2. psql … -f 01b-customize-schema.sql is included in step 1
---   3. (insert auth.trusted_tenants row)
---   4. ./postgres/migrations/migrate-prod.sh "$BASE_ADMIN_URL"
+--      (NB: 01b-customize-schema.sql's CREATE SCHEMA / CREATE TABLE will
+--       no-op in prod because bases owns auth.trusted_tenants — that's
+--       fine, the IF NOT EXISTS guards make it harmless.)
+--   2. POST /bases/{id}/auth/toggle-magic-links {enabled:true}
+--      ← bases superuser installs auth.set_jwt(), auth.email(), etc.
+--   3. POST /bases/{id}/auth/trusted-tenants  {tenant_id, public_key_pem}
+--      ← register the magic-links tenant (table owned by bases superuser,
+--        so we go through the API, not direct INSERT).
+--   4. POST /bases/{id}/auth/apply-privileges-template
+--      ← anon + admin role grants on sema's tables and views.
+--   5. ./postgres/migrations/migrate-prod.sh "$BASE_ADMIN_URL"
 --      ← applies this file, recording version 0001 in schema_migrations,
 --        which is what tells future runs "the baseline is in place."
 --

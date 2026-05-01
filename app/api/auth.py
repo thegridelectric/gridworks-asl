@@ -5,20 +5,19 @@ needs the tenant id baked into its bundle), and one dependency verifies
 the Bearer JWT against the per-DB ``auth.trusted_tenants`` registry.
 
 Verification is FAIL-not-FALLBACK: any signature problem, missing
-issuer, inactive tenant, expired token, or unknown ``tenant_id`` is a
-401 — never a 200 with a downgraded session.
+issuer, expired token, or unknown ``tenant_id`` is a 401 — never a 200
+with a downgraded session.
 
-The middleware stamps verified claims on ``request.state.jwt_claims``
-and exposes a ``CurrentUser`` Pydantic model via the ``current_user``
-dependency. RLS plumbing (``SET LOCAL app.jwt_claims`` per query) is
-deferred until the first route actually reads from a row-secured table;
-the helper functions live in ``postgres/01b-customize-schema.sql`` ready
-for that day.
+Auth in sema is purely a *gate to enter the app*. There is no RLS today,
+so the dependency just returns the verified ``CurrentUser`` claims to
+the route. If RLS lands later, swap to the per-request connection
+pattern that calls ``SELECT auth.set_jwt(:token)`` (the helper bases
+installs into every Magic-Links-enabled base) so that
+``auth.email()`` / ``auth.role()`` work inside USING/WITH CHECK clauses.
 """
 
 from __future__ import annotations
 
-import json
 import logging
 import os
 from typing import Any
@@ -148,13 +147,16 @@ async def verify_code(payload: VerifyCodeIn) -> VerifyCodeOut:
 
 
 async def _lookup_public_key(tenant_id: str) -> str | None:
-    """Look up an active trusted tenant's public key. Returns None if
-    no active row exists. Cached briefly per-process via ``functools``
-    in a future iteration; for now a fresh query per request keeps
-    revocation immediate."""
+    """Look up a trusted tenant's public key. Returns None when no row
+    exists (revocation = ``DELETE FROM auth.trusted_tenants``).
+
+    Schema mirrors what bases.effortlessapi.com installs: just
+    ``(tenant_id, public_key_pem, created_at)`` — no soft-delete flag.
+    A fresh query per request keeps revocation immediate without
+    caching layers."""
     row = await db.fetch_one(
         "SELECT public_key_pem FROM auth.trusted_tenants "
-        "WHERE tenant_id = %s AND is_active = true",
+        "WHERE tenant_id = %s",
         tenant_id,
     )
     if row is None:
@@ -199,7 +201,7 @@ async def current_user(
 
     public_key = await _lookup_public_key(tenant_claim)
     if public_key is None:
-        # Either unknown or deactivated. Either way, do not honor.
+        # Unknown to this DB (or revoked via DELETE). Either way: 401.
         raise _unauthorized("unknown_or_revoked_tenant")
 
     try:
@@ -251,22 +253,22 @@ async def auth_config() -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Future: per-request DB connection that SET LOCAL app.jwt_claims
+# Future: per-request DB connection that calls auth.set_jwt(token)
 # ---------------------------------------------------------------------------
-# When the first RLS-protected route lands, swap its db.fetch_* calls for
-# a connection-scoped helper like:
+# bases.effortlessapi.com installs auth.set_jwt(text), auth.email(),
+# auth.role(), auth.claim(text), auth.verify_jwt(text), auth.clear_jwt()
+# into every Magic-Links-enabled base. When the first RLS-protected route
+# lands in sema, mirror those helpers locally (a 02b customization) and
+# wrap each request handler in a connection-scoped helper like:
 #
 #     async with db.conn() as c:
-#         await c.execute(
-#             "SELECT set_config('app.jwt_claims', %s, true)",
-#             (json.dumps(user.claims),),
-#         )
+#         await c.execute("SELECT auth.set_jwt(%s)", (raw_bearer_token,))
 #         async with c.cursor() as cur:
-#             await cur.execute("SELECT * FROM vw_owners")
+#             await cur.execute("SELECT * FROM vw_owners")  -- RLS sees auth.email()
 #             ...
 #
-# The set_config(..., true) makes the GUC LOCAL — it disappears at txn
-# end so it can't leak across requests on a pooled connection.
+# Until then sema treats auth as a pure entry gate: verified in Python,
+# never propagated to postgres.
 
 __all__ = [
     "router",
@@ -275,5 +277,3 @@ __all__ = [
     "MAGICLINK_BASE_URL",
     "MAGICLINK_TENANT_ID",
 ]
-# json import retained for the contextual snippet above; suppress unused warnings.
-_ = json

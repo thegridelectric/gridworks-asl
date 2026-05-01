@@ -25,7 +25,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     PORT=8765 \
     SEMA_SPA_DIST=/app/web/dist \
-    SEMA_RULEBOOK_PATH=/app/effortless-rulebook/effortless-rulebook.json
+    SEMA_RULEBOOK_PATH=/app/effortless-rulebook/effortless-rulebook.json \
+    SEMA_EMITTERS_DIR=/app/rulebook-emitters
 
 COPY app/api/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt

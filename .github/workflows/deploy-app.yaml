@@ -19,6 +19,7 @@ env:
   CPLN_GVC: ${{ vars.CPLN_GVC_NAME }}
   CPLN_WORKLOAD: ${{ vars.CPLN_APP_WORKLOAD_NAME }}
   CPLN_IMAGE: ${{ vars.CPLN_APP_IMAGE_NAME }}
+  CPLN_SECRET_NAME: ${{ vars.CPLN_SECRET_NAME }}
   CPLN_TOKEN: ${{ secrets.SERVICE_ACCOUNT_KEY }}
   BASE_ADMIN_URL: ${{ secrets.BASE_ADMIN_URL }}
 
@@ -63,6 +64,9 @@ jobs:
           sed -i "s|WORKLOAD_NAME|${CPLN_WORKLOAD}|g" cpln-app-workload.yaml
           sed -i "s|IMAGE_NAME_TAG|${CPLN_IMAGE}:${SHORT_SHA}|g" cpln-app-workload.yaml
           sed -i "s|ORG_NAME|${CPLN_ORG}|g" cpln-app-workload.yaml
+          sed -i "s|GVC_NAME|${CPLN_GVC}|g" cpln-app-workload.yaml
+          sed -i "s|IDENTITY_NAME|${CPLN_WORKLOAD}|g" cpln-app-workload.yaml
+          sed -i "s|SECRET_NAME|${CPLN_SECRET_NAME}|g" cpln-app-workload.yaml
           cat cpln-app-workload.yaml
 
       - name: Apply workload
