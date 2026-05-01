@@ -18449,11 +18449,76 @@
       }
     ]
   },
+  "AppUsers": {
+    "Description": "Application users authenticated via magic-links. The Name field is the lowercased email — it is both the primary key and the value that the JWT 'email' claim resolves against. AppUsers are editing principals (who can sign in and act in the Explorer); they are independent of Owners (who own published artifacts in the registry).",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Lowercased email address. Acts as the primary key. The verified 'email' claim from a magic-links JWT must equal this value for the user to be recognized."
+      },
+      {
+        "name": "DisplayName",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Optional human-friendly display name shown in the Explorer UI."
+      },
+      {
+        "name": "Role",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "App role. One of: 'admin' (full edit/promote rights once Phase 5 lands) or 'member' (read-only today). Word-level promotion to a finer-grained role table can land later as an additive change."
+      },
+      {
+        "name": "Notes",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Free-text notes — provenance, why-granted, whatever the registry maintainer wants future readers to know."
+      },
+      {
+        "name": "Created",
+        "datatype": "datetime",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Creation timestamp."
+      },
+      {
+        "name": "IsAdmin",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when Role is 'admin'. Drives admin-gated affordances in the Explorer and (eventually) RLS predicates.",
+        "formula": "=IF({{Role}}=\"admin\", TRUE(), FALSE())"
+      },
+      {
+        "name": "IsMember",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when Role is 'member'. Inverse of IsAdmin while only two roles exist.",
+        "formula": "=IF({{Role}}=\"member\", TRUE(), FALSE())"
+      }
+    ],
+    "data": [
+      {
+        "Name": "ej@ssot.me",
+        "DisplayName": "EJ",
+        "Role": "admin",
+        "Notes": "Bootstrap admin (seeded with the initial AppUsers landing).",
+        "Created": "2026-04-30T23:30:00Z"
+      }
+    ]
+  },
   "_meta": {
-    "_CMCC_Summary": "Hand-authored rulebook (no Airtable). Tier-1 schema covering all 19 tables: Module 1 (schema-of-record, 13 tables) + Module 2 (version upgrades, 6 tables). Aggregation calc fields (LatestVersion, IsCurrent, IsDefault) deferred to second pass once base shape verifies clean.",
+    "_CMCC_Summary": "Hand-authored rulebook (no Airtable). Tier-1 schema covering all 19 registry tables (Module 1 schema-of-record + Module 2 version upgrades) plus an app-side AppUsers table for magic-links principals. Aggregation calc fields (LatestVersion, IsCurrent, IsDefault) deferred to second pass once base shape verifies clean.",
     "_conversion_metadata": {
       "source": "yaml-to-rulebook (Phase 1 importer)",
-      "table_count": 19,
+      "table_count": 20,
       "phase": "0.5 - full Tier-1 schema",
       "module_1_tables": [
         "Owners",
@@ -18477,6 +18542,9 @@
         "TypeUpgradeOps",
         "EnumUpgrades",
         "EnumUpgradeMappings"
+      ],
+      "app_tables": [
+        "AppUsers"
       ],
       "next_phase": "1 - yaml-to-rulebook migrator (populate data[] from definitions/*.yaml)",
       "definitions_path": "definitions/",
