@@ -25,6 +25,7 @@ ALTER TABLE type_upgrades ENABLE ROW LEVEL SECURITY;
 ALTER TABLE type_upgrade_ops ENABLE ROW LEVEL SECURITY;
 ALTER TABLE enum_upgrades ENABLE ROW LEVEL SECURITY;
 ALTER TABLE enum_upgrade_mappings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE app_users ENABLE ROW LEVEL SECURITY;
 
 -- TODO: Add specific RLS policies based on your security requirements
 -- Example:

@@ -2536,6 +2536,26 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(from_symbol, '') FROM enum_upgrade_mappings WHERE enum_upgrade_mappings_id = p_enum_upgrade_mappings_id) = (SELECT NULLIF(to_symbol, '') FROM enum_upgrade_mappings WHERE enum_upgrade_mappings_id = p_enum_upgrade_mappings_id) THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_app_users_is_admin
+-- Field: AppUsers.IsAdmin
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_app_users_is_admin(p_app_users_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(role, '') FROM app_users WHERE app_users_id = p_app_users_id) = 'admin' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_app_users_is_member
+-- Field: AppUsers.IsMember
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_app_users_is_member(p_app_users_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(role, '') FROM app_users WHERE app_users_id = p_app_users_id) = 'member' THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- ============================================================================
 -- MANY-SIDE RELATIONSHIP FUNCTIONS
 -- These functions aggregate child records for many-side relationships

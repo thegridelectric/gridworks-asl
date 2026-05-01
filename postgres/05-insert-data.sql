@@ -6068,3 +6068,9 @@ VALUES ('8b1edea8-5450-bd57-3bd5-de78576d3968', 'gw1.quantity/000 -> gw1.quantit
 INSERT INTO enum_upgrade_mappings (enum_upgrade_mappings_id, enum_upgrade, from_symbol, to_symbol, description)
 VALUES ('58f361ad-a9c1-fc1f-9909-8b2ccf523699', 'gw1.quantity/000 -> gw1.quantity/001', 'Volume', 'Volume', 'Identity carry-over.') ON CONFLICT (enum_upgrade_mappings_id) DO NOTHING;
 
+-- ----------------------------------------------------------------------------
+-- AppUsers: Application users authenticated via magic-links. The Name field is the lowercased email — it is both the primary key and the value that the JWT 'email' claim resolves against. AppUsers are editing principals (who can sign in and act in the Explorer); they are independent of Owners (who own published artifacts in the registry).
+-- ----------------------------------------------------------------------------
+INSERT INTO app_users (app_users_id, name, display_name, role, notes, created)
+VALUES ('3856874c-b33c-c3a2-e615-f12a305393bd', 'ej@ssot.me', 'EJ', 'admin', 'Bootstrap admin (seeded with the initial AppUsers landing).', '2026-04-30T23:30:00Z') ON CONFLICT (app_users_id) DO NOTHING;
+
