@@ -69,7 +69,7 @@ def prepare_snapshot(seed_request: Path) -> Path:
 
 
 def _clear_runtime_outputs(target_root: Path) -> None:
-    for name in ("enums", "types", "tests"):
+    for name in ("enums", "types", "tests", "logic"):
         path = target_root / name
         if path.exists():
             shutil.rmtree(path)

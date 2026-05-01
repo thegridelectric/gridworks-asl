@@ -135,7 +135,7 @@ def is_non_negative_int(v: int) -> int:
 
 
 def is_positive_int(v: int) -> int:
-    if not isinstance(v, int):
+    if not isinstance(v, int) or isinstance(v, bool):
         raise TypeError("Not an int!")
     if v <= 0:
         raise ValueError(f"{v} must be positive")
@@ -252,8 +252,8 @@ NonNegativeInt = Annotated[
 ]
 
 PositiveInt = Annotated[
-    StrictInt,
-    Field(gt=0),
+    int,
+    BeforeValidator(is_positive_int),
 ]
 
 SpaceheatName = Annotated[

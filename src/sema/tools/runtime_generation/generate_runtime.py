@@ -18,7 +18,12 @@ Generated snapshot runtime package.
 def _ensure_package_layout(target_root) -> None:
     (target_root / "enums" / "old_versions").mkdir(parents=True, exist_ok=True)
     (target_root / "types" / "old_versions").mkdir(parents=True, exist_ok=True)
+    (target_root / "logic" / "axioms").mkdir(parents=True, exist_ok=True)
+    (target_root / "logic" / "upgrades").mkdir(parents=True, exist_ok=True)
     (target_root / "__init__.py").write_text(RUNTIME_INIT)
+    (target_root / "logic" / "__init__.py").write_text("")
+    (target_root / "logic" / "axioms" / "__init__.py").write_text("")
+    (target_root / "logic" / "upgrades" / "__init__.py").write_text("")
 
 
 def _write_codec(target_root, package_name: str) -> None:

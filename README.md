@@ -90,6 +90,9 @@ repo/
     property_format.py
     enums/
     types/
+    logic/
+      axioms/
+      upgrades/
     definitions/
       registry.yaml
       formats/
@@ -196,20 +199,23 @@ Build a snapshot in two steps:
 
 ```bash
 uv run sema snapshot prepare template_seed_request.yaml
+vim output/sema/indexes/local_names.yaml
 uv run sema snapshot build --package-name gjk
 ```
 
 The prepare step:
 
+- clears the existing `output/` directory
 - computes the **transitive dependency closure**
 - resolves all required formats, enums, and types
 - writes definitions under `output/sema/definitions`
 - writes restricted indexes under `output/sema/indexes`
 - writes `output/sema/indexes/seed_expanded.yaml`
-- creates `output/sema/indexes/local_names.yaml` if it does not already exist
+- creates `output/sema/indexes/local_names.yaml`
 
 Edit `output/sema/indexes/local_names.yaml` between prepare and build to choose
-local Python class names for generated types and enums.
+local Python class names for generated types and enums. The keys remain
+canonical Sema names; only `local_class_name` values should be edited.
 
 The build step:
 

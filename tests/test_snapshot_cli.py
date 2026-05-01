@@ -44,9 +44,23 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
     assert (target_root / "indexes" / "reverse_dependencies.yaml").exists()
     assert (target_root / "indexes" / "versions.yaml").exists()
     assert (target_root / "tests" / "test_property_format.py").exists()
+    assert (target_root / "logic" / "axioms" / "lite_layout.py").exists()
+    assert (target_root / "logic" / "upgrades" / "lite_layout_011_to_012.py").exists()
     assert "from gjk.sema.base import" in (target_root / "codec.py").read_text()
     assert (target_root / "enums" / "emission_method.py").exists()
     assert not (target_root / "enums" / "gw1_emission_method.py").exists()
     lite_layout = (target_root / "types" / "lite_layout.py").read_text()
     assert "class LiteLayout" in lite_layout
+    assert "from gjk.sema.logic.axioms.lite_layout import check_axiom_1 as _check_axiom_1" in lite_layout
     assert "from gjk.sema.enums.seasonal_storage_mode import SeasonalStorageMode" in lite_layout
+
+    axiom_logic = target_root / "logic" / "axioms" / "lite_layout.py"
+    upgrade_logic = target_root / "logic" / "upgrades" / "lite_layout_011_to_012.py"
+    axiom_logic.write_text("# stale axiom implementation\n")
+    upgrade_logic.write_text("# stale upgrade implementation\n")
+
+    assert snapshot.build_snapshot_runtime("gjk") == target_root
+    assert "stale axiom" not in axiom_logic.read_text()
+    assert "stale upgrade" not in upgrade_logic.read_text()
+    assert "def check_axiom_1" in axiom_logic.read_text()
+    assert "def upgrade" in upgrade_logic.read_text()

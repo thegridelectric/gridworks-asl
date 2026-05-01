@@ -202,10 +202,9 @@ NonNegativeInt = Annotated[
 
     "positive.int": {
         "class_name": "PositiveInt",
-        "imports": ["from pydantic import Field, StrictInt"],
         "methods": """
 def is_positive_int(v: int) -> int:
-    if not isinstance(v, int):
+    if not isinstance(v, int) or isinstance(v, bool):
         raise TypeError("Not an int!")
     if v <= 0:
         raise ValueError(f"{v} must be positive")
@@ -213,8 +212,8 @@ def is_positive_int(v: int) -> int:
 """,
         "annotated_type": """
 PositiveInt = Annotated[
-    StrictInt,
-    Field(gt=0),
+    int,
+    BeforeValidator(is_positive_int),
 ]
 """,
     },
