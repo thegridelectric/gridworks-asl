@@ -298,9 +298,14 @@ enums:
   relay.closed.or.open:
     '000':
       used_by:
+      - machine.states:000
       - relay.actor.config:002
       - relay.actor.config:003
       - single.machine.state:000
+  relay.energization.state:
+    '000':
+      used_by:
+      - fsm.atomic.report:001
   relay.wiring.config:
     '000':
       used_by:

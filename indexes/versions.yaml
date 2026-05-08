@@ -555,6 +555,12 @@ enums:
     versions:
       "000": {}
 
+  main.auto.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
   market.price.unit:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."

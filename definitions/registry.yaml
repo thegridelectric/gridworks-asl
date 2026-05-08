@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-05-08T18:01:43Z"
+  last_updated: "2026-05-08T19:57:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -339,6 +339,17 @@ enums:
     description: "ADC input pin identifier for I2C ADC devices."
     schema_url: "https://schemas.electricity.works/enums/i2c.adc.channel/000"
     created: "2026-03-04T19:00:00Z"
+
+  main.auto.state:
+    latest_version: "001"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Top-level state of a GridWorks spaceheat system."
+
+    versions:
+      "001":    
+        schema_url: "https://schemas.electricity.works/enums/main.auto.state/001"
+        created: "2026-05-08T19:57:00Z"
 
   market.price.unit:
     latest_version: "000"
@@ -761,6 +772,8 @@ types:
             - "left.right.dot"
             - "utc.milliseconds"
             - "uuid4.str"
+          axiom:
+            - "relay.energization.state:000"
 
       "000":
         schema_url: "https://schemas.electricity.works/types/fsm.atomic.report/000"
@@ -1325,6 +1338,8 @@ types:
             - "handle.name"
             - "left.right.dot"
             - "utc.milliseconds"
+          axiom:
+            - "relay.closed.or.open:000"
 
   pico.flow.module.component.gt:
     latest_version: "000"
