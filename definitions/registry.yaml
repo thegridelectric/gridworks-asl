@@ -334,6 +334,14 @@ enums:
     schema_url: "https://schemas.electricity.works/enums/i2c.adc.channel/000"
     created: "2026-03-04T19:00:00Z"
 
+  main.auto.state:
+    latest_version: "001"
+    owner: gridworks-energy
+    enum_type: "literal"
+    description: "Top-level state of a GridWorks spaceheat system."
+    schema_url: "https://schemas.electricity.works/enums/main.auto.state/001"
+    created: "2026-05-08T19:57:00Z"
+
   market.price.unit:
     latest_version: "000"
     owner: gridworks-energy
