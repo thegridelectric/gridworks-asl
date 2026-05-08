@@ -766,6 +766,8 @@ types:
             - "left.right.dot"
             - "utc.milliseconds"
             - "uuid4.str"
+          axiom:
+            - "relay.energization.state:000"
 
       "000":
         schema_url: "https://schemas.electricity.works/types/fsm.atomic.report/000"
@@ -1315,6 +1317,8 @@ types:
             - "handle.name"
             - "left.right.dot"
             - "utc.milliseconds"
+          axiom:
+            - "relay.closed.or.open:000"
 
   pico.flow.module.component.gt:
     latest_version: "000"
