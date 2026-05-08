@@ -74,6 +74,58 @@ https://schemas.electricity.works/types/report/002
 
 These URLs serve as the globally stable identifiers for Sema vocabulary and are used directly in `$ref` links within schemas and generated code.
 
+## Adding a New Type
+
+New Sema types are authored in two layers:
+
+- the schema and registry metadata, which define the public contract
+- optional runtime axiom templates, which contain hand-written validation logic
+
+To add a type:
+
+1. Add the schema YAML under `definitions/types/<type-name>/<version>.yaml`.
+   Follow the type, versioning, dependency, enum, format, and axiom rules in
+   [`docs/sema-specification.md`](docs/sema-specification.md).
+
+2. Add the type version to `definitions/registry.yaml`.
+   Declare only direct dependencies. Use `structural` for `$ref` dependencies
+   required by the schema and `axiom` for vocabulary used only by axiom logic.
+
+3. If the schema declares `x-gridworks.axioms`, create the runtime axiom
+   template stub:
+
+   ```bash
+   uv run sema runtime scaffold-axiom-template <type-name> <version>
+   ```
+
+   This writes a new file under
+   `src/sema/tools/runtime_generation/templates/axioms/`. Existing templates
+   are not overwritten. The generated stub includes formatted axiom docstrings
+   from the schema and raises `NotImplementedError` until the validation logic
+   is filled in.
+
+4. Fill in the hand-written validation logic in the generated Jinja template.
+   The Jinja template is the maintained source for custom runtime axiom code;
+   runtime regeneration renders it into `src/sema/runtime/types/...`.
+   Runtime axiom failures should identify the mechanical axiom number, such as
+   `Axiom 1`. Tests for invalid examples should assert that number
+   case-insensitively rather than matching semantic labels or full prose, since
+   labels and wording are human-authored documentation.
+
+5. Rebuild indexes and run validation:
+
+   ```bash
+   ./scripts/build_indexes.sh
+   uv run pytest tests/registry tests/indexes/test_indexes_are_up_to_date.py
+   ```
+
+6. Regenerate the local runtime only when you are ready to update generated
+   runtime files:
+
+   ```bash
+   uv run python scripts/regenerate_runtime.py
+   ```
+
 ## Vocabulary Snapshots
 
 Instead of distributing a shared runtime package, Sema produces **self-contained vocabulary snapshots**.
@@ -85,18 +137,23 @@ Example structure:
 ```
 repo/
   sema/
+    base.py
+    codec.py
+    property_format.py
+    enums/
+    types/
     definitions/
+      registry.yaml
+      formats/
+      enums/
+      types/
     indexes/
       dependency_closure.yaml
       reverse_dependencies.yaml
       lookup.yaml
       versions.yaml
-    types/
-    enums/
-    formats/
-    base.py
-    codec.py
-    property_format.py
+    tests/
+      test_property_format.py
 ```
 
 
@@ -134,7 +191,7 @@ Example output:
 ```
 Sema CLI
 Interface: textual
-Subcommands: reverse, seed, info
+Subcommands: reverse, runtime, snapshot, info
 ```
 
 ### Reverse Dependency Analysis
@@ -161,19 +218,64 @@ This is useful for:
 
 Sema generates snapshots from a small set of initial targets.
 
-A seed request defines the starting vocabulary:
+A seed request defines the starting vocabulary. Use
+[`template_seed_request.yaml`](template_seed_request.yaml) at the repository
+root as the starting template.
 
 ```yaml
 initial_targets:
-  - "analytics.channel.gt:000"
-  - "synced.readings.bundle:000"
-```
-From this, Sema tooling:
- - Computes the **transitive dependency closure**
- - Resolves all required formats, enums, and types
- - Produces a complete, self-contained snapshot
+  types:
+    synced.readings.bundle: {}
 
-The result is a sema/ directory containing all vocabulary required to interpret the selected types.
+    snapshot.spaceheat:
+      include_all_versions: true
+
+    layout.lite:
+      versions: ["011", "013"]
+
+  enums:
+    relay.energization.state:
+      versions: ["000"]
+```
+
+For each type or enum target:
+
+- `{}` selects the latest registry version
+- `include_all_versions: true` selects every registry-declared version
+- `versions: ["011", "013"]` selects explicit versions; intermediate type versions are added during expansion
+
+Build a snapshot in two steps:
+
+```bash
+uv run sema snapshot prepare template_seed_request.yaml
+vim output/sema/indexes/local_names.yaml
+uv run sema snapshot build --package-name gjk
+```
+
+The prepare step:
+
+- clears the existing `output/` directory
+- computes the **transitive dependency closure**
+- resolves all required formats, enums, and types
+- writes definitions under `output/sema/definitions`
+- writes restricted indexes under `output/sema/indexes`
+- writes `output/sema/indexes/seed_expanded.yaml`
+- creates `output/sema/indexes/local_names.yaml`
+
+Edit `output/sema/indexes/local_names.yaml` between prepare and build to choose
+local names for generated types and enums. The keys remain canonical Sema names;
+values are local `left.right.dot` names. Python class and module names are
+derived from those local names.
+
+The build step:
+
+- reads `output/sema/indexes/seed_expanded.yaml`
+- reads `output/sema/indexes/local_names.yaml`
+- writes the runtime snapshot under `output/sema`
+
+The generated files under `output/sema` are intended to be copied into the
+target repository under `src/<package-name>/sema`. The `--package-name` value is
+used in generated imports, for example `from gjk.sema.enums import ...`.
 
 
 ### Local Reasoning and Indexes
@@ -186,6 +288,8 @@ Each snapshot includes an `indexes/` directory containing precomputed dependency
 - `reverse_dependencies.yaml`
 - `lookup.yaml`
 - `versions.yaml`
+- `seed_expanded.yaml`
+- `local_names.yaml`
 
 These indexes enable tools to reason about the vocabulary efficiently without recomputing graph relationships.
 

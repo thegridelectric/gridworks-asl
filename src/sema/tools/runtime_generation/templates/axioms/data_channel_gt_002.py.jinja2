@@ -1,0 +1,29 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ data_channel_gt_002_class_name }}":
+        """
+        Axiom 1: PowerMeteringConstraint
+        If InPowerMetering is true, TelemetryName SHALL equal PowerW.
+        """
+        if self.in_power_metering and self.telemetry_name != {{ spaceheat_telemetry_name_007_class_name }}.PowerW:
+            raise ValueError(
+                "Axiom 1 failed: telemetry_name must be PowerW when in_power_metering is true."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ data_channel_gt_002_class_name }}":
+        """
+        Axiom 2: TelemetryQuantityConsistency
+        Quantity SHALL equal the Quantity defined by the canonical
+        spaceheat.telemetry.quantity.projection/000 instance for the specified TelemetryName.
+        """
+        try:
+            {{ spaceheat_telemetry_quantity_projection_000_class_name }}(
+                telemetry_name=self.telemetry_name,
+                quantity=self.quantity,
+            )
+        except ValidationError as e:
+            raise ValueError(
+                "Axiom 2 failed: quantity is inconsistent with telemetry_name."
+            ) from e
+        return self

@@ -1,11 +1,11 @@
 # GENERATED FILE — DO NOT EDIT
-# Generated from definitions/registry.yaml
+# Generated from indexes/public_registry.yaml
 #
 # ------------------------------------------------------------------
-# LOCAL LOOKUP (NON-AUTHORITATIVE)
+# PUBLIC LOOKUP (NON-AUTHORITATIVE)
 #
-# This file provides local resolution from Sema vocabulary words
-# to schema files within this repository.
+# This file provides public resolution from Sema vocabulary words
+# to schema files within this repository. Draft entries are excluded.
 #
 # Authority for all Sema vocabulary definitions SHALL be the
 # canonical schema_url (https://schemas.electricity.works/...).
@@ -16,11 +16,6 @@
 # ------------------------------------------------------------------
 
 types:
-  analytics.channel.gt:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/analytics.channel.gt/000.yaml
   bid:
     latest_version: '000'
     versioning_strategy: literal
@@ -37,6 +32,11 @@ types:
     versions:
       '002': definitions/types/channel.readings/002.yaml
       '001': definitions/types/channel.readings/001.yaml
+  channel.readings.list.item:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/channel.readings.list.item/000.yaml
   connectivity.edge.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -55,16 +55,6 @@ types:
       '002': definitions/types/derived.channel.gt/002.yaml
       '001': definitions/types/derived.channel.gt/001.yaml
       '000': definitions/types/derived.channel.gt/000.yaml
-  fis.authority.manifest:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/fis.authority.manifest/000.yaml
-  fis.instance.authorization.event:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/fis.instance.authorization.event/000.yaml
   fsm.atomic.report:
     latest_version: '001'
     versioning_strategy: literal
@@ -203,9 +193,10 @@ types:
       '003': definitions/types/report.event/003.yaml
       '002': definitions/types/report.event/002.yaml
   scada.control.capabilities:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/scada.control.capabilities/001.yaml
       '000': definitions/types/scada.control.capabilities/000.yaml
   send.control.capabilities:
     latest_version: '000'
@@ -256,9 +247,10 @@ types:
     versions:
       '000': definitions/types/synced.readings/000.yaml
   synced.readings.bundle:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/synced.readings.bundle/002.yaml
       '001': definitions/types/synced.readings.bundle/001.yaml
 enums:
   base.g.node.class:
@@ -275,16 +267,6 @@ enums:
   change.relay.state:
     enum_type: literal
     schema: definitions/enums/change.relay.state/000.yaml
-  fis.authorization.decision:
-    enum_type: versioned
-    latest_version: '000'
-    versions:
-      '000': definitions/enums/fis.authorization.decision/000.yaml
-  fis.authorization.reason:
-    enum_type: versioned
-    latest_version: '000'
-    versions:
-      '000': definitions/enums/fis.authorization.reason/000.yaml
   fsm.report.type:
     enum_type: literal
     schema: definitions/enums/fsm.report.type/000.yaml
@@ -360,6 +342,9 @@ enums:
     latest_version: '001'
     versions:
       '001': definitions/enums/hz.calc.method/001.yaml
+  i2c.adc.channel:
+    enum_type: literal
+    schema: definitions/enums/i2c.adc.channel/000.yaml
   market.price.unit:
     enum_type: versioned
     latest_version: '000'
@@ -416,6 +401,8 @@ formats:
   left.right.dot: definitions/formats/left.right.dot.yaml
   market.slot.name: definitions/formats/market.slot.name.yaml
   non.negative.int: definitions/formats/non.negative.int.yaml
+  pascal.case: definitions/formats/pascal.case.yaml
+  positive.float: definitions/formats/positive.float.yaml
   positive.int: definitions/formats/positive.int.yaml
   spaceheat.name: definitions/formats/spaceheat.name.yaml
   utc.iso8601.millis: definitions/formats/utc.iso8601.millis.yaml

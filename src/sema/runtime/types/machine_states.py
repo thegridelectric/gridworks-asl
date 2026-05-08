@@ -1,20 +1,10 @@
 from typing import Literal
-
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.relay_closed_or_open import RelayClosedOrOpen
-from sema.runtime.property_format import HandleName, LeftRightDot, UTCMilliseconds
-
-
-def _validate_known_state_enum(state_enum: str, states: list[str]) -> None:
-    if state_enum == "relay.closed.or.open":
-        valid_values = set(RelayClosedOrOpen.values())
-        invalid = [state for state in states if state not in valid_values]
-        if invalid:
-            raise ValueError(
-                "Axiom 2 failed: state_list contains invalid values for relay.closed.or.open."
-            )
+from sema.runtime.enums import RelayClosedOrOpen
+from sema.runtime.property_format import HandleName
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import UTCMilliseconds
 
 
 class MachineStates(SemaType):
@@ -29,6 +19,10 @@ class MachineStates(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "MachineStates":
+        """
+        Axiom 1: ListLengthConsistency
+        len(StateList) SHALL equal len(UnixMsList).
+        """
         if len(self.state_list) != len(self.unix_ms_list):
             raise ValueError(
                 "Axiom 1 failed: state_list and unix_ms_list must have equal length."
@@ -37,5 +31,15 @@ class MachineStates(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "MachineStates":
-        _validate_known_state_enum(self.state_enum, self.state_list)
+        """
+        Axiom 2: RecognizedStateEnumConsistency
+        If StateEnum is a recognized GridWorks enum, then all elements of StateList SHALL be
+        valid values of that enum.
+        """
+        if self.state_enum == "relay.closed.or.open":
+            valid = set(RelayClosedOrOpen.values())
+            if any(state not in valid for state in self.state_list):
+                raise ValueError(
+                    "Axiom 2 failed: state_list values must be valid relay.closed.or.open values."
+                )
         return self

@@ -1,19 +1,12 @@
-import re
 from typing import Literal
-
-from pydantic import StrictInt, model_validator
-
+from pydantic import StrictFloat, StrictInt, model_validator
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gpm_from_hz_method import GpmFromHzMethod
-from sema.runtime.enums.hz_calc_method import HzCalcMethod
-from sema.runtime.enums.old_versions.spaceheat_make_model_003 import (
-    SpaceheatMakeModel003,
-)
-from sema.runtime.property_format import UUID4Str, SpaceheatName
+from sema.runtime.enums import GpmFromHzMethod
+from sema.runtime.enums import HzCalcMethod
+from sema.runtime.enums.old_versions.spaceheat_make_model_003 import SpaceheatMakeModel003
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.channel_config import ChannelConfig
-
-
-_PICO_HW_UID_PATTERN = re.compile(r"^pico_[0-9a-f]{6}$")
 
 
 class PicoFlowModuleComponentGt(SemaType):
@@ -30,7 +23,7 @@ class PicoFlowModuleComponentGt(SemaType):
     flow_meter_type: SpaceheatMakeModel003
     hz_calc_method: HzCalcMethod
     gpm_from_hz_method: GpmFromHzMethod
-    constant_gallons_per_tick: float
+    constant_gallons_per_tick: StrictFloat
     send_hz: bool
     send_gallons: bool
     send_tick_lists: bool
@@ -40,14 +33,21 @@ class PicoFlowModuleComponentGt(SemaType):
     publish_any_ticklist_after_s: StrictInt | None = None
     publish_ticklist_period_s: StrictInt | None = None
     publish_ticklist_length: StrictInt | None = None
-    exp_alpha: float | None = None
-    cutoff_frequency: float | None = None
+    exp_alpha: StrictFloat | None = None
+    cutoff_frequency: StrictFloat | None = None
     type_name: Literal["pico.flow.module.component.gt"] = "pico.flow.module.component.gt"
     version: Literal["000"] = "000"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "PicoFlowModuleComponentGt":
-        if self.hw_uid is not None and not _PICO_HW_UID_PATTERN.fullmatch(self.hw_uid):
+        """
+        Axiom 1: HwUidPattern
+        If HwUid is present, it SHALL match the pattern pico_xxxxxx where xxxxxx consists of six
+        lowercase hexadecimal characters.
+        """
+        import re
+
+        if self.hw_uid is not None and not re.fullmatch(r"pico_[0-9a-f]{6}", self.hw_uid):
             raise ValueError(
                 "Axiom 1 failed: hw_uid must match pico_xxxxxx with lowercase hex."
             )

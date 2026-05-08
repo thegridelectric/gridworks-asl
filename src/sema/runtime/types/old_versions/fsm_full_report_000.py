@@ -1,9 +1,11 @@
 from typing import Literal
-
+from pydantic import ConfigDict
 from sema.runtime.base import SemaType
-from sema.runtime.property_format import SpaceheatName, UUID4Str
-from sema.runtime.types.old_versions.fsm_atomic_report_000 import FsmAtomicReport000
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.fsm_full_report import FsmFullReport
+from sema.runtime.types.old_versions.fsm_atomic_report_000 import FsmAtomicReport000
+
 
 class FsmFullReport000(SemaType):
     """Sema: https://schemas.electricity.works/types/fsm.full.report/000"""
@@ -14,13 +16,10 @@ class FsmFullReport000(SemaType):
     type_name: Literal["fsm.full.report"] = "fsm.full.report"
     version: Literal["000"] = "000"
 
-    model_config = dict(SemaType.model_config)
-    model_config["extra"] = "allow"
+    model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))
 
     def upgrade(self) -> FsmFullReport:
-        """
-        000 -> 001: AtomicList: fsm.atomic.report:000 -> 001
-        """
+        """- AtomicList[]: fsm.atomic.report:000 -> 001"""
         data = self.model_dump()
 
         data["atomic_list"] = [atomic.upgrade() for atomic in self.atomic_list]

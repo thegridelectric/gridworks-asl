@@ -1,21 +1,15 @@
 from typing import Literal
-
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.property_format import (
-    LeftRightDot,
-    PositiveInt,
-    UTCMilliseconds,
-    UUID4Str,
-)
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import UTCMilliseconds
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
-from sema.runtime.types.old_versions.ha1_params_004 import Ha1Params004
 from sema.runtime.types.old_versions.data_channel_gt_001 import DataChannelGt001
 from sema.runtime.types.old_versions.derived_channel_gt_000 import DerivedChannelGt000
-from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
-    I2cMultichannelDtRelayComponentGt002,
-)
+from sema.runtime.types.old_versions.ha1_params_004 import Ha1Params004
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import I2cMultichannelDtRelayComponentGt002
 from sema.runtime.types.old_versions.layout_lite_008 import LayoutLite008
 from sema.runtime.types.old_versions.spaceheat_node_gt_200 import SpaceheatNodeGt200
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
@@ -46,10 +40,9 @@ class LayoutLite007(SemaType):
     @model_validator(mode="after")
     def check_axiom_1(self) -> "LayoutLite007":
         """
-        Axiom 1: DcNodeConsistency.
-        Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName
-        SHALL reference an existing ShNodes.Name, and every captured-by node
-        SHALL have an active ActorClass.
+        Axiom 1: DcNodeConsistency
+        Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an
+        existing ShNodes.Name, and every captured-by node SHALL have an active ActorClass.
         """
         node_names = {node.name for node in self.sh_nodes}
         active_actorless = {"NoActor"}
@@ -64,9 +57,9 @@ class LayoutLite007(SemaType):
     @model_validator(mode="after")
     def check_axiom_2(self) -> "LayoutLite007":
         """
-        Axiom 2: NodeHandleHierarchyConsistency.
-        Every ShNode with a dotted handle SHALL have its immediate boss present
-        as another ShNode in the same payload.
+        Axiom 2: NodeHandleHierarchyConsistency
+        Every ShNode with a dotted handle SHALL have its immediate boss present as another
+        ShNode in the same payload.
         """
         node_names = {node.name for node in self.sh_nodes}
         for node in self.sh_nodes:
@@ -79,21 +72,19 @@ class LayoutLite007(SemaType):
     @model_validator(mode="after")
     def check_axiom_3(self) -> "LayoutLite007":
         """
-        Axiom 3: CriticalZoneSubset.
+        Axiom 3: CriticalZoneSubset
         CriticalZoneList SHALL be a subset of ZoneList.
         """
         if not set(self.critical_zone_list).issubset(set(self.zone_list)):
             raise ValueError("Axiom 3 failed: critical_zone_list must be a subset of zone_list.")
         return self
 
-
     def upgrade(self) -> LayoutLite008:
         """
-        007 -> 008:
         - SystemMode: add
         - SeasonalStorageMode: add
         - TankModuleComponents[]: pico.tank.module.component.gt only -> pico.tank.module.component.gt | sim.pico.tank.module.component.gt
-        - Axiom 4 (DerivedNodeConsistency): add
+        - DerivedNodeConsistency axiom: add
         """
         data = self.model_dump()
         data["system_mode"] = "Heating"

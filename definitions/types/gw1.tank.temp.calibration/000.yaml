@@ -39,6 +39,12 @@ properties:
     const: "000"
 
 required:
+  - Depth1M
+  - Depth1B
+  - Depth2M
+  - Depth2B
+  - Depth3M
+  - Depth3B
   - TypeName
   - Version
 

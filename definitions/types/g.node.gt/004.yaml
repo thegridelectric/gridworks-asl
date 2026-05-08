@@ -44,26 +44,20 @@ properties:
       Lifecycle status of the GNode within the registry.
 
   PrevAlias:
-    anyOf:
-      - $ref: "https://schemas.electricity.works/formats/left.right.dot"
-      - type: "null"
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
     description: >
       Previous Alias value during alias transitions. Required only when
       Alias changes. Must be null if Alias has not changed.
 
   PositionPointId:
-    anyOf:
-      - $ref: "https://schemas.electricity.works/formats/uuid4.str"
-      - type: "null"
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
     description: >
       Reference to a PositionPoint GT type giving physical location
       (WGS84 microdegrees). Required for physical GNodes; null for
       logical/service nodes.
 
   DisplayName:
-    anyOf:
-      - type: "string"
-      - type: "null"
+    type: "string"
     description: >
       Optional human-friendly label for UI or documentation.
 
@@ -117,8 +111,8 @@ x-gridworks:
     - number: 1
       name: "ClassConsistency"
       statement: >
-        If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass.
-        If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
+        a. If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass.
+        b. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
 
     - number: 2
       name: "PhysicalGNodeLocations"
@@ -128,19 +122,18 @@ x-gridworks:
     - number: 3
       name: "AliasTransitionConsistency"
       statement: >
-        If PrevAlias is not null, it SHALL differ from Alias. If PrevAlias
-        is null, no alias transition is represented in this snapshot.
+        If PrevAlias is not null, it SHALL differ from Alias.
 
     - number: 4
       name: "GNodeClassNamespacing"
       statement: >
-        GNodeClass SHALL be a non-empty string. It SHALL NOT contain whitespace.
+        GNodeClass SHALL be a non-empty string containing no whitespace
 
     - number: 5
       name: "AliasSuffixSemantics"
       statement: >
-        Alias SHALL end with ".ta" if and only if GNodeClass is "TerminalAsset".
-        Alias SHALL end with ".scada" if and only if GNodeClass is "Scada".
+        a. Alias SHALL end with ".ta" if and only if GNodeClass is "TerminalAsset".
+        b. Alias SHALL end with ".scada" if and only if GNodeClass is "Scada".
 
   extended_description: >
     Grid Nodes (GNodes) provide the stable identity layer for distributed

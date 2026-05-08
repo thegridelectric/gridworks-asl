@@ -1,18 +1,14 @@
 from typing import Any, Literal
-
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
-from sema.runtime.enums.gw1_unit import Gw1Unit
+from sema.runtime.enums import Gw1EmissionMethod
+from sema.runtime.enums import Gw1Unit
 from sema.runtime.enums.old_versions.gw1_quantity_000 import Gw1Quantity000
 from sema.runtime.enums.old_versions.gw1_unit_000 import Gw1Unit000
-from sema.runtime.property_format import (
-    LeftRightDot,
-    PositiveInt,
-    SpaceheatName,
-    UUID4Str,
-)
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProjection
 
 
@@ -42,9 +38,9 @@ class DerivedChannelGt(SemaType):
         EmissionMethod SHALL determine the presence of EmitPeriodS and
         AsyncEmitDelta as follows:
 
-          OnTrigger -> neither EmitPeriodS nor AsyncEmitDelta present
-          Periodic -> EmitPeriodS present, AsyncEmitDelta absent
-          AsyncAndPeriodic -> both EmitPeriodS and AsyncEmitDelta present
+          OnTrigger → neither EmitPeriodS nor AsyncEmitDelta present
+          Periodic → EmitPeriodS present, AsyncEmitDelta absent
+          AsyncAndPeriodic → both EmitPeriodS and AsyncEmitDelta present
         """
         if self.emission_method == Gw1EmissionMethod.OnTrigger:
             if self.emit_period_s is not None or self.async_emit_delta is not None:

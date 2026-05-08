@@ -1,0 +1,40 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ pico_tank_module_component_gt_011_class_name }}":
+        """
+        Axiom 1: PicoHardwareIdentityXor
+        Exactly one of the following SHALL hold: - PicoHwUid is present - both PicoAHwUid and
+        PicoBHwUid are present
+        """
+        has_single = self.pico_hw_uid is not None
+        has_pair = self.pico_a_hw_uid is not None and self.pico_b_hw_uid is not None
+        if has_single == has_pair:
+            raise ValueError(
+                "Axiom 1 failed: exactly one of pico_hw_uid or both pico_a_hw_uid and pico_b_hw_uid must be present."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ pico_tank_module_component_gt_011_class_name }}":
+        """
+        Axiom 2: PicoKOhmsConsistency
+        PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
+        """
+        if (self.temp_calc_method == {{ temp_calc_method_000_class_name }}.SimpleBetaForPico) != (
+            self.pico_k_ohms is not None
+        ):
+            raise ValueError(
+                "Axiom 2 failed: pico_k_ohms must be present iff temp_calc_method is SimpleBetaForPico."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "{{ pico_tank_module_component_gt_011_class_name }}":
+        """
+        Axiom 3: SensorOrderPermutation
+        If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
+        """
+        if self.sensor_order is not None and sorted(self.sensor_order) != [1, 2, 3]:
+            raise ValueError(
+                "Axiom 3 failed: sensor_order must be a permutation of [1, 2, 3]."
+            )
+        return self

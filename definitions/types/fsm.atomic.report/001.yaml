@@ -26,55 +26,10 @@ properties:
       Indicates whether this report represents an Event, an Action, or Other.
 
   Action:
+    type: object
     description: >
-      Structured payload describing a side-effect produced by the state machine.
-      The structure of this object determines the type of action being executed.
-    oneOf:
-      - type: object
-        description: >
-          Relay energization command. Sets a relay to either energized or
-          de-energized state.
-        properties:
-          Value:
-            $ref: "https://schemas.electricity.works/enums/relay.energization.state/000"
-            description: >
-              Target energization state of the relay.
-        required:
-          - Value
-        additionalProperties: false
-
-      - type: object
-        description: >
-          I2C bit write operation. Writes a single bit value to a specified
-          register on an I2C device.
-        properties:
-          I2cBus:
-            $ref: "https://schemas.electricity.works/formats/spaceheat.name"
-            description: >
-              Logical name of the I2C bus.
-          Address:
-            type: integer
-            description: >
-              I2C device address.
-          I2cRegister:
-            type: integer
-            description: >
-              Register address within the device.
-          Bit:
-            type: integer
-            description: >
-              Bit position within the register.
-          Value:
-            type: integer
-            description: >
-              Bit value to write (typically 0 or 1).
-        required:
-          - I2cBus
-          - Address
-          - I2cRegister
-          - Bit
-          - Value
-        additionalProperties: false
+      Structured payload describing a side-effect produced by the state
+      machine. Version 001 does not constrain the structure of this payload.
 
   EventEnum:
     $ref: "https://schemas.electricity.works/formats/left.right.dot"

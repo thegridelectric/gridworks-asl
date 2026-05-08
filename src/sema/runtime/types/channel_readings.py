@@ -1,9 +1,8 @@
 from typing import Literal
-
 from pydantic import StrictInt, model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.property_format import SpaceheatName, UTCMilliseconds
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.property_format import UTCMilliseconds
 
 
 class ChannelReadings(SemaType):
@@ -17,6 +16,10 @@ class ChannelReadings(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "ChannelReadings":
+        """
+        Axiom 1: ListLengthConsistency
+        len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
+        """
         if len(self.value_list) != len(self.scada_read_time_unix_ms_list):
             raise ValueError(
                 "Axiom 1 failed: value_list and scada_read_time_unix_ms_list must have equal length."

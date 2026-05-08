@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ report_003_class_name }}:
+        """- FsmReportList[]: fsm.full.report:000 -> 001"""
+        data = self.model_dump()
+        data["fsm_report_list"] = [
+            fsm_report.upgrade() if fsm_report.version == "000" else fsm_report for fsm_report in self.fsm_report_list
+        ]
+        data["version"] = "003"
+        return {{ report_003_class_name }}.model_validate(data)

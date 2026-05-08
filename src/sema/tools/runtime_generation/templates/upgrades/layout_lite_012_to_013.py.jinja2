@@ -1,0 +1,12 @@
+    def upgrade(self) -> {{ layout_lite_013_class_name }}:
+        """- I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004"""
+        data = self.model_dump()
+        if self.i2c_relay_component is not None:
+            upgraded_component = self.i2c_relay_component.upgrade()
+            if not isinstance(upgraded_component, {{ i2c_multichannel_dt_relay_component_gt_004_class_name }}):
+                raise TypeError(
+                    "Expected I2cRelayComponent upgrade to produce {{ i2c_multichannel_dt_relay_component_gt_004_class_name }}"
+                )
+            data["i2c_relay_component"] = upgraded_component
+        data["version"] = "013"
+        return {{ layout_lite_013_class_name }}.model_validate(data)

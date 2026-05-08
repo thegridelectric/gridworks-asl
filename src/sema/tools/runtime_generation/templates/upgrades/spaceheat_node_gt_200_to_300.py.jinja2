@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ spaceheat_node_gt_300_class_name }}:
+        """
+        - ActorClass: string -> gw1.actor.class:009
+        """
+        data = self.model_dump()
+        data["actor_class"] = {{ gw1_actor_class_009_class_name }}(data["actor_class"]).value
+        data["version"] = "300"
+        return {{ spaceheat_node_gt_300_class_name }}.model_validate(data)

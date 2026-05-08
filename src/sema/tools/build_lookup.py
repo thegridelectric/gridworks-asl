@@ -6,17 +6,17 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[3]
-REGISTRY_PATH = ROOT / "definitions" / "registry.yaml"
+REGISTRY_PATH = ROOT / "indexes" / "public_registry.yaml"
 OUTPUT_PATH = ROOT / "indexes" / "lookup.yaml"
 
 HEADER = """# GENERATED FILE — DO NOT EDIT
-# Generated from definitions/registry.yaml
+# Generated from indexes/public_registry.yaml
 #
 # ------------------------------------------------------------------
-# LOCAL LOOKUP (NON-AUTHORITATIVE)
+# PUBLIC LOOKUP (NON-AUTHORITATIVE)
 #
-# This file provides local resolution from Sema vocabulary words
-# to schema files within this repository.
+# This file provides public resolution from Sema vocabulary words
+# to schema files within this repository. Draft entries are excluded.
 #
 # Authority for all Sema vocabulary definitions SHALL be the
 # canonical schema_url (https://schemas.electricity.works/...).

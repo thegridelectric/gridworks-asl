@@ -9,7 +9,7 @@ from sema.runtime.types.synced_readings_bundle import (
 
 def test_valid_object() -> None:
     SyncedReadingsBundle(
-        about_gnode_alias="a.b.c.ta",
+        about_g_node_alias="a.b.c.ta",
         start_timestamp="2025-02-26T00:00:00Z",
         end_timestamp="2025-02-26T02:00:00Z",
         timestamp_list=[
@@ -48,7 +48,7 @@ def test_valid_object() -> None:
 def test_axiom1() -> None:
     try:
         SyncedReadingsBundle(
-            about_gnode_alias="a.b.c",
+            about_g_node_alias="a.b.c",
             start_timestamp="2025-02-26T00:00:00Z",
             end_timestamp="2025-02-26T02:00:00Z",
             timestamp_list=[],
@@ -62,7 +62,7 @@ def test_axiom1() -> None:
 def test_axiom2() -> None:
     try:
         SyncedReadingsBundle(
-            about_gnode_alias="a.b.c.ta",
+            about_g_node_alias="a.b.c.ta",
             start_timestamp="2025-02-26T00:00:00Z",
             end_timestamp="2025-02-26T02:00:00Z",
             timestamp_list=["2025-02-26T00:00:00Z"],
@@ -89,7 +89,7 @@ def test_axiom2() -> None:
 def test_axiom3() -> None:
     try:
         SyncedReadingsBundle(
-            about_gnode_alias="a.b.c.ta",
+            about_g_node_alias="a.b.c.ta",
             start_timestamp="2025-02-26T02:00:00Z",
             end_timestamp="2025-02-26T00:00:00Z",
             timestamp_list=[],
@@ -103,7 +103,7 @@ def test_axiom3() -> None:
 def test_axiom4() -> None:
     try:
         SyncedReadingsBundle(
-            about_gnode_alias="a.b.c.ta",
+            about_g_node_alias="a.b.c.ta",
             start_timestamp="2025-02-26T00:00:00Z",
             end_timestamp="2025-02-26T02:00:00Z",
             timestamp_list=["2025-02-26T00:00:00Z", "2025-02-26T01:00:00Z"],
@@ -130,7 +130,7 @@ def test_axiom4() -> None:
 def test_axiom5_invalid_unit_type() -> None:
     try:
         SyncedReadingsBundle(
-            about_gnode_alias="a.b.c.ta",
+            about_g_node_alias="a.b.c.ta",
             start_timestamp="2025-02-26T00:00:00Z",
             end_timestamp="2025-02-26T02:00:00Z",
             timestamp_list=["2025-02-26T00:00:00Z", "2025-02-26T01:00:00Z"],
@@ -151,7 +151,7 @@ def test_axiom5_invalid_unit_type() -> None:
 def test_axiom5_invalid_unit() -> None:
     try:
         SyncedReadingsBundle(
-            about_gnode_alias="a.b.c.ta",
+            about_g_node_alias="a.b.c.ta",
             start_timestamp="2025-02-26T00:00:00Z",
             end_timestamp="2025-02-26T02:00:00Z",
             timestamp_list=["2025-02-26T00:00:00Z", "2025-02-26T01:00:00Z"],

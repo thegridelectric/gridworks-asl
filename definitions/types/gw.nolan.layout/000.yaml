@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/gw.nolan.layout/000"
+$id: "https://schemas.electricity.works/draft/types/gw.nolan.layout/000"
 
 title: "gw.nolan.layout"
 type: object
@@ -780,76 +780,3 @@ x-gridworks:
 
   extended_description: >
     TODO: add Nolan specific information (e.g. radiant floor heating, Gw108).
-
-
-###
-
-# Nolan entry in registry
-
-
-   gw.nolan.layout:
-    latest_version: "000"
-    owner: gridworks-energy
-    versioning_strategy: "literal"
-    description: "ADD"
-
-    versions:
-      "000":
-        schema_url: "https://schemas.electricity.works/types/gw.nolan.layout/000"
-        created: "2026-03-20T19:00:00Z"
-        summary: "Initial commit"
-        dependencies:
-          direct:
-            - "change.heatcall.source:000"
-            - "change.relay.state:000"
-            - "component.attribute.class.gt:001"
-            - "data.channel.gt:001"
-            - "derived.channel.gt:002"
-            - "electric.meter.cac.gt:001"
-            - "electric.meter.component.gt:001"
-            - "g.node.gt:004"
-            - "gw1.quantity:000"
-            - "gw1.scada.device.type.gt:000"
-            - "gw1.unit:001"
-            - "gw108.gpio.relay.component.gt:001"
-            - "gw108.gpio.sensor.component.gt:001"
-            - "heatcall.source:000"
-            - "heatcall.interpretation:000"
-            - "i2c.multichannel.dt.relay.component.gt:003"
-            - "pico.btu.meter.component.gt:000"
-            - "pico.tank.module.component.gt:000"
-            - "relay.closed.or.open:000"
-            - "relay.wiring.config:000"
-            - "spaceheat.node.gt:301"
-            - "web.server.component.gt:001"
-
-          all:
-            - "base.g.node.class:000"
-            - "change.heatcall.source:000"
-            - "change.relay.state:000"
-            - "component.attribute.class.gt:001"
-            - "data.channel.gt:001"
-            - "derived.channel.gt:002"
-            - "electric.meter.cac.gt:001"
-            - "electric.meter.component.gt:001"
-            - "g.node.gt:004"
-            - "g.node.status:000"
-            - "gw1.quantity:000"
-            - "gw1.scada.device.type.gt:000"
-            - "gw1.unit:001"
-            - "gw108.gpio.relay.component.gt:001"
-            - "gw108.gpio.sensor.component.gt:001"
-            - "heatcall.interpretation:000"
-            - "heatcall.source:000"
-            - "i2c.multichannel.dt.relay.component.gt:003"
-            - "left.right.dot"
-            - "pico.btu.meter.component.gt:000"
-            - "pico.tank.module.component.gt:000"
-            - "relay.actor.config:002"
-            - "relay.closed.or.open:000"
-            - "relay.wiring.config:000"
-            - "spaceheat.name"
-            - "spaceheat.node.gt:301"
-            - "uuid4.str"
-            - "web.server.component.gt:001"
-          

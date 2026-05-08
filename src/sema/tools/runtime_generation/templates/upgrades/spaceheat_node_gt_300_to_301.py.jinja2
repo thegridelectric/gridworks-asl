@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ spaceheat_node_gt_301_class_name }}:
+        """
+        - BoardComponentId: add as Optional
+        - ActorClass: gw1.actor.class:009 -> 011
+        """
+        data = self.model_dump()
+        data["version"] = "301"
+        return {{ spaceheat_node_gt_301_class_name }}.model_validate(data)

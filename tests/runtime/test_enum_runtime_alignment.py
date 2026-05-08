@@ -5,7 +5,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[2]
-REGISTRY_PATH = ROOT / "definitions" / "registry.yaml"
+REGISTRY_PATH = ROOT / "indexes" / "public_registry.yaml"
 ENUMS_DIR = ROOT / "definitions" / "enums"
 
 

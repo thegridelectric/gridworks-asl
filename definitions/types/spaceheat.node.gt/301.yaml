@@ -52,8 +52,7 @@ properties:
       allows grouping of nodes by embedded hardware platform or control board.
 
   NameplatePowerW:
-    type: integer
-    minimum: 0
+    $ref: "https://schemas.electricity.works/formats/positive.int"
     description: >
       Nameplate power rating in watts for this node, used for power estimation,
       metering, and system-level energy calculations.

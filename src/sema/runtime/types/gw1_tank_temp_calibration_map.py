@@ -1,7 +1,5 @@
-from typing import Literal
-
+from typing import Any, Literal
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
 from sema.runtime.types.gw1_tank_temp_calibration import Gw1TankTempCalibration
 
@@ -16,6 +14,11 @@ class Gw1TankTempCalibrationMap(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "Gw1TankTempCalibrationMap":
+        """
+        Axiom 1: ContiguousTankIndexConstraint
+        Tank SHALL contain between 1 and 6 entries, and its keys SHALL be the contiguous integer
+        strings starting at 1.
+        """
         keys = sorted(int(key) for key in self.tank)
         if not 1 <= len(keys) <= 6:
             raise ValueError("Axiom 1 failed: tank must contain between 1 and 6 entries.")

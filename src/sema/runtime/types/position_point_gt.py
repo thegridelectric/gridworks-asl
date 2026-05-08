@@ -1,16 +1,12 @@
-from typing import Literal
-
-from sema.runtime.base import SemaType
+from typing import Literal, Self
 from pydantic import StrictInt, model_validator
-from typing_extensions import Self
-
+from sema.runtime.base import SemaType
 from sema.runtime.property_format import UUID4Str
 
 
 class PositionPointGt(SemaType):
-    """
-    Sema: https://schemas.electricity.works/types/position.point.gt/000
-    """
+    """Sema: https://schemas.electricity.works/types/position.point.gt/000"""
+
     id: UUID4Str
     latitude_micro_deg: StrictInt
     longitude_micro_deg: StrictInt
@@ -20,9 +16,9 @@ class PositionPointGt(SemaType):
     @model_validator(mode="after") 
     def check_axiom_1(self) -> Self: 
         """
-        Axiom 1: Coordinates must be valid Earth locations.
-        Latitude: -90 to +90 degrees (-90,000,000 to +90,000,000 microdegrees)
-        Longitude: -180 to +180 degrees (-180,000,000 to +180,000,000 microdegrees)
+        Axiom 1: ValidEarthCoordinates
+        LatitudeMicroDeg SHALL be between -90,000,000 and 90,000,000 inclusive.
+        LongitudeMicroDeg SHALL be between -180,000,000 and 180,000,000 inclusive.
         """
         if not -90_000_000 <= self.latitude_micro_deg <= 90_000_000:
             raise ValueError(
@@ -33,13 +29,3 @@ class PositionPointGt(SemaType):
                 f"Longitude {self.longitude_micro_deg / 1_000_000}° out of range [-180, 180]"
             )
         return self
-
-    @property
-    def lat(self) -> float:
-        """Get latitude in decimal degrees."""
-        return self.latitude_micro_deg / 1_000_000
-
-    @property
-    def lon(self) -> float:
-        """Get longitude in decimal degrees."""
-        return self.longitude_micro_deg / 1_000_000

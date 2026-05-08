@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw1_telemetry_name_quantity_projection_000_class_name }}":
+        """
+        Axiom 1: EnumeratedTelemetryProjectionMapping
+        Every (TelemetryName, Quantity) pair SHALL match the mapping declared in
+        x-gridworks.projection.table. Any other combination is invalid.
+        """
+        expected = self.project(self.telemetry_name)
+        if expected != self.quantity:
+            raise ValueError(
+                "Axiom 1 failed: telemetry_name and quantity do not match the enumerated projection."
+            )
+        return self

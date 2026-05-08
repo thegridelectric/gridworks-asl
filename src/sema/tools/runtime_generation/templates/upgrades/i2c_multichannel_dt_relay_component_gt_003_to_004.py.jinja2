@@ -1,0 +1,15 @@
+    def upgrade(self) -> {{ i2c_multichannel_dt_relay_component_gt_004_class_name }}:
+        """- ConfigList[]: relay.actor.config:002 -> 003"""
+        data = self.model_dump()
+
+        upgraded_configs = []
+        for cfg in self.config_list:
+            if isinstance(cfg, {{ relay_actor_config_002_class_name }}):
+                upgraded_configs.append(cfg.upgrade())
+            else:
+                upgraded_configs.append(cfg)
+
+        data["config_list"] = upgraded_configs
+        data["version"] = "004"
+
+        return {{ i2c_multichannel_dt_relay_component_gt_004_class_name }}.model_validate(data)

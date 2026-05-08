@@ -1,35 +1,11 @@
-from typing import Literal
-
-from pydantic import BaseModel, ConfigDict, StrictInt, model_validator
-
+from typing import Any, Literal
+from pydantic import ConfigDict, model_validator
 from sema.runtime.base import SemaType
-from sema.runtime.enums.fsm_report_type import FsmReportType
-from sema.runtime.enums.relay_energization_state import RelayEnergizationState
-from sema.runtime.property_format import HandleName, LeftRightDot, SpaceheatName, UTCMilliseconds, UUID4Str
-
-
-class FsmAtomicReportSimpleAction(BaseModel):
-    value: RelayEnergizationState
-
-    model_config = ConfigDict(
-        alias_generator=SemaType.model_config.get("alias_generator"),
-        populate_by_name=True,
-        extra="forbid",
-    )
-
-
-class FsmAtomicReportI2cAction(BaseModel):
-    i2c_bus: SpaceheatName
-    address: StrictInt
-    i2c_register: StrictInt
-    bit: StrictInt
-    value: StrictInt
-
-    model_config = ConfigDict(
-        alias_generator=SemaType.model_config.get("alias_generator"),
-        populate_by_name=True,
-        extra="forbid",
-    )
+from sema.runtime.enums import FsmReportType
+from sema.runtime.property_format import HandleName
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import UTCMilliseconds
+from sema.runtime.property_format import UUID4Str
 
 
 class FsmAtomicReport(SemaType):
@@ -38,7 +14,7 @@ class FsmAtomicReport(SemaType):
     machine_handle: HandleName
     state_enum: str
     report_type: FsmReportType
-    action: FsmAtomicReportSimpleAction | FsmAtomicReportI2cAction | None = None
+    action: dict[str, Any] | None = None
     event_enum: LeftRightDot | None = None
     event: str | None = None
     from_state: str | None = None
@@ -48,15 +24,14 @@ class FsmAtomicReport(SemaType):
     type_name: Literal["fsm.atomic.report"] = "fsm.atomic.report"
     version: Literal["001"] = "001"
 
-    model_config = ConfigDict(
-        alias_generator=SemaType.model_config.get("alias_generator"),
-        frozen=True,
-        populate_by_name=True,
-        extra="allow",
-    )
+    model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "FsmAtomicReport":
+        """
+        Axiom 1: ActionPresenceConsistency
+        Action SHALL be present if and only if ReportType equals Action.
+        """
         if (self.report_type == "Action") != (self.action is not None):
             raise ValueError(
                 "Axiom 1 failed: action must be present if and only if report_type is Action."
@@ -65,6 +40,11 @@ class FsmAtomicReport(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "FsmAtomicReport":
+        """
+        Axiom 2: EventPresenceConsistency
+        EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType
+        equals Event.
+        """
         event_fields_present = all(
             field is not None
             for field in (self.event_enum, self.event, self.from_state, self.to_state)

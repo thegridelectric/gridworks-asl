@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ i2c_multichannel_dt_relay_component_gt_002_class_name }}":
+        """
+        Axiom 1: ActorAndRelayIndexUniqueness
+        ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx values.
+        """
+        actor_names = [cfg.actor_name for cfg in self.config_list]
+        relay_idxs = [cfg.relay_idx for cfg in self.config_list]
+        if len(set(actor_names)) != len(actor_names):
+            raise ValueError("Axiom 1 failed: config_list contains duplicate actor_name values.")
+        if len(set(relay_idxs)) != len(relay_idxs):
+            raise ValueError("Axiom 1 failed: config_list contains duplicate relay_idx values.")
+        return self

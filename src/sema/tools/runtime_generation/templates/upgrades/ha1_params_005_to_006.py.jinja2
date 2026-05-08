@@ -1,0 +1,11 @@
+    def upgrade(self) -> {{ ha1_params_006_class_name }}:
+        """
+        - HpMaxKwEl: add as optional
+        - HpMaxKwTh: required -> optional
+        - HpTurnOnMinutes: add
+        - VersioningStrategy: string -> literal
+        """
+        data = self.model_dump()
+        data["hp_turn_on_minutes"] = 12
+        data["version"] = "006"
+        return {{ ha1_params_006_class_name }}.model_validate(data)

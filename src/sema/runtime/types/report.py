@@ -1,13 +1,10 @@
 from typing import Literal
-
 from sema.runtime.base import SemaType
-from sema.runtime.property_format import (
-    LeftRightDot,
-    PositiveInt,
-    UTCMilliseconds,
-    UTCSeconds,
-    UUID4Str,
-)
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import UTCMilliseconds
+from sema.runtime.property_format import UTCSeconds
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.channel_readings import ChannelReadings
 from sema.runtime.types.fsm_full_report import FsmFullReport
 from sema.runtime.types.machine_states import MachineStates

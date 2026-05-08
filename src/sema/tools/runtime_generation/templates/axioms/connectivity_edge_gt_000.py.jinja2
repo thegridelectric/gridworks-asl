@@ -1,0 +1,11 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ connectivity_edge_gt_000_class_name }}":
+        """
+        Axiom 1: NoSelfLoop
+        FromGNodeId SHALL NOT equal ToGNodeId.
+        """
+        if self.from_g_node_id == self.to_g_node_id:
+            raise ValueError(
+                "Axiom 1 failed: from_g_node_id and to_g_node_id must differ."
+            )
+        return self

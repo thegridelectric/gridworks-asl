@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/enums/fis.authorization.reason/000"
+$id: "https://schemas.electricity.works/draft/enums/fis.authorization.reason/000"
 
 title: "fis.authorization.reason"
 type: "string"

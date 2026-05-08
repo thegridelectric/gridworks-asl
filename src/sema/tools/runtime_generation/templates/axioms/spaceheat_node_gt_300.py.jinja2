@@ -1,0 +1,11 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ spaceheat_node_gt_300_class_name }}":
+        """
+        Axiom 1: InPowerMeteringRequiresNameplate
+        If InPowerMetering is true, NameplatePowerW SHALL be present.
+        """
+        if self.in_power_metering and self.nameplate_power_w is None:
+            raise ValueError(
+                "Axiom 1 failed: nameplate_power_w is required when in_power_metering is true."
+            )
+        return self

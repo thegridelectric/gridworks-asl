@@ -1,10 +1,9 @@
 from typing import Literal
-
 from pydantic import StrictInt, model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
-from sema.runtime.property_format import PositiveInt, SpaceheatName
+from sema.runtime.enums import SpaceheatUnit
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import SpaceheatName
 
 
 class ChannelConfig(SemaType):
@@ -22,6 +21,12 @@ class ChannelConfig(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "ChannelConfig":
+        """
+        Axiom 1: CaptureAndPollingConsistency
+        If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be
+        greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then
+        CapturePeriodMs SHALL be a multiple of PollPeriodMs.
+        """
         if self.poll_period_ms is None:
             return self
 
