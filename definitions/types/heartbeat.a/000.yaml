@@ -1,0 +1,49 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/heartbeat.a/000"
+
+title: "heartbeat.a"
+type: object
+description: >
+  Lightweight actor heartbeat message exchanged between a supervisor and a
+  supervised actor. The message carries a newly selected local hexadecimal
+  token and may echo the last hexadecimal token received from the peer,
+  allowing each side to confirm that heartbeat traffic is fresh and
+  bidirectional after the initial exchange.
+
+properties:
+  MyHex:
+    $ref: "https://schemas.electricity.works/formats/hex.char"
+    description: >
+      Fresh hexadecimal token selected by the sender for this heartbeat.
+
+  YourLastHex:
+    $ref: "https://schemas.electricity.works/formats/hex.char"
+    description: >
+      Most recent hexadecimal token previously received from the peer and
+      echoed back by the sender. This field is absent when no peer token has
+      been received yet.
+
+  TypeName:
+    const: "heartbeat.a"
+
+  Version:
+    const: "000"
+
+required:
+  - MyHex
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "MyHex": "a",
+      "YourLastHex": "0",
+      "TypeName": "heartbeat.a",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

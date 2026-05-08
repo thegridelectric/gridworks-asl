@@ -161,6 +161,13 @@ types:
       "004":
         summary: "Baseline runtime version (no prior version tracked)."
 
+  heartbeat.a:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version."
+
   i2c.multichannel.dt.relay.component.gt:
     latest_version: "004"
     versioning_strategy: "literal"
@@ -390,11 +397,9 @@ types:
         summary: "Initial Sema version"
 
   synced.readings.bundle:
-    latest_version: "002"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
-      "002":
-        summary: "- ChannelReadingsList[]: inline object -> channel.readings.list.item:000"
       "001":
         summary: "Baseline runtime version (no prior version tracked)."
 

@@ -110,6 +110,11 @@ types:
       '006': definitions/types/ha1.params/006.yaml
       '005': definitions/types/ha1.params/005.yaml
       '004': definitions/types/ha1.params/004.yaml
+  heartbeat.a:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/heartbeat.a/000.yaml
   i2c.multichannel.dt.relay.component.gt:
     latest_version: '004'
     versioning_strategy: literal
@@ -247,10 +252,9 @@ types:
     versions:
       '000': definitions/types/synced.readings/000.yaml
   synced.readings.bundle:
-    latest_version: '002'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
-      '002': definitions/types/synced.readings.bundle/002.yaml
       '001': definitions/types/synced.readings.bundle/001.yaml
 enums:
   base.g.node.class:
@@ -398,6 +402,7 @@ enums:
       '000': definitions/enums/temp.calc.method/000.yaml
 formats:
   handle.name: definitions/formats/handle.name.yaml
+  hex.char: definitions/formats/hex.char.yaml
   left.right.dot: definitions/formats/left.right.dot.yaml
   market.slot.name: definitions/formats/market.slot.name.yaml
   non.negative.int: definitions/formats/non.negative.int.yaml

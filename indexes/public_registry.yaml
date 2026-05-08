@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-05-07T20:00:00Z'
+  last_updated: '2026-05-08T16:34:06Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -15,6 +15,11 @@ formats:
     created: '2024-09-02T15:00:00Z'
     description: Dot-separated hierarchical identifier with hyphen-friendly lowercase
       segments
+  hex.char:
+    owner: gridworks-energy
+    schema_url: https://schemas.electricity.works/formats/hex.char
+    created: '2026-05-08T16:34:06Z'
+    description: Single hexadecimal character, restricted to 0-9, a-f, or A-F
   left.right.dot:
     owner: gridworks-energy
     schema_url: https://schemas.electricity.works/formats/left.right.dot
@@ -742,6 +747,20 @@ types:
         summary: Baseline runtime version (no prior version tracked).
         direct_dependencies:
           structural: []
+  heartbeat.a:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Lightweight actor heartbeat message carrying a fresh local hex token
+      and, when available, the peer's previous token.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/heartbeat.a/000
+        created: '2026-05-08T16:34:06Z'
+        summary: Initial Sema version.
+        direct_dependencies:
+          structural:
+          - hex.char
   i2c.multichannel.dt.relay.component.gt:
     latest_version: '004'
     owner: gridworks-energy

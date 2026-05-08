@@ -12,6 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 FORMATS_DIR = REPO_ROOT / "definitions" / "formats"
 RUNTIME_FORMAT_TYPES: dict[str, Any] = {
     "handle.name": property_format.HandleName,
+    "hex.char": property_format.HexChar,
     "left.right.dot": property_format.LeftRightDot,
     "market.slot.name": property_format.MarketSlotName,
     "non.negative.int": property_format.NonNegativeInt,

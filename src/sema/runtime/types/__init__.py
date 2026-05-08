@@ -16,6 +16,7 @@ from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrat
 from sema.runtime.types.gw1_telemetry_name_quantity_projection import Gw1TelemetryNameQuantityProjection
 from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProjection
 from sema.runtime.types.ha1_params import Ha1Params
+from sema.runtime.types.heartbeat_a import HeartbeatA
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import I2cMultichannelDtRelayComponentGt
 from sema.runtime.types.i2c_thermistor_channel_config import I2cThermistorChannelConfig
 from sema.runtime.types.i2c_thermistor_reader_component_gt import I2cThermistorReaderComponentGt
@@ -61,6 +62,7 @@ __all__ = [
     "Gw1TelemetryNameQuantityProjection",
     "Gw1UnitQuantityProjection",
     "Ha1Params",
+    "HeartbeatA",
     "I2cMultichannelDtRelayComponentGt",
     "I2cThermistorChannelConfig",
     "I2cThermistorReaderComponentGt",

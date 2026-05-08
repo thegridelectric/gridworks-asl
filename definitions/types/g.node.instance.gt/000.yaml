@@ -44,14 +44,12 @@ properties:
 
   ConnectionHandle:
     type: string
-    minLength: 1
     description: >
       Opaque transport-level connection identifier as reported
       by the broker (e.g., RabbitMQ connection name).
 
   ObservedPeerAddress:
     type: string
-    minLength: 1
     description: >
       Remote address as observed by the broker at connection time.
 

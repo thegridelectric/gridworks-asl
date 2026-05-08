@@ -1,0 +1,28 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/formats/hex.char"
+
+title: "hex.char"
+description: >
+  Single hexadecimal character. The serialized value must be a string of
+  exactly one ASCII character in 0-9, a-f, or A-F.
+
+type: string
+minLength: 1
+maxLength: 1
+pattern: "^[0-9a-fA-F]$"
+
+examples:
+  - "0"
+  - "9"
+  - "a"
+  - "F"
+
+counterexamples:
+  - ""
+  - "10"
+  - "g"
+  - "x"
+  - 1
+
+x-gridworks:
+  owner: "gridworks-energy"
