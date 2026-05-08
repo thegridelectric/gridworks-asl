@@ -379,6 +379,8 @@ formats:
     - send.control.capabilities:000
     - send.layout:000
     - send.layout:001
+    - sim.ready:000
+    - sim.timestep:000
     - single.machine.state:000
     - snapshot.spaceheat:003
     - synced.readings.bundle:001
@@ -466,6 +468,7 @@ formats:
     - scada.control.capabilities:001
     - send.control.capabilities:000
     - send.layout:001
+    - sim.timestep:000
     - single.machine.state:000
     - single.reading:000
     - snapshot.spaceheat:003
@@ -476,6 +479,8 @@ formats:
     - data.channel.gt:002
     - report:002
     - report:003
+    - sim.ready:000
+    - sim.timestep:000
   uuid4.str:
     used_by:
     - channel.readings:001
@@ -510,6 +515,8 @@ formats:
     - report:002
     - report:003
     - sim.pico.tank.module.component.gt:000
+    - sim.ready:000
+    - sim.timestep:000
     - snapshot.spaceheat:003
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300

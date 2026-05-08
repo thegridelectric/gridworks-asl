@@ -752,6 +752,23 @@ types:
       - uuid4.str
       types:
       - channel.config:000
+  sim.ready:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.seconds
+      - uuid4.str
+      types: []
+  sim.timestep:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - utc.seconds
+      - uuid4.str
+      types: []
   single.machine.state:
     '000':
       enums:

@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-05-08T16:34:06Z"
+  last_updated: "2026-05-08T18:01:43Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1407,6 +1407,23 @@ types:
         direct_dependencies:
           structural: []
 
+  sim.ready:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Actor readiness announcement for coordinated simulation time."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/sim.ready/000"
+        created: "2026-05-08T18:01:43Z"
+        summary: "Initial Sema version."
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.seconds"
+            - "uuid4.str"
+
   relay.actor.config:
     latest_version: "003"
     owner: gridworks-energy
@@ -1618,6 +1635,24 @@ types:
             - "channel.config:000"
             - "positive.int"
             - "temp.calc.method:000"
+            - "uuid4.str"
+
+  sim.timestep:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Simulation time-coordinator message announcing the current simulated Unix time."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/sim.timestep/000"
+        created: "2026-05-08T16:48:56Z"
+        summary: "Initial Sema version."
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "utc.seconds"
             - "uuid4.str"
 
   single.machine.state:

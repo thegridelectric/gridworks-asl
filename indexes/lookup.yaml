@@ -179,6 +179,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/power.watts/000.yaml
+  sim.ready:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.ready/000.yaml
   relay.actor.config:
     latest_version: '003'
     versioning_strategy: literal
@@ -219,6 +224,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/sim.pico.tank.module.component.gt/000.yaml
+  sim.timestep:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.timestep/000.yaml
   single.machine.state:
     latest_version: '000'
     versioning_strategy: literal

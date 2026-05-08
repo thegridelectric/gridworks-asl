@@ -280,6 +280,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  sim.ready:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version."
+
   relay.actor.config:
     latest_version: "003"
     versioning_strategy: "literal"
@@ -347,6 +354,13 @@ types:
     versions:
       "000":
         summary: "Initial Sema version"
+
+  sim.timestep:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version."
 
   single.machine.state:
     latest_version: "000"
