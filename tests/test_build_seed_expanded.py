@@ -43,6 +43,22 @@ initial_targets:
     assert {"011", "012", "013"} <= set(expanded["worklist"]["types"]["layout.lite"])
 
 
+def test_include_all_versions_uses_public_versions_only(tmp_path: Path) -> None:
+    expanded = expand_request(
+        tmp_path,
+        """
+initial_targets:
+  types:
+    report.event:
+      include_all_versions: true
+""",
+    )
+
+    assert expanded["initial_targets"] == ["report.event:002", "report.event:003"]
+    assert set(expanded["worklist"]["types"]["report.event"]) == {"002", "003"}
+    assert "004" not in expanded["worklist"]["types"]["report.event"]
+
+
 def test_structured_seed_request_accepts_enum_versions(tmp_path: Path) -> None:
     expanded = expand_request(
         tmp_path,
