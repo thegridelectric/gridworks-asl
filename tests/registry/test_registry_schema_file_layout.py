@@ -109,8 +109,16 @@ def test_registry_entries_resolve_to_schema_files() -> None:
     for name, entry in registry["enums"].items():
         if entry["enum_type"] == "literal":
             status = _registry_word_status(entry)
+            schema_url = str(entry.get("schema_url", ""))
+            assert schema_url.endswith("/000"), (
+                f"{name}: literal enums SHALL only be version 000; "
+                f"registry schema_url is {schema_url}"
+            )
             path = expected_enum_path(name, "000")
-            assert path.exists(), f"Missing enum schema for {name}:000: {path}"
+            assert path.exists(), (
+                f"Missing enum schema for {name}:000: {path}. "
+                "Literal enums SHALL only be version 000."
+            )
             assert id_line(path) == expected_enum_id_line(name, "000", status)
             schema = load_yaml(path)
             expected_type = "integer" if entry.get("value_type") == "integer" else "string"
