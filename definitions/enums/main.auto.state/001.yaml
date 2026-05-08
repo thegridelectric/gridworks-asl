@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/enums/main.auto.state/000"
+$id: "https://schemas.electricity.works/enums/main.auto.state/001"
 
 title: "main.auto.state"
 type: "string"
