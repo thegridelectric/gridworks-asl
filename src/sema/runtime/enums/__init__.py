@@ -18,6 +18,7 @@ from sema.runtime.enums.gw_g_node_class import GwGNodeClass
 from sema.runtime.enums.heatcall_source import HeatcallSource
 from sema.runtime.enums.hz_calc_method import HzCalcMethod
 from sema.runtime.enums.i2c_adc_channel import I2cAdcChannel
+from sema.runtime.enums.main_auto_state import MainAutoState
 from sema.runtime.enums.market_price_unit import MarketPriceUnit
 from sema.runtime.enums.market_quantity_unit import MarketQuantityUnit
 from sema.runtime.enums.market_type_name import MarketTypeName
@@ -51,6 +52,7 @@ __all__ = [
     "HeatcallSource",
     "HzCalcMethod",
     "I2cAdcChannel",
+    "MainAutoState",
     "MarketPriceUnit",
     "MarketQuantityUnit",
     "MarketTypeName",

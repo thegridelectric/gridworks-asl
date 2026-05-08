@@ -345,6 +345,11 @@ enums:
   i2c.adc.channel:
     enum_type: literal
     schema: definitions/enums/i2c.adc.channel/000.yaml
+  main.auto.state:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/main.auto.state/001.yaml
   market.price.unit:
     enum_type: versioned
     latest_version: '000'
