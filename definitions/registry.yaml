@@ -1729,12 +1729,25 @@ types:
             - "utc.milliseconds"
 
   synced.readings.bundle:
-    latest_version: "001"
+    latest_version: "002"
     owner: joe-strommen
     versioning_strategy: "literal"
     description: "Time-aligned sequence of synchronized multi-channel readings with embedded channel semantics sufficient for independent interpretation."
 
     versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/synced.readings.bundle/002"
+        created: "2026-05-05T00:00:00Z"
+        summary: >-
+          - ChannelReadingsList[]: inline object -> channel.readings.list.item:000
+        direct_dependencies:
+          structural:
+            - "channel.readings.list.item:000"
+            - "left.right.dot"
+            - "utc.iso8601.seconds"
+          axiom:
+            - "gw1.unit:001"
+            - "spaceheat.telemetry.name:007"
       "001":
         schema_url: "https://schemas.electricity.works/types/synced.readings.bundle/001"
         created: "2026-04-03T16:00:00Z"
