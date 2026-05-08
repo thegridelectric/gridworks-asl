@@ -3,15 +3,15 @@ from enum import auto
 from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
-class MainAutoState(SemaEnum):
-    """Sema: https://schemas.electricity.works/enums/main.auto.state/001"""
+class Gw1MainAutoState(SemaEnum):
+    """Sema: https://schemas.electricity.works/enums/gw1.main.auto.state/001"""
 
     LocalControl = auto()
     LeafTransactiveNode = auto()
     Dormant = auto()
 
     @classmethod
-    def default(cls) -> "MainAutoState":
+    def default(cls) -> "Gw1MainAutoState":
         return cls.LocalControl
 
     @classmethod
@@ -20,7 +20,7 @@ class MainAutoState(SemaEnum):
 
     @classmethod
     def enum_name(cls) -> str:
-        return "main.auto.state"
+        return "gw1.main.auto.state"
 
     @classmethod
     def enum_version(cls) -> str:

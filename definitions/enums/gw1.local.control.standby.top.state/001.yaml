@@ -1,0 +1,20 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/gw1.local.control.standby.top.state/001"
+
+title: "gw1.local.control.standby.top.state"
+type: "string"
+description: >
+  Local-Control sub-state of a GridWorks spaceheat system in standby.
+
+enum:
+  - "EverythingOff"
+  - "Dormant"
+
+default: "EverythingOff"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "001"
+  value_descriptions:   
+  extended_description:
+    
