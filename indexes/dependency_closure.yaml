@@ -832,3 +832,13 @@ types:
       - spaceheat.name
       - utc.iso8601.seconds
       types: []
+    '002':
+      enums:
+      - gw1.unit:001
+      - spaceheat.telemetry.name:007
+      formats:
+      - left.right.dot
+      - spaceheat.name
+      - utc.iso8601.seconds
+      types:
+      - channel.readings.list.item:000

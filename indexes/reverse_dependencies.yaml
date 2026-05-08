@@ -13,6 +13,10 @@ types:
       used_by:
       - report:002
       - report:003
+  channel.readings.list.item:
+    '000':
+      used_by:
+      - synced.readings.bundle:002
   data.channel.gt:
     '001':
       used_by:
@@ -274,6 +278,7 @@ enums:
       used_by:
       - gw1.unit.quantity.projection:000
       - synced.readings.bundle:001
+      - synced.readings.bundle:002
   hz.calc.method:
     '001':
       used_by:
@@ -315,6 +320,7 @@ enums:
       - data.channel.gt:002
       - spaceheat.telemetry.quantity.projection:000
       - synced.readings.bundle:001
+      - synced.readings.bundle:002
   spaceheat.unit:
     '001':
       used_by:
@@ -376,6 +382,7 @@ formats:
     - single.machine.state:000
     - snapshot.spaceheat:003
     - synced.readings.bundle:001
+    - synced.readings.bundle:002
   market.slot.name:
     used_by:
     - bid:000
@@ -435,6 +442,7 @@ formats:
   utc.iso8601.seconds:
     used_by:
     - synced.readings.bundle:001
+    - synced.readings.bundle:002
   utc.milliseconds:
     used_by:
     - channel.readings:001
