@@ -307,6 +307,41 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/gw1.emission.method/000.yaml
+  gw1.main.auto.state:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/gw1.main.auto.state/001.yaml
+  gw1.lc.top.state:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/gw1.lc.top.state/001.yaml
+  gw1.leaf.ally.all.tanks.state:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/gw1.leaf.ally.all.tanks.state/001.yaml
+  gw1.leaf.ally.buffer.only.state:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/gw1.leaf.ally.buffer.only.state/001.yaml
+  gw1.local.control.all.tanks.state:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/gw1.local.control.all.tanks.state/001.yaml
+  gw1.local.control.buffer.only.state:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/gw1.local.control.buffer.only.state/001.yaml
+  gw1.local.control.standby.top.state:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/gw1.local.control.standby.top.state/001.yaml
   gw1.quantity:
     enum_type: versioned
     latest_version: '001'

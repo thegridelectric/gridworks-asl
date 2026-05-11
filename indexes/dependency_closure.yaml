@@ -116,6 +116,7 @@ types:
     '001':
       enums:
       - fsm.report.type:000
+      - relay.energization.state:000
       formats:
       - handle.name
       - left.right.dot
@@ -137,6 +138,7 @@ types:
     '001':
       enums:
       - fsm.report.type:000
+      - relay.energization.state:000
       formats:
       - handle.name
       - left.right.dot
@@ -536,7 +538,8 @@ types:
       types: []
   machine.states:
     '000':
-      enums: []
+      enums:
+      - relay.closed.or.open:000
       formats:
       - handle.name
       - left.right.dot
@@ -609,6 +612,8 @@ types:
     '002':
       enums:
       - fsm.report.type:000
+      - relay.closed.or.open:000
+      - relay.energization.state:000
       formats:
       - handle.name
       - left.right.dot
@@ -627,6 +632,8 @@ types:
     '003':
       enums:
       - fsm.report.type:000
+      - relay.closed.or.open:000
+      - relay.energization.state:000
       formats:
       - handle.name
       - left.right.dot
@@ -644,6 +651,8 @@ types:
     '002':
       enums:
       - fsm.report.type:000
+      - relay.closed.or.open:000
+      - relay.energization.state:000
       formats:
       - handle.name
       - left.right.dot
@@ -663,6 +672,8 @@ types:
     '003':
       enums:
       - fsm.report.type:000
+      - relay.closed.or.open:000
+      - relay.energization.state:000
       formats:
       - handle.name
       - left.right.dot

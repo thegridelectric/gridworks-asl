@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-05-07T20:00:00Z'
+  last_updated: '2026-05-08T19:57:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -193,6 +193,74 @@ enums:
       '000':
         schema_url: https://schemas.electricity.works/enums/gw1.emission.method/000
         created: '2026-02-02T22:17:00Z'
+  gw1.main.auto.state:
+    latest_version: '001'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Top-level state of a GridWorks spaceheat system.
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/enums/gw1.main.auto.state/001
+        created: '2026-05-08T19:57:00Z'
+  gw1.lc.top.state:
+    latest_version: '001'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Local-Control sub-state of a GridWorks spaceheat system
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/enums/gw1.lc.top.state/001
+        created: '2026-05-08T19:57:00Z'
+  gw1.leaf.ally.all.tanks.state:
+    latest_version: '001'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: LTN sub-state of a GridWorks spaceheat system while using storage
+      tanks
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/enums/gw1.leaf.ally.all.tanks.state/001
+        created: '2026-05-08T19:57:00Z'
+  gw1.leaf.ally.buffer.only.state:
+    latest_version: '001'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: LTN sub-state of a GridWorks spaceheat system while using a buffer
+      tank only.
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/enums/gw1.leaf.ally.buffer.only.state/001
+        created: '2026-05-08T19:57:00Z'
+  gw1.local.control.all.tanks.state:
+    latest_version: '001'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Local-Control sub-state of a GridWorks spaceheat system while using
+      storage tanks.
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/enums/gw1.local.control.all.tanks.state/001
+        created: '2026-05-08T19:57:00Z'
+  gw1.local.control.buffer.only.state:
+    latest_version: '001'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Local-Control sub-state of a GridWorks spaceheat system while using
+      a buffer tank only.
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/enums/gw1.local.control.buffer.only.state/001
+        created: '2026-05-08T19:57:00Z'
+  gw1.local.control.standby.top.state:
+    latest_version: '001'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Local-Control sub-state of a GridWorks spaceheat system in standby
+      mode.
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/enums/gw1.local.control.standby.top.state/001
+        created: '2026-05-08T19:57:00Z'
   gw1.quantity:
     latest_version: '001'
     owner: gridworks-energy
@@ -569,6 +637,8 @@ types:
           - left.right.dot
           - utc.milliseconds
           - uuid4.str
+          axiom:
+          - relay.energization.state:000
       '000':
         schema_url: https://schemas.electricity.works/types/fsm.atomic.report/000
         created: '2024-10-08T17:17:00Z'
@@ -1009,6 +1079,8 @@ types:
           - handle.name
           - left.right.dot
           - utc.milliseconds
+          axiom:
+          - relay.closed.or.open:000
   pico.flow.module.component.gt:
     latest_version: '000'
     owner: gridworks-energy
