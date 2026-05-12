@@ -96,6 +96,27 @@ HandleName = Annotated[
 """,
     },
 
+    "hex.char": {
+        "class_name": "HexChar",
+        "pattern": r"^[0-9a-fA-F]$",
+        "methods": """
+def is_hex_char(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: hex.char must be a string.")
+
+    if not HEX_CHAR_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails hex.char format.")
+
+    return v
+""",
+        "annotated_type": """
+HexChar = Annotated[
+    str,
+    BeforeValidator(is_hex_char),
+]
+""",
+    },
+
     "market.slot.name": {
         "class_name": "MarketSlotName",
         "pattern": r"^[erd]\.[a-z0-9]+(?:\.[a-z0-9]+)*(?:\.[a-z0-9]+)+\.[0-9]{10}$",
