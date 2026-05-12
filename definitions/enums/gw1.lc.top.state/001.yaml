@@ -1,0 +1,29 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/gw1.lc.top.state/001"
+
+title: "gw1.lc.top.state"
+type: "string"
+description: >
+  Local-Control sub-state of a GridWorks spaceheat system.
+
+enum:
+  - "Dormant"
+  - "UsingNonElectricBackup"
+  - "Normal"
+  - "ScadaBlind"
+  - "Monitor"
+
+default: "Dormant"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "001"
+  value_descriptions:
+    "Dormant":
+    "UsingNonEectricBackup":
+    "Normal":
+    "ScadaBlind":
+    "Monitor":
+    
+  extended_description:
+    

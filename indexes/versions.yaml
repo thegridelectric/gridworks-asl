@@ -500,6 +500,48 @@ enums:
     versions:
       "000": {}
 
+  gw1.main.auto.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.lc.top.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.leaf.ally.all.tanks.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.leaf.ally.buffer.only.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.local.control.all.tanks.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.local.control.buffer.only.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.local.control.standby.top.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
   gw1.quantity:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
@@ -554,12 +596,6 @@ enums:
     note: "This enum is literal; version 000 is immutable and exclusive."
     versions:
       "000": {}
-
-  main.auto.state:
-    enum_type: "versioned"
-    note: "This enum is versioned; new versions are additive only."
-    versions:
-      "001": {}
 
   market.price.unit:
     enum_type: "versioned"

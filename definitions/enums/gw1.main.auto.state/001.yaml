@@ -1,7 +1,7 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/enums/main.auto.state/001"
+$id: "https://schemas.electricity.works/enums/gw1.main.auto.state/001"
 
-title: "main.auto.state"
+title: "gw1.main.auto.state"
 type: "string"
 description: >
   Top-level state of a GridWorks spaceheat system.

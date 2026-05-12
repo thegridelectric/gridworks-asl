@@ -10,6 +10,13 @@ from sema.runtime.enums.gpm_from_hz_method import GpmFromHzMethod
 from sema.runtime.enums.gw1_actor_class import Gw1ActorClass
 from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
 from sema.runtime.enums.gw1_heat_call_interpretation import Gw1HeatCallInterpretation
+from sema.runtime.enums.gw1_lc_top_state import Gw1LcTopState
+from sema.runtime.enums.gw1_leaf_ally_all_tanks_state import Gw1LeafAllyAllTanksState
+from sema.runtime.enums.gw1_leaf_ally_buffer_only_state import Gw1LeafAllyBufferOnlyState
+from sema.runtime.enums.gw1_local_control_all_tanks_state import Gw1LocalControlAllTanksState
+from sema.runtime.enums.gw1_local_control_buffer_only_state import Gw1LocalControlBufferOnlyState
+from sema.runtime.enums.gw1_local_control_standby_top_state import Gw1LocalControlStandbyTopState
+from sema.runtime.enums.gw1_main_auto_state import Gw1MainAutoState
 from sema.runtime.enums.gw1_quantity import Gw1Quantity
 from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode
 from sema.runtime.enums.gw1_system_mode import Gw1SystemMode
@@ -18,7 +25,6 @@ from sema.runtime.enums.gw_g_node_class import GwGNodeClass
 from sema.runtime.enums.heatcall_source import HeatcallSource
 from sema.runtime.enums.hz_calc_method import HzCalcMethod
 from sema.runtime.enums.i2c_adc_channel import I2cAdcChannel
-from sema.runtime.enums.main_auto_state import MainAutoState
 from sema.runtime.enums.market_price_unit import MarketPriceUnit
 from sema.runtime.enums.market_quantity_unit import MarketQuantityUnit
 from sema.runtime.enums.market_type_name import MarketTypeName
@@ -44,6 +50,13 @@ __all__ = [
     "Gw1ActorClass",
     "Gw1EmissionMethod",
     "Gw1HeatCallInterpretation",
+    "Gw1LcTopState",
+    "Gw1LeafAllyAllTanksState",
+    "Gw1LeafAllyBufferOnlyState",
+    "Gw1LocalControlAllTanksState",
+    "Gw1LocalControlBufferOnlyState",
+    "Gw1LocalControlStandbyTopState",
+    "Gw1MainAutoState",
     "Gw1Quantity",
     "Gw1SeasonalStorageMode",
     "Gw1SystemMode",
@@ -52,7 +65,6 @@ __all__ = [
     "HeatcallSource",
     "HzCalcMethod",
     "I2cAdcChannel",
-    "MainAutoState",
     "MarketPriceUnit",
     "MarketQuantityUnit",
     "MarketTypeName",
