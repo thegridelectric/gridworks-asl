@@ -1,0 +1,46 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/latest.price/000"
+
+title: "latest.price"
+type: object
+description: >
+  Latest cleared market price notification sent by an ATN to a SCADA node.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  PriceTimes1000:
+    type: integer
+    description: >
+      Cleared market price scaled by 1000.
+
+  PriceUnit:
+    $ref: "https://schemas.electricity.works/enums/market.price.unit/000"
+
+  MarketSlotName:
+    $ref: "https://schemas.electricity.works/formats/market.slot.name"
+
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  TypeName:
+    const: "latest.price"
+
+  Version:
+    const: "000"
+
+required:
+  - FromGNodeAlias
+  - PriceTimes1000
+  - PriceUnit
+  - MarketSlotName
+  - MessageId
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

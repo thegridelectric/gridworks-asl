@@ -1,0 +1,40 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/ticklist.reed.report/000"
+
+title: "ticklist.reed.report"
+type: object
+description: >
+  Report wrapping a ticklist.reed payload with channel and terminal asset context.
+
+properties:
+
+  TerminalAssetAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  ScadaReceivedUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  Ticklist:
+    $ref: "https://schemas.electricity.works/types/ticklist.reed/101"
+
+  TypeName:
+    const: "ticklist.reed.report"
+
+  Version:
+    const: "000"
+
+required:
+  - TerminalAssetAlias
+  - ChannelName
+  - ScadaReceivedUnixMs
+  - Ticklist
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

@@ -1,0 +1,51 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/scada.params/004"
+
+title: "scada.params"
+type: object
+description: >
+  Parameter update message exchanged between ATN and SCADA nodes, carrying
+  new and old HA1 algorithm parameters.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  FromName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  ToName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  UnixTimeMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  NewParams:
+    $ref: "https://schemas.electricity.works/types/ha1.params/004"
+
+  OldParams:
+    $ref: "https://schemas.electricity.works/types/ha1.params/004"
+
+  TypeName:
+    const: "scada.params"
+
+  Version:
+    const: "004"
+
+required:
+  - FromGNodeAlias
+  - FromName
+  - ToName
+  - UnixTimeMs
+  - MessageId
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

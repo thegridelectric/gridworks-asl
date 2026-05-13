@@ -1,0 +1,68 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/weather.forecast/000"
+
+title: "weather.forecast"
+type: object
+description: >
+  Multi-interval weather forecast for a geographic location, providing
+  outside air temperature and wind speed predictions.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  WeatherChannelName:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  Time:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/utc.seconds"
+
+  OatF:
+    type: array
+    items:
+      type: number
+
+  WindSpeedMph:
+    type: array
+    items:
+      type: number
+
+  WeatherUid:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ForecastCreatedS:
+    $ref: "https://schemas.electricity.works/formats/utc.seconds"
+
+  TypeName:
+    const: "weather.forecast"
+
+  Version:
+    const: "000"
+
+required:
+  - FromGNodeAlias
+  - WeatherChannelName
+  - Time
+  - OatF
+  - WindSpeedMph
+  - WeatherUid
+  - ForecastCreatedS
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ListLengthConsistency"
+      statement: >
+        Time, OatF, and WindSpeedMph SHALL all have the same length.
+    - number: 2
+      name: "ForecastCreatedBeforeFirstInterval"
+      statement: >
+        ForecastCreatedS SHALL be less than the first element of Time.

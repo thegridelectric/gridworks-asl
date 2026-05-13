@@ -1,0 +1,53 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/ticklist.reed/101"
+
+title: "ticklist.reed"
+type: object
+description: >
+  List of reed-switch flow meter tick timestamps captured by a pico flow module.
+  Timestamps are expressed as millisecond offsets relative to the first tick.
+
+properties:
+
+  HwUid:
+    type: string
+
+  FirstTickTimestampNanoSecond:
+    type: integer
+    description: >
+      Absolute nanosecond timestamp of the first tick. Absent when no ticks
+      were captured.
+
+  RelativeMillisecondList:
+    type: array
+    items:
+      type: integer
+    description: >
+      Millisecond offsets of each tick relative to FirstTickTimestampNanoSecond.
+
+  PicoBeforePostTimestampNanoSecond:
+    type: integer
+
+  TypeName:
+    const: "ticklist.reed"
+
+  Version:
+    const: "101"
+
+required:
+  - HwUid
+  - RelativeMillisecondList
+  - PicoBeforePostTimestampNanoSecond
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "FirstTickTimestampConsistency"
+      statement: >
+        FirstTickTimestampNanoSecond SHALL be absent if and only if
+        RelativeMillisecondList is empty.

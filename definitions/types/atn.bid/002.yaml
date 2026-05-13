@@ -1,0 +1,61 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/atn.bid/002"
+
+title: "atn.bid"
+type: object
+description: >
+  Market bid submitted by an ATN (AtomicTNode) for a specific market slot.
+
+properties:
+
+  BidderAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  MarketSlotName:
+    $ref: "https://schemas.electricity.works/formats/market.slot.name"
+
+  PqPairs:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/price.quantity.unitless/001"
+    minItems: 1
+
+  InjectionIsPositive:
+    type: boolean
+
+  PriceUnit:
+    $ref: "https://schemas.electricity.works/enums/market.price.unit/000"
+
+  QuantityUnit:
+    $ref: "https://schemas.electricity.works/enums/market.quantity.unit/000"
+
+  SignedMarketFeeTxn:
+    type: string
+
+  TypeName:
+    const: "atn.bid"
+
+  Version:
+    const: "002"
+
+required:
+  - BidderAlias
+  - MarketSlotName
+  - PqPairs
+  - InjectionIsPositive
+  - PriceUnit
+  - QuantityUnit
+  - SignedMarketFeeTxn
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "PqPairsPriceMaxMatchesMarketType"
+      statement: >
+        The first price in PqPairs SHALL equal the PriceMax defined by the
+        MarketType associated with MarketSlotName.

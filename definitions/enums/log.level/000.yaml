@@ -1,0 +1,19 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/log.level/000"
+
+title: "log.level"
+type: "string"
+
+enum:
+  - "Critical"
+  - "Error"
+  - "Warning"
+  - "Info"
+  - "Debug"
+  - "Trace"
+
+default: "Info"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"

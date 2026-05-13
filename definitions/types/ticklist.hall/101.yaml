@@ -1,0 +1,53 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/ticklist.hall/101"
+
+title: "ticklist.hall"
+type: object
+description: >
+  List of hall-effect flow meter tick timestamps captured by a pico flow module.
+  Timestamps are expressed as nanosecond offsets relative to the first tick.
+
+properties:
+
+  HwUid:
+    type: string
+
+  FirstTickTimestampNanoSecond:
+    type: integer
+    description: >
+      Absolute nanosecond timestamp of the first tick. Absent when no ticks
+      were captured.
+
+  RelativeMicrosecondList:
+    type: array
+    items:
+      type: integer
+    description: >
+      Microsecond offsets of each tick relative to FirstTickTimestampNanoSecond.
+
+  PicoBeforePostTimestampNanoSecond:
+    type: integer
+
+  TypeName:
+    const: "ticklist.hall"
+
+  Version:
+    const: "101"
+
+required:
+  - HwUid
+  - RelativeMicrosecondList
+  - PicoBeforePostTimestampNanoSecond
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "FirstTickTimestampConsistency"
+      statement: >
+        FirstTickTimestampNanoSecond SHALL be absent if and only if
+        RelativeMicrosecondList is empty.

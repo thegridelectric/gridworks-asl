@@ -1,0 +1,54 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/glitch/000"
+
+title: "glitch"
+type: object
+description: >
+  A report of an unexpected system event.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Alias of the GNode on which the glitch has occurred.
+
+  Node:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Subsystem identifier on which the glitch has occurred.
+
+  Type:
+    $ref: "https://schemas.electricity.works/enums/log.level"
+    description: >
+      Logging level of the glitch.
+
+  Summary:
+    type: string
+
+  Details:
+    type: string
+
+  CreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  TypeName:
+    const: "glitch"
+
+  Version:
+    const: "000"
+
+required:
+  - FromGNodeAlias
+  - Node
+  - Type
+  - Summary
+  - Details
+  - CreatedMs
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

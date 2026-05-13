@@ -1,0 +1,39 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/new.command.tree/000"
+
+title: "new.command.tree"
+type: object
+description: >
+  Updated set of SpaceheatNodes transmitted from an ATN to a SCADA node,
+  replacing the prior command tree.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  ShNodes:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/200"
+
+  UnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  TypeName:
+    const: "new.command.tree"
+
+  Version:
+    const: "000"
+
+required:
+  - FromGNodeAlias
+  - ShNodes
+  - UnixMs
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

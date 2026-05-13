@@ -1,0 +1,52 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gridworks.event.problem/001"
+
+title: "gridworks.event.problem"
+type: object
+description: >
+  Event message reporting a problem detected in a GridWorks node.
+
+properties:
+
+  Src:
+    type: string
+    description: >
+      Identifier of the source node reporting the problem.
+
+  ProblemType:
+    type: string
+    description: >
+      Category of problem being reported.
+
+  Summary:
+    type: string
+
+  Details:
+    type: string
+
+  TimeCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  TypeName:
+    const: "gridworks.event.problem"
+
+  Version:
+    const: "001"
+
+required:
+  - Src
+  - ProblemType
+  - Summary
+  - Details
+  - TimeCreatedMs
+  - MessageId
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
