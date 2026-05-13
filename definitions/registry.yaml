@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-05-08T19:57:00Z"
+  last_updated: "2026-05-13T00:00:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -573,6 +573,25 @@ types:
           axiom:
             - "gw1.unit.quantity.projection:000"
 
+  atn.bid:
+    latest_version: "002"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Market bid submitted by an ATN for a specific market slot."
+
+    versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/atn.bid/002"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "market.price.unit:000"
+            - "market.quantity.unit:000"
+            - "market.slot.name"
+            - "price.quantity.unitless:001"
+
   bid:
     latest_version: "000"
     owner: gridworks-energy
@@ -760,6 +779,24 @@ types:
             - "spaceheat.name"
             - "uuid4.str"
 
+  energy.instruction:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Energy dispatch instruction sent to a terminal asset for a specific market slot."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/energy.instruction/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "positive.int"
+            - "utc.milliseconds"
+            - "utc.seconds"
+
   fis.authority.manifest:
     latest_version: "000"
     owner: jessica-millar
@@ -799,6 +836,25 @@ types:
             - "g.node.instance.transport:000"
             - "left.right.dot"
             - "utc.milliseconds"
+            - "uuid4.str"
+
+  flo.params.house0:
+    latest_version: "003"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Parameters into the Forward-Looking-Optimization (FLO) algorithm for a House0 thermal model."
+
+    versions:
+      "003":
+        schema_url: "https://schemas.electricity.works/types/flo.params.house0/003"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "market.price.unit:000"
+            - "positive.int"
+            - "utc.seconds"
             - "uuid4.str"
 
   fsm.atomic.report:
@@ -913,6 +969,24 @@ types:
             - "spaceheat.name"
             - "uuid4.str"
 
+  fsm.event:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Finite State Machine event command sent to a SpaceheatNode that implements a finite state machine."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/fsm.event/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "handle.name"
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
   g.node.gt:
     latest_version: "004"
     owner: gridworks-energy
@@ -949,6 +1023,24 @@ types:
             - "utc.milliseconds"
             - "uuid4.str"
 
+  glitch:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Report of an unexpected system event with logging level, source node, and detail."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/glitch/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "log.level:000"
+            - "spaceheat.name"
+            - "utc.milliseconds"
+
   gridworks.ack:
     owner: smoothstone-computing
     versioning_strategy: "none"
@@ -959,6 +1051,22 @@ types:
     direct_dependencies:
       structural:
         - "uuid4.str"
+
+  gridworks.event.problem:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Event message reporting a problem detected in a GridWorks node."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gridworks.event.problem/001"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "utc.milliseconds"
+            - "uuid4.str"
 
   gridworks.ping:
     owner: smoothstone-computing
@@ -1105,12 +1213,18 @@ types:
           structural: []
 
   heartbeat.a:
-    latest_version: "000"
+    latest_version: "001"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Lightweight actor heartbeat message carrying a fresh local hex token and, when available, the peer's previous token."
+    description: "Lightweight actor heartbeat message. Version 000 carries hex tokens; version 001 is a minimal no-payload variant."
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/heartbeat.a/001"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Minimal no-payload heartbeat variant."
+        direct_dependencies:
+          structural: []
       "000":
         schema_url: "https://schemas.electricity.works/types/heartbeat.a/000"
         created: "2026-05-08T16:34:06Z"
@@ -1118,6 +1232,23 @@ types:
         direct_dependencies:
           structural:
             - "hex.char"
+
+  heating.forecast:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Heating demand forecast providing projected average power, required source water temperature, and delta T per interval."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/heating.forecast/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.seconds"
+            - "uuid4.str"
 
   i2c.multichannel.dt.relay.component.gt:
     latest_version: "004"
@@ -1191,6 +1322,21 @@ types:
             - "spaceheat.name"
             - "temp.calc.method:000"
             - "uuid4.str"
+
+  keyparam.change.log:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Audit log record of a significant parameter change in SCADA or AtomicTNode code."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/keyparam.change.log/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
 
   layout.lite:
     latest_version: "013"
@@ -1366,6 +1512,24 @@ types:
             - "utc.milliseconds"
             - "uuid4.str"
 
+  latest.price:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Latest cleared market price notification sent by an ATN to a SCADA node."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/latest.price/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "market.price.unit:000"
+            - "market.slot.name"
+            - "uuid4.str"
+
   linear.one.dimensional.calibration:
     latest_version: "001"
     owner: gridworks-energy
@@ -1406,6 +1570,23 @@ types:
             - "utc.milliseconds"
           axiom:
             - "relay.closed.or.open:000"
+
+  new.command.tree:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Updated set of SpaceheatNodes transmitted from an ATN to a SCADA node, replacing the prior command tree."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/new.command.tree/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "spaceheat.node.gt:200"
+            - "utc.milliseconds"
 
   pico.flow.module.component.gt:
     latest_version: "000"
@@ -1621,6 +1802,25 @@ types:
             - "utc.milliseconds"
             - "uuid4.str"
 
+  scada.params:
+    latest_version: "004"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Parameter update message exchanged between ATN and SCADA nodes carrying HA1 algorithm parameters."
+
+    versions:
+      "004":
+        schema_url: "https://schemas.electricity.works/types/scada.params/004"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "ha1.params:004"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
   scada.control.capabilities:
     latest_version: "001"
     owner: gridworks-energy
@@ -1736,6 +1936,70 @@ types:
             - "utc.seconds"
             - "uuid4.str"
 
+  ticklist.hall:
+    latest_version: "101"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "List of hall-effect flow meter tick timestamps captured by a pico flow module."
+
+    versions:
+      "101":
+        schema_url: "https://schemas.electricity.works/types/ticklist.hall/101"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural: []
+
+  ticklist.hall.report:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Report wrapping a ticklist.hall payload with channel and terminal asset context."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/ticklist.hall.report/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "ticklist.hall:101"
+            - "utc.milliseconds"
+
+  ticklist.reed:
+    latest_version: "101"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "List of reed-switch flow meter tick timestamps captured by a pico flow module."
+
+    versions:
+      "101":
+        schema_url: "https://schemas.electricity.works/types/ticklist.reed/101"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural: []
+
+  ticklist.reed.report:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Report wrapping a ticklist.reed payload with channel and terminal asset context."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/ticklist.reed.report/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "ticklist.reed:101"
+            - "utc.milliseconds"
+
   single.machine.state:
     latest_version: "000"
     owner: gridworks-energy
@@ -1788,6 +2052,25 @@ types:
             - "single.machine.state:000"
             - "single.reading:000"
             - "utc.milliseconds"
+            - "uuid4.str"
+
+  synth.channel.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Definition of a synthetic telemetry channel computed by a GridWorks actor node from one or more input channels."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/synth.channel.gt/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "positive.int"
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:007"
             - "uuid4.str"
 
   spaceheat.node.gt:
@@ -1897,3 +2180,36 @@ types:
           axiom:
             - "gw1.unit:001"
             - "spaceheat.telemetry.name:007"
+
+  weather:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Single-point weather observation sent by an ATN to a SCADA node."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/weather/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.seconds"
+
+  weather.forecast:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Multi-interval weather forecast providing outside air temperature and wind speed predictions."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/weather.forecast/000"
+        created: "2026-05-13T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.seconds"
+            - "uuid4.str"
