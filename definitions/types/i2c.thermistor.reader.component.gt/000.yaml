@@ -38,16 +38,14 @@ properties:
       7-bit I2C address of the ADC device.
 
   AdcReferenceVolts:
-    type: number
-    exclusiveMinimum: 0
+    $ref: "https://schemas.electricity.works/formats/positive.float"
     default: 3.3
     description: >
       Reference voltage used by the ADC when converting measured voltage to a
       serialized reading.
 
   SeriesResistanceKOhms:
-    type: number
-    exclusiveMinimum: 0
+    $ref: "https://schemas.electricity.works/formats/positive.float"
     description: >
       Series resistance, in kilo-ohms, used in the thermistor divider circuit.
 
@@ -66,6 +64,7 @@ required:
   - ConfigList
   - Bus
   - AdcAddress
+  - AdcReferenceVolts
   - SeriesResistanceKOhms
   - TempCalcMethod
   - TypeName

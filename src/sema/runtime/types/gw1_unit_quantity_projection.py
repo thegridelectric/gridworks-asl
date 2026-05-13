@@ -1,10 +1,8 @@
 from typing import Literal
-
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gw1_quantity import Gw1Quantity
-from sema.runtime.enums.gw1_unit import Gw1Unit
+from sema.runtime.enums import Gw1Quantity
+from sema.runtime.enums import Gw1Unit
 
 
 _PROJECTION = {
@@ -17,7 +15,7 @@ _PROJECTION = {
     Gw1Unit.GpmX100: Gw1Quantity.FlowRate,
     Gw1Unit.Seconds: Gw1Quantity.Time,
     Gw1Unit.SecondsX10: Gw1Quantity.Time,
-    Gw1Unit.Milliseconds: Gw1Quantity.Time
+    Gw1Unit.Milliseconds: Gw1Quantity.Time,
 }
 
 
@@ -33,11 +31,18 @@ class Gw1UnitQuantityProjection(SemaType):
     def project(cls, unit: Gw1Unit) -> Gw1Quantity:
         expected = _PROJECTION.get(unit)
         if expected is None:
-            raise ValueError(f"No quantity projection defined for unit {unit!r}.")
+            raise ValueError(
+                f"No projection defined for unit {unit!r}."
+            )
         return expected
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "Gw1UnitQuantityProjection":
+        """
+        Axiom 1: EnumeratedProjectionMapping
+        Every (Unit, Quantity) pair SHALL match the mapping declared in
+        x-gridworks.projection.table. Any combination not present in the table is invalid.
+        """
         expected = self.project(self.unit)
         if expected != self.quantity:
             raise ValueError(

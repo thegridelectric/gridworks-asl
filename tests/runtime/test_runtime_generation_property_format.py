@@ -33,7 +33,7 @@ def test_generated_property_format_matches_runtime_property_format(tmp_path: Pat
         target_root,
         FormatOnlyDag(format_names),
         seed,
-        REPO_ROOT / "definitions",
+        import_root="sema.runtime",
     )
 
     generated = (target_root / "property_format.py").read_text()
@@ -57,10 +57,12 @@ def test_generate_formats_writes_snapshot_property_format_test(tmp_path: Path) -
         target_root,
         FormatOnlyDag(format_names),
         seed,
-        REPO_ROOT / "definitions",
+        import_root="sema.runtime",
+        write_tests=True,
     )
 
     generated_test = (target_root / "tests" / "test_property_format.py").read_text()
+    assert "PACKAGE_ROOT = Path(__file__).resolve().parents[1]" in generated_test
     assert 'DEFINITIONS_DIR / "formats" / "left.right.dot.yaml"' in generated_test
     assert 'DEFINITIONS_DIR / "formats" / "positive.int.yaml"' in generated_test
     assert "utc.seconds.yaml" not in generated_test

@@ -13,7 +13,6 @@ description: >
   telemetry, derived channels, and market contracts.
 
 properties:
-
   Unit:
     $ref: "https://schemas.electricity.works/enums/gw1.unit/001"
     description: >
@@ -50,20 +49,25 @@ examples:
 x-gridworks:
   owner: "gridworks-energy"
 
+  projection:
+    from: Unit
+    to: Quantity
+    table:
+      Unknown: Unknown
+      Unitless: Unitless
+      FahrenheitX100: Temperature
+      Watts: Power
+      WattHours: Energy
+      Gallons: Volume
+      GpmX100: FlowRate
+      Seconds: Time
+      SecondsX10: Time
+      Milliseconds: Time
+
   axioms:
     - number: 1
       name: "EnumeratedProjectionMapping"
       statement: >
-        For version 000, the projection is defined exhaustively as follows:
-
-          Unknown → Unknown
-          Unitless → Unitless
-          FahrenheitX100 → Temperature
-          Watts → Power
-          WattHours → Energy
-          Gallons → Volume
-          GpmX100 → FlowRate
-          Seconds → Time
-          SecondsX10 → Time
-
-        Any other combination SHALL be invalid.
+        Every (Unit, Quantity) pair SHALL match the mapping declared in
+        x-gridworks.projection.table. Any combination not present in
+        the table is invalid.

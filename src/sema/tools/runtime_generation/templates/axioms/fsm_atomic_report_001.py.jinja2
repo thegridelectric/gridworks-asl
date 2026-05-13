@@ -1,0 +1,28 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ fsm_atomic_report_001_class_name }}":
+        """
+        Axiom 1: ActionPresenceConsistency
+        Action SHALL be present if and only if ReportType equals Action.
+        """
+        if (self.report_type == "Action") != (self.action is not None):
+            raise ValueError(
+                "Axiom 1 failed: action must be present if and only if report_type is Action."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ fsm_atomic_report_001_class_name }}":
+        """
+        Axiom 2: EventPresenceConsistency
+        EventEnum, Event, FromState, and ToState SHALL be present if and only if ReportType
+        equals Event.
+        """
+        event_fields_present = all(
+            field is not None
+            for field in (self.event_enum, self.event, self.from_state, self.to_state)
+        )
+        if (self.report_type == "Event") != event_fields_present:
+            raise ValueError(
+                "Axiom 2 failed: event fields must be present if and only if report_type is Event."
+            )
+        return self

@@ -1,0 +1,12 @@
+    def upgrade(self) -> {{ relay_actor_config_003_class_name }}:
+        """- AsyncCaptureDelta: require when AsyncCapture is true"""
+        data = self.model_dump()
+
+        if self.async_capture:
+            if not self.async_capture_delta:
+                data["async_capture_delta"] = 1
+
+        # Update version
+        data["version"] = "003"
+
+        return {{ relay_actor_config_003_class_name }}.model_validate(data)

@@ -1,0 +1,68 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/sim.timestep/000"
+
+title: "sim.timestep"
+type: object
+description: >
+  Simulation time-coordinator message announcing a simulated Unix timestamp to
+  supervised actors. Recipients use this message to advance or repeat their
+  local simulated time.
+
+properties:
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the time coordinator sending the timestep.
+
+  FromGNodeInstanceId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier of the specific time-coordinator runtime instance
+      sending the timestep.
+
+  TimeUnixS:
+    $ref: "https://schemas.electricity.works/formats/utc.seconds"
+    description: >
+      Simulated Unix time in seconds announced by the time coordinator.
+
+  TimestepCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      UTC timestamp in milliseconds when this timestep message was created.
+
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier for this timestep message.
+
+  TypeName:
+    const: "sim.timestep"
+
+  Version:
+    const: "000"
+
+required:
+  - FromGNodeAlias
+  - FromGNodeInstanceId
+  - TimeUnixS
+  - TimestepCreatedMs
+  - MessageId
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "FromGNodeAlias": "d1.time",
+      "FromGNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+      "TimeUnixS": 1577854800,
+      "TimestepCreatedMs": 1577854800000,
+      "MessageId": "7499defd-c54a-4061-a37a-17f3c84f88a2",
+      "TypeName": "sim.timestep",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

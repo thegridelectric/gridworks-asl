@@ -1,0 +1,19 @@
+    def upgrade(self) -> {{ fsm_atomic_report_001_class_name }}:
+        """
+        - ActionType: remove
+        - Action: scalar -> unconstrained object payload
+        """
+        data = self.model_dump()
+        data.pop("action_type", None)
+
+        if self.report_type == {{ fsm_report_type_000_class_name }}.Action and self.action is not None:
+            if self.action_type != "RelayPinSet":
+                raise ValueError(
+                    "{{ fsm_atomic_report_000_class_name }}.upgrade() only supports ActionType 'RelayPinSet'."
+                )
+            data["action"] = {
+                "Value": {{ relay_energization_state_000_class_name }}(self.action).value
+            }
+
+        data["version"] = "001"
+        return {{ fsm_atomic_report_001_class_name }}.model_validate(data)

@@ -1,19 +1,7 @@
 # GENERATED FILE — DO NOT EDIT
-# Generated from definitions/registry.yaml
+# Generated from indexes/public_registry.yaml
 
 types:
-  analytics.channel.gt:
-    '000':
-      enums:
-      - gw1.quantity:000
-      - gw1.quantity:001
-      - gw1.unit:001
-      formats:
-      - left.right.dot
-      - spaceheat.name
-      - uuid4.str
-      types:
-      - gw1.unit.quantity.projection:000
   bid:
     '000':
       enums:
@@ -45,6 +33,13 @@ types:
       formats:
       - spaceheat.name
       - utc.milliseconds
+      types: []
+  channel.readings.list.item:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - spaceheat.name
       types: []
   connectivity.edge.gt:
     '000':
@@ -98,37 +93,16 @@ types:
       enums:
       - gw1.emission.method:000
       - gw1.quantity:000
+      - gw1.quantity:001
       - gw1.unit:000
+      - gw1.unit:001
       formats:
       - left.right.dot
+      - positive.int
       - spaceheat.name
       - uuid4.str
-      types: []
-  fis.authority.manifest:
-    '000':
-      enums:
-      - base.g.node.class:000
-      - g.node.instance.status:000
-      - g.node.instance.transport:000
-      - g.node.status:000
-      formats:
-      - left.right.dot
-      - utc.milliseconds
-      - uuid4.str
       types:
-      - g.node.gt:004
-      - g.node.instance.gt:000
-  fis.instance.authorization.event:
-    '000':
-      enums:
-      - fis.authorization.decision:000
-      - fis.authorization.reason:000
-      - g.node.instance.transport:000
-      formats:
-      - left.right.dot
-      - utc.milliseconds
-      - uuid4.str
-      types: []
+      - gw1.unit.quantity.projection:000
   fsm.atomic.report:
     '000':
       enums:
@@ -146,7 +120,6 @@ types:
       formats:
       - handle.name
       - left.right.dot
-      - spaceheat.name
       - utc.milliseconds
       - uuid4.str
       types: []
@@ -230,6 +203,12 @@ types:
       enums: []
       formats: []
       types: []
+  heartbeat.a:
+    '000':
+      enums: []
+      formats:
+      - hex.char
+      types: []
   i2c.multichannel.dt.relay.component.gt:
     '002':
       enums:
@@ -273,6 +252,7 @@ types:
   i2c.thermistor.channel.config:
     '000':
       enums:
+      - i2c.adc.channel:000
       - spaceheat.unit:001
       formats:
       - positive.int
@@ -281,9 +261,11 @@ types:
   i2c.thermistor.reader.component.gt:
     '000':
       enums:
+      - i2c.adc.channel:000
       - spaceheat.unit:001
       - temp.calc.method:000
       formats:
+      - positive.float
       - positive.int
       - spaceheat.name
       - uuid4.str
@@ -562,7 +544,8 @@ types:
       types: []
   machine.states:
     '000':
-      enums: []
+      enums:
+      - relay.closed.or.open:000
       formats:
       - handle.name
       - left.right.dot
@@ -635,6 +618,7 @@ types:
     '002':
       enums:
       - fsm.report.type:000
+      - relay.closed.or.open:000
       - relay.energization.state:000
       formats:
       - handle.name
@@ -654,6 +638,7 @@ types:
     '003':
       enums:
       - fsm.report.type:000
+      - relay.closed.or.open:000
       - relay.energization.state:000
       formats:
       - handle.name
@@ -672,6 +657,7 @@ types:
     '002':
       enums:
       - fsm.report.type:000
+      - relay.closed.or.open:000
       - relay.energization.state:000
       formats:
       - handle.name
@@ -692,6 +678,7 @@ types:
     '003':
       enums:
       - fsm.report.type:000
+      - relay.closed.or.open:000
       - relay.energization.state:000
       formats:
       - handle.name
@@ -724,6 +711,27 @@ types:
       types:
       - i2c.multichannel.dt.relay.component.gt:002
       - relay.actor.config:002
+    '001':
+      enums:
+      - change.relay.state:000
+      - gw1.actor.class:009
+      - relay.closed.or.open:000
+      - relay.wiring.config:000
+      - spaceheat.telemetry.name:006
+      - spaceheat.unit:001
+      formats:
+      - handle.name
+      - left.right.dot
+      - positive.int
+      - spaceheat.name
+      - utc.milliseconds
+      - utc.seconds
+      - uuid4.str
+      types:
+      - data.channel.gt:001
+      - i2c.multichannel.dt.relay.component.gt:002
+      - relay.actor.config:002
+      - spaceheat.node.gt:300
   send.control.capabilities:
     '000':
       enums: []
@@ -755,6 +763,23 @@ types:
       - uuid4.str
       types:
       - channel.config:000
+  sim.ready:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.seconds
+      - uuid4.str
+      types: []
+  sim.timestep:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - utc.seconds
+      - uuid4.str
+      types: []
   single.machine.state:
     '000':
       enums:
@@ -789,6 +814,7 @@ types:
       enums: []
       formats:
       - handle.name
+      - positive.int
       - spaceheat.name
       - uuid4.str
       types: []
@@ -797,6 +823,7 @@ types:
       - gw1.actor.class:009
       formats:
       - handle.name
+      - positive.int
       - spaceheat.name
       - uuid4.str
       types: []
@@ -805,6 +832,7 @@ types:
       - gw1.actor.class:011
       formats:
       - handle.name
+      - positive.int
       - spaceheat.name
       - uuid4.str
       types: []
@@ -832,3 +860,13 @@ types:
       - spaceheat.name
       - utc.iso8601.seconds
       types: []
+    '002':
+      enums:
+      - gw1.unit:001
+      - spaceheat.telemetry.name:007
+      formats:
+      - left.right.dot
+      - spaceheat.name
+      - utc.iso8601.seconds
+      types:
+      - channel.readings.list.item:000

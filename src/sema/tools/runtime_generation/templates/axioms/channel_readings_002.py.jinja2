@@ -1,0 +1,11 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ channel_readings_002_class_name }}":
+        """
+        Axiom 1: ListLengthConsistency
+        len(ValueList) SHALL equal len(ScadaReadTimeUnixMsList).
+        """
+        if len(self.value_list) != len(self.scada_read_time_unix_ms_list):
+            raise ValueError(
+                "Axiom 1 failed: value_list and scada_read_time_unix_ms_list must have equal length."
+            )
+        return self

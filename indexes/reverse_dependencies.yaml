@@ -1,5 +1,5 @@
 # GENERATED FILE — DO NOT EDIT
-# Generated from definitions/registry.yaml
+# Generated from indexes/public_registry.yaml
 
 types:
   channel.config:
@@ -13,6 +13,10 @@ types:
       used_by:
       - report:002
       - report:003
+  channel.readings.list.item:
+    '000':
+      used_by:
+      - synced.readings.bundle:002
   data.channel.gt:
     '001':
       used_by:
@@ -21,6 +25,7 @@ types:
       - layout.lite:009
       - layout.lite:010
       - layout.lite:011
+      - scada.control.capabilities:001
     '002':
       used_by:
       - layout.lite:012
@@ -53,14 +58,6 @@ types:
       used_by:
       - report:002
       - report:003
-  g.node.gt:
-    '004':
-      used_by:
-      - fis.authority.manifest:000
-  g.node.instance.gt:
-    '000':
-      used_by:
-      - fis.authority.manifest:000
   gw1.tank.temp.calibration:
     '000':
       used_by:
@@ -78,7 +75,7 @@ types:
   gw1.unit.quantity.projection:
     '000':
       used_by:
-      - analytics.channel.gt:000
+      - derived.channel.gt:002
   ha1.params:
     '004':
       used_by:
@@ -103,6 +100,7 @@ types:
       - layout.lite:010
       - layout.lite:011
       - scada.control.capabilities:000
+      - scada.control.capabilities:001
     '003':
       used_by:
       - layout.lite:012
@@ -184,6 +182,7 @@ types:
       - layout.lite:009
       - layout.lite:010
       - layout.lite:011
+      - scada.control.capabilities:001
     '301':
       used_by:
       - layout.lite:010
@@ -204,14 +203,6 @@ enums:
       used_by:
       - relay.actor.config:002
       - relay.actor.config:003
-  fis.authorization.decision:
-    '000':
-      used_by:
-      - fis.instance.authorization.event:000
-  fis.authorization.reason:
-    '000':
-      used_by:
-      - fis.instance.authorization.event:000
   fsm.report.type:
     '000':
       used_by:
@@ -224,7 +215,6 @@ enums:
   g.node.instance.transport:
     '000':
       used_by:
-      - fis.instance.authorization.event:000
       - g.node.instance.gt:000
   g.node.status:
     '000':
@@ -240,6 +230,7 @@ enums:
       used_by:
       - layout.lite:010
       - scada.control.capabilities:000
+      - scada.control.capabilities:001
       - spaceheat.node.gt:300
     '011':
       used_by:
@@ -252,7 +243,6 @@ enums:
   gw1.quantity:
     '000':
       used_by:
-      - analytics.channel.gt:000
       - data.channel.gt:002
       - derived.channel.gt:002
       - gw1.telemetry.name.quantity.projection:000
@@ -286,13 +276,17 @@ enums:
       - derived.channel.gt:002
     '001':
       used_by:
-      - analytics.channel.gt:000
       - gw1.unit.quantity.projection:000
       - synced.readings.bundle:001
+      - synced.readings.bundle:002
   hz.calc.method:
     '001':
       used_by:
       - pico.flow.module.component.gt:000
+  i2c.adc.channel:
+    '000':
+      used_by:
+      - i2c.thermistor.channel.config:000
   market.price.unit:
     '000':
       used_by:
@@ -304,6 +298,7 @@ enums:
   relay.closed.or.open:
     '000':
       used_by:
+      - machine.states:000
       - relay.actor.config:002
       - relay.actor.config:003
       - single.machine.state:000
@@ -330,6 +325,7 @@ enums:
       - data.channel.gt:002
       - spaceheat.telemetry.quantity.projection:000
       - synced.readings.bundle:001
+      - synced.readings.bundle:002
   spaceheat.unit:
     '001':
       used_by:
@@ -353,18 +349,19 @@ formats:
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
+  hex.char:
+    used_by:
+    - heartbeat.a:000
   left.right.dot:
     used_by:
-    - analytics.channel.gt:000
     - bid:000
+    - channel.readings.list.item:000
     - connectivity.edge.gt:000
     - data.channel.gt:001
     - data.channel.gt:002
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
-    - fis.authority.manifest:000
-    - fis.instance.authorization.event:000
     - fsm.atomic.report:000
     - fsm.atomic.report:001
     - g.node.gt:004
@@ -383,19 +380,27 @@ formats:
     - report:002
     - report:003
     - scada.control.capabilities:000
+    - scada.control.capabilities:001
     - send.control.capabilities:000
     - send.layout:000
     - send.layout:001
+    - sim.ready:000
+    - sim.timestep:000
     - single.machine.state:000
     - snapshot.spaceheat:003
     - synced.readings.bundle:001
+    - synced.readings.bundle:002
   market.slot.name:
     used_by:
     - bid:000
+  positive.float:
+    used_by:
+    - i2c.thermistor.reader.component.gt:000
   positive.int:
     used_by:
     - channel.config:000
     - derived.channel.gt:001
+    - derived.channel.gt:002
     - i2c.thermistor.channel.config:000
     - layout.lite:007
     - layout.lite:008
@@ -410,10 +415,13 @@ formats:
     - report:002
     - report:003
     - sim.pico.tank.module.component.gt:000
+    - spaceheat.node.gt:200
+    - spaceheat.node.gt:300
+    - spaceheat.node.gt:301
   spaceheat.name:
     used_by:
-    - analytics.channel.gt:000
     - channel.config:000
+    - channel.readings.list.item:000
     - channel.readings:001
     - channel.readings:002
     - data.channel.gt:001
@@ -421,7 +429,6 @@ formats:
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
-    - fsm.atomic.report:001
     - fsm.full.report:000
     - fsm.full.report:001
     - i2c.multichannel.dt.relay.component.gt:003
@@ -442,12 +449,11 @@ formats:
   utc.iso8601.seconds:
     used_by:
     - synced.readings.bundle:001
+    - synced.readings.bundle:002
   utc.milliseconds:
     used_by:
     - channel.readings:001
     - channel.readings:002
-    - fis.authority.manifest:000
-    - fis.instance.authorization.event:000
     - fsm.atomic.report:000
     - fsm.atomic.report:001
     - g.node.instance.gt:000
@@ -464,8 +470,10 @@ formats:
     - report:002
     - report:003
     - scada.control.capabilities:000
+    - scada.control.capabilities:001
     - send.control.capabilities:000
     - send.layout:001
+    - sim.timestep:000
     - single.machine.state:000
     - single.reading:000
     - snapshot.spaceheat:003
@@ -476,9 +484,10 @@ formats:
     - data.channel.gt:002
     - report:002
     - report:003
+    - sim.ready:000
+    - sim.timestep:000
   uuid4.str:
     used_by:
-    - analytics.channel.gt:000
     - channel.readings:001
     - connectivity.edge.gt:000
     - data.channel.gt:001
@@ -486,8 +495,6 @@ formats:
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
-    - fis.authority.manifest:000
-    - fis.instance.authorization.event:000
     - fsm.atomic.report:000
     - fsm.atomic.report:001
     - fsm.full.report:000
@@ -513,6 +520,8 @@ formats:
     - report:002
     - report:003
     - sim.pico.tank.module.component.gt:000
+    - sim.ready:000
+    - sim.timestep:000
     - snapshot.spaceheat:003
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300

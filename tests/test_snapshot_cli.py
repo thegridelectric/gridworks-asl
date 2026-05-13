@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from sema.interfaces.cli import snapshot
+from sema.tools.build_public_registry import build_public_registry, load_registry
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -9,6 +10,11 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_path: Path) -> None:
     output_root = tmp_path / "output"
     monkeypatch.setattr(snapshot, "OUTPUT_DIR", output_root)
+    monkeypatch.setattr(
+        snapshot,
+        "build_public_registry_index",
+        lambda: build_public_registry(load_registry()),
+    )
 
     target_root = snapshot.prepare_snapshot(ROOT / "template_seed_request.yaml")
 
@@ -22,16 +28,21 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
     stale_file = output_root / "stale.txt"
     stale_file.write_text("remove me")
     local_names = target_root / "indexes" / "local_names.yaml"
-    local_names.write_text(local_names.read_text().replace("LayoutLite", "LiteLayout"))
+    local_names.write_text(
+        local_names.read_text().replace("layout.lite: layout.lite", "layout.lite: lite.layout")
+    )
 
     assert snapshot.prepare_snapshot(ROOT / "template_seed_request.yaml") == target_root
     assert not stale_file.exists()
-    assert "LiteLayout" not in local_names.read_text()
+    assert "lite.layout" not in local_names.read_text()
     local_names.write_text(
         local_names.read_text()
-        .replace("LayoutLite", "LiteLayout")
-        .replace("Gw1EmissionMethod", "EmissionMethod")
-        .replace("Gw1SeasonalStorageMode", "SeasonalStorageMode")
+        .replace("layout.lite: layout.lite", "layout.lite: lite.layout")
+        .replace("gw1.emission.method: gw1.emission.method", "gw1.emission.method: emission.method")
+        .replace(
+            "gw1.seasonal.storage.mode: gw1.seasonal.storage.mode",
+            "gw1.seasonal.storage.mode: seasonal.storage.mode",
+        )
     )
 
     assert snapshot.build_snapshot_runtime("gjk") == target_root
@@ -44,23 +55,17 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
     assert (target_root / "indexes" / "reverse_dependencies.yaml").exists()
     assert (target_root / "indexes" / "versions.yaml").exists()
     assert (target_root / "tests" / "test_property_format.py").exists()
-    assert (target_root / "logic" / "axioms" / "lite_layout.py").exists()
-    assert (target_root / "logic" / "upgrades" / "lite_layout_011_to_012.py").exists()
     assert "from gjk.sema.base import" in (target_root / "codec.py").read_text()
     assert (target_root / "enums" / "emission_method.py").exists()
     assert not (target_root / "enums" / "gw1_emission_method.py").exists()
+    enum_init = (target_root / "enums" / "__init__.py").read_text()
     lite_layout = (target_root / "types" / "lite_layout.py").read_text()
     assert "class LiteLayout" in lite_layout
-    assert "from gjk.sema.logic.axioms.lite_layout import check_axiom_1 as _check_axiom_1" in lite_layout
-    assert "from gjk.sema.enums.seasonal_storage_mode import SeasonalStorageMode" in lite_layout
-
-    axiom_logic = target_root / "logic" / "axioms" / "lite_layout.py"
-    upgrade_logic = target_root / "logic" / "upgrades" / "lite_layout_011_to_012.py"
-    axiom_logic.write_text("# stale axiom implementation\n")
-    upgrade_logic.write_text("# stale upgrade implementation\n")
+    assert "from gjk.sema.logic" not in lite_layout
+    assert "def check_axiom_1" in lite_layout
+    assert "from gjk.sema.enums.seasonal_storage_mode import SeasonalStorageMode" in enum_init
+    assert "from gjk.sema.enums import SeasonalStorageMode" in lite_layout
 
     assert snapshot.build_snapshot_runtime("gjk") == target_root
-    assert "stale axiom" not in axiom_logic.read_text()
-    assert "stale upgrade" not in upgrade_logic.read_text()
-    assert "def check_axiom_1" in axiom_logic.read_text()
-    assert "def upgrade" in upgrade_logic.read_text()
+    assert "def check_axiom_1" in (target_root / "types" / "lite_layout.py").read_text()
+    assert "def upgrade" in (target_root / "types" / "old_versions" / "lite_layout_011.py").read_text()

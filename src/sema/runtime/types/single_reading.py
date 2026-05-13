@@ -1,9 +1,8 @@
 from typing import Literal
-
 from pydantic import StrictInt
-
 from sema.runtime.base import SemaType
-from sema.runtime.property_format import SpaceheatName, UTCMilliseconds
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.property_format import UTCMilliseconds
 
 
 class SingleReading(SemaType):

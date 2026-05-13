@@ -1,13 +1,10 @@
 from enum import auto
-from typing import List
 
 from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
 class GNodeInstanceTransport(SemaEnum):
-    """
-    Sema: https://schemas.electricity.works/enums/g.node.instance.transport/000
-    """
+    """Sema: https://schemas.electricity.works/enums/g.node.instance.transport/000"""
 
     RabbitAmqp = auto()
     RabbitMqtt = auto()
@@ -17,7 +14,7 @@ class GNodeInstanceTransport(SemaEnum):
         return cls.RabbitAmqp
 
     @classmethod
-    def values(cls) -> List[str]:
+    def values(cls) -> list[str]:
         return [elt.value for elt in cls]
 
     @classmethod

@@ -1,0 +1,24 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> Self:
+        """
+        Axiom 1: TerminalAssetAliasConstraint
+        AboutGNodeAlias SHALL identify a TerminalAsset and therefore SHALL end with the suffix
+        ".ta".
+        """
+        if not self.about_g_node_alias.endswith(".ta"):
+            raise ValueError(
+                f'TerminalAssetAliasConstraint: AboutGNodeAlias ({self.about_g_node_alias}) does not end with the suffix ".ta".'
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> Self:
+        """
+        Axiom 2: StartTimestampBeforeEnd
+        StartTimestamp shall be less than EndTimestamp
+        """
+        if self.start_timestamp >= self.end_timestamp:
+            raise ValueError(
+                f"StartTimestampBeforeEnd: ({self.start_timestamp}) is not less than ({self.end_timestamp})."
+            )
+        return self

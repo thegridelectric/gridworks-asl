@@ -13,7 +13,7 @@ class RelayEnergizationState(IntEnum):
 
     @classmethod
     def values(cls) -> list[int]:
-        return [elt.value for elt in cls]
+        return [int(elt.value) for elt in cls]
 
     @classmethod
     def enum_name(cls) -> str:

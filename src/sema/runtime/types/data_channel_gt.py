@@ -1,11 +1,12 @@
 from typing import Literal
-
 from pydantic import ValidationError, model_validator
-
 from sema.runtime.base import SemaType
+from sema.runtime.enums import SpaceheatTelemetryName
 from sema.runtime.enums.old_versions.gw1_quantity_000 import Gw1Quantity000
-from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
-from sema.runtime.property_format import LeftRightDot, SpaceheatName, UTCSeconds, UUID4Str
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.property_format import UTCSeconds
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.spaceheat_telemetry_quantity_projection import SpaceheatTelemetryQuantityProjection
 
 
@@ -27,6 +28,10 @@ class DataChannelGt(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "DataChannelGt":
+        """
+        Axiom 1: PowerMeteringConstraint
+        If InPowerMetering is true, TelemetryName SHALL equal PowerW.
+        """
         if self.in_power_metering and self.telemetry_name != SpaceheatTelemetryName.PowerW:
             raise ValueError(
                 "Axiom 1 failed: telemetry_name must be PowerW when in_power_metering is true."
@@ -35,6 +40,11 @@ class DataChannelGt(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "DataChannelGt":
+        """
+        Axiom 2: TelemetryQuantityConsistency
+        Quantity SHALL equal the Quantity defined by the canonical
+        spaceheat.telemetry.quantity.projection/000 instance for the specified TelemetryName.
+        """
         try:
             SpaceheatTelemetryQuantityProjection(
                 telemetry_name=self.telemetry_name,

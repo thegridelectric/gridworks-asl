@@ -10,7 +10,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[3]
-REGISTRY_PATH = ROOT / "definitions" / "registry.yaml"
+REGISTRY_PATH = ROOT / "indexes" / "public_registry.yaml"
 LOOKUP_PATH = ROOT / "indexes" / "lookup.yaml"
 CLOSURE_PATH = ROOT / "indexes" / "dependency_closure.yaml"
 OUTPUT_DIR = ROOT / "output"
@@ -240,7 +240,7 @@ def expand_seed(seed_request_path: Path, output_path: Path) -> None:
 
     output: dict[str, object] = {
         "metadata": {
-            "generated_from": "definitions/registry.yaml",
+            "generated_from": "indexes/public_registry.yaml",
             "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "note": "Transitive closure of initial_targets",
         },

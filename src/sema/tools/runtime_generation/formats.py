@@ -88,7 +88,9 @@ def generate_property_format(formats, schemas) -> str:
             )
 
         # sections
-        method_blocks.append(spec["methods"].strip())
+        methods = spec["methods"].strip()
+        if methods:
+            method_blocks.append(methods)
         annotated_blocks.append(spec["annotated_type"].strip())
 
         if "helpers" in spec:
@@ -105,7 +107,8 @@ def generate_property_format(formats, schemas) -> str:
         parts.append("# --- patterns ---\n" + "\n\n".join(pattern_lines))
 
     # methods
-    parts.append("# --- methods ---\n" + "\n\n\n".join(method_blocks))
+    if method_blocks:
+        parts.append("# --- methods ---\n" + "\n\n\n".join(method_blocks))
 
     # annotated types
     parts.append("# --- annotated types ---\n" + "\n\n".join(annotated_blocks))
@@ -117,7 +120,7 @@ def generate_property_format(formats, schemas) -> str:
     return "\n\n\n".join(parts) + "\n"
 
 
-def generate_property_format_test(formats) -> str:
+def generate_property_format_test(formats, import_root: str = "sema.runtime") -> str:
     formats = sorted(formats)
     mapping_lines = [
         f'    "{name}": property_format.{FORMAT_TEMPLATES[name]["class_name"]},'
@@ -135,11 +138,11 @@ def generate_property_format_test(formats) -> str:
         "import yaml\n"
         "from pydantic import TypeAdapter, ValidationError\n"
         "\n"
-        "from gjk.sema import property_format\n"
+        f"from {import_root} import property_format\n"
         "\n"
         "\n"
-        "REPO_ROOT = Path(__file__).resolve().parents[2]\n"
-        'DEFINITIONS_DIR = REPO_ROOT / "definitions"\n'
+        "PACKAGE_ROOT = Path(__file__).resolve().parents[1]\n"
+        'DEFINITIONS_DIR = PACKAGE_ROOT / "definitions"\n'
         "FORMAT_SCHEMA_PATHS = [\n"
         + "\n".join(schema_path_lines)
         + "\n]\n"
@@ -176,8 +179,14 @@ def generate_property_format_test(formats) -> str:
     )
 
 
-def generate_formats(target_root, dag, seed=None, definitions_root=None) -> None:
-    if seed is None or definitions_root is None:
+def generate_formats(
+    target_root,
+    dag,
+    seed=None,
+    import_root: str = "sema.runtime",
+    write_tests: bool = False,
+) -> None:
+    if seed is None:
         return
 
     formats: list[str] = []
@@ -187,13 +196,14 @@ def generate_formats(target_root, dag, seed=None, definitions_root=None) -> None
             continue
         _, name, _ = node
         formats.append(name)
-        schemas[name] = load_schema_for_node(node, seed, definitions_root)
+        schemas[name] = load_schema_for_node(node, seed)
 
     target_root.mkdir(parents=True, exist_ok=True)
     (target_root / "property_format.py").write_text(
         generate_property_format(formats, schemas)
     )
-    (target_root / "tests").mkdir(parents=True, exist_ok=True)
-    (target_root / "tests" / "test_property_format.py").write_text(
-        generate_property_format_test(formats)
-    )
+    if write_tests:
+        (target_root / "tests").mkdir(parents=True, exist_ok=True)
+        (target_root / "tests" / "test_property_format.py").write_text(
+            generate_property_format_test(formats, import_root)
+        )

@@ -96,6 +96,27 @@ HandleName = Annotated[
 """,
     },
 
+    "hex.char": {
+        "class_name": "HexChar",
+        "pattern": r"^[0-9a-fA-F]$",
+        "methods": """
+def is_hex_char(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: hex.char must be a string.")
+
+    if not HEX_CHAR_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails hex.char format.")
+
+    return v
+""",
+        "annotated_type": """
+HexChar = Annotated[
+    str,
+    BeforeValidator(is_hex_char),
+]
+""",
+    },
+
     "market.slot.name": {
         "class_name": "MarketSlotName",
         "pattern": r"^[erd]\.[a-z0-9]+(?:\.[a-z0-9]+)*(?:\.[a-z0-9]+)+\.[0-9]{10}$",
@@ -200,6 +221,27 @@ NonNegativeInt = Annotated[
 """,
     },
 
+    "pascal.case": {
+        "class_name": "PascalCase",
+        "pattern": r"^[A-Z][A-Za-z0-9]*$",
+        "methods": """
+def is_pascal_case(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: PascalCase must be a string.")
+
+    if not PASCAL_CASE_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails PascalCase format.")
+
+    return v
+""",
+        "annotated_type": """
+PascalCase = Annotated[
+    str,
+    BeforeValidator(is_pascal_case),
+]
+""",
+    },
+
     "positive.int": {
         "class_name": "PositiveInt",
         "methods": """
@@ -214,6 +256,18 @@ def is_positive_int(v: int) -> int:
 PositiveInt = Annotated[
     int,
     BeforeValidator(is_positive_int),
+]
+""",
+    },
+
+    "positive.float": {
+        "class_name": "PositiveFloat",
+        "imports": ["from pydantic import Field, StrictFloat"],
+        "methods": "",
+        "annotated_type": """
+PositiveFloat = Annotated[
+    StrictFloat,
+    Field(gt=0),
 ]
 """,
     },

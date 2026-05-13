@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ fsm_full_report_001_class_name }}:
+        """- AtomicList[]: fsm.atomic.report:000 -> 001"""
+        data = self.model_dump()
+
+        data["atomic_list"] = [atomic.upgrade() for atomic in self.atomic_list]
+
+        data["version"] = "001"
+        return {{ fsm_full_report_001_class_name }}.model_validate(data)

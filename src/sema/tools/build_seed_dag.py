@@ -42,8 +42,14 @@ class SeedDag:
     def print_edges(self) -> str:
         return format_edges(self.dependencies, self.upgrades)
 
-    def latest_in_dag(self) -> dict[tuple[str, str], str | None]:
-        return compute_latest_in_dag(self.nodes)
+    def dag_max(self) -> dict[tuple[str, str], str | None]:
+        """Per-(kind, name) maximum version present in this DAG.
+
+        This is *not* "the registry's latest_version" — it reflects only the
+        versions selected into this DAG. Used by codegen for old-versions
+        placement and class-name suffixing within a single generation.
+        """
+        return compute_dag_max(self.nodes)
 
 
 def load_yaml(path: Path) -> dict:
@@ -99,11 +105,6 @@ def build_seed_dag_from_data(seed: dict, registry: dict) -> SeedDag:
         for current, nxt in zip(ordered, ordered[1:]):
             if current not in available_versions or nxt not in available_versions:
                 raise ValueError(f"Type {type_name} has selected version not declared in registry")
-            expected_gap = int(nxt) - int(current)
-            if expected_gap > 1:
-                raise ValueError(
-                    f"Missing intermediate version between {current} and {nxt} for {type_name}"
-                )
             current_node: NodeKey = ("type", type_name, current)
             next_node: NodeKey = ("type", type_name, nxt)
             upgrades[current_node] = next_node
@@ -132,18 +133,26 @@ def build_nodes_from_worklist(seed: dict) -> set[NodeKey]:
     return nodes
 
 
-def compute_latest_in_dag(nodes: set[NodeKey]) -> dict[tuple[str, str], str | None]:
-    latest: dict[tuple[str, str], str | None] = {}
+def compute_dag_max(nodes: set[NodeKey]) -> dict[tuple[str, str], str | None]:
+    """Compute per-(kind, name) maximum version across DAG nodes.
+
+    Returns a dict mapping (kind, sema_name) -> max-version-string-in-DAG.
+    Versionless words map to None.
+
+    Note: this is the DAG-local maximum, not the registry's latest_version.
+    """
+    dag_max: dict[tuple[str, str], str | None] = {}
 
     for kind, name, version in nodes:
         key = (kind, name)
         if version is None:
-            latest[key] = None
+            dag_max[key] = None
             continue
-        if key not in latest or latest[key] is None or int(version) > int(latest[key]):
-            latest[key] = version
+        current = dag_max.get(key)
+        if current is None or int(version) > int(current):
+            dag_max[key] = version
 
-    return latest
+    return dag_max
 
 
 def normalize_worklist_versions(entry: dict) -> list[str]:

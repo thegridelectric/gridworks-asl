@@ -74,6 +74,58 @@ https://schemas.electricity.works/types/report/002
 
 These URLs serve as the globally stable identifiers for Sema vocabulary and are used directly in `$ref` links within schemas and generated code.
 
+## Adding a New Type
+
+New Sema types are authored in two layers:
+
+- the schema and registry metadata, which define the public contract
+- optional runtime axiom templates, which contain hand-written validation logic
+
+To add a type:
+
+1. Add the schema YAML under `definitions/types/<type-name>/<version>.yaml`.
+   Follow the type, versioning, dependency, enum, format, and axiom rules in
+   [`docs/sema-specification.md`](docs/sema-specification.md).
+
+2. Add the type version to `definitions/registry.yaml`.
+   Declare only direct dependencies. Use `structural` for `$ref` dependencies
+   required by the schema and `axiom` for vocabulary used only by axiom logic.
+
+3. If the schema declares `x-gridworks.axioms`, create the runtime axiom
+   template stub:
+
+   ```bash
+   uv run sema runtime scaffold-axiom-template <type-name> <version>
+   ```
+
+   This writes a new file under
+   `src/sema/tools/runtime_generation/templates/axioms/`. Existing templates
+   are not overwritten. The generated stub includes formatted axiom docstrings
+   from the schema and raises `NotImplementedError` until the validation logic
+   is filled in.
+
+4. Fill in the hand-written validation logic in the generated Jinja template.
+   The Jinja template is the maintained source for custom runtime axiom code;
+   runtime regeneration renders it into `src/sema/runtime/types/...`.
+   Runtime axiom failures should identify the mechanical axiom number, such as
+   `Axiom 1`. Tests for invalid examples should assert that number
+   case-insensitively rather than matching semantic labels or full prose, since
+   labels and wording are human-authored documentation.
+
+5. Rebuild indexes and run validation:
+
+   ```bash
+   ./scripts/build_indexes.sh
+   uv run pytest tests/registry tests/indexes/test_indexes_are_up_to_date.py
+   ```
+
+6. Regenerate the local runtime only when you are ready to update generated
+   runtime files:
+
+   ```bash
+   uv run python scripts/regenerate_runtime.py
+   ```
+
 ## Vocabulary Snapshots
 
 Instead of distributing a shared runtime package, Sema produces **self-contained vocabulary snapshots**.
@@ -90,9 +142,6 @@ repo/
     property_format.py
     enums/
     types/
-    logic/
-      axioms/
-      upgrades/
     definitions/
       registry.yaml
       formats/
@@ -142,7 +191,7 @@ Example output:
 ```
 Sema CLI
 Interface: textual
-Subcommands: reverse, snapshot, info
+Subcommands: reverse, runtime, snapshot, info
 ```
 
 ### Reverse Dependency Analysis
@@ -214,8 +263,9 @@ The prepare step:
 - creates `output/sema/indexes/local_names.yaml`
 
 Edit `output/sema/indexes/local_names.yaml` between prepare and build to choose
-local Python class names for generated types and enums. The keys remain
-canonical Sema names; only `local_class_name` values should be edited.
+local names for generated types and enums. The keys remain canonical Sema names;
+values are local `left.right.dot` names. Python class and module names are
+derived from those local names.
 
 The build step:
 

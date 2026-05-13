@@ -61,16 +61,14 @@ properties:
       (e.g., OnTrigger, Periodic, AsyncAndPeriodic).
 
   AsyncEmitDelta:
-    type: integer
-    minimum: 1
+    $ref: "https://schemas.electricity.works/formats/positive.int"
     description: >
       Minimum delta required to emit asynchronously.
       Required for AsyncAndPeriodic.
       Must not be present for OnTrigger or Periodic.
 
   EmitPeriodS:
-    type: integer
-    minimum: 1
+    $ref: "https://schemas.electricity.works/formats/positive.int"
     description: >
       Periodic emission interval in seconds.
       Required for Periodic and AsyncAndPeriodic.
@@ -78,7 +76,6 @@ properties:
 
   Parameters:
     type: object
-    additionalProperties: true
     description: >
       Optional strategy-specific configuration parameters.
 

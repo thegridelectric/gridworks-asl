@@ -1,0 +1,36 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ bid_000_class_name }}":
+        """
+        Axiom 1: MarketNormalizationAnchor
+        The price of the first element in PqPairs SHALL equal the PriceMax defined by the
+        MarketType associated with MarketSlotName.
+        """
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ bid_000_class_name }}":
+        """
+        Axiom 2: UnitConsistency
+        PriceUnit and QuantityUnit SHALL match the units declared by the MarketType associated
+        with MarketSlotName.
+        """
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "{{ bid_000_class_name }}":
+        """
+        Axiom 3: CurveAdmissibility
+        The structure, ordering, and cardinality of PqPairs SHALL conform to the admissibility
+        rules of the MarketType associated with MarketSlotName (including any constraints on
+        price ordering, monotonicity, tick size, or maximum number of segments).
+        """
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_4(self) -> "{{ bid_000_class_name }}":
+        """
+        Axiom 4: EconomicAdmission
+        SignedMarketFeeTxn MUST be verifiable under the market’s fee and admission policy for
+        the specified MarketSlot.
+        """
+        return self

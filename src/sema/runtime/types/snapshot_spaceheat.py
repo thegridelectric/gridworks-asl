@@ -1,7 +1,8 @@
 from typing import Literal
-
 from sema.runtime.base import SemaType
-from sema.runtime.property_format import LeftRightDot, UTCMilliseconds, UUID4Str
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import UTCMilliseconds
+from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.single_machine_state import SingleMachineState
 from sema.runtime.types.single_reading import SingleReading
 

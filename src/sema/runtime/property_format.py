@@ -3,12 +3,16 @@ import uuid
 from datetime import UTC, datetime
 from typing import Annotated
 
-from pydantic import BeforeValidator, Field, StrictInt
+from pydantic import BeforeValidator, Field, StrictFloat, StrictInt
 
 
 # --- patterns ---
 HANDLE_NAME_PATTERN = re.compile(
     r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)*$"
+)
+
+HEX_CHAR_PATTERN = re.compile(
+    r"^[0-9a-fA-F]$"
 )
 
 LEFT_RIGHT_DOT_PATTERN = re.compile(
@@ -17,6 +21,10 @@ LEFT_RIGHT_DOT_PATTERN = re.compile(
 
 MARKET_SLOT_NAME_PATTERN = re.compile(
     r"^[erd]\.[a-z0-9]+(?:\.[a-z0-9]+)*(?:\.[a-z0-9]+)+\.[0-9]{10}$"
+)
+
+PASCAL_CASE_PATTERN = re.compile(
+    r"^[A-Z][A-Za-z0-9]*$"
 )
 
 SPACEHEAT_NAME_PATTERN = re.compile(
@@ -43,6 +51,16 @@ def is_handle_name(v: str) -> str:
 
     if not HANDLE_NAME_PATTERN.fullmatch(v):
         raise ValueError(f"<{v}>: Fails HandleName format.")
+
+    return v
+
+
+def is_hex_char(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: hex.char must be a string.")
+
+    if not HEX_CHAR_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails hex.char format.")
 
     return v
 
@@ -131,6 +149,16 @@ def is_non_negative_int(v: int) -> int:
         raise TypeError("Not an int!")
     if v < 0:
         raise ValueError(f"{v} must be non-negative")
+    return v
+
+
+def is_pascal_case(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: PascalCase must be a string.")
+
+    if not PASCAL_CASE_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails PascalCase format.")
+
     return v
 
 
@@ -231,6 +259,11 @@ HandleName = Annotated[
     BeforeValidator(is_handle_name),
 ]
 
+HexChar = Annotated[
+    str,
+    BeforeValidator(is_hex_char),
+]
+
 LeftRightDot = Annotated[
     str,
     BeforeValidator(is_left_right_dot),
@@ -249,6 +282,16 @@ MarketSlotName = Annotated[
 NonNegativeInt = Annotated[
     StrictInt,
     Field(ge=0),
+]
+
+PascalCase = Annotated[
+    str,
+    BeforeValidator(is_pascal_case),
+]
+
+PositiveFloat = Annotated[
+    StrictFloat,
+    Field(gt=0),
 ]
 
 PositiveInt = Annotated[

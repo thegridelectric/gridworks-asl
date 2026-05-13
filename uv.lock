@@ -732,6 +732,7 @@ source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
     { name = "gridworks" },
+    { name = "jinja2" },
     { name = "pydantic" },
     { name = "pyyaml" },
     { name = "uvicorn" },
@@ -751,6 +752,7 @@ dev = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115.13" },
     { name = "gridworks", specifier = ">=1.4.2" },
+    { name = "jinja2", specifier = ">=3.1.6" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "uvicorn", specifier = ">=0.34.3" },

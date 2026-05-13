@@ -1,15 +1,8 @@
 # GENERATED FILE — DO NOT EDIT
-# Generated from definitions/registry.yaml
+# Generated from indexes/public_registry.yaml
 
 
 types:
-  analytics.channel.gt:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
-
   bid:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -34,6 +27,13 @@ types:
           - additionalProperties: true -> false
       "001":
         summary: "Baseline runtime version (no prior version tracked)."
+
+  channel.readings.list.item:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
 
   connectivity.edge.gt:
     latest_version: "000"
@@ -71,28 +71,14 @@ types:
       "000":
         summary: "Initial Sema version"
 
-  fis.authority.manifest:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
-
-  fis.instance.authorization.event:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
-
   fsm.atomic.report:
     latest_version: "001"
     versioning_strategy: "literal"
     versions:
       "001":
         summary: >
-          - Remove ActionType
-          - Action: scalar → structured variants (oneOf)
+          - ActionType: remove
+          - Action: scalar -> unconstrained object payload
       "000":
         summary: "Initial Sema version"
 
@@ -101,7 +87,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "001":
-        summary: "Update AtomicList item type from fsm.atomic.report:000 to fsm.atomic.report:001."
+        summary: "- AtomicList[]: fsm.atomic.report:000 -> 001"
       "000":
         summary: "Initial Sema version"
 
@@ -164,6 +150,7 @@ types:
           - HpMaxKwEl: add as optional
           - HpMaxKwTh: required -> optional
           - HpTurnOnMinutes: add
+          - VersioningStrategy: string -> literal
       "005":
         summary: >
           - CopIntercept: add as optional
@@ -173,6 +160,13 @@ types:
           - CopMinOatF: add as optional
       "004":
         summary: "Baseline runtime version (no prior version tracked)."
+
+  heartbeat.a:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version."
 
   i2c.multichannel.dt.relay.component.gt:
     latest_version: "004"
@@ -213,8 +207,8 @@ types:
           - ShNodes[]: spaceheat.node.gt:300 | 301 -> 301
       "011":
         summary: >
-          - Ha1Params: ha1.params: 005 -> 006
-          - DerivedChannels: derived.channel.gt:000 -> 000 | 001
+          - Ha1Params: ha1.params:005 -> 006
+          - DerivedChannels[]: derived.channel.gt:000 -> 000 | 001
       "010":
         summary: >
           - Ha1Params: ha1.params:004 | 005 -> 005
@@ -229,7 +223,7 @@ types:
           - SystemMode: add
           - SeasonalStorageMode: add
           - TankModuleComponents[]: pico.tank.module.component.gt only -> pico.tank.module.component.gt | sim.pico.tank.module.component.gt
-          - Axiom 4 (DerivedNodeConsistency): add
+          - DerivedNodeConsistency axiom: add
       "007":
         summary: "Baseline runtime version (no prior version tracked)."
 
@@ -238,7 +232,9 @@ types:
     versioning_strategy: "literal"
     versions:
       "001":
-        summary: "B: number → integer; semantics clarified to operate in OutputUnit scaling domain."
+        summary: >
+          - B: number -> integer
+          - Semantics: clarify OutputUnit scaling domain
       "000":
         summary: "Initial Sema version"
 
@@ -284,12 +280,19 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  sim.ready:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version."
+
   relay.actor.config:
     latest_version: "003"
     versioning_strategy: "literal"
     versions:
       "003":
-        summary: "- AsyncCaptureDelta: conditionally required when AsyncCapture is true (was optional)"
+        summary: "- AsyncCaptureDelta: require when AsyncCapture is true"
       "002":
         summary: "Baseline runtime version (no prior version tracked)."
 
@@ -309,14 +312,20 @@ types:
       "003":
         summary: >
           - Report: report:002 -> 003
-          - Removed (accidentally) former axioms 1 and 2
+          - Axioms: remove former ReportIdentityPropagation and ReportCreatedTimePropagation
       "002":
         summary: "Baseline runtime version (no prior version tracked)."
 
   scada.control.capabilities:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: >
+          - RelayNodes[]: inline object -> spaceheat.node.gt:300
+          - DacNodes[]: inline object -> spaceheat.node.gt:300
+          - ControlChannels[]: inline object -> data.channel.gt:001
+          - Axioms: add control surface consistency checks
       "000":
         summary: "Initial Sema version"
 
@@ -333,8 +342,8 @@ types:
     versions:
       "001":
         summary: >
-          - Remove FromName
-          - Remove ToName
+          - FromName: remove
+          - ToName: remove
           - MessageCreatedMs: add
       "000":
         summary: "Initial Sema version"
@@ -345,6 +354,13 @@ types:
     versions:
       "000":
         summary: "Initial Sema version"
+
+  sim.timestep:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version."
 
   single.machine.state:
     latest_version: "000"
@@ -395,9 +411,11 @@ types:
         summary: "Initial Sema version"
 
   synced.readings.bundle:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- ChannelReadingsList[]: inline object -> channel.readings.list.item:000"
       "001":
         summary: "Baseline runtime version (no prior version tracked)."
 
@@ -423,18 +441,6 @@ enums:
   change.relay.state:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
-    versions:
-      "000": {}
-
-  fis.authorization.decision:
-    enum_type: "versioned"
-    note: "This enum is versioned; new versions are additive only."
-    versions:
-      "000": {}
-
-  fis.authorization.reason:
-    enum_type: "versioned"
-    note: "This enum is versioned; new versions are additive only."
     versions:
       "000": {}
 
@@ -494,6 +500,48 @@ enums:
     versions:
       "000": {}
 
+  gw1.main.auto.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.lc.top.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.leaf.ally.all.tanks.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.leaf.ally.buffer.only.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.local.control.all.tanks.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.local.control.buffer.only.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
+  gw1.local.control.standby.top.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
   gw1.quantity:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
@@ -542,6 +590,12 @@ enums:
     note: "This enum is versioned; new versions are additive only."
     versions:
       "001": {}
+
+  i2c.adc.channel:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
 
   market.price.unit:
     enum_type: "versioned"

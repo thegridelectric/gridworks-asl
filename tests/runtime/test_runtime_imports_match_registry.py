@@ -6,14 +6,28 @@ import yaml
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-FULL_SEED_PATH = REPO_ROOT / "full_seed.yaml"
-REGISTRY_PATH = REPO_ROOT / "definitions" / "registry.yaml"
+REGISTRY_PATH = REPO_ROOT / "indexes" / "public_registry.yaml"
 RUNTIME_TYPES_DIR = REPO_ROOT / "src" / "sema" / "runtime" / "types"
 RUNTIME_ENUMS_DIR = REPO_ROOT / "src" / "sema" / "runtime" / "enums"
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
     return yaml.safe_load(path.read_text())
+
+
+def seed_from_registry(registry: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "worklist": {
+            "types": {
+                name: (
+                    {"versioning_strategy": "none"}
+                    if entry["versioning_strategy"] == "none"
+                    else {version: {} for version in entry["versions"]}
+                )
+                for name, entry in registry["types"].items()
+            }
+        }
+    }
 
 
 def sema_name_to_module(word_name: str) -> str:
@@ -77,6 +91,48 @@ def runtime_type_file(registry_entry: dict[str, Any], type_name: str, version: s
     return RUNTIME_TYPES_DIR / "old_versions" / f"{module_name}_{version}.py"
 
 
+def candidate_type_imports(dep_name: str, imports: set[tuple[str, str]]) -> set[tuple[str, str]]:
+    module_name = sema_name_to_module(dep_name)
+    class_name = sema_name_to_class(dep_name)
+    return {
+        target
+        for target in imports
+        if (
+            target[0] == f"sema.runtime.types.{module_name}"
+            and target[1] == class_name
+        )
+        or (
+            target[0] == "sema.runtime.types"
+            and target[1] == class_name
+        )
+        or (
+            target[0].startswith(f"sema.runtime.types.old_versions.{module_name}_")
+            and target[1].startswith(class_name)
+        )
+    }
+
+
+def candidate_enum_imports(dep_name: str, imports: set[tuple[str, str]]) -> set[tuple[str, str]]:
+    module_name = sema_name_to_module(dep_name)
+    class_name = sema_name_to_class(dep_name)
+    return {
+        target
+        for target in imports
+        if (
+            target[0] == f"sema.runtime.enums.{module_name}"
+            and target[1] == class_name
+        )
+        or (
+            target[0] == "sema.runtime.enums"
+            and target[1] == class_name
+        )
+        or (
+            target[0].startswith(f"sema.runtime.enums.old_versions.{module_name}_")
+            and target[1].startswith(class_name)
+        )
+    }
+
+
 def selected_type_versions(seed: dict) -> dict[str, list[str]]:
     selected: dict[str, list[str]] = {}
     for word_name, entry in seed["worklist"]["types"].items():
@@ -93,8 +149,8 @@ def selected_type_versions(seed: dict) -> dict[str, list[str]]:
 
 
 def test_runtime_imports_match_registry() -> None:
-    seed = load_yaml(FULL_SEED_PATH)
     registry = load_yaml(REGISTRY_PATH)
+    seed = seed_from_registry(registry)
     findings: list[str] = []
 
     for type_name, versions in selected_type_versions(seed).items():
@@ -121,14 +177,22 @@ def test_runtime_imports_match_registry() -> None:
                     if dep_entry["versioning_strategy"] == "none":
                         continue
                     expected = expected_type_import(registry, dep_name, dep_version)
-                    if expected not in imports:
+                    candidates = candidate_type_imports(dep_name, imports)
+                    acceptable = {expected}
+                    if expected[0].startswith("sema.runtime.types.") and ".old_versions." not in expected[0]:
+                        acceptable.add(("sema.runtime.types", expected[1]))
+                    if not (acceptable & candidates):
                         findings.append(
                             f"{type_name}:{version} missing runtime import for {dep}; "
                             f"expected {expected[0]} import {expected[1]}"
                         )
                 elif dep_name in registry["enums"]:
                     expected = expected_enum_import(registry, dep_name, dep_version)
-                    if expected not in imports:
+                    candidates = candidate_enum_imports(dep_name, imports)
+                    acceptable = {expected}
+                    if expected[0].startswith("sema.runtime.enums.") and ".old_versions." not in expected[0]:
+                        acceptable.add(("sema.runtime.enums", expected[1]))
+                    if not (acceptable & candidates):
                         findings.append(
                             f"{type_name}:{version} missing runtime import for {dep}; "
                             f"expected {expected[0]} import {expected[1]}"

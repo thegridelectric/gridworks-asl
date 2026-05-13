@@ -1,13 +1,10 @@
 from enum import auto
-from typing import List
 
 from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
 class MarketQuantityUnit(SemaEnum):
-    """
-    Sema: https://schemas.electricity.works/enums/market.quantity.unit/000
-    """
+    """Sema: https://schemas.electricity.works/enums/market.quantity.unit/000"""
 
     AvgMW = auto()
     AvgkW = auto()
@@ -17,7 +14,7 @@ class MarketQuantityUnit(SemaEnum):
         return cls.AvgMW
 
     @classmethod
-    def values(cls) -> List[str]:
+    def values(cls) -> list[str]:
         return [elt.value for elt in cls]
 
     @classmethod

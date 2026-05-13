@@ -1,0 +1,27 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ derived_channel_gt_001_class_name }}":
+        """
+        Axiom 1: EmissionSemanticsConsistency
+        EmissionMethod SHALL determine the presence of EmitPeriodS and
+        AsyncEmitDelta as follows:
+
+          OnTrigger → neither EmitPeriodS nor AsyncEmitDelta present
+          Periodic → EmitPeriodS present, AsyncEmitDelta absent
+          AsyncAndPeriodic → both EmitPeriodS and AsyncEmitDelta present
+        """
+        if self.emission_method == {{ gw1_emission_method_000_class_name }}.OnTrigger:
+            if self.emit_period_s is not None or self.async_emit_delta is not None:
+                raise ValueError(
+                    "Axiom 1 failed: OnTrigger must not include emit_period_s or async_emit_delta."
+                )
+        elif self.emission_method == {{ gw1_emission_method_000_class_name }}.Periodic:
+            if self.emit_period_s is None or self.async_emit_delta is not None:
+                raise ValueError(
+                    "Axiom 1 failed: Periodic requires emit_period_s and forbids async_emit_delta."
+                )
+        elif self.emission_method == {{ gw1_emission_method_000_class_name }}.AsyncAndPeriodic:
+            if self.emit_period_s is None or self.async_emit_delta is None:
+                raise ValueError(
+                    "Axiom 1 failed: AsyncAndPeriodic requires both emit_period_s and async_emit_delta."
+                )
+        return self

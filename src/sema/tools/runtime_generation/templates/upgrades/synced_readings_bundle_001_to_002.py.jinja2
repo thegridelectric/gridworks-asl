@@ -1,0 +1,18 @@
+    def upgrade(self) -> {{ synced_readings_bundle_002_class_name }}:
+        """- ChannelReadingsList[]: inline object -> channel.readings.list.item:000"""
+        data = self.model_dump()
+        channel_readings_list: list[dict[str, Any]] = []
+
+        for item in self.channel_readings_list:
+            item_data = dict(item)
+
+            if any(key in item_data for key in ("ChannelName", "ValueList", "Unit", "UnitType")):
+                item_data["TypeName"] = "channel.readings.list.item"
+                item_data["Version"] = "000"
+            else:
+                item_data["type_name"] = "channel.readings.list.item"
+                item_data["version"] = "000"
+            channel_readings_list.append(item_data)
+        data["channel_readings_list"] = channel_readings_list
+        data["version"] = "002"
+        return {{ synced_readings_bundle_002_class_name }}.model_validate(data)

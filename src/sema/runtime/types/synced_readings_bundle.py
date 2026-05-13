@@ -1,54 +1,42 @@
-from typing import List, Literal, Self
-
-from pydantic import BaseModel, ConfigDict, StrictInt, model_validator
-
+from typing import Literal, Self
+from pydantic import model_validator
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gw1_unit import Gw1Unit
-from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
-from sema.runtime.property_format import (
-    LeftRightDot,
-    SpaceheatName,
-    UtcIso8601Seconds,
-)
-
-
-class ChannelReadingsListItem(BaseModel):
-    channel_name: SpaceheatName
-    value_list: List[StrictInt | None]
-    unit: str
-    unit_type: LeftRightDot
-
-    model_config = ConfigDict(
-        alias_generator=SemaType.model_config.get("alias_generator"),
-        populate_by_name=True,
-        extra="forbid",
-    )
+from sema.runtime.enums import Gw1Unit
+from sema.runtime.enums import SpaceheatTelemetryName
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import UtcIso8601Seconds
+from sema.runtime.types.channel_readings_list_item import ChannelReadingsListItem
 
 
 class SyncedReadingsBundle(SemaType):
-    about_gnode_alias: LeftRightDot
+    """Sema: https://schemas.electricity.works/types/synced.readings.bundle/002"""
+
+    about_g_node_alias: LeftRightDot
     start_timestamp: UtcIso8601Seconds
     end_timestamp: UtcIso8601Seconds
-    timestamp_list: List[UtcIso8601Seconds]
-    channel_readings_list: List[ChannelReadingsListItem]
+    timestamp_list: list[UtcIso8601Seconds]
+    channel_readings_list: list[ChannelReadingsListItem]
     type_name: Literal["synced.readings.bundle"] = "synced.readings.bundle"
-    version: Literal["001"] = "001"
+    version: Literal["002"] = "002"
 
     @model_validator(mode="after")
-    def check_axiom1(self) -> Self:
+    def check_axiom_1(self) -> Self:
         """
-        Axiom 1: "AboutGNodeAlias SHALL identify a TerminalAsset and therefore SHALL end with the suffix ".ta"."
+        Axiom 1: TerminalAssetAliasConstraint
+        AboutGNodeAlias SHALL identify a TerminalAsset and therefore SHALL end with the suffix
+        ".ta".
         """
-        if not self.about_gnode_alias.endswith(".ta"):
+        if not self.about_g_node_alias.endswith(".ta"):
             raise ValueError(
-                f'TerminalAssetAliasConstraint: AboutGNodeAlias ({self.about_gnode_alias}) does not end with the suffix ".ta".'
+                f'TerminalAssetAliasConstraint: AboutGNodeAlias ({self.about_g_node_alias}) does not end with the suffix ".ta".'
             )
         return self
 
     @model_validator(mode="after")
-    def check_axiom2(self) -> Self:
+    def check_axiom_2(self) -> Self:
         """
-        Axiom 2: "ChannelName values SHALL be unique across ChannelReadingsList."
+        Axiom 2: ChannelDefinitionBijection
+        ChannelName values SHALL be unique across ChannelReadingsList.
         """
         seen = set()
         duplicates = set()
@@ -64,9 +52,10 @@ class SyncedReadingsBundle(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom3(self) -> Self:
+    def check_axiom_3(self) -> Self:
         """
-        Axiom 3: "StartTimestamp shall be less than EndTimestamp"
+        Axiom 3: StartTimestampBeforeEnd
+        StartTimestamp shall be less than EndTimestamp
         """
         if self.start_timestamp >= self.end_timestamp:
             raise ValueError(
@@ -75,9 +64,11 @@ class SyncedReadingsBundle(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom4(self) -> Self:
+    def check_axiom_4(self) -> Self:
         """
-        Axiom 4: "The length of TimestampList shall be equal to the length of ValueList for each entry in ChannelReadingsList."
+        Axiom 4: TimestampAndValueLengthAlignment
+        The length of TimestampList shall be equal to the length of ValueList for each entry in
+        ChannelReadingsList.
         """
         errors = {}
         for crl in self.channel_readings_list:
@@ -94,28 +85,22 @@ class SyncedReadingsBundle(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom5(self) -> Self:
+    def check_axiom_5(self) -> Self:
         """
-        Axiom 5: "For each entry in ChannelDefinitions:
-
-          - UnitType SHALL equal one of:
-              gw1.unit
-              spaceheat.telemetry.name
-
-          - Unit SHALL be a valid value from the specified UnitType version:
-
-            gw1.unit -> version 001
-            spaceheat.telemetry.name -> version 007"
+        Axiom 5: UnitTypeAndValueRepresentationConsistency
+        For each entry in ChannelDefinitions: - UnitType SHALL equal one of: gw1.unit
+        spaceheat.telemetry.name - Unit SHALL be a valid value from the specified UnitType
+        version: gw1.unit → version 001 spaceheat.telemetry.name → version 007
         """
         if Gw1Unit.enum_version() != "001":
             raise ValueError(
-                f'UnitTypeAndValueRepresentationConsistency: Gw1Unit version should be "001", is "{Gw1Unit.enum_version()}"'
+                f'UnitTypeAndValueRepresentationConsistency: Gw1Unit version should be "001", is { Gw1Unit.enum_version()}'
             )
 
         if SpaceheatTelemetryName.enum_version() != "007":
             raise ValueError(
                 "UnitTypeAndValueRepresentationConsistency: "
-                f'SpaceheatTelemetryName version should be "007", is "{SpaceheatTelemetryName.enum_version()}"'
+                f'SpaceheatTelemetryName version should be "007", is { SpaceheatTelemetryName.enum_version()}'
             )
 
         errors = []

@@ -1,0 +1,15 @@
+    def upgrade(self) -> {{ data_channel_gt_002_class_name }}:
+        """
+        - Quantity: add
+        - TelemetryName: spaceheat.telemetry.name:006 -> 007
+        - TelemetryQuantityConsistency axiom: add
+        """
+
+        data = self.model_dump()
+        upgraded_telemetry_name = {{ spaceheat_telemetry_name_007_class_name }}[self.telemetry_name.name]
+        data["telemetry_name"] = upgraded_telemetry_name
+        data["quantity"] = {{ spaceheat_telemetry_quantity_projection_000_class_name }}.project(
+            upgraded_telemetry_name
+        )
+        data["version"] = "002"
+        return {{ data_channel_gt_002_class_name }}.model_validate(data)

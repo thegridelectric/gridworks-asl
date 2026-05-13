@@ -1,13 +1,13 @@
 from typing import Literal
-
 from pydantic import StrictInt, model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.change_relay_state import ChangeRelayState
-from sema.runtime.enums.relay_closed_or_open import RelayClosedOrOpen
-from sema.runtime.enums.relay_wiring_config import RelayWiringConfig
-from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
-from sema.runtime.property_format import LeftRightDot, PositiveInt, SpaceheatName
+from sema.runtime.enums import ChangeRelayState
+from sema.runtime.enums import RelayClosedOrOpen
+from sema.runtime.enums import RelayWiringConfig
+from sema.runtime.enums import SpaceheatUnit
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import SpaceheatName
 
 
 class RelayActorConfig(SemaType):
@@ -48,10 +48,9 @@ class RelayActorConfig(SemaType):
     def check_axiom_2(self) -> "RelayActorConfig":
         """
         Axiom 2: CapturePollingConsistency
-        If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000)
-        SHALL be greater than PollPeriodMs. If CapturePeriodMs is less than
-        10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple of
-        PollPeriodMs.
+        If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS * 1000) SHALL be
+        greater than PollPeriodMs. If CapturePeriodMs is less than 10 times PollPeriodMs, then
+        CapturePeriodMs SHALL be a multiple of PollPeriodMs.
         """
         if self.poll_period_ms is None:
             return self
@@ -75,8 +74,8 @@ class RelayActorConfig(SemaType):
     def check_axiom_3(self) -> "RelayActorConfig":
         """
         Axiom 3: RelayEventEnumConsistency
-        If EventType equals "change.relay.state", then DeEnergizingEvent and
-        EnergizingEvent SHALL both be valid values of change.relay.state:000.
+        If EventType equals "change.relay.state", then DeEnergizingEvent and EnergizingEvent
+        SHALL both be valid values of change.relay.state:000.
         """
         if self.event_type == "change.relay.state":
             valid = set(ChangeRelayState.values())
@@ -90,8 +89,8 @@ class RelayActorConfig(SemaType):
     def check_axiom_4(self) -> "RelayActorConfig":
         """
         Axiom 4: RelayStateEnumConsistency
-        If StateType equals "relay.closed.or.open", then DeEnergizedState and
-        EnergizedState SHALL both be valid values of relay.closed.or.open:000.
+        If StateType equals "relay.closed.or.open", then DeEnergizedState and EnergizedState
+        SHALL both be valid values of relay.closed.or.open:000.
         """
         if self.state_type == "relay.closed.or.open":
             valid = set(RelayClosedOrOpen.values())
@@ -105,9 +104,11 @@ class RelayActorConfig(SemaType):
     def check_axiom_5(self) -> "RelayActorConfig":
         """
         Axiom 5: RelayEventStateMatch
-        If EventType equals "change.relay.state" and StateType equals
-        "relay.closed.or.open", then each relay event SHALL imply its matching
-        relay state.
+        If EventType equals "change.relay.state" and StateType equals "relay.closed.or.open",
+        then: - DeEnergizingEvent "CloseRelay" SHALL imply DeEnergizedState "RelayClosed" -
+        DeEnergizingEvent "OpenRelay" SHALL imply DeEnergizedState "RelayOpen" - EnergizingEvent
+        "CloseRelay" SHALL imply EnergizedState "RelayClosed" - EnergizingEvent "OpenRelay"
+        SHALL imply EnergizedState "RelayOpen"
         """
         if self.state_type != "relay.closed.or.open" or self.event_type != "change.relay.state":
             return self

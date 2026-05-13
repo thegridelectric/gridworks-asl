@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ synced_readings_000_class_name }}":
+        """
+        Axiom 1: ListLengthConsistency
+        len(ChannelNameList) SHALL equal len(ValueList).
+        """
+        if len(self.channel_name_list) != len(self.value_list):
+            raise ValueError(
+                "Axiom 1 failed: channel_name_list and value_list must have the "
+                f"same length (got {len(self.channel_name_list)} and "
+                f"{len(self.value_list)})."
+            )
+        return self

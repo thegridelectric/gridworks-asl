@@ -1,0 +1,26 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ machine_states_000_class_name }}":
+        """
+        Axiom 1: ListLengthConsistency
+        len(StateList) SHALL equal len(UnixMsList).
+        """
+        if len(self.state_list) != len(self.unix_ms_list):
+            raise ValueError(
+                "Axiom 1 failed: state_list and unix_ms_list must have equal length."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ machine_states_000_class_name }}":
+        """
+        Axiom 2: RecognizedStateEnumConsistency
+        If StateEnum is a recognized GridWorks enum, then all elements of StateList SHALL be
+        valid values of that enum.
+        """
+        if self.state_enum == "relay.closed.or.open":
+            valid = set({{ relay_closed_or_open_000_class_name }}.values())
+            if any(state not in valid for state in self.state_list):
+                raise ValueError(
+                    "Axiom 2 failed: state_list values must be valid relay.closed.or.open values."
+                )
+        return self

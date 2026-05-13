@@ -6,6 +6,7 @@ from pathlib import Path
 
 import yaml
 
+from sema.tools.build_public_registry import build as build_public_registry_index
 from sema.tools.build_seed_dag import build_seed_dag_from_data
 from sema.tools.build_seed_definitions import (
     OUTPUT_DIR,
@@ -21,7 +22,6 @@ from sema.tools.build_seed_definitions import (
 )
 from sema.tools.build_seed_expanded import expand_seed
 from sema.tools.runtime_generation.generate_runtime import generate_runtime_from_dag
-from sema.tools.runtime_generation.helpers import default_local_class_name
 
 
 def snapshot_root() -> Path:
@@ -29,7 +29,7 @@ def snapshot_root() -> Path:
 
 
 def _write_local_names_yaml(dag, path: Path) -> None:
-    data: dict[str, dict[str, dict[str, str]]] = {
+    data: dict[str, dict[str, str]] = {
         "types": {},
         "enums": {},
     }
@@ -38,25 +38,82 @@ def _write_local_names_yaml(dag, path: Path) -> None:
         if kind == "format":
             continue
         section = f"{kind}s"
-        data[section][name] = {
-            "local_class_name": default_local_class_name(name)
-        }
+        data[section][name] = name
 
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w") as handle:
         yaml.safe_dump(data, handle, sort_keys=True)
 
 
+def _reject_drafts_in_seed_request(seed_request: dict, public_registry: dict) -> None:
+    """Fail if the seed REQUEST directly names a draft (or unknown) word.
+
+    Active words are closed under dependency by registry-side validation, so
+    drafts can only enter a snapshot via direct selection in the request.
+    Catching that here gives a clear error before ``expand_seed`` runs.
+    """
+    missing: list[str] = []
+    targets = seed_request.get("initial_targets", {}) or {}
+
+    for name in targets.get("formats", {}) or {}:
+        if name not in public_registry["formats"]:
+            missing.append(f"format {name}")
+
+    for name, spec in (targets.get("enums", {}) or {}).items():
+        public_enum = public_registry["enums"].get(name)
+        if public_enum is None:
+            missing.append(f"enum {name}")
+            continue
+        if public_enum.get("enum_type") == "literal":
+            continue
+        requested_versions = (spec or {}).get("versions") or []
+        for version in requested_versions:
+            if version not in public_enum.get("versions", {}):
+                missing.append(f"enum {name}:{version}")
+
+    for name, spec in (targets.get("types", {}) or {}).items():
+        public_type = public_registry["types"].get(name)
+        if public_type is None:
+            missing.append(f"type {name}")
+            continue
+        if public_type.get("versioning_strategy") == "none":
+            continue
+        requested_versions = (spec or {}).get("versions") or []
+        for version in requested_versions:
+            if version not in public_type.get("versions", {}):
+                missing.append(f"type {name}:{version}")
+
+    if missing:
+        raise ValueError(
+            "Snapshot seed_request references draft (or unknown) words/versions:\n  "
+            + "\n  ".join(sorted(missing))
+        )
+
+
 def prepare_snapshot(seed_request: Path) -> Path:
+    # Regenerate indexes/public_registry.yaml first. This validates:
+    #   - status placement (word-level only on versionless / literal /
+    #     formats; otherwise version-level)
+    #   - active-vs-draft dependency closure (active SHALL NOT depend on
+    #     draft, transitively or directly)
+    # and raises ValueError if the registry is in an inconsistent state.
+    public_registry = build_public_registry_index()
+
+    seed_request_path = seed_request.resolve()
+    with seed_request_path.open() as handle:
+        seed_request_data = yaml.safe_load(handle)
+    _reject_drafts_in_seed_request(seed_request_data, public_registry)
+
     ensure_clean_dir(OUTPUT_DIR)
     target_root = snapshot_root()
     indexes_root = target_root / "indexes"
     expanded_seed = indexes_root / "seed_expanded.yaml"
     local_names = indexes_root / "local_names.yaml"
 
-    expand_seed(seed_request.resolve(), expanded_seed)
+    expand_seed(seed_request_path, expanded_seed)
 
     seed = load_seed(expanded_seed)
+
     registry = load_registry()
     copy_seed_definitions(target_root, seed)
     restricted_registry = build_restricted_registry(seed, registry)
@@ -69,7 +126,7 @@ def prepare_snapshot(seed_request: Path) -> Path:
 
 
 def _clear_runtime_outputs(target_root: Path) -> None:
-    for name in ("enums", "types", "tests", "logic"):
+    for name in ("enums", "types", "tests"):
         path = target_root / name
         if path.exists():
             shutil.rmtree(path)
@@ -92,14 +149,15 @@ def build_snapshot_runtime(package_name: str) -> Path:
 
     seed = load_seed(expanded_seed)
     restricted_registry = load_seed(target_root / "definitions" / "registry.yaml")
+    import_root = f"{package_name}.sema"
     _clear_runtime_outputs(target_root)
     generate_runtime_from_dag(
         target_root,
         seed,
         restricted_registry,
-        target_root / "definitions",
-        package_name,
-        local_names,
+        import_root=import_root,
+        local_names=local_names,
+        write_tests=True,
     )
     return target_root
 

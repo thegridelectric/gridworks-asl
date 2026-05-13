@@ -128,35 +128,9 @@ x-gridworks:
         SHALL end with the suffix ".ta".
 
     - number: 2
-      name: "ChannelDefinitionBijection"
-      statement: >
-        ChannelName values SHALL be unique across ChannelReadingsList.
-
-    - number: 3
       name: "StartTimestampBeforeEnd"
       statement: >
         StartTimestamp shall be less than EndTimestamp
-
-    - number: 4
-      name: "TimestampAndValueLengthAlignment"
-      statement: >
-        The length of TimestampList shall be equal to the length of ValueList for each entry in ChannelReadingsList.
-
-    - number: 5
-      name: "UnitTypeAndValueRepresentationConsistency"
-      statement: >
-        For each entry in ChannelDefinitions:
-
-          - UnitType SHALL equal one of:
-              gw1.unit
-              spaceheat.telemetry.name
-
-          - Unit SHALL be a valid value from the specified UnitType version:
-
-            gw1.unit → version 001
-            spaceheat.telemetry.name → version 007
-
-
 
   extended_description: >
 

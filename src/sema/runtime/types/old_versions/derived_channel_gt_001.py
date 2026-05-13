@@ -1,20 +1,17 @@
 from typing import Any, Literal
-
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
-from sema.runtime.enums.gw1_quantity import Gw1Quantity
+from sema.runtime.enums import Gw1EmissionMethod
+from sema.runtime.enums import Gw1Quantity
+from sema.runtime.enums import Gw1Unit
 from sema.runtime.enums.old_versions.gw1_unit_000 import Gw1Unit000
-from sema.runtime.property_format import (
-    LeftRightDot,
-    SpaceheatName,
-    PositiveInt,
-    UUID4Str,
-)
-from sema.runtime.types.derived_channel_gt import DerivedChannelGt as DerivedChannelGt002
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import PositiveInt
+from sema.runtime.property_format import SpaceheatName
+from sema.runtime.property_format import UUID4Str
+from sema.runtime.types.derived_channel_gt import DerivedChannelGt
 from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProjection
-from sema.runtime.enums.gw1_unit import Gw1Unit as Gw1Unit001
+
 
 class DerivedChannelGt001(SemaType):
     """Sema: https://schemas.electricity.works/types/derived.channel.gt/001"""
@@ -36,6 +33,15 @@ class DerivedChannelGt001(SemaType):
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "DerivedChannelGt001":
+        """
+        Axiom 1: EmissionSemanticsConsistency
+        EmissionMethod SHALL determine the presence of EmitPeriodS and
+        AsyncEmitDelta as follows:
+
+          OnTrigger → neither EmitPeriodS nor AsyncEmitDelta present
+          Periodic → EmitPeriodS present, AsyncEmitDelta absent
+          AsyncAndPeriodic → both EmitPeriodS and AsyncEmitDelta present
+        """
         if self.emission_method == Gw1EmissionMethod.OnTrigger:
             if self.emit_period_s is not None or self.async_emit_delta is not None:
                 raise ValueError(
@@ -53,9 +59,8 @@ class DerivedChannelGt001(SemaType):
                 )
         return self
 
-    def upgrade(self) -> DerivedChannelGt002:
+    def upgrade(self) -> DerivedChannelGt:
         """
-        001 -> 002:
         - OutputUnit: required
         - OutputQuantity: add
         - OutputUnitQuantityConsistency axiom: add
@@ -68,8 +73,8 @@ class DerivedChannelGt001(SemaType):
         else:
             data["output_unit"] = self.output_unit.value
             data["output_quantity"] = Gw1UnitQuantityProjection.project(
-                Gw1Unit001(self.output_unit.value)
+                Gw1Unit(self.output_unit.value)
             )
 
         data["version"] = "002"
-        return DerivedChannelGt002.model_validate(data)
+        return DerivedChannelGt.model_validate(data)

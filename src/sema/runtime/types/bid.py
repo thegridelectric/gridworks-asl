@@ -1,11 +1,10 @@
 from typing import Literal
-
 from pydantic import model_validator
-
 from sema.runtime.base import SemaType
-from sema.runtime.enums.market_price_unit import MarketPriceUnit
-from sema.runtime.enums.market_quantity_unit import MarketQuantityUnit
-from sema.runtime.property_format import LeftRightDot, MarketSlotName
+from sema.runtime.enums import MarketPriceUnit
+from sema.runtime.enums import MarketQuantityUnit
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import MarketSlotName
 from sema.runtime.types.price_quantity_unitless import PriceQuantityUnitless
 
 
@@ -25,37 +24,36 @@ class Bid(SemaType):
     @model_validator(mode="after")
     def check_axiom_1(self) -> "Bid":
         """
-        Axiom 1: MarketNormalizationAnchor.
-        The price of the first element in PqPairs SHALL equal the PriceMax
-        defined by the MarketType associated with MarketSlotName.
+        Axiom 1: MarketNormalizationAnchor
+        The price of the first element in PqPairs SHALL equal the PriceMax defined by the
+        MarketType associated with MarketSlotName.
         """
         return self
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "Bid":
         """
-        Axiom 2: UnitConsistency.
-        PriceUnit and QuantityUnit SHALL match the units declared by the
-        MarketType associated with MarketSlotName.
+        Axiom 2: UnitConsistency
+        PriceUnit and QuantityUnit SHALL match the units declared by the MarketType associated
+        with MarketSlotName.
         """
         return self
 
     @model_validator(mode="after")
     def check_axiom_3(self) -> "Bid":
         """
-        Axiom 3: CurveAdmissibility.
-        The structure, ordering, and cardinality of PqPairs SHALL conform to
-        the admissibility rules of the MarketType associated with MarketSlotName
-        (including any constraints on price ordering, monotonicity, tick size,
-        or maximum number of segments).
+        Axiom 3: CurveAdmissibility
+        The structure, ordering, and cardinality of PqPairs SHALL conform to the admissibility
+        rules of the MarketType associated with MarketSlotName (including any constraints on
+        price ordering, monotonicity, tick size, or maximum number of segments).
         """
         return self
 
     @model_validator(mode="after")
     def check_axiom_4(self) -> "Bid":
         """
-        Axiom 4: EconomicAdmission.
-        SignedMarketFeeTxn MUST be verifiable under the market’s fee and
-        admission policy for the specified MarketSlot.
+        Axiom 4: EconomicAdmission
+        SignedMarketFeeTxn MUST be verifiable under the market’s fee and admission policy for
+        the specified MarketSlot.
         """
         return self

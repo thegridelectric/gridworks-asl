@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ channel_readings_002_class_name }}:
+        """
+        - ChannelId: remove
+        - additionalProperties: true -> false
+        """
+        data = self.model_dump()
+        data.pop("channel_id", None)
+        data["version"] = "002"
+        return {{ channel_readings_002_class_name }}.model_validate(data)

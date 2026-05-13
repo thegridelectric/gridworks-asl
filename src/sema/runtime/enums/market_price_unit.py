@@ -4,9 +4,7 @@ from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
 class MarketPriceUnit(SemaEnum):
-    """ 
-    Sema: https://schemas.electricity.works/enums/market.price.unit/000
-    """
+    """Sema: https://schemas.electricity.works/enums/market.price.unit/000"""
 
     USDPerMWh = auto()
 

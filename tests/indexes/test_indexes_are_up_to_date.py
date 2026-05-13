@@ -5,6 +5,7 @@ from pathlib import Path
 from sema.tools import (
     build_dependency_closure,
     build_lookup,
+    build_public_registry,
     build_reverse_dependencies,
     build_versions,
 )
@@ -33,6 +34,16 @@ def test_dependency_closure_is_up_to_date(tmp_path: Path) -> None:
         build_dependency_closure, tmp_path, "dependency_closure.yaml"
     )
     committed = _committed_text("dependency_closure.yaml")
+
+    assert generated == committed, (
+        "Indexes are out of date.\n"
+        "Run: uv run sema build-indexes"
+    )
+
+
+def test_public_registry_is_up_to_date(tmp_path: Path) -> None:
+    generated = _generated_text(build_public_registry, tmp_path, "public_registry.yaml")
+    committed = _committed_text("public_registry.yaml")
 
     assert generated == committed, (
         "Indexes are out of date.\n"

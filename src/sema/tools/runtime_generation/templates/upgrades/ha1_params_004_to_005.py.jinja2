@@ -1,0 +1,11 @@
+    def upgrade(self) -> {{ ha1_params_005_class_name }}:
+        """
+        - CopIntercept: add as optional
+        - CopOatCoeff: add as optional
+        - CopLwtCoeff: add as optional
+        - CopMin: add as optional
+        - CopMinOatF: add as optional
+        """
+        data = self.model_dump()
+        data["version"] = "005"
+        return {{ ha1_params_005_class_name }}.model_validate(data)

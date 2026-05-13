@@ -37,42 +37,45 @@ additionalProperties: false
 x-gridworks:
   owner: "gridworks-energy"
 
+  projection:
+    from: TelemetryName
+    to: Quantity
+    table:
+      Unknown: Unknown
+
+      PowerW: Power
+      WattHours: Energy
+      MilliWattHours: Energy
+
+      WaterTempCTimes1000: Temperature
+      WaterTempFTimes1000: Temperature
+      AirTempCTimes1000: Temperature
+      AirTempFTimes1000: Temperature
+      CelsiusTimes100: Temperature
+
+      GpmTimes100: FlowRate
+      GallonsTimes100: Volume
+
+      VoltageRmsMilliVolts: Voltage
+      VoltsTimesTen: Voltage
+      VoltsTimes100: Voltage
+      MicroVolts: Voltage
+
+      CurrentRmsMicroAmps: Current
+
+      HzTimes100: Frequency
+      MicroHz: Frequency
+
+      RelayState: Unitless
+      ThermostatState: Unitless
+      StorageLayer: Unitless
+      BinaryState: Unitless
+
+      PercentKeep: Percent
+
   axioms:
     - number: 1
       name: "EnumeratedProjectionMapping"
       statement: >
-        The only valid TelemetryName → Quantity pairs in version 000 are:
-
-          Unknown → Unknown
-
-          PowerW → Power
-          WattHours → Energy
-          MilliWattHours → Energy
-
-          WaterTempCTimes1000 → Temperature
-          WaterTempFTimes1000 → Temperature
-          AirTempCTimes1000 → Temperature
-          AirTempFTimes1000 → Temperature
-          CelsiusTimes100 → Temperature
-
-          GpmTimes100 → FlowRate
-          GallonsTimes100 → Volume
-
-          VoltageRmsMilliVolts → Voltage
-          VoltsTimesTen → Voltage
-          VoltsTimes100 → Voltage
-          MicroVolts → Voltage
-
-          CurrentRmsMicroAmps → Current
-
-          HzTimes100 → Frequency
-          MicroHz → Frequency
-
-          RelayState → Unitless
-          ThermostatState → Unitless
-          StorageLayer → Unitless
-          BinaryState → Unitless
-
-          PercentKeep → Percent
-
-        Any other combination SHALL be invalid.
+        Every (TelemetryName, Quantity) pair SHALL match the mapping declared
+        in x-gridworks.projection.table. Any other combination is invalid.

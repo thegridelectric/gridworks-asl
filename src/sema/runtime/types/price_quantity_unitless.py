@@ -1,7 +1,5 @@
 from typing import Literal
-
 from pydantic import StrictInt
-
 from sema.runtime.base import SemaType
 
 

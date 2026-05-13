@@ -34,6 +34,8 @@ properties:
     const: "000"
 
 required:
+  - M
+  - B
   - TypeName
   - Version
 

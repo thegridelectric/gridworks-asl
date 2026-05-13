@@ -3,9 +3,11 @@ from __future__ import annotations
 from typing import Any
 
 from sema.tools.runtime_generation.helpers import (
+    LeftRightDot,
     class_name_for_node,
     integer_enum_member_name,
     load_schema_for_node,
+    render_init_module,
     string_enum_member_name,
     target_path_for_node,
 )
@@ -14,23 +16,25 @@ from sema.tools.runtime_generation.helpers import (
 def generate_enums(
     target_root,
     dag,
-    latest,
+    dag_max,
     seed=None,
-    definitions_root=None,
-    package_name="gjk",
-    local_names: dict[str, Any] | None = None,
+    import_root: str = "sema.runtime",
+    local_names: dict[LeftRightDot, LeftRightDot] | None = None,
 ):
-    if seed is None or definitions_root is None:
+    if seed is None:
         return
     write_enum_base(target_root)
     for node in dag.topo_sort():
         if node[0] != "enum":
             continue
-        schema = load_schema_for_node(node, seed, definitions_root)
-        target_path = target_path_for_node(node, latest, target_root, local_names)
+        schema = load_schema_for_node(node, seed)
+        target_path = target_path_for_node(node, dag_max, target_root, local_names)
         target_path.parent.mkdir(parents=True, exist_ok=True)
-        target_path.write_text(render_enum(node, schema, latest, package_name, local_names))
-    (target_root / "enums" / "__init__.py").write_text("")
+        target_path.write_text(render_enum(node, schema, dag_max, import_root, local_names))
+    (target_root / "enums" / "__init__.py").write_text(
+        render_init_module("enum", dag, dag_max, import_root, local_names)
+    )
+    # Intentionally empty: eager imports here would deadlock with latest enums.
     (target_root / "enums" / "old_versions" / "__init__.py").write_text("")
 
 
@@ -141,12 +145,12 @@ class SymbolizedEnum(SemaEnum):
 def render_enum(
     node,
     schema: dict,
-    latest_map,
-    package_name: str,
-    local_names: dict[str, Any] | None = None,
+    dag_max,
+    import_root: str,
+    local_names: dict[LeftRightDot, LeftRightDot] | None = None,
 ) -> str:
     _, name, version = node
-    class_name = class_name_for_node(node, latest_map, local_names)
+    class_name = class_name_for_node(node, dag_max, local_names)
     schema_url = schema["$id"]
     values = schema["enum"]
     default_value = schema.get("default")
@@ -160,7 +164,7 @@ def render_enum(
             version,
             values,
             default_value,
-            package_name,
+            import_root,
         )
 
     if schema["type"] != "integer":
@@ -189,12 +193,12 @@ def _render_string_enum(
     version: str,
     values: list[str],
     default_value: str | None,
-    package_name: str,
+    import_root: str,
 ) -> str:
     lines = [
         "from enum import auto",
         "",
-        f"from {package_name}.sema.enums.gw_str_enum import SemaEnum",
+        f"from {import_root}.enums.gw_str_enum import SemaEnum",
         "",
         "",
         f"class {class_name}(SemaEnum):",
