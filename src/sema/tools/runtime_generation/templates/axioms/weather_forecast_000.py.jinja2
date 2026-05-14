@@ -1,0 +1,23 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ weather_forecast_000_class_name }}":
+        """
+        Axiom 1: ListLengthConsistency
+        Time, OatF, and WindSpeedMph SHALL all have the same length.
+        """
+        if len({len(self.time), len(self.oat_f), len(self.wind_speed_mph)}) > 1:
+            raise ValueError(
+                "Axiom 1 failed: time, oat_f, and wind_speed_mph must all have the same length."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ weather_forecast_000_class_name }}":
+        """
+        Axiom 2: ForecastCreatedBeforeFirstInterval
+        ForecastCreatedS SHALL be less than the first element of Time.
+        """
+        if self.time and self.forecast_created_s >= self.time[0]:
+            raise ValueError(
+                "Axiom 2 failed: forecast_created_s must be less than the first element of time."
+            )
+        return self

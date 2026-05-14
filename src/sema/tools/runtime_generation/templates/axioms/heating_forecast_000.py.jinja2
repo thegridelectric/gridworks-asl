@@ -1,0 +1,18 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ heating_forecast_000_class_name }}":
+        """
+        Axiom 1: ListLengthConsistency
+        Time, AvgPowerKw, RswtF, and RswtDeltaTF SHALL all have the same length.
+        """
+        lengths = {
+            len(self.time),
+            len(self.avg_power_kw),
+            len(self.rswt_f),
+            len(self.rswt_delta_t_f),
+        }
+        if len(lengths) > 1:
+            raise ValueError(
+                "Axiom 1 failed: time, avg_power_kw, rswt_f, and rswt_delta_t_f must "
+                "all have the same length."
+            )
+        return self

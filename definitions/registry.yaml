@@ -417,6 +417,13 @@ enums:
     schema_url: "https://schemas.electricity.works/enums/i2c.adc.channel/000"
     created: "2026-03-04T19:00:00Z"
 
+  log.level:
+    owner: gridworks-energy
+    enum_type: "literal"
+    description: "Logging level."
+    schema_url: "https://schemas.electricity.works/enums/log.level/000"
+    created: "2026-05-13T00:00:00Z"
+
   market.price.unit:
     latest_version: "000"
     owner: gridworks-energy

@@ -82,6 +82,7 @@ types:
       - layout.lite:007
       - layout.lite:008
       - layout.lite:009
+      - scada.params:004
     '005':
       used_by:
       - layout.lite:009
@@ -139,6 +140,7 @@ types:
   price.quantity.unitless:
     '001':
       used_by:
+      - atn.bid:002
       - bid:000
   relay.actor.config:
     '002':
@@ -176,6 +178,7 @@ types:
     '200':
       used_by:
       - layout.lite:007
+      - new.command.tree:000
     '300':
       used_by:
       - layout.lite:008
@@ -193,6 +196,14 @@ types:
     '000':
       used_by:
       - data.channel.gt:002
+  ticklist.hall:
+    '101':
+      used_by:
+      - ticklist.hall.report:000
+  ticklist.reed:
+    '101':
+      used_by:
+      - ticklist.reed.report:000
 enums:
   base.g.node.class:
     '000':
@@ -287,13 +298,21 @@ enums:
     '000':
       used_by:
       - i2c.thermistor.channel.config:000
+  log.level:
+    '000':
+      used_by:
+      - glitch:000
   market.price.unit:
     '000':
       used_by:
+      - atn.bid:002
       - bid:000
+      - flo.params.house0:003
+      - latest.price:000
   market.quantity.unit:
     '000':
       used_by:
+      - atn.bid:002
       - bid:000
   relay.closed.or.open:
     '000':
@@ -326,6 +345,7 @@ enums:
       - spaceheat.telemetry.quantity.projection:000
       - synced.readings.bundle:001
       - synced.readings.bundle:002
+      - synth.channel.gt:000
   spaceheat.unit:
     '001':
       used_by:
@@ -344,6 +364,7 @@ formats:
     used_by:
     - fsm.atomic.report:000
     - fsm.atomic.report:001
+    - fsm.event:000
     - machine.states:000
     - single.machine.state:000
     - spaceheat.node.gt:200
@@ -354,6 +375,7 @@ formats:
     - heartbeat.a:000
   left.right.dot:
     used_by:
+    - atn.bid:002
     - bid:000
     - channel.readings.list.item:000
     - connectivity.edge.gt:000
@@ -362,9 +384,16 @@ formats:
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - energy.instruction:000
+    - flo.params.house0:003
     - fsm.atomic.report:000
     - fsm.atomic.report:001
+    - fsm.event:000
     - g.node.gt:004
+    - glitch:000
+    - heating.forecast:000
+    - keyparam.change.log:000
+    - latest.price:000
     - layout.lite:007
     - layout.lite:008
     - layout.lite:009
@@ -373,6 +402,7 @@ formats:
     - layout.lite:012
     - layout.lite:013
     - machine.states:000
+    - new.command.tree:000
     - relay.actor.config:002
     - relay.actor.config:003
     - report.event:002
@@ -381,6 +411,7 @@ formats:
     - report:003
     - scada.control.capabilities:000
     - scada.control.capabilities:001
+    - scada.params:004
     - send.control.capabilities:000
     - send.layout:000
     - send.layout:001
@@ -390,9 +421,16 @@ formats:
     - snapshot.spaceheat:003
     - synced.readings.bundle:001
     - synced.readings.bundle:002
+    - synth.channel.gt:000
+    - ticklist.hall.report:000
+    - ticklist.reed.report:000
+    - weather.forecast:000
+    - weather:000
   market.slot.name:
     used_by:
+    - atn.bid:002
     - bid:000
+    - latest.price:000
   positive.float:
     used_by:
     - i2c.thermistor.reader.component.gt:000
@@ -401,6 +439,8 @@ formats:
     - channel.config:000
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - energy.instruction:000
+    - flo.params.house0:003
     - i2c.thermistor.channel.config:000
     - layout.lite:007
     - layout.lite:008
@@ -418,6 +458,7 @@ formats:
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
+    - synth.channel.gt:000
   spaceheat.name:
     used_by:
     - channel.config:000
@@ -431,6 +472,7 @@ formats:
     - derived.channel.gt:002
     - fsm.full.report:000
     - fsm.full.report:001
+    - glitch:000
     - i2c.multichannel.dt.relay.component.gt:003
     - i2c.multichannel.dt.relay.component.gt:004
     - i2c.thermistor.channel.config:000
@@ -439,6 +481,7 @@ formats:
     - relay.actor.config:002
     - relay.actor.config:003
     - scada.control.capabilities:000
+    - scada.params:004
     - send.layout:000
     - single.reading:000
     - spaceheat.node.gt:200
@@ -446,6 +489,9 @@ formats:
     - spaceheat.node.gt:301
     - synced.readings.bundle:001
     - synced.readings:000
+    - synth.channel.gt:000
+    - ticklist.hall.report:000
+    - ticklist.reed.report:000
   utc.iso8601.seconds:
     used_by:
     - synced.readings.bundle:001
@@ -454,9 +500,13 @@ formats:
     used_by:
     - channel.readings:001
     - channel.readings:002
+    - energy.instruction:000
     - fsm.atomic.report:000
     - fsm.atomic.report:001
+    - fsm.event:000
     - g.node.instance.gt:000
+    - glitch:000
+    - gridworks.event.problem:001
     - layout.lite:007
     - layout.lite:008
     - layout.lite:009
@@ -465,12 +515,14 @@ formats:
     - layout.lite:012
     - layout.lite:013
     - machine.states:000
+    - new.command.tree:000
     - report.event:002
     - report.event:003
     - report:002
     - report:003
     - scada.control.capabilities:000
     - scada.control.capabilities:001
+    - scada.params:004
     - send.control.capabilities:000
     - send.layout:001
     - sim.timestep:000
@@ -478,14 +530,21 @@ formats:
     - single.reading:000
     - snapshot.spaceheat:003
     - synced.readings:000
+    - ticklist.hall.report:000
+    - ticklist.reed.report:000
   utc.seconds:
     used_by:
     - data.channel.gt:001
     - data.channel.gt:002
+    - energy.instruction:000
+    - flo.params.house0:003
+    - heating.forecast:000
     - report:002
     - report:003
     - sim.ready:000
     - sim.timestep:000
+    - weather.forecast:000
+    - weather:000
   uuid4.str:
     used_by:
     - channel.readings:001
@@ -495,16 +554,21 @@ formats:
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - flo.params.house0:003
     - fsm.atomic.report:000
     - fsm.atomic.report:001
+    - fsm.event:000
     - fsm.full.report:000
     - fsm.full.report:001
     - g.node.gt:004
     - g.node.instance.gt:000
+    - gridworks.event.problem:001
+    - heating.forecast:000
     - i2c.multichannel.dt.relay.component.gt:002
     - i2c.multichannel.dt.relay.component.gt:003
     - i2c.multichannel.dt.relay.component.gt:004
     - i2c.thermistor.reader.component.gt:000
+    - latest.price:000
     - layout.lite:007
     - layout.lite:008
     - layout.lite:009
@@ -519,6 +583,7 @@ formats:
     - report.event:003
     - report:002
     - report:003
+    - scada.params:004
     - sim.pico.tank.module.component.gt:000
     - sim.ready:000
     - sim.timestep:000
@@ -526,3 +591,5 @@ formats:
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
+    - synth.channel.gt:000
+    - weather.forecast:000

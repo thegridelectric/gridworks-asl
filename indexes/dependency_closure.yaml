@@ -2,6 +2,16 @@
 # Generated from indexes/public_registry.yaml
 
 types:
+  atn.bid:
+    '002':
+      enums:
+      - market.price.unit:000
+      - market.quantity.unit:000
+      formats:
+      - left.right.dot
+      - market.slot.name
+      types:
+      - price.quantity.unitless:001
   bid:
     '000':
       enums:
@@ -103,6 +113,25 @@ types:
       - uuid4.str
       types:
       - gw1.unit.quantity.projection:000
+  energy.instruction:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - positive.int
+      - utc.milliseconds
+      - utc.seconds
+      types: []
+  flo.params.house0:
+    '003':
+      enums:
+      - market.price.unit:000
+      formats:
+      - left.right.dot
+      - positive.int
+      - utc.seconds
+      - uuid4.str
+      types: []
   fsm.atomic.report:
     '000':
       enums:
@@ -117,6 +146,15 @@ types:
       enums:
       - fsm.report.type:000
       - relay.energization.state:000
+      formats:
+      - handle.name
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+  fsm.event:
+    '000':
+      enums: []
       formats:
       - handle.name
       - left.right.dot
@@ -165,6 +203,22 @@ types:
       - utc.milliseconds
       - uuid4.str
       types: []
+  glitch:
+    '000':
+      enums:
+      - log.level:000
+      formats:
+      - left.right.dot
+      - spaceheat.name
+      - utc.milliseconds
+      types: []
+  gridworks.event.problem:
+    '001':
+      enums: []
+      formats:
+      - utc.milliseconds
+      - uuid4.str
+      types: []
   gw1.tank.temp.calibration:
     '000':
       enums: []
@@ -208,6 +262,18 @@ types:
       enums: []
       formats:
       - hex.char
+      types: []
+    '001':
+      enums: []
+      formats: []
+      types: []
+  heating.forecast:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.seconds
+      - uuid4.str
       types: []
   i2c.multichannel.dt.relay.component.gt:
     '002':
@@ -271,6 +337,21 @@ types:
       - uuid4.str
       types:
       - i2c.thermistor.channel.config:000
+  keyparam.change.log:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      types: []
+  latest.price:
+    '000':
+      enums:
+      - market.price.unit:000
+      formats:
+      - left.right.dot
+      - market.slot.name
+      - uuid4.str
+      types: []
   layout.lite:
     '007':
       enums:
@@ -551,6 +632,18 @@ types:
       - left.right.dot
       - utc.milliseconds
       types: []
+  new.command.tree:
+    '000':
+      enums: []
+      formats:
+      - handle.name
+      - left.right.dot
+      - positive.int
+      - spaceheat.name
+      - utc.milliseconds
+      - uuid4.str
+      types:
+      - spaceheat.node.gt:200
   pico.flow.module.component.gt:
     '000':
       enums:
@@ -732,6 +825,16 @@ types:
       - i2c.multichannel.dt.relay.component.gt:002
       - relay.actor.config:002
       - spaceheat.node.gt:300
+  scada.params:
+    '004':
+      enums: []
+      formats:
+      - left.right.dot
+      - spaceheat.name
+      - utc.milliseconds
+      - uuid4.str
+      types:
+      - ha1.params:004
   send.control.capabilities:
     '000':
       enums: []
@@ -870,3 +973,56 @@ types:
       - utc.iso8601.seconds
       types:
       - channel.readings.list.item:000
+  synth.channel.gt:
+    '000':
+      enums:
+      - spaceheat.telemetry.name:007
+      formats:
+      - left.right.dot
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types: []
+  ticklist.hall:
+    '101':
+      enums: []
+      formats: []
+      types: []
+  ticklist.hall.report:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - spaceheat.name
+      - utc.milliseconds
+      types:
+      - ticklist.hall:101
+  ticklist.reed:
+    '101':
+      enums: []
+      formats: []
+      types: []
+  ticklist.reed.report:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - spaceheat.name
+      - utc.milliseconds
+      types:
+      - ticklist.reed:101
+  weather:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.seconds
+      types: []
+  weather.forecast:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.seconds
+      - uuid4.str
+      types: []

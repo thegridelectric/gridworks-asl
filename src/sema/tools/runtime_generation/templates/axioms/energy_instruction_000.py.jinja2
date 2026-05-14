@@ -1,0 +1,23 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ energy_instruction_000_class_name }}":
+        """
+        Axiom 1: SlotStartOnMinuteBoundary
+        SlotStartS SHALL be divisible by 60.
+        """
+        if self.slot_start_s % 60 != 0:
+            raise ValueError(
+                "Axiom 1 failed: slot_start_s must be divisible by 60."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ energy_instruction_000_class_name }}":
+        """
+        Axiom 2: SendTimeProximityToSlotStart
+        SendTimeMs SHALL be no more than 10 seconds after SlotStartS * 1000.
+        """
+        if self.send_time_ms > self.slot_start_s * 1000 + 10_000:
+            raise ValueError(
+                "Axiom 2 failed: send_time_ms must be no more than 10 seconds after slot_start_s."
+            )
+        return self

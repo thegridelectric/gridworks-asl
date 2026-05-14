@@ -16,6 +16,11 @@
 # ------------------------------------------------------------------
 
 types:
+  atn.bid:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/atn.bid/002.yaml
   bid:
     latest_version: '000'
     versioning_strategy: literal
@@ -55,6 +60,16 @@ types:
       '002': definitions/types/derived.channel.gt/002.yaml
       '001': definitions/types/derived.channel.gt/001.yaml
       '000': definitions/types/derived.channel.gt/000.yaml
+  energy.instruction:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/energy.instruction/000.yaml
+  flo.params.house0:
+    latest_version: '003'
+    versioning_strategy: literal
+    versions:
+      '003': definitions/types/flo.params.house0/003.yaml
   fsm.atomic.report:
     latest_version: '001'
     versioning_strategy: literal
@@ -67,6 +82,11 @@ types:
     versions:
       '001': definitions/types/fsm.full.report/001.yaml
       '000': definitions/types/fsm.full.report/000.yaml
+  fsm.event:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/fsm.event/000.yaml
   g.node.gt:
     latest_version: '004'
     versioning_strategy: literal
@@ -77,9 +97,19 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/g.node.instance.gt/000.yaml
+  glitch:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/glitch/000.yaml
   gridworks.ack:
     versioning_strategy: none
     schema: definitions/types/gridworks.ack.yaml
+  gridworks.event.problem:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gridworks.event.problem/001.yaml
   gridworks.ping:
     versioning_strategy: none
     schema: definitions/types/gridworks.ping.yaml
@@ -111,10 +141,16 @@ types:
       '005': definitions/types/ha1.params/005.yaml
       '004': definitions/types/ha1.params/004.yaml
   heartbeat.a:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/heartbeat.a/001.yaml
+      '000': definitions/types/heartbeat.a/000.yaml
+  heating.forecast:
     latest_version: '000'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/heartbeat.a/000.yaml
+      '000': definitions/types/heating.forecast/000.yaml
   i2c.multichannel.dt.relay.component.gt:
     latest_version: '004'
     versioning_strategy: literal
@@ -132,6 +168,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/i2c.thermistor.reader.component.gt/000.yaml
+  keyparam.change.log:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/keyparam.change.log/000.yaml
   layout.lite:
     latest_version: '013'
     versioning_strategy: literal
@@ -143,6 +184,11 @@ types:
       009: definitions/types/layout.lite/009.yaml
       008: definitions/types/layout.lite/008.yaml
       '007': definitions/types/layout.lite/007.yaml
+  latest.price:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/latest.price/000.yaml
   linear.one.dimensional.calibration:
     latest_version: '001'
     versioning_strategy: literal
@@ -154,6 +200,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/machine.states/000.yaml
+  new.command.tree:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/new.command.tree/000.yaml
   pico.flow.module.component.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -202,6 +253,11 @@ types:
     versions:
       '003': definitions/types/report.event/003.yaml
       '002': definitions/types/report.event/002.yaml
+  scada.params:
+    latest_version: '004'
+    versioning_strategy: literal
+    versions:
+      '004': definitions/types/scada.params/004.yaml
   scada.control.capabilities:
     latest_version: '001'
     versioning_strategy: literal
@@ -229,6 +285,26 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/sim.timestep/000.yaml
+  ticklist.hall:
+    latest_version: '101'
+    versioning_strategy: literal
+    versions:
+      '101': definitions/types/ticklist.hall/101.yaml
+  ticklist.hall.report:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/ticklist.hall.report/000.yaml
+  ticklist.reed:
+    latest_version: '101'
+    versioning_strategy: literal
+    versions:
+      '101': definitions/types/ticklist.reed/101.yaml
+  ticklist.reed.report:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/ticklist.reed.report/000.yaml
   single.machine.state:
     latest_version: '000'
     versioning_strategy: literal
@@ -244,6 +320,11 @@ types:
     versioning_strategy: literal
     versions:
       '003': definitions/types/snapshot.spaceheat/003.yaml
+  synth.channel.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/synth.channel.gt/000.yaml
   spaceheat.node.gt:
     latest_version: '301'
     versioning_strategy: literal
@@ -267,6 +348,16 @@ types:
     versions:
       '002': definitions/types/synced.readings.bundle/002.yaml
       '001': definitions/types/synced.readings.bundle/001.yaml
+  weather:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/weather/000.yaml
+  weather.forecast:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/weather.forecast/000.yaml
 enums:
   base.g.node.class:
     enum_type: versioned
@@ -395,6 +486,9 @@ enums:
   i2c.adc.channel:
     enum_type: literal
     schema: definitions/enums/i2c.adc.channel/000.yaml
+  log.level:
+    enum_type: literal
+    schema: definitions/enums/log.level/000.yaml
   market.price.unit:
     enum_type: versioned
     latest_version: '000'

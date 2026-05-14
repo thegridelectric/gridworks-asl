@@ -19,7 +19,7 @@ properties:
       Subsystem identifier on which the glitch has occurred.
 
   Type:
-    $ref: "https://schemas.electricity.works/enums/log.level"
+    $ref: "https://schemas.electricity.works/enums/log.level/000"
     description: >
       Logging level of the glitch.
 
