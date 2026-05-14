@@ -19,7 +19,7 @@ class Ha1Params004(SemaType):
     max_ewt_f: StrictInt
     load_overestimation_percent: StrictInt
     type_name: Literal["ha1.params"] = "ha1.params"
-    version: str = '004'
+    version: Literal["004"] = "004"
 
     def upgrade(self) -> Ha1Params005:
         """

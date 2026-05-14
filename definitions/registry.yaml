@@ -1253,7 +1253,7 @@ types:
   ha1.params:
     latest_version: "006"
     owner: gridworks-energy
-    versioning_strategy: "string"
+    versioning_strategy: "literal"
     description: "Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model."
 
     versions:
@@ -1264,7 +1264,6 @@ types:
           - HpMaxKwEl: add as optional
           - HpMaxKwTh: required -> optional
           - HpTurnOnMinutes: add
-          - VersioningStrategy: string -> literal
         direct_dependencies:
           structural: []
       "005":
@@ -1876,19 +1875,33 @@ types:
             - "uuid4.str"
 
   scada.params:
-    latest_version: "004"
+    latest_version: "005"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Parameter update message exchanged between ATN and SCADA nodes carrying HA1 algorithm parameters."
+    description: "Message to read or change a SCADA node's HA1 control parameters, exchanged with its LeafTransactiveNode."
 
     versions:
+      "005":
+        schema_url: "https://schemas.electricity.works/types/scada.params/005"
+        created: "2026-02-25T19:23:45Z"
+        summary: >-
+          - NewParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
+          - OldParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
+        direct_dependencies:
+          structural:
+            - "ha1.params:006"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "utc.milliseconds"
+            - "uuid4.str"
       "004":
         schema_url: "https://schemas.electricity.works/types/scada.params/004"
-        created: "2026-05-13T00:00:00Z"
+        created: "2026-02-18T11:07:45Z"
         summary: "Initial Sema version"
         direct_dependencies:
           structural:
             - "ha1.params:004"
+            - "ha1.params:005"
             - "left.right.dot"
             - "spaceheat.name"
             - "utc.milliseconds"

@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/scada.params/004"
+$id: "https://schemas.electricity.works/types/scada.params/005"
 
 title: "scada.params"
 type: object
@@ -38,29 +38,22 @@ properties:
       response carries the MessageId of the request it answers.
 
   NewParams:
-    oneOf:
-      - $ref: "https://schemas.electricity.works/types/ha1.params/004"
-      - $ref: "https://schemas.electricity.works/types/ha1.params/005"
+    $ref: "https://schemas.electricity.works/types/ha1.params/006"
     description: >
       HA1 parameters being proposed or, in a reply, the parameters now in
-      effect on the SCADA node. A scada.params version 004 message carries
-      either an ha1.params version 004 or version 005 object.
+      effect on the SCADA node.
 
   OldParams:
-    oneOf:
-      - $ref: "https://schemas.electricity.works/types/ha1.params/004"
-      - $ref: "https://schemas.electricity.works/types/ha1.params/005"
+    $ref: "https://schemas.electricity.works/types/ha1.params/006"
     description: >
       HA1 parameters that were in effect on the SCADA node before this
-      exchange. Populated by the SCADA node in its reply. A scada.params
-      version 004 message carries either an ha1.params version 004 or version
-      005 object.
+      exchange. Populated by the SCADA node in its reply.
 
   TypeName:
     const: "scada.params"
 
   Version:
-    const: "004"
+    const: "005"
 
 required:
   - FromGNodeAlias
@@ -89,9 +82,8 @@ x-gridworks:
     OldParams are optional because not every message in the exchange carries
     both.
 
-    The SCADA codebase held scada.params at version 004 across an ha1.params
-    version bump, so version 004 messages were emitted carrying either an
-    ha1.params version 004 or version 005 object. NewParams and OldParams
-    therefore accept both, expressed as a oneOf of those two ha1.params
-    versions; the ha1.params Version field discriminates which one a given
-    message carries.
+    Version 005 differs from version 004 only in the referenced ha1.params
+    version: version 004 carried ha1.params version 004 or 005, while version
+    005 carries ha1.params version 006. The commit that bumped scada.params to
+    005 is the same commit that introduced ha1.params version 006, so
+    scada.params version 005 has only ever carried ha1.params version 006.

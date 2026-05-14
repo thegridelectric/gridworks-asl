@@ -4,8 +4,8 @@ $id: "https://schemas.electricity.works/types/ha1.params/005"
 title: "ha1.params"
 type: object
 description: >
-  Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1
-  house-heating model.
+  Parameter set used by Spaceheat SCADA and LTN runtime logic for the House0
+  layout.
 
 properties:
 
@@ -94,8 +94,7 @@ properties:
     const: "ha1.params"
 
   Version:
-    type: string
-    default: "005"
+    const: "005"
 
 required:
   - AlphaTimes10
@@ -141,6 +140,6 @@ x-gridworks:
   owner: "gridworks-energy"
   extended_description: >
     `ha1.params` carries the numeric coefficients and operating limits used by
-    runtime HA1 heating calculations. Version `005` extends the earlier shape
+    runtime House0 heating calculations. Version `005` extends the earlier shape
     with COP-model coefficients and minimum-COP parameters so SCADA and
     downstream consumers can apply the same heat-pump performance assumptions.
