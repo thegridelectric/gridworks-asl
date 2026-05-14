@@ -1,22 +1,5 @@
-from typing import Literal
-from pydantic import model_validator
-from sema.runtime.base import SemaType
-from sema.runtime.property_format import LeftRightDot
-from sema.runtime.property_format import UTCMilliseconds
-from sema.runtime.types.old_versions.spaceheat_node_gt_200 import SpaceheatNodeGt200
-
-
-class NewCommandTree(SemaType):
-    """Sema: https://schemas.electricity.works/types/new.command.tree/000"""
-
-    from_g_node_alias: LeftRightDot
-    sh_nodes: list[SpaceheatNodeGt200]
-    unix_ms: UTCMilliseconds
-    type_name: Literal["new.command.tree"] = "new.command.tree"
-    version: Literal["000"] = "000"
-
     @model_validator(mode="after")
-    def check_axiom_1(self) -> "NewCommandTree":
+    def check_axiom_1(self) -> "{{ new_command_tree_000_class_name }}":
         """
         Axiom 1: PrefixClosedHierarchy
         a. The set of ShNode Handles SHALL be prefix-closed: for every ShNode in ShNodes
