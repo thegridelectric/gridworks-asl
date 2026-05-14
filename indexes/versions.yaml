@@ -3,6 +3,13 @@
 
 
 types:
+  atn.bid:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: "Initial Sema version"
+
   bid:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -71,6 +78,49 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  energy.instruction:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  flo.params.house0:
+    latest_version: "007"
+    versioning_strategy: "literal"
+    versions:
+      "007":
+        summary: "- FloGitCommit: add"
+      "006":
+        summary: >
+          - StabilityWeight -> StabilityPenaltyWeight: rename
+          - StabilityDecay -> StabilityPenaltyDecay: rename
+          - StabilityThresholdKwh -> StabilityPenaltyThresholdKwh: rename
+          - StabilityHorizonHours -> StabilityPenaltyHorizonHours: rename
+          - MaxHpKwhTh: add
+          - MaxLoadKwhTh: add
+          - RswtPenaltyEnabled: add
+          - StabilityPenaltyEnabled: add
+          - RswtPenaltyWeight: add
+          - RswtPenaltyDecay: add
+          - RswtPenaltyExponentRate: add
+          - RswtPenaltyDecayMaxHour: add
+      "005":
+        summary: >
+          - StabilityWeight: add
+          - StabilityDecay: add
+          - StabilityThresholdKwh: add
+          - StabilityHorizonHours: add
+          - PreviousPlanHpKwhElList: add (optional)
+          - PreviousEstimateStorageKwhNow: add (optional)
+      "004":
+        summary: >
+          - FloAlias: remove
+          - FloGitCommit: remove
+          - ConstantDeltaT: optional -> required
+      "003":
+        summary: "Initial Sema version"
+
   fsm.atomic.report:
     latest_version: "001"
     versioning_strategy: "literal"
@@ -91,6 +141,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  fsm.event:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   g.node.gt:
     latest_version: "004"
     versioning_strategy: "literal"
@@ -105,9 +162,23 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  glitch:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   gridworks.ack:
     versioning_strategy: "none"
     summary: "Versionless acknowledgement message."
+
+  gridworks.event.problem:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version"
 
   gridworks.ping:
     versioning_strategy: "none"
@@ -143,14 +214,13 @@ types:
 
   ha1.params:
     latest_version: "006"
-    versioning_strategy: "string"
+    versioning_strategy: "literal"
     versions:
       "006":
         summary: >
           - HpMaxKwEl: add as optional
           - HpMaxKwTh: required -> optional
           - HpTurnOnMinutes: add
-          - VersioningStrategy: string -> literal
       "005":
         summary: >
           - CopIntercept: add as optional
@@ -162,11 +232,20 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   heartbeat.a:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Minimal no-payload heartbeat variant."
+      "000":
+        summary: "Initial Sema version."
+
+  heating.forecast:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial Sema version."
+        summary: "Initial Sema version"
 
   i2c.multichannel.dt.relay.component.gt:
     latest_version: "004"
@@ -187,6 +266,13 @@ types:
         summary: "Initial Sema version"
 
   i2c.thermistor.reader.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  keyparam.change.log:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
@@ -227,6 +313,13 @@ types:
       "007":
         summary: "Baseline runtime version (no prior version tracked)."
 
+  latest.price:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   linear.one.dimensional.calibration:
     latest_version: "001"
     versioning_strategy: "literal"
@@ -239,6 +332,13 @@ types:
         summary: "Initial Sema version"
 
   machine.states:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  new.command.tree:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
@@ -316,6 +416,17 @@ types:
       "002":
         summary: "Baseline runtime version (no prior version tracked)."
 
+  scada.params:
+    latest_version: "005"
+    versioning_strategy: "literal"
+    versions:
+      "005":
+        summary: >
+          - NewParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
+          - OldParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
+      "004":
+        summary: "Initial Sema version"
+
   scada.control.capabilities:
     latest_version: "001"
     versioning_strategy: "literal"
@@ -362,6 +473,34 @@ types:
       "000":
         summary: "Initial Sema version."
 
+  ticklist.hall:
+    latest_version: "101"
+    versioning_strategy: "literal"
+    versions:
+      "101":
+        summary: "Initial Sema version"
+
+  ticklist.hall.report:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  ticklist.reed:
+    latest_version: "101"
+    versioning_strategy: "literal"
+    versions:
+      "101":
+        summary: "Initial Sema version"
+
+  ticklist.reed.report:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   single.machine.state:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -382,6 +521,13 @@ types:
     versions:
       "003":
         summary: "Baseline runtime version (no prior version tracked)."
+
+  synth.channel.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
 
   spaceheat.node.gt:
     latest_version: "301"
@@ -418,6 +564,13 @@ types:
         summary: "- ChannelReadingsList[]: inline object -> channel.readings.list.item:000"
       "001":
         summary: "Baseline runtime version (no prior version tracked)."
+
+  weather.forecast:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
 
 enums:
   base.g.node.class:
@@ -592,6 +745,12 @@ enums:
       "001": {}
 
   i2c.adc.channel:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
+
+  log.level:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
     versions:

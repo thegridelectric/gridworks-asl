@@ -1,0 +1,70 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/new.command.tree/000"
+
+title: "new.command.tree"
+type: object
+description: >
+  Full set of SpaceheatNodes describing a SCADA node's current actor command
+  hierarchy, sent by the SCADA node to its LeafTransactiveNode. Each node
+  carries the handle that locates it in the command tree; receiving a
+  new.command.tree replaces the recipient's prior view of that hierarchy in
+  its entirety.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the SCADA node whose command hierarchy this message
+      describes.
+
+  ShNodes:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/200"
+    description: >
+      The complete set of SpaceheatNodes that make up the command tree. The
+      handle of each node encodes its position in the hierarchy: a node's
+      boss is found by dropping the last segment of its handle.
+
+  UnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Time at which the SCADA node generated this command tree.
+
+  TypeName:
+    const: "new.command.tree"
+
+  Version:
+    const: "000"
+
+required:
+  - FromGNodeAlias
+  - ShNodes
+  - UnixMs
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "PrefixClosedHierarchy"
+      statement: |
+        a. The set of ShNode Handles SHALL be prefix-closed: for every ShNode in ShNodes whose Handle is present, each of its dot-separated prefixes SHALL also be the Handle of some ShNode in ShNodes.
+        b. The set of ShNode ActorHierarchyNames SHALL be prefix-closed in the same way: for every ShNode in ShNodes whose ActorHierarchyName is present, each of its dot-separated prefixes SHALL also be the ActorHierarchyName of some ShNode in ShNodes.
+  extended_description: >
+    A GridWorks SCADA node owns the hardware layout and the actor hierarchy
+    that commands it. When that hierarchy changes -- for example when control
+    is handed between automatic and administrative bosses -- the SCADA node
+    sends a new.command.tree to its LeafTransactiveNode so the LTN's view of
+    who commands whom stays current.
+
+    The message is a full snapshot rather than a delta: the recipient
+    discards its previous command tree and adopts ShNodes as the new one.
+    The actor hierarchy is expressed through SpaceheatNode handles and
+    ActorHierarchyNames, dotted strings whose prefixes name successive bosses.
+    Axiom 1 makes this structural: each set is prefix-closed, so every boss
+    referenced by a node is itself present in ShNodes.

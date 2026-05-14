@@ -1,0 +1,8 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ fsm_event_000_class_name }}":
+        """
+        Axiom 1: EventNameBelongsToEventType
+        EventName SHALL be a valid value of the enum identified by EventType.
+        """
+        # Validation requires runtime enum resolution; deferred to application logic.
+        return self

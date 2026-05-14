@@ -1404,8 +1404,6 @@ aggregation or embedding layers, MAY declare:
 ```
 additionalProperties: true
 ```
-Such types MUST document this behavior in their description or
-extended_description, including the intended purpose of additional fields.
 
 Over time, as schemas stabilize, types SHOULD transition toward:
 

@@ -25,4 +25,4 @@ class Ha1Params(SemaType):
     cop_min_oat_f: StrictFloat | None = None
     hp_turn_on_minutes: StrictInt = 12
     type_name: Literal["ha1.params"] = "ha1.params"
-    version: str = '006'
+    version: Literal["006"] = "006"

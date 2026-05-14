@@ -1,0 +1,55 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/keyparam.change.log/000"
+
+title: "keyparam.change.log"
+type: object
+description: >
+  Log record of a significant parameter change in SCADA or AtomicTNode code.
+  Intended for human-readable audit trails maintained by developers and system
+  maintainers.
+
+properties:
+
+  AboutNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  ChangeTimeUtc:
+    type: string
+    description: >
+      UTC timestamp of the parameter change in log-style date-with-millis format
+      (e.g. "2024-01-15 10:23:45.123").
+
+  Author:
+    type: string
+
+  ParamName:
+    type: string
+
+  Description:
+    type: string
+
+  Kind:
+    type: string
+    description: >
+      Category of the parameter change.
+
+  TypeName:
+    const: "keyparam.change.log"
+
+  Version:
+    const: "000"
+
+required:
+  - AboutNodeAlias
+  - ChangeTimeUtc
+  - Author
+  - ParamName
+  - Description
+  - Kind
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
