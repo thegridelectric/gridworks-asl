@@ -1,0 +1,113 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/atn.bid/002"
+
+title: "atn.bid"
+type: object
+description: >
+  Legacy market bid submitted by a LeafTransactiveNode for a specific market
+  slot. A bid expresses willingness to inject or withdraw a quantity of the
+  market's commodity as a function of price, subject to the rules of the
+  MarketType associated with the specified MarketSlot.
+
+  This type predates the rename of the atomic metered grid actor from
+  AtomicTNode (atn) to LeafTransactiveNode (ltn). It is retained for
+  compatibility with historical messages and is superseded by the bid type,
+  which carries the same contract under a name-neutral vocabulary word.
+
+properties:
+
+  BidderAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Canonical alias of the LeafTransactiveNode submitting this bid. This
+      alias associates the bid with authorization, fee-payment credentials,
+      and market participation rules defined outside this message.
+
+  MarketSlotName:
+    $ref: "https://schemas.electricity.works/formats/market.slot.name"
+    description: >
+      Identifier of the market slot for which this bid applies. The market
+      slot determines the applicable MarketType, settlement interval, and
+      market rules used to validate and clear the bid.
+
+  PqPairs:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/price.quantity.unitless/001"
+    minItems: 1
+    description: >
+      Ordered list of price-quantity pairs defining the bid curve. Prices and
+      quantities are scaled integers normalized to the market's declared price
+      and quantity domains. Quantities represent willingness to inject or
+      withdraw at the corresponding prices.
+
+  InjectionIsPositive:
+    type: boolean
+    description: >
+      Sign convention for quantities in this bid. If true, positive quantities
+      represent injection into the grid; if false, positive quantities
+      represent withdrawal. The interpretation of this convention is governed
+      by the associated MarketType.
+
+  PriceUnit:
+    $ref: "https://schemas.electricity.works/enums/market.price.unit/000"
+    description: >
+      Unit of the price axis for this bid. Matches the PriceUnit declared by
+      the MarketType associated with MarketSlotName.
+
+  QuantityUnit:
+    $ref: "https://schemas.electricity.works/enums/market.quantity.unit/000"
+    description: >
+      Unit of the quantity axis for this bid. Matches the QuantityUnit declared
+      by the MarketType associated with MarketSlotName.
+
+  SignedMarketFeeTxn:
+    type: string
+    description: >
+      Cryptographic proof of payment of the market-defined bid submission fee.
+      References a signed transaction that satisfies the market's fee and
+      admission rules for the specified market slot. It proves economic
+      admissibility of the bid only; it does not establish physical
+      feasibility, delivery capability, or settlement commitment.
+
+  TypeName:
+    const: "atn.bid"
+
+  Version:
+    const: "002"
+
+required:
+  - BidderAlias
+  - MarketSlotName
+  - PqPairs
+  - InjectionIsPositive
+  - PriceUnit
+  - QuantityUnit
+  - SignedMarketFeeTxn
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "PqPairsPriceMaxMatchesMarketType"
+      statement: >
+        The first price in PqPairs SHALL equal the PriceMax defined by the
+        MarketType associated with MarketSlotName.
+
+  extended_description: >
+    atn.bid is the original GridWorks market bid message, named when the
+    atomic metered grid actor was called an AtomicTNode (atn). That actor has
+    since been renamed LeafTransactiveNode (ltn), and the bid contract was
+    re-published under the name-neutral vocabulary word bid. New
+    implementations should use bid; atn.bid exists so that historical bids and
+    references such as the ContractId of a market.maker.ack remain
+    interpretable.
+
+    The structure is unchanged from bid: a single normalized price-quantity
+    curve plus a signed fee transaction. Differences between participant
+    classes are expressed through MarketType rules and authorization
+    registries rather than through specialized bid schemas.

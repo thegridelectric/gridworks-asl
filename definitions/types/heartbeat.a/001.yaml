@@ -1,0 +1,24 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/heartbeat.a/001"
+
+title: "heartbeat.a"
+type: object
+description: >
+  Minimal heartbeat message with no payload fields, used for liveness signaling.
+
+properties:
+
+  TypeName:
+    const: "heartbeat.a"
+
+  Version:
+    const: "001"
+
+required:
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

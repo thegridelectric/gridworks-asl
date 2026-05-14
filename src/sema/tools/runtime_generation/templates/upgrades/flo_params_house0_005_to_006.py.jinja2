@@ -1,0 +1,30 @@
+    def upgrade(self) -> {{ flo_params_house0_006_class_name }}:
+        """
+        - StabilityWeight -> StabilityPenaltyWeight: rename
+        - StabilityDecay -> StabilityPenaltyDecay: rename
+        - StabilityThresholdKwh -> StabilityPenaltyThresholdKwh: rename
+        - StabilityHorizonHours -> StabilityPenaltyHorizonHours: rename
+        - MaxHpKwhTh: add
+        - MaxLoadKwhTh: add
+        - RswtPenaltyEnabled: add
+        - StabilityPenaltyEnabled: add
+        - RswtPenaltyWeight: add
+        - RswtPenaltyDecay: add
+        - RswtPenaltyExponentRate: add
+        - RswtPenaltyDecayMaxHour: add
+        """
+        data = self.model_dump()
+        data["stability_penalty_weight"] = data.pop("stability_weight")
+        data["stability_penalty_decay"] = data.pop("stability_decay")
+        data["stability_penalty_threshold_kwh"] = data.pop("stability_threshold_kwh")
+        data["stability_penalty_horizon_hours"] = data.pop("stability_horizon_hours")
+        data["max_hp_kwh_th"] = 25
+        data["max_load_kwh_th"] = 20
+        data["rswt_penalty_enabled"] = True
+        data["stability_penalty_enabled"] = True
+        data["rswt_penalty_weight"] = 0.3
+        data["rswt_penalty_decay"] = 0.9
+        data["rswt_penalty_exponent_rate"] = 0.15
+        data["rswt_penalty_decay_max_hour"] = 12
+        data["version"] = "006"
+        return {{ flo_params_house0_006_class_name }}.model_validate(data)

@@ -24,14 +24,13 @@ class Ha1Params005(SemaType):
     cop_min: StrictFloat | None = None
     cop_min_oat_f: StrictFloat | None = None
     type_name: Literal["ha1.params"] = "ha1.params"
-    version: str = '005'
+    version: Literal["005"] = "005"
 
     def upgrade(self) -> Ha1Params:
         """
         - HpMaxKwEl: add as optional
         - HpMaxKwTh: required -> optional
         - HpTurnOnMinutes: add
-        - VersioningStrategy: string -> literal
         """
         data = self.model_dump()
         data["hp_turn_on_minutes"] = 12

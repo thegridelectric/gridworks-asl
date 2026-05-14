@@ -1,0 +1,13 @@
+    def upgrade(self) -> {{ flo_params_house0_004_class_name }}:
+        """
+        - FloAlias: remove
+        - FloGitCommit: remove
+        - ConstantDeltaT: optional -> required
+        """
+        data = self.model_dump()
+        data.pop("flo_alias", None)
+        data.pop("flo_git_commit", None)
+        if data.get("constant_delta_t") is None:
+            data["constant_delta_t"] = 20
+        data["version"] = "004"
+        return {{ flo_params_house0_004_class_name }}.model_validate(data)

@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ flo_params_house0_007_class_name }}:
+        """
+        - FloGitCommit: add
+        """
+        data = self.model_dump()
+        data["flo_git_commit"] = "Unknown"
+        data["version"] = "007"
+        return {{ flo_params_house0_007_class_name }}.model_validate(data)
