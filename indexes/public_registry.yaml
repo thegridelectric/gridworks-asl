@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-05-13T00:00:00Z'
+  last_updated: '2026-05-14T14:50:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -465,8 +465,11 @@ types:
   atn.bid:
     latest_version: '002'
     owner: gridworks-energy
+    replaced_by:
+    - bid
     versioning_strategy: literal
-    description: Market bid submitted by an ATN for a specific market slot.
+    description: Legacy market bid submitted by a LeafTransactiveNode for a specific
+      market slot; superseded by bid.
     versions:
       '002':
         schema_url: https://schemas.electricity.works/types/atn.bid/002
@@ -665,12 +668,64 @@ types:
           - utc.milliseconds
           - utc.seconds
   flo.params.house0:
-    latest_version: '003'
+    latest_version: '007'
     owner: gridworks-energy
     versioning_strategy: literal
     description: Parameters into the Forward-Looking-Optimization (FLO) algorithm
       for a House0 thermal model.
     versions:
+      '007':
+        schema_url: https://schemas.electricity.works/types/flo.params.house0/007
+        created: '2026-05-14T00:00:06Z'
+        summary: '- FloGitCommit: add'
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - market.price.unit:000
+          - positive.int
+          - utc.seconds
+          - uuid4.str
+      '006':
+        schema_url: https://schemas.electricity.works/types/flo.params.house0/006
+        created: '2026-05-14T00:00:04Z'
+        summary: '- StabilityWeight -> StabilityPenaltyWeight: rename - StabilityDecay
+          -> StabilityPenaltyDecay: rename - StabilityThresholdKwh -> StabilityPenaltyThresholdKwh:
+          rename - StabilityHorizonHours -> StabilityPenaltyHorizonHours: rename -
+          MaxHpKwhTh: add - MaxLoadKwhTh: add - RswtPenaltyEnabled: add - StabilityPenaltyEnabled:
+          add - RswtPenaltyWeight: add - RswtPenaltyDecay: add - RswtPenaltyExponentRate:
+          add - RswtPenaltyDecayMaxHour: add'
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - market.price.unit:000
+          - positive.int
+          - utc.seconds
+          - uuid4.str
+      '005':
+        schema_url: https://schemas.electricity.works/types/flo.params.house0/005
+        created: '2026-05-14T00:00:02Z'
+        summary: '- StabilityWeight: add - StabilityDecay: add - StabilityThresholdKwh:
+          add - StabilityHorizonHours: add - PreviousPlanHpKwhElList: add (optional)
+          - PreviousEstimateStorageKwhNow: add (optional)'
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - market.price.unit:000
+          - positive.int
+          - utc.seconds
+          - uuid4.str
+      '004':
+        schema_url: https://schemas.electricity.works/types/flo.params.house0/004
+        created: '2026-05-14T00:00:00Z'
+        summary: '- FloAlias: remove - FloGitCommit: remove - ConstantDeltaT: optional
+          -> required'
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - market.price.unit:000
+          - positive.int
+          - utc.seconds
+          - uuid4.str
       '003':
         schema_url: https://schemas.electricity.works/types/flo.params.house0/003
         created: '2026-05-13T00:00:00Z'
@@ -898,7 +953,7 @@ types:
   ha1.params:
     latest_version: '006'
     owner: gridworks-energy
-    versioning_strategy: string
+    versioning_strategy: literal
     description: Parameter set used by Spaceheat SCADA and LTN runtime logic for the
       HA1 heating model.
     versions:
@@ -906,7 +961,7 @@ types:
         schema_url: https://schemas.electricity.works/types/ha1.params/006
         created: '2026-02-25T14:23:00Z'
         summary: '- HpMaxKwEl: add as optional - HpMaxKwTh: required -> optional -
-          HpTurnOnMinutes: add - VersioningStrategy: string -> literal'
+          HpTurnOnMinutes: add'
         direct_dependencies:
           structural: []
       '005':
@@ -1208,8 +1263,8 @@ types:
     latest_version: '000'
     owner: gridworks-energy
     versioning_strategy: literal
-    description: Latest cleared market price notification sent by an ATN to a SCADA
-      node.
+    description: Latest cleared market price for a market slot, published by the MarketMaker
+      (currently by the LeafTransactiveNode, pre-MarketMaker).
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/latest.price/000
@@ -1263,8 +1318,8 @@ types:
     latest_version: '000'
     owner: gridworks-energy
     versioning_strategy: literal
-    description: Updated set of SpaceheatNodes transmitted from an ATN to a SCADA
-      node, replacing the prior command tree.
+    description: Full set of SpaceheatNodes describing a SCADA node's actor command
+      hierarchy, sent to its LeafTransactiveNode.
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/new.command.tree/000
@@ -1461,19 +1516,32 @@ types:
           - utc.milliseconds
           - uuid4.str
   scada.params:
-    latest_version: '004'
+    latest_version: '005'
     owner: gridworks-energy
     versioning_strategy: literal
-    description: Parameter update message exchanged between ATN and SCADA nodes carrying
-      HA1 algorithm parameters.
+    description: Message to read or change a SCADA node's HA1 control parameters,
+      exchanged with its LeafTransactiveNode.
     versions:
+      '005':
+        schema_url: https://schemas.electricity.works/types/scada.params/005
+        created: '2026-02-25T19:23:45Z'
+        summary: '- NewParams: ha1.params:004 | ha1.params:005 -> ha1.params:006 -
+          OldParams: ha1.params:004 | ha1.params:005 -> ha1.params:006'
+        direct_dependencies:
+          structural:
+          - ha1.params:006
+          - left.right.dot
+          - spaceheat.name
+          - utc.milliseconds
+          - uuid4.str
       '004':
         schema_url: https://schemas.electricity.works/types/scada.params/004
-        created: '2026-05-13T00:00:00Z'
+        created: '2026-02-18T11:07:45Z'
         summary: Initial Sema version
         direct_dependencies:
           structural:
           - ha1.params:004
+          - ha1.params:005
           - left.right.dot
           - spaceheat.name
           - utc.milliseconds
@@ -1808,20 +1876,6 @@ types:
           axiom:
           - gw1.unit:001
           - spaceheat.telemetry.name:007
-  weather:
-    latest_version: '000'
-    owner: gridworks-energy
-    versioning_strategy: literal
-    description: Single-point weather observation sent by an ATN to a SCADA node.
-    versions:
-      '000':
-        schema_url: https://schemas.electricity.works/types/weather/000
-        created: '2026-05-13T00:00:00Z'
-        summary: Initial Sema version
-        direct_dependencies:
-          structural:
-          - left.right.dot
-          - utc.seconds
   weather.forecast:
     latest_version: '000'
     owner: gridworks-energy

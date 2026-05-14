@@ -86,9 +86,38 @@ types:
         summary: "Initial Sema version"
 
   flo.params.house0:
-    latest_version: "003"
+    latest_version: "007"
     versioning_strategy: "literal"
     versions:
+      "007":
+        summary: "- FloGitCommit: add"
+      "006":
+        summary: >
+          - StabilityWeight -> StabilityPenaltyWeight: rename
+          - StabilityDecay -> StabilityPenaltyDecay: rename
+          - StabilityThresholdKwh -> StabilityPenaltyThresholdKwh: rename
+          - StabilityHorizonHours -> StabilityPenaltyHorizonHours: rename
+          - MaxHpKwhTh: add
+          - MaxLoadKwhTh: add
+          - RswtPenaltyEnabled: add
+          - StabilityPenaltyEnabled: add
+          - RswtPenaltyWeight: add
+          - RswtPenaltyDecay: add
+          - RswtPenaltyExponentRate: add
+          - RswtPenaltyDecayMaxHour: add
+      "005":
+        summary: >
+          - StabilityWeight: add
+          - StabilityDecay: add
+          - StabilityThresholdKwh: add
+          - StabilityHorizonHours: add
+          - PreviousPlanHpKwhElList: add (optional)
+          - PreviousEstimateStorageKwhNow: add (optional)
+      "004":
+        summary: >
+          - FloAlias: remove
+          - FloGitCommit: remove
+          - ConstantDeltaT: optional -> required
       "003":
         summary: "Initial Sema version"
 
@@ -185,14 +214,13 @@ types:
 
   ha1.params:
     latest_version: "006"
-    versioning_strategy: "string"
+    versioning_strategy: "literal"
     versions:
       "006":
         summary: >
           - HpMaxKwEl: add as optional
           - HpMaxKwTh: required -> optional
           - HpTurnOnMinutes: add
-          - VersioningStrategy: string -> literal
       "005":
         summary: >
           - CopIntercept: add as optional
@@ -389,9 +417,13 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   scada.params:
-    latest_version: "004"
+    latest_version: "005"
     versioning_strategy: "literal"
     versions:
+      "005":
+        summary: >
+          - NewParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
+          - OldParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
       "004":
         summary: "Initial Sema version"
 
@@ -532,13 +564,6 @@ types:
         summary: "- ChannelReadingsList[]: inline object -> channel.readings.list.item:000"
       "001":
         summary: "Baseline runtime version (no prior version tracked)."
-
-  weather:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
 
   weather.forecast:
     latest_version: "000"

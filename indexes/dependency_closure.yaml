@@ -132,6 +132,42 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+    '004':
+      enums:
+      - market.price.unit:000
+      formats:
+      - left.right.dot
+      - positive.int
+      - utc.seconds
+      - uuid4.str
+      types: []
+    '005':
+      enums:
+      - market.price.unit:000
+      formats:
+      - left.right.dot
+      - positive.int
+      - utc.seconds
+      - uuid4.str
+      types: []
+    '006':
+      enums:
+      - market.price.unit:000
+      formats:
+      - left.right.dot
+      - positive.int
+      - utc.seconds
+      - uuid4.str
+      types: []
+    '007':
+      enums:
+      - market.price.unit:000
+      formats:
+      - left.right.dot
+      - positive.int
+      - utc.seconds
+      - uuid4.str
+      types: []
   fsm.atomic.report:
     '000':
       enums:
@@ -835,6 +871,16 @@ types:
       - uuid4.str
       types:
       - ha1.params:004
+      - ha1.params:005
+    '005':
+      enums: []
+      formats:
+      - left.right.dot
+      - spaceheat.name
+      - utc.milliseconds
+      - uuid4.str
+      types:
+      - ha1.params:006
   send.control.capabilities:
     '000':
       enums: []
@@ -1011,13 +1057,6 @@ types:
       - utc.milliseconds
       types:
       - ticklist.reed:101
-  weather:
-    '000':
-      enums: []
-      formats:
-      - left.right.dot
-      - utc.seconds
-      types: []
   weather.forecast:
     '000':
       enums: []

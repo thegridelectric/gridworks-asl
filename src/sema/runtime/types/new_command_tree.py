@@ -21,10 +21,11 @@ class NewCommandTree(SemaType):
         Axiom 1: PrefixClosedHierarchy
         a. The set of ShNode Handles SHALL be prefix-closed: for every ShNode in ShNodes
         whose Handle is present, each of its dot-separated prefixes SHALL also be the Handle
-        of some ShNode in ShNodes. b. The set of ShNode ActorHierarchyNames SHALL be
-        prefix-closed in the same way: for every ShNode in ShNodes whose ActorHierarchyName
-        is present, each of its dot-separated prefixes SHALL also be the ActorHierarchyName
         of some ShNode in ShNodes.
+        b. The set of ShNode ActorHierarchyNames SHALL be prefix-closed in the same way: for
+        every ShNode in ShNodes whose ActorHierarchyName is present, each of its
+        dot-separated prefixes SHALL also be the ActorHierarchyName of some ShNode in
+        ShNodes.
         """
         for attr in ("handle", "actor_hierarchy_name"):
             present = {

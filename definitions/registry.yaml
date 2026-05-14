@@ -583,8 +583,10 @@ types:
   atn.bid:
     latest_version: "002"
     owner: gridworks-energy
+    replaced_by:
+      - bid
     versioning_strategy: "literal"
-    description: "Market bid submitted by an ATN for a specific market slot."
+    description: "Legacy market bid submitted by a LeafTransactiveNode for a specific market slot; superseded by bid."
 
     versions:
       "002":
@@ -1588,7 +1590,7 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Latest cleared market price notification sent by an ATN to a SCADA node."
+    description: "Latest cleared market price for a market slot, published by the MarketMaker (currently by the LeafTransactiveNode, pre-MarketMaker)."
 
     versions:
       "000":
@@ -1647,7 +1649,7 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Updated set of SpaceheatNodes transmitted from an ATN to a SCADA node, replacing the prior command tree."
+    description: "Full set of SpaceheatNodes describing a SCADA node's actor command hierarchy, sent to its LeafTransactiveNode."
 
     versions:
       "000":
@@ -2266,22 +2268,6 @@ types:
           axiom:
             - "gw1.unit:001"
             - "spaceheat.telemetry.name:007"
-
-  weather:
-    latest_version: "000"
-    owner: gridworks-energy
-    versioning_strategy: "literal"
-    description: "Single-point weather observation sent by an ATN to a SCADA node."
-
-    versions:
-      "000":
-        schema_url: "https://schemas.electricity.works/types/weather/000"
-        created: "2026-05-13T00:00:00Z"
-        summary: "Initial Sema version"
-        direct_dependencies:
-          structural:
-            - "left.right.dot"
-            - "utc.seconds"
 
   weather.forecast:
     latest_version: "000"

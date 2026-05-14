@@ -66,9 +66,13 @@ types:
     versions:
       '000': definitions/types/energy.instruction/000.yaml
   flo.params.house0:
-    latest_version: '003'
+    latest_version: '007'
     versioning_strategy: literal
     versions:
+      '007': definitions/types/flo.params.house0/007.yaml
+      '006': definitions/types/flo.params.house0/006.yaml
+      '005': definitions/types/flo.params.house0/005.yaml
+      '004': definitions/types/flo.params.house0/004.yaml
       '003': definitions/types/flo.params.house0/003.yaml
   fsm.atomic.report:
     latest_version: '001'
@@ -135,7 +139,7 @@ types:
       '000': definitions/types/gw1.unit.quantity.projection/000.yaml
   ha1.params:
     latest_version: '006'
-    versioning_strategy: string
+    versioning_strategy: literal
     versions:
       '006': definitions/types/ha1.params/006.yaml
       '005': definitions/types/ha1.params/005.yaml
@@ -254,9 +258,10 @@ types:
       '003': definitions/types/report.event/003.yaml
       '002': definitions/types/report.event/002.yaml
   scada.params:
-    latest_version: '004'
+    latest_version: '005'
     versioning_strategy: literal
     versions:
+      '005': definitions/types/scada.params/005.yaml
       '004': definitions/types/scada.params/004.yaml
   scada.control.capabilities:
     latest_version: '001'
@@ -348,11 +353,6 @@ types:
     versions:
       '002': definitions/types/synced.readings.bundle/002.yaml
       '001': definitions/types/synced.readings.bundle/001.yaml
-  weather:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/weather/000.yaml
   weather.forecast:
     latest_version: '000'
     versioning_strategy: literal

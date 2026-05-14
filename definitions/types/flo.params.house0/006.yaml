@@ -463,9 +463,3 @@ x-gridworks:
     PreviousEstimateStorageKwhNow remain optional and supply the reference
     plan for the stability penalty; they are absent on the first run. The
     SCADA codebase has emitted version 006 in a single, stable shape.
-
-    additionalProperties is true because the emitting runtime serializes
-    flo.params.house0 with an open model (extra fields allowed). Additional
-    properties are tolerated to absorb in-flight schema evolution; they are
-    not part of the stable contract and consumers are not expected to
-    interpret them.

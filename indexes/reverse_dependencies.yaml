@@ -87,11 +87,13 @@ types:
       used_by:
       - layout.lite:009
       - layout.lite:010
+      - scada.params:004
     '006':
       used_by:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - scada.params:005
   i2c.multichannel.dt.relay.component.gt:
     '002':
       used_by:
@@ -308,6 +310,10 @@ enums:
       - atn.bid:002
       - bid:000
       - flo.params.house0:003
+      - flo.params.house0:004
+      - flo.params.house0:005
+      - flo.params.house0:006
+      - flo.params.house0:007
       - latest.price:000
   market.quantity.unit:
     '000':
@@ -386,6 +392,10 @@ formats:
     - derived.channel.gt:002
     - energy.instruction:000
     - flo.params.house0:003
+    - flo.params.house0:004
+    - flo.params.house0:005
+    - flo.params.house0:006
+    - flo.params.house0:007
     - fsm.atomic.report:000
     - fsm.atomic.report:001
     - fsm.event:000
@@ -412,6 +422,7 @@ formats:
     - scada.control.capabilities:000
     - scada.control.capabilities:001
     - scada.params:004
+    - scada.params:005
     - send.control.capabilities:000
     - send.layout:000
     - send.layout:001
@@ -425,7 +436,6 @@ formats:
     - ticklist.hall.report:000
     - ticklist.reed.report:000
     - weather.forecast:000
-    - weather:000
   market.slot.name:
     used_by:
     - atn.bid:002
@@ -441,6 +451,10 @@ formats:
     - derived.channel.gt:002
     - energy.instruction:000
     - flo.params.house0:003
+    - flo.params.house0:004
+    - flo.params.house0:005
+    - flo.params.house0:006
+    - flo.params.house0:007
     - i2c.thermistor.channel.config:000
     - layout.lite:007
     - layout.lite:008
@@ -482,6 +496,7 @@ formats:
     - relay.actor.config:003
     - scada.control.capabilities:000
     - scada.params:004
+    - scada.params:005
     - send.layout:000
     - single.reading:000
     - spaceheat.node.gt:200
@@ -523,6 +538,7 @@ formats:
     - scada.control.capabilities:000
     - scada.control.capabilities:001
     - scada.params:004
+    - scada.params:005
     - send.control.capabilities:000
     - send.layout:001
     - sim.timestep:000
@@ -538,13 +554,16 @@ formats:
     - data.channel.gt:002
     - energy.instruction:000
     - flo.params.house0:003
+    - flo.params.house0:004
+    - flo.params.house0:005
+    - flo.params.house0:006
+    - flo.params.house0:007
     - heating.forecast:000
     - report:002
     - report:003
     - sim.ready:000
     - sim.timestep:000
     - weather.forecast:000
-    - weather:000
   uuid4.str:
     used_by:
     - channel.readings:001
@@ -555,6 +574,10 @@ formats:
     - derived.channel.gt:001
     - derived.channel.gt:002
     - flo.params.house0:003
+    - flo.params.house0:004
+    - flo.params.house0:005
+    - flo.params.house0:006
+    - flo.params.house0:007
     - fsm.atomic.report:000
     - fsm.atomic.report:001
     - fsm.event:000
@@ -584,6 +607,7 @@ formats:
     - report:002
     - report:003
     - scada.params:004
+    - scada.params:005
     - sim.pico.tank.module.component.gt:000
     - sim.ready:000
     - sim.timestep:000

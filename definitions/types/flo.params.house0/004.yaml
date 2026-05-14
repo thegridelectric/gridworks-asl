@@ -349,9 +349,3 @@ x-gridworks:
     ConstantDeltaT as a standard property and no longer carries the FloAlias
     or FloGitCommit fields of the original "Winter.Oak" runs. The SCADA
     codebase has emitted version 004 in a single, stable shape.
-
-    additionalProperties is true because the emitting runtime serializes
-    flo.params.house0 with an open model (extra fields allowed). Additional
-    properties are tolerated to absorb in-flight schema evolution; they are
-    not part of the stable contract and consumers are not expected to
-    interpret them.

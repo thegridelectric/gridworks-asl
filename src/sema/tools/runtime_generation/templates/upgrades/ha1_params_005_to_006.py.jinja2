@@ -3,7 +3,6 @@
         - HpMaxKwEl: add as optional
         - HpMaxKwTh: required -> optional
         - HpTurnOnMinutes: add
-        - VersioningStrategy: string -> literal
         """
         data = self.model_dump()
         data["hp_turn_on_minutes"] = 12

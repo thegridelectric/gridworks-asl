@@ -52,14 +52,9 @@ x-gridworks:
   axioms:
     - number: 1
       name: "PrefixClosedHierarchy"
-      statement: >
-        a. The set of ShNode Handles SHALL be prefix-closed: for every ShNode
-        in ShNodes whose Handle is present, each of its dot-separated prefixes
-        SHALL also be the Handle of some ShNode in ShNodes.
-        b. The set of ShNode ActorHierarchyNames SHALL be prefix-closed in the
-        same way: for every ShNode in ShNodes whose ActorHierarchyName is
-        present, each of its dot-separated prefixes SHALL also be the
-        ActorHierarchyName of some ShNode in ShNodes.
+      statement: |
+        a. The set of ShNode Handles SHALL be prefix-closed: for every ShNode in ShNodes whose Handle is present, each of its dot-separated prefixes SHALL also be the Handle of some ShNode in ShNodes.
+        b. The set of ShNode ActorHierarchyNames SHALL be prefix-closed in the same way: for every ShNode in ShNodes whose ActorHierarchyName is present, each of its dot-separated prefixes SHALL also be the ActorHierarchyName of some ShNode in ShNodes.
   extended_description: >
     A GridWorks SCADA node owns the hardware layout and the actor hierarchy
     that commands it. When that hierarchy changes -- for example when control
