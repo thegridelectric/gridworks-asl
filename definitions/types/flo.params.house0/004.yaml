@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/flo.params.house0/003"
+$id: "https://schemas.electricity.works/types/flo.params.house0/004"
 
 title: "flo.params.house0"
 type: object
@@ -267,34 +267,18 @@ properties:
     description: >
       Time, in Unix seconds, at which this parameter set was generated.
 
-  FloAlias:
-    type: string
-    description: >
-      Name identifying the FLO algorithm variant these parameters are intended
-      for. Present in the original "Winter.Oak" v003 messages; absent from the
-      later v003 variant that carries ConstantDeltaT instead.
-
-  FloGitCommit:
-    type: string
-    description: >
-      Git commit of the FLO implementation, recorded so a run can be
-      reproduced and audited against a specific version of the algorithm.
-      Present in the original "Winter.Oak" v003 messages; absent from the
-      later v003 variant that carries ConstantDeltaT instead.
-
   ConstantDeltaT:
     type: integer
     description: >
       Constant temperature drop, in degrees Fahrenheit, applied across the
-      house heat emitters by FLO variants that model delta-T as fixed rather
-      than per operating point. Present only in the later v003 variant; absent
-      from the original "Winter.Oak" v003 messages.
+      house heat emitters. House0 models delta-T as fixed rather than per
+      operating point.
 
   TypeName:
     const: "flo.params.house0"
 
   Version:
-    const: "003"
+    const: "004"
 
 required:
   - GNodeAlias
@@ -334,6 +318,7 @@ required:
   - MaxEwtF
   - PriceUnit
   - ParamsGeneratedS
+  - ConstantDeltaT
   - TypeName
   - Version
 
@@ -349,23 +334,24 @@ x-gridworks:
     the price-quantity curve the node submits as its market bid.
 
     The parameters fall into groups: identity and timing (GNodeAlias,
-    FloParamsUid, TimezoneStr, StartUnixS, ParamsGeneratedS, FloAlias,
-    FloGitCommit); horizon and storage geometry (HorizonHours, NumLayers,
-    StorageVolumeGallons, StorageLossesPercent); heat pump characteristics
-    (HpMinElecKw, HpMaxElecKw, HpTurnOnMinutes, HpIsOff, and the Cop terms);
-    the initial thermal state (the InitialTemp and InitialThermocline fields,
-    BufferAvailableKwh, HouseAvailableKwh); the forecasts and their provenance
-    ids; and the House0 thermal-response coefficients and operating points
-    (Alpha/Beta/Gamma, the Intermediate and Dd fields, MaxEwtF). Several
+    FloParamsUid, TimezoneStr, StartUnixS, ParamsGeneratedS); horizon and
+    storage geometry (HorizonHours, NumLayers, StorageVolumeGallons,
+    StorageLossesPercent); heat pump characteristics (HpMinElecKw, HpMaxElecKw,
+    HpTurnOnMinutes, HpIsOff, and the Cop terms); the initial thermal state
+    (the InitialTemp and InitialThermocline fields, BufferAvailableKwh,
+    HouseAvailableKwh); the forecasts and their provenance ids; and the House0
+    thermal-response coefficients and operating points (Alpha/Beta/Gamma,
+    ConstantDeltaT, the Intermediate and Dd fields, MaxEwtF). Several
     coefficients are carried as scaled integers to keep the serialized
     contract free of floating point representation.
 
-    Version 003 was emitted by the SCADA codebase in two shapes, because a
-    field was added without bumping the version. The original shape (the
-    "Winter.Oak" runs, 2025-04 through 2025-09) carries FloAlias and
-    FloGitCommit and no ConstantDeltaT. A later shape (2025-11) carries
-    ConstantDeltaT and drops FloAlias and FloGitCommit. All three of those
-    fields are therefore optional in this schema, while the remaining
-    properties are common to both shapes with identical types. A valid v003
-    message matches exactly one of the two historical shapes; this schema
-    accepts both.
+    Version 004 follows the later of the two version-003 shapes: it carries
+    ConstantDeltaT as a standard property and no longer carries the FloAlias
+    or FloGitCommit fields of the original "Winter.Oak" runs. The SCADA
+    codebase has emitted version 004 in a single, stable shape.
+
+    additionalProperties is true because the emitting runtime serializes
+    flo.params.house0 with an open model (extra fields allowed). Additional
+    properties are tolerated to absorb in-flight schema evolution; they are
+    not part of the stable contract and consumers are not expected to
+    interpret them.

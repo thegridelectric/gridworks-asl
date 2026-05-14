@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-05-13T00:00:00Z"
+  last_updated: "2026-05-14T14:50:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -846,12 +846,78 @@ types:
             - "uuid4.str"
 
   flo.params.house0:
-    latest_version: "003"
+    latest_version: "007"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Parameters into the Forward-Looking-Optimization (FLO) algorithm for a House0 thermal model."
 
     versions:
+      "007":
+        schema_url: "https://schemas.electricity.works/types/flo.params.house0/007"
+        created: "2026-05-14T00:00:06Z"
+        summary: >-
+          - FloGitCommit: add
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "market.price.unit:000"
+            - "positive.int"
+            - "utc.seconds"
+            - "uuid4.str"
+      "006":
+        schema_url: "https://schemas.electricity.works/types/flo.params.house0/006"
+        created: "2026-05-14T00:00:04Z"
+        summary: >-
+          - StabilityWeight -> StabilityPenaltyWeight: rename
+          - StabilityDecay -> StabilityPenaltyDecay: rename
+          - StabilityThresholdKwh -> StabilityPenaltyThresholdKwh: rename
+          - StabilityHorizonHours -> StabilityPenaltyHorizonHours: rename
+          - MaxHpKwhTh: add
+          - MaxLoadKwhTh: add
+          - RswtPenaltyEnabled: add
+          - StabilityPenaltyEnabled: add
+          - RswtPenaltyWeight: add
+          - RswtPenaltyDecay: add
+          - RswtPenaltyExponentRate: add
+          - RswtPenaltyDecayMaxHour: add
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "market.price.unit:000"
+            - "positive.int"
+            - "utc.seconds"
+            - "uuid4.str"
+      "005":
+        schema_url: "https://schemas.electricity.works/types/flo.params.house0/005"
+        created: "2026-05-14T00:00:02Z"
+        summary: >-
+          - StabilityWeight: add
+          - StabilityDecay: add
+          - StabilityThresholdKwh: add
+          - StabilityHorizonHours: add
+          - PreviousPlanHpKwhElList: add (optional)
+          - PreviousEstimateStorageKwhNow: add (optional)
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "market.price.unit:000"
+            - "positive.int"
+            - "utc.seconds"
+            - "uuid4.str"
+      "004":
+        schema_url: "https://schemas.electricity.works/types/flo.params.house0/004"
+        created: "2026-05-14T00:00:00Z"
+        summary: >-
+          - FloAlias: remove
+          - FloGitCommit: remove
+          - ConstantDeltaT: optional -> required
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "market.price.unit:000"
+            - "positive.int"
+            - "utc.seconds"
+            - "uuid4.str"
       "003":
         schema_url: "https://schemas.electricity.works/types/flo.params.house0/003"
         created: "2026-05-13T00:00:00Z"

@@ -6,10 +6,11 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UTCSeconds
 from sema.runtime.property_format import UUID4Str
+from sema.runtime.types.flo_params_house0 import FloParamsHouse0
 
 
-class FloParamsHouse0(SemaType):
-    """Sema: https://schemas.electricity.works/types/flo.params.house0/007"""
+class FloParamsHouse0006(SemaType):
+    """Sema: https://schemas.electricity.works/types/flo.params.house0/006"""
 
     g_node_alias: LeftRightDot
     flo_params_uid: UUID4Str
@@ -68,8 +69,16 @@ class FloParamsHouse0(SemaType):
     price_unit: MarketPriceUnit
     params_generated_s: UTCSeconds
     constant_delta_t: StrictInt
-    flo_git_commit: str
     type_name: Literal["flo.params.house0"] = "flo.params.house0"
-    version: Literal["007"] = "007"
+    version: Literal["006"] = "006"
 
     model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))
+
+    def upgrade(self) -> FloParamsHouse0:
+        """
+        - FloGitCommit: add
+        """
+        data = self.model_dump()
+        data["flo_git_commit"] = "Unknown"
+        data["version"] = "007"
+        return FloParamsHouse0.model_validate(data)

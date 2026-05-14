@@ -6,10 +6,11 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UTCSeconds
 from sema.runtime.property_format import UUID4Str
+from sema.runtime.types.old_versions.flo_params_house0_005 import FloParamsHouse0005
 
 
-class FloParamsHouse0(SemaType):
-    """Sema: https://schemas.electricity.works/types/flo.params.house0/007"""
+class FloParamsHouse0004(SemaType):
+    """Sema: https://schemas.electricity.works/types/flo.params.house0/004"""
 
     g_node_alias: LeftRightDot
     flo_params_uid: UUID4Str
@@ -21,8 +22,6 @@ class FloParamsHouse0(SemaType):
     storage_losses_percent: StrictFloat
     hp_min_elec_kw: StrictFloat
     hp_max_elec_kw: StrictFloat
-    max_hp_kwh_th: StrictFloat
-    max_load_kwh_th: StrictFloat
     buffer_available_kwh: StrictFloat
     house_available_kwh: StrictFloat
     cop_intercept: StrictFloat
@@ -53,23 +52,29 @@ class FloParamsHouse0(SemaType):
     dd_rswt_f: StrictInt
     dd_delta_t_f: StrictInt
     max_ewt_f: StrictInt
-    rswt_penalty_enabled: bool
-    stability_penalty_enabled: bool
-    rswt_penalty_weight: StrictFloat
-    rswt_penalty_decay: StrictFloat
-    rswt_penalty_exponent_rate: StrictFloat
-    rswt_penalty_decay_max_hour: StrictInt
-    previous_plan_hp_kwh_el_list: list[StrictFloat] | None = None
-    previous_estimate_storage_kwh_now: StrictFloat | None = None
-    stability_penalty_weight: StrictFloat
-    stability_penalty_decay: StrictFloat
-    stability_penalty_threshold_kwh: StrictFloat
-    stability_penalty_horizon_hours: StrictInt
     price_unit: MarketPriceUnit
     params_generated_s: UTCSeconds
     constant_delta_t: StrictInt
-    flo_git_commit: str
     type_name: Literal["flo.params.house0"] = "flo.params.house0"
-    version: Literal["007"] = "007"
+    version: Literal["004"] = "004"
 
     model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))
+
+    def upgrade(self) -> FloParamsHouse0005:
+        """
+        - StabilityWeight: add
+        - StabilityDecay: add
+        - StabilityThresholdKwh: add
+        - StabilityHorizonHours: add
+        - PreviousPlanHpKwhElList: add (optional)
+        - PreviousEstimateStorageKwhNow: add (optional)
+        """
+        data = self.model_dump()
+        data["stability_weight"] = 0.5
+        data["stability_decay"] = 0.75
+        data["stability_threshold_kwh"] = 10.0
+        data["stability_horizon_hours"] = 20
+        data["previous_plan_hp_kwh_el_list"] = None
+        data["previous_estimate_storage_kwh_now"] = None
+        data["version"] = "005"
+        return FloParamsHouse0005.model_validate(data)
