@@ -28,14 +28,9 @@ SELECT
   calc_owners_enum_count(t.owners_id) AS enum_count,                            -- Number of Enums owned by this owner.
   calc_owners_type_count(t.owners_id) AS type_count,                            -- Number of Types owned by this owner.
   calc_owners_draft_type_version_count(t.owners_id) AS draft_type_version_count,-- Number of draft TypeVersions across all this owner's Words. Drives §7 'drafts open: N' badge on the Vocabularies grid.
-  calc_owners_active_type_version_count(t.owners_id) AS active_type_version_count,-- Number of active TypeVersions.
-  calc_owners_deprecated_type_version_count(t.owners_id) AS deprecated_type_version_count,-- Number of deprecated TypeVersions.
+  calc_owners_published_type_version_count(t.owners_id) AS published_type_version_count,-- Number of published TypeVersions.
   calc_owners_draft_enum_version_count(t.owners_id) AS draft_enum_version_count,-- Number of draft EnumVersions across this owner's Enums.
-  calc_owners_active_enum_version_count(t.owners_id) AS active_enum_version_count,-- Number of active EnumVersions.
-  calc_owners_deprecated_enum_version_count(t.owners_id) AS deprecated_enum_version_count,-- Number of deprecated EnumVersions.
-  calc_owners_retired_type_count(t.owners_id) AS retired_type_count,            -- Number of retired Types (Words). Drives the red-strike count on the Vocabulary card.
-  calc_owners_retired_enum_count(t.owners_id) AS retired_enum_count,            -- Number of retired Enums (Words).
-  calc_owners_retired_format_count(t.owners_id) AS retired_format_count,        -- Number of retired Formats.
+  calc_owners_published_enum_version_count(t.owners_id) AS published_enum_version_count,-- Number of published EnumVersions.
   calc_owners_has_open_drafts(t.owners_id) AS has_open_drafts,                  -- True iff this owner has any draft Type or Enum versions. Drives the amber dot on the Vocabularies card.
   calc_owners_has_published_artifacts(t.owners_id) AS has_published_artifacts,  -- True iff this owner has any artifacts at all (Types, Enums, or Formats). Drives empty-state vs populated rendering.
   calc_owners_latest_type_version_at(t.owners_id) AS latest_type_version_at,    -- Most recent TypeVersions.Created among this owner's Words.
@@ -55,14 +50,13 @@ SELECT
   t.schema_url,                                                                 -- Schema URL from JSON-Schema $id.
   t.title,                                                                      -- Human-readable title.
   t.description,                                                                -- Free-text description of the format.
-  t.replaced_by,                                                                -- Optional pointer to another Format that retires this one. If non-null, this format has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).
+  t.replaced_by,                                                                -- Advisory pointer to another Format that supersedes this one. The original Format remains valid and queryable — ReplacedBy is just a hint to consumers about a preferred successor. NOT a state change; published versions are immutable.
   t.pattern,                                                                    -- Regex pattern that valid values must match.
   t.min_length,                                                                 -- Minimum string length, if constrained.
   t.max_length,                                                                 -- Maximum string length, if constrained.
   t.json_schema_format,                                                         -- JSON-Schema 'format' keyword if present (e.g. 'date-time', 'email').
   t.created,                                                                    -- Created timestamp from registry.yaml.
   t.raw_json,                                                                   -- Escape hatch: any unmodeled JSON-Schema fields, serialized as JSON string.
-  calc_formats_is_retired(t.formats_id) AS is_retired,                          -- True when this format has been replaced by another (ReplacedBy is set).
   calc_formats_has_pattern(t.formats_id) AS has_pattern,                        -- True when a regex Pattern constraint is defined.
   calc_formats_has_length_bounds(t.formats_id) AS has_length_bounds,            -- True when at least one of MinLength / MaxLength is defined.
   calc_formats_example_count(t.formats_id) AS example_count,                    -- Number of positive examples on this format (FormatExamples where IsCounter=false).
@@ -103,16 +97,14 @@ SELECT
   t.enum_type,                                                                  -- Either 'versioned' (additive-only multi-version) or 'literal' (single immutable version).
   t.value_type,                                                                 -- JSON Schema datatype of the enum's symbols. If present, SHALL be 'integer' and version YAML files SHALL have type: integer. If null, the enum SHALL be treated as string-valued.
   t.description,                                                                -- Name-level description (registry-level).
-  t.replaced_by,                                                                -- Optional pointer to another Enum that retires this one. If non-null, this enum has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).
+  t.replaced_by,                                                                -- Advisory pointer to another Enum that supersedes this one. The original Enum remains valid and queryable — ReplacedBy is just a hint to consumers about a preferred successor. NOT a state change; published versions are immutable.
   t.raw_json,                                                                   -- Escape hatch: any unmodeled YAML keys (e.g., x-gridworks extended_description). JSON-encoded.
-  calc_enums_is_retired(t.enums_id) AS is_retired,                              -- True when this enum has been replaced by another (ReplacedBy is set).
   calc_enums_is_versioned(t.enums_id) AS is_versioned,                          -- True when EnumType is 'versioned' (additive-only multi-version enum).
   calc_enums_is_literal(t.enums_id) AS is_literal,                              -- True when EnumType is 'literal' (single immutable version, frozen vocabulary).
   calc_enums_is_integer_valued(t.enums_id) AS is_integer_valued,                -- True when ValueType is 'integer' (otherwise the enum's symbols are strings).
   calc_enums_version_count(t.enums_id) AS version_count,                        -- Number of EnumVersions for this enum.
   calc_enums_draft_version_count(t.enums_id) AS draft_version_count,            -- Number of EnumVersions of this Word with Status='draft'.
-  calc_enums_active_version_count(t.enums_id) AS active_version_count,          -- Number of active EnumVersions.
-  calc_enums_deprecated_version_count(t.enums_id) AS deprecated_version_count,  -- Number of deprecated EnumVersions.
+  calc_enums_published_version_count(t.enums_id) AS published_version_count,    -- Number of published EnumVersions.
   calc_enums_has_drafts(t.enums_id) AS has_drafts,                              -- True iff this Word has at least one draft Definition.
   calc_enums_first_created(t.enums_id) AS first_created,                        -- When the first EnumVersion for this Word was created.
   calc_enums_last_modified(t.enums_id) AS last_modified                         -- Latest EnumVersions.Created among this Word's Definitions.
@@ -132,11 +124,10 @@ SELECT
   t.title,                                                                      -- Human-readable title.
   t.description,                                                                -- Version-specific description.
   t.default_symbol,                                                             -- The default symbol value for this version.
-  t.status,                                                                     -- Lifecycle status (e.g. 'active', 'deprecated').
+  t.status,                                                                     -- Lifecycle status. One of 'draft' (still being designed; mutable) or 'published' (promoted; immutable thereafter). Versions never leave 'published' — successors are introduced as new versions, optionally pointed at via the parent Word's ReplacedBy.
   t.created,                                                                    -- Creation timestamp from registry.yaml.
   t.raw_json,                                                                   -- Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded.
-  calc_enum_versions_is_active(t.enum_versions_id) AS is_active,                -- True when Status is 'active'.
-  calc_enum_versions_is_deprecated(t.enum_versions_id) AS is_deprecated,        -- True when Status is 'deprecated'.
+  calc_enum_versions_is_published(t.enum_versions_id) AS is_published,          -- True when Status is 'published'.
   calc_enum_versions_is_draft(t.enum_versions_id) AS is_draft,                  -- True when Status is 'draft'. Drives the Editor's 'Edit unlocked' affordance.
   calc_enum_versions_has_default_symbol(t.enum_versions_id) AS has_default_symbol,-- True when DefaultSymbol is set on this version.
   calc_enum_versions_value_count(t.enum_versions_id) AS value_count,            -- Number of EnumValues (symbols) declared in this version.
@@ -158,11 +149,9 @@ SELECT
   calc_enum_versions_is_root(t.enum_versions_id) AS is_root,                    -- True when this version has no incoming upgrade — it was created fresh, not bumped from a predecessor.
   calc_enum_versions_is_leaf(t.enum_versions_id) AS is_leaf,                    -- True when this version has no outgoing upgrade — it has no successor and is a tip of the version chain.
   calc_enum_versions_owner_name(t.enum_versions_id) AS owner_name,              -- Owner of this EnumVersion's Word, passed through from Enums.Owner.
-  calc_enum_versions_word_is_retired(t.enum_versions_id) AS word_is_retired,    -- Whether this EnumVersion's Word is retired (Enums.IsRetired). Drives §4 red strike-through.
   calc_enum_versions_word_description(t.enum_versions_id) AS word_description,  -- Description of the parent Enum.
   t.last_modified,                                                              -- Most recent edit to this EnumVersion or its child EnumValues.
   t.promoted_at,                                                                -- When Status flipped from draft to active.
-  t.deprecated_at,                                                              -- When Status flipped from active to deprecated.
   calc_enum_versions_is_promotable(t.enum_versions_id) AS is_promotable         -- True iff this draft EnumVersion can be promoted: it is a draft and has at least one symbol.
 FROM enum_versions t;
 
@@ -192,16 +181,14 @@ SELECT
   t.owner,                                                                      -- Owner of this type.
   t.title,                                                                      -- Name-level title.
   t.description,                                                                -- Name-level description.
-  t.replaced_by,                                                                -- Optional pointer to another Type that retires this one. If non-null, this type has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).
+  t.replaced_by,                                                                -- Advisory pointer to another Type that supersedes this one. The original Type remains valid and queryable — ReplacedBy is just a hint to consumers about a preferred successor. NOT a state change; published versions are immutable.
   t.python_class_name,                                                          -- Tier-2 placeholder: ODXML-derived Python class name (populated when ODXML data absorbs in).
   t.make_data_class,                                                            -- Tier-2 placeholder: ODXML invariant.
   t.is_cac,                                                                     -- Tier-2 placeholder: ODXML invariant (component access control marker).
   t.is_component,                                                               -- Tier-2 placeholder: ODXML invariant.
-  calc_types_is_retired(t.types_id) AS is_retired,                              -- True when this type has been replaced by another (ReplacedBy is set).
   calc_types_version_count(t.types_id) AS version_count,                        -- Number of TypeVersions for this type.
   calc_types_draft_version_count(t.types_id) AS draft_version_count,            -- Number of TypeVersions of this Word with Status='draft'. Drives 'drafts open' badge on Word cards.
-  calc_types_active_version_count(t.types_id) AS active_version_count,          -- Number of active TypeVersions.
-  calc_types_deprecated_version_count(t.types_id) AS deprecated_version_count,  -- Number of deprecated TypeVersions.
+  calc_types_published_version_count(t.types_id) AS published_version_count,    -- Number of published TypeVersions.
   calc_types_has_drafts(t.types_id) AS has_drafts,                              -- True iff this Word has at least one draft Definition. Drives the amber 'drafts open' badge on Word rows.
   calc_types_first_created(t.types_id) AS first_created,                        -- When the first Definition for this Word was created. Drives 'Word age' displays.
   calc_types_last_modified(t.types_id) AS last_modified                         -- Latest TypeVersions.Created among this Word's Definitions. Drives 'recently active' sort.
@@ -221,11 +208,10 @@ SELECT
   t.title,                                                                      -- Human-readable title.
   t.description,                                                                -- Version-specific description.
   t.extra_allowed,                                                              -- From JSON-Schema additionalProperties (true=open, false=closed).
-  t.status,                                                                     -- Lifecycle status.
+  t.status,                                                                     -- Lifecycle status. One of 'draft' (still being designed; mutable) or 'published' (promoted; immutable thereafter). Versions never leave 'published' — successors are introduced as new versions, optionally pointed at via the parent Word's ReplacedBy.
   t.created,                                                                    -- Creation timestamp.
   t.raw_json,                                                                   -- Escape hatch: unmodeled top-level JSON-Schema fields (if/then/else, conditionals, etc.).
-  calc_type_versions_is_active(t.type_versions_id) AS is_active,                -- True when Status is 'active'.
-  calc_type_versions_is_deprecated(t.type_versions_id) AS is_deprecated,        -- True when Status is 'deprecated'.
+  calc_type_versions_is_published(t.type_versions_id) AS is_published,          -- True when Status is 'published'.
   calc_type_versions_is_draft(t.type_versions_id) AS is_draft,                  -- True when Status is 'draft'. Drives the Editor's 'Edit unlocked' affordance.
   calc_type_versions_is_closed(t.type_versions_id) AS is_closed,                -- True when ExtraAllowed is FALSE (additionalProperties: false in JSON-Schema).
   calc_type_versions_attribute_count(t.type_versions_id) AS attribute_count,    -- Number of TypeAttributes declared on this version.
@@ -250,13 +236,9 @@ SELECT
   calc_type_versions_originates_helpers(t.type_versions_id) AS originates_helpers,-- True when at least one TypeHelper was originally introduced by this version's YAML body.
   calc_type_versions_owner_name(t.type_versions_id) AS owner_name,              -- Owner of this Definition's Word, passed through from Types.Owner. Lets list views render owner without joining.
   calc_type_versions_word_title(t.type_versions_id) AS word_title,              -- Title of this Definition's Word, passed through from Types.Title. Used in breadcrumbs.
-  calc_type_versions_word_is_retired(t.type_versions_id) AS word_is_retired,    -- Whether this Definition's Word is retired (Types.IsRetired). Drives the red strike-through pill in §4 — distinct from version-level deprecation.
   t.last_modified,                                                              -- Most recent edit to this Definition or any of its child rows. Null until the editor lands. Drives Activity-feed sort.
   t.promoted_at,                                                                -- When Status flipped from draft to active. Null for never-promoted drafts. Activity feed renders 'promoted on...' distinct from 'created on...'.
-  t.deprecated_at,                                                              -- When Status flipped from active to deprecated. Null while still active or while still draft.
-  calc_type_versions_stale_reference_count(t.type_versions_id) AS stale_reference_count,-- Number of TypeAttributes on this Definition whose ref points at a retired/deprecated/draft target. Drives §7 promote-gating.
-  calc_type_versions_has_stale_references(t.type_versions_id) AS has_stale_references,-- True iff any of this Definition's attribute refs are stale.
-  calc_type_versions_is_promotable(t.type_versions_id) AS is_promotable         -- True iff this draft Definition can be promoted: it is a draft, has no stale references, and has at least one attribute. Gates the Promote CTA in §7.
+  calc_type_versions_is_promotable(t.type_versions_id) AS is_promotable         -- True iff this TypeVersion is a draft with at least one attribute defined — i.e., ready to promote to published.
 FROM type_versions t;
 
 -- ----------------------------------------------------------------------------
@@ -283,14 +265,10 @@ SELECT
   calc_type_attributes_is_optional(t.type_attributes_id) AS is_optional,        -- True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.
   calc_type_attributes_has_default(t.type_attributes_id) AS has_default,        -- True when a JSON-encoded Default value is present for this attribute.
   calc_type_attributes_ref_kind(t.type_attributes_id) AS ref_kind,              -- Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive' when only PrimitiveType is set.
-  calc_type_attributes_ref_format_is_retired(t.type_attributes_id) AS ref_format_is_retired,-- Whether the FormatRef target is retired. Null when FormatRef is unset.
-  calc_type_attributes_ref_enum_is_active(t.type_attributes_id) AS ref_enum_is_active,-- Whether the EnumVersionRef target has Status='active'. Null when EnumVersionRef is unset.
+  calc_type_attributes_ref_enum_is_published(t.type_attributes_id) AS ref_enum_is_published,-- Whether the EnumVersionRef target has Status='published'. Null when EnumVersionRef is unset.
   calc_type_attributes_ref_enum_is_draft(t.type_attributes_id) AS ref_enum_is_draft,-- Whether the EnumVersionRef target is still a draft. Promoting a draft TypeVersion that points at a draft EnumVersion is not allowed.
-  calc_type_attributes_ref_enum_word_is_retired(t.type_attributes_id) AS ref_enum_word_is_retired,-- Whether the EnumVersionRef's Word is retired.
-  calc_type_attributes_ref_subtype_is_active(t.type_attributes_id) AS ref_subtype_is_active,-- Whether the SubTypeVersionRef target has Status='active'.
-  calc_type_attributes_ref_subtype_is_draft(t.type_attributes_id) AS ref_subtype_is_draft,-- Whether the SubTypeVersionRef target is still a draft.
-  calc_type_attributes_ref_subtype_word_is_retired(t.type_attributes_id) AS ref_subtype_word_is_retired,-- Whether the SubTypeVersionRef's Word is retired.
-  calc_type_attributes_ref_is_stale(t.type_attributes_id) AS ref_is_stale       -- True iff this attribute's reference points at a retired Word, a deprecated/draft EnumVersion or TypeVersion. Rolls up into TypeVersions.HasStaleReferences and gates promote.
+  calc_type_attributes_ref_subtype_is_published(t.type_attributes_id) AS ref_subtype_is_published,-- Whether the SubTypeVersionRef target has Status='published'.
+  calc_type_attributes_ref_subtype_is_draft(t.type_attributes_id) AS ref_subtype_is_draft-- Whether the SubTypeVersionRef target is still a draft.
 FROM type_attributes t;
 
 -- ----------------------------------------------------------------------------
@@ -320,8 +298,7 @@ SELECT
   t.axiom_name,                                                                 -- Axiom name from YAML.
   t.statement,                                                                  -- Axiom statement (the natural-language invariant).
   calc_type_axioms_has_statement(t.type_axioms_id) AS has_statement,            -- True when the axiom carries a non-empty Statement.
-  calc_type_axioms_owner_name(t.type_axioms_id) AS owner_name,                  -- Owner passthrough via TypeVersion → Type → Owner.
-  calc_type_axioms_word_is_retired(t.type_axioms_id) AS word_is_retired         -- True iff the parent Definition's Word is retired (axiom inherits visual retirement).
+  calc_type_axioms_owner_name(t.type_axioms_id) AS owner_name                   -- Owner passthrough via TypeVersion → Type → Owner.
 FROM type_axioms t;
 
 -- ----------------------------------------------------------------------------
@@ -347,9 +324,7 @@ SELECT
   calc_type_helpers_origin_owner_name(t.type_helpers_id) AS origin_owner_name,  -- Owner of the helper's origin Definition.
   calc_type_helpers_origin_type_name(t.type_helpers_id) AS origin_type_name,    -- Word name of the helper's origin Definition.
   calc_type_helpers_is_origin_draft(t.type_helpers_id) AS is_origin_draft,      -- Whether the origin Definition is still a draft. Gates the 'Edit helper' CTA in §9c.
-  calc_type_helpers_is_origin_active(t.type_helpers_id) AS is_origin_active,    -- Whether the origin Definition is active.
-  calc_type_helpers_is_origin_deprecated(t.type_helpers_id) AS is_origin_deprecated,-- Whether the origin Definition is deprecated.
-  calc_type_helpers_origin_word_is_retired(t.type_helpers_id) AS origin_word_is_retired-- Whether the origin Definition's Word is retired. Helpers inherit retirement of their origin Word.
+  calc_type_helpers_is_origin_active(t.type_helpers_id) AS is_origin_active     -- Whether the origin Definition is active.
 FROM type_helpers t;
 
 -- ----------------------------------------------------------------------------
@@ -374,12 +349,8 @@ SELECT
   t.raw_json,                                                                   -- Escape hatch for unmodeled JSON-Schema specifics.
   calc_type_helper_attributes_is_optional(t.type_helper_attributes_id) AS is_optional,-- True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.
   calc_type_helper_attributes_ref_kind(t.type_helper_attributes_id) AS ref_kind,-- Which $ref family this attribute uses: 'format', 'enum', 'subtype', 'helper', or 'primitive'.
-  calc_type_helper_attributes_ref_format_is_retired(t.type_helper_attributes_id) AS ref_format_is_retired,-- Whether the FormatRef target is retired.
   calc_type_helper_attributes_ref_enum_is_draft(t.type_helper_attributes_id) AS ref_enum_is_draft,-- Whether the EnumVersionRef target is still a draft.
-  calc_type_helper_attributes_ref_enum_word_is_retired(t.type_helper_attributes_id) AS ref_enum_word_is_retired,-- Whether the EnumVersionRef's Word is retired.
-  calc_type_helper_attributes_ref_subtype_is_draft(t.type_helper_attributes_id) AS ref_subtype_is_draft,-- Whether the SubTypeVersionRef target is still a draft.
-  calc_type_helper_attributes_ref_subtype_word_is_retired(t.type_helper_attributes_id) AS ref_subtype_word_is_retired,-- Whether the SubTypeVersionRef's Word is retired.
-  calc_type_helper_attributes_ref_is_stale(t.type_helper_attributes_id) AS ref_is_stale-- True iff this helper attribute's reference points at a retired/deprecated/draft target.
+  calc_type_helper_attributes_ref_subtype_is_draft(t.type_helper_attributes_id) AS ref_subtype_is_draft-- Whether the SubTypeVersionRef target is still a draft.
 FROM type_helper_attributes t;
 
 -- ----------------------------------------------------------------------------

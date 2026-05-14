@@ -117,20 +117,12 @@
         "formula": "=COUNTIFS(TypeVersions!{{OwnerName}}, Owners!{{Name}}, TypeVersions!{{IsDraft}}, TRUE())"
       },
       {
-        "name": "ActiveTypeVersionCount",
+        "name": "PublishedTypeVersionCount",
         "datatype": "integer",
         "type": "aggregation",
         "nullable": false,
-        "Description": "Number of active TypeVersions.",
-        "formula": "=COUNTIFS(TypeVersions!{{OwnerName}}, Owners!{{Name}}, TypeVersions!{{IsActive}}, TRUE())"
-      },
-      {
-        "name": "DeprecatedTypeVersionCount",
-        "datatype": "integer",
-        "type": "aggregation",
-        "nullable": false,
-        "Description": "Number of deprecated TypeVersions.",
-        "formula": "=COUNTIFS(TypeVersions!{{OwnerName}}, Owners!{{Name}}, TypeVersions!{{IsDeprecated}}, TRUE())"
+        "Description": "Number of published TypeVersions.",
+        "formula": "=COUNTIFS(TypeVersions!{{OwnerName}}, Owners!{{Name}}, TypeVersions!{{IsPublished}}, TRUE())"
       },
       {
         "name": "DraftEnumVersionCount",
@@ -141,44 +133,12 @@
         "formula": "=COUNTIFS(EnumVersions!{{OwnerName}}, Owners!{{Name}}, EnumVersions!{{IsDraft}}, TRUE())"
       },
       {
-        "name": "ActiveEnumVersionCount",
+        "name": "PublishedEnumVersionCount",
         "datatype": "integer",
         "type": "aggregation",
         "nullable": false,
-        "Description": "Number of active EnumVersions.",
-        "formula": "=COUNTIFS(EnumVersions!{{OwnerName}}, Owners!{{Name}}, EnumVersions!{{IsActive}}, TRUE())"
-      },
-      {
-        "name": "DeprecatedEnumVersionCount",
-        "datatype": "integer",
-        "type": "aggregation",
-        "nullable": false,
-        "Description": "Number of deprecated EnumVersions.",
-        "formula": "=COUNTIFS(EnumVersions!{{OwnerName}}, Owners!{{Name}}, EnumVersions!{{IsDeprecated}}, TRUE())"
-      },
-      {
-        "name": "RetiredTypeCount",
-        "datatype": "integer",
-        "type": "aggregation",
-        "nullable": false,
-        "Description": "Number of retired Types (Words). Drives the red-strike count on the Vocabulary card.",
-        "formula": "=COUNTIFS(Types!{{Owner}}, Owners!{{Name}}, Types!{{IsRetired}}, TRUE())"
-      },
-      {
-        "name": "RetiredEnumCount",
-        "datatype": "integer",
-        "type": "aggregation",
-        "nullable": false,
-        "Description": "Number of retired Enums (Words).",
-        "formula": "=COUNTIFS(Enums!{{Owner}}, Owners!{{Name}}, Enums!{{IsRetired}}, TRUE())"
-      },
-      {
-        "name": "RetiredFormatCount",
-        "datatype": "integer",
-        "type": "aggregation",
-        "nullable": false,
-        "Description": "Number of retired Formats.",
-        "formula": "=COUNTIFS(Formats!{{Owner}}, Owners!{{Name}}, Formats!{{IsRetired}}, TRUE())"
+        "Description": "Number of published EnumVersions.",
+        "formula": "=COUNTIFS(EnumVersions!{{OwnerName}}, Owners!{{Name}}, EnumVersions!{{IsPublished}}, TRUE())"
       },
       {
         "name": "HasOpenDrafts",
@@ -334,7 +294,7 @@
         "datatype": "string",
         "type": "relationship",
         "nullable": true,
-        "Description": "Optional pointer to another Format that retires this one. If non-null, this format has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).",
+        "Description": "Advisory pointer to another Format that supersedes this one. The original Format remains valid and queryable \u2014 ReplacedBy is just a hint to consumers about a preferred successor. NOT a state change; published versions are immutable.",
         "RelatedTo": "Formats"
       },
       {
@@ -378,14 +338,6 @@
         "type": "raw",
         "nullable": true,
         "Description": "Escape hatch: any unmodeled JSON-Schema fields, serialized as JSON string."
-      },
-      {
-        "name": "IsRetired",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True when this format has been replaced by another (ReplacedBy is set).",
-        "formula": "=IF({{ReplacedBy}}, TRUE(), FALSE())"
       },
       {
         "name": "HasPattern",
@@ -1302,7 +1254,7 @@
         "datatype": "string",
         "type": "relationship",
         "nullable": true,
-        "Description": "Optional pointer to another Enum that retires this one. If non-null, this enum has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).",
+        "Description": "Advisory pointer to another Enum that supersedes this one. The original Enum remains valid and queryable \u2014 ReplacedBy is just a hint to consumers about a preferred successor. NOT a state change; published versions are immutable.",
         "RelatedTo": "Enums"
       },
       {
@@ -1311,14 +1263,6 @@
         "type": "raw",
         "nullable": true,
         "Description": "Escape hatch: any unmodeled YAML keys (e.g., x-gridworks extended_description). JSON-encoded."
-      },
-      {
-        "name": "IsRetired",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True when this enum has been replaced by another (ReplacedBy is set).",
-        "formula": "=IF({{ReplacedBy}}, TRUE(), FALSE())"
       },
       {
         "name": "IsVersioned",
@@ -1361,20 +1305,12 @@
         "formula": "=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}}, EnumVersions!{{IsDraft}}, TRUE())"
       },
       {
-        "name": "ActiveVersionCount",
+        "name": "PublishedVersionCount",
         "datatype": "integer",
         "type": "aggregation",
         "nullable": false,
-        "Description": "Number of active EnumVersions.",
-        "formula": "=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}}, EnumVersions!{{IsActive}}, TRUE())"
-      },
-      {
-        "name": "DeprecatedVersionCount",
-        "datatype": "integer",
-        "type": "aggregation",
-        "nullable": false,
-        "Description": "Number of deprecated EnumVersions.",
-        "formula": "=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}}, EnumVersions!{{IsDeprecated}}, TRUE())"
+        "Description": "Number of published EnumVersions.",
+        "formula": "=COUNTIFS(EnumVersions!{{Enum}}, Enums!{{Name}}, EnumVersions!{{IsPublished}}, TRUE())"
       },
       {
         "name": "HasDrafts",
@@ -1751,7 +1687,7 @@
         "datatype": "string",
         "type": "raw",
         "nullable": true,
-        "Description": "Lifecycle status (e.g. 'active', 'deprecated')."
+        "Description": "Lifecycle status. One of 'draft' (still being designed; mutable) or 'published' (promoted; immutable thereafter). Versions never leave 'published' \u2014 successors are introduced as new versions, optionally pointed at via the parent Word's ReplacedBy."
       },
       {
         "name": "Created",
@@ -1768,20 +1704,12 @@
         "Description": "Escape hatch: any unmodeled YAML keys (e.g., type: integer for non-string enums, x-gridworks extended_description). JSON-encoded."
       },
       {
-        "name": "IsActive",
+        "name": "IsPublished",
         "datatype": "boolean",
         "type": "calculated",
         "nullable": false,
-        "Description": "True when Status is 'active'.",
-        "formula": "=IF({{Status}}=\"active\", TRUE(), FALSE())"
-      },
-      {
-        "name": "IsDeprecated",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True when Status is 'deprecated'.",
-        "formula": "=IF({{Status}}=\"deprecated\", TRUE(), FALSE())"
+        "Description": "True when Status is 'published'.",
+        "formula": "=IF({{Status}}=\"published\", TRUE(), FALSE())"
       },
       {
         "name": "IsDraft",
@@ -1952,14 +1880,6 @@
         "formula": "=INDEX(Enums!{{Owner}}, MATCH({{Enum}}, Enums!{{Name}}, 0))"
       },
       {
-        "name": "WordIsRetired",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether this EnumVersion's Word is retired (Enums.IsRetired). Drives \u00a74 red strike-through.",
-        "formula": "=INDEX(Enums!{{IsRetired}}, MATCH({{Enum}}, Enums!{{Name}}, 0))"
-      },
-      {
         "name": "WordDescription",
         "datatype": "string",
         "type": "lookup",
@@ -1982,13 +1902,6 @@
         "Description": "When Status flipped from draft to active."
       },
       {
-        "name": "DeprecatedAt",
-        "datatype": "datetime",
-        "type": "raw",
-        "nullable": true,
-        "Description": "When Status flipped from active to deprecated."
-      },
-      {
         "name": "IsPromotable",
         "datatype": "boolean",
         "type": "calculated",
@@ -2005,7 +1918,7 @@
         "Title": "base.g.node.class",
         "Description": "Ontology classification for Grid Nodes (GNodes) used to describe their structural relationship to the physical electric grid. Values identify whether a node represents a physical metered boundary, a physical topological structure, a market coordination constraint, or a purely logical entity.\nEvery GNode SHALL declare exactly one base.g.node.class value.\n",
         "DefaultSymbol": "Logical",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-22T16:43:00Z",
         "RawJson": null
       },
@@ -2016,7 +1929,7 @@
         "Title": "buffer.regulation.mode",
         "Description": "Governs how the House0 buffer tank is operated.\n",
         "DefaultSymbol": "Normal",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-16T14:14:00Z",
         "RawJson": null
       },
@@ -2027,7 +1940,7 @@
         "Title": "change.heatcall.source",
         "Description": "Source responsible for issuing the heat call signal to a zone. Used to represent control authority in systems where a relay selects between SCADA and a local wall thermostat.\n",
         "DefaultSymbol": "WallThermostat",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-27T21:31:00Z",
         "RawJson": null
       },
@@ -2038,7 +1951,7 @@
         "Title": "change.relay.state",
         "Description": "Canonical FSM events for transitioning a simple relay between open and closed states. These events correspond to control actions applied to the relay.\n",
         "DefaultSymbol": "OpenRelay",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-09-17T20:17:00Z",
         "RawJson": null
       },
@@ -2049,7 +1962,7 @@
         "Title": "fis.authorization.decision",
         "Description": "Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.\nThis enum captures only the final decision result. Structured explanations are conveyed separately via fis.authorization.reason.\n",
         "DefaultSymbol": "Denied",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-16T14:14:00Z",
         "RawJson": null
       },
@@ -2060,7 +1973,7 @@
         "Title": "fis.authorization.reason",
         "Description": "Structured reason describing why the Fleet Index Service (FIS) produced a specific authorization decision.\nReasons provide audit-level diagnostic clarity and are machine-readable.\n",
         "DefaultSymbol": "SecurityViolation",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-16T14:14:00Z",
         "RawJson": null
       },
@@ -2071,7 +1984,7 @@
         "Title": "fsm.report.type",
         "Description": "Enumeration of atomic FSM report categories.\n",
         "DefaultSymbol": "Other",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-08T17:17:00Z",
         "RawJson": null
       },
@@ -2082,7 +1995,7 @@
         "Title": "g.node.instance.status",
         "Description": "Lifecycle state of a runtime instance representing a durable Grid Node. This enum describes the authority status of a specific GNodeInstanceId as tracked by the GridWorks Fleet Index Service (FIS).\nEach GNodeInstanceId SHALL be in exactly one status at any given time.\n",
         "DefaultSymbol": "Active",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-04T17:00:00Z",
         "RawJson": null
       },
@@ -2093,7 +2006,7 @@
         "Title": "g.node.instance.transport",
         "Description": "Messaging transport protocol through which a runtime instance connected and established authority. This enum captures transport-layer context for audit and operational diagnostics.\n",
         "DefaultSymbol": "RabbitAmqp",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-03T17:00:00Z",
         "RawJson": null
       },
@@ -2104,7 +2017,7 @@
         "Title": "g.node.status",
         "Description": "Lifecycle status of a Grid Node (GNode) within coordinated systems.\n",
         "DefaultSymbol": "Pending",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-22T16:43:00Z",
         "RawJson": null
       },
@@ -2115,7 +2028,7 @@
         "Title": "gpm.from.hz.method",
         "Description": "Method used to convert measured pulse frequency into gallons per minute for supported flow-meter components.\n",
         "DefaultSymbol": "Constant",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-23T19:32:00Z",
         "RawJson": null
       },
@@ -2126,7 +2039,7 @@
         "Title": "gw.g.node.class",
         "Description": "GridWorks functional classification for Grid Nodes (GNodes). Defines the operational or service-level role a GNode performs within the GridWorks ecosystem.\nThis enum is specific to GridWorks. Other organizations MAY define their own functional taxonomies under separate namespaces (e.g., acme.g.node.class). Structural interoperability across organizations is governed by base.g.node.class, not by this enum.\n",
         "DefaultSymbol": "Unknown",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-23T17:08:00Z",
         "RawJson": null
       },
@@ -2137,7 +2050,7 @@
         "Title": "gw1.actor.class",
         "Description": "Classification of actors in the GridWorks SCADA system.\n",
         "DefaultSymbol": "NoActor",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-15T18:00:00Z",
         "RawJson": null
       },
@@ -2148,7 +2061,7 @@
         "Title": "gw1.actor.class",
         "Description": "Classification of actors in the GridWorks SCADA system.\n",
         "DefaultSymbol": "NoActor",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-17T20:00:00Z",
         "RawJson": null
       },
@@ -2159,7 +2072,7 @@
         "Title": "gw1.actor.class",
         "Description": "Classification of actors in the GridWorks SCADA system.\n",
         "DefaultSymbol": "NoActor",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-18T21:34:00Z",
         "RawJson": null
       },
@@ -2170,7 +2083,7 @@
         "Title": "gw1.emission.method",
         "Description": "Method by which a derived or computed channel emits values.\n",
         "DefaultSymbol": "OnTrigger",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-02T22:17:00Z",
         "RawJson": null
       },
@@ -2181,7 +2094,7 @@
         "Title": "gw1.heat.call.interpretation",
         "Description": "Defines how a source telemetry channel is interpreted to determine whether a zone is calling for heat.\n",
         "DefaultSymbol": "DigitalZeroIsActive",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-16T14:14:00Z",
         "RawJson": null
       },
@@ -2192,7 +2105,7 @@
         "Title": "gw1.quantity",
         "Description": "High-level physical or semantic quantity classification associated with a telemetry value. Quantity expresses the physical dimension or logical interpretation independent of unit scaling.\n",
         "DefaultSymbol": "Unknown",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-17T19:54:00Z",
         "RawJson": null
       },
@@ -2203,7 +2116,7 @@
         "Title": "gw1.quantity",
         "Description": "High-level physical or semantic quantity classification associated with a telemetry value. Quantity expresses the physical dimension or logical interpretation independent of unit scaling.\n",
         "DefaultSymbol": "Unknown",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-31T09:18:00Z",
         "RawJson": null
       },
@@ -2214,7 +2127,7 @@
         "Title": "gw1.seasonal.storage.mode",
         "Description": "Seasonal storage operating mode for layouts that distinguish between all-tank operation and buffer-only operation.\n",
         "DefaultSymbol": "AllTanks",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-14T18:04:00Z",
         "RawJson": null
       },
@@ -2225,7 +2138,7 @@
         "Title": "gw1.system.mode",
         "Description": "**SCADA system operational mode.** This enum declares the degree of physical actuation authority exercised by SCADA over connected hardware. It is communicated to other actors (e.g. LTN, admin tools, analytics) to establish shared expectations about whether and how physical control actions may occur.\n",
         "DefaultSymbol": "Heating",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-14T18:04:00Z",
         "RawJson": null
       },
@@ -2236,7 +2149,7 @@
         "Title": "gw1.unit",
         "Description": "Canonical measurement unit associated with a GridWorks telemetry value. This enum defines the structural unit representation used at the serialization boundary. Scaling conventions (e.g., X100) are encoded explicitly in the unit name to preserve mechanical interpretability.\n",
         "DefaultSymbol": "Unknown",
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-12-25T22:18:00Z",
         "RawJson": null
       },
@@ -2247,7 +2160,7 @@
         "Title": "gw1.unit",
         "Description": "Canonical measurement unit associated with a GridWorks telemetry value. This enum defines the structural unit representation used at the serialization boundary. Scaling conventions are encoded explicitly in the unit name.\n",
         "DefaultSymbol": "Unknown",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-04T20:35:00Z",
         "RawJson": null
       },
@@ -2258,7 +2171,7 @@
         "Title": "heatcall.source",
         "Description": "Source responsible for issuing the heat call signal to a zone. Used to represent control authority in systems where a relay selects between SCADA and a local wall thermostat.\n",
         "DefaultSymbol": "WallThermostat",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-27T21:31:00Z",
         "RawJson": null
       },
@@ -2269,7 +2182,7 @@
         "Title": "hz.calc.method",
         "Description": "Method used to estimate signal frequency from pulse timing data.\n",
         "DefaultSymbol": "BasicExpWeightedAvg",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-23T19:32:00Z",
         "RawJson": null
       },
@@ -2280,7 +2193,7 @@
         "Title": "market.price.unit",
         "Description": "Unit of the price axis for a MarketType. This unit defines the dimensional interpretation of bid prices and clearing prices within the associated MarketSlot.\nPrice units represent compensation per unit of the declared QuantityUnit over the market settlement interval. All bids and clearing results for a given MarketSlot SHALL use the PriceUnit declared by its MarketType.\n",
         "DefaultSymbol": "USDPerMWh",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-12-05T19:25:00Z",
         "RawJson": null
       },
@@ -2291,7 +2204,7 @@
         "Title": "market.quantity.unit",
         "Description": "Unit of the quantity axis for a MarketType. This unit defines the dimensional meaning of quantities submitted in bids and cleared in the associated MarketSlot.\nQuantity units represent average power over the market settlement interval unless otherwise specified by the MarketType definition. All bids and clearing results for a given MarketSlot SHALL use the QuantityUnit declared by its MarketType.\n",
         "DefaultSymbol": "AvgMW",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-12-05T19:25:00Z",
         "RawJson": null
       },
@@ -2302,7 +2215,7 @@
         "Title": "market.type.name",
         "Description": "Categorizes different markets run by MarketMaker",
         "DefaultSymbol": "unknown",
-        "Status": "active",
+        "Status": "published",
         "Created": "2022-10-17T16:55:39Z",
         "RawJson": null
       },
@@ -2313,7 +2226,7 @@
         "Title": "relay.closed.or.open",
         "Description": "Canonical FSM states for a simple relay with two positions: closed (energized) and open (de-energized). These states represent the logical relay condition, not raw electrical readings.\n",
         "DefaultSymbol": "RelayClosed",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-09-17T20:17:00Z",
         "RawJson": null
       },
@@ -2324,7 +2237,7 @@
         "Title": "relay.energization.state",
         "Description": "Two-state relay energization state.\n",
         "DefaultSymbol": "0",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-03-06T22:07:00Z",
         "RawJson": null
       },
@@ -2335,7 +2248,7 @@
         "Title": "relay.open.or.closed",
         "Description": "Binary state of a single-pole relay contact. Describes whether the relay \ncontact is open (not conducting) or closed (conducting), regardless of \ncoil energization state.\n\nNote 1: The coil energization required to achieve a contact state depends \non relay type:\n- Normally Open (NO) relay: energized coil \u2192 closed contact\n- Normally Closed (NC) relay: de-energized coil \u2192 closed contact\n\nNote 2: This enum is specifically for single-pole relays with binary states.\nOther relay configurations (double-throw, multi-position, latching, etc.) \nrequire different state enumerations that capture their specific switching \npatterns.\n",
         "DefaultSymbol": "RelayClosed",
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-10-14T16:07:00Z",
         "RawJson": null
       },
@@ -2346,7 +2259,7 @@
         "Title": "relay.wiring.config",
         "Description": "Wiring configuration of a relay contact set. Defines how the relay's common (COM), normally open (NO), and normally closed (NC) terminals are used within a circuit.\n",
         "DefaultSymbol": "NormallyClosed",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-09-17T19:18:00Z",
         "RawJson": null
       },
@@ -2357,7 +2270,7 @@
         "Title": "spaceheat.make.model",
         "Description": "Make and model taxonomy used by Spaceheat SCADA for hardware devices and simulated components.\n",
         "DefaultSymbol": "UnknownMake__UnknownModel",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-18T15:21:00Z",
         "RawJson": null
       },
@@ -2368,7 +2281,7 @@
         "Title": "spaceheat.make.model",
         "Description": "Make and model taxonomy used by Spaceheat SCADA for hardware devices and simulated components.\n",
         "DefaultSymbol": "UnknownMake__UnknownModel",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-03T14:27:00Z",
         "RawJson": null
       },
@@ -2379,7 +2292,7 @@
         "Title": "spaceheat.telemetry.name",
         "Description": "Specifies the canonical name of telemetry values produced by legacy Spaceheat SCADA systems.\nThis enum historically encoded both physical quantity and unit scaling within a single string (e.g., WaterTempCTimes1000, GpmTimes100). It remains supported for backward compatibility and stable integration with existing deployed systems.\nNewer Sema vocabulary separates quantity classification (gw1.quantity) from unit representation (gw1.unit) to make dimensional semantics explicit and mechanically verifiable. Future designs SHOULD prefer those explicit fields over introducing new values into this enum.\nThis enum remains authoritative for existing Spaceheat channel definitions but is not intended to expand indefinitely.\n",
         "DefaultSymbol": "Unknown",
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-09-24T14:28:00Z",
         "RawJson": null
       },
@@ -2390,7 +2303,7 @@
         "Title": "spaceheat.telemetry.name",
         "Description": "Specifies the canonical name of telemetry values produced by legacy Spaceheat SCADA systems.\nThis enum historically encoded both physical quantity and unit scaling within a single string (e.g., WaterTempCTimes1000, GpmTimes100). It remains supported for backward compatibility and stable integration with existing deployed systems.\nNewer Sema vocabulary separates quantity classification (gw1.quantity) from unit representation (gw1.unit) to make dimensional semantics explicit and mechanically verifiable. Future designs SHOULD prefer those explicit fields over introducing new values into this enum.\nThis enum remains authoritative for existing Spaceheat channel definitions but is not intended to expand indefinitely.\n",
         "DefaultSymbol": "Unknown",
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T17:12:00Z",
         "RawJson": null
       },
@@ -2401,7 +2314,7 @@
         "Title": "spaceheat.unit",
         "Description": "Canonical measurement unit used by legacy Spaceheat SCADA channel configuration and telemetry payloads.\n",
         "DefaultSymbol": "Unknown",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-09-02T15:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"This enum is used in component ChannelConfig objects, where it is paired with an Exponent field to express the serialized unit and scaling of a telemetry channel.\\nIt is a legacy Spaceheat unit vocabulary. In the near future it is expected to be replaced by a new layout mechanism based on gw1.unit.\\n\"}"
       },
@@ -2412,7 +2325,7 @@
         "Title": "temp.calc.method",
         "Description": "Method used to calculate temperature from voltage-derived thermistor measurements.\n",
         "DefaultSymbol": "SimpleBeta",
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-21T23:19:00Z",
         "RawJson": null
       }
@@ -4493,7 +4406,7 @@
         "datatype": "string",
         "type": "relationship",
         "nullable": true,
-        "Description": "Optional pointer to another Type that retires this one. If non-null, this type has been retired in favor of the named successor. Words are immutable and may only be retired at the registry level (not per-version, per-value, or per-attribute).",
+        "Description": "Advisory pointer to another Type that supersedes this one. The original Type remains valid and queryable \u2014 ReplacedBy is just a hint to consumers about a preferred successor. NOT a state change; published versions are immutable.",
         "RelatedTo": "Types"
       },
       {
@@ -4525,14 +4438,6 @@
         "Description": "Tier-2 placeholder: ODXML invariant."
       },
       {
-        "name": "IsRetired",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True when this type has been replaced by another (ReplacedBy is set).",
-        "formula": "=IF({{ReplacedBy}}, TRUE(), FALSE())"
-      },
-      {
         "name": "VersionCount",
         "datatype": "integer",
         "type": "aggregation",
@@ -4549,20 +4454,12 @@
         "formula": "=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}}, TypeVersions!{{IsDraft}}, TRUE())"
       },
       {
-        "name": "ActiveVersionCount",
+        "name": "PublishedVersionCount",
         "datatype": "integer",
         "type": "aggregation",
         "nullable": false,
-        "Description": "Number of active TypeVersions.",
-        "formula": "=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}}, TypeVersions!{{IsActive}}, TRUE())"
-      },
-      {
-        "name": "DeprecatedVersionCount",
-        "datatype": "integer",
-        "type": "aggregation",
-        "nullable": false,
-        "Description": "Number of deprecated TypeVersions.",
-        "formula": "=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}}, TypeVersions!{{IsDeprecated}}, TRUE())"
+        "Description": "Number of published TypeVersions.",
+        "formula": "=COUNTIFS(TypeVersions!{{Type}}, Types!{{Name}}, TypeVersions!{{IsPublished}}, TRUE())"
       },
       {
         "name": "HasDrafts",
@@ -5157,7 +5054,7 @@
         "datatype": "string",
         "type": "raw",
         "nullable": true,
-        "Description": "Lifecycle status."
+        "Description": "Lifecycle status. One of 'draft' (still being designed; mutable) or 'published' (promoted; immutable thereafter). Versions never leave 'published' \u2014 successors are introduced as new versions, optionally pointed at via the parent Word's ReplacedBy."
       },
       {
         "name": "Created",
@@ -5174,20 +5071,12 @@
         "Description": "Escape hatch: unmodeled top-level JSON-Schema fields (if/then/else, conditionals, etc.)."
       },
       {
-        "name": "IsActive",
+        "name": "IsPublished",
         "datatype": "boolean",
         "type": "calculated",
         "nullable": false,
-        "Description": "True when Status is 'active'.",
-        "formula": "=IF({{Status}}=\"active\", TRUE(), FALSE())"
-      },
-      {
-        "name": "IsDeprecated",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True when Status is 'deprecated'.",
-        "formula": "=IF({{Status}}=\"deprecated\", TRUE(), FALSE())"
+        "Description": "True when Status is 'published'.",
+        "formula": "=IF({{Status}}=\"published\", TRUE(), FALSE())"
       },
       {
         "name": "IsDraft",
@@ -5382,14 +5271,6 @@
         "formula": "=INDEX(Types!{{Title}}, MATCH({{Type}}, Types!{{Name}}, 0))"
       },
       {
-        "name": "WordIsRetired",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether this Definition's Word is retired (Types.IsRetired). Drives the red strike-through pill in \u00a74 \u2014 distinct from version-level deprecation.",
-        "formula": "=INDEX(Types!{{IsRetired}}, MATCH({{Type}}, Types!{{Name}}, 0))"
-      },
-      {
         "name": "LastModified",
         "datatype": "datetime",
         "type": "raw",
@@ -5404,35 +5285,12 @@
         "Description": "When Status flipped from draft to active. Null for never-promoted drafts. Activity feed renders 'promoted on...' distinct from 'created on...'."
       },
       {
-        "name": "DeprecatedAt",
-        "datatype": "datetime",
-        "type": "raw",
-        "nullable": true,
-        "Description": "When Status flipped from active to deprecated. Null while still active or while still draft."
-      },
-      {
-        "name": "StaleReferenceCount",
-        "datatype": "integer",
-        "type": "aggregation",
-        "nullable": false,
-        "Description": "Number of TypeAttributes on this Definition whose ref points at a retired/deprecated/draft target. Drives \u00a77 promote-gating.",
-        "formula": "=COUNTIFS(TypeAttributes!{{TypeVersion}}, TypeVersions!{{Name}}, TypeAttributes!{{RefIsStale}}, TRUE())"
-      },
-      {
-        "name": "HasStaleReferences",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True iff any of this Definition's attribute refs are stale.",
-        "formula": "=IF({{StaleReferenceCount}}>0, TRUE(), FALSE())"
-      },
-      {
         "name": "IsPromotable",
         "datatype": "boolean",
         "type": "calculated",
         "nullable": false,
-        "Description": "True iff this draft Definition can be promoted: it is a draft, has no stale references, and has at least one attribute. Gates the Promote CTA in \u00a77.",
-        "formula": "=IF(AND({{IsDraft}}, NOT({{HasStaleReferences}}), {{AttributeCount}}>0), TRUE(), FALSE())"
+        "Description": "True iff this TypeVersion is a draft with at least one attribute defined \u2014 i.e., ready to promote to published.",
+        "formula": "=IF(AND({{IsDraft}}, {{AttributeCount}}>0), TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -5443,7 +5301,7 @@
         "Title": "analytics.channel.gt",
         "Description": "Canonical definition of a computed telemetry channel scoped to a single terminal asset and produced outside SCADA systems.\nAn analytics.channel.gt declares a computation over message streams, telemetry, or system behavior associated with a specific terminal asset. These channels represent analytics-derived signals such as persistence delay, heartbeat-based health, or other observational metrics.\nUnlike derived.channel.gt, analytics.channel.gt is not computed by a GridWorks GNode. Its semantic authority lies in external analytics systems.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-04-02T00:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"`analytics.channel.gt` defines computed telemetry channels whose semantic authority lies outside SCADA systems and whose scope is a single terminal asset.\\nValues associated with `analytics.channel.gt` SHALL be represented as floating point numbers, with the unit defined by OutputUnit.\\nMulti-terminal-asset computations (e.g. aggregation across assets or GNode-based selection) are intentionally excluded from this type and should be represented by a separate aggregation type.\"}"
       },
@@ -5454,10 +5312,9 @@
         "Title": "bid",
         "Description": "A market-normalized, slot-specific price\u2013quantity schedule submitted by a market participant. A bid expresses willingness to inject or withdraw a quantity of a market-defined commodity as a function of price, subject to the rules of the MarketType associated with the specified MarketSlot.\nBids are economically admissible, cryptographically anchored messages that serve as the primary input to market aggregation and clearing. Differences between participant classes (e.g. leaf nodes, aggregators, fleets, generators) are expressed through MarketType rules and bidder authorization registries, not through differences in bid structure.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-15T15:45:08Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"The bid type is the foundational economic message of the GridWorks market architecture. By enforcing strict normalization against MarketType-defined price and quantity domains, bids enable a self-scaling market maker strategy in which aggregation, clearing, and dispatch logic can be applied uniformly across participant classes and market layers.\\nAll bids share a common structure and validation contract. Differences in physical assets, aggregation scope, or operational responsibility are expressed through external registries, MarketType definitions, and settlement processes rather than through specialized bid schemas.\\nThis design supports permissioned or permissionless participation, economic rate-limiting via fees, and bounded computational complexity, while preserving extensibility for future market products and clearing mechanisms.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"The bid type is the foundational economic message of the GridWorks market architecture. By enforcing strict normalization against MarketType-defined price and quantity domains, bids enable a self-scaling market maker strategy in which aggregation, clearing, and dispatch logic can be applied uniformly across participant classes and market layers.\\nAll bids share a common structure and validation contract. Differences in physical assets, aggregation scope, or operational responsibility are expressed through external registries, MarketType definitions, and settlement processes rather than through specialized bid schemas.\\nThis design supports permissioned or permissionless participation, economic rate-limiting via fees, and bounded computational complexity, while preserving extensibility for future market products and clearing mechanisms.\\n\"}"
       },
       {
         "Type": "channel.config",
@@ -5466,7 +5323,7 @@
         "Title": "channel.config",
         "Description": "Base channel configuration used by component definitions to describe how a telemetry channel is sampled, scaled, and serialized.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-09-22T11:32:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"`channel.config` captures both periodic sampling behavior and optional asynchronous emission behavior for a telemetry channel.\\n`PollPeriodMs` and `CapturePeriodS` describe different stages of SCADA behavior. `PollPeriodMs` is the cadence at which SCADA polls the hardware device or upstream source for a value. `CapturePeriodS` is the cadence at which SCADA emits that channel value into the telemetry stream.\\nThese cadences may differ. For example, SCADA may poll a device frequently to maintain fresh local state while only reporting the value periodically or when an async trigger condition is met.\\nIn current runtime practice, `AsyncCapture` may be true even when `AsyncCaptureDelta` is omitted. This means asynchronous capture is enabled, but the threshold semantics are not fully specified in the payload itself.\\nWhen `AsyncCaptureDelta` is present, the intended interpretation is: publish asynchronously when the magnitude of the change since the last published value is greater than or equal to `AsyncCaptureDelta`.\\n`Exponent` describes how to interpret the serialized integer reading relative to `Unit`. For example, if `Unit` is `Gpm` and `Exponent` is `2`, then a reading value of `432` represents `4.32 Gpm`.\\nA future published version may strengthen this contract by requiring `AsyncCaptureDelta` whenever `AsyncCapture` is true, once runtime behavior consistently provides that value.\\n\"}"
       },
@@ -5477,7 +5334,7 @@
         "Title": "channel.readings",
         "Description": "Timestamped integer readings for one channel within a SCADA reporting context, including the channel UUID.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-06T17:49:32Z",
         "RawJson": null
       },
@@ -5488,7 +5345,7 @@
         "Title": "channel.readings",
         "Description": "Timestamped integer readings for one channel within a SCADA reporting context.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-12T17:43:44Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"ChannelName SHALL reference a channel definition known to both the reporting node and the receiving system. Channel definitions may be declared using data.channel.gt (for raw telemetry) or derived.channel.gt (for computed channels).\\nThis type transmits timestamped values only. It does not encode channel units, quantities, or derivation semantics. Those properties are resolved by consulting the corresponding channel definition.\\n\"}"
       },
@@ -5499,7 +5356,7 @@
         "Title": "connectivity.edge.gt",
         "Description": "Directed topological edge connecting two Grid Nodes (GNodes) in the physical electric network. This type encodes copper-level adjacency used for graph-based modeling, Kirchhoff power flow calculations, and constraint propagation.\nA ConnectivityEdge represents an oriented structural relationship between two distinct GNodes. Direction SHALL be interpreted as the positive reference direction for flow modeling and graph traversal. Physical power MAY flow in either direction subject to system conditions.\nFor a given pair of GNodes, only one structural ConnectivityEdge SHALL exist. Reverse flow SHALL be represented by sign conventions in power quantities and SHALL NOT be modeled by introducing a secondConnectivityEdge reversing the same GNode pair.\nConnectivityEdge does not encode electrical impedance, capacity, or switching state. It defines structural topology only.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-23T00:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"ConnectivityEdge represents structural conductor adjacency only. Most edges correspond directly to parent\\u2013child relationships in the GNode hierarchy (for example, substation to feeder or feeder to downstream connectivity node). In these cases, the directed edge makes explicit the physical copper relationship already implied by the structural topology.\\nHowever, real distribution systems may contain tie-lines, loops, and alternate routing paths. The graph formed by ConnectivityEdge objects MAY therefore contain cycles. Acyclicity is not assumed.\\nThe directed orientation of a ConnectivityEdge establishes a positive reference direction for flow modeling and graph traversal. It does NOT restrict physical power flow to a single direction. Reverse flow SHALL be represented by sign conventions in power quantities rather than by duplicating edges in the opposite direction.\\nStatus expresses lifecycle participation of the edge in the registry and coordination system. It SHALL NOT be interpreted as operational switching state (e.g., breaker open or closed). Operational configuration of the active network graph MUST be modeled using separate types designed for dynamic topology state.\\nConceptually, ConnectivityEdge aligns with the conductor adjacency relationships represented in IEC 61970/61968 CIM (Common Information Model), where network topology is derived from connections between ConnectivityNodes through conducting equipment. ConnectivityEdge provides a simplified, distribution-level abstraction suitable for graph-based modeling and transactive coordination without adopting the full CIM equipment hierarchy.\"}"
       },
@@ -5510,10 +5367,9 @@
         "Title": "data.channel.gt",
         "Description": "Canonical definition of a telemetry channel representing directly captured measurements within a GridWorks system.\nA data.channel.gt declares the semantic identity of a telemetry stream, including what is measured, which node it describes, and which node captures the measurement. To interpret a channel.readings instance, consumers SHALL resolve ChannelName against the channel definitions for the relevant terminal asset / SCADA context (typically by matching data.channel.gt.Name).\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-09-24T14:29:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"data.channel.gt defines primary telemetry channels corresponding to directly observed measurements from physical devices or sensors.\\nIn contrast, derived.channel.gt defines computed channels whose values are produced from one or more input channels according to a declared strategy.\\nTelemetry is transported using channel.readings, which includes a ChannelName and aligned lists of values and timestamps. channel.readings does not carry the full channel definition; consumers interpret channel.readings by resolving ChannelName against the channel definition set for the relevant SCADA / terminal asset context (data.channel.gt and derived.channel.gt), typically by Name equality.\\nreport messages aggregate channel.readings (ChannelReadingList) along with state transitions and FSM outputs for transmission from SCADA nodes associated with terminal assets.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"data.channel.gt defines primary telemetry channels corresponding to directly observed measurements from physical devices or sensors.\\nIn contrast, derived.channel.gt defines computed channels whose values are produced from one or more input channels according to a declared strategy.\\nTelemetry is transported using channel.readings, which includes a ChannelName and aligned lists of values and timestamps. channel.readings does not carry the full channel definition; consumers interpret channel.readings by resolving ChannelName against the channel definition set for the relevant SCADA / terminal asset context (data.channel.gt and derived.channel.gt), typically by Name equality.\\nreport messages aggregate channel.readings (ChannelReadingList) along with state transitions and FSM outputs for transmission from SCADA nodes associated with terminal assets.\\n\"}"
       },
       {
         "Type": "data.channel.gt",
@@ -5522,7 +5378,7 @@
         "Title": "data.channel.gt",
         "Description": "Canonical definition of a telemetry channel representing directly captured measurements within a GridWorks system.\nA data.channel.gt declares the semantic identity of a telemetry stream, including what is measured, which node it describes, and which node captures the measurement. To interpret a channel.readings instance, consumers SHALL resolve ChannelName against the channel definitions for the relevant terminal asset / SCADA context (typically by matching data.channel.gt.Name).\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T21:27:05Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"data.channel.gt defines primary telemetry channels corresponding to directly observed measurements from physical devices or sensors.\\nIn contrast, derived.channel.gt defines computed channels whose values are produced from one or more input channels according to a declared strategy.\\nTelemetry is transported using channel.readings, which includes a ChannelName and aligned lists of values and timestamps. channel.readings does not carry the full channel definition; consumers interpret channel.readings by resolving ChannelName against the channel definition set for the relevant SCADA / terminal asset context (data.channel.gt and derived.channel.gt), typically by Name equality.\\nreport messages aggregate channel.readings (ChannelReadingList) along with state transitions and FSM outputs for transmission from SCADA nodes associated with terminal assets.\\n\"}"
       },
@@ -5533,10 +5389,9 @@
         "Title": "derived.channel.gt",
         "Description": "Canonical definition of a derived telemetry channel within a GridWorks system.\nA derived channel declares a computed telemetry stream whose values are produced from a named computation strategy rather than from direct physical measurement. Derived channels represent transformations, aggregations, or model-based computations over other telemetry streams.\nIn the GridWorks SCADA lexicon, channels define the semantic identity of telemetry streams. data.channel.gt defines directly observed measurements, while derived.channel.gt defines computed streams.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-03T14:27:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes.\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes.\"}"
       },
       {
         "Type": "derived.channel.gt",
@@ -5545,10 +5400,9 @@
         "Title": "derived.channel.gt",
         "Description": "Canonical definition of a derived telemetry channel within a GridWorks system.\nA derived.channel.gt declares a computed telemetry stream whose values are produced from one or more input channels according to a declared strategy. Derived channels do not represent directly captured measurements; instead, they represent transformations, aggregations, or computations over other telemetry streams.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-02T23:00:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"derived.channel.gt defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\\nInstances of channel.readings referencing a derived channel SHALL be interpreted by resolving ChannelName against derived.channel.gt.Name within the relevant terminal asset / SCADA context.\\nTogether, data.channel.gt and derived.channel.gt form the semantic backbone for telemetry reporting. channel.readings transports values, and report aggregates those readings for transmission from SCADA nodes.\\n\"}"
       },
       {
         "Type": "derived.channel.gt",
@@ -5557,7 +5411,7 @@
         "Title": "derived.channel.gt",
         "Description": "Canonical definition of a derived telemetry channel within a GridWorks system.\nA derived.channel.gt declares a computed telemetry stream whose values are produced from one or more input channels according to a declared strategy. Derived channels do not represent directly captured measurements; instead, they represent transformations, aggregations, or computations over other telemetry streams.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-04T19:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"`derived.channel.gt` defines computed telemetry channels produced from other telemetry streams. These channels represent transformations, aggregations, or model-based computations rather than directly observed measurements.\\nTelemetry values associated with `derived.channel.gt` are intended to be represented as integers, with any required scaling encoded in the OutputUnit.\\nThis convention supports deterministic and efficient serialization while preserving mechanical interpretability of values. Alternative representations (e.g., floating point values) are expected to be introduced through separate vocabularies rather than modifying the semantics of `derived.channel.gt`.\\nInstances of `channel.readings` referencing a derived channel SHALL be interpreted by resolving ChannelName against `derived.channel.gt`.Name within the relevant terminal asset / SCADA context.\\nTogether, `data.channel.gt` and `derived.channel.gt` form the semantic backbone for telemetry reporting. `channel.readings` transports values, and `report` aggregates those readings for transmission from SCADA nodes.\"}"
       },
@@ -5568,7 +5422,7 @@
         "Title": "fis.authority.manifest",
         "Description": "A coherent snapshot of the authority plane as maintained by the Fleet Index Service (FIS) at a specific point in time.\nThis manifest encodes design-level invariants of Grid Node identity and runtime instance authority. It is intended for audit, verification, and architectural clarity. It is not part of the runtime authorization enforcement path.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-04-06T16:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"This manifest formalizes authority-plane design invariants without embedding database implementation details.\\nThe SingleActiveInstancePerGNode invariant expresses the single-writer authority model enforced operationally by FIS. ParentClosureUpToDeclaredRoots ensures that the GNode alias hierarchy is structurally coherent within the manifest scope.\\nThis type is intended for architectural verification, regression testing, and diagnostic inspection. It is not required for runtime authorization enforcement.\\n\"}"
       },
@@ -5579,7 +5433,7 @@
         "Title": "fis.instance.authorization.event",
         "Description": "Event emitted by the Fleet Index Service (FIS) recording an authorization decision for a runtime instance attempting to connect to a broker. This event provides an immutable audit record of instance-level authorization outcomes.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-04-06T16:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"Authorization events are emitted asynchronously by FIS after evaluating a connection attempt. They provide a durable audit trail of authorization outcomes, including supersession events and denial decisions.\\nThese events do not grant authority; they record authority decisions. Runtime enforcement occurs at the broker level.\\n\"}"
       },
@@ -5590,10 +5444,9 @@
         "Title": "fsm.atomic.report",
         "Description": "Single atomic FSM report item representing either an event or an action emitted by a state machine transition.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-08T17:17:00Z",
-        "RawJson": null,
-        "DeprecatedAt": null
+        "RawJson": null
       },
       {
         "Type": "fsm.atomic.report",
@@ -5602,7 +5455,7 @@
         "Title": "fsm.atomic.report",
         "Description": "Single atomic FSM report item representing either an event or an action emitted by a state machine transition. An action represents a side-effect applied to the physical or logical system.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-04-23T18:03:00Z",
         "RawJson": null
       },
@@ -5613,10 +5466,9 @@
         "Title": "fsm.full.report",
         "Description": "Full FSM report emitted for a trigger, including the ordered list of atomic report items produced by the state machine.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-08T17:41:00Z",
-        "RawJson": null,
-        "DeprecatedAt": null
+        "RawJson": null
       },
       {
         "Type": "fsm.full.report",
@@ -5625,7 +5477,7 @@
         "Title": "fsm.full.report",
         "Description": "Full FSM report emitted for a trigger, including the ordered list of atomic report items produced by the state machine.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-04-23T18:03:00Z",
         "RawJson": null
       },
@@ -5636,7 +5488,7 @@
         "Title": "g.node.gt",
         "Description": "A GNode (\u201cGrid Node\u201d) is the fundamental identity object in the GridWorks  ecosystem. Every physical location, metered unit, device, service, or actor  interacting with the transactive system is represented as a GNode.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-24T14:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"Grid Nodes (GNodes) provide the stable identity layer for distributed coordination in the GridWorks ecosystem. Each GNode participates in a hierarchical alias structure that encodes topology, routing semantics, and coordination scope.\\nGNodes may represent physical grid structure (e.g., metered boundaries, connectivity nodes, constraint points) or logical and service roles (e.g., SCADA agents, forecasting services, market participants). BaseClass defines the universal structural ontology required for interoperability. GNodeClass expresses organization-specific functional roles and does not alter structural semantics.\\n`g.node.gt` is an immutable serialized snapshot of declared node state. Any change to a GNode (alias updates, status changes, relocations, or classification changes) SHALL be represented by publishing a new `g.node.gt` message rather than mutating a previously published instance. This preserves durable identity (GNodeId) while allowing controlled evolution of descriptive attributes.\\nGNode is designed as the atomic unit of coordination in a recursively composable grid architecture. Systems of arbitrary scale are formed by composing GNodes into hierarchical or heterarchical structures. This allows optimal power flow (OPF), market clearing, and constraint coordination mechanisms to operate centrally, regionally, or in distributed configurations without altering the underlying identity model.\\nConceptually, GNode aligns with node abstractions in IEC 61970/61968 CIM (e.g., ConnectivityNode and TopologicalNode), while unifying physical and logical coordination entities within a single identity abstraction suitable for graph-based modeling and transactive coordination.\\n\"}"
       },
@@ -5647,7 +5499,7 @@
         "Title": "g.node.instance.gt",
         "Description": "Durable snapshot of a runtime instance representing a Grid Node. Each instance record corresponds bijectively to a persistent FIS database record tracking runtime authority and transport connection state.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-04T17:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"The g.node.instance.gt type represents a durable record of runtime authority for a Grid Node. It is maintained by the Fleet Index Service (FIS) and serves as an auditable snapshot of instance lifecycle events.\\nWhile this type represents a single runtime instance, the broader system enforces a single-writer authority model: at most one instance per GNodeId is permitted to hold Status = Active at any time. That invariant is enforced at the runtime and database layer and is not validated within this schema itself.\\nThe distinction between Active, Revoked, and Ended enables audit differentiation between normal shutdown, supersession by a newer instance, and forced authority revocation.\\nConnectionHandle and ObservedPeerAddress are transport-observed values used for operational diagnostics and forensic analysis. Their structure is transport-specific and intentionally opaque to preserve neutrality across messaging systems.\\n\"}"
       },
@@ -5658,7 +5510,7 @@
         "Title": "gridworks.ack",
         "Description": "Versionless acknowledgement message used to confirm receipt of a prior GridWorks message by its message identifier.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": null,
         "RawJson": "{\"IsVersionless\": true}"
       },
@@ -5669,7 +5521,7 @@
         "Title": "gridworks.ping",
         "Description": "Versionless message used for liveness and heartbeat checks between GridWorks components.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": null,
         "RawJson": "{\"IsVersionless\": true}"
       },
@@ -5680,7 +5532,7 @@
         "Title": "gw1.tank.temp.calibration",
         "Description": "Linear calibration coefficients for converting three raw tank probe readings into calibrated temperatures.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-12-25T22:18:00Z",
         "RawJson": null
       },
@@ -5691,7 +5543,7 @@
         "Title": "gw1.tank.temp.calibration.map",
         "Description": "Buffer and per-tank calibration map for converting raw probe readings into calibrated temperatures.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-12-25T22:18:00Z",
         "RawJson": null
       },
@@ -5702,7 +5554,7 @@
         "Title": "telemetry.name.quantity.projection",
         "Description": "Canonical projection from spaceheat.telemetry.name to gw1.quantity.\nThis type declares the deterministic semantic relationship by which every legacy Spaceheat telemetry encoding maps to exactly one gw1.quantity value.\nIt exists to support safe transition from TelemetryName-based dimensional encoding toward explicit gw1.unit and gw1.quantity separation.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-16T14:14:56Z",
         "RawJson": null
       },
@@ -5713,7 +5565,7 @@
         "Title": "gw1.unit.quantity.projection",
         "Description": "Canonical projection from gw1.unit to gw1.quantity. This type declares the deterministic semantic relationship by which every gw1.unit maps to exactly one gw1.quantity.\nThe projection defines the physical dimension abstraction associated with each unit and ensures consistent dimensional reasoning across telemetry, derived channels, and market contracts.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-31T09:18:00Z",
         "RawJson": null
       },
@@ -5724,10 +5576,9 @@
         "Title": "ha1.params",
         "Description": "Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 house-heating model.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-12-04T15:54:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. These values are exchanged across system boundaries so SCADA and downstream consumers can make consistent calculations from the same declared parameter set.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. These values are exchanged across system boundaries so SCADA and downstream consumers can make consistent calculations from the same declared parameter set.\\n\"}"
       },
       {
         "Type": "ha1.params",
@@ -5736,10 +5587,9 @@
         "Title": "ha1.params",
         "Description": "Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 house-heating model.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-16T15:53:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. Version `005` extends the earlier shape with COP-model coefficients and minimum-COP parameters so SCADA and downstream consumers can apply the same heat-pump performance assumptions.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"`ha1.params` carries the numeric coefficients and operating limits used by runtime HA1 heating calculations. Version `005` extends the earlier shape with COP-model coefficients and minimum-COP parameters so SCADA and downstream consumers can apply the same heat-pump performance assumptions.\\n\"}"
       },
       {
         "Type": "ha1.params",
@@ -5748,7 +5598,7 @@
         "Title": "ha1.params",
         "Description": "Parameter set used by Spaceheat SCADA and LTN runtime logic for the HA1 heating model.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-25T14:23:00Z",
         "RawJson": null
       },
@@ -5759,10 +5609,9 @@
         "Title": "i2c.multichannel.dt.relay.component.gt",
         "Description": "Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.\nThis includes relay-actor configuration fields specific to the I2C relay board.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-12-31T15:42:00Z",
-        "RawJson": null,
-        "DeprecatedAt": null
+        "RawJson": null
       },
       {
         "Type": "i2c.multichannel.dt.relay.component.gt",
@@ -5771,10 +5620,9 @@
         "Title": "i2c.multichannel.dt.relay.component.gt",
         "Description": "Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.\nThis includes relay-actor configuration fields specific to the I2C relay board together with the logical I2C bus name used to address it at runtime.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-28T15:17:00Z",
-        "RawJson": null,
-        "DeprecatedAt": null
+        "RawJson": null
       },
       {
         "Type": "i2c.multichannel.dt.relay.component.gt",
@@ -5783,7 +5631,7 @@
         "Title": "i2c.multichannel.dt.relay.component.gt",
         "Description": "Configuration for a multi-channel I2C relay component used by Spaceheat SCADA.\nThis includes relay-actor configuration fields specific to the I2C relay board together with the logical I2C bus name used to address it at runtime.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-04-01T10:49:00Z",
         "RawJson": null
       },
@@ -5794,7 +5642,7 @@
         "Title": "i2c.thermistor.channel.config",
         "Description": "Channel configuration for one thermistor input read through an I2C ADC.\nThis type extends the base channel configuration with the ADC pin selection, thermistor beta parameter, and whether the channel should also be forwarded into derived-channel processing.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T16:07:00Z",
         "RawJson": null
       },
@@ -5805,7 +5653,7 @@
         "Title": "i2c.thermistor.reader.component.gt",
         "Description": "Configuration for an I2C thermistor reader component that samples one ADC device and publishes one or more thermistor-backed temperature channels.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T16:07:00Z",
         "RawJson": null
       },
@@ -5816,10 +5664,9 @@
         "Title": "layout.lite",
         "Description": "Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.\n`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-14T14:08:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including active HA1 parameters.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including active HA1 parameters.\\n\"}"
       },
       {
         "Type": "layout.lite",
@@ -5828,10 +5675,9 @@
         "Title": "layout.lite",
         "Description": "Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.\n`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-15T18:00:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}"
       },
       {
         "Type": "layout.lite",
@@ -5840,10 +5686,9 @@
         "Title": "layout.lite",
         "Description": "Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.\n`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-16T15:53:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}"
       },
       {
         "Type": "layout.lite",
@@ -5852,10 +5697,9 @@
         "Title": "layout.lite",
         "Description": "Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.\n`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings. \n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-18T21:34:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}"
       },
       {
         "Type": "layout.lite",
@@ -5864,10 +5708,9 @@
         "Title": "layout.lite",
         "Description": "Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.\n`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-25T19:23:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}"
       },
       {
         "Type": "layout.lite",
@@ -5876,10 +5719,9 @@
         "Title": "layout.lite",
         "Description": "Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.\n`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-31T10:42:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n`layout.lite` also carries selected runtime settings whose values affect the interpretation of the running system, including system mode, seasonal storage mode, short-cycling behavior, and active HA1 parameters.\\n\"}"
       },
       {
         "Type": "layout.lite",
@@ -5888,7 +5730,7 @@
         "Title": "layout.lite",
         "Description": "Runtime projection of the active SCADA context needed to interpret telemetry and snapshot messages for a running Spaceheat deployment.\n`layout.lite` is emitted by SCADA on request. It is not intended to be a lossless copy of the source layout artifact on disk. Some fields are projected directly from the loaded hardware layout, while others reflect active runtime settings.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-04-01T10:49:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"`layout.lite` is the SCADA-emitted semantic context for a running deployment. It exists so consumers can interpret compact runtime payloads that reference channels and nodes by name rather than embedding full definitions in every message.\\nIn particular, `report.event` and `snapshot.spaceheat` rely on `layout.lite` for channel interpretation. `ChannelName` references inside those messages SHALL be resolved against `DataChannels` and `DerivedChannels` in the relevant `layout.lite` context.\\n\"}"
       },
@@ -5899,7 +5741,7 @@
         "Title": "linear.one.dimensional.calibration",
         "Description": "Linear calibration applied to a raw sensor measurement.\nThe transformation is interpreted as:\n\n    calibrated_value = M * raw_value + B\n\nThis type represents empirical correction of a sensor's raw output into a physically meaningful quantity.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-06T17:06:00Z",
         "RawJson": null
       },
@@ -5910,7 +5752,7 @@
         "Title": "linear.one.dimensional.calibration",
         "Description": "Linear calibration applied to a measurement expressed in the derived channel's declared OutputUnit domain.\nThe transformation is interpreted as:\n\n    calibrated = M * x + B\n\nwhere:\n\n  - x is the input measurement first converted into the OutputUnit\n    scaling of the derived channel.\n\n  - M is dimensionless.\n\n  - B is expressed in OutputUnit scaling and therefore shares the\n    same integer scaling convention as the derived channel's output.\n\nThis type represents an affine correction applied after unit normalization and does not itself declare units.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-16T20:55:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"Instances of this type are typically used as Parameters for derived.channel.gt when Strategy equals \\\"affine\\\".\\nThe calibration is interpreted in the OutputUnit scaling domain declared by the referencing derived channel.\"}"
       },
@@ -5921,7 +5763,7 @@
         "Title": "machine.states",
         "Description": "Sequence of machine states observed for one state machine during a reporting interval.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-11-09T16:36:00Z",
         "RawJson": null
       },
@@ -5932,7 +5774,7 @@
         "Title": "pico.flow.module.component.gt",
         "Description": "Configuration for a Pico-based flow module component in a Spaceheat SCADA deployment.\nThis type includes the common component identity fields inherited from ComponentGt together with flow-meter specific capture, conversion, and publication parameters.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-10-23T19:32:00Z",
         "RawJson": null
       },
@@ -5943,7 +5785,7 @@
         "Title": "pico.tank.module.component.gt",
         "Description": "Configuration for a Pico-based tank temperature module component in a Spaceheat SCADA deployment.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-12-05T02:59:00Z",
         "RawJson": null
       },
@@ -5954,7 +5796,7 @@
         "Title": "position.point.gt",
         "Description": "A geographic position for a physical Grid Node. Coordinates are stored in integer microdegrees (degrees \u00d7 1,000,000). This type is conceptually aligned with the IEC 61970/61968 CIM `PositionPoint` class, but simplified for GridWorks use cases, which require only a single latitude/longitude point.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-24T15:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"PositionPoint represents the physical location of a GNode that has spatial meaning within the electric grid, such as TerminalAssets, LeafTransactiveNodes, MarketMaker constraint points, and ConnectivityNodes. Coordinates are expressed in WGS84 (EPSG:4326), the standard global geodetic reference system used by GPS and commonly adopted in utility GIS, mapping, and DERMS integrations.\\nThis type corresponds to a simplified form of the IEC 61970/61968 CIM `PositionPoint` class. The CIM model supports elevation, coordinate-system definitions, and collections of points for geometric shapes. GridWorks intentionally restricts this type to a single latitude/longitude pair to provide a deterministic and minimal spatial anchor for coordination.\\nPosition accuracy is not prescribed by this type. The microdegree representation provides sufficient precision to distinguish distribution-level assets (e.g., residential footprints, poles, transformers, substations). The actual positional accuracy of a PositionPoint depends entirely on the source of the underlying geographic data.\"}"
       },
@@ -5965,7 +5807,7 @@
         "Title": "power.watts",
         "Description": "Immediate real-time power measurement message for instantaneous transmission.\nPositive values indicate power withdrawal from the grid. Negative values indicate power injection to the grid.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2022-10-17T16:55:39Z",
         "RawJson": null
       },
@@ -5976,7 +5818,7 @@
         "Title": "price.quantity.unitless",
         "Description": "Integer price and quantity pair for market bidding and dispatch curves.\nBoth values are serialized as strict integers scaled by 1000.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-10-30T17:29:00Z",
         "RawJson": null
       },
@@ -5987,10 +5829,9 @@
         "Title": "relay.actor.config",
         "Description": "Configuration for a relay-backed Spaceheat actor associated with one relay on a multi-channel relay board.\nA relay.actor.config binds a specific relay index on a relay component to a named actor and declares the event/state semantics associated with energizing and de-energizing that relay. The config also carries the channel capture settings required to report the relay-controlled actor's state into the telemetry system.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-12-31T15:38:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"relay.actor.config specializes generic channel capture configuration for relay-backed actors in hydronic control systems.\\nThis type binds one relay position on a relay board to a specific actor and declares the event/state semantics associated with switching that relay. These semantics are important for distributed coordination because different layouts may realize the same functional role using different underlying hardware node names, while preserving identical actor-level meaning.\\nTypical uses include selecting the source of a heat call, enabling or disabling control authority, or switching physical flow or heating elements between named operating states.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"relay.actor.config specializes generic channel capture configuration for relay-backed actors in hydronic control systems.\\nThis type binds one relay position on a relay board to a specific actor and declares the event/state semantics associated with switching that relay. These semantics are important for distributed coordination because different layouts may realize the same functional role using different underlying hardware node names, while preserving identical actor-level meaning.\\nTypical uses include selecting the source of a heat call, enabling or disabling control authority, or switching physical flow or heating elements between named operating states.\\n\"}"
       },
       {
         "Type": "relay.actor.config",
@@ -5999,7 +5840,7 @@
         "Title": "relay.actor.config",
         "Description": "Configuration for a relay-backed Spaceheat actor associated with one relay on a multi-channel relay board.\nA relay.actor.config binds a specific relay index on a relay component to a named actor and declares the event/state semantics associated with energizing and de-energizing that relay. The config also carries the channel capture settings required to report the relay-controlled actor's state into the telemetry system.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-04-01T10:49:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"relay.actor.config specializes generic channel capture configuration for relay-backed actors in hydronic control systems.\\nThis type binds one relay position on a relay board to a specific actor and declares the event/state semantics associated with switching that relay. These semantics are important for distributed coordination because different layouts may realize the same functional role using different underlying hardware node names while preserving identical actor-level meaning.\\nIn this registry, the declared relay event/state semantics are based on change.relay.state and relay.closed.or.open.\\n\"}"
       },
@@ -6010,10 +5851,9 @@
         "Title": "report",
         "Description": "Primary telemetry and state reporting message produced by a SCADA node for a specific reporting slot. A report contains all meaningful channel readings, state transitions, and FSM outputs observed during the slot period.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-04-23T18:03:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"Reports are sent at fixed slot intervals (typically 5 minutes) and provide a durable historical record of telemetry and state changes observed during that period.\\nGridWorks SCADA devices emit most channel readings asynchronously when values change beyond configured thresholds. Each reading is timestamped at the moment of observation by the SCADA device. Reports preserve these original timestamps without resampling or aggregation.\\nAs a result, a report represents a batched event log for the slot period rather than a sampled snapshot. Consumers can reconstruct the precise timing of state transitions (e.g., relay changes) and value updates within the slot window.\\nThis differs from snapshot messages, which represent the most recent value of each channel at a single point in time and are optimized for near-real-time visualization rather than historical accuracy.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"Reports are sent at fixed slot intervals (typically 5 minutes) and provide a durable historical record of telemetry and state changes observed during that period.\\nGridWorks SCADA devices emit most channel readings asynchronously when values change beyond configured thresholds. Each reading is timestamped at the moment of observation by the SCADA device. Reports preserve these original timestamps without resampling or aggregation.\\nAs a result, a report represents a batched event log for the slot period rather than a sampled snapshot. Consumers can reconstruct the precise timing of state transitions (e.g., relay changes) and value updates within the slot window.\\nThis differs from snapshot messages, which represent the most recent value of each channel at a single point in time and are optimized for near-real-time visualization rather than historical accuracy.\\n\"}"
       },
       {
         "Type": "report",
@@ -6022,7 +5862,7 @@
         "Title": "report",
         "Description": "Historical telemetry and state report for a fixed reporting interval. A Report contains all meaningful channel readings and machine state transitions observed during a single SlotDurationS window.\nReports are the authoritative historical record of SCADA behavior. They are emitted periodically (typically every 5 minutes) and contain timestamped readings for each channel that changed or reported during the interval.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T19:01:47Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"Reports provide the durable historical record of SCADA telemetry. They differ from snapshots in that they preserve all timestamped readings within a fixed interval rather than only the most recent value.\\nReports are optimized for replay, auditing, debugging, and analytics. Snapshots are optimized for real-time visualization.\\n\"}"
       },
@@ -6033,10 +5873,9 @@
         "Title": "report.event",
         "Description": "Event wrapper for a report payload with message tracking metadata.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2025-04-23T18:03:00Z",
         "RawJson": null,
-        "DeprecatedAt": null,
         "LastModified": "2026-04-30T18:00:00Z"
       },
       {
@@ -6046,7 +5885,7 @@
         "Title": "report.event",
         "Description": "Event wrapper for a report payload with message tracking metadata.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T19:01:47Z",
         "RawJson": null
       },
@@ -6057,7 +5896,7 @@
         "Title": "scada.control.capabilities",
         "Description": "Projection of the control surface exposed by a SCADA node. This type declares controllable relay and DAC nodes, the telemetry channels that represent their observed state, and the relay semantic configuration required for dispatch construction.\nThis is a control-focused projection derived from layout.lite and does not represent the full system topology.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-02T18:00:00Z",
         "RawJson": null
       },
@@ -6068,7 +5907,7 @@
         "Title": "send.control.capabilities",
         "Description": "Request message asking a SCADA actor to send its current scada.control.capabilities.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-02T18:15:00Z",
         "RawJson": null
       },
@@ -6079,7 +5918,7 @@
         "Title": "send.layout",
         "Description": "Request message asking a SCADA actor to send its current layout.lite.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2024-12-09T15:00:00Z",
         "RawJson": null
       },
@@ -6090,7 +5929,7 @@
         "Title": "send.layout",
         "Description": "Request message asking a SCADA actor to send its current layout.lite.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-02T17:00:00Z",
         "RawJson": null
       },
@@ -6101,7 +5940,7 @@
         "Title": "sim.pico.tank.module.component.gt",
         "Description": "Simulation configuration corresponding to pico.tank.module.component.gt.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-03T14:27:00Z",
         "RawJson": null
       },
@@ -6112,7 +5951,7 @@
         "Title": "single.machine.state",
         "Description": "Latest known state for a single state machine at a specific timestamp.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T19:01:47Z",
         "RawJson": null
       },
@@ -6123,7 +5962,7 @@
         "Title": "single.reading",
         "Description": "Latest known reading for a single channel at a specific SCADA read time.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T19:01:47Z",
         "RawJson": null
       },
@@ -6134,7 +5973,7 @@
         "Title": "snapshot.spaceheat",
         "Description": "Point-in-time snapshot containing the latest known readings and machine states captured by a Spaceheat SCADA.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T19:01:47Z",
         "RawJson": null
       },
@@ -6145,10 +5984,9 @@
         "Title": "spaceheat.node.gt",
         "Description": "A Spaceheat node representing a named element in the SCADA system.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-14T14:08:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\\n\"}"
       },
       {
         "Type": "spaceheat.node.gt",
@@ -6157,10 +5995,9 @@
         "Title": "spaceheat.node.gt",
         "Description": "A Spaceheat node representing a named element in the SCADA system.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-01-15T18:00:00Z",
-        "RawJson": "{\"x-gridworks-extended_description\": \"Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\\n\"}",
-        "DeprecatedAt": null
+        "RawJson": "{\"x-gridworks-extended_description\": \"Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\\n\"}"
       },
       {
         "Type": "spaceheat.node.gt",
@@ -6169,7 +6006,7 @@
         "Title": "spaceheat.node.gt",
         "Description": "A Spaceheat node representing a named element in the SCADA system.\n",
         "ExtraAllowed": true,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-02-18T21:34:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"Spaceheat nodes are the fundamental building blocks of an agent-based SCADA deployment for a hydronic heating system.\\nEach node represents a named element in the operational control model. Nodes may correspond to active software actors responsible for sensing, control, telemetry generation, or coordination. They may also represent passive physical or logical entities that are measured or controlled, or higher-level semantic roles such as supervisory control, derived signals, or system modes.\\nThis abstraction unifies physical equipment, software actors, and logical constructs under a single naming system, enabling consistent binding across telemetry, control, and coordination layers.\\nThis type permits additionalProperties to support forward-compatible schema evolution and temporary inclusion of application-specific fields during layout development. Such extensions are expected to be formalized into explicit schema properties over time.\\n\"}"
       },
@@ -6180,7 +6017,7 @@
         "Title": "spaceheat.telemetry.quantity.projection",
         "Description": "Canonical projection from spaceheat.telemetry.name to gw1.quantity. This type defines the authoritative dimensional abstraction associated with each telemetry semantic category in version 007 of spaceheat.telemetry.name.\nThis projection exists to make dimensional semantics explicit at the serialization boundary and to support safe evolution toward gw1.unit.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T17:12:00Z",
         "RawJson": null
       },
@@ -6191,7 +6028,7 @@
         "Title": "synced.readings",
         "Description": "Compact synchronized reading payload consisting of a single SCADA read time and parallel channel and value lists.\nEach value in ValueList is aligned by index with ChannelNameList, such that ValueList[i] is the reading for ChannelNameList[i] captured at ScadaReadTimeUnixMs.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-03-30T00:00:00Z",
         "RawJson": null
       },
@@ -6202,7 +6039,7 @@
         "Title": "synced.readings.bundle",
         "Description": "Time-aligned sequence of synchronized multi-channel readings with embedded channel semantics sufficient for independent interpretation.\nFor each channel, values in its associated ValueList are ordered to align by index with TimestampList, such that the value at index i corresponds to TimestampList[i].\nChannelDefinitions provides the measurement unit required to interpret values for each channel.\n",
         "ExtraAllowed": false,
-        "Status": "active",
+        "Status": "published",
         "Created": "2026-04-03T16:00:00Z",
         "RawJson": "{\"x-gridworks-extended_description\": \"\\n`synced.readings.bundle` represents a rectangular, time-aligned dataset across multiple channels.\\nChannelName values are identifiers defined within a GridWorks SCADA layout context (e.g. layout.lite or gw.nolan.layout). They are not globally standardized vocabulary and SHALL be interpreted only within the context in which they were produced.\\nChannelDefinitions provides a minimal projection of channel semantics, including `Name`, `Id`, `Unit` and `UnitType`, sufficient to interpret the numeric values in this bundle without requiring access to the full layout.\\nThe `Id` together with the channel TypeName (e.g. `data.channel.gt`, `derived.channel.gt`, or `analytics.channel.gt`) enables resolution of the authoritative channel definition. This bundle is not a source of semantic authority; it provides a convenient projection for transport, indexing, and querying.\\nIn GridWorks systems, full channel definitions are typically available in layout artifacts such as `layout.lite`, which include additional information such as `AboutNodeName`, `CapturedByNodeName`, and derivation strategy. Those details are intentionally omitted here to keep this type lightweight and focused on boundary interpretation.\\nAll channels share a common `TimestampList`. For any index i, values across all channels correspond to the same point in time.\\n\"}"
       }
@@ -6340,20 +6177,12 @@
         "formula": "=IF({{FormatRef}}, \"format\", IF({{EnumVersionRef}}, \"enum\", IF({{SubTypeVersionRef}}, \"subtype\", IF({{HelperRef}}, \"helper\", \"primitive\"))))"
       },
       {
-        "name": "RefFormatIsRetired",
+        "name": "RefEnumIsPublished",
         "datatype": "boolean",
         "type": "lookup",
         "nullable": true,
-        "Description": "Whether the FormatRef target is retired. Null when FormatRef is unset.",
-        "formula": "=INDEX(Formats!{{IsRetired}}, MATCH({{FormatRef}}, Formats!{{Name}}, 0))"
-      },
-      {
-        "name": "RefEnumIsActive",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether the EnumVersionRef target has Status='active'. Null when EnumVersionRef is unset.",
-        "formula": "=INDEX(EnumVersions!{{IsActive}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
+        "Description": "Whether the EnumVersionRef target has Status='published'. Null when EnumVersionRef is unset.",
+        "formula": "=INDEX(EnumVersions!{{IsPublished}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
       },
       {
         "name": "RefEnumIsDraft",
@@ -6364,20 +6193,12 @@
         "formula": "=INDEX(EnumVersions!{{IsDraft}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
       },
       {
-        "name": "RefEnumWordIsRetired",
+        "name": "RefSubtypeIsPublished",
         "datatype": "boolean",
         "type": "lookup",
         "nullable": true,
-        "Description": "Whether the EnumVersionRef's Word is retired.",
-        "formula": "=INDEX(EnumVersions!{{WordIsRetired}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
-      },
-      {
-        "name": "RefSubtypeIsActive",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether the SubTypeVersionRef target has Status='active'.",
-        "formula": "=INDEX(TypeVersions!{{IsActive}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
+        "Description": "Whether the SubTypeVersionRef target has Status='published'.",
+        "formula": "=INDEX(TypeVersions!{{IsPublished}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
       },
       {
         "name": "RefSubtypeIsDraft",
@@ -6386,22 +6207,6 @@
         "nullable": true,
         "Description": "Whether the SubTypeVersionRef target is still a draft.",
         "formula": "=INDEX(TypeVersions!{{IsDraft}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
-      },
-      {
-        "name": "RefSubtypeWordIsRetired",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether the SubTypeVersionRef's Word is retired.",
-        "formula": "=INDEX(TypeVersions!{{WordIsRetired}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
-      },
-      {
-        "name": "RefIsStale",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True iff this attribute's reference points at a retired Word, a deprecated/draft EnumVersion or TypeVersion. Rolls up into TypeVersions.HasStaleReferences and gates promote.",
-        "formula": "=IF(OR({{RefFormatIsRetired}}=TRUE(), {{RefEnumIsDraft}}=TRUE(), {{RefEnumWordIsRetired}}=TRUE(), {{RefSubtypeIsDraft}}=TRUE(), {{RefSubtypeWordIsRetired}}=TRUE()), TRUE(), FALSE())"
       }
     ],
     "data": [
@@ -15262,14 +15067,6 @@
         "nullable": true,
         "Description": "Owner passthrough via TypeVersion \u2192 Type \u2192 Owner.",
         "formula": "=INDEX(TypeVersions!{{OwnerName}}, MATCH({{TypeVersion}}, TypeVersions!{{Name}}, 0))"
-      },
-      {
-        "name": "WordIsRetired",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "True iff the parent Definition's Word is retired (axiom inherits visual retirement).",
-        "formula": "=INDEX(TypeVersions!{{WordIsRetired}}, MATCH({{TypeVersion}}, TypeVersions!{{Name}}, 0))"
       }
     ],
     "data": [
@@ -16061,23 +15858,7 @@
         "type": "lookup",
         "nullable": true,
         "Description": "Whether the origin Definition is active.",
-        "formula": "=INDEX(TypeVersions!{{IsActive}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
-      },
-      {
-        "name": "IsOriginDeprecated",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether the origin Definition is deprecated.",
-        "formula": "=INDEX(TypeVersions!{{IsDeprecated}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
-      },
-      {
-        "name": "OriginWordIsRetired",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether the origin Definition's Word is retired. Helpers inherit retirement of their origin Word.",
-        "formula": "=INDEX(TypeVersions!{{WordIsRetired}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
+        "formula": "=INDEX(TypeVersions!{{IsPublished}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
       }
     ],
     "data": [
@@ -16232,14 +16013,6 @@
         "formula": "=IF({{FormatRef}}, \"format\", IF({{EnumVersionRef}}, \"enum\", IF({{SubTypeVersionRef}}, \"subtype\", IF({{HelperRef}}, \"helper\", \"primitive\"))))"
       },
       {
-        "name": "RefFormatIsRetired",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether the FormatRef target is retired.",
-        "formula": "=INDEX(Formats!{{IsRetired}}, MATCH({{FormatRef}}, Formats!{{Name}}, 0))"
-      },
-      {
         "name": "RefEnumIsDraft",
         "datatype": "boolean",
         "type": "lookup",
@@ -16248,36 +16021,12 @@
         "formula": "=INDEX(EnumVersions!{{IsDraft}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
       },
       {
-        "name": "RefEnumWordIsRetired",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether the EnumVersionRef's Word is retired.",
-        "formula": "=INDEX(EnumVersions!{{WordIsRetired}}, MATCH({{EnumVersionRef}}, EnumVersions!{{Name}}, 0))"
-      },
-      {
         "name": "RefSubtypeIsDraft",
         "datatype": "boolean",
         "type": "lookup",
         "nullable": true,
         "Description": "Whether the SubTypeVersionRef target is still a draft.",
         "formula": "=INDEX(TypeVersions!{{IsDraft}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
-      },
-      {
-        "name": "RefSubtypeWordIsRetired",
-        "datatype": "boolean",
-        "type": "lookup",
-        "nullable": true,
-        "Description": "Whether the SubTypeVersionRef's Word is retired.",
-        "formula": "=INDEX(TypeVersions!{{WordIsRetired}}, MATCH({{SubTypeVersionRef}}, TypeVersions!{{Name}}, 0))"
-      },
-      {
-        "name": "RefIsStale",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True iff this helper attribute's reference points at a retired/deprecated/draft target.",
-        "formula": "=IF(OR({{RefFormatIsRetired}}=TRUE(), {{RefEnumIsDraft}}=TRUE(), {{RefEnumWordIsRetired}}=TRUE(), {{RefSubtypeIsDraft}}=TRUE(), {{RefSubtypeWordIsRetired}}=TRUE()), TRUE(), FALSE())"
       }
     ],
     "data": [
