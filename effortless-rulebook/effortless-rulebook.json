@@ -1848,6 +1848,22 @@
         "formula": "=COUNTIFS(EnumUpgrades!{{FromEnumVersion}}, EnumVersions!{{Name}})"
       },
       {
+        "name": "UpgradeTemplateOutCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of upgrade Templates whose UpgradeFromEnumVersion is this EnumVersion.",
+        "formula": "=COUNTIFS(Templates!{{UpgradeFromEnumVersion}}, EnumVersions!{{Name}})"
+      },
+      {
+        "name": "HasUpgradeTemplate",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this EnumVersion has at least one outgoing upgrade template wired in.",
+        "formula": "=IF({{UpgradeTemplateOutCount}}>0, TRUE(), FALSE())"
+      },
+      {
         "name": "IncomingUpgradeCount",
         "datatype": "integer",
         "type": "aggregation",
@@ -5214,6 +5230,22 @@
         "formula": "=COUNTIFS(TypeAxioms!{{TypeVersion}}, TypeVersions!{{Name}})"
       },
       {
+        "name": "AxiomTemplateCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of axiom Templates whose AxiomTypeVersion is this TypeVersion.",
+        "formula": "=COUNTIFS(Templates!{{AxiomTypeVersion}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "HasAxiomTemplate",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this TypeVersion has at least one axiom template wired in. Required for runtime generation when AxiomCount > 0.",
+        "formula": "=IF({{AxiomTemplateCount}}>0, TRUE(), FALSE())"
+      },
+      {
         "name": "ExampleCount",
         "datatype": "integer",
         "type": "aggregation",
@@ -5244,6 +5276,22 @@
         "nullable": false,
         "Description": "Number of TypeUpgrades that bump from this version (this version has a successor).",
         "formula": "=COUNTIFS(TypeUpgrades!{{FromTypeVersion}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "UpgradeTemplateOutCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of upgrade Templates whose UpgradeFromTypeVersion is this TypeVersion (i.e. templates emanating from here).",
+        "formula": "=COUNTIFS(Templates!{{UpgradeFromTypeVersion}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "HasUpgradeTemplate",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this TypeVersion has at least one outgoing upgrade template wired in. Required for runtime generation when OutgoingUpgradeCount > 0.",
+        "formula": "=IF({{UpgradeTemplateOutCount}}>0, TRUE(), FALSE())"
       },
       {
         "name": "IncomingUpgradeCount",
@@ -17951,5 +17999,440 @@
         "TypeUpgradeOps": 25
       }
     }
+  },
+  "SeedRequests": {
+    "Description": "Seed requests catalogued by the snapshot pipeline. Each row describes the inputs of one `effortless snapshot prepare`/`build` invocation \u2014 which Types/Enums to include and how to pin their versions. Mirrors the legacy seed YAML schema (see template_seed_request.yaml).",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Identifier for this seed request (e.g. 'gridworks-spaceheat'). Acts as the primary key."
+      },
+      {
+        "name": "Owner",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "Owner sponsoring this seed request.",
+        "RelatedTo": "Owners"
+      },
+      {
+        "name": "PackageName",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Python package name produced when this seed request is built (e.g. 'gridworks_sema')."
+      },
+      {
+        "name": "Description",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "What this seed request covers and why."
+      },
+      {
+        "name": "IncludeAllVersionsDefault",
+        "datatype": "boolean",
+        "type": "raw",
+        "nullable": true,
+        "Description": "When true, entries default to include_all_versions=true unless overridden. Mirrors the top-level convenience flag in the legacy seed YAML."
+      },
+      {
+        "name": "Created",
+        "datatype": "datetime",
+        "type": "raw",
+        "nullable": true,
+        "Description": "When this seed request was added to the registry."
+      },
+      {
+        "name": "EntryCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of SeedRequestEntries belonging to this seed request.",
+        "formula": "=COUNTIFS(SeedRequestEntries!{{SeedRequest}}, SeedRequests!{{Name}})"
+      },
+      {
+        "name": "SnapshotCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of Snapshots built from this seed request.",
+        "formula": "=COUNTIFS(Snapshots!{{SeedRequest}}, SeedRequests!{{Name}})"
+      }
+    ],
+    "data": []
+  },
+  "SeedRequestEntries": {
+    "Description": "Individual targets within a SeedRequest. Each row is one Type or one Enum to include (Formats are never listed directly \u2014 they come in via type dependencies).",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Composite identifier: SeedRequest:Kind:TargetName.",
+        "formula": "=CONCAT({{SeedRequest}}, \":\", {{EntryKind}}, \":\", {{TargetName}})"
+      },
+      {
+        "name": "SeedRequest",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": false,
+        "Description": "Parent SeedRequest.",
+        "RelatedTo": "SeedRequests"
+      },
+      {
+        "name": "EntryKind",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "What kind of registry word this entry pulls in. One of 'type', 'enum'. (Formats are never listed directly \u2014 they come in via type dependencies.)"
+      },
+      {
+        "name": "TargetName",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "The Word's Name (e.g. 'synced.readings.bundle', 'relay.energization.state')."
+      },
+      {
+        "name": "IncludeAllVersions",
+        "datatype": "boolean",
+        "type": "raw",
+        "nullable": true,
+        "Description": "When true, expand all registry versions for this target. Mirrors `include_all_versions: true` in the seed YAML."
+      },
+      {
+        "name": "Versions",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Comma-separated explicit version list (e.g. '001,003'). Null/empty means 'use only the latest registry version' unless IncludeAllVersions is true."
+      },
+      {
+        "name": "Reason",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Free-text why this target is in the request."
+      }
+    ],
+    "data": []
+  },
+  "Snapshots": {
+    "Description": "Built snapshots produced by the snapshot pipeline. Each row records one materialized `output/sema/<name>` directory plus pointers back to the SeedRequest that produced it.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Identifier for this snapshot build (e.g. 'gridworks-spaceheat@2026-05-13'). Acts as the primary key."
+      },
+      {
+        "name": "SeedRequest",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": false,
+        "Description": "Seed request that produced this snapshot.",
+        "RelatedTo": "SeedRequests"
+      },
+      {
+        "name": "BuiltAt",
+        "datatype": "datetime",
+        "type": "raw",
+        "nullable": true,
+        "Description": "When this snapshot was built (UTC)."
+      },
+      {
+        "name": "OutputPath",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Filesystem path where the snapshot was written (e.g. 'output/sema/gridworks-spaceheat')."
+      },
+      {
+        "name": "PackageImportRoot",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Python import root used for the generated SDK (e.g. 'gridworks_sema')."
+      },
+      {
+        "name": "Status",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "One of 'prepared' (definitions restricted + indexes written), 'built' (runtime generated), or 'published' (released externally)."
+      },
+      {
+        "name": "CommitSha",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Git commit sha of the rulebook used to build this snapshot."
+      },
+      {
+        "name": "LocalNameCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Count of LocalNames carried by this snapshot.",
+        "formula": "=COUNTIFS(LocalNames!{{Snapshot}}, Snapshots!{{Name}})"
+      }
+    ],
+    "data": []
+  },
+  "LocalNames": {
+    "Description": "Per-snapshot local-naming overrides. Models `local_names.yaml` inside a snapshot \u2014 each row pairs a canonical registry name with the local rebranding used inside the snapshot's generated package.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Composite identifier: Snapshot/Kind/CanonicalName.",
+        "formula": "=CONCAT({{Snapshot}}, \"/\", {{Kind}}, \"/\", {{CanonicalName}})"
+      },
+      {
+        "name": "Snapshot",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": false,
+        "Description": "Parent Snapshot.",
+        "RelatedTo": "Snapshots"
+      },
+      {
+        "name": "Kind",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "One of 'type', 'enum', 'format'."
+      },
+      {
+        "name": "CanonicalName",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "The full canonical name as it appears in the registry (e.g. 'synced.readings.bundle')."
+      },
+      {
+        "name": "LocalName",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "The locally-rebranded name within this snapshot's local_names.yaml. Often identical to CanonicalName when no rebranding is applied."
+      }
+    ],
+    "data": []
+  },
+  "IndexBuilders": {
+    "Description": "Catalogue of the Python builder scripts orchestrated by scripts/build_indexes.sh. The rulebook describes the build sequence (run order, output path, re-run pass) rather than the output files themselves \u2014 those are downstream artifacts.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Builder name (e.g. 'build_public_registry'). Primary key."
+      },
+      {
+        "name": "ScriptPath",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Path to the Python script that implements this builder (relative to repo root)."
+      },
+      {
+        "name": "RunOrder",
+        "datatype": "integer",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Position in the orchestrated build sequence (lower runs first)."
+      },
+      {
+        "name": "OutputPath",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Path of the YAML index file this builder emits (relative to repo root)."
+      },
+      {
+        "name": "InputsDescription",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Brief description of what this builder reads to produce its output."
+      },
+      {
+        "name": "Description",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "What the builder does and why it exists."
+      },
+      {
+        "name": "RerunAtEnd",
+        "datatype": "boolean",
+        "type": "raw",
+        "nullable": true,
+        "Description": "True iff this builder is re-run as a final pass after all other builders complete (currently only build_public_registry needs this, to incorporate facts surfaced by downstream builders)."
+      }
+    ],
+    "data": [
+      {
+        "Name": "build_public_registry",
+        "ScriptPath": "src/sema/tools/build_public_registry.py",
+        "RunOrder": 1,
+        "OutputPath": "indexes/public_registry.yaml",
+        "InputsDescription": "Reads definitions/registry.yaml plus all definitions/{types,enums,formats}/**/*.yaml.",
+        "Description": "Filters the legacy SSoT registry down to its publishable surface \u2014 drops draft Words and draft Versions. Re-run at end of pipeline to absorb facts surfaced by other builders.",
+        "RerunAtEnd": true
+      },
+      {
+        "Name": "build_dependency_closure",
+        "ScriptPath": "src/sema/tools/build_dependency_closure.py",
+        "RunOrder": 2,
+        "OutputPath": "indexes/dependency_closure.yaml",
+        "InputsDescription": "Reads indexes/public_registry.yaml plus the underlying YAML for transitive resolution.",
+        "Description": "Computes the transitive dependency closure for every active version in the public registry.",
+        "RerunAtEnd": false
+      },
+      {
+        "Name": "build_lookup",
+        "ScriptPath": "src/sema/tools/build_lookup.py",
+        "RunOrder": 3,
+        "OutputPath": "indexes/lookup.yaml",
+        "InputsDescription": "Reads indexes/public_registry.yaml.",
+        "Description": "Builds canonical schema-URL lookup table (name \u2192 schema URL \u2192 version metadata).",
+        "RerunAtEnd": false
+      },
+      {
+        "Name": "build_reverse_dependencies",
+        "ScriptPath": "src/sema/tools/build_reverse_dependencies.py",
+        "RunOrder": 4,
+        "OutputPath": "indexes/reverse_dependencies.yaml",
+        "InputsDescription": "Reads indexes/dependency_closure.yaml.",
+        "Description": "Inverts the dependency closure to produce per-Word reverse-dependency lists (who uses me).",
+        "RerunAtEnd": false
+      },
+      {
+        "Name": "build_versions",
+        "ScriptPath": "src/sema/tools/build_versions.py",
+        "RunOrder": 5,
+        "OutputPath": "indexes/versions.yaml",
+        "InputsDescription": "Reads indexes/public_registry.yaml.",
+        "Description": "Emits the per-Word version list (active versions only) keyed by Word name.",
+        "RerunAtEnd": false
+      }
+    ]
+  },
+  "Templates": {
+    "Description": "Generator templates that implement axiom and upgrade behavior. Runtime generation REQUIRES that every TypeVersion declaring an axiom (or upgrade) has a matching Templates row pointing at the corresponding `.jinja2` file (see runtime_generation/templates/).",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Composite template identifier. Convention: '<kind>:<owner-version-id>' (e.g. 'axiom:atn.bid/002', 'upgrade:bid/000->bid/002'). Primary key."
+      },
+      {
+        "name": "Kind",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Template kind. One of 'axiom' or 'upgrade'."
+      },
+      {
+        "name": "Path",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Path to the .jinja2 template file relative to repo root."
+      },
+      {
+        "name": "Language",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Target language. Currently always 'python'."
+      },
+      {
+        "name": "Status",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Template status: 'present' (file exists), 'missing' (declared but not yet scaffolded), 'deprecated'."
+      },
+      {
+        "name": "AxiomTypeVersion",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "When Kind='axiom': the TypeVersion this axiom implements.",
+        "RelatedTo": "TypeVersions"
+      },
+      {
+        "name": "UpgradeFromTypeVersion",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "When Kind='upgrade' between types: the source TypeVersion.",
+        "RelatedTo": "TypeVersions"
+      },
+      {
+        "name": "UpgradeToTypeVersion",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "When Kind='upgrade' between types: the destination TypeVersion.",
+        "RelatedTo": "TypeVersions"
+      },
+      {
+        "name": "UpgradeFromEnumVersion",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "When Kind='upgrade' between enums: the source EnumVersion.",
+        "RelatedTo": "EnumVersions"
+      },
+      {
+        "name": "UpgradeToEnumVersion",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "When Kind='upgrade' between enums: the destination EnumVersion.",
+        "RelatedTo": "EnumVersions"
+      },
+      {
+        "name": "IsAxiom",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this template implements an axiom.",
+        "formula": "=IF({{Kind}}=\"axiom\", TRUE(), FALSE())"
+      },
+      {
+        "name": "IsTypeUpgrade",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this template implements a type-version upgrade.",
+        "formula": "=IF({{UpgradeFromTypeVersion}}, TRUE(), FALSE())"
+      },
+      {
+        "name": "IsEnumUpgrade",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff this template implements an enum-version upgrade.",
+        "formula": "=IF({{UpgradeFromEnumVersion}}, TRUE(), FALSE())"
+      }
+    ],
+    "data": []
   }
 }
