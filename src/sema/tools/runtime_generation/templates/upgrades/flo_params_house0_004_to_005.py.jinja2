@@ -1,0 +1,18 @@
+    def upgrade(self) -> {{ flo_params_house0_005_class_name }}:
+        """
+        - StabilityWeight: add
+        - StabilityDecay: add
+        - StabilityThresholdKwh: add
+        - StabilityHorizonHours: add
+        - PreviousPlanHpKwhElList: add (optional)
+        - PreviousEstimateStorageKwhNow: add (optional)
+        """
+        data = self.model_dump()
+        data["stability_weight"] = 0.5
+        data["stability_decay"] = 0.75
+        data["stability_threshold_kwh"] = 10.0
+        data["stability_horizon_hours"] = 20
+        data["previous_plan_hp_kwh_el_list"] = None
+        data["previous_estimate_storage_kwh_now"] = None
+        data["version"] = "005"
+        return {{ flo_params_house0_005_class_name }}.model_validate(data)

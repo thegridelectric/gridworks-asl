@@ -1,0 +1,102 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/weather.forecast/000"
+
+title: "weather.forecast"
+type: object
+description: >
+  A multi-interval outside-air-temperature and wind-speed forecast for a
+  geographic location, as fetched by a SCADA node from a third-party weather
+  service. Each forecast interval has an entry in the parallel Time, OatF, and
+  WindSpeedMph lists.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the node that produced this forecast.
+
+  WeatherChannelName:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Dotted name identifying the weather source the forecast came from, for
+      example weather.gov.kmlt for the KMLT weather station.
+
+  Time:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/utc.seconds"
+    description: >
+      Unix-second start time of each forecast interval, in order.
+
+  OatF:
+    type: array
+    items:
+      type: number
+    description: >
+      Forecast outside air temperature, in degrees Fahrenheit, for each
+      interval in Time.
+
+  WindSpeedMph:
+    type: array
+    items:
+      type: number
+    description: >
+      Forecast wind speed, in miles per hour, for each interval in Time.
+
+  WeatherUid:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier for this forecast, used to trace which forecast fed a
+      downstream calculation.
+
+  ForecastCreatedS:
+    $ref: "https://schemas.electricity.works/formats/utc.seconds"
+    description: >
+      Time, in Unix seconds, at which this forecast was created.
+
+  TypeName:
+    const: "weather.forecast"
+
+  Version:
+    const: "000"
+
+required:
+  - FromGNodeAlias
+  - WeatherChannelName
+  - Time
+  - OatF
+  - WindSpeedMph
+  - WeatherUid
+  - ForecastCreatedS
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ListLengthConsistency"
+      statement: >
+        Time, OatF, and WindSpeedMph SHALL all have the same length.
+    - number: 2
+      name: "ForecastCreatedBeforeFirstInterval"
+      statement: >
+        ForecastCreatedS SHALL be less than the first element of Time.
+
+  extended_description: >
+    weather.forecast carries raw forecast data obtained directly from a
+    third-party weather service. In the SCADA codebase it is produced by the
+    derived-data actor, which fetches an hourly forecast from the National
+    Weather Service (api.weather.gov) for an ICAO weather station, falling back
+    to the coldest historical temperature for the current month when no
+    forecast is available. The actor uses the forecast to compute heating
+    forecasts (required power and source water temperature) and sends the
+    forecast to the LeafTransactiveNode for record-keeping.
+
+    GridWorks plans to introduce a dedicated weather forecast service (and a
+    parallel price forecast service) that publishes to broadcast channels
+    GNodes can subscribe to, rather than each node fetching weather on its
+    own. weather.forecast is the message such a service would broadcast.

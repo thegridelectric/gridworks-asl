@@ -67,8 +67,7 @@ properties:
     const: "ha1.params"
 
   Version:
-    type: string
-    default: "006"
+    const: "006"
 
 required:
   - AlphaTimes10

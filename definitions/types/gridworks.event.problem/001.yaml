@@ -1,0 +1,67 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gridworks.event.problem/001"
+
+title: "gridworks.event.problem"
+type: object
+description: >
+  Event message reporting a problem detected in a GridWorks node.
+
+properties:
+
+  Src:
+    type: string
+    description: >
+      Identifier of the source node reporting the problem.
+
+  ProblemType:
+    type: string
+    description: >
+      Category of problem being reported.
+
+  Summary:
+    type: string
+    description: >
+      Short, human-readable summary of the problem.
+
+  Details:
+    type: string
+    description: >
+      Longer human-readable detail about the problem.
+
+  TimeCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  TypeName:
+    const: "gridworks.event.problem"
+
+  Version:
+    const: "001"
+
+required:
+  - Src
+  - ProblemType
+  - Summary
+  - Details
+  - TimeCreatedMs
+  - MessageId
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  extended_description: >
+    gridworks.event.problem is inherited from the gwproactor framework rather
+    than originating in GridWorks' own vocabulary. Driver and sensor actors
+    raise it through the framework's Problems class -- typically
+    Problems(warnings=..., errors=...).problem_event(...) -- as part of the
+    proactor event stream.
+
+    It overlaps in purpose with glitch, GridWorks' own actor-level event
+    report. GridWorks expects to transition away from gridworks.event.problem,
+    keeping glitch and adding a companion glitch.event type for events that
+    must be persisted and re-sent until acknowledged.
