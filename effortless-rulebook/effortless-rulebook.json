@@ -20313,5 +20313,318 @@
         "Description": "Single-page documentation HTML covering the entire platform. Scaffolded; not yet wired into the build."
       }
     ]
+  },
+  "Features": {
+    "Description": "Coarse-grained capabilities that the sema platform delivers (Tier E of ERB-SCAFFOLD-PLAN.md). Each row is a human-readable index into 1..N implementing pieces \u2014 CliCommands, Emitters, IndexBuilders, Templates, and tables \u2014 surfaced via FeatureBindings. Whether a Feature is shipped or merely planned is derived from BindingCount; there is no Status field.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Short snake-case feature name. Acts as the primary key."
+      },
+      {
+        "name": "Summary",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "One-line description of the capability."
+      },
+      {
+        "name": "Description",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Longer description of what the feature does and how it's experienced by users."
+      },
+      {
+        "name": "Owner",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": false,
+        "Description": "FK to Owners. Who maintains this feature.",
+        "RelatedTo": "Owners"
+      },
+      {
+        "name": "IntroducedInCommit",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Optional pointer to the commit sha that first introduced this capability. NULL when historical attribution is unclear."
+      },
+      {
+        "name": "BindingCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Total number of FeatureBindings rows pointing at this feature.",
+        "formula": "=COUNTIFS(FeatureBindings!{{Feature}}, Features!{{Name}})"
+      },
+      {
+        "name": "CliCommandCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of CLI commands bound to this feature.",
+        "formula": "=COUNTIFS(FeatureBindings!{{Feature}}, Features!{{Name}}, FeatureBindings!{{Kind}}, \"cli\")"
+      },
+      {
+        "name": "EmitterCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of emitters bound to this feature.",
+        "formula": "=COUNTIFS(FeatureBindings!{{Feature}}, Features!{{Name}}, FeatureBindings!{{Kind}}, \"emitter\")"
+      },
+      {
+        "name": "IndexBuilderCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of index builders bound to this feature.",
+        "formula": "=COUNTIFS(FeatureBindings!{{Feature}}, Features!{{Name}}, FeatureBindings!{{Kind}}, \"index\")"
+      },
+      {
+        "name": "TemplateCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of runtime templates bound to this feature.",
+        "formula": "=COUNTIFS(FeatureBindings!{{Feature}}, Features!{{Name}}, FeatureBindings!{{Kind}}, \"template\")"
+      },
+      {
+        "name": "TableCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of rulebook tables bound to this feature.",
+        "formula": "=COUNTIFS(FeatureBindings!{{Feature}}, Features!{{Name}}, FeatureBindings!{{Kind}}, \"table\")"
+      },
+      {
+        "name": "HasBindings",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "TRUE iff at least one FeatureBindings row points at this feature. Distinguishes 'shipped' (has bindings) from 'planned' (no bindings yet) \u2014 without a separate state column.",
+        "formula": "=IF({{BindingCount}}>0, TRUE(), FALSE())"
+      }
+    ],
+    "data": [
+      {
+        "Name": "snapshot_pipeline",
+        "Summary": "Restrict + expand a seed YAML and emit a runnable Python SDK snapshot.",
+        "Description": "Two CLI verbs (`sema snapshot prepare` and `sema snapshot build`) drive a pipeline that takes a structured seed-request YAML, computes the transitive closure of the requested types/enums/formats, writes restricted definitions and indexes under output/sema/, and finally generates Python runtime files keyed by --package-name. Models the snapshot pieces tracked in SeedRequests / Snapshots / LocalNames.",
+        "Owner": "gridworks-energy",
+        "IntroducedInCommit": null
+      },
+      {
+        "Name": "reverse_dependencies",
+        "Summary": "Show transitive reverse dependencies for a Sema word.",
+        "Description": "The `sema reverse <name> [version]` command resolves a Sema word and walks the reverse-dependency closure, returning every dependent type/enum/format. For types and enums the version is required; for formats it's omitted.",
+        "Owner": "gridworks-energy",
+        "IntroducedInCommit": null
+      },
+      {
+        "Name": "axiom_template_enforcement",
+        "Summary": "Every published version with declared axioms MUST have a Jinja axiom template.",
+        "Description": "Per commit 87bbeef, runtime generation FAILS if a schema declares an axiom without a corresponding template. `sema runtime scaffold-axiom-template` creates the missing stub. Templates live under src/sema/tools/runtime_generation/templates/axioms/ and are modeled in the rulebook's Templates table (Tier A5).",
+        "Owner": "gridworks-energy",
+        "IntroducedInCommit": "87bbeef"
+      },
+      {
+        "Name": "upgrade_template_enforcement",
+        "Summary": "Every upgrade hop must have a Jinja upgrade template.",
+        "Description": "Companion to axiom_template_enforcement. `sema runtime scaffold-upgrade-template <type> <ver> <next>` creates the stub for an outgoing version. Templates live under src/sema/tools/runtime_generation/templates/upgrades/.",
+        "Owner": "gridworks-energy",
+        "IntroducedInCommit": null
+      },
+      {
+        "Name": "yaml_round_trip",
+        "Summary": "Rulebook \u21c4 YAML parity: emit YAML from the rulebook and re-import it without loss.",
+        "Description": "rulebook-emitters/yaml/ provides the emit-and-reimport pair (rulebook_to_yaml.py + yaml_to_rulebook.py) plus yaml_round_trip_check.py to assert canonical equivalence. Currently ~97% round-trip parity.",
+        "Owner": "gridworks-energy",
+        "IntroducedInCommit": null
+      },
+      {
+        "Name": "magic_links_auth",
+        "Summary": "Passwordless email-code authentication for the sema admin surface.",
+        "Description": "The single AppUsers row in the rulebook + the auth.trusted_tenants seeding in init-db.sh + the .secrets/sema-tenant.json file together implement magic-links auth for the bases.effortlessapi.com tenant. Standard ERB add-on via the effortless-magic-links skill.",
+        "Owner": "gridworks-energy",
+        "IntroducedInCommit": null
+      },
+      {
+        "Name": "postgres_codegen",
+        "Summary": "Compile the rulebook into a runnable Postgres database (tables, functions, views).",
+        "Description": "The rulebook-to-postgres transpiler reads effortless-rulebook.json and emits postgres/01-05*.sql. init-db.sh runs them in order against a local Postgres. 02b and similar `*b-customize-*.sql` files hold hand-written overrides for cases the transpiler can't yet express.",
+        "Owner": "gridworks-energy",
+        "IntroducedInCommit": null
+      },
+      {
+        "Name": "public_registry_index",
+        "Summary": "Publishable surface: types/enums/formats with at least one published version.",
+        "Description": "build_public_registry.py reads definitions/registry.yaml and emits indexes/public_registry.yaml, including only published-version rows. In rulebook terms the same membership is `vw_types WHERE published_version_count > 0` (and analogous for enums/formats). Tracked as an IndexBuilders row, not a calculated field on the schema-of-record (see plan \u00a7A2 SUBSUMED).",
+        "Owner": "gridworks-energy",
+        "IntroducedInCommit": null
+      }
+    ]
+  },
+  "FeatureBindings": {
+    "Description": "Many-to-many resolution rows linking a Feature to the concrete pieces that implement it: CliCommands, Emitters, IndexBuilders, Templates, rulebook tables, etc. Kind is the discriminator; TargetName names the row inside the bound catalog. Notes is free-form.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Compound key: <Feature>::<Kind>::<TargetName>. Auto-derived.",
+        "formula": "=CONCATENATE({{Feature}}, \"::\", {{Kind}}, \"::\", {{TargetName}})"
+      },
+      {
+        "name": "Feature",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": false,
+        "Description": "FK to the Features row.",
+        "RelatedTo": "Features"
+      },
+      {
+        "name": "Kind",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "One of 'cli', 'emitter', 'index', 'template', 'table'. Tells the consumer which catalog to look TargetName up in."
+      },
+      {
+        "name": "TargetName",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Name of the bound row inside its catalog. For example, Kind='cli' / TargetName='sema snapshot prepare'; Kind='emitter' / TargetName='yaml'; Kind='table' / TargetName='SeedRequests'."
+      },
+      {
+        "name": "Notes",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Free-form annotation about why this binding exists or any caveat."
+      }
+    ],
+    "data": [
+      {
+        "Feature": "snapshot_pipeline",
+        "Kind": "cli",
+        "TargetName": "sema snapshot prepare",
+        "Notes": null
+      },
+      {
+        "Feature": "snapshot_pipeline",
+        "Kind": "cli",
+        "TargetName": "sema snapshot build",
+        "Notes": null
+      },
+      {
+        "Feature": "snapshot_pipeline",
+        "Kind": "table",
+        "TargetName": "SeedRequests",
+        "Notes": null
+      },
+      {
+        "Feature": "snapshot_pipeline",
+        "Kind": "table",
+        "TargetName": "SeedRequestEntries",
+        "Notes": null
+      },
+      {
+        "Feature": "snapshot_pipeline",
+        "Kind": "table",
+        "TargetName": "Snapshots",
+        "Notes": null
+      },
+      {
+        "Feature": "snapshot_pipeline",
+        "Kind": "table",
+        "TargetName": "LocalNames",
+        "Notes": null
+      },
+      {
+        "Feature": "reverse_dependencies",
+        "Kind": "cli",
+        "TargetName": "sema reverse",
+        "Notes": null
+      },
+      {
+        "Feature": "reverse_dependencies",
+        "Kind": "index",
+        "TargetName": "build_reverse_dependencies",
+        "Notes": "Index builder under src/sema/tools/; the CLI loads its output."
+      },
+      {
+        "Feature": "axiom_template_enforcement",
+        "Kind": "cli",
+        "TargetName": "sema runtime scaffold-axiom-template",
+        "Notes": null
+      },
+      {
+        "Feature": "axiom_template_enforcement",
+        "Kind": "table",
+        "TargetName": "Templates",
+        "Notes": "Templates rows with Kind='axiom' gate the build."
+      },
+      {
+        "Feature": "axiom_template_enforcement",
+        "Kind": "table",
+        "TargetName": "TypeAxioms",
+        "Notes": null
+      },
+      {
+        "Feature": "upgrade_template_enforcement",
+        "Kind": "cli",
+        "TargetName": "sema runtime scaffold-upgrade-template",
+        "Notes": null
+      },
+      {
+        "Feature": "upgrade_template_enforcement",
+        "Kind": "table",
+        "TargetName": "Templates",
+        "Notes": "Templates rows with Kind='upgrade'."
+      },
+      {
+        "Feature": "upgrade_template_enforcement",
+        "Kind": "table",
+        "TargetName": "TypeUpgrades",
+        "Notes": null
+      },
+      {
+        "Feature": "upgrade_template_enforcement",
+        "Kind": "table",
+        "TargetName": "EnumUpgrades",
+        "Notes": null
+      },
+      {
+        "Feature": "yaml_round_trip",
+        "Kind": "emitter",
+        "TargetName": "yaml",
+        "Notes": "Pair: rulebook_to_yaml + yaml_to_rulebook + yaml_round_trip_check."
+      },
+      {
+        "Feature": "magic_links_auth",
+        "Kind": "table",
+        "TargetName": "AppUsers",
+        "Notes": null
+      },
+      {
+        "Feature": "postgres_codegen",
+        "Kind": "index",
+        "TargetName": "build_dependency_closure",
+        "Notes": null
+      },
+      {
+        "Feature": "public_registry_index",
+        "Kind": "index",
+        "TargetName": "build_public_registry",
+        "Notes": null
+      }
+    ]
   }
 }
