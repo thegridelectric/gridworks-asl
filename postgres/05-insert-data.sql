@@ -6462,3 +6462,18 @@ VALUES ('add4b270-a4a1-564b-b14a-ef50ff1d0151', 'definitions/types/ticklist.reed
 INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
 VALUES ('141d13e7-e665-71e1-0da7-489826e34a16', 'definitions/types/weather.forecast/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
 
+-- ----------------------------------------------------------------------------
+-- Emitters: Catalog of rulebook emitters (Tier D of ERB-SCAFFOLD-PLAN.md). Every subdirectory of rulebook-emitters/ that consumes the rulebook and writes downstream artifacts is a row here. shared/ is not an emitter — it's a common-utilities library — and is excluded. Match the table at the top of rulebook-emitters/README.md.
+-- ----------------------------------------------------------------------------
+INSERT INTO emitters (emitters_id, name, path, language, input_kind, output_dir, entrypoint_module, has_templates, round_trips, round_trip_percent, maturity, description)
+VALUES ('c88b492c-1857-e475-e453-aa47341cf0ff', 'yaml', 'rulebook-emitters/yaml', 'yaml', 'rulebook', 'definitions-emitted/', 'rulebook_emitters.yaml.rulebook_to_yaml', FALSE, TRUE, 97, 'real', 'JSON-Schema YAML emitter. Pair with yaml/yaml_to_rulebook.py for one-shot import and yaml/yaml_round_trip_check.py for parity testing. Round-trips to ~96.6% (rounded to 97 here) at last measurement.') ON CONFLICT (emitters_id) DO NOTHING;
+
+INSERT INTO emitters (emitters_id, name, path, language, input_kind, output_dir, entrypoint_module, has_templates, round_trips, round_trip_percent, maturity, description)
+VALUES ('5f401815-7647-e669-8d3d-1bdc0d4b51b2', 'python', 'rulebook-emitters/python', 'python', 'rulebook', 'rulebook-emitters/python/out', 'rulebook_emitters.python.rulebook_to_python', TRUE, FALSE, NULL, 'scaffold', 'Pydantic classes for types; IntEnum/StrEnum for enums; format validators. Templates and entrypoint exist; not yet wired into the effortless build pipeline.') ON CONFLICT (emitters_id) DO NOTHING;
+
+INSERT INTO emitters (emitters_id, name, path, language, input_kind, output_dir, entrypoint_module, has_templates, round_trips, round_trip_percent, maturity, description)
+VALUES ('56194262-7862-2262-2431-5d74d9af44e4', 'golang', 'rulebook-emitters/golang', 'go', 'rulebook', 'rulebook-emitters/golang/out', 'rulebook_emitters.golang.rulebook_to_golang', TRUE, FALSE, NULL, 'scaffold', 'Go structs and typed enum constants. Scaffolded; not yet wired into the build.') ON CONFLICT (emitters_id) DO NOTHING;
+
+INSERT INTO emitters (emitters_id, name, path, language, input_kind, output_dir, entrypoint_module, has_templates, round_trips, round_trip_percent, maturity, description)
+VALUES ('403c582d-91d1-a855-493a-1b90f8cfe340', 'html', 'rulebook-emitters/html', 'html', 'rulebook', 'rulebook-emitters/html/out', 'rulebook_emitters.html.rulebook_to_html', TRUE, FALSE, NULL, 'scaffold', 'Single-page documentation HTML covering the entire platform. Scaffolded; not yet wired into the build.') ON CONFLICT (emitters_id) DO NOTHING;
+
