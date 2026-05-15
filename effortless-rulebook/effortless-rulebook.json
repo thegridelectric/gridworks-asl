@@ -20177,5 +20177,141 @@
         "Kind": "type"
       }
     ]
+  },
+  "Emitters": {
+    "Description": "Catalog of rulebook emitters (Tier D of ERB-SCAFFOLD-PLAN.md). Every subdirectory of rulebook-emitters/ that consumes the rulebook and writes downstream artifacts is a row here. shared/ is not an emitter \u2014 it's a common-utilities library \u2014 and is excluded. Match the table at the top of rulebook-emitters/README.md.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Emitter slug \u2014 the subdirectory name under rulebook-emitters/. Acts as the primary key."
+      },
+      {
+        "name": "Path",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Path to the emitter's root directory, relative to the repo root."
+      },
+      {
+        "name": "Language",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Language or format of the generated artifacts. Today same as Name; reserved separately so future emitters can target a language under a non-matching dir name."
+      },
+      {
+        "name": "InputKind",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "What the emitter reads. Currently always 'rulebook'; reserved for future 'snapshot'-driven emitters that consume output/sema/ instead."
+      },
+      {
+        "name": "OutputDir",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Where this emitter writes its artifacts. yaml/ writes to definitions-emitted/ at the repo root; the others write under <emitter>/out/."
+      },
+      {
+        "name": "EntrypointModule",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Importable Python module path for the emitter's CLI entrypoint."
+      },
+      {
+        "name": "HasTemplates",
+        "datatype": "boolean",
+        "type": "raw",
+        "nullable": false,
+        "Description": "TRUE iff the emitter has a templates/ subdirectory of Jinja or stdlib-Template files."
+      },
+      {
+        "name": "RoundTrips",
+        "datatype": "boolean",
+        "type": "raw",
+        "nullable": false,
+        "Description": "TRUE iff the emitter is paired with an inverse importer that closes the loop (rulebook \u2192 emitted \u2192 rulebook). Only yaml/ today."
+      },
+      {
+        "name": "RoundTripPercent",
+        "datatype": "integer",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Latest measured round-trip parity (0\u2013100). NULL when RoundTrips is FALSE."
+      },
+      {
+        "name": "Maturity",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "One of 'real' (in production use; generated artifacts committed and consumed) or 'scaffold' (entrypoint and templates exist, not wired into the build). Matches the Status column of rulebook-emitters/README.md, renamed to avoid collision with versioned-protocol Status semantics."
+      },
+      {
+        "name": "Description",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Free-form notes about what this emitter produces and any caveats."
+      }
+    ],
+    "data": [
+      {
+        "Name": "yaml",
+        "Path": "rulebook-emitters/yaml",
+        "Language": "yaml",
+        "InputKind": "rulebook",
+        "OutputDir": "definitions-emitted/",
+        "EntrypointModule": "rulebook_emitters.yaml.rulebook_to_yaml",
+        "HasTemplates": false,
+        "RoundTrips": true,
+        "RoundTripPercent": 97,
+        "Maturity": "real",
+        "Description": "JSON-Schema YAML emitter. Pair with yaml/yaml_to_rulebook.py for one-shot import and yaml/yaml_round_trip_check.py for parity testing. Round-trips to ~96.6% (rounded to 97 here) at last measurement."
+      },
+      {
+        "Name": "python",
+        "Path": "rulebook-emitters/python",
+        "Language": "python",
+        "InputKind": "rulebook",
+        "OutputDir": "rulebook-emitters/python/out",
+        "EntrypointModule": "rulebook_emitters.python.rulebook_to_python",
+        "HasTemplates": true,
+        "RoundTrips": false,
+        "RoundTripPercent": null,
+        "Maturity": "scaffold",
+        "Description": "Pydantic classes for types; IntEnum/StrEnum for enums; format validators. Templates and entrypoint exist; not yet wired into the effortless build pipeline."
+      },
+      {
+        "Name": "golang",
+        "Path": "rulebook-emitters/golang",
+        "Language": "go",
+        "InputKind": "rulebook",
+        "OutputDir": "rulebook-emitters/golang/out",
+        "EntrypointModule": "rulebook_emitters.golang.rulebook_to_golang",
+        "HasTemplates": true,
+        "RoundTrips": false,
+        "RoundTripPercent": null,
+        "Maturity": "scaffold",
+        "Description": "Go structs and typed enum constants. Scaffolded; not yet wired into the build."
+      },
+      {
+        "Name": "html",
+        "Path": "rulebook-emitters/html",
+        "Language": "html",
+        "InputKind": "rulebook",
+        "OutputDir": "rulebook-emitters/html/out",
+        "EntrypointModule": "rulebook_emitters.html.rulebook_to_html",
+        "HasTemplates": true,
+        "RoundTrips": false,
+        "RoundTripPercent": null,
+        "Maturity": "scaffold",
+        "Description": "Single-page documentation HTML covering the entire platform. Scaffolded; not yet wired into the build."
+      }
+    ]
   }
 }
