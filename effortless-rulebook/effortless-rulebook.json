@@ -298,20 +298,6 @@
         "RelatedTo": "Formats"
       },
       {
-        "name": "Status",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Parent-level lifecycle status, independent of per-version Status. One of 'active' (discoverable, may have published versions), 'draft' (placeholder, no published versions yet), or 'deprecated' (kept queryable but excluded from the public registry). Hand-edited; never derived. See ReplacedBy for the advisory successor pointer that typically accompanies 'deprecated'. Existing rows are seeded to 'active' since they are already curated in HEAD's definitions/."
-      },
-      {
-        "name": "RetiredAt",
-        "datatype": "datetime",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Timestamp when Status was set to 'deprecated'. Null while still active or draft. Advisory only \u2014 query filters use Status, not this date."
-      },
-      {
         "name": "Pattern",
         "datatype": "string",
         "type": "raw",
@@ -368,14 +354,6 @@
         "nullable": false,
         "Description": "True when at least one of MinLength / MaxLength is defined.",
         "formula": "=IF(OR({{MinLength}}>0, {{MaxLength}}>0), TRUE(), FALSE())"
-      },
-      {
-        "name": "IsPublic",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True iff Status is 'active'. Drives the public-registry view per Tier A2 of the ERB scaffold plan. Formats have no per-version lifecycle \u2014 a Format is either active or it isn't.",
-        "formula": "=IF({{Status}}=\"active\", TRUE(), FALSE())"
       },
       {
         "name": "ExampleCount",
@@ -455,8 +433,7 @@
         "MaxLength": null,
         "JsonSchemaFormat": null,
         "Created": "2024-09-02T15:00:00Z",
-        "RawJson": "{\"type\": \"string\"}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"string\"}"
       },
       {
         "Name": "left.right.dot",
@@ -470,8 +447,7 @@
         "MaxLength": null,
         "JsonSchemaFormat": null,
         "Created": "2024-09-02T15:00:00Z",
-        "RawJson": "{\"type\": \"string\"}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"string\"}"
       },
       {
         "Name": "market.slot.name",
@@ -485,8 +461,7 @@
         "MaxLength": null,
         "JsonSchemaFormat": null,
         "Created": "2024-12-05T19:25:00Z",
-        "RawJson": "{\"type\": \"string\"}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"string\"}"
       },
       {
         "Name": "non.negative.int",
@@ -500,8 +475,7 @@
         "MaxLength": null,
         "JsonSchemaFormat": null,
         "Created": "2024-09-02T15:00:00Z",
-        "RawJson": "{\"type\": \"integer\", \"minimum\": 0}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"integer\", \"minimum\": 0}"
       },
       {
         "Name": "positive.int",
@@ -515,8 +489,7 @@
         "MaxLength": null,
         "JsonSchemaFormat": null,
         "Created": "2024-09-02T15:00:00Z",
-        "RawJson": "{\"type\": \"integer\", \"minimum\": 1}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"integer\", \"minimum\": 1}"
       },
       {
         "Name": "spaceheat.name",
@@ -530,8 +503,7 @@
         "MaxLength": 64,
         "JsonSchemaFormat": null,
         "Created": "2024-09-02T15:00:00Z",
-        "RawJson": "{\"type\": \"string\"}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"string\"}"
       },
       {
         "Name": "utc.iso8601.millis",
@@ -545,8 +517,7 @@
         "MaxLength": null,
         "JsonSchemaFormat": null,
         "Created": "2026-02-22T16:43:00Z",
-        "RawJson": "{\"type\": \"string\"}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"string\"}"
       },
       {
         "Name": "utc.iso8601.seconds",
@@ -560,8 +531,7 @@
         "MaxLength": null,
         "JsonSchemaFormat": null,
         "Created": "2026-02-22T16:43:00Z",
-        "RawJson": "{\"type\": \"string\"}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"string\"}"
       },
       {
         "Name": "utc.milliseconds",
@@ -575,8 +545,7 @@
         "MaxLength": null,
         "JsonSchemaFormat": null,
         "Created": "2024-09-02T15:00:00Z",
-        "RawJson": "{\"type\": \"integer\", \"minimum\": 946684800000, \"maximum\": 32503680000000}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"integer\", \"minimum\": 946684800000, \"maximum\": 32503680000000}"
       },
       {
         "Name": "utc.seconds",
@@ -590,8 +559,7 @@
         "MaxLength": null,
         "JsonSchemaFormat": null,
         "Created": "2024-09-02T15:00:00Z",
-        "RawJson": "{\"type\": \"integer\", \"minimum\": 946684800, \"maximum\": 32503680000}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"integer\", \"minimum\": 946684800, \"maximum\": 32503680000}"
       },
       {
         "Name": "uuid4.str",
@@ -605,8 +573,7 @@
         "MaxLength": 36,
         "JsonSchemaFormat": null,
         "Created": "2024-09-02T15:00:00Z",
-        "RawJson": "{\"type\": \"string\"}",
-        "Status": "active"
+        "RawJson": "{\"type\": \"string\"}"
       }
     ]
   },
@@ -1291,20 +1258,6 @@
         "RelatedTo": "Enums"
       },
       {
-        "name": "Status",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Parent-level lifecycle status, independent of per-version Status. One of 'active' (discoverable, may have published versions), 'draft' (placeholder, no published versions yet), or 'deprecated' (kept queryable but excluded from the public registry). Hand-edited; never derived. See ReplacedBy for the advisory successor pointer that typically accompanies 'deprecated'. Existing rows are seeded to 'active' since they are already curated in HEAD's definitions/."
-      },
-      {
-        "name": "RetiredAt",
-        "datatype": "datetime",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Timestamp when Status was set to 'deprecated'. Null while still active or draft. Advisory only \u2014 query filters use Status, not this date."
-      },
-      {
         "name": "RawJson",
         "datatype": "string",
         "type": "raw",
@@ -1368,14 +1321,6 @@
         "formula": "=IF({{DraftVersionCount}}>0, TRUE(), FALSE())"
       },
       {
-        "name": "IsPublic",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True iff Status is 'active' AND at least one version is published. Drives the public-registry view per Tier A2 of the ERB scaffold plan.",
-        "formula": "=IF(AND({{Status}}=\"active\", {{PublishedVersionCount}}>0), TRUE(), FALSE())"
-      },
-      {
         "name": "FirstCreated",
         "datatype": "datetime",
         "type": "aggregation",
@@ -1400,8 +1345,7 @@
         "ValueType": null,
         "Description": "Universal physical ontology classification for Grid Nodes",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "buffer.regulation.mode",
@@ -1410,8 +1354,7 @@
         "ValueType": null,
         "Description": "Operating mode that governs how tightly the House0 buffer tank is regulated.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "change.heatcall.source",
@@ -1420,8 +1363,7 @@
         "ValueType": null,
         "Description": "Command enum for switching heat-call control authority between wall thermostat and SCADA.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "change.relay.state",
@@ -1430,8 +1372,7 @@
         "ValueType": null,
         "Description": "FSM events for changing a simple relay between open and closed states.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "fis.authorization.decision",
@@ -1440,8 +1381,7 @@
         "ValueType": null,
         "Description": "Authorization outcome determined by the Fleet Index Service (FIS) for a runtime instance connection attempt.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "fis.authorization.reason",
@@ -1450,8 +1390,7 @@
         "ValueType": null,
         "Description": "Structured reason describing why the Fleet Index Service (FIS) produced a specific authorization decision.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "fsm.report.type",
@@ -1460,8 +1399,7 @@
         "ValueType": null,
         "Description": "Enumeration of atomic FSM report categories.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "g.node.instance.status",
@@ -1470,8 +1408,7 @@
         "ValueType": null,
         "Description": "Lifecycle state of a runtime instance tracked by FIS",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "g.node.instance.transport",
@@ -1480,8 +1417,7 @@
         "ValueType": null,
         "Description": "Transport protocol used by a runtime instance",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "g.node.status",
@@ -1490,8 +1426,7 @@
         "ValueType": null,
         "Description": "Lifecycle status of a Grid Node within the registry",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "gpm.from.hz.method",
@@ -1500,8 +1435,7 @@
         "ValueType": null,
         "Description": "Method used to convert measured pulse frequency into gallons per minute.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "gw.g.node.class",
@@ -1510,8 +1444,7 @@
         "ValueType": null,
         "Description": "GridWorks-specific functional classification for GNodes",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "gw1.actor.class",
@@ -1520,8 +1453,7 @@
         "ValueType": null,
         "Description": "Classification of actors in the GridWorks SCADA system.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "gw1.emission.method",
@@ -1530,8 +1462,7 @@
         "ValueType": null,
         "Description": "Method by which a derived or computed channel emits values.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "gw1.quantity",
@@ -1540,8 +1471,7 @@
         "ValueType": null,
         "Description": "High-level physical or semantic quantity classification for telemetry values.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "gw1.seasonal.storage.mode",
@@ -1550,8 +1480,7 @@
         "ValueType": null,
         "Description": "Seasonal storage operating mode for layouts that distinguish all-tank from buffer-only operation.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "gw1.system.mode",
@@ -1560,8 +1489,7 @@
         "ValueType": null,
         "Description": "System operational mode for HVAC control.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "gw1.heat.call.interpretation",
@@ -1570,8 +1498,7 @@
         "ValueType": null,
         "Description": "Defines how a source telemetry channel is interpreted to determine whether a zone is calling for heat.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "gw1.unit",
@@ -1580,8 +1507,7 @@
         "ValueType": null,
         "Description": "Measurement-unit vocabulary used for derived channels.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "heatcall.source",
@@ -1590,8 +1516,7 @@
         "ValueType": null,
         "Description": "Source currently responsible for issuing a zone heat call.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "hz.calc.method",
@@ -1600,8 +1525,7 @@
         "ValueType": null,
         "Description": "Method used to estimate signal frequency from pulse timing data.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "market.price.unit",
@@ -1610,8 +1534,7 @@
         "ValueType": null,
         "Description": "Unit of the price axis for a market type.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "market.quantity.unit",
@@ -1620,8 +1543,7 @@
         "ValueType": null,
         "Description": "Unit of the quantity axis for a market type.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "market.type.name",
@@ -1630,8 +1552,7 @@
         "ValueType": null,
         "Description": "Categorizes different markets run by MarketMaker",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "relay.closed.or.open",
@@ -1640,8 +1561,7 @@
         "ValueType": null,
         "Description": "FSM states for a simple relay with open and closed positions.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "relay.energization.state",
@@ -1650,8 +1570,7 @@
         "ValueType": "integer",
         "Description": "Two-state relay energization state.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "relay.open.or.closed",
@@ -1660,8 +1579,7 @@
         "ValueType": null,
         "Description": "Binary contact state for a single-pole relay, independent of coil energization.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "relay.wiring.config",
@@ -1670,8 +1588,7 @@
         "ValueType": null,
         "Description": "Defines how a relay\u2019s COM, NO, and NC terminals are wired into a circuit.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "spaceheat.make.model",
@@ -1680,8 +1597,7 @@
         "ValueType": null,
         "Description": "Make and model taxonomy used by Spaceheat SCADA for physical and simulated devices.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "spaceheat.telemetry.name",
@@ -1690,8 +1606,7 @@
         "ValueType": null,
         "Description": "Legacy Spaceheat telemetry-name vocabulary for raw channels.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "spaceheat.unit",
@@ -1700,8 +1615,7 @@
         "ValueType": null,
         "Description": "Legacy Spaceheat measurement-unit vocabulary used in channel configuration and telemetry payloads.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       },
       {
         "Name": "temp.calc.method",
@@ -1710,8 +1624,7 @@
         "ValueType": null,
         "Description": "Method used to calculate temperature from thermistor voltage measurements.",
         "ReplacedBy": null,
-        "RawJson": null,
-        "Status": "active"
+        "RawJson": null
       }
     ]
   },
@@ -1987,13 +1900,6 @@
         "type": "raw",
         "nullable": true,
         "Description": "When Status flipped from draft to active."
-      },
-      {
-        "name": "RetiredAt",
-        "datatype": "datetime",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Timestamp when this version was retired (superseded by a successor or its parent was deprecated). Null for active/draft versions. Advisory \u2014 the upgrade chain and parent Status remain authoritative."
       },
       {
         "name": "IsPromotable",
@@ -4504,20 +4410,6 @@
         "RelatedTo": "Types"
       },
       {
-        "name": "Status",
-        "datatype": "string",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Parent-level lifecycle status, independent of per-version Status. One of 'active' (discoverable, may have published versions), 'draft' (placeholder, no published versions yet), or 'deprecated' (kept queryable but excluded from the public registry). Hand-edited; never derived. See ReplacedBy for the advisory successor pointer that typically accompanies 'deprecated'. Existing rows are seeded to 'active' since they are already curated in HEAD's definitions/."
-      },
-      {
-        "name": "RetiredAt",
-        "datatype": "datetime",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Timestamp when Status was set to 'deprecated'. Null while still active or draft. Advisory only \u2014 query filters use Status, not this date."
-      },
-      {
         "name": "PythonClassName",
         "datatype": "string",
         "type": "raw",
@@ -4578,14 +4470,6 @@
         "formula": "=IF({{DraftVersionCount}}>0, TRUE(), FALSE())"
       },
       {
-        "name": "IsPublic",
-        "datatype": "boolean",
-        "type": "calculated",
-        "nullable": false,
-        "Description": "True iff Status is 'active' AND at least one version is published. Drives the public-registry view per Tier A2 of the ERB scaffold plan.",
-        "formula": "=IF(AND({{Status}}=\"active\", {{PublishedVersionCount}}>0), TRUE(), FALSE())"
-      },
-      {
         "name": "FirstCreated",
         "datatype": "datetime",
         "type": "aggregation",
@@ -4612,8 +4496,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "bid",
@@ -4624,8 +4507,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "channel.config",
@@ -4636,8 +4518,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "channel.readings",
@@ -4648,8 +4529,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "connectivity.edge.gt",
@@ -4660,8 +4540,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "data.channel.gt",
@@ -4672,8 +4551,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "derived.channel.gt",
@@ -4684,8 +4562,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "fis.authority.manifest",
@@ -4696,8 +4573,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "fis.instance.authorization.event",
@@ -4708,8 +4584,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "fsm.atomic.report",
@@ -4720,8 +4595,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "fsm.full.report",
@@ -4732,8 +4606,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "g.node.gt",
@@ -4744,8 +4617,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "g.node.instance.gt",
@@ -4756,8 +4628,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "gridworks.ack",
@@ -4768,8 +4639,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "gridworks.ping",
@@ -4780,8 +4650,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "gw1.tank.temp.calibration",
@@ -4792,8 +4661,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "gw1.tank.temp.calibration.map",
@@ -4804,8 +4672,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "gw1.telemetry.name.quantity.projection",
@@ -4816,8 +4683,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "gw1.unit.quantity.projection",
@@ -4828,8 +4694,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "ha1.params",
@@ -4840,8 +4705,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "i2c.multichannel.dt.relay.component.gt",
@@ -4852,8 +4716,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "i2c.thermistor.channel.config",
@@ -4864,8 +4727,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "i2c.thermistor.reader.component.gt",
@@ -4876,8 +4738,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "layout.lite",
@@ -4888,8 +4749,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "linear.one.dimensional.calibration",
@@ -4900,8 +4760,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "machine.states",
@@ -4912,8 +4771,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "pico.flow.module.component.gt",
@@ -4924,8 +4782,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "pico.tank.module.component.gt",
@@ -4936,8 +4793,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "position.point.gt",
@@ -4948,8 +4804,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "price.quantity.unitless",
@@ -4960,8 +4815,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "power.watts",
@@ -4972,8 +4826,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "relay.actor.config",
@@ -4984,8 +4837,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "report",
@@ -4996,8 +4848,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "report.event",
@@ -5008,8 +4859,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "scada.control.capabilities",
@@ -5020,8 +4870,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "send.control.capabilities",
@@ -5032,8 +4881,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "send.layout",
@@ -5044,8 +4892,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "sim.pico.tank.module.component.gt",
@@ -5056,8 +4903,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "single.machine.state",
@@ -5068,8 +4914,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "single.reading",
@@ -5080,8 +4925,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "snapshot.spaceheat",
@@ -5092,8 +4936,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "spaceheat.node.gt",
@@ -5104,8 +4947,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "spaceheat.telemetry.quantity.projection",
@@ -5116,8 +4958,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "synced.readings",
@@ -5128,8 +4969,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "synced.readings.bundle",
@@ -5140,8 +4980,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       },
       {
         "Name": "gw.nolan.layout",
@@ -5152,8 +4991,7 @@
         "PythonClassName": null,
         "MakeDataClass": null,
         "IsCac": null,
-        "IsComponent": null,
-        "Status": "active"
+        "IsComponent": null
       }
     ]
   },
@@ -5453,13 +5291,6 @@
         "type": "raw",
         "nullable": true,
         "Description": "When Status flipped from draft to active. Null for never-promoted drafts. Activity feed renders 'promoted on...' distinct from 'created on...'."
-      },
-      {
-        "name": "RetiredAt",
-        "datatype": "datetime",
-        "type": "raw",
-        "nullable": true,
-        "Description": "Timestamp when this version was retired (superseded by a successor or its parent was deprecated). Null for active/draft versions. Advisory \u2014 the upgrade chain and parent Status remain authoritative."
       },
       {
         "name": "IsPromotable",
