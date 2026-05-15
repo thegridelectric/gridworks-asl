@@ -216,4 +216,14 @@ ALTER TABLE yaml_files DROP CONSTRAINT IF EXISTS fk_yaml_files_format;
 ALTER TABLE yaml_files ADD CONSTRAINT fk_yaml_files_format
   FOREIGN KEY (format) REFERENCES formats (formats_id);
 
--- 50 FK constraint(s) declared (off unless EFFORTLESS_ENFORCE_FKS=true).
+-- Features
+ALTER TABLE features DROP CONSTRAINT IF EXISTS fk_features_owner;
+ALTER TABLE features ADD CONSTRAINT fk_features_owner
+  FOREIGN KEY (owner) REFERENCES owners (owners_id);
+
+-- FeatureBindings
+ALTER TABLE feature_bindings DROP CONSTRAINT IF EXISTS fk_feature_bindings_feature;
+ALTER TABLE feature_bindings ADD CONSTRAINT fk_feature_bindings_feature
+  FOREIGN KEY (feature) REFERENCES features (features_id);
+
+-- 52 FK constraint(s) declared (off unless EFFORTLESS_ENFORCE_FKS=true).

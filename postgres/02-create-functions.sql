@@ -2703,6 +2703,122 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN ((SELECT NULLIF(type_version, '') FROM yaml_files WHERE yaml_files_id = p_yaml_files_id) IS NOT NULL OR (SELECT NULLIF(enum_version, '') FROM yaml_files WHERE yaml_files_id = p_yaml_files_id) IS NOT NULL OR (SELECT NULLIF(format, '') FROM yaml_files WHERE yaml_files_id = p_yaml_files_id) IS NOT NULL) THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_features_binding_count
+-- Field: Features.BindingCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_features_binding_count(p_features_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM feature_bindings WHERE feature = (SELECT NULLIF(name, '') FROM features WHERE features_id = p_features_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_features_cli_command_count
+-- Field: Features.CliCommandCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_features_cli_command_count(p_features_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM feature_bindings WHERE feature = (SELECT NULLIF(name, '') FROM features WHERE features_id = p_features_id) AND kind = 'cli'))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_features_emitter_count
+-- Field: Features.EmitterCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_features_emitter_count(p_features_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM feature_bindings WHERE feature = (SELECT NULLIF(name, '') FROM features WHERE features_id = p_features_id) AND kind = 'emitter'))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_features_index_builder_count
+-- Field: Features.IndexBuilderCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_features_index_builder_count(p_features_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM feature_bindings WHERE feature = (SELECT NULLIF(name, '') FROM features WHERE features_id = p_features_id) AND kind = 'index'))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_features_template_count
+-- Field: Features.TemplateCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_features_template_count(p_features_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM feature_bindings WHERE feature = (SELECT NULLIF(name, '') FROM features WHERE features_id = p_features_id) AND kind = 'template'))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_features_table_count
+-- Field: Features.TableCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_features_table_count(p_features_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM feature_bindings WHERE feature = (SELECT NULLIF(name, '') FROM features WHERE features_id = p_features_id) AND kind = 'table'))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_features_has_bindings
+-- Field: Features.HasBindings
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_features_has_bindings(p_features_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_features_binding_count(p_features_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- get_features_name
+-- Helper function: Get Name from Features by FeaturesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_features_name(p_features_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT name FROM features WHERE features_id = p_features_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_features_summary
+-- Helper function: Get Summary from Features by FeaturesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_features_summary(p_features_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT summary FROM features WHERE features_id = p_features_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_features_description
+-- Helper function: Get Description from Features by FeaturesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_features_description(p_features_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM features WHERE features_id = p_features_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_features_introduced_in_commit
+-- Helper function: Get IntroducedInCommit from Features by FeaturesId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_features_introduced_in_commit(p_features_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT introduced_in_commit FROM features WHERE features_id = p_features_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_feature_bindings_name
+-- Field: FeatureBindings.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_feature_bindings_name(p_feature_bindings_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(feature, '') FROM feature_bindings WHERE feature_bindings_id = p_feature_bindings_id), '::', (SELECT NULLIF(kind, '') FROM feature_bindings WHERE feature_bindings_id = p_feature_bindings_id), '::', (SELECT NULLIF(target_name, '') FROM feature_bindings WHERE feature_bindings_id = p_feature_bindings_id)))::text;
+$$ LANGUAGE sql STABLE;
+
 -- ============================================================================
 -- MANY-SIDE RELATIONSHIP FUNCTIONS
 -- These functions aggregate child records for many-side relationships

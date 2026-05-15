@@ -6477,3 +6477,90 @@ VALUES ('56194262-7862-2262-2431-5d74d9af44e4', 'golang', 'rulebook-emitters/gol
 INSERT INTO emitters (emitters_id, name, path, language, input_kind, output_dir, entrypoint_module, has_templates, round_trips, round_trip_percent, maturity, description)
 VALUES ('403c582d-91d1-a855-493a-1b90f8cfe340', 'html', 'rulebook-emitters/html', 'html', 'rulebook', 'rulebook-emitters/html/out', 'rulebook_emitters.html.rulebook_to_html', TRUE, FALSE, NULL, 'scaffold', 'Single-page documentation HTML covering the entire platform. Scaffolded; not yet wired into the build.') ON CONFLICT (emitters_id) DO NOTHING;
 
+-- ----------------------------------------------------------------------------
+-- Features: Coarse-grained capabilities that the sema platform delivers (Tier E of ERB-SCAFFOLD-PLAN.md). Each row is a human-readable index into 1..N implementing pieces — CliCommands, Emitters, IndexBuilders, Templates, and tables — surfaced via FeatureBindings. Whether a Feature is shipped or merely planned is derived from BindingCount; there is no Status field.
+-- ----------------------------------------------------------------------------
+INSERT INTO features (features_id, name, summary, description, owner, introduced_in_commit)
+VALUES ('0aea1a6c-7a42-d7a7-d758-ca7e11309602', 'snapshot_pipeline', 'Restrict + expand a seed YAML and emit a runnable Python SDK snapshot.', 'Two CLI verbs (`sema snapshot prepare` and `sema snapshot build`) drive a pipeline that takes a structured seed-request YAML, computes the transitive closure of the requested types/enums/formats, writes restricted definitions and indexes under output/sema/, and finally generates Python runtime files keyed by --package-name. Models the snapshot pieces tracked in SeedRequests / Snapshots / LocalNames.', 'gridworks-energy', NULL) ON CONFLICT (features_id) DO NOTHING;
+
+INSERT INTO features (features_id, name, summary, description, owner, introduced_in_commit)
+VALUES ('05362aaa-34c4-47ac-1028-785d10a2b1b2', 'reverse_dependencies', 'Show transitive reverse dependencies for a Sema word.', 'The `sema reverse <name> [version]` command resolves a Sema word and walks the reverse-dependency closure, returning every dependent type/enum/format. For types and enums the version is required; for formats it''s omitted.', 'gridworks-energy', NULL) ON CONFLICT (features_id) DO NOTHING;
+
+INSERT INTO features (features_id, name, summary, description, owner, introduced_in_commit)
+VALUES ('a065894a-9830-a79f-fc2e-ad68a3806b5a', 'axiom_template_enforcement', 'Every published version with declared axioms MUST have a Jinja axiom template.', 'Per commit 87bbeef, runtime generation FAILS if a schema declares an axiom without a corresponding template. `sema runtime scaffold-axiom-template` creates the missing stub. Templates live under src/sema/tools/runtime_generation/templates/axioms/ and are modeled in the rulebook''s Templates table (Tier A5).', 'gridworks-energy', '87bbeef') ON CONFLICT (features_id) DO NOTHING;
+
+INSERT INTO features (features_id, name, summary, description, owner, introduced_in_commit)
+VALUES ('eedcc7c8-42ed-c3b3-4ca6-bc66d10a25e3', 'upgrade_template_enforcement', 'Every upgrade hop must have a Jinja upgrade template.', 'Companion to axiom_template_enforcement. `sema runtime scaffold-upgrade-template <type> <ver> <next>` creates the stub for an outgoing version. Templates live under src/sema/tools/runtime_generation/templates/upgrades/.', 'gridworks-energy', NULL) ON CONFLICT (features_id) DO NOTHING;
+
+INSERT INTO features (features_id, name, summary, description, owner, introduced_in_commit)
+VALUES ('00802134-74f4-f2ae-218a-1ec372038443', 'yaml_round_trip', 'Rulebook ⇄ YAML parity: emit YAML from the rulebook and re-import it without loss.', 'rulebook-emitters/yaml/ provides the emit-and-reimport pair (rulebook_to_yaml.py + yaml_to_rulebook.py) plus yaml_round_trip_check.py to assert canonical equivalence. Currently ~97% round-trip parity.', 'gridworks-energy', NULL) ON CONFLICT (features_id) DO NOTHING;
+
+INSERT INTO features (features_id, name, summary, description, owner, introduced_in_commit)
+VALUES ('11ac24fa-1c32-090a-5a65-23c8b874484b', 'magic_links_auth', 'Passwordless email-code authentication for the sema admin surface.', 'The single AppUsers row in the rulebook + the auth.trusted_tenants seeding in init-db.sh + the .secrets/sema-tenant.json file together implement magic-links auth for the bases.effortlessapi.com tenant. Standard ERB add-on via the effortless-magic-links skill.', 'gridworks-energy', NULL) ON CONFLICT (features_id) DO NOTHING;
+
+INSERT INTO features (features_id, name, summary, description, owner, introduced_in_commit)
+VALUES ('291a1b67-ecd8-d8e7-8939-0a0cc722678e', 'postgres_codegen', 'Compile the rulebook into a runnable Postgres database (tables, functions, views).', 'The rulebook-to-postgres transpiler reads effortless-rulebook.json and emits postgres/01-05*.sql. init-db.sh runs them in order against a local Postgres. 02b and similar `*b-customize-*.sql` files hold hand-written overrides for cases the transpiler can''t yet express.', 'gridworks-energy', NULL) ON CONFLICT (features_id) DO NOTHING;
+
+INSERT INTO features (features_id, name, summary, description, owner, introduced_in_commit)
+VALUES ('454b9030-7bff-da41-81e0-ab39ced6b156', 'public_registry_index', 'Publishable surface: types/enums/formats with at least one published version.', 'build_public_registry.py reads definitions/registry.yaml and emits indexes/public_registry.yaml, including only published-version rows. In rulebook terms the same membership is `vw_types WHERE published_version_count > 0` (and analogous for enums/formats). Tracked as an IndexBuilders row, not a calculated field on the schema-of-record (see plan §A2 SUBSUMED).', 'gridworks-energy', NULL) ON CONFLICT (features_id) DO NOTHING;
+
+-- ----------------------------------------------------------------------------
+-- FeatureBindings: Many-to-many resolution rows linking a Feature to the concrete pieces that implement it: CliCommands, Emitters, IndexBuilders, Templates, rulebook tables, etc. Kind is the discriminator; TargetName names the row inside the bound catalog. Notes is free-form.
+-- ----------------------------------------------------------------------------
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('e34743d0-fcae-83c8-af44-b1c4480f02ce', 'snapshot_pipeline', 'cli', 'sema snapshot prepare', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('99edfe85-3537-ddc0-401e-4784d3eeb643', 'snapshot_pipeline', 'cli', 'sema snapshot build', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('98cf0e1a-d7d1-cab2-f0eb-a01ac115211b', 'snapshot_pipeline', 'table', 'SeedRequests', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('594fe4dd-7dce-824a-4569-d069b6fce0d7', 'snapshot_pipeline', 'table', 'SeedRequestEntries', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('6d9b58f8-92bd-26b5-bd58-c980330210de', 'snapshot_pipeline', 'table', 'Snapshots', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('8600e504-1b91-7bb1-e3fd-cb558b9f1bd6', 'snapshot_pipeline', 'table', 'LocalNames', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('87c611cc-54ed-6d49-5818-dc478f8a8dcf', 'reverse_dependencies', 'cli', 'sema reverse', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('a447c58a-3f06-8840-9ebe-95465be220ef', 'reverse_dependencies', 'index', 'build_reverse_dependencies', 'Index builder under src/sema/tools/; the CLI loads its output.') ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('983dd7c6-1655-23fc-5e70-11da9daee2c4', 'axiom_template_enforcement', 'cli', 'sema runtime scaffold-axiom-template', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('d8a38706-e46a-9da1-46b9-eccef3c40b55', 'axiom_template_enforcement', 'table', 'Templates', 'Templates rows with Kind=''axiom'' gate the build.') ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('bf23e7ba-7dcd-2885-17d5-75f278423244', 'axiom_template_enforcement', 'table', 'TypeAxioms', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('fa3323bf-e181-209c-08ef-75dbfa830f10', 'upgrade_template_enforcement', 'cli', 'sema runtime scaffold-upgrade-template', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('4bf27486-e4eb-8efd-8bdc-d23bb38421e2', 'upgrade_template_enforcement', 'table', 'Templates', 'Templates rows with Kind=''upgrade''.') ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('6ec3eca8-9d1e-e620-be66-12df7c7e70dc', 'upgrade_template_enforcement', 'table', 'TypeUpgrades', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('6b3a4d4b-a8c5-fbcc-31d1-a743610022f5', 'upgrade_template_enforcement', 'table', 'EnumUpgrades', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('897e3849-4d4d-d3e7-184a-9642430a3511', 'yaml_round_trip', 'emitter', 'yaml', 'Pair: rulebook_to_yaml + yaml_to_rulebook + yaml_round_trip_check.') ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('4f1d9f0b-bee6-94ef-7a1f-f3e5c7b26a7d', 'magic_links_auth', 'table', 'AppUsers', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('612a88db-4a42-8c20-26c3-c9c2aac44c3d', 'postgres_codegen', 'index', 'build_dependency_closure', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
+INSERT INTO feature_bindings (feature_bindings_id, feature, kind, target_name, notes)
+VALUES ('68a56315-feb0-7fbf-79b8-8d15fb142428', 'public_registry_index', 'index', 'build_public_registry', NULL) ON CONFLICT (feature_bindings_id) DO NOTHING;
+
