@@ -36,6 +36,7 @@ ALTER TABLE templates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cli_commands ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cli_flags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cli_examples ENABLE ROW LEVEL SECURITY;
+ALTER TABLE yaml_files ENABLE ROW LEVEL SECURITY;
 
 -- TODO: Add specific RLS policies based on your security requirements
 -- Example:

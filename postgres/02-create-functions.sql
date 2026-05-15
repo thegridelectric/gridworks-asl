@@ -2693,6 +2693,16 @@ RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(command, '') FROM cli_examples WHERE cli_examples_id = p_cli_examples_id), '::ex', (SELECT idx FROM cli_examples WHERE cli_examples_id = p_cli_examples_id)))::text;
 $$ LANGUAGE sql STABLE;
 
+-- calc_yaml_files_has_rulebook_row
+-- Field: YamlFiles.HasRulebookRow
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_yaml_files_has_rulebook_row(p_yaml_files_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN ((SELECT NULLIF(type_version, '') FROM yaml_files WHERE yaml_files_id = p_yaml_files_id) IS NOT NULL OR (SELECT NULLIF(enum_version, '') FROM yaml_files WHERE yaml_files_id = p_yaml_files_id) IS NOT NULL OR (SELECT NULLIF(format, '') FROM yaml_files WHERE yaml_files_id = p_yaml_files_id) IS NOT NULL) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- ============================================================================
 -- MANY-SIDE RELATIONSHIP FUNCTIONS
 -- These functions aggregate child records for many-side relationships

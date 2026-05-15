@@ -205,4 +205,15 @@ ALTER TABLE cli_examples DROP CONSTRAINT IF EXISTS fk_cli_examples_command;
 ALTER TABLE cli_examples ADD CONSTRAINT fk_cli_examples_command
   FOREIGN KEY (command) REFERENCES cli_commands (cli_commands_id);
 
--- 47 FK constraint(s) declared (off unless EFFORTLESS_ENFORCE_FKS=true).
+-- YamlFiles
+ALTER TABLE yaml_files DROP CONSTRAINT IF EXISTS fk_yaml_files_type_version;
+ALTER TABLE yaml_files ADD CONSTRAINT fk_yaml_files_type_version
+  FOREIGN KEY (type_version) REFERENCES type_versions (type_versions_id);
+ALTER TABLE yaml_files DROP CONSTRAINT IF EXISTS fk_yaml_files_enum_version;
+ALTER TABLE yaml_files ADD CONSTRAINT fk_yaml_files_enum_version
+  FOREIGN KEY (enum_version) REFERENCES enum_versions (enum_versions_id);
+ALTER TABLE yaml_files DROP CONSTRAINT IF EXISTS fk_yaml_files_format;
+ALTER TABLE yaml_files ADD CONSTRAINT fk_yaml_files_format
+  FOREIGN KEY (format) REFERENCES formats (formats_id);
+
+-- 50 FK constraint(s) declared (off unless EFFORTLESS_ENFORCE_FKS=true).

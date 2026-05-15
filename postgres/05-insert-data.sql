@@ -5964,3 +5964,501 @@ VALUES ('3257fcf0-282a-771b-456a-1a0a3015d6f7', 'sema reverse', 1, 'uv run sema 
 INSERT INTO cli_examples (cli_examples_id, command, idx, example_string, description, expected_exit_code)
 VALUES ('6c36fe7d-3e0f-3a00-b8dd-e43cb90ae1a1', 'sema reverse', 2, 'uv run sema reverse left.right.dot', 'Reverse dependencies of a format (no version argument).', 0) ON CONFLICT (cli_examples_id) DO NOTHING;
 
+-- ----------------------------------------------------------------------------
+-- YamlFiles: Pointer rows for every YAML file under definitions/ that contributes to the rulebook (Tier C of ERB-SCAFFOLD-PLAN.md). Name is the file path relative to the repo root. Kind selects which (nullable) FK column is populated. IsGenerated is FALSE today since the YAMLs are still the SSoT; after Phase 3 of YAML-ODXML-RULEBOOK-MIGRATION-PLAN.md flips it to TRUE.
+-- ----------------------------------------------------------------------------
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('ab366a71-a652-dfc0-86c0-617e950c2e1b', 'definitions/enums/base.g.node.class/000.yaml', 'enum', NULL, 'base.g.node.class/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('f2536114-7c0f-e431-9909-cce1b0edfd0d', 'definitions/enums/buffer.regulation.mode/000.yaml', 'enum', NULL, 'buffer.regulation.mode/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('bdf15375-272c-e4c1-9716-9f8206b92fa2', 'definitions/enums/change.heatcall.source/000.yaml', 'enum', NULL, 'change.heatcall.source/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('477225e6-35f8-3834-878e-a21466d063a9', 'definitions/enums/change.relay.state/000.yaml', 'enum', NULL, 'change.relay.state/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a681d81b-151d-f1f0-e2b3-8a411a00d15d', 'definitions/enums/fis.authorization.decision/000.yaml', 'enum', NULL, 'fis.authorization.decision/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('956efbda-5747-bdd3-8cc4-4a61cb1c0b46', 'definitions/enums/fis.authorization.reason/000.yaml', 'enum', NULL, 'fis.authorization.reason/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('2b69d01f-39b9-0bd8-ae86-2e307b24d0db', 'definitions/enums/fsm.report.type/000.yaml', 'enum', NULL, 'fsm.report.type/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('36d4844e-1ebc-4eb2-ddc7-0b9452e6f1ac', 'definitions/enums/g.node.instance.status/000.yaml', 'enum', NULL, 'g.node.instance.status/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5cd53dac-4967-02d3-8724-04bd03d4470a', 'definitions/enums/g.node.instance.transport/000.yaml', 'enum', NULL, 'g.node.instance.transport/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('8fc90b06-de41-97f9-700a-74cb95aa324d', 'definitions/enums/g.node.status/000.yaml', 'enum', NULL, 'g.node.status/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e9e5a0f2-a822-b0cd-dc24-4000c6b4d474', 'definitions/enums/gpm.from.hz.method/000.yaml', 'enum', NULL, 'gpm.from.hz.method/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('b81b10ba-cc93-5cd4-02d2-13c7b9d551e3', 'definitions/enums/gw.g.node.class/000.yaml', 'enum', NULL, 'gw.g.node.class/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e48fd9a9-4dac-d8f1-19e2-0ff70092daa0', 'definitions/enums/gw1.actor.class/009.yaml', 'enum', NULL, 'gw1.actor.class/009', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('ca304d2f-1c65-d6d7-fa88-b212f6fd9879', 'definitions/enums/gw1.actor.class/010.yaml', 'enum', NULL, 'gw1.actor.class/010', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('85919952-313d-5500-b1ec-9921343a872b', 'definitions/enums/gw1.actor.class/011.yaml', 'enum', NULL, 'gw1.actor.class/011', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('45be8cfe-2d63-93f1-9cc7-b603fce0d59f', 'definitions/enums/gw1.emission.method/000.yaml', 'enum', NULL, 'gw1.emission.method/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a33f27db-c694-a336-c3cf-3c0392164d99', 'definitions/enums/gw1.heat.call.interpretation/000.yaml', 'enum', NULL, 'gw1.heat.call.interpretation/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5f2b6bfd-de98-45b9-1c3d-e7d3ef9d11a7', 'definitions/enums/gw1.lc.top.state/001.yaml', 'enum', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('f84c6dbd-a122-9e5b-c535-085e624b6961', 'definitions/enums/gw1.leaf.ally.all.tanks.state/001.yaml', 'enum', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('9547e459-20b4-9b2c-a52c-bdd86a9b46d7', 'definitions/enums/gw1.leaf.ally.buffer.only.state/001.yaml', 'enum', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('63773723-a0ea-04d6-9178-f5e1f80400a9', 'definitions/enums/gw1.local.control.all.tanks.state/001.yaml', 'enum', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('7182d0da-cac3-d0fe-5b0c-d1f5cba1ed7d', 'definitions/enums/gw1.local.control.buffer.only.state/001.yaml', 'enum', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('62f7dd5d-bb72-871d-f631-97709d25bc51', 'definitions/enums/gw1.local.control.standby.top.state/001.yaml', 'enum', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('9b8a9362-b42e-3399-b672-e41c24a6e78e', 'definitions/enums/gw1.main.auto.state/001.yaml', 'enum', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('9bb66bc0-c4e5-eb5a-141b-4b8a887023be', 'definitions/enums/gw1.quantity/000.yaml', 'enum', NULL, 'gw1.quantity/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('aada0f37-bb46-2c3c-3f52-1d1338022237', 'definitions/enums/gw1.quantity/001.yaml', 'enum', NULL, 'gw1.quantity/001', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('4b9bc933-fb4c-44a6-0d62-1b4556f43fb1', 'definitions/enums/gw1.seasonal.storage.mode/000.yaml', 'enum', NULL, 'gw1.seasonal.storage.mode/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('4aa1eddd-d08d-91d2-581d-af8771a01107', 'definitions/enums/gw1.system.mode/000.yaml', 'enum', NULL, 'gw1.system.mode/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('b5e31f21-25e9-5d34-7b5e-f9cf4633957e', 'definitions/enums/gw1.unit/000.yaml', 'enum', NULL, 'gw1.unit/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e10b34a4-2fae-2bf3-5ba9-cfd762207753', 'definitions/enums/gw1.unit/001.yaml', 'enum', NULL, 'gw1.unit/001', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('d2d7cfcf-de8d-2ea2-56bb-6bbb360f8822', 'definitions/enums/heatcall.source/000.yaml', 'enum', NULL, 'heatcall.source/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e67ae4cf-6dcc-77b5-9bfe-49ed0dae51ea', 'definitions/enums/hz.calc.method/001.yaml', 'enum', NULL, 'hz.calc.method/001', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('2bbd2d88-5067-4de8-5843-251b9e4fa0e4', 'definitions/enums/i2c.adc.channel/000.yaml', 'enum', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('9a9eec19-37bd-a9bb-a587-1264500a3c27', 'definitions/enums/log.level/000.yaml', 'enum', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('1ccc7b15-93d6-4f5b-c704-c4f161ce1e38', 'definitions/enums/market.price.unit/000.yaml', 'enum', NULL, 'market.price.unit/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('82f5e000-7ce2-78ce-a704-8a7dcbee5df0', 'definitions/enums/market.quantity.unit/000.yaml', 'enum', NULL, 'market.quantity.unit/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('bc8276c8-67d5-1e45-217e-07939e7db03a', 'definitions/enums/market.type.name/000.yaml', 'enum', NULL, 'market.type.name/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('8d0e1093-49f4-ec15-0233-6bb213a771be', 'definitions/enums/relay.closed.or.open/000.yaml', 'enum', NULL, 'relay.closed.or.open/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('84a55ae5-73fd-2fba-1209-bb48ac84174c', 'definitions/enums/relay.energization.state/000.yaml', 'enum', NULL, 'relay.energization.state/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('4a1d2a82-70c3-c9f8-b268-e500d7876ab3', 'definitions/enums/relay.open.or.closed/000.yaml', 'enum', NULL, 'relay.open.or.closed/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('f719dbda-3556-99f4-642c-a9ff96a86ff3', 'definitions/enums/relay.wiring.config/000.yaml', 'enum', NULL, 'relay.wiring.config/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a6cf2a9e-cf6a-98fd-3352-b4ffe437e5a4', 'definitions/enums/spaceheat.make.model/003.yaml', 'enum', NULL, 'spaceheat.make.model/003', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('628e57d7-b8d7-699c-5f64-ad331d74bd63', 'definitions/enums/spaceheat.make.model/007.yaml', 'enum', NULL, 'spaceheat.make.model/007', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('d2171fcc-8ad6-d4aa-94eb-1f46f6344f94', 'definitions/enums/spaceheat.telemetry.name/006.yaml', 'enum', NULL, 'spaceheat.telemetry.name/006', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a9be5c8e-c647-56ec-f503-fb821dca22eb', 'definitions/enums/spaceheat.telemetry.name/007.yaml', 'enum', NULL, 'spaceheat.telemetry.name/007', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a509d62f-6e84-7cf7-d900-0e46bbc546aa', 'definitions/enums/spaceheat.unit/001.yaml', 'enum', NULL, 'spaceheat.unit/001', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5b7ac811-c3ed-3f4b-cd87-a6f3167adc67', 'definitions/enums/temp.calc.method/000.yaml', 'enum', NULL, 'temp.calc.method/000', NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('6f85be62-68df-960f-743c-5edd9ed579d0', 'definitions/formats/handle.name.yaml', 'format', NULL, NULL, 'handle.name', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('387a4e1d-b306-d5bf-9d13-ae8eeb57842c', 'definitions/formats/hex.char.yaml', 'format', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('d3f4ae0a-bfc2-cf1a-d338-568a706c50e1', 'definitions/formats/left.right.dot.yaml', 'format', NULL, NULL, 'left.right.dot', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('9fe26689-d6b1-9709-08ac-1640d53f8680', 'definitions/formats/market.slot.name.yaml', 'format', NULL, NULL, 'market.slot.name', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e8c48cb0-b985-d5af-f614-0bdc35be5b25', 'definitions/formats/non.negative.int.yaml', 'format', NULL, NULL, 'non.negative.int', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('2bf0e2a0-d7e2-ba2f-6704-1e05e73ec1a7', 'definitions/formats/pascal.case.yaml', 'format', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('80b22be2-11e0-2492-eecd-c3c04960b823', 'definitions/formats/positive.float.yaml', 'format', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('05717a1b-f332-7e0a-ca40-e48454b2abc3', 'definitions/formats/positive.int.yaml', 'format', NULL, NULL, 'positive.int', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('29690ee3-6026-ccd6-1e4e-5b39e118f7e5', 'definitions/formats/spaceheat.name.yaml', 'format', NULL, NULL, 'spaceheat.name', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('d50430ae-9389-dd62-6ff9-f74511e432e1', 'definitions/formats/utc.iso8601.millis.yaml', 'format', NULL, NULL, 'utc.iso8601.millis', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('2108f4bb-6810-a8c4-1d2a-8c84b2fa78b6', 'definitions/formats/utc.iso8601.seconds.yaml', 'format', NULL, NULL, 'utc.iso8601.seconds', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('c94f128c-22af-5057-fea7-8e73b078d52d', 'definitions/formats/utc.milliseconds.yaml', 'format', NULL, NULL, 'utc.milliseconds', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('53d0c9ec-dd3e-6de4-aac1-98e28d91fac1', 'definitions/formats/utc.seconds.yaml', 'format', NULL, NULL, 'utc.seconds', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('fc7b151b-901d-17b1-47d1-8bb52fbc2b18', 'definitions/formats/uuid4.str.yaml', 'format', NULL, NULL, 'uuid4.str', NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('2edcb095-e757-4213-41e0-382ed405f260', 'definitions/owners.yaml', 'owner', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('acad132f-a58e-8d91-1b9c-015f5c0c3dd0', 'definitions/registry.yaml', 'registry', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5965e3ff-3118-822f-98a1-01f15abea479', 'definitions/types/analytics.channel.gt/000.yaml', 'type', 'analytics.channel.gt/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('704d1d4a-9bf5-f688-5bfe-c30193dce8c6', 'definitions/types/atn.bid/002.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('24f98641-7dfe-e24c-cbaa-855355d86b39', 'definitions/types/bid/000.yaml', 'type', 'bid/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('476d1ba3-ac1c-89e8-5665-76f7440da351', 'definitions/types/channel.config/000.yaml', 'type', 'channel.config/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('57b73f27-25e5-0b74-3ee1-3c8f5ddf2434', 'definitions/types/channel.readings.list.item/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e802a533-4e61-0d1a-0867-3dd075328352', 'definitions/types/channel.readings/001.yaml', 'type', 'channel.readings/001', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('d8d0574c-4643-6409-9af9-f61a1feb76de', 'definitions/types/channel.readings/002.yaml', 'type', 'channel.readings/002', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('f2424b40-d95a-251e-1da0-af3fde90ee30', 'definitions/types/connectivity.edge.gt/000.yaml', 'type', 'connectivity.edge.gt/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a7c596fa-fa4c-d66e-15b2-17c55035b855', 'definitions/types/data.channel.gt/001.yaml', 'type', 'data.channel.gt/001', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('cd4a4cd2-2e30-5652-9e79-95754b1ebcb4', 'definitions/types/data.channel.gt/002.yaml', 'type', 'data.channel.gt/002', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('ac645d0a-a17d-86d5-1e42-29c006f9d291', 'definitions/types/derived.channel.gt/000.yaml', 'type', 'derived.channel.gt/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('27ed02da-48a0-c33d-8f40-aa351bbee58c', 'definitions/types/derived.channel.gt/001.yaml', 'type', 'derived.channel.gt/001', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('4f6e3d8c-1446-72db-92a9-d70f2983f54a', 'definitions/types/derived.channel.gt/002.yaml', 'type', 'derived.channel.gt/002', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('9e5f1da4-d777-0082-13b7-d87467cc4fb2', 'definitions/types/energy.instruction/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('ec264e85-d8be-2582-f325-f35bbcdc0faa', 'definitions/types/fis.authority.manifest/000.yaml', 'type', 'fis.authority.manifest/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5614b336-2981-4bc7-fa29-e876e78ef3bd', 'definitions/types/fis.instance.authorization.event/000.yaml', 'type', 'fis.instance.authorization.event/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('1fb21d9b-a994-e556-61ca-2f2e4ffc3034', 'definitions/types/flo.params.house0/003.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('2e969c8d-d83c-636b-8b9d-4814f9c78723', 'definitions/types/flo.params.house0/004.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a0d7e37f-80d9-ffff-54bd-a6dd709517cf', 'definitions/types/flo.params.house0/005.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('fb3ad307-40b9-69ac-a563-e56ced0d99a9', 'definitions/types/flo.params.house0/006.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('00ed080b-6484-1785-dedf-85847f7a2487', 'definitions/types/flo.params.house0/007.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('94ebfdc6-3e2b-8b2e-4222-b6d11944909a', 'definitions/types/fsm.atomic.report.i2c.action/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('20e0d4f6-506f-4efd-ce01-16925bbb8124', 'definitions/types/fsm.atomic.report.simple.action/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a8b22da9-fdf1-421f-8241-93a622dae06d', 'definitions/types/fsm.atomic.report/000.yaml', 'type', 'fsm.atomic.report/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('069fa0b1-50e2-5a30-cc7c-8b454920bb8d', 'definitions/types/fsm.atomic.report/001.yaml', 'type', 'fsm.atomic.report/001', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('512ce82b-4929-346e-1e6f-feaab2cf2641', 'definitions/types/fsm.atomic.report/002.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('4c819881-84b0-ba4c-66a7-dc66a053995d', 'definitions/types/fsm.event/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('68c003ac-691e-8128-f5f3-44dfe471926e', 'definitions/types/fsm.full.report/000.yaml', 'type', 'fsm.full.report/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('00613605-b24f-4cd2-d4b0-7e1c5e89a06b', 'definitions/types/fsm.full.report/001.yaml', 'type', 'fsm.full.report/001', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5c968e82-5bc8-4714-67ed-e36bbe500726', 'definitions/types/g.node.gt/004.yaml', 'type', 'g.node.gt/004', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('87c99a74-5300-cede-007a-45ace408365b', 'definitions/types/g.node.instance.gt/000.yaml', 'type', 'g.node.instance.gt/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('aff03f2b-e9fa-0f6c-9f95-6601f4732bff', 'definitions/types/glitch/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('6072a10f-bcae-6f9e-403e-dbe61dc13a7b', 'definitions/types/gridworks.ack.yaml', 'type', 'gridworks.ack/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('bb01fe0a-0d69-0303-6a4c-7fb3205401ea', 'definitions/types/gridworks.event.problem/001.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('65300e4a-96e0-6cca-6dcc-edd83d7f0ae6', 'definitions/types/gridworks.ping.yaml', 'type', 'gridworks.ping/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('dec5ef24-b873-5565-73f8-f95510dddb7a', 'definitions/types/gw.nolan.layout/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('144d6dee-50c5-5ced-8916-1be26eb2e36f', 'definitions/types/gw1.tank.temp.calibration.map/000.yaml', 'type', 'gw1.tank.temp.calibration.map/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('015680d0-d75e-4c89-732c-cee2e5f237d6', 'definitions/types/gw1.tank.temp.calibration/000.yaml', 'type', 'gw1.tank.temp.calibration/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('f0305447-e616-4567-48c9-6bdcf6f6f6a9', 'definitions/types/gw1.telemetry.name.quantity.projection/000.yaml', 'type', 'gw1.telemetry.name.quantity.projection/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('c7de0eaa-14c2-1132-1711-7800c0c9ccfd', 'definitions/types/gw1.unit.quantity.projection/000.yaml', 'type', 'gw1.unit.quantity.projection/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('cf2c097d-16a6-4941-8cf5-3b1a82b57e98', 'definitions/types/ha1.params/004.yaml', 'type', 'ha1.params/004', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('946f04ed-9f58-1f0b-ca50-404677f3a1e6', 'definitions/types/ha1.params/005.yaml', 'type', 'ha1.params/005', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e302b5cc-2d18-1ace-6df2-8c33dc5ed40a', 'definitions/types/ha1.params/006.yaml', 'type', 'ha1.params/006', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5b20094d-df6d-b55c-1579-d4fc8e5a0528', 'definitions/types/heartbeat.a/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5d6da46f-297d-3c23-530c-9608cb7a9bd2', 'definitions/types/heartbeat.a/001.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e8bbac22-e14d-987d-1fac-69f2a585a30e', 'definitions/types/heating.forecast/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('7b89b363-621b-dbe4-2ebe-4cd4328c1f2c', 'definitions/types/i2c.multichannel.dt.relay.component.gt/002.yaml', 'type', 'i2c.multichannel.dt.relay.component.gt/002', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('16a80abc-2653-5491-375a-e782a42d0f2d', 'definitions/types/i2c.multichannel.dt.relay.component.gt/003.yaml', 'type', 'i2c.multichannel.dt.relay.component.gt/003', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('33736200-78bf-091b-872b-4d7b464c0e7b', 'definitions/types/i2c.multichannel.dt.relay.component.gt/004.yaml', 'type', 'i2c.multichannel.dt.relay.component.gt/004', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('c3c122e3-d6b9-38ad-2a50-56c60fec52c1', 'definitions/types/i2c.thermistor.channel.config/000.yaml', 'type', 'i2c.thermistor.channel.config/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('c1f07e04-8d8d-73d4-a38e-af308d2004d2', 'definitions/types/i2c.thermistor.reader.component.gt/000.yaml', 'type', 'i2c.thermistor.reader.component.gt/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('da49a908-1e9c-0c85-97c5-7d87da78771c', 'definitions/types/keyparam.change.log/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('77ea8a33-0ec0-fa4e-cea6-436d6cee1d59', 'definitions/types/latest.price/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('89b755e3-70aa-f87f-6aff-aae5e6714f0b', 'definitions/types/layout.lite/007.yaml', 'type', 'layout.lite/007', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('0d463bf2-f1bf-5e1a-ca6d-787bdd29d864', 'definitions/types/layout.lite/008.yaml', 'type', 'layout.lite/008', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5c17cdd9-061d-c508-f4a7-2eac806da237', 'definitions/types/layout.lite/009.yaml', 'type', 'layout.lite/009', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('69be0629-9167-0faf-023c-ac063fc57733', 'definitions/types/layout.lite/010.yaml', 'type', 'layout.lite/010', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('0b10d4d1-c38b-2c22-633f-a6916ad8f4c0', 'definitions/types/layout.lite/011.yaml', 'type', 'layout.lite/011', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('66c16335-0a91-0e30-6ef0-2092433c560d', 'definitions/types/layout.lite/012.yaml', 'type', 'layout.lite/012', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('6d0708c3-d7d6-b0c1-c603-b0d4b83e72f4', 'definitions/types/layout.lite/013.yaml', 'type', 'layout.lite/013', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('5fbbf5cb-35ff-1c9c-ad8b-9a824a726487', 'definitions/types/linear.one.dimensional.calibration/000.yaml', 'type', 'linear.one.dimensional.calibration/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('03fc844c-eee9-6d5e-be11-16163a063720', 'definitions/types/linear.one.dimensional.calibration/001.yaml', 'type', 'linear.one.dimensional.calibration/001', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('4bd7698d-1a07-b6d4-719c-bac01f1c0019', 'definitions/types/machine.states/000.yaml', 'type', 'machine.states/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('6a20036b-c3df-800b-a9df-110fbcd08fa6', 'definitions/types/new.command.tree/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('207928df-e13a-1f57-4419-cfbaa8080c33', 'definitions/types/pico.flow.module.component.gt/000.yaml', 'type', 'pico.flow.module.component.gt/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('4bd8bd59-3731-2159-4a2a-005d08b63ac3', 'definitions/types/pico.tank.module.component.gt/011.yaml', 'type', 'pico.tank.module.component.gt/011', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('8afe7eb8-db57-9444-dbaa-8050cf3d8cda', 'definitions/types/position.point.gt/000.yaml', 'type', 'position.point.gt/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a10d4b19-55f0-7508-edef-95944186d997', 'definitions/types/power.watts/000.yaml', 'type', 'power.watts/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('950bcbfd-b68c-bc8c-d465-0101fb672078', 'definitions/types/price.quantity.unitless/001.yaml', 'type', 'price.quantity.unitless/001', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('13125add-7c09-6391-5486-2652fe02a31f', 'definitions/types/relay.actor.config/002.yaml', 'type', 'relay.actor.config/002', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('3843b31e-ed1a-a092-747a-c7339e109a6c', 'definitions/types/relay.actor.config/003.yaml', 'type', 'relay.actor.config/003', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('0d74839f-0944-4769-f08c-328409e7d3ba', 'definitions/types/report.event/002.yaml', 'type', 'report.event/002', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('784b4e79-9f90-e6d9-85f3-454b1ad5e21b', 'definitions/types/report.event/003.yaml', 'type', 'report.event/003', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('d0393391-d99a-ff49-4fa5-892809b87bf1', 'definitions/types/report.event/004.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('c92ec1a3-5922-0ee1-23e8-ae3e683919d2', 'definitions/types/report/002.yaml', 'type', 'report/002', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('56ead4b9-a452-5d41-a4f9-c16ca40fea4f', 'definitions/types/report/003.yaml', 'type', 'report/003', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('270596b7-d599-55a7-86bf-6881bc930232', 'definitions/types/scada.control.capabilities/000.yaml', 'type', 'scada.control.capabilities/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('17f73de5-4c0b-f670-4f6d-813e08a35365', 'definitions/types/scada.control.capabilities/001.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('87503dbb-ced9-7082-45f7-a0965ea01582', 'definitions/types/scada.params/004.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('b5ca916b-448a-fa67-302f-592c9176d142', 'definitions/types/scada.params/005.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('6fd327b5-8084-db84-91b8-c47e8743efac', 'definitions/types/send.control.capabilities/000.yaml', 'type', 'send.control.capabilities/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e09d20d8-cc12-a8b6-fd18-56fc7996691c', 'definitions/types/send.layout/000.yaml', 'type', 'send.layout/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e840f6c9-4ae2-fc19-4497-9416f27262d3', 'definitions/types/send.layout/001.yaml', 'type', 'send.layout/001', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e5663464-f4f3-8e31-621a-f8f7c502dcd4', 'definitions/types/sim.pico.tank.module.component.gt/000.yaml', 'type', 'sim.pico.tank.module.component.gt/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('8b2833f1-6d62-a3bb-38a3-3df6a853a83d', 'definitions/types/sim.ready/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('11997b23-f344-9a13-8348-cfef3b46e7b1', 'definitions/types/sim.timestep/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('74be9d97-479d-40b6-4a7f-723180fc721f', 'definitions/types/single.machine.state/000.yaml', 'type', 'single.machine.state/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('aa3cc87b-3255-f6da-3251-d710af3995d5', 'definitions/types/single.reading/000.yaml', 'type', 'single.reading/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('324edc6c-853a-b23c-3401-901953f82b75', 'definitions/types/snapshot.spaceheat/003.yaml', 'type', 'snapshot.spaceheat/003', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('9a25f338-928d-95e0-cbe5-5231bff3f91e', 'definitions/types/spaceheat.node.gt/200.yaml', 'type', 'spaceheat.node.gt/200', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('c4f399ba-2731-fda2-34b8-0a2241cb45db', 'definitions/types/spaceheat.node.gt/300.yaml', 'type', 'spaceheat.node.gt/300', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('e1fb62fb-043c-c39a-f991-98e6e3469e12', 'definitions/types/spaceheat.node.gt/301.yaml', 'type', 'spaceheat.node.gt/301', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('61e592a7-b1f1-9111-fe5e-875c7a4350cf', 'definitions/types/spaceheat.telemetry.quantity.projection/000.yaml', 'type', 'spaceheat.telemetry.quantity.projection/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('bd108027-10f3-a436-920f-e408ac36696c', 'definitions/types/synced.readings.bundle/001.yaml', 'type', 'synced.readings.bundle/001', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('36b5784f-2977-20e2-09b7-9fdc7275759b', 'definitions/types/synced.readings.bundle/002.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('fe5a099d-7473-b47d-97ce-bcdbe7e84185', 'definitions/types/synced.readings/000.yaml', 'type', 'synced.readings/000', NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('a9ebefaf-e458-9e2d-afc5-207797975991', 'definitions/types/synth.channel.gt/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('c123f617-cea5-91ea-3708-84cc7637ad67', 'definitions/types/ticklist.hall.report/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('cd50d9fb-fed4-0b99-2b43-0abc345717a6', 'definitions/types/ticklist.hall/101.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('9145b369-6885-0cc0-4e60-5ea45e05d305', 'definitions/types/ticklist.reed.report/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('add4b270-a4a1-564b-b14a-ef50ff1d0151', 'definitions/types/ticklist.reed/101.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
+INSERT INTO yaml_files (yaml_files_id, name, kind, type_version, enum_version, format, sha, is_generated)
+VALUES ('141d13e7-e665-71e1-0da7-489826e34a16', 'definitions/types/weather.forecast/000.yaml', 'type', NULL, NULL, NULL, NULL, FALSE) ON CONFLICT (yaml_files_id) DO NOTHING;
+
