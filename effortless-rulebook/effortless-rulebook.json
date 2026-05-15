@@ -18625,5 +18625,1557 @@
         "ExpectedExitCode": 0
       }
     ]
+  },
+  "YamlFiles": {
+    "Description": "Pointer rows for every YAML file under definitions/ that contributes to the rulebook (Tier C of ERB-SCAFFOLD-PLAN.md). Name is the file path relative to the repo root. Kind selects which (nullable) FK column is populated. IsGenerated is FALSE today since the YAMLs are still the SSoT; after Phase 3 of YAML-ODXML-RULEBOOK-MIGRATION-PLAN.md flips it to TRUE.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Path relative to the repo root. Example: 'definitions/types/atn.bid/002.yaml'. Acts as the primary key."
+      },
+      {
+        "name": "Kind",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "One of 'type', 'enum', 'format', 'registry', 'owner'. Determines which FK column is populated."
+      },
+      {
+        "name": "TypeVersion",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "FK to TypeVersions when Kind='type' and the file lives at definitions/types/<name>/<version>.yaml.",
+        "RelatedTo": "TypeVersions"
+      },
+      {
+        "name": "EnumVersion",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "FK to EnumVersions when Kind='enum'.",
+        "RelatedTo": "EnumVersions"
+      },
+      {
+        "name": "Format",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "FK to Formats when Kind='format'.",
+        "RelatedTo": "Formats"
+      },
+      {
+        "name": "Sha",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Optional SHA-256 hex digest of the file contents. NULL today; future tooling can populate."
+      },
+      {
+        "name": "IsGenerated",
+        "datatype": "boolean",
+        "type": "raw",
+        "nullable": false,
+        "Description": "FALSE while the YAML is the SSoT (current state). After Phase 3 of YAML-ODXML-RULEBOOK-MIGRATION-PLAN.md, the rulebook becomes the SSoT and these files are emitted by rulebook-to-yaml \u2014 set TRUE then."
+      },
+      {
+        "name": "HasRulebookRow",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "TRUE iff at least one of TypeVersion / EnumVersion / Format is non-null. FALSE for registry/owner kinds and for any orphan YAML file that lacks a corresponding rulebook row.",
+        "formula": "=IF(OR({{TypeVersion}}, {{EnumVersion}}, {{Format}}), TRUE(), FALSE())"
+      }
+    ],
+    "data": [
+      {
+        "Name": "definitions/enums/base.g.node.class/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "base.g.node.class/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/buffer.regulation.mode/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "buffer.regulation.mode/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/change.heatcall.source/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "change.heatcall.source/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/change.relay.state/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "change.relay.state/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/fis.authorization.decision/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "fis.authorization.decision/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/fis.authorization.reason/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "fis.authorization.reason/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/fsm.report.type/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "fsm.report.type/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/g.node.instance.status/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "g.node.instance.status/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/g.node.instance.transport/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "g.node.instance.transport/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/g.node.status/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "g.node.status/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gpm.from.hz.method/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gpm.from.hz.method/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw.g.node.class/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw.g.node.class/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.actor.class/009.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.actor.class/009",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.actor.class/010.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.actor.class/010",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.actor.class/011.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.actor.class/011",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.emission.method/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.emission.method/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.heat.call.interpretation/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.heat.call.interpretation/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.lc.top.state/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.leaf.ally.all.tanks.state/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.leaf.ally.buffer.only.state/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.local.control.all.tanks.state/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.local.control.buffer.only.state/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.local.control.standby.top.state/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.main.auto.state/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.quantity/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.quantity/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.quantity/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.quantity/001",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.seasonal.storage.mode/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.seasonal.storage.mode/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.system.mode/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.system.mode/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.unit/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.unit/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/gw1.unit/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "gw1.unit/001",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/heatcall.source/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "heatcall.source/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/hz.calc.method/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "hz.calc.method/001",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/i2c.adc.channel/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/log.level/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/market.price.unit/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "market.price.unit/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/market.quantity.unit/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "market.quantity.unit/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/market.type.name/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "market.type.name/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/relay.closed.or.open/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "relay.closed.or.open/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/relay.energization.state/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "relay.energization.state/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/relay.open.or.closed/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "relay.open.or.closed/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/relay.wiring.config/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "relay.wiring.config/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/spaceheat.make.model/003.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "spaceheat.make.model/003",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/spaceheat.make.model/007.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "spaceheat.make.model/007",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/spaceheat.telemetry.name/006.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "spaceheat.telemetry.name/006",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/spaceheat.telemetry.name/007.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "spaceheat.telemetry.name/007",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/spaceheat.unit/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "spaceheat.unit/001",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/enums/temp.calc.method/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": "temp.calc.method/000",
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "enum"
+      },
+      {
+        "Name": "definitions/formats/handle.name.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "handle.name",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/hex.char.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/left.right.dot.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "left.right.dot",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/market.slot.name.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "market.slot.name",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/non.negative.int.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "non.negative.int",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/pascal.case.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/positive.float.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/positive.int.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "positive.int",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/spaceheat.name.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "spaceheat.name",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/utc.iso8601.millis.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "utc.iso8601.millis",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/utc.iso8601.seconds.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "utc.iso8601.seconds",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/utc.milliseconds.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "utc.milliseconds",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/utc.seconds.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "utc.seconds",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/formats/uuid4.str.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": "uuid4.str",
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "format"
+      },
+      {
+        "Name": "definitions/owners.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "owner"
+      },
+      {
+        "Name": "definitions/registry.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "registry"
+      },
+      {
+        "Name": "definitions/types/analytics.channel.gt/000.yaml",
+        "TypeVersion": "analytics.channel.gt/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/atn.bid/002.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/bid/000.yaml",
+        "TypeVersion": "bid/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/channel.config/000.yaml",
+        "TypeVersion": "channel.config/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/channel.readings.list.item/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/channel.readings/001.yaml",
+        "TypeVersion": "channel.readings/001",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/channel.readings/002.yaml",
+        "TypeVersion": "channel.readings/002",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/connectivity.edge.gt/000.yaml",
+        "TypeVersion": "connectivity.edge.gt/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/data.channel.gt/001.yaml",
+        "TypeVersion": "data.channel.gt/001",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/data.channel.gt/002.yaml",
+        "TypeVersion": "data.channel.gt/002",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/derived.channel.gt/000.yaml",
+        "TypeVersion": "derived.channel.gt/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/derived.channel.gt/001.yaml",
+        "TypeVersion": "derived.channel.gt/001",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/derived.channel.gt/002.yaml",
+        "TypeVersion": "derived.channel.gt/002",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/energy.instruction/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fis.authority.manifest/000.yaml",
+        "TypeVersion": "fis.authority.manifest/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fis.instance.authorization.event/000.yaml",
+        "TypeVersion": "fis.instance.authorization.event/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/flo.params.house0/003.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/flo.params.house0/004.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/flo.params.house0/005.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/flo.params.house0/006.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/flo.params.house0/007.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fsm.atomic.report.i2c.action/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fsm.atomic.report.simple.action/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fsm.atomic.report/000.yaml",
+        "TypeVersion": "fsm.atomic.report/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fsm.atomic.report/001.yaml",
+        "TypeVersion": "fsm.atomic.report/001",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fsm.atomic.report/002.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fsm.event/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fsm.full.report/000.yaml",
+        "TypeVersion": "fsm.full.report/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/fsm.full.report/001.yaml",
+        "TypeVersion": "fsm.full.report/001",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/g.node.gt/004.yaml",
+        "TypeVersion": "g.node.gt/004",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/g.node.instance.gt/000.yaml",
+        "TypeVersion": "g.node.instance.gt/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/glitch/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/gridworks.ack.yaml",
+        "TypeVersion": "gridworks.ack/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/gridworks.event.problem/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/gridworks.ping.yaml",
+        "TypeVersion": "gridworks.ping/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/gw.nolan.layout/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/gw1.tank.temp.calibration.map/000.yaml",
+        "TypeVersion": "gw1.tank.temp.calibration.map/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/gw1.tank.temp.calibration/000.yaml",
+        "TypeVersion": "gw1.tank.temp.calibration/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/gw1.telemetry.name.quantity.projection/000.yaml",
+        "TypeVersion": "gw1.telemetry.name.quantity.projection/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/gw1.unit.quantity.projection/000.yaml",
+        "TypeVersion": "gw1.unit.quantity.projection/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/ha1.params/004.yaml",
+        "TypeVersion": "ha1.params/004",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/ha1.params/005.yaml",
+        "TypeVersion": "ha1.params/005",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/ha1.params/006.yaml",
+        "TypeVersion": "ha1.params/006",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/heartbeat.a/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/heartbeat.a/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/heating.forecast/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/i2c.multichannel.dt.relay.component.gt/002.yaml",
+        "TypeVersion": "i2c.multichannel.dt.relay.component.gt/002",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/i2c.multichannel.dt.relay.component.gt/003.yaml",
+        "TypeVersion": "i2c.multichannel.dt.relay.component.gt/003",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/i2c.multichannel.dt.relay.component.gt/004.yaml",
+        "TypeVersion": "i2c.multichannel.dt.relay.component.gt/004",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/i2c.thermistor.channel.config/000.yaml",
+        "TypeVersion": "i2c.thermistor.channel.config/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/i2c.thermistor.reader.component.gt/000.yaml",
+        "TypeVersion": "i2c.thermistor.reader.component.gt/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/keyparam.change.log/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/latest.price/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/layout.lite/007.yaml",
+        "TypeVersion": "layout.lite/007",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/layout.lite/008.yaml",
+        "TypeVersion": "layout.lite/008",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/layout.lite/009.yaml",
+        "TypeVersion": "layout.lite/009",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/layout.lite/010.yaml",
+        "TypeVersion": "layout.lite/010",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/layout.lite/011.yaml",
+        "TypeVersion": "layout.lite/011",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/layout.lite/012.yaml",
+        "TypeVersion": "layout.lite/012",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/layout.lite/013.yaml",
+        "TypeVersion": "layout.lite/013",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/linear.one.dimensional.calibration/000.yaml",
+        "TypeVersion": "linear.one.dimensional.calibration/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/linear.one.dimensional.calibration/001.yaml",
+        "TypeVersion": "linear.one.dimensional.calibration/001",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/machine.states/000.yaml",
+        "TypeVersion": "machine.states/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/new.command.tree/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/pico.flow.module.component.gt/000.yaml",
+        "TypeVersion": "pico.flow.module.component.gt/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/pico.tank.module.component.gt/011.yaml",
+        "TypeVersion": "pico.tank.module.component.gt/011",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/position.point.gt/000.yaml",
+        "TypeVersion": "position.point.gt/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/power.watts/000.yaml",
+        "TypeVersion": "power.watts/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/price.quantity.unitless/001.yaml",
+        "TypeVersion": "price.quantity.unitless/001",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/relay.actor.config/002.yaml",
+        "TypeVersion": "relay.actor.config/002",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/relay.actor.config/003.yaml",
+        "TypeVersion": "relay.actor.config/003",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/report.event/002.yaml",
+        "TypeVersion": "report.event/002",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/report.event/003.yaml",
+        "TypeVersion": "report.event/003",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/report.event/004.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/report/002.yaml",
+        "TypeVersion": "report/002",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/report/003.yaml",
+        "TypeVersion": "report/003",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/scada.control.capabilities/000.yaml",
+        "TypeVersion": "scada.control.capabilities/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/scada.control.capabilities/001.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/scada.params/004.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/scada.params/005.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/send.control.capabilities/000.yaml",
+        "TypeVersion": "send.control.capabilities/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/send.layout/000.yaml",
+        "TypeVersion": "send.layout/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/send.layout/001.yaml",
+        "TypeVersion": "send.layout/001",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/sim.pico.tank.module.component.gt/000.yaml",
+        "TypeVersion": "sim.pico.tank.module.component.gt/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/sim.ready/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/sim.timestep/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/single.machine.state/000.yaml",
+        "TypeVersion": "single.machine.state/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/single.reading/000.yaml",
+        "TypeVersion": "single.reading/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/snapshot.spaceheat/003.yaml",
+        "TypeVersion": "snapshot.spaceheat/003",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/spaceheat.node.gt/200.yaml",
+        "TypeVersion": "spaceheat.node.gt/200",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/spaceheat.node.gt/300.yaml",
+        "TypeVersion": "spaceheat.node.gt/300",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/spaceheat.node.gt/301.yaml",
+        "TypeVersion": "spaceheat.node.gt/301",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/spaceheat.telemetry.quantity.projection/000.yaml",
+        "TypeVersion": "spaceheat.telemetry.quantity.projection/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/synced.readings.bundle/001.yaml",
+        "TypeVersion": "synced.readings.bundle/001",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/synced.readings.bundle/002.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/synced.readings/000.yaml",
+        "TypeVersion": "synced.readings/000",
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/synth.channel.gt/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/ticklist.hall.report/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/ticklist.hall/101.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/ticklist.reed.report/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/ticklist.reed/101.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      },
+      {
+        "Name": "definitions/types/weather.forecast/000.yaml",
+        "TypeVersion": null,
+        "EnumVersion": null,
+        "Format": null,
+        "Sha": null,
+        "IsGenerated": false,
+        "Kind": "type"
+      }
+    ]
   }
 }
