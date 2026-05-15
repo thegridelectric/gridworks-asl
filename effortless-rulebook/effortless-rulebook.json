@@ -18263,5 +18263,367 @@
       }
     ],
     "data": []
+  },
+  "CliCommands": {
+    "Description": "The hierarchical surface of the `sema` CLI \u2014 every parser node from src/sema/interfaces/cli/. Each row is one subcommand or the root. Parent links form a tree; flags and examples attach via CliFlags.Command and CliExamples.Command. This is descriptive scaffolding (Tier B of ERB-SCAFFOLD-PLAN.md) \u2014 the CLI is still implemented in Python, but the rulebook now points at every node.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Fully-qualified command path. Example: 'sema snapshot prepare'. Acts as the primary key."
+      },
+      {
+        "name": "Parent",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "FK to the parent CliCommand. NULL for the root 'sema'. Children's Names start with their Parent's Name followed by a single space.",
+        "RelatedTo": "CliCommands"
+      },
+      {
+        "name": "ImplFile",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Path (relative to repo root) of the Python file that defines this command's parser/handler."
+      },
+      {
+        "name": "Summary",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Short one-line description, mirroring the argparse `help=` for this subparser."
+      },
+      {
+        "name": "Description",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Longer description, mirroring the argparse `description=` for this subparser. Often spans multiple sentences."
+      },
+      {
+        "name": "ChildCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of CliCommands whose Parent is this command.",
+        "formula": "=COUNTIFS(CliCommands!{{Parent}}, CliCommands!{{Name}})"
+      },
+      {
+        "name": "FlagCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of CliFlags attached to this command.",
+        "formula": "=COUNTIFS(CliFlags!{{Command}}, CliCommands!{{Name}})"
+      },
+      {
+        "name": "ExampleCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of CliExamples attached to this command.",
+        "formula": "=COUNTIFS(CliExamples!{{Command}}, CliCommands!{{Name}})"
+      },
+      {
+        "name": "IsLeaf",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True when this command has no children (a runnable subcommand, not a parser-only grouping).",
+        "formula": "=IF({{ChildCount}}=0, TRUE(), FALSE())"
+      }
+    ],
+    "data": [
+      {
+        "Name": "sema",
+        "Parent": null,
+        "ImplFile": "src/sema/interfaces/cli/main.py",
+        "Summary": "Sema CLI root parser.",
+        "Description": "Root argparse parser. Dispatches to the four subcommand groups (info, reverse, runtime, snapshot)."
+      },
+      {
+        "Name": "sema info",
+        "Parent": "sema",
+        "ImplFile": "src/sema/interfaces/cli/main.py",
+        "Summary": "Display CLI surface.",
+        "Description": "Print a short summary of the Sema CLI: interface kind and list of subcommands."
+      },
+      {
+        "Name": "sema reverse",
+        "Parent": "sema",
+        "ImplFile": "src/sema/interfaces/cli/reverse.py",
+        "Summary": "Show transitive reverse dependencies for a Sema word.",
+        "Description": "Return the transitive reverse dependency closure for a Sema word. If the word is a type or enum, it MUST include a version. If the word is a property format, it has no version."
+      },
+      {
+        "Name": "sema runtime",
+        "Parent": "sema",
+        "ImplFile": "src/sema/interfaces/cli/runtime.py",
+        "Summary": "Runtime generation helper commands.",
+        "Description": "Helpers for maintaining generated Sema runtime templates (axioms, upgrades)."
+      },
+      {
+        "Name": "sema runtime scaffold-axiom-template",
+        "Parent": "sema runtime",
+        "ImplFile": "src/sema/interfaces/cli/runtime.py",
+        "Summary": "Create a missing axiom implementation template for a type version.",
+        "Description": "Read definitions/types/<type-name>/<version>.yaml and create a missing Jinja axiom template. Existing templates are never overwritten."
+      },
+      {
+        "Name": "sema runtime scaffold-upgrade-template",
+        "Parent": "sema runtime",
+        "ImplFile": "src/sema/interfaces/cli/runtime.py",
+        "Summary": "Create a missing upgrade template for a non-latest type version.",
+        "Description": "Create a missing Jinja upgrade template for <type-name>:<version> -> <next-version>. The stub raises NotImplementedError until hand-written. Existing templates are never overwritten."
+      },
+      {
+        "Name": "sema snapshot",
+        "Parent": "sema",
+        "ImplFile": "src/sema/interfaces/cli/snapshot.py",
+        "Summary": "Prepare and build a complete Sema snapshot runtime.",
+        "Description": "Use `prepare` with a structured seed request YAML, then edit output/sema/indexes/local_names.yaml if needed, then use `build` with --package-name to generate runtime imports. Use template_seed_request.yaml at the repository root as a starting point."
+      },
+      {
+        "Name": "sema snapshot prepare",
+        "Parent": "sema snapshot",
+        "ImplFile": "src/sema/interfaces/cli/snapshot.py",
+        "Summary": "Expand a seed request and write definitions, indexes, and local names.",
+        "Description": "Read a structured seed request YAML, expand the transitive closure, clear output/, mirror seed-scoped definitions under output/sema/definitions, write restricted indexes under output/sema/indexes, and create output/sema/indexes/local_names.yaml."
+      },
+      {
+        "Name": "sema snapshot build",
+        "Parent": "sema snapshot",
+        "ImplFile": "src/sema/interfaces/cli/snapshot.py",
+        "Summary": "Generate runtime files from a prepared snapshot.",
+        "Description": "Read output/sema/indexes/seed_expanded.yaml and output/sema/indexes/local_names.yaml, then generate runtime files under output/sema. The package name is used for generated imports."
+      }
+    ]
+  },
+  "CliFlags": {
+    "Description": "Every flag (positional or named) declared on a CliCommand. Name is the compound key Command::FlagName. Kind names a primitive value type; EnumValuesRef points at an Enum when a flag's value is constrained to a rulebook enum (no current flag uses this, but the column is reserved for future use).",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Compound key: <Command>::<FlagName>. Auto-derived.",
+        "formula": "=CONCATENATE({{Command}}, \"::\", {{FlagName}})"
+      },
+      {
+        "name": "Command",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": false,
+        "Description": "FK to the CliCommands row this flag attaches to.",
+        "RelatedTo": "CliCommands"
+      },
+      {
+        "name": "FlagName",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Flag spelling. Positional args use the bare identifier ('name', 'version'). Named args use the long form including dashes ('--package-name')."
+      },
+      {
+        "name": "ShortName",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Short alias if defined ('-p'). NULL for positional args and named-only flags."
+      },
+      {
+        "name": "IsPositional",
+        "datatype": "boolean",
+        "type": "raw",
+        "nullable": false,
+        "Description": "True when the argparse action is a positional argument. False for named flags."
+      },
+      {
+        "name": "Kind",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "Primitive value type. One of 'string', 'bool', 'int', 'path'. Reserved value 'enum' applies when EnumValuesRef is non-null."
+      },
+      {
+        "name": "Required",
+        "datatype": "boolean",
+        "type": "raw",
+        "nullable": false,
+        "Description": "True when the flag is mandatory. For positional args this maps to nargs not being '?' or '*'."
+      },
+      {
+        "name": "Default",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Stringified default value, or NULL when there is no default."
+      },
+      {
+        "name": "Description",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Short description, taken from argparse `help=` where available."
+      },
+      {
+        "name": "EnumValuesRef",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": true,
+        "Description": "When the flag accepts values constrained to a rulebook Enum, points at the Enum row. NULL otherwise.",
+        "RelatedTo": "Enums"
+      }
+    ],
+    "data": [
+      {
+        "Command": "sema reverse",
+        "FlagName": "name",
+        "IsPositional": true,
+        "Kind": "string",
+        "Required": true,
+        "Description": "Sema word identifier (type, enum, or format name)."
+      },
+      {
+        "Command": "sema reverse",
+        "FlagName": "version",
+        "IsPositional": true,
+        "Kind": "string",
+        "Required": false,
+        "Description": "Three-digit version. Required for types/enums; omitted for formats."
+      },
+      {
+        "Command": "sema runtime scaffold-axiom-template",
+        "FlagName": "type_name",
+        "IsPositional": true,
+        "Kind": "string",
+        "Required": true,
+        "Description": "Type identifier slug."
+      },
+      {
+        "Command": "sema runtime scaffold-axiom-template",
+        "FlagName": "version",
+        "IsPositional": true,
+        "Kind": "string",
+        "Required": true,
+        "Description": "Three-digit version of the type."
+      },
+      {
+        "Command": "sema runtime scaffold-upgrade-template",
+        "FlagName": "type_name",
+        "IsPositional": true,
+        "Kind": "string",
+        "Required": true,
+        "Description": "Type identifier slug."
+      },
+      {
+        "Command": "sema runtime scaffold-upgrade-template",
+        "FlagName": "version",
+        "IsPositional": true,
+        "Kind": "string",
+        "Required": true,
+        "Description": "From-version, the older end of the upgrade hop."
+      },
+      {
+        "Command": "sema runtime scaffold-upgrade-template",
+        "FlagName": "next_version",
+        "IsPositional": true,
+        "Kind": "string",
+        "Required": true,
+        "Description": "To-version, the newer end of the upgrade hop."
+      },
+      {
+        "Command": "sema snapshot prepare",
+        "FlagName": "seed_request",
+        "IsPositional": true,
+        "Kind": "path",
+        "Required": true,
+        "Description": "Path to a seed request YAML file."
+      },
+      {
+        "Command": "sema snapshot build",
+        "FlagName": "--package-name",
+        "IsPositional": false,
+        "Kind": "string",
+        "Required": true,
+        "Description": "Python package name used for generated import paths."
+      }
+    ]
+  },
+  "CliExamples": {
+    "Description": "Concrete example invocations for a CliCommand. Sourced from argparse `epilog=` blocks. Idx preserves listing order. ExpectedExitCode defaults to 0 (success); future rows can document expected-failure examples.",
+    "schema": [
+      {
+        "name": "Name",
+        "datatype": "string",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "Compound key: <Command>::ex<Idx>. Auto-derived.",
+        "formula": "=CONCATENATE({{Command}}, \"::ex\", {{Idx}})"
+      },
+      {
+        "name": "Command",
+        "datatype": "string",
+        "type": "relationship",
+        "nullable": false,
+        "Description": "FK to the CliCommands row this example illustrates.",
+        "RelatedTo": "CliCommands"
+      },
+      {
+        "name": "Idx",
+        "datatype": "integer",
+        "type": "raw",
+        "nullable": false,
+        "Description": "0-indexed ordering of this example within its Command's epilog."
+      },
+      {
+        "name": "ExampleString",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": false,
+        "Description": "The full command-line invocation as it would be typed in a terminal."
+      },
+      {
+        "name": "Description",
+        "datatype": "string",
+        "type": "raw",
+        "nullable": true,
+        "Description": "Optional short note about what this example demonstrates."
+      },
+      {
+        "name": "ExpectedExitCode",
+        "datatype": "integer",
+        "type": "raw",
+        "nullable": false,
+        "Description": "POSIX exit code the example is expected to produce. 0 for success."
+      }
+    ],
+    "data": [
+      {
+        "Command": "sema reverse",
+        "Idx": 0,
+        "ExampleString": "uv run sema reverse relay.actor.config 003",
+        "Description": "Reverse dependencies of a versioned type.",
+        "ExpectedExitCode": 0
+      },
+      {
+        "Command": "sema reverse",
+        "Idx": 1,
+        "ExampleString": "uv run sema reverse gw1.unit 001",
+        "Description": "Reverse dependencies of a different versioned word.",
+        "ExpectedExitCode": 0
+      },
+      {
+        "Command": "sema reverse",
+        "Idx": 2,
+        "ExampleString": "uv run sema reverse left.right.dot",
+        "Description": "Reverse dependencies of a format (no version argument).",
+        "ExpectedExitCode": 0
+      }
+    ]
   }
 }
