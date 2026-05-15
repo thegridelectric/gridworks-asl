@@ -5087,12 +5087,12 @@
         "formula": "=IF({{Status}}=\"draft\", TRUE(), FALSE())"
       },
       {
-        "name": "IsClosed",
+        "name": "IsDependencyClosed",
         "datatype": "boolean",
         "type": "calculated",
         "nullable": false,
-        "Description": "True when ExtraAllowed is FALSE (additionalProperties: false in JSON-Schema).",
-        "formula": "=IF({{ExtraAllowed}}, FALSE(), TRUE())"
+        "Description": "True iff every TypeAttribute on this TypeVersion has refs (FormatRef / EnumVersionRef / SubTypeVersionRef) that resolve to existing registry rows. Replaces the prior schema-closure meaning \u2014 for 'additionalProperties: false', read NOT(ExtraAllowed).",
+        "formula": "=IF({{UnresolvedRefCount}}=0, TRUE(), FALSE())"
       },
       {
         "name": "AttributeCount",
@@ -5149,6 +5149,14 @@
         "nullable": false,
         "Description": "Number of TypeAttributes that nest this version as a sub-type via SubTypeVersionRef.",
         "formula": "=COUNTIFS(TypeAttributes!{{SubTypeVersionRef}}, TypeVersions!{{Name}})"
+      },
+      {
+        "name": "UnresolvedRefCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeAttributes on this TypeVersion whose refs do not resolve to existing registry rows. Zero when the version is dependency-closed.",
+        "formula": "=COUNTIFS(TypeAttributes!{{TypeVersion}}, TypeVersions!{{Name}}, TypeAttributes!{{RefIsResolvable}}, FALSE())"
       },
       {
         "name": "TypeHelperAttributeAsSubtypeCount",
@@ -6136,6 +6144,38 @@
         "nullable": true,
         "Description": "FK to another TypeVersion, when this attribute uses a $ref to /types/X/NNN.",
         "RelatedTo": "TypeVersions"
+      },
+      {
+        "name": "RefFormatExists",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff FormatRef is null OR points at an existing row in Formats. Used to roll up dependency-closedness on the parent TypeVersion.",
+        "formula": "=IF({{FormatRef}}, IF(COUNTIFS(Formats!{{Name}}, {{FormatRef}})>0, TRUE(), FALSE()), TRUE())"
+      },
+      {
+        "name": "RefEnumVersionExists",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff EnumVersionRef is null OR points at an existing row in EnumVersions.",
+        "formula": "=IF({{EnumVersionRef}}, IF(COUNTIFS(EnumVersions!{{Name}}, {{EnumVersionRef}})>0, TRUE(), FALSE()), TRUE())"
+      },
+      {
+        "name": "RefSubTypeVersionExists",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff SubTypeVersionRef is null OR points at an existing row in TypeVersions.",
+        "formula": "=IF({{SubTypeVersionRef}}, IF(COUNTIFS(TypeVersions!{{Name}}, {{SubTypeVersionRef}})>0, TRUE(), FALSE()), TRUE())"
+      },
+      {
+        "name": "RefIsResolvable",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff every populated ref on this attribute (FormatRef / EnumVersionRef / SubTypeVersionRef) points at an existing registry row. Drives TypeVersions.IsDependencyClosed.",
+        "formula": "=IF(AND({{RefFormatExists}}, {{RefEnumVersionExists}}, {{RefSubTypeVersionExists}}), TRUE(), FALSE())"
       },
       {
         "name": "HelperRef",
@@ -15789,12 +15829,12 @@
         "formula": "=COUNTIFS(TypeHelperAttributes!{{TypeHelper}}, TypeHelpers!{{Name}}, TypeHelperAttributes!{{IsRequired}}, TRUE())"
       },
       {
-        "name": "IsClosed",
+        "name": "IsDependencyClosed",
         "datatype": "boolean",
         "type": "calculated",
         "nullable": false,
-        "Description": "True when ExtraAllowed is FALSE (the helper rejects unknown properties).",
-        "formula": "=IF({{ExtraAllowed}}, FALSE(), TRUE())"
+        "Description": "True iff every TypeHelperAttribute on this Helper has refs that resolve to existing registry rows.",
+        "formula": "=IF({{UnresolvedRefCount}}=0, TRUE(), FALSE())"
       },
       {
         "name": "TypeAttributeUsageCount",
@@ -15859,6 +15899,14 @@
         "nullable": true,
         "Description": "Whether the origin Definition is active.",
         "formula": "=INDEX(TypeVersions!{{IsPublished}}, MATCH({{OriginTypeVersion}}, TypeVersions!{{Name}}, 0))"
+      },
+      {
+        "name": "UnresolvedRefCount",
+        "datatype": "integer",
+        "type": "aggregation",
+        "nullable": false,
+        "Description": "Number of TypeHelperAttributes on this Helper whose refs do not resolve to existing registry rows.",
+        "formula": "=COUNTIFS(TypeHelperAttributes!{{TypeHelper}}, TypeHelpers!{{Name}}, TypeHelperAttributes!{{RefIsResolvable}}, FALSE())"
       }
     ],
     "data": [
@@ -15980,6 +16028,38 @@
         "nullable": true,
         "Description": "FK to a TypeVersion, if this attribute references one.",
         "RelatedTo": "TypeVersions"
+      },
+      {
+        "name": "RefFormatExists",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff FormatRef is null OR points at an existing row in Formats. Used to roll up dependency-closedness on the parent TypeVersion.",
+        "formula": "=IF({{FormatRef}}, IF(COUNTIFS(Formats!{{Name}}, {{FormatRef}})>0, TRUE(), FALSE()), TRUE())"
+      },
+      {
+        "name": "RefEnumVersionExists",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff EnumVersionRef is null OR points at an existing row in EnumVersions.",
+        "formula": "=IF({{EnumVersionRef}}, IF(COUNTIFS(EnumVersions!{{Name}}, {{EnumVersionRef}})>0, TRUE(), FALSE()), TRUE())"
+      },
+      {
+        "name": "RefSubTypeVersionExists",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff SubTypeVersionRef is null OR points at an existing row in TypeVersions.",
+        "formula": "=IF({{SubTypeVersionRef}}, IF(COUNTIFS(TypeVersions!{{Name}}, {{SubTypeVersionRef}})>0, TRUE(), FALSE()), TRUE())"
+      },
+      {
+        "name": "RefIsResolvable",
+        "datatype": "boolean",
+        "type": "calculated",
+        "nullable": false,
+        "Description": "True iff every populated ref on this attribute (FormatRef / EnumVersionRef / SubTypeVersionRef) points at an existing registry row. Drives TypeVersions.IsDependencyClosed.",
+        "formula": "=IF(AND({{RefFormatExists}}, {{RefEnumVersionExists}}, {{RefSubTypeVersionExists}}), TRUE(), FALSE())"
       },
       {
         "name": "HelperRef",

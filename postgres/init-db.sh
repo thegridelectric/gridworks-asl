@@ -25,6 +25,8 @@ SQL_FILES=(
     "${SCRIPT_DIR}/04b-customize-policies.sql"
     "${SCRIPT_DIR}/05-insert-data.sql"
     "${SCRIPT_DIR}/05b-customize-data.sql"
+    "${SCRIPT_DIR}/05c-customize-data.sql"
+
 )
 
 # Default connection string

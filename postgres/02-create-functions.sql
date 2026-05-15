@@ -1122,14 +1122,14 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(status, '') FROM type_versions WHERE type_versions_id = p_type_versions_id) = 'draft' THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
--- calc_type_versions_is_closed
--- Field: TypeVersions.IsClosed
+-- calc_type_versions_is_dependency_closed
+-- Field: TypeVersions.IsDependencyClosed
 -- Type: calculated | DataType: boolean | Returns: BOOLEAN
 
 
-CREATE OR REPLACE FUNCTION calc_type_versions_is_closed(p_type_versions_id TEXT)
+CREATE OR REPLACE FUNCTION calc_type_versions_is_dependency_closed(p_type_versions_id TEXT)
 RETURNS BOOLEAN AS $$
-  SELECT (CASE WHEN COALESCE((SELECT extra_allowed FROM type_versions WHERE type_versions_id = p_type_versions_id), FALSE) THEN FALSE ELSE TRUE END)::boolean;
+  SELECT (CASE WHEN (calc_type_versions_unresolved_ref_count(p_type_versions_id))::NUMERIC = 0 THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_versions_attribute_count
@@ -1200,6 +1200,16 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_versions_type_attribute_as_subtype_count(p_type_versions_id TEXT)
 RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM type_attributes WHERE sub_type_version_ref = calc_type_versions_name(p_type_versions_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_versions_unresolved_ref_count
+-- Field: TypeVersions.UnresolvedRefCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_versions_unresolved_ref_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_attributes WHERE type_version = calc_type_versions_name(p_type_versions_id)))::integer;
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_versions_type_helper_attribute_as_subtype_count
@@ -1531,6 +1541,46 @@ RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(type_version, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id), '.', (SELECT NULLIF(attribute_name, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id)))::text;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_attributes_ref_format_exists
+-- Field: TypeAttributes.RefFormatExists
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_format_exists(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(format_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN (CASE WHEN ((SELECT COUNT(*) FROM formats WHERE name = (SELECT NULLIF(format_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id)))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::text ELSE (TRUE)::text END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_enum_version_exists
+-- Field: TypeAttributes.RefEnumVersionExists
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_enum_version_exists(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN (CASE WHEN ((SELECT COUNT(*)))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::text ELSE (TRUE)::text END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_sub_type_version_exists
+-- Field: TypeAttributes.RefSubTypeVersionExists
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_sub_type_version_exists(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(sub_type_version_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NOT NULL THEN (CASE WHEN ((SELECT COUNT(*)))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::text ELSE (TRUE)::text END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_attributes_ref_is_resolvable
+-- Field: TypeAttributes.RefIsResolvable
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_is_resolvable(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_attributes_ref_format_exists(p_type_attributes_id) AND calc_type_attributes_ref_enum_version_exists(p_type_attributes_id) AND calc_type_attributes_ref_sub_type_version_exists(p_type_attributes_id)) THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_attributes_is_optional
 -- Field: TypeAttributes.IsOptional
 -- Type: calculated | DataType: boolean | Returns: BOOLEAN
@@ -1677,14 +1727,14 @@ RETURNS INTEGER AS $$
   SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE type_helper = (SELECT NULLIF(name, '') FROM type_helpers WHERE type_helpers_id = p_type_helpers_id) AND is_required = TRUE))::integer;
 $$ LANGUAGE sql STABLE;
 
--- calc_type_helpers_is_closed
--- Field: TypeHelpers.IsClosed
+-- calc_type_helpers_is_dependency_closed
+-- Field: TypeHelpers.IsDependencyClosed
 -- Type: calculated | DataType: boolean | Returns: BOOLEAN
 
 
-CREATE OR REPLACE FUNCTION calc_type_helpers_is_closed(p_type_helpers_id TEXT)
+CREATE OR REPLACE FUNCTION calc_type_helpers_is_dependency_closed(p_type_helpers_id TEXT)
 RETURNS BOOLEAN AS $$
-  SELECT (CASE WHEN COALESCE((SELECT extra_allowed FROM type_helpers WHERE type_helpers_id = p_type_helpers_id), FALSE) THEN FALSE ELSE TRUE END)::boolean;
+  SELECT (CASE WHEN (calc_type_helpers_unresolved_ref_count(p_type_helpers_id))::NUMERIC = 0 THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_helpers_type_attribute_usage_count
@@ -1727,6 +1777,16 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (calc_type_helpers_total_usage_count(p_type_helpers_id))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- calc_type_helpers_unresolved_ref_count
+-- Field: TypeHelpers.UnresolvedRefCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_type_helpers_unresolved_ref_count(p_type_helpers_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM type_helper_attributes WHERE type_helper = (SELECT NULLIF(name, '') FROM type_helpers WHERE type_helpers_id = p_type_helpers_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
 -- calc_type_helper_attributes_ref_enum_is_draft
 -- Field: TypeHelperAttributes.RefEnumIsDraft
 -- Type: lookup | DataType: boolean | Returns: BOOLEAN
@@ -1757,6 +1817,46 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION calc_type_helper_attributes_name(p_type_helper_attributes_id TEXT)
 RETURNS TEXT AS $$
   SELECT (CONCAT((SELECT NULLIF(type_helper, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id), '.', (SELECT NULLIF(attribute_name, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_format_exists
+-- Field: TypeHelperAttributes.RefFormatExists
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_format_exists(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(format_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN (CASE WHEN ((SELECT COUNT(*) FROM formats WHERE name = (SELECT NULLIF(format_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id)))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::text ELSE (TRUE)::text END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_enum_version_exists
+-- Field: TypeHelperAttributes.RefEnumVersionExists
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_enum_version_exists(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN (CASE WHEN ((SELECT COUNT(*)))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::text ELSE (TRUE)::text END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_sub_type_version_exists
+-- Field: TypeHelperAttributes.RefSubTypeVersionExists
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_sub_type_version_exists(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (SELECT NULLIF(sub_type_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NOT NULL THEN (CASE WHEN ((SELECT COUNT(*)))::NUMERIC > 0 THEN TRUE ELSE FALSE END)::text ELSE (TRUE)::text END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_type_helper_attributes_ref_is_resolvable
+-- Field: TypeHelperAttributes.RefIsResolvable
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_is_resolvable(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_type_helper_attributes_ref_format_exists(p_type_helper_attributes_id) AND calc_type_helper_attributes_ref_enum_version_exists(p_type_helper_attributes_id) AND calc_type_helper_attributes_ref_sub_type_version_exists(p_type_helper_attributes_id)) THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
 -- calc_type_helper_attributes_is_optional

@@ -1,15 +1,12 @@
 -- ============================================================================
--- CUSTOMIZE DATA - User-defined data customizations
+-- 05b-customize-data.sql — sema customizations applied AFTER 05-insert-data
 -- ============================================================================
--- This file is for YOUR custom changes that should persist across
--- regeneration of the base ERB files.
+-- sema has no Airtable. This file's sole job is to chain in the
+-- auto-generated 05c-install-vocabulary.sql, which contains the YAML SSoT
+-- vocabulary upserts (regenerate via src/sema/tools/sync_vocabulary_to_db.py).
 --
--- IMPORTANT:
---   - This file runs AFTER the main data script
---   - Define your customizations in the ERBCustomizations table in Airtable
---   - Those changes will appear here after the next build
---
+-- Idempotent: 05c uses INSERT ... ON CONFLICT DO UPDATE for every row, so
+-- re-running init-db.sh always converges the DB to the YAML's current state.
 -- ============================================================================
 
--- Your custom data changes will appear here:
-
+\ir 05c-install-vocabulary.sql

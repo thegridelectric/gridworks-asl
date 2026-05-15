@@ -213,7 +213,7 @@ SELECT
   t.raw_json,                                                                   -- Escape hatch: unmodeled top-level JSON-Schema fields (if/then/else, conditionals, etc.).
   calc_type_versions_is_published(t.type_versions_id) AS is_published,          -- True when Status is 'published'.
   calc_type_versions_is_draft(t.type_versions_id) AS is_draft,                  -- True when Status is 'draft'. Drives the Editor's 'Edit unlocked' affordance.
-  calc_type_versions_is_closed(t.type_versions_id) AS is_closed,                -- True when ExtraAllowed is FALSE (additionalProperties: false in JSON-Schema).
+  calc_type_versions_is_dependency_closed(t.type_versions_id) AS is_dependency_closed,-- True iff every TypeAttribute on this TypeVersion has refs (FormatRef / EnumVersionRef / SubTypeVersionRef) that resolve to existing registry rows. Replaces the prior schema-closure meaning — for 'additionalProperties: false', read NOT(ExtraAllowed).
   calc_type_versions_attribute_count(t.type_versions_id) AS attribute_count,    -- Number of TypeAttributes declared on this version.
   calc_type_versions_required_attribute_count(t.type_versions_id) AS required_attribute_count,-- Number of TypeAttributes on this version where IsRequired=true.
   calc_type_versions_axiom_count(t.type_versions_id) AS axiom_count,            -- Number of natural-language axioms declared on this version.
@@ -221,6 +221,7 @@ SELECT
   calc_type_versions_has_axiom_template(t.type_versions_id) AS has_axiom_template,-- True iff this TypeVersion has at least one axiom template wired in. Required for runtime generation when AxiomCount > 0.
   calc_type_versions_example_count(t.type_versions_id) AS example_count,        -- Number of TypeExamples attached to this version.
   calc_type_versions_type_attribute_as_subtype_count(t.type_versions_id) AS type_attribute_as_subtype_count,-- Number of TypeAttributes that nest this version as a sub-type via SubTypeVersionRef.
+  calc_type_versions_unresolved_ref_count(t.type_versions_id) AS unresolved_ref_count,-- Number of TypeAttributes on this TypeVersion whose refs do not resolve to existing registry rows. Zero when the version is dependency-closed.
   calc_type_versions_type_helper_attribute_as_subtype_count(t.type_versions_id) AS type_helper_attribute_as_subtype_count,-- Number of TypeHelperAttributes that nest this version as a sub-type via SubTypeVersionRef.
   calc_type_versions_outgoing_upgrade_count(t.type_versions_id) AS outgoing_upgrade_count,-- Number of TypeUpgrades that bump from this version (this version has a successor).
   calc_type_versions_upgrade_template_out_count(t.type_versions_id) AS upgrade_template_out_count,-- Number of upgrade Templates whose UpgradeFromTypeVersion is this TypeVersion (i.e. templates emanating from here).
@@ -260,6 +261,10 @@ SELECT
   t.format_ref,                                                                 -- FK to a Format, when this attribute uses a $ref to /formats/X.
   t.enum_version_ref,                                                           -- FK to an EnumVersion, when this attribute uses a $ref to /enums/X/NNN.
   t.sub_type_version_ref,                                                       -- FK to another TypeVersion, when this attribute uses a $ref to /types/X/NNN.
+  calc_type_attributes_ref_format_exists(t.type_attributes_id) AS ref_format_exists,-- True iff FormatRef is null OR points at an existing row in Formats. Used to roll up dependency-closedness on the parent TypeVersion.
+  calc_type_attributes_ref_enum_version_exists(t.type_attributes_id) AS ref_enum_version_exists,-- True iff EnumVersionRef is null OR points at an existing row in EnumVersions.
+  calc_type_attributes_ref_sub_type_version_exists(t.type_attributes_id) AS ref_sub_type_version_exists,-- True iff SubTypeVersionRef is null OR points at an existing row in TypeVersions.
+  calc_type_attributes_ref_is_resolvable(t.type_attributes_id) AS ref_is_resolvable,-- True iff every populated ref on this attribute (FormatRef / EnumVersionRef / SubTypeVersionRef) points at an existing registry row. Drives TypeVersions.IsDependencyClosed.
   t.helper_ref,                                                                 -- FK to a TypeHelper, when this attribute is an inline-nested object auto-promoted to a helper.
   t.raw_json,                                                                   -- Escape hatch: unmodeled JSON-Schema specifics, including oneOf bodies (v1 parking lot for n=1 cases).
   calc_type_attributes_is_optional(t.type_attributes_id) AS is_optional,        -- True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.
@@ -316,7 +321,7 @@ SELECT
   t.origin_path,                                                                -- JSON-Pointer-ish path within origin (e.g. '/properties/RelayNodes/items') — used to re-inline on YAML emit.
   calc_type_helpers_attribute_count(t.type_helpers_id) AS attribute_count,      -- Number of TypeHelperAttributes declared on this helper.
   calc_type_helpers_required_attribute_count(t.type_helpers_id) AS required_attribute_count,-- Number of TypeHelperAttributes on this helper where IsRequired=true.
-  calc_type_helpers_is_closed(t.type_helpers_id) AS is_closed,                  -- True when ExtraAllowed is FALSE (the helper rejects unknown properties).
+  calc_type_helpers_is_dependency_closed(t.type_helpers_id) AS is_dependency_closed,-- True iff every TypeHelperAttribute on this Helper has refs that resolve to existing registry rows.
   calc_type_helpers_type_attribute_usage_count(t.type_helpers_id) AS type_attribute_usage_count,-- Number of TypeAttributes that point at this helper via HelperRef.
   calc_type_helpers_type_helper_attribute_usage_count(t.type_helpers_id) AS type_helper_attribute_usage_count,-- Number of TypeHelperAttributes that point at this helper via HelperRef (nested helpers).
   calc_type_helpers_total_usage_count(t.type_helpers_id) AS total_usage_count,  -- Total references across TypeAttributes + TypeHelperAttributes (nested helpers).
@@ -324,7 +329,8 @@ SELECT
   calc_type_helpers_origin_owner_name(t.type_helpers_id) AS origin_owner_name,  -- Owner of the helper's origin Definition.
   calc_type_helpers_origin_type_name(t.type_helpers_id) AS origin_type_name,    -- Word name of the helper's origin Definition.
   calc_type_helpers_is_origin_draft(t.type_helpers_id) AS is_origin_draft,      -- Whether the origin Definition is still a draft. Gates the 'Edit helper' CTA in §9c.
-  calc_type_helpers_is_origin_active(t.type_helpers_id) AS is_origin_active     -- Whether the origin Definition is active.
+  calc_type_helpers_is_origin_active(t.type_helpers_id) AS is_origin_active,    -- Whether the origin Definition is active.
+  calc_type_helpers_unresolved_ref_count(t.type_helpers_id) AS unresolved_ref_count-- Number of TypeHelperAttributes on this Helper whose refs do not resolve to existing registry rows.
 FROM type_helpers t;
 
 -- ----------------------------------------------------------------------------
@@ -345,6 +351,10 @@ SELECT
   t.format_ref,                                                                 -- FK to a Format, if this attribute references one.
   t.enum_version_ref,                                                           -- FK to an EnumVersion, if this attribute references one.
   t.sub_type_version_ref,                                                       -- FK to a TypeVersion, if this attribute references one.
+  calc_type_helper_attributes_ref_format_exists(t.type_helper_attributes_id) AS ref_format_exists,-- True iff FormatRef is null OR points at an existing row in Formats. Used to roll up dependency-closedness on the parent TypeVersion.
+  calc_type_helper_attributes_ref_enum_version_exists(t.type_helper_attributes_id) AS ref_enum_version_exists,-- True iff EnumVersionRef is null OR points at an existing row in EnumVersions.
+  calc_type_helper_attributes_ref_sub_type_version_exists(t.type_helper_attributes_id) AS ref_sub_type_version_exists,-- True iff SubTypeVersionRef is null OR points at an existing row in TypeVersions.
+  calc_type_helper_attributes_ref_is_resolvable(t.type_helper_attributes_id) AS ref_is_resolvable,-- True iff every populated ref on this attribute (FormatRef / EnumVersionRef / SubTypeVersionRef) points at an existing registry row. Drives TypeVersions.IsDependencyClosed.
   t.helper_ref,                                                                 -- FK to another TypeHelper (supports nested helpers).
   t.raw_json,                                                                   -- Escape hatch for unmodeled JSON-Schema specifics.
   calc_type_helper_attributes_is_optional(t.type_helper_attributes_id) AS is_optional,-- True when this attribute is NOT required (inverse of IsRequired). Convenience predicate.

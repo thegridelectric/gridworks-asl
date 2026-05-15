@@ -445,3 +445,118 @@ RETURNS INTEGER AS $$
 $$ LANGUAGE sql STABLE;
 
 -- END aggregation overrides --
+
+
+-- ============================================================================
+-- Dependency-closure overrides (transpiler can't compile COUNTIFS+filter
+-- correctly, and EnumVersions/TypeVersions composite-key Name lookups don't
+-- transpile because Name is calculated, not a base column).
+-- ============================================================================
+
+-- type_attributes.ref_enum_version_exists: split "<enum>/<version>" then EXISTS
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_enum_version_exists(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT CASE
+    WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NULL THEN TRUE
+    ELSE EXISTS(
+      SELECT 1 FROM enum_versions ev
+       WHERE ev.enum    = split_part((SELECT enum_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id), '/', 1)
+         AND ev.version = split_part((SELECT enum_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id), '/', 2)
+    )
+  END;
+$$ LANGUAGE sql STABLE;
+
+-- type_attributes.ref_sub_type_version_exists: split "<type>/<version>" then EXISTS
+CREATE OR REPLACE FUNCTION calc_type_attributes_ref_sub_type_version_exists(p_type_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT CASE
+    WHEN (SELECT NULLIF(sub_type_version_ref, '') FROM type_attributes WHERE type_attributes_id = p_type_attributes_id) IS NULL THEN TRUE
+    ELSE EXISTS(
+      SELECT 1 FROM type_versions tv
+       WHERE tv.type    = split_part((SELECT sub_type_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id), '/', 1)
+         AND tv.version = split_part((SELECT sub_type_version_ref FROM type_attributes WHERE type_attributes_id = p_type_attributes_id), '/', 2)
+    )
+  END;
+$$ LANGUAGE sql STABLE;
+
+-- type_helper_attributes mirrors of the above (HelperAttributes have the same ref columns)
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_enum_version_exists(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT CASE
+    WHEN (SELECT NULLIF(enum_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NULL THEN TRUE
+    ELSE EXISTS(
+      SELECT 1 FROM enum_versions ev
+       WHERE ev.enum    = split_part((SELECT enum_version_ref FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id), '/', 1)
+         AND ev.version = split_part((SELECT enum_version_ref FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id), '/', 2)
+    )
+  END;
+$$ LANGUAGE sql STABLE;
+
+CREATE OR REPLACE FUNCTION calc_type_helper_attributes_ref_sub_type_version_exists(p_type_helper_attributes_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT CASE
+    WHEN (SELECT NULLIF(sub_type_version_ref, '') FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id) IS NULL THEN TRUE
+    ELSE EXISTS(
+      SELECT 1 FROM type_versions tv
+       WHERE tv.type    = split_part((SELECT sub_type_version_ref FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id), '/', 1)
+         AND tv.version = split_part((SELECT sub_type_version_ref FROM type_helper_attributes WHERE type_helper_attributes_id = p_type_helper_attributes_id), '/', 2)
+    )
+  END;
+$$ LANGUAGE sql STABLE;
+
+-- type_versions.unresolved_ref_count: count attributes where the AND of
+-- format/enum/subtype-exists is FALSE.
+CREATE OR REPLACE FUNCTION calc_type_versions_unresolved_ref_count(p_type_versions_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT COUNT(*)::integer
+    FROM type_attributes ta
+   WHERE ta.type_version = (SELECT type || '/' || version FROM type_versions WHERE type_versions_id = p_type_versions_id)
+     AND calc_type_attributes_ref_is_resolvable(ta.type_attributes_id) = FALSE;
+$$ LANGUAGE sql STABLE;
+
+-- type_helpers.unresolved_ref_count: same against type_helper_attributes
+CREATE OR REPLACE FUNCTION calc_type_helpers_unresolved_ref_count(p_type_helpers_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT COUNT(*)::integer
+    FROM type_helper_attributes tha
+   WHERE tha.type_helper = (SELECT name FROM type_helpers WHERE type_helpers_id = p_type_helpers_id)
+     AND calc_type_helper_attributes_ref_is_resolvable(tha.type_helper_attributes_id) = FALSE;
+$$ LANGUAGE sql STABLE;
+
+-- ============================================================================
+-- Active->Published rename overrides. The 02b active-named overrides above are
+-- orphans now; these re-implement the same logic under the renamed function
+-- names that match the rulebook's Published* aggregations.
+-- ============================================================================
+
+CREATE OR REPLACE FUNCTION calc_types_published_version_count(p_types_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT COUNT(*)::integer
+    FROM type_versions tv
+   WHERE tv.type = (SELECT name FROM types WHERE types_id = p_types_id)
+     AND calc_type_versions_is_published(tv.type_versions_id) = TRUE;
+$$ LANGUAGE sql STABLE;
+
+CREATE OR REPLACE FUNCTION calc_enums_published_version_count(p_enums_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT COUNT(*)::integer
+    FROM enum_versions ev
+   WHERE ev.enum = (SELECT name FROM enums WHERE enums_id = p_enums_id)
+     AND calc_enum_versions_is_published(ev.enum_versions_id) = TRUE;
+$$ LANGUAGE sql STABLE;
+
+CREATE OR REPLACE FUNCTION calc_owners_published_type_version_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT COUNT(*)::integer
+    FROM type_versions tv
+   WHERE tv.type IN (SELECT t.name FROM types t WHERE t.owner = (SELECT name FROM owners WHERE owners_id = p_owners_id))
+     AND calc_type_versions_is_published(tv.type_versions_id) = TRUE;
+$$ LANGUAGE sql STABLE;
+
+CREATE OR REPLACE FUNCTION calc_owners_published_enum_version_count(p_owners_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT COUNT(*)::integer
+    FROM enum_versions ev
+   WHERE ev.enum IN (SELECT e.name FROM enums e WHERE e.owner = (SELECT name FROM owners WHERE owners_id = p_owners_id))
+     AND calc_enum_versions_is_published(ev.enum_versions_id) = TRUE;
+$$ LANGUAGE sql STABLE;
