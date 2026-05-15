@@ -1329,6 +1329,8 @@ types:
           structural:
           - left.right.dot
           - spaceheat.node.gt:200
+          - spaceheat.node.gt:300
+          - spaceheat.node.gt:301
           - utc.milliseconds
   pico.flow.module.component.gt:
     latest_version: '000'
