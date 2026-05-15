@@ -84,18 +84,17 @@ x-gridworks:
     and emitting a fresh new.command.tree -- so a given physical actuator may
     be reachable under different paths at different times.
 
-    An ShNode with Handle absent is not currently participating in the
-    authority chain. Typical cases are the SCADA root itself, passive sensor
-    nodes, and actors whose hierarchical state is currently dormant. For
-    prefix-closure their effective handle is their Name, which lets a root
-    node such as one named "ltn" with Handle null serve as the anchor for
-    children whose Handle is "ltn.la".
-
-    ActorHierarchyName is a separate, static concept describing the process-
-    tree location of actors (typically rooted at "s" or "s2"). It is
-    intentionally not constrained by this type.
+    An ShNode with Handle absent has effective handle equal to its Name, but
+    this enables participation only as the top of a command tree: a node
+    whose effective handle is a bare Name can serve as the root anchor for
+    children whose Handle starts with that Name (e.g., a node named "ltn"
+    anchors children whose Handle is "ltn.la"). A Handle-absent node that is
+    not such a root does not participate in the command-authority chain at
+    all; this is the typical case for passive sensor nodes, the SCADA
+    process-tree root, and actors whose hierarchical state is currently
+    dormant.
 
     Together with the hierarchical state machine that drives the SCADA, this
-    snapshot makes after-the-fact debugging tractable: any action -- or
-    refused action -- can be matched against the command tree in force at
+    command tree pattern makes after-the-fact debugging more tractable: any action
+     -- or refused action -- can be matched against the command tree in force at
     that moment to determine who was authorized to command whom.
