@@ -24,6 +24,9 @@ effortless.env
 # start.sh runtime artifacts
 .logs/
 
+# Claude Code worktree clones (each carries its own .git/)
+.claude/worktrees/
+
 # App-level secrets (per-process .env, magic-links tenant record).
 # Tracked example/config lives in .env.example next to each .env.
 app/**/.env
