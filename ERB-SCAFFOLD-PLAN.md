@@ -74,30 +74,31 @@ Below is the full punch-list. Each entry: **WHY it's missing**, **WHAT to add** 
 
 ### Tier A — Pipeline-shape (post-`jm/derived` work that the old plan predates)
 
-#### A1. Lifecycle / governance fields on existing tables
-**Why:** the snapshot refactor introduced `active` / `draft` / `replaced_by` semantics ([87bbeef](commit)). The rulebook's Types / TypeVersions / Enums / EnumVersions / Formats don't yet carry these consistently.
+#### A1. Lifecycle / governance fields on existing tables — **DONE (effectively no-op)**
 
-**Changes:**
-- `Types.Status` (active | draft | deprecated)
-- `Types.ReplacedBy` (FK → Types, advisory only — never relied on for codegen)
-- `TypeVersions.Status` (active | draft | deprecated)
-- `TypeVersions.RetiredAt` (date, calculated optional)
-- Same triplet on `Enums`, `EnumVersions`, `Formats`.
-- Calculated: `Types.IsPublic = AND(Status='active', NOT(IsDraft))` — drives the public-registry view.
+**Status correction (2026-05-15):** the original A1 wording was based on a hallucinated lifecycle vocabulary. The only Status values in sema are `draft` and `published`, and they exist exclusively at the *version* level (TypeVersions / EnumVersions). The concepts `active`, `deprecated`, `retired`, `IsActive`, `IsDeprecated`, `IsRetired`, `RetiredAt`, and a parent-level `Status` field were all hallucinations and have been removed from this plan. Parent-table liveness is derived from versions via the existing aggregations (`HasDrafts`, `PublishedVersionCount`, `DraftVersionCount`).
 
-**Verify:** `vw_types`, `vw_type_versions`, `vw_enums`, `vw_enum_versions`, `vw_formats` rebuild; spot-check `IsPublic` matches the file partition that `build_public_registry.py` produces today.
+**What was actually missing:** nothing. `Types.ReplacedBy`, `Enums.ReplacedBy`, `Formats.ReplacedBy` were already in the rulebook before this tier was started. The per-version `Status` field (`draft | published`) was already present on TypeVersions and EnumVersions.
+
+**Cleanup performed in this tier instead:**
+- Removed 26 orphan calc-function bodies from [postgres/02b-customize-functions.sql](postgres/02b-customize-functions.sql) that referenced the hallucinated vocabulary (`calc_*_is_active`, `calc_*_is_deprecated`, `calc_*_is_retired`, `calc_*_word_is_retired`, `ref_is_stale`, plus the active/deprecated/retired `*_count` rollups).
+- Activated the DROP-views-and-functions block in [postgres/00-bootstrap.sql](postgres/00-bootstrap.sql) so every `effortless build` runs against a clean slate of derived objects. Tables and their data are never dropped here — schema evolution stays additive via `ALTER TABLE ADD COLUMN IF NOT EXISTS`.
+
+**Lesson:** future tiers that talk about lifecycle MUST use only `draft | published`. See memory `feedback-lifecycle-vocab` and `plan-doc-caveat`.
 
 #### A2. PublicRegistry as a derived view
+
 **Why:** `indexes/public_registry.yaml` is the publishable surface. Right now it's emitted by a Python tool; the ERB should *define* it declaratively.
 
-**Changes:** no new table — add calculated/lookup fields:
-- `Types.PublicRegistryEntry` (calc, JSON-ish summary of what `build_public_registry` emits per type).
-- `Enums.PublicRegistryEntry` (same for enums).
-- `Formats.PublicRegistryEntry`.
+**Membership rule (corrected):** a Type or Enum is "in the public registry" iff it has at least one *published* version (`PublishedVersionCount > 0` — already a real aggregation field on Types and Enums). A Format is always in the registry (Formats have no per-version lifecycle; their existence in the rulebook is what publishes them). No new lifecycle field needed.
 
-Optionally an `Indexes` table (see §A4) treats `public_registry` as one row whose `SourceQuery` points at `vw_types WHERE IsPublic`.
+**Changes (no new table):** add calculated fields on Types / Enums / Formats:
+- `PublicRegistryEntry` — JSON-ish summary of what `build_public_registry.py` emits per row today (Types: `{name, owner, title, latest_published_version, schema_url, …}`; Enums similar; Formats: `{name, owner, pattern, …}`). Returns `NULL` when the row is not in the registry — for Types/Enums this is when `PublishedVersionCount = 0`; for Formats this is never.
+- Querying the registry then becomes `SELECT public_registry_entry FROM vw_types WHERE public_registry_entry IS NOT NULL`. No companion `IsPublic` boolean is needed.
 
-**Verify:** view counts match the published `indexes/public_registry.yaml`.
+Optionally an `Indexes` table (see §A4) treats `public_registry` as one row whose `SourceQuery` points at `vw_types WHERE public_registry_entry IS NOT NULL` (and unions in Enums / Formats).
+
+**Verify:** the union of non-NULL `PublicRegistryEntry` rows across `vw_types` + `vw_enums` + `vw_formats` matches the entry count in the published `indexes/public_registry.yaml`.
 
 #### A3. SeedRequests + Snapshots
 **Why:** the `snapshot prepare`/`build` pair takes a seed YAML, produces `output/sema/` with restricted definitions + indexes + `local_names.yaml`, and runs runtime generation. None of this is in the ERB.
