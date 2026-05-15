@@ -5892,3 +5892,75 @@ VALUES ('c0dba85e-e07d-d751-5580-7379373c27a8', 'build_reverse_dependencies', 's
 INSERT INTO index_builders (index_builders_id, name, script_path, run_order, output_path, inputs_description, description, rerun_at_end)
 VALUES ('658d3bc1-5922-e26a-59f4-46281d7ab453', 'build_versions', 'src/sema/tools/build_versions.py', 5, 'indexes/versions.yaml', 'Reads indexes/public_registry.yaml.', 'Emits the per-Word version list (active versions only) keyed by Word name.', FALSE) ON CONFLICT (index_builders_id) DO NOTHING;
 
+-- ----------------------------------------------------------------------------
+-- CliCommands: The hierarchical surface of the `sema` CLI — every parser node from src/sema/interfaces/cli/. Each row is one subcommand or the root. Parent links form a tree; flags and examples attach via CliFlags.Command and CliExamples.Command. This is descriptive scaffolding (Tier B of ERB-SCAFFOLD-PLAN.md) — the CLI is still implemented in Python, but the rulebook now points at every node.
+-- ----------------------------------------------------------------------------
+INSERT INTO cli_commands (cli_commands_id, name, parent, impl_file, summary, description)
+VALUES ('5977ce8d-a367-2eb7-961a-b3e260dda3d1', 'sema', NULL, 'src/sema/interfaces/cli/main.py', 'Sema CLI root parser.', 'Root argparse parser. Dispatches to the four subcommand groups (info, reverse, runtime, snapshot).') ON CONFLICT (cli_commands_id) DO NOTHING;
+
+INSERT INTO cli_commands (cli_commands_id, name, parent, impl_file, summary, description)
+VALUES ('fe890f49-1c65-ceaf-ad69-6b6afa6516fa', 'sema info', 'sema', 'src/sema/interfaces/cli/main.py', 'Display CLI surface.', 'Print a short summary of the Sema CLI: interface kind and list of subcommands.') ON CONFLICT (cli_commands_id) DO NOTHING;
+
+INSERT INTO cli_commands (cli_commands_id, name, parent, impl_file, summary, description)
+VALUES ('0e003709-bb02-2367-59d7-2d4436c8797b', 'sema reverse', 'sema', 'src/sema/interfaces/cli/reverse.py', 'Show transitive reverse dependencies for a Sema word.', 'Return the transitive reverse dependency closure for a Sema word. If the word is a type or enum, it MUST include a version. If the word is a property format, it has no version.') ON CONFLICT (cli_commands_id) DO NOTHING;
+
+INSERT INTO cli_commands (cli_commands_id, name, parent, impl_file, summary, description)
+VALUES ('50d27736-cd36-c25e-0067-ffc81b08eb96', 'sema runtime', 'sema', 'src/sema/interfaces/cli/runtime.py', 'Runtime generation helper commands.', 'Helpers for maintaining generated Sema runtime templates (axioms, upgrades).') ON CONFLICT (cli_commands_id) DO NOTHING;
+
+INSERT INTO cli_commands (cli_commands_id, name, parent, impl_file, summary, description)
+VALUES ('75e4ff95-7781-0b33-ec11-05c84961b56d', 'sema runtime scaffold-axiom-template', 'sema runtime', 'src/sema/interfaces/cli/runtime.py', 'Create a missing axiom implementation template for a type version.', 'Read definitions/types/<type-name>/<version>.yaml and create a missing Jinja axiom template. Existing templates are never overwritten.') ON CONFLICT (cli_commands_id) DO NOTHING;
+
+INSERT INTO cli_commands (cli_commands_id, name, parent, impl_file, summary, description)
+VALUES ('4dcc0a7c-41ed-8998-f95a-df3977d6a12e', 'sema runtime scaffold-upgrade-template', 'sema runtime', 'src/sema/interfaces/cli/runtime.py', 'Create a missing upgrade template for a non-latest type version.', 'Create a missing Jinja upgrade template for <type-name>:<version> -> <next-version>. The stub raises NotImplementedError until hand-written. Existing templates are never overwritten.') ON CONFLICT (cli_commands_id) DO NOTHING;
+
+INSERT INTO cli_commands (cli_commands_id, name, parent, impl_file, summary, description)
+VALUES ('381b9c60-57a1-17e9-d589-7ed4d5b943ec', 'sema snapshot', 'sema', 'src/sema/interfaces/cli/snapshot.py', 'Prepare and build a complete Sema snapshot runtime.', 'Use `prepare` with a structured seed request YAML, then edit output/sema/indexes/local_names.yaml if needed, then use `build` with --package-name to generate runtime imports. Use template_seed_request.yaml at the repository root as a starting point.') ON CONFLICT (cli_commands_id) DO NOTHING;
+
+INSERT INTO cli_commands (cli_commands_id, name, parent, impl_file, summary, description)
+VALUES ('bedd91ec-2017-823d-86b1-607200edd077', 'sema snapshot prepare', 'sema snapshot', 'src/sema/interfaces/cli/snapshot.py', 'Expand a seed request and write definitions, indexes, and local names.', 'Read a structured seed request YAML, expand the transitive closure, clear output/, mirror seed-scoped definitions under output/sema/definitions, write restricted indexes under output/sema/indexes, and create output/sema/indexes/local_names.yaml.') ON CONFLICT (cli_commands_id) DO NOTHING;
+
+INSERT INTO cli_commands (cli_commands_id, name, parent, impl_file, summary, description)
+VALUES ('6a89ed28-99d3-fc35-8039-a7334a3dc00d', 'sema snapshot build', 'sema snapshot', 'src/sema/interfaces/cli/snapshot.py', 'Generate runtime files from a prepared snapshot.', 'Read output/sema/indexes/seed_expanded.yaml and output/sema/indexes/local_names.yaml, then generate runtime files under output/sema. The package name is used for generated imports.') ON CONFLICT (cli_commands_id) DO NOTHING;
+
+-- ----------------------------------------------------------------------------
+-- CliFlags: Every flag (positional or named) declared on a CliCommand. Name is the compound key Command::FlagName. Kind names a primitive value type; EnumValuesRef points at an Enum when a flag's value is constrained to a rulebook enum (no current flag uses this, but the column is reserved for future use).
+-- ----------------------------------------------------------------------------
+INSERT INTO cli_flags (cli_flags_id, command, flag_name, short_name, is_positional, kind, required, "default", description, enum_values_ref)
+VALUES ('ed4f0b6b-42f9-4c0a-c6d2-b060bbc77fa8', 'sema reverse', 'name', NULL, TRUE, 'string', TRUE, NULL, 'Sema word identifier (type, enum, or format name).', NULL) ON CONFLICT (cli_flags_id) DO NOTHING;
+
+INSERT INTO cli_flags (cli_flags_id, command, flag_name, short_name, is_positional, kind, required, "default", description, enum_values_ref)
+VALUES ('14e3317c-d47a-2e95-19b3-2095c6dc6be3', 'sema reverse', 'version', NULL, TRUE, 'string', FALSE, NULL, 'Three-digit version. Required for types/enums; omitted for formats.', NULL) ON CONFLICT (cli_flags_id) DO NOTHING;
+
+INSERT INTO cli_flags (cli_flags_id, command, flag_name, short_name, is_positional, kind, required, "default", description, enum_values_ref)
+VALUES ('649074df-3d9d-e624-1c3b-52dca25b5deb', 'sema runtime scaffold-axiom-template', 'type_name', NULL, TRUE, 'string', TRUE, NULL, 'Type identifier slug.', NULL) ON CONFLICT (cli_flags_id) DO NOTHING;
+
+INSERT INTO cli_flags (cli_flags_id, command, flag_name, short_name, is_positional, kind, required, "default", description, enum_values_ref)
+VALUES ('aaaff3e6-a0b0-8698-f72b-713fcd39927f', 'sema runtime scaffold-axiom-template', 'version', NULL, TRUE, 'string', TRUE, NULL, 'Three-digit version of the type.', NULL) ON CONFLICT (cli_flags_id) DO NOTHING;
+
+INSERT INTO cli_flags (cli_flags_id, command, flag_name, short_name, is_positional, kind, required, "default", description, enum_values_ref)
+VALUES ('230afe2c-9988-a6a8-2440-8e924101ba63', 'sema runtime scaffold-upgrade-template', 'type_name', NULL, TRUE, 'string', TRUE, NULL, 'Type identifier slug.', NULL) ON CONFLICT (cli_flags_id) DO NOTHING;
+
+INSERT INTO cli_flags (cli_flags_id, command, flag_name, short_name, is_positional, kind, required, "default", description, enum_values_ref)
+VALUES ('6428cdcf-e48d-6951-aaff-5a871ff7f078', 'sema runtime scaffold-upgrade-template', 'version', NULL, TRUE, 'string', TRUE, NULL, 'From-version, the older end of the upgrade hop.', NULL) ON CONFLICT (cli_flags_id) DO NOTHING;
+
+INSERT INTO cli_flags (cli_flags_id, command, flag_name, short_name, is_positional, kind, required, "default", description, enum_values_ref)
+VALUES ('9d2ccf5a-5666-fa95-7ea7-f1e958646822', 'sema runtime scaffold-upgrade-template', 'next_version', NULL, TRUE, 'string', TRUE, NULL, 'To-version, the newer end of the upgrade hop.', NULL) ON CONFLICT (cli_flags_id) DO NOTHING;
+
+INSERT INTO cli_flags (cli_flags_id, command, flag_name, short_name, is_positional, kind, required, "default", description, enum_values_ref)
+VALUES ('e2e32b9e-13aa-3867-fb37-0b87b9976402', 'sema snapshot prepare', 'seed_request', NULL, TRUE, 'path', TRUE, NULL, 'Path to a seed request YAML file.', NULL) ON CONFLICT (cli_flags_id) DO NOTHING;
+
+INSERT INTO cli_flags (cli_flags_id, command, flag_name, short_name, is_positional, kind, required, "default", description, enum_values_ref)
+VALUES ('8a9e151a-8cb4-52ca-084f-8c98294aede7', 'sema snapshot build', '--package-name', NULL, FALSE, 'string', TRUE, NULL, 'Python package name used for generated import paths.', NULL) ON CONFLICT (cli_flags_id) DO NOTHING;
+
+-- ----------------------------------------------------------------------------
+-- CliExamples: Concrete example invocations for a CliCommand. Sourced from argparse `epilog=` blocks. Idx preserves listing order. ExpectedExitCode defaults to 0 (success); future rows can document expected-failure examples.
+-- ----------------------------------------------------------------------------
+INSERT INTO cli_examples (cli_examples_id, command, idx, example_string, description, expected_exit_code)
+VALUES ('58f87561-e48d-e25b-c09e-6369d53ddcd7', 'sema reverse', 0, 'uv run sema reverse relay.actor.config 003', 'Reverse dependencies of a versioned type.', 0) ON CONFLICT (cli_examples_id) DO NOTHING;
+
+INSERT INTO cli_examples (cli_examples_id, command, idx, example_string, description, expected_exit_code)
+VALUES ('3257fcf0-282a-771b-456a-1a0a3015d6f7', 'sema reverse', 1, 'uv run sema reverse gw1.unit 001', 'Reverse dependencies of a different versioned word.', 0) ON CONFLICT (cli_examples_id) DO NOTHING;
+
+INSERT INTO cli_examples (cli_examples_id, command, idx, example_string, description, expected_exit_code)
+VALUES ('6c36fe7d-3e0f-3a00-b8dd-e43cb90ae1a1', 'sema reverse', 2, 'uv run sema reverse left.right.dot', 'Reverse dependencies of a format (no version argument).', 0) ON CONFLICT (cli_examples_id) DO NOTHING;
+

@@ -187,4 +187,22 @@ ALTER TABLE templates DROP CONSTRAINT IF EXISTS fk_templates_upgrade_to_enum_ver
 ALTER TABLE templates ADD CONSTRAINT fk_templates_upgrade_to_enum_version
   FOREIGN KEY (upgrade_to_enum_version) REFERENCES enum_versions (enum_versions_id);
 
--- 43 FK constraint(s) declared (off unless EFFORTLESS_ENFORCE_FKS=true).
+-- CliCommands
+ALTER TABLE cli_commands DROP CONSTRAINT IF EXISTS fk_cli_commands_parent;
+ALTER TABLE cli_commands ADD CONSTRAINT fk_cli_commands_parent
+  FOREIGN KEY (parent) REFERENCES cli_commands (cli_commands_id);
+
+-- CliFlags
+ALTER TABLE cli_flags DROP CONSTRAINT IF EXISTS fk_cli_flags_command;
+ALTER TABLE cli_flags ADD CONSTRAINT fk_cli_flags_command
+  FOREIGN KEY (command) REFERENCES cli_commands (cli_commands_id);
+ALTER TABLE cli_flags DROP CONSTRAINT IF EXISTS fk_cli_flags_enum_values_ref;
+ALTER TABLE cli_flags ADD CONSTRAINT fk_cli_flags_enum_values_ref
+  FOREIGN KEY (enum_values_ref) REFERENCES enums (enums_id);
+
+-- CliExamples
+ALTER TABLE cli_examples DROP CONSTRAINT IF EXISTS fk_cli_examples_command;
+ALTER TABLE cli_examples ADD CONSTRAINT fk_cli_examples_command
+  FOREIGN KEY (command) REFERENCES cli_commands (cli_commands_id);
+
+-- 47 FK constraint(s) declared (off unless EFFORTLESS_ENFORCE_FKS=true).

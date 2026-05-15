@@ -2597,6 +2597,102 @@ RETURNS BOOLEAN AS $$
   SELECT (CASE WHEN (SELECT NULLIF(upgrade_from_enum_version, '') FROM templates WHERE templates_id = p_templates_id) IS NOT NULL THEN TRUE ELSE FALSE END)::boolean;
 $$ LANGUAGE sql STABLE;
 
+-- get_cli_commands_name
+-- Helper function: Get Name from CliCommands by CliCommandsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_cli_commands_name(p_cli_commands_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT name FROM cli_commands WHERE cli_commands_id = p_cli_commands_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_cli_commands_impl_file
+-- Helper function: Get ImplFile from CliCommands by CliCommandsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_cli_commands_impl_file(p_cli_commands_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT impl_file FROM cli_commands WHERE cli_commands_id = p_cli_commands_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_cli_commands_summary
+-- Helper function: Get Summary from CliCommands by CliCommandsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_cli_commands_summary(p_cli_commands_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT summary FROM cli_commands WHERE cli_commands_id = p_cli_commands_id);
+$$ LANGUAGE sql STABLE;
+
+-- get_cli_commands_description
+-- Helper function: Get Description from CliCommands by CliCommandsId
+-- Used for join-free cross-table references in aggregations
+
+CREATE OR REPLACE FUNCTION get_cli_commands_description(p_cli_commands_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (SELECT description FROM cli_commands WHERE cli_commands_id = p_cli_commands_id);
+$$ LANGUAGE sql STABLE;
+
+-- calc_cli_commands_child_count
+-- Field: CliCommands.ChildCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_cli_commands_child_count(p_cli_commands_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM cli_commands WHERE parent = (SELECT NULLIF(name, '') FROM cli_commands WHERE cli_commands_id = p_cli_commands_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_cli_commands_flag_count
+-- Field: CliCommands.FlagCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_cli_commands_flag_count(p_cli_commands_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM cli_flags WHERE command = (SELECT NULLIF(name, '') FROM cli_commands WHERE cli_commands_id = p_cli_commands_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_cli_commands_example_count
+-- Field: CliCommands.ExampleCount
+-- Type: aggregation | DataType: integer | Returns: INTEGER
+
+
+CREATE OR REPLACE FUNCTION calc_cli_commands_example_count(p_cli_commands_id TEXT)
+RETURNS INTEGER AS $$
+  SELECT ((SELECT COUNT(*) FROM cli_examples WHERE command = (SELECT NULLIF(name, '') FROM cli_commands WHERE cli_commands_id = p_cli_commands_id)))::integer;
+$$ LANGUAGE sql STABLE;
+
+-- calc_cli_commands_is_leaf
+-- Field: CliCommands.IsLeaf
+-- Type: calculated | DataType: boolean | Returns: BOOLEAN
+
+
+CREATE OR REPLACE FUNCTION calc_cli_commands_is_leaf(p_cli_commands_id TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT (CASE WHEN (calc_cli_commands_child_count(p_cli_commands_id))::NUMERIC = 0 THEN TRUE ELSE FALSE END)::boolean;
+$$ LANGUAGE sql STABLE;
+
+-- calc_cli_flags_name
+-- Field: CliFlags.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_cli_flags_name(p_cli_flags_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(command, '') FROM cli_flags WHERE cli_flags_id = p_cli_flags_id), '::', (SELECT NULLIF(flag_name, '') FROM cli_flags WHERE cli_flags_id = p_cli_flags_id)))::text;
+$$ LANGUAGE sql STABLE;
+
+-- calc_cli_examples_name
+-- Field: CliExamples.Name
+-- Type: calculated | DataType: string | Returns: TEXT
+
+
+CREATE OR REPLACE FUNCTION calc_cli_examples_name(p_cli_examples_id TEXT)
+RETURNS TEXT AS $$
+  SELECT (CONCAT((SELECT NULLIF(command, '') FROM cli_examples WHERE cli_examples_id = p_cli_examples_id), '::ex', (SELECT idx FROM cli_examples WHERE cli_examples_id = p_cli_examples_id)))::text;
+$$ LANGUAGE sql STABLE;
+
 -- ============================================================================
 -- MANY-SIDE RELATIONSHIP FUNCTIONS
 -- These functions aggregate child records for many-side relationships
