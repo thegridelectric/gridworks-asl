@@ -86,19 +86,20 @@ Below is the full punch-list. Each entry: **WHY it's missing**, **WHAT to add** 
 
 **Lesson:** future tiers that talk about lifecycle MUST use only `draft | published`. See memory `feedback-lifecycle-vocab` and `plan-doc-caveat`.
 
-#### A2. PublicRegistry as a derived view
+#### A2. PublicRegistry — **SUBSUMED, NO WORK NEEDED**
 
-**Why:** `indexes/public_registry.yaml` is the publishable surface. Right now it's emitted by a Python tool; the ERB should *define* it declaratively.
+**Status correction (2026-05-15):** A2 as originally drafted (and as I tried to rewrite in 227a587) was another instance of the same mistake §A1 corrected. There is no "is in the public registry" state separate from "has been published" — they are the same fact. The public registry of types/enums is literally the set of rows where `PublishedVersionCount > 0`; the public registry of formats is the set of formats. Both are filters over existing data, not new state to model.
 
-**Membership rule (corrected):** a Type or Enum is "in the public registry" iff it has at least one *published* version (`PublishedVersionCount > 0` — already a real aggregation field on Types and Enums). A Format is always in the registry (Formats have no per-version lifecycle; their existence in the rulebook is what publishes them). No new lifecycle field needed.
+These are *immutable versioned protocols*: a version has been published or it hasn't. Once published it's permanent. Adding `IsInPublicRegistry`, `PublicRegistryEntry`, or any sibling field is categorically wrong — equivalent to putting an "IsActive" flag on the HTTP protocol.
 
-**Changes (no new table):** add calculated fields on Types / Enums / Formats:
-- `PublicRegistryEntry` — JSON-ish summary of what `build_public_registry.py` emits per row today (Types: `{name, owner, title, latest_published_version, schema_url, …}`; Enums similar; Formats: `{name, owner, pattern, …}`). Returns `NULL` when the row is not in the registry — for Types/Enums this is when `PublishedVersionCount = 0`; for Formats this is never.
-- Querying the registry then becomes `SELECT public_registry_entry FROM vw_types WHERE public_registry_entry IS NOT NULL`. No companion `IsPublic` boolean is needed.
+**The "public registry" expressed in current ERB terms (no new fields):**
+- Public types: `SELECT * FROM vw_types WHERE published_version_count > 0`
+- Public enums: `SELECT * FROM vw_enums WHERE published_version_count > 0`
+- Public formats: `SELECT * FROM vw_formats` (Formats have no version axis; all rows are public)
 
-Optionally an `Indexes` table (see §A4) treats `public_registry` as one row whose `SourceQuery` points at `vw_types WHERE public_registry_entry IS NOT NULL` (and unions in Enums / Formats).
+The JSON shape that `build_public_registry.py` emits is constructible directly from these views — no rulebook field needs to wrap it. If a future Tier wants to model the *index file itself* as a row (a `public_registry` row in the `IndexBuilders` catalog from §A4), that's where the registry's existence is recorded, not on Types/Enums/Formats.
 
-**Verify:** the union of non-NULL `PublicRegistryEntry` rows across `vw_types` + `vw_enums` + `vw_formats` matches the entry count in the published `indexes/public_registry.yaml`.
+**Verify:** none required — there's nothing to build.
 
 #### A3. SeedRequests + Snapshots
 **Why:** the `snapshot prepare`/`build` pair takes a seed YAML, produces `output/sema/` with restricted definitions + indexes + `local_names.yaml`, and runs runtime generation. None of this is in the ERB.
