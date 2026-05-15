@@ -14,6 +14,36 @@ The full technical specification is available at:
 **[Sema Specification v1.0](https://schemas.electricity.works/sema/specification/1.0)**
 
 
+## Architecture: the loop
+
+Sema is structured as a round-trip pipeline. The hand-authored YAML under [definitions/](definitions/) is the contract-bound single source of truth (see [JM_DERIVED_INTEGRATION_PLAN.md](JM_DERIVED_INTEGRATION_PLAN.md) §3.3 for the GridWorks SOW reference). Everything else is a derived projection of it.
+
+```mermaid
+flowchart LR
+  YAML["definitions/*.yaml<br/><i>hand-authored SSoT</i>"]
+  RB[("effortless-rulebook.json<br/><i>derived CMCC instance</i>")]
+  DB[("Postgres<br/><i>base tables + vw_* views</i>")]
+  APP["Registry Explorer<br/><i>FastAPI + React admin app</i>"]
+  EMIT["definitions-emitted/*.yaml<br/><i>round-trip sandbox</i>"]
+
+  YAML -->|yaml_to_rulebook.py| RB
+  RB -->|rulebook-to-postgres| DB
+  DB --> APP
+  RB -->|rulebook_to_yaml.py| EMIT
+  EMIT -. yaml_round_trip_check.py .- YAML
+  APP -. future: edit via UI .-> RB
+```
+
+**Reading the diagram:**
+
+1. **YAML → Rulebook.** [`yaml_to_rulebook.py`](rulebook-emitters/yaml/yaml_to_rulebook.py) ingests every file under `definitions/` into the rulebook JSON.
+2. **Rulebook → Postgres → App.** The [`rulebook-to-postgres`](postgres/) transpiler emits SQL that produces the base tables plus a generated `vw_*` view per table. The admin app reads `vw_*` and writes back to base tables.
+3. **Rulebook → emitted YAML.** [`rulebook_to_yaml.py`](rulebook-emitters/yaml/rulebook_to_yaml.py) writes the rulebook back out as YAML into `definitions-emitted/` — a **separate sandbox** that never touches `definitions/`.
+4. **Round-trip check.** [`yaml_round_trip_check.py`](rulebook-emitters/yaml/yaml_round_trip_check.py) diffs `definitions/` against `definitions-emitted/`. The closer that parity gets to 100%, the more the rulebook can be trusted as a lossless intermediate. Current parity: ~97%.
+
+**The loop closes** when `definitions/` and `definitions-emitted/` match exactly. At that point a change can be authored from either end — edit YAML directly, or edit through the admin app — and the whole model stays consistent. The model also becomes portable: any rulebook consumer (Python SDK, Go SDK, HTML docs site — see [rulebook-emitters/](rulebook-emitters/)) sees the same canonical projection.
+
+
 ## Core Vocabulary Model
 
 Sema defines three kinds of vocabulary words:
