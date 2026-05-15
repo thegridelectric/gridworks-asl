@@ -86,3 +86,35 @@ CREATE UNIQUE INDEX IF NOT EXISTS ux_type_versions_natkey   ON type_versions    
 CREATE UNIQUE INDEX IF NOT EXISTS ux_type_attributes_natkey ON type_attributes   (type_version, attribute_name);
 CREATE UNIQUE INDEX IF NOT EXISTS ux_type_examples_natkey   ON type_examples     (type_version, idx);
 CREATE UNIQUE INDEX IF NOT EXISTS ux_type_axioms_natkey     ON type_axioms       (type_version, axiom_name);
+
+-- ============================================================================
+-- Rulebook-derived table refresh: TRUNCATE before 05-insert-data re-seeds
+-- ============================================================================
+-- These tables are 100% derivable from the rulebook (and ultimately from
+-- definitions/*.yaml, the SSoT). Each `effortless build` regenerates them
+-- from scratch. Without this truncation, 05-insert-data.sql's plain INSERTs
+-- collide with the natural-key unique constraints above whenever a row's
+-- generated UUID changes between builds (e.g. after yaml_to_rulebook reflows
+-- the rulebook). After truncation, 05 inserts cleanly and 05c-install-
+-- vocabulary.sql's upserts become no-ops.
+--
+-- IMPORTANT: only tables whose data is rulebook-derivable belong here.
+-- app_users carries real user data and is intentionally excluded.
+-- CASCADE handles the dependency order so FK-bearing tables clear too.
+-- ============================================================================
+TRUNCATE TABLE
+    owners,
+    formats, format_examples,
+    enums, enum_versions, enum_values,
+    types, type_versions, type_attributes, type_examples, type_axioms,
+    type_helpers, type_helper_attributes,
+    projections, projection_mappings,
+    type_upgrades, type_upgrade_ops,
+    enum_upgrades, enum_upgrade_mappings,
+    seed_requests, seed_request_entries, snapshots, local_names,
+    index_builders, templates,
+    cli_commands, cli_flags, cli_examples,
+    yaml_files,
+    emitters,
+    features, feature_bindings
+CASCADE;
