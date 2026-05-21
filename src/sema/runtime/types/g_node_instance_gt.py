@@ -28,10 +28,10 @@ class GNodeInstanceGt(SemaType):
         RevokedAtUnixMs SHALL be present if and only if Status is Revoked or Ended.
         """
 
-        if self.status in (
+        if self.status in {
             GNodeInstanceStatus.Revoked,
             GNodeInstanceStatus.Ended,
-        ):
+        }:
             if self.revoked_at_unix_ms is None:
                 raise ValueError(
                     "Axiom 1 violated! RevokedAtUnixMs must be present "

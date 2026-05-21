@@ -401,6 +401,7 @@ formats:
     - fsm.event:000
     - g.node.gt:004
     - glitch:000
+    - gridworks.header:001
     - heating.forecast:000
     - keyparam.change.log:000
     - latest.price:000

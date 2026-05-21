@@ -28,9 +28,14 @@ def classify(dep: str, registry) -> str:
     name, version = split_dep(dep)
 
     if version is None:
-        if name not in registry["formats"]:
-            raise ValueError(f"Unknown format dependency: {dep}")
-        return "format"
+        if name in registry["formats"]:
+            return "format"
+        if (
+            name in registry["types"]
+            and registry["types"][name].get("versioning_strategy") == "none"
+        ):
+            return "versionless_type"
+        raise ValueError(f"Unknown bare dependency: {dep}")
 
     if name in registry["types"]:
         return "type"
@@ -49,19 +54,20 @@ def get_direct_deps(type_def: dict) -> list[str]:
     ))
 
 
-def compute_closure(type_name: str, version: str, registry) -> dict:
+def compute_closure(type_name: str, version: str | None, registry) -> dict:
     visited = set()
-    stack = [(type_name, version)]
+    stack: list[tuple[str, str | None]] = [(type_name, version)]
 
     closure = {
         "types": set(),
         "enums": set(),
         "formats": set(),
+        "versionless_types": set(),
     }
 
     while stack:
         t_name, t_version = stack.pop()
-        key = f"{t_name}:{t_version}"
+        key = f"{t_name}:{t_version}" if t_version is not None else t_name
 
         if key in visited:
             continue
@@ -73,41 +79,53 @@ def compute_closure(type_name: str, version: str, registry) -> dict:
         if t_name not in types:
             raise ValueError(f"Unknown type referenced: {t_name}")
 
-        versions = types[t_name]["versions"]
+        type_entry = types[t_name]
 
-        if t_version not in versions:
-            raise ValueError(f"Unknown version: {t_name}:{t_version}")
+        if t_version is None:
+            if type_entry.get("versioning_strategy") != "none":
+                raise ValueError(f"Versioned type referenced without version: {t_name}")
+            type_def = type_entry
+        else:
+            versions = type_entry["versions"]
+            if t_version not in versions:
+                raise ValueError(f"Unknown version: {t_name}:{t_version}")
+            type_def = versions[t_version]
 
-        type_def = versions[t_version]
         direct_deps = get_direct_deps(type_def)
 
         for dep in direct_deps:
             category = classify(dep, registry)
 
-            closure[category + "s"].add(dep)
-
-            if category == "type":
+            if category == "format":
+                closure["formats"].add(dep)
+            elif category == "enum":
+                closure["enums"].add(dep)
+            elif category == "type":
+                closure["types"].add(dep)
                 dep_name, dep_version = split_dep(dep)
-
-                if dep_version is None:
-                    raise ValueError(f"Type dependency missing version: {dep}")
-
                 stack.append((dep_name, dep_version))
+            elif category == "versionless_type":
+                closure["versionless_types"].add(dep)
+                stack.append((dep, None))
 
     return {
         "types": sorted(closure["types"]),
         "enums": sorted(closure["enums"]),
         "formats": sorted(closure["formats"]),
+        "versionless_types": sorted(closure["versionless_types"]),
     }
 
 
 def build():
     registry = load_registry()
 
-    output = {"types": {}}
+    output = {"types": {}, "versionless_types": {}}
 
     for type_name, type_def in registry["types"].items():
         if type_def.get("versioning_strategy") == "none":
+            output["versionless_types"][type_name] = compute_closure(
+                type_name, None, registry
+            )
             continue
 
         output["types"][type_name] = {}

@@ -12,6 +12,7 @@ types:
       - market.slot.name
       types:
       - price.quantity.unitless:001
+      versionless_types: []
   bid:
     '000':
       enums:
@@ -22,6 +23,7 @@ types:
       - market.slot.name
       types:
       - price.quantity.unitless:001
+      versionless_types: []
   channel.config:
     '000':
       enums:
@@ -30,6 +32,7 @@ types:
       - positive.int
       - spaceheat.name
       types: []
+      versionless_types: []
   channel.readings:
     '001':
       enums: []
@@ -38,12 +41,14 @@ types:
       - utc.milliseconds
       - uuid4.str
       types: []
+      versionless_types: []
     '002':
       enums: []
       formats:
       - spaceheat.name
       - utc.milliseconds
       types: []
+      versionless_types: []
   channel.readings.list.item:
     '000':
       enums: []
@@ -51,6 +56,7 @@ types:
       - left.right.dot
       - spaceheat.name
       types: []
+      versionless_types: []
   connectivity.edge.gt:
     '000':
       enums:
@@ -59,6 +65,7 @@ types:
       - left.right.dot
       - uuid4.str
       types: []
+      versionless_types: []
   data.channel.gt:
     '001':
       enums:
@@ -69,6 +76,7 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
     '002':
       enums:
       - gw1.quantity:000
@@ -80,6 +88,7 @@ types:
       - uuid4.str
       types:
       - spaceheat.telemetry.quantity.projection:000
+      versionless_types: []
   derived.channel.gt:
     '000':
       enums:
@@ -89,6 +98,7 @@ types:
       - spaceheat.name
       - uuid4.str
       types: []
+      versionless_types: []
     '001':
       enums:
       - gw1.emission.method:000
@@ -99,6 +109,7 @@ types:
       - spaceheat.name
       - uuid4.str
       types: []
+      versionless_types: []
     '002':
       enums:
       - gw1.emission.method:000
@@ -113,6 +124,7 @@ types:
       - uuid4.str
       types:
       - gw1.unit.quantity.projection:000
+      versionless_types: []
   energy.instruction:
     '000':
       enums: []
@@ -122,6 +134,7 @@ types:
       - utc.milliseconds
       - utc.seconds
       types: []
+      versionless_types: []
   flo.params.house0:
     '003':
       enums:
@@ -132,6 +145,7 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
     '004':
       enums:
       - market.price.unit:000
@@ -141,6 +155,7 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
     '005':
       enums:
       - market.price.unit:000
@@ -150,6 +165,7 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
     '006':
       enums:
       - market.price.unit:000
@@ -159,6 +175,7 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
     '007':
       enums:
       - market.price.unit:000
@@ -168,6 +185,7 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
   fsm.atomic.report:
     '000':
       enums:
@@ -178,6 +196,7 @@ types:
       - utc.milliseconds
       - uuid4.str
       types: []
+      versionless_types: []
     '001':
       enums:
       - fsm.report.type:000
@@ -188,6 +207,7 @@ types:
       - utc.milliseconds
       - uuid4.str
       types: []
+      versionless_types: []
   fsm.event:
     '000':
       enums: []
@@ -197,6 +217,7 @@ types:
       - utc.milliseconds
       - uuid4.str
       types: []
+      versionless_types: []
   fsm.full.report:
     '000':
       enums:
@@ -209,6 +230,7 @@ types:
       - uuid4.str
       types:
       - fsm.atomic.report:000
+      versionless_types: []
     '001':
       enums:
       - fsm.report.type:000
@@ -221,6 +243,7 @@ types:
       - uuid4.str
       types:
       - fsm.atomic.report:001
+      versionless_types: []
   g.node.gt:
     '004':
       enums:
@@ -230,6 +253,7 @@ types:
       - left.right.dot
       - uuid4.str
       types: []
+      versionless_types: []
   g.node.instance.gt:
     '000':
       enums:
@@ -239,6 +263,7 @@ types:
       - utc.milliseconds
       - uuid4.str
       types: []
+      versionless_types: []
   glitch:
     '000':
       enums:
@@ -248,6 +273,7 @@ types:
       - spaceheat.name
       - utc.milliseconds
       types: []
+      versionless_types: []
   gridworks.event.problem:
     '001':
       enums: []
@@ -255,17 +281,27 @@ types:
       - utc.milliseconds
       - uuid4.str
       types: []
+      versionless_types: []
+  gridworks.header:
+    '001':
+      enums: []
+      formats:
+      - left.right.dot
+      types: []
+      versionless_types: []
   gw1.tank.temp.calibration:
     '000':
       enums: []
       formats: []
       types: []
+      versionless_types: []
   gw1.tank.temp.calibration.map:
     '000':
       enums: []
       formats: []
       types:
       - gw1.tank.temp.calibration:000
+      versionless_types: []
   gw1.telemetry.name.quantity.projection:
     '000':
       enums:
@@ -273,6 +309,7 @@ types:
       - spaceheat.telemetry.name:006
       formats: []
       types: []
+      versionless_types: []
   gw1.unit.quantity.projection:
     '000':
       enums:
@@ -280,25 +317,30 @@ types:
       - gw1.unit:001
       formats: []
       types: []
+      versionless_types: []
   ha1.params:
     '004':
       enums: []
       formats: []
       types: []
+      versionless_types: []
     '005':
       enums: []
       formats: []
       types: []
+      versionless_types: []
     '006':
       enums: []
       formats: []
       types: []
+      versionless_types: []
   heartbeat.a:
     '000':
       enums: []
       formats:
       - hex.char
       types: []
+      versionless_types: []
   heating.forecast:
     '000':
       enums: []
@@ -307,6 +349,7 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
   i2c.multichannel.dt.relay.component.gt:
     '002':
       enums:
@@ -321,6 +364,7 @@ types:
       - uuid4.str
       types:
       - relay.actor.config:002
+      versionless_types: []
     '003':
       enums:
       - change.relay.state:000
@@ -334,6 +378,7 @@ types:
       - uuid4.str
       types:
       - relay.actor.config:002
+      versionless_types: []
     '004':
       enums:
       - change.relay.state:000
@@ -347,6 +392,7 @@ types:
       - uuid4.str
       types:
       - relay.actor.config:003
+      versionless_types: []
   i2c.thermistor.channel.config:
     '000':
       enums:
@@ -356,6 +402,7 @@ types:
       - positive.int
       - spaceheat.name
       types: []
+      versionless_types: []
   i2c.thermistor.reader.component.gt:
     '000':
       enums:
@@ -369,12 +416,14 @@ types:
       - uuid4.str
       types:
       - i2c.thermistor.channel.config:000
+      versionless_types: []
   keyparam.change.log:
     '000':
       enums: []
       formats:
       - left.right.dot
       types: []
+      versionless_types: []
   latest.price:
     '000':
       enums:
@@ -384,6 +433,7 @@ types:
       - market.slot.name
       - uuid4.str
       types: []
+      versionless_types: []
   layout.lite:
     '007':
       enums:
@@ -417,6 +467,7 @@ types:
       - pico.tank.module.component.gt:011
       - relay.actor.config:002
       - spaceheat.node.gt:200
+      versionless_types: []
     008:
       enums:
       - change.relay.state:000
@@ -453,6 +504,7 @@ types:
       - relay.actor.config:002
       - sim.pico.tank.module.component.gt:000
       - spaceheat.node.gt:300
+      versionless_types: []
     009:
       enums:
       - change.relay.state:000
@@ -490,6 +542,7 @@ types:
       - relay.actor.config:002
       - sim.pico.tank.module.component.gt:000
       - spaceheat.node.gt:300
+      versionless_types: []
     '010':
       enums:
       - change.relay.state:000
@@ -528,6 +581,7 @@ types:
       - sim.pico.tank.module.component.gt:000
       - spaceheat.node.gt:300
       - spaceheat.node.gt:301
+      versionless_types: []
     '011':
       enums:
       - change.relay.state:000
@@ -568,6 +622,7 @@ types:
       - sim.pico.tank.module.component.gt:000
       - spaceheat.node.gt:300
       - spaceheat.node.gt:301
+      versionless_types: []
     '012':
       enums:
       - change.relay.state:000
@@ -607,6 +662,7 @@ types:
       - sim.pico.tank.module.component.gt:000
       - spaceheat.node.gt:301
       - spaceheat.telemetry.quantity.projection:000
+      versionless_types: []
     '013':
       enums:
       - change.relay.state:000
@@ -646,15 +702,18 @@ types:
       - sim.pico.tank.module.component.gt:000
       - spaceheat.node.gt:301
       - spaceheat.telemetry.quantity.projection:000
+      versionless_types: []
   linear.one.dimensional.calibration:
     '000':
       enums: []
       formats: []
       types: []
+      versionless_types: []
     '001':
       enums: []
       formats: []
       types: []
+      versionless_types: []
   machine.states:
     '000':
       enums:
@@ -664,6 +723,7 @@ types:
       - left.right.dot
       - utc.milliseconds
       types: []
+      versionless_types: []
   new.command.tree:
     '000':
       enums: []
@@ -676,6 +736,7 @@ types:
       - uuid4.str
       types:
       - spaceheat.node.gt:200
+      versionless_types: []
   pico.flow.module.component.gt:
     '000':
       enums:
@@ -689,6 +750,7 @@ types:
       - uuid4.str
       types:
       - channel.config:000
+      versionless_types: []
   pico.tank.module.component.gt:
     '011':
       enums:
@@ -700,22 +762,26 @@ types:
       - uuid4.str
       types:
       - channel.config:000
+      versionless_types: []
   position.point.gt:
     '000':
       enums: []
       formats:
       - uuid4.str
       types: []
+      versionless_types: []
   power.watts:
     '000':
       enums: []
       formats: []
       types: []
+      versionless_types: []
   price.quantity.unitless:
     '001':
       enums: []
       formats: []
       types: []
+      versionless_types: []
   relay.actor.config:
     '002':
       enums:
@@ -728,6 +794,7 @@ types:
       - positive.int
       - spaceheat.name
       types: []
+      versionless_types: []
     '003':
       enums:
       - change.relay.state:000
@@ -739,6 +806,7 @@ types:
       - positive.int
       - spaceheat.name
       types: []
+      versionless_types: []
   report:
     '002':
       enums:
@@ -760,6 +828,7 @@ types:
       - fsm.full.report:000
       - fsm.full.report:001
       - machine.states:000
+      versionless_types: []
     '003':
       enums:
       - fsm.report.type:000
@@ -778,6 +847,7 @@ types:
       - fsm.atomic.report:001
       - fsm.full.report:001
       - machine.states:000
+      versionless_types: []
   report.event:
     '002':
       enums:
@@ -800,6 +870,7 @@ types:
       - fsm.full.report:001
       - machine.states:000
       - report:002
+      versionless_types: []
     '003':
       enums:
       - fsm.report.type:000
@@ -819,6 +890,7 @@ types:
       - fsm.full.report:001
       - machine.states:000
       - report:003
+      versionless_types: []
   scada.control.capabilities:
     '000':
       enums:
@@ -836,6 +908,7 @@ types:
       types:
       - i2c.multichannel.dt.relay.component.gt:002
       - relay.actor.config:002
+      versionless_types: []
     '001':
       enums:
       - change.relay.state:000
@@ -857,6 +930,7 @@ types:
       - i2c.multichannel.dt.relay.component.gt:002
       - relay.actor.config:002
       - spaceheat.node.gt:300
+      versionless_types: []
   scada.params:
     '004':
       enums: []
@@ -868,6 +942,7 @@ types:
       types:
       - ha1.params:004
       - ha1.params:005
+      versionless_types: []
     '005':
       enums: []
       formats:
@@ -877,6 +952,7 @@ types:
       - uuid4.str
       types:
       - ha1.params:006
+      versionless_types: []
   send.control.capabilities:
     '000':
       enums: []
@@ -884,6 +960,7 @@ types:
       - left.right.dot
       - utc.milliseconds
       types: []
+      versionless_types: []
   send.layout:
     '000':
       enums: []
@@ -891,12 +968,14 @@ types:
       - left.right.dot
       - spaceheat.name
       types: []
+      versionless_types: []
     '001':
       enums: []
       formats:
       - left.right.dot
       - utc.milliseconds
       types: []
+      versionless_types: []
   sim.pico.tank.module.component.gt:
     '000':
       enums:
@@ -908,6 +987,7 @@ types:
       - uuid4.str
       types:
       - channel.config:000
+      versionless_types: []
   sim.ready:
     '000':
       enums: []
@@ -916,6 +996,7 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
   sim.timestep:
     '000':
       enums: []
@@ -925,6 +1006,7 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
   single.machine.state:
     '000':
       enums:
@@ -934,6 +1016,7 @@ types:
       - left.right.dot
       - utc.milliseconds
       types: []
+      versionless_types: []
   single.reading:
     '000':
       enums: []
@@ -941,6 +1024,7 @@ types:
       - spaceheat.name
       - utc.milliseconds
       types: []
+      versionless_types: []
   snapshot.spaceheat:
     '003':
       enums:
@@ -954,6 +1038,7 @@ types:
       types:
       - single.machine.state:000
       - single.reading:000
+      versionless_types: []
   spaceheat.node.gt:
     '200':
       enums: []
@@ -963,6 +1048,7 @@ types:
       - spaceheat.name
       - uuid4.str
       types: []
+      versionless_types: []
     '300':
       enums:
       - gw1.actor.class:009
@@ -972,6 +1058,7 @@ types:
       - spaceheat.name
       - uuid4.str
       types: []
+      versionless_types: []
     '301':
       enums:
       - gw1.actor.class:011
@@ -981,6 +1068,7 @@ types:
       - spaceheat.name
       - uuid4.str
       types: []
+      versionless_types: []
   spaceheat.telemetry.quantity.projection:
     '000':
       enums:
@@ -988,6 +1076,7 @@ types:
       - spaceheat.telemetry.name:007
       formats: []
       types: []
+      versionless_types: []
   synced.readings:
     '000':
       enums: []
@@ -995,6 +1084,7 @@ types:
       - spaceheat.name
       - utc.milliseconds
       types: []
+      versionless_types: []
   synced.readings.bundle:
     '001':
       enums:
@@ -1005,6 +1095,7 @@ types:
       - spaceheat.name
       - utc.iso8601.seconds
       types: []
+      versionless_types: []
     '002':
       enums:
       - gw1.unit:001
@@ -1015,6 +1106,7 @@ types:
       - utc.iso8601.seconds
       types:
       - channel.readings.list.item:000
+      versionless_types: []
   synth.channel.gt:
     '000':
       enums:
@@ -1025,11 +1117,13 @@ types:
       - spaceheat.name
       - uuid4.str
       types: []
+      versionless_types: []
   ticklist.hall:
     '101':
       enums: []
       formats: []
       types: []
+      versionless_types: []
   ticklist.hall.report:
     '000':
       enums: []
@@ -1039,11 +1133,13 @@ types:
       - utc.milliseconds
       types:
       - ticklist.hall:101
+      versionless_types: []
   ticklist.reed:
     '101':
       enums: []
       formats: []
       types: []
+      versionless_types: []
   ticklist.reed.report:
     '000':
       enums: []
@@ -1053,6 +1149,7 @@ types:
       - utc.milliseconds
       types:
       - ticklist.reed:101
+      versionless_types: []
   weather.forecast:
     '000':
       enums: []
@@ -1061,3 +1158,24 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
+versionless_types:
+  gridworks.ack:
+    enums: []
+    formats:
+    - uuid4.str
+    types: []
+    versionless_types: []
+  gridworks.ping:
+    enums: []
+    formats:
+    - uuid4.str
+    types: []
+    versionless_types: []
+  gw:
+    enums: []
+    formats:
+    - left.right.dot
+    types:
+    - gridworks.header:001
+    versionless_types: []
