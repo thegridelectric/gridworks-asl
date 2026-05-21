@@ -299,10 +299,6 @@ types:
       formats:
       - hex.char
       types: []
-    '001':
-      enums: []
-      formats: []
-      types: []
   heating.forecast:
     '000':
       enums: []

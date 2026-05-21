@@ -145,10 +145,9 @@ types:
       '005': definitions/types/ha1.params/005.yaml
       '004': definitions/types/ha1.params/004.yaml
   heartbeat.a:
-    latest_version: '001'
+    latest_version: '000'
     versioning_strategy: literal
     versions:
-      '001': definitions/types/heartbeat.a/001.yaml
       '000': definitions/types/heartbeat.a/000.yaml
   heating.forecast:
     latest_version: '000'
