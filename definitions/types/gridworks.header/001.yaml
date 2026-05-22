@@ -1,0 +1,130 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gridworks.header/001"
+
+title: "gridworks.header"
+type: object
+description: >
+  Delivery-layer metadata carried inside a ``gw`` envelope. Identifies the
+  sender, optional recipient, the type of the wrapped payload, a message
+  correlation id, and whether acknowledgment is requested.
+
+properties:
+  Src:
+    type: string
+    description: >
+      GNode alias of the sender.
+
+  Dst:
+    type: string
+    description: >
+      Recipient identifier (e.g. GNode alias or short address) when the
+      message is addressed to a single recipient. Empty string indicates
+      no specific recipient is encoded in the header.
+
+  MessageType:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The TypeName of the Payload carried in the enclosing ``gw`` envelope.
+      Equals Payload.TypeName by construction.
+
+  MessageId:
+    type: string
+    description: >
+      Correlation identifier for this message. Empty string indicates no
+      correlation is established.
+
+  AckRequired:
+    type: boolean
+    description: >
+      If true, the sender expects an acknowledgment from the recipient.
+
+  TypeName:
+    const: "gridworks.header"
+
+  Version:
+    const: "001"
+
+required:
+  - Src
+  - Dst
+  - MessageType
+  - MessageId
+  - AckRequired
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Src": "hw1.isone.me.versant.keene.maple.scada",
+      "Dst": "ltn",
+      "MessageType": "glitch",
+      "MessageId": "",
+      "AckRequired": false,
+      "TypeName": "gridworks.header",
+      "Version": "001"
+    }
+
+x-gridworks:
+  owner: "smoothstone-computing"
+  extended_description: >
+    gridworks.header is the envelope metadata used by the gwproto Message
+    pattern. It is paired with a Payload (any registered Sema type) inside
+    a ``gw`` envelope. Header.MessageType is set to equal Payload.TypeName
+    by the Message constructor; consumers MAY verify this equality at
+    decode time but are not required to by this schema.
+
+
+    This v001 definition matches the wire format emitted by the
+    gridworks-scada / gwproto Message class as currently deployed in the
+    field. The header was originally designed (by Andy Schweitzer) less as
+    a tight contract for GridWorks's own use than as a flexible envelope
+    intended to accommodate other organizations adopting the gw wrapper
+    format. As a result, several fields are loosely typed or carry
+    empty-string defaults to leave room for varied use; GridWorks's own
+    use today exercises only a subset of that flexibility.
+
+
+    Several aspects of the style are pragmatic accommodations of the
+    existing wire rather than principled long-term design choices, and a
+    future header version (gridworks.header/002 or successor) may evolve
+    in the following directions:
+
+
+    - **Empty-string defaults.** Today Dst and MessageId are required on
+      the wire and serialized as empty strings when not populated, because
+      pydantic emits the defaults declared on the gwproto Header class.
+      A future header may make these optional and rely on field absence
+      rather than empty-string sentinels — closer to the recommended Sema
+      style for optional fields.
+
+
+    - **MessageType redundancy.** Header.MessageType duplicates the
+      Payload's own TypeName field by construction. It exists for
+      backward compatibility and routing-key convenience. A future header
+      may drop MessageType entirely and treat Payload.TypeName as the
+      single source of truth.
+
+
+    - **Dst format.** Dst is currently a free-form string used variously
+      as a short address ("ltn", "scada"), a GNode alias, or an empty
+      placeholder. A future header may constrain Dst to a single
+      well-defined format (e.g., left.right.dot or a routable address
+      type) and move short-address routing into the rabbit routing key
+      where it already partially lives.
+
+
+    - **Instance provenance.** Per the FIS lifecycle the broker now binds
+      each connection to a GNodeInstanceId, but the header itself does
+      not carry FromGNodeInstanceId. A future header may include the
+      sending instance id so that downstream archival and audit consumers
+      (e.g., journalkeeper) can correlate messages to specific runtime
+      instances without consulting the broker session.
+
+
+    - **Authentication metadata.** The current header carries no
+      cryptographic signing or authenticated-sender claim. A future
+      header may include signing fields once mTLS-only identity proves
+      insufficient for higher-trust message classes.

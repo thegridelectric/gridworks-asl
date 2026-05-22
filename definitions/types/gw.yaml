@@ -1,0 +1,68 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw"
+
+title: "gw"
+type: object
+description: >
+  GridWorks message envelope. Carries a gridworks.header (delivery
+  metadata) and a Payload (any registered Sema type). 
+properties:
+  Header:
+    $ref: "https://schemas.electricity.works/types/gridworks.header/001"
+    description: >
+      Delivery-layer metadata for this envelope. See gridworks.header/001.
+
+  Payload:
+    type: object
+    properties:
+      TypeName:
+        type: string
+    required:
+      - TypeName
+    additionalProperties: true
+    description: >
+      Serialized form of a registered Sema type.
+
+  TypeName:
+    const: "gw"
+
+required:
+  - Header
+  - Payload
+  - TypeName
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Header": {
+        "Src": "hw1.isone.me.versant.keene.maple.scada",
+        "Dst": "ltn",
+        "MessageType": "glitch",
+        "MessageId": "",
+        "AckRequired": false,
+        "TypeName": "gridworks.header",
+        "Version": "001"
+      },
+      "Payload": {
+        "FromGNodeAlias": "hw1.isone.me.versant.keene.maple.scada",
+        "Node": "analog-temp",
+        "Type": "Warning",
+        "Summary": "TSnapReadIssue",
+        "Details": "Open Thermistor reading AND bad max voltage!",
+        "CreatedMs": 1778844412223,
+        "TypeName": "glitch",
+        "Version": "000"
+      },
+      "TypeName": "gw"
+    }
+
+x-gridworks:
+  owner: "smoothstone-computing"
+  extended_description: >
+    The gw envelope is the wire-format wrapper used by GridWorks actors
+    that follow the GridWorksWrapped pattern, for example as implemented
+    in the gwproto package's Message pattern. Consumers extract the
+    Payload using its TypeName to look up the appropriate Sema type
+    schema.

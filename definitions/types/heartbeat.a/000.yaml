@@ -4,11 +4,14 @@ $id: "https://schemas.electricity.works/types/heartbeat.a/000"
 title: "heartbeat.a"
 type: object
 description: >
-  Lightweight actor heartbeat message exchanged between a supervisor and a
-  supervised actor. The message carries a newly selected local hexadecimal
-  token and may echo the last hexadecimal token received from the peer,
-  allowing each side to confirm that heartbeat traffic is fresh and
-  bidirectional after the initial exchange.
+  Lightweight actor heartbeat used by a supervisor to monitor the liveness and
+  health of the applications (actors) it supervises, and by each supervised
+  actor to confirm its supervisor is alive. The message carries a newly selected
+  local hexadecimal token and may echo the last hexadecimal token received from
+  the peer, allowing each side to confirm that heartbeat traffic is fresh and
+  bidirectional after the initial exchange. The field names are written from the
+  sender's perspective, so the same message shape serves traffic in both
+  directions.
 
 properties:
   MyHex:
@@ -47,3 +50,14 @@ examples:
 
 x-gridworks:
   owner: "gridworks-energy"
+  extended_description: >
+    This is supervisor-tier liveness, not a contract instrument. It answers
+    "is this actor/process running?" within a single trust domain (a supervisor
+    and its supervised actors), where peers are identified by alias and no
+    signing or non-repudiation is implied. A `MyHex`/`YourLastHex` pair from the
+    sender's perspective lets each side detect missed or duplicated beats and
+    confirm two-way freshness; because the names are sender-relative, the same
+    type is used by the supervisor and by the supervised actor without a
+    role-specific variant. Cross-party, accountable liveness that underpins a
+    dispatch contract (e.g. between a SCADA and a LeafTransactiveNode) is a
+    distinct, heavier mechanism and is not modeled by this type.

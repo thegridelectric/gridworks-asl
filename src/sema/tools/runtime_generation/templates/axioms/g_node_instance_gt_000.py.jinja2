@@ -5,10 +5,10 @@
         RevokedAtUnixMs SHALL be present if and only if Status is Revoked or Ended.
         """
 
-        if self.status in (
+        if self.status in {
             {{ g_node_instance_status_000_class_name }}.Revoked,
             {{ g_node_instance_status_000_class_name }}.Ended,
-        ):
+        }:
             if self.revoked_at_unix_ms is None:
                 raise ValueError(
                     "Axiom 1 violated! RevokedAtUnixMs must be present "
