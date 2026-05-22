@@ -32,3 +32,5 @@ effortless.env
 app/**/.env
 .env
 .secrets/
+
+**/node_modules/**/*

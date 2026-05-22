@@ -50,6 +50,12 @@ export function ThreePaneShell() {
               <NavLink to="/activity">Activity</NavLink>
             </li>
           </ul>
+          <h2>Admin</h2>
+          <ul className="nav">
+            <li>
+              <NavLink to="/admin">YAML ⇄ rulebook</NavLink>
+            </li>
+          </ul>
         </nav>
         <Outlet />
       </div>

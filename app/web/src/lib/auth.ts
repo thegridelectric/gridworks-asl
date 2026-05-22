@@ -12,6 +12,7 @@
 // signed-in email) and is treated as untrusted otherwise.
 
 const STORAGE_KEY = "sema.auth.jwt.v1";
+const DEV_SKIP_KEY = "sema.auth.dev_skip.v1";
 export const AUTH_EVENT = "sema:auth-changed";
 
 export function getJwt(): string | null {
@@ -38,6 +39,28 @@ export function setJwt(jwt: string): void {
 export function clearJwt(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
+  window.dispatchEvent(new CustomEvent(AUTH_EVENT));
+}
+
+// Dev-only bypass: when set, LoginGate treats the session as an anonymous
+// localhost admin and skips the magic-links round-trip entirely. Server
+// routes don't enforce auth today, so this is purely a UI gate flip.
+export function getDevSkip(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return localStorage.getItem(DEV_SKIP_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function setDevSkip(on: boolean): void {
+  try {
+    if (on) localStorage.setItem(DEV_SKIP_KEY, "1");
+    else localStorage.removeItem(DEV_SKIP_KEY);
   } catch {
     /* ignore */
   }

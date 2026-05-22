@@ -5,6 +5,32 @@
 > **Scope.** This is the live forward-looking doc. The scaffold work that *described* HEAD in the rulebook is done. What's left is closing the loop (round-trip parity, downstream emitters) and building the admin app.
 >
 > **Anchor rule.** [`definitions/*.yaml`](definitions/) is the contract-bound SSoT (GridWorks SOW §3.3). The rulebook is a derived projection. The architecture diagram in [README.md](README.md#architecture-the-loop) is the canonical picture; this doc is the punch list against it.
+>
+> **Theoretical frame.** [`effortless-rulebook/effortless-rulebook.json`](effortless-rulebook/effortless-rulebook.json) is a CMCC instance — the same five-primitive (Schema / Data / Lookups / Aggregations / Calculated-Fields) structure that every effortless project uses. The build pipeline ([`effortless.json`](effortless.json) + the `effortless` CLI) is standard ssotme:// machinery. Sema's twist is that `definitions/*.yaml` is upstream of the rulebook, not Airtable — see [`effortless-rulebook/README.md`](effortless-rulebook/README.md) for the full framing.
+>
+> **Integration principle.** The remaining SOW work is a *wrap*, not a fork: the rulebook is the **catalog** (what's pickable, browsable), jm's existing snapshot CLI is the **engine** (what produces the ZIP), and the website/admin app is the **wrapper** around both. See §3.
+
+---
+
+## SOW deliverable map (GridWorks 2026-05-01)
+
+| § | Deliverable                              | Hits in this doc                            |
+| - | ---------------------------------------- | ------------------------------------------- |
+| 3.1 | Public site at `schemas.electricity.works` | §4 (D1–D3) — auth-strip + CPLN domain      |
+| 3.2 | Path mirror `/{kind}/{name}/{version}`     | §3 C5 (new)                                |
+| 3.3 | `definitions/` on `main` is canonical      | Anchor rule above + §1 (Phase A enforces it) |
+| 3.4 | PR workflow + unified build script         | §1 (A2) + §1 (A3) + §4 (D-CI)             |
+| 3.5 | Web-based snapshot builder                 | §3 (C3)                                    |
+| 3.6 | Knowledge transfer                         | §4 (D4 — runbook) + this doc + [`effortless-rulebook/README.md`](effortless-rulebook/README.md) |
+
+**Definition of done (contract level):**
+
+1. `https://schemas.electricity.works/{kind}/{name}/{version}` serves YAML byte-equivalent to `definitions/` on `main`.
+2. `definitions/` on `main` contains no mock/test data; `build_registry.sh` regenerates everything else deterministically.
+3. PR merge to `main` auto-deploys to the website within ~5 min.
+4. Web snapshot builder produces a ZIP byte-equivalent to the CLI output for the same inputs.
+5. Runbook explains every workflow above end-to-end.
+6. End-to-end PR acceptance test passes.
 
 ---
 
@@ -101,11 +127,77 @@ URL spine, three-pane shell, Word/Enum/Format timelines and detail pages, helper
 
 ### C3. Snapshot UI (the SOW §3.5 deliverable)
 
-A web endpoint that wraps `sema snapshot prepare` / `sema snapshot build`. Per JM_DERIVED §3 the rulebook is the *catalog* (what's pickable) and `sema snapshot` is the *engine* (what builds the SDK). The UI:
+A web endpoint that wraps `sema snapshot prepare` / `sema snapshot build`. The rulebook is the **catalog** (what's pickable) and `sema snapshot` is the **engine** (what builds the SDK). The UI is the **wrapper** — it never re-implements the CLI logic, only orchestrates around it.
 
-- Lets a user select root types/enums/formats from the rulebook.
-- Posts to a FastAPI endpoint that shells out to `sema snapshot prepare` then `sema snapshot build`.
-- Returns a download URL for the generated Python package.
+**Backend — [`app/api/routes/snapshot.py`](app/api/routes/snapshot.py):**
+
+```python
+class SeedSpec(BaseModel):
+    versions: list[str] | None = None       # explicit version list
+    include_all_versions: bool = False      # all registry-declared versions
+    # absent → latest only
+
+class SnapshotRequest(BaseModel):
+    seeds: dict[str, dict[str, SeedSpec]]   # {types: {bid: {versions: ["000"]}}, enums: {...}}
+    local_names: dict[str, str]             # canonical -> local class name
+    package_name: str = "gjk"
+
+GET  /api/snapshot/reserved-names   # Python keywords + builtins + snapshot helper module names
+POST /api/snapshot/preview          # returns the resolved closure (no build)
+POST /api/snapshot/build            # returns a ZIP stream
+GET  /api/closure?type=...&enum=... # reuses src/sema/tools/build_seed_dag.py
+```
+
+The build handler shells out / imports jm's CLI (not subprocess — import `prepare`/`build` from [`src/sema/interfaces/cli/snapshot.py`](src/sema/interfaces/cli/snapshot.py)):
+
+```python
+@router.post("/snapshot/build")
+async def snapshot_build(req: SnapshotRequest) -> StreamingResponse:
+    with tempfile.TemporaryDirectory() as workdir:
+        seed_yaml = render_seed_request_yaml(req.seeds)
+        write(workdir / "seed_request.yaml", seed_yaml)
+        prepare(workdir / "seed_request.yaml", workdir / "output")
+        merge_local_names(workdir / "output/sema/indexes/local_names.yaml", req.local_names)
+        build(workdir / "output", package_name=req.package_name)
+        return zip_stream(workdir / "output/sema", filename="sema-snapshot.zip")
+```
+
+**Validation rules for `local_names`:**
+
+- Reject Python keywords / builtins (`keyword.kwlist + dir(builtins)`).
+- Reject names that collide with each other.
+- Reject names that collide with the snapshot's runtime helper modules (`base`, `codec`, `property_format`).
+
+**Frontend — [`app/web/src/routes/SnapshotBuilder.tsx`](app/web/src/routes/SnapshotBuilder.tsx):**
+
+Three-pane shell:
+
+1. **Seed picker** (left) — Types + Enums from rulebook with per-row "latest / all versions / explicit" controls. Reuse the existing [`Search.tsx`](app/web/src/routes/Search.tsx) picker.
+2. **Closure preview** (middle) — calls `/api/snapshot/preview` after each seed change, renders the full dependency tree. Reuse the rendering pattern from [`TypeVersion.tsx`](app/web/src/routes/TypeVersion.tsx).
+3. **Local names + download** (right) — per-class text inputs, live validation against `/api/snapshot/reserved-names`, big "Download ZIP" button → POST to `/api/snapshot/build`.
+
+**Acceptance:**
+
+- ZIP from `/api/snapshot/build` is byte-equivalent (after deterministic-ordering normalization) to running `sema snapshot prepare` → edit `local_names.yaml` → `sema snapshot build` from the same inputs. Add a golden test enforcing this.
+- Anonymous browser sessions can use it end-to-end with no login (per SOW §3.1).
+- Rate-limit `/api/snapshot/build` (default: 10 req/min per IP) since it's public and CPU-bound.
+
+### C5. Path-mirrored YAML serving (SOW §3.2)
+
+Separate from the rulebook-backed Explorer. The site MUST serve raw `definitions/*.yaml` at canonical paths so the SOW path-mirror invariant holds.
+
+**Routes ([`app/api/routes/registry.py`](app/api/routes/registry.py)):**
+
+```
+GET /{kind}                          # kind index — all names
+GET /{kind}/{name}                   # version index — latest + all versions
+GET /{kind}/{name}/{version}         # HTML view (header + raw-yaml link)
+GET /{kind}/{name}/{version}.yaml    # raw YAML, byte-equivalent to definitions/...
+```
+
+`{kind} ∈ {types, enums, formats, owners}`. The `.yaml` route reads directly from `definitions/{kind}/{name}/{version}.yaml` on disk — **never** from the rulebook — to honor §3.3's "definitions is authoritative" rule.
+
+**Acceptance:** `curl https://schemas.electricity.works/types/bid/000.yaml` is byte-equivalent to the file at `definitions/types/bid/000.yaml` on the deployed commit.
 
 ### C4. Edit ergonomics (Phase 5+ in APP_PLAN)
 
@@ -115,11 +207,14 @@ When this lands, the loop is fully bidirectional — edit YAML OR edit through t
 
 ---
 
-## 4. Phase D — Deployment (SOW §3.4 / §3.6)
+## 4. Phase D — Deployment (SOW §3.1 / §3.4 / §3.6)
 
-- [ ] **D1.** Replace the bases.effortlessapi.com magic-links auth (currently mocked for local) with the real auth wiring for production. The infra is mostly in place — see [DEPLOY.md](DEPLOY.md) and the `auth.trusted_tenants` table.
-- [ ] **D2.** Deploy to Control Plane (CPLN) or equivalent. Domain TBD.
-- [ ] **D3.** End-to-end smoke test against the deployed instance.
+- [ ] **D-Auth.** Strip magic-links auth from all read paths (GET routes that read schema content + the snapshot-builder routes). Keep auth ONLY on routes that mutate state — or remove mutation routes entirely from the public deployment. Audit [`app/api/auth.py`](app/api/auth.py) decorators systematically. Per SOW §3.1 the public site has no login.
+- [ ] **D-CPLN.** Configure CPLN workload with public domain `schemas.electricity.works`. DNS CNAME → CPLN endpoint, cert provisioning. (Open question: who owns `electricity.works`? Need NS-record / CNAME ability.)
+- [ ] **D-CI.** GitHub Action `.github/workflows/ci.yml` runs `scripts/build_registry.sh` on every PR. Fails CI if regenerated artifacts diverge from committed (`git diff --exit-code`). This is what enforces A3 at the repo level.
+- [ ] **D-Deploy.** GitHub Action `.github/workflows/deploy.yml` on push to `main`: run `build_registry.sh`, build Docker image, push to CPLN via [`push-to-cpln.sh`](push-to-cpln.sh). `needs: [ci]` so deploy never fires before tests pass.
+- [ ] **D-Smoke.** End-to-end smoke test against the deployed instance. Hits §3.2 path mirror, the snapshot-builder, and one full PR-merge → website-update cycle.
+- [ ] **D-Runbook.** `docs/RUNBOOK.md` — adding a new type, adding a new enum, investigating a round-trip failure, deploying, rolling back, local development setup. The SOW §3.6 deliverable.
 
 ---
 
@@ -145,10 +240,26 @@ Any code or doc that references the forbidden terms needs updating. Run `git gre
 
 ---
 
-## 7. References
+## 7. Sequencing & risk
+
+**Critical path to SOW completion:** A1 (round-trip 100%) → A2 (build script) → C3 (snapshot endpoint + UI) → C5 (path-mirrored YAML) → D-Auth/D-CPLN (deploy) → D-Smoke (e2e test). Estimated 1.5–2 weeks of single-developer flow.
+
+| Risk                                                                 | Mitigation                                                                                  |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| 4 round-trip failures need rulebook schema additions, not emitter fixes | Time-box A1 to 2 days; if blocked, mark failing fields derived-only and document why    |
+| jm's `prepare`/`build` aren't importable as functions (only CLI)     | Refactor [`snapshot.py`](src/sema/interfaces/cli/snapshot.py) to expose plain functions     |
+| Auth-strip leaks something not intended public                       | Audit every route before deploy; default to public-read/no-write; add visible banner        |
+| Snapshot ZIPs don't match CLI output bit-for-bit                     | Golden test (C3 acceptance) — same `seed_request.yaml` → CLI output vs API output diff = ∅ |
+| Deploy fires before tests complete                                   | `deploy.yml needs: [ci]`                                                                    |
+
+---
+
+## 8. References
 
 - [README.md](README.md) — architecture diagram + Sema overview.
 - [CLAUDE.md](CLAUDE.md) — project rules and build discipline.
 - [DEPLOY.md](DEPLOY.md) — deployment procedures.
+- [effortless-rulebook/README.md](effortless-rulebook/README.md) — CMCC framing, ssotme:// stack, theoretical context.
 - [rulebook-emitters/README.md](rulebook-emitters/README.md) — emitter inventory.
 - The `vw_*` views in postgres — live signal of rulebook state (run `psql -d sema -c "\dv vw_*"`).
+- [CMCC Zenodo paper](https://zenodo.org/records/14761025) — the formal foundation behind the rulebook structure.

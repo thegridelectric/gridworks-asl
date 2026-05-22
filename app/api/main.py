@@ -13,6 +13,7 @@ load_dotenv(Path(__file__).resolve().parent / ".env", override=False)
 from . import auth, db, loader  # noqa: E402
 from .models import HealthResponse, TableSummary  # noqa: E402
 from .routes import (  # noqa: E402
+    admin,
     enums,
     formats,
     helpers,
@@ -66,6 +67,7 @@ app.include_router(helpers.router)
 app.include_router(projections.router)
 app.include_router(upgrades.router)
 app.include_router(search.router)
+app.include_router(admin.router)
 
 
 @app.get("/api/health", response_model=HealthResponse, tags=["meta"])

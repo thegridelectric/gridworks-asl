@@ -10,6 +10,8 @@ import { FormatView } from "./routes/Format";
 import { HelperView } from "./routes/Helper";
 import { ProjectionView } from "./routes/Projection";
 import { SearchView } from "./routes/Search";
+import { AdminView } from "./routes/Admin";
+import { AdminShell } from "./components/AdminShell";
 import {
   EnumUpgradeChainView,
   EnumUpgradeEdgeView,
@@ -71,6 +73,13 @@ export const router = createBrowserRouter([
       { path: "helpers/:name", element: <HelperView /> },
 
       { path: "*", element: <Placeholder phase="(404)" title="Not Found" /> },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminShell />,
+    children: [
+      { index: true, element: <AdminView /> },
     ],
   },
 ]);

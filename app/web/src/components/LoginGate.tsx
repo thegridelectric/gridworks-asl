@@ -5,8 +5,10 @@ import {
   decodeUntrusted,
   fetchAuthConfig,
   fetchCurrentUser,
+  getDevSkip,
   getJwt,
   requestCode,
+  setDevSkip,
   setJwt,
   verifyCode,
   type AuthConfig,
@@ -16,6 +18,7 @@ import {
 type GateState =
   | { kind: "loading" }
   | { kind: "open" }                    // auth not configured upstream — render children
+  | { kind: "dev_skip" }                // localhost dev bypass — render children
   | { kind: "anonymous"; cfg: AuthConfig }
   | { kind: "authed"; user: CurrentUser };
 
@@ -38,6 +41,12 @@ export function LoginGate({ children }: { children: ReactNode }) {
 
     async function recheck() {
       setState({ kind: "loading" });
+      // Dev bypass wins over everything: skip the magic-links round-trip
+      // entirely. Server routes don't enforce auth, so this is safe today.
+      if (getDevSkip()) {
+        if (!cancelled) setState({ kind: "dev_skip" });
+        return;
+      }
       try {
         const cfg = await fetchAuthConfig();
         if (!cfg.configured) {
@@ -78,15 +87,33 @@ export function LoginGate({ children }: { children: ReactNode }) {
   if (state.kind === "loading") {
     return <div style={loadingStyle}>Loading…</div>;
   }
-  if (state.kind === "open" || state.kind === "authed") {
+  if (state.kind === "open" || state.kind === "authed" || state.kind === "dev_skip") {
     return (
       <>
         {state.kind === "authed" && <SignedInBadge user={state.user} />}
+        {state.kind === "dev_skip" && <DevSkipBadge />}
         {children}
       </>
     );
   }
   return <LoginForm cfg={state.cfg} />;
+}
+
+function DevSkipBadge() {
+  return (
+    <div style={badgeStyle}>
+      <span style={{ color: "var(--fg-muted)" }}>dev:</span>{" "}
+      <strong>anonymous admin</strong>
+      <button
+        type="button"
+        onClick={() => setDevSkip(false)}
+        style={badgeButtonStyle}
+        title="Re-enable login"
+      >
+        sign in
+      </button>
+    </div>
+  );
 }
 
 function SignedInBadge({ user }: { user: CurrentUser }) {
@@ -227,6 +254,17 @@ function LoginForm({ cfg }: { cfg: AuthConfig }) {
         )}
 
         {error && <div style={errorStyle}>Error: {error}</div>}
+
+        <div style={devSkipRowStyle}>
+          <button
+            type="button"
+            onClick={() => setDevSkip(true)}
+            style={devSkipButtonStyle}
+            title="Bypass login as an anonymous admin (localhost dev only)"
+          >
+            Skip login (dev) →
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -346,4 +384,21 @@ const badgeButtonStyle: React.CSSProperties = {
   border: "none",
   cursor: "pointer",
   padding: 0,
+};
+
+const devSkipRowStyle: React.CSSProperties = {
+  marginTop: 16,
+  paddingTop: 12,
+  borderTop: "1px dashed var(--border)",
+  display: "flex",
+  justifyContent: "center",
+};
+
+const devSkipButtonStyle: React.CSSProperties = {
+  fontSize: 12,
+  background: "transparent",
+  color: "var(--fg-muted)",
+  border: "none",
+  cursor: "pointer",
+  padding: "4px 8px",
 };
