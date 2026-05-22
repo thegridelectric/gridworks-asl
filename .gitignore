@@ -2,8 +2,7 @@
 __pycache__/
 *.py[oc]
 *.DS_Store
-LLM.md
-CLAUDE.md
+
 build/
 dist/
 wheels/
