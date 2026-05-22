@@ -114,9 +114,17 @@ types:
     versioning_strategy: literal
     versions:
       '001': definitions/types/gridworks.event.problem/001.yaml
+  gridworks.header:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gridworks.header/001.yaml
   gridworks.ping:
     versioning_strategy: none
     schema: definitions/types/gridworks.ping.yaml
+  gw:
+    versioning_strategy: none
+    schema: definitions/types/gw.yaml
   gw1.tank.temp.calibration:
     latest_version: '000'
     versioning_strategy: literal
@@ -145,10 +153,9 @@ types:
       '005': definitions/types/ha1.params/005.yaml
       '004': definitions/types/ha1.params/004.yaml
   heartbeat.a:
-    latest_version: '001'
+    latest_version: '000'
     versioning_strategy: literal
     versions:
-      '001': definitions/types/heartbeat.a/001.yaml
       '000': definitions/types/heartbeat.a/000.yaml
   heating.forecast:
     latest_version: '000'

@@ -188,6 +188,8 @@ def expand_seed(seed_request_path: Path, output_path: Path) -> None:
     normalized_targets: list[str] = []
     pending_type_versions: list[tuple[str, str]] = []
     expanded_type_versions: set[tuple[str, str]] = set()
+    pending_versionless: list[str] = []
+    expanded_versionless: set[str] = set()
 
     def add_enum(name: str, version: str) -> None:
         enums.setdefault(name, set()).add(version)
@@ -198,6 +200,23 @@ def expand_seed(seed_request_path: Path, output_path: Path) -> None:
             selected.add(version)
             pending_type_versions.append((name, version))
 
+    def add_versionless_type(name: str) -> None:
+        if name not in versionless_types:
+            versionless_types.add(name)
+            pending_versionless.append(name)
+
+    def absorb_closure(type_closure: dict) -> None:
+        for dep in type_closure.get("formats", []):
+            formats.add(dep)
+        for dep in type_closure.get("enums", []):
+            dep_name, dep_version = dep.rsplit(":", 1)
+            add_enum(dep_name, dep_version)
+        for dep in type_closure.get("types", []):
+            dep_name, dep_version = dep.rsplit(":", 1)
+            add_type(dep_name, dep_version)
+        for dep in type_closure.get("versionless_types", []):
+            add_versionless_type(dep)
+
     def expand_pending_type_versions() -> None:
         while pending_type_versions:
             name, version = pending_type_versions.pop(0)
@@ -205,16 +224,15 @@ def expand_seed(seed_request_path: Path, output_path: Path) -> None:
             if key in expanded_type_versions:
                 continue
             expanded_type_versions.add(key)
-            type_closure = closure["types"][name][version]
+            absorb_closure(closure["types"][name][version])
 
-            for dep in type_closure["formats"]:
-                formats.add(dep)
-            for dep in type_closure["enums"]:
-                dep_name, dep_version = dep.rsplit(":", 1)
-                add_enum(dep_name, dep_version)
-            for dep in type_closure["types"]:
-                dep_name, dep_version = dep.rsplit(":", 1)
-                add_type(dep_name, dep_version)
+    def expand_pending_versionless() -> None:
+        while pending_versionless:
+            name = pending_versionless.pop(0)
+            if name in expanded_versionless:
+                continue
+            expanded_versionless.add(name)
+            absorb_closure(closure["versionless_types"][name])
 
     for category, name, version in requested_targets:
         normalized_targets.append(name if version is None else f"{name}:{version}")
@@ -226,13 +244,16 @@ def expand_seed(seed_request_path: Path, output_path: Path) -> None:
             continue
 
         if version is None:
-            versionless_types.add(name)
+            add_versionless_type(name)
             continue
 
         add_type(name, version)
 
     while True:
         expand_pending_type_versions()
+        expand_pending_versionless()
+        if pending_type_versions or pending_versionless:
+            continue
         added_intermediate_versions = add_intermediate_type_versions(types, registry)
         if not added_intermediate_versions:
             break

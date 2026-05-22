@@ -1,6 +1,0 @@
-    def upgrade(self) -> {{ heartbeat_a_001_class_name }}:
-        """Minimal no-payload heartbeat variant."""
-        data = []
-        data["hp_turn_on_minutes"] = 12
-        data["version"] = "006"
-        return {{ heartbeat_a_001_class_name }}.model_validate(data)

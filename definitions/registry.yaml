@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-05-14T14:50:00Z"
+  last_updated: "2026-05-15T00:00:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -19,7 +19,7 @@ formats:
   left.right.dot:
     owner: gridworks-energy
     schema_url: "https://schemas.electricity.works/formats/left.right.dot"
-    created: "2024-09-02T15:00:00Z"
+    created: "2022-01-01T00:00:00Z"
     description: "Dot-separated hierarchical identifier composed of lowercase alphanumeric segments"
 
   market.slot.name:
@@ -1143,6 +1143,21 @@ types:
             - "utc.milliseconds"
             - "uuid4.str"
 
+  gridworks.header:
+    latest_version: "001"
+    owner: smoothstone-computing
+    versioning_strategy: "literal"
+    description: "Delivery-layer metadata carried inside a gw envelope: Src, Dst, MessageType, MessageId, AckRequired."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gridworks.header/001"
+        created: "2022-10-17T16:55:39Z"
+        summary: "Initial published version, matching the gwproto Header wire format deployed in the field."
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+
   gridworks.ping:
     owner: smoothstone-computing
     versioning_strategy: "none"
@@ -1153,6 +1168,17 @@ types:
     direct_dependencies:
       structural:
         - "uuid4.str"
+
+  gw:
+    owner: smoothstone-computing
+    versioning_strategy: "none"
+    description: "GridWorks message envelope: a gridworks.header plus a Payload of any registered Sema type."
+    schema_url: "https://schemas.electricity.works/types/gw"
+    created: "2022-10-17T16:55:39Z"
+    summary: "Versionless GridWorks message envelope (gwproto Message wire format)."
+    direct_dependencies:
+      structural:
+        - "gridworks.header:001"
 
   gw.nolan.layout:
     latest_version: "000"
@@ -1287,18 +1313,12 @@ types:
           structural: []
 
   heartbeat.a:
-    latest_version: "001"
+    latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Lightweight actor heartbeat message. Version 000 carries hex tokens; version 001 is a minimal no-payload variant."
+    description: "Lightweight supervisor-tier actor heartbeat carrying sender/peer hex tokens for bidirectional liveness."
 
     versions:
-      "001":
-        schema_url: "https://schemas.electricity.works/types/heartbeat.a/001"
-        created: "2026-05-13T00:00:00Z"
-        summary: "Minimal no-payload heartbeat variant."
-        direct_dependencies:
-          structural: []
       "000":
         schema_url: "https://schemas.electricity.works/types/heartbeat.a/000"
         created: "2026-05-08T16:34:06Z"

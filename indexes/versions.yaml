@@ -180,9 +180,20 @@ types:
       "001":
         summary: "Initial Sema version"
 
+  gridworks.header:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial published version, matching the gwproto Header wire format deployed in the field."
+
   gridworks.ping:
     versioning_strategy: "none"
     summary: "Versionless message used for liveness/heartbeat checks."
+
+  gw:
+    versioning_strategy: "none"
+    summary: "Versionless GridWorks message envelope (gwproto Message wire format)."
 
   gw1.tank.temp.calibration:
     latest_version: "000"
@@ -232,11 +243,9 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   heartbeat.a:
-    latest_version: "001"
+    latest_version: "000"
     versioning_strategy: "literal"
     versions:
-      "001":
-        summary: "Minimal no-payload heartbeat variant."
       "000":
         summary: "Initial Sema version."
 
