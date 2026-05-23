@@ -5,7 +5,7 @@ You MUST read and follow `spec/primary.md` before proceeding
 `spec/authoring/` for the kind of work you are doing). Paths in
 this file are relative to the sema repo root.
 
-The previous monolithic spec is preserved as `docs/orig-spec.md` for
+The previous monolithic spec is preserved as `spec/orig-spec.md` for
 reference during the transition.
 
 Please ask the user for a Task Prompt before starting.

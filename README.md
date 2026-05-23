@@ -14,6 +14,33 @@ The full technical specification is available at:
 **[Sema Specification v1.0](https://schemas.electricity.works/sema/specification/1.0)**
 
 
+## Why this matters
+
+When shared message structures evolve slowly and unsafely, the vocabulary
+itself becomes the constraint. Small changes — adding a field, extending
+an enum, clarifying a concept — turn into coordinated deployments,
+version negotiations, or breaking migrations across multiple systems.
+Sema treats shared vocabulary as a first-class, versioned artifact so
+systems can evolve independently while continuing to communicate
+reliably.
+
+This approach provides several practical benefits:
+
+- **Independent evolution** — vocabulary changes are versioned at the
+  level of individual words; new types or fields can be introduced
+  without forcing coordinated migrations across unrelated systems.
+- **Language neutrality** — definitions are expressed as JSON Schema and
+  can generate bindings in multiple programming languages.
+- **Clear system boundaries** — shared vocabulary is defined once and
+  reused across systems; application code is free to implement its own
+  internal models and architecture.
+- **Open collaboration** — vocabulary evolves through contributions to
+  the registry rather than through centralized API ownership.
+
+The vision: make shared vocabulary **explicit, portable, and evolvable**,
+so distributed systems can coordinate while remaining autonomous.
+
+
 ## Core Vocabulary Model
 
 Sema defines three kinds of vocabulary words:
@@ -333,6 +360,6 @@ To propose a new vocabulary word or version:
 2. Add the new definition and registry entry
 3. Submit a pull request
 
-See the **Vocabulary Registration Process**(docs/rules_and_guidelines.md#vocabulary-registration-process) for full details.
+See the [**Vocabulary Registration Process**](spec/governance.md#vocabulary-registration-process) for full details.
 
 Questions and proposals are welcome via GitHub issues.
