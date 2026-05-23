@@ -85,7 +85,8 @@ To add a type:
 
 1. Add the schema YAML under `definitions/types/<type-name>/<version>.yaml`.
    Follow the type, versioning, dependency, enum, format, and axiom rules in
-   [`docs/sema-specification.md`](docs/sema-specification.md).
+   [`spec/primary.md`](spec/primary.md) (the spec hub; per-kind
+   spokes live under `spec/registry/` and `spec/authoring/`).
 
 2. Add the type version to `definitions/registry.yaml`.
    Declare only direct dependencies. Use `structural` for `$ref` dependencies

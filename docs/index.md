@@ -7,8 +7,13 @@ This directory contains background material and architectural notes for Sema.
 - **[motivation.md](motivation.md)**  
   Why Sema exists and the problem it addresses.
 
-- **[sema-specification.md](sema-specification.md)**  
-  The formal specification governing vocabulary structure, versioning, and registry behavior.
+- **[../spec/primary.md](../spec/primary.md)**
+  The formal specification (hub) governing vocabulary structure, versioning,
+  and registry behavior. Lives at the top level of the repo (`sema/spec/`)
+  because it is the canonical rebuild artifact, not background reading.
+  Per-kind spokes live under `../spec/registry/` and `../spec/authoring/`;
+  governance lives at `../spec/governance.md`. The previous monolithic
+  version is archived at [orig-spec.md](orig-spec.md).
 
 ## Architecture
 

@@ -1,0 +1,316 @@
+# Authoring — Worked Type Examples
+
+Two complete, annotated type schema examples. For structural rules see
+[types.md](types.md); for axioms, projections, and upgrades see
+[type-semantics.md](type-semantics.md). Read
+[../primary.md](../primary.md) for core principles.
+
+## Example: `bid v000` (Type)
+
+```
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/bid/000"
+
+title: "bid"
+type: object
+description: >
+  A market-normalized, slot-specific price–quantity schedule submitted by a
+  market participant. A bid expresses willingness to inject or withdraw a
+  quantity of a market-defined commodity as a function of price, subject to
+  the rules of the MarketType associated with the specified MarketSlot.
+
+  Bids are economically admissible, cryptographically anchored messages that
+  serve as the primary input to market aggregation and clearing. Differences
+  between participant classes (e.g. leaf nodes, aggregators, fleets, generators)
+  are expressed through MarketType rules and bidder authorization registries,
+  not through differences in bid structure.
+
+properties:
+  BidderAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Canonical alias of the market participant submitting this bid. This alias
+      is used to associate the bid with authorization, fee-payment credentials,
+      and market participation rules defined outside this message.
+
+  MarketSlotName:
+    $ref: "https://schemas.electricity.works/formats/market.slot.name"
+    description: >
+      Identifier of the market slot for which this bid applies. The MarketSlot
+      determines the applicable MarketType, settlement interval, and market
+      rules used to validate and clear the bid.
+
+  PqPairs:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/price.quantity.unitless/000"
+    description: >
+      Ordered list of price–quantity pairs defining the bid curve. Prices SHALL
+      be ordered according to MarketType rules and normalized to the market’s
+      declared price domain. Quantities represent willingness to inject or
+      withdraw at the corresponding prices.
+    minItems: 1
+
+  InjectionIsPositive:
+    type: boolean
+    description: >
+      Sign convention for quantities in this bid. If true, positive quantities
+      represent injection into the market; if false, positive quantities
+      represent withdrawal. The interpretation of this convention is governed
+      by the associated MarketType.
+
+  PriceUnit:
+    $ref: "https://schemas.electricity.works/enums/market.price.unit/000"
+    description: >
+      Unit of the price axis for this bid. MUST match the PriceUnit declared by
+      the MarketType associated with the MarketSlot.
+
+  QuantityUnit:
+    $ref: "https://schemas.electricity.works/enums/market.quantity.unit/000"
+    description: >
+      Unit of the quantity axis for this bid. MUST match the QuantityUnit
+      declared by the MarketType associated with the MarketSlot.
+
+  SignedMarketFeeTxn:
+    type: string
+    description: >
+      Cryptographic proof of payment of the market-defined bid submission fee.
+      This value SHALL reference a signed transaction that satisfies the
+      market’s fee and admission rules for the specified MarketSlot.
+
+      The SignedMarketFeeTxn proves economic admissibility of the bid. It does
+      NOT, by itself, prove physical feasibility, delivery capability,
+      portfolio composition, or settlement commitment. Those guarantees, if
+      any, are established by clearing, dispatch, and settlement processes
+      external to this message.
+
+  # Identity Fields
+  TypeName:
+    const: "bid"
+
+  Version:
+    const: "000"
+
+required:
+  - BidderAlias
+  - MarketSlotName
+  - PqPairs
+  - InjectionIsPositive
+  - PriceUnit
+  - QuantityUnit
+  - SignedMarketFeeTxn
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "MarketNormalizationAnchor"
+      statement: >
+        The price of the first element in PqPairs SHALL equal the PriceMax
+        defined by the MarketType associated with MarketSlotName.
+
+    - number: 2
+      name: "UnitConsistency"
+      statement: >
+        PriceUnit and QuantityUnit SHALL match the units declared by the
+        MarketType associated with MarketSlotName.
+
+    - number: 3
+      name: "CurveAdmissibility"
+      statement: >
+        The structure, ordering, and cardinality of PqPairs SHALL conform to
+        the admissibility rules of the MarketType associated with MarketSlotName
+        (including any constraints on price ordering, monotonicity, tick size,
+        or maximum number of segments).
+
+    - number: 4
+      name: "EconomicAdmission"
+      statement: >
+        SignedMarketFeeTxn MUST be verifiable under the market’s fee and
+        admission policy for the specified MarketSlot.
+
+  extended_description: >
+    The bid type is the foundational economic message of the GridWorks market
+    architecture. By enforcing strict normalization against MarketType-defined
+    price and quantity domains, bids enable a self-scaling market maker
+    strategy in which aggregation, clearing, and dispatch logic can be applied
+    uniformly across participant classes and market layers.
+
+    All bids share a common structure and validation contract. Differences in
+    physical assets, aggregation scope, or operational responsibility are
+    expressed through external registries, MarketType definitions, and
+    settlement processes rather than through specialized bid schemas.
+
+    This design supports permissioned or permissionless participation,
+    economic rate-limiting via fees, and bounded computational complexity,
+    while preserving extensibility for future market products and clearing
+    mechanisms.
+```
+
+## Example: `report v002` (Type)
+
+```
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/report/002"
+
+title: "report"
+type: object
+description: >
+  Primary telemetry and state reporting message produced by a SCADA node
+  for a specific reporting slot. A report contains all meaningful channel
+  readings, state transitions, and FSM outputs observed during the slot
+  period.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the entity sending this report.
+
+  FromGNodeInstanceId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier of the specific runtime instance producing this report.
+
+  AboutGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the entity about which this report is describing telemetry.
+
+  SlotStartUnixS:
+    $ref: "https://schemas.electricity.works/formats/utc.seconds"
+    description: >
+      Start time of the reporting period in Unix seconds.
+
+  SlotDurationS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Duration of the reporting slot in seconds.
+
+  ChannelReadingList:
+    type: array
+    description: >
+      Telemetry readings observed during this reporting slot.
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.readings/002"
+
+  StateList:
+    type: array
+    description: >
+      State transitions observed during this reporting slot.
+    items:
+      $ref: "https://schemas.electricity.works/types/machine.states/000"
+
+  FsmReportList:
+    type: array
+    description: >
+      Finite state machine reports generated during this slot.
+    items:
+      $ref: "https://schemas.electricity.works/types/fsm.full.report/001"
+
+  MessageCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Timestamp at which this report was created by the reporting node.
+
+  Id:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this report message.
+
+  TypeName:
+    const: "report"
+
+  Version:
+    const: "002"
+
+required:
+  - FromGNodeAlias
+  - FromGNodeInstanceId
+  - AboutGNodeAlias
+  - SlotStartUnixS
+  - SlotDurationS
+  - ChannelReadingList
+  - StateList
+  - FsmReportList
+  - MessageCreatedMs
+  - Id
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "FromGNodeAlias": "hw1.isone.me.versant.keene.beech.scada",
+      "FromGNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+      "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
+      "SlotStartUnixS": 1762633800,
+      "SlotDurationS": 300,
+      "ChannelReadingList": [{
+              "ChannelName": "hp-lwt",
+              "ValueList": [
+                  19900,
+                  19700
+              ],
+              "ScadaReadTimeUnixMsList": [
+                  1762633800195,
+                  1762634056082
+              ],
+              "TypeName": "channel.readings",
+              "Version": "002"
+          }],
+      "StateList": [{
+              "MachineHandle": "ltn.la.relay6",
+              "StateEnum": "relay.closed.or.open",
+              "StateList": [
+                  "RelayOpen"
+              ],
+              "UnixMsList": [
+                  1762634098098
+              ],
+              "TypeName": "machine.states",
+              "Version": "000"
+          }],
+      "FsmReportList": [],
+      "MessageCreatedMs": 1762634100033,
+      "Id": "7499defd-c54a-4061-a37a-17f3c84f88a2",
+      "TypeName": "report",
+      "Version": "002"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  extended_description: >
+    Reports are sent at fixed slot intervals (typically 5 minutes) and
+    provide a durable historical record of telemetry and state changes
+    observed during that period.
+
+    GridWorks SCADA devices emit most channel readings asynchronously
+    when values change beyond configured thresholds. Each reading is
+    timestamped at the moment of observation by the SCADA device.
+    Reports preserve these original timestamps without resampling
+    or aggregation.
+
+    As a result, a report represents a batched event log for the slot
+    period rather than a sampled snapshot. Consumers can reconstruct
+    the precise timing of state transitions (e.g., relay changes)
+    and value updates within the slot window.
+
+    This differs from snapshot messages, which represent the most recent
+    value of each channel at a single point in time and are optimized
+    for near-real-time visualization rather than historical accuracy.
+```
+
+> Note on this example: the original monolithic spec had `Version: const "003"`
+> in this block while `$id`/`title`/registry all said `002`. That has been
+> corrected to `"002"` here. The `SlotDurationS` property has also been corrected
+> to a proper `$ref` to `positive.int` (the original used bare-string `minimum:`,
+> which violates the *Primitive Constraint Rule*).

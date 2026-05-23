@@ -38,10 +38,15 @@ sema/
 │                  │    │     └── DeriveTypeInit.xslt/
 │                  │    └── DeriveTypes.xslt
 │                  └── python/
-├── docs/
+├── spec/                # The specification (hub + spokes) — canonical artifact
+│   ├── primary.md
+│   ├── registry/
+│   ├── authoring/
+│   └── governance.md
+├── docs/                # Supporting narrative
 │   ├── motivation.md
-│   ├── sema-specifications.md
-│   └── where-meaing-lives-in-gridworks.md
+│   ├── orig-spec.md         # Archive of the prior monolithic spec
+│   └── where-meaning-lives-in-gridworks.md
 ├── tests/
 ├── type_definitions/          # Source of truth
 │   ├── registry.yaml         # Vocabulary registry
