@@ -442,6 +442,10 @@ formats:
     - atn.bid:002
     - bid:000
     - latest.price:000
+  non.empty.string:
+    used_by:
+    - relay.actor.config:002
+    - relay.actor.config:003
   positive.float:
     used_by:
     - i2c.thermistor.reader.component.gt:000
@@ -474,6 +478,9 @@ formats:
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - synth.channel.gt:000
+  positive.int.as.str:
+    used_by:
+    - gw1.tank.temp.calibration.map:000
   spaceheat.name:
     used_by:
     - channel.config:000

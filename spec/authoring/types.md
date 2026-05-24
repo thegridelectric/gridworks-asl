@@ -142,6 +142,11 @@ containing exactly one `$ref`, and that `$ref` SHALL reference either
 `https://schemas.electricity.works/types/...` or
 `https://schemas.electricity.works/enums/...`.
 
+A `oneOf` MAY include multiple versions of the same versioned type
+(e.g., `spaceheat.node.gt/300` and `spaceheat.node.gt/301`) to accept
+instances from a bounded set of versions during version-transition
+windows.
+
 Type schemas SHALL NOT use `oneOf` with inline schemas, primitive
 schemas, `const`, `enum`, formats, or constraint-bearing JSON Schema
 constructs. Type schemas SHALL NOT define inline enums with the JSON
@@ -228,7 +233,112 @@ These permissions do not allow inline objects to carry semantic
 constraints. When the distinction is ambiguous, schema authors SHALL
 promote the object to a named Sema type.
 
+## Open Containers
+
+A schema node of the form `type: object` with no `properties:` and no
+`additionalProperties:` is an **open container** — a placeholder for
+content whose structural shape is not declared at this layer.
+Open containers MAY appear inside type schemas
+(e.g., `derived.channel.gt`'s `Parameters` field).
+
+Axioms MAY reference an open container's contents **only when the
+axiom encodes a discriminated or conditional structure** — that is,
+when the required shape of the container depends on the value of a
+sibling field of the containing type. The canonical example is
+`derived.channel.gt`'s axioms 3 and 4: `Parameters`' shape depends on
+the value of the sibling `Strategy` enum field.
+
+Axioms SHALL NOT use an open container to encode **unconditional**
+structure. If a `type: object` field's shape is fixed and known at
+design time, the schema SHALL express that shape directly — via
+`properties:`, by promoting to a named Sema type, or (when keyed-dict
+semantics are required) via the Typed Map pattern defined below.
+
+Rationale: see core principle 4 ("Semantics at the Boundary Must Be
+Declared"). Unconditional structure belongs in the schema where it can
+be mechanically validated and code-generated; conditional structure
+that Sema's restricted composition cannot express is the legitimate
+axiom case.
+
+## Typed Maps
+
+A **typed map** is a `type: object` node that declares both:
+
+- `propertyNames: { $ref: <canonical Sema format URL> }` — fixing the
+  shape of the dictionary keys
+- `additionalProperties: { $ref: <canonical Sema type URL> }` — fixing
+  the value type
+
+Typed maps MAY appear inside type schemas. The `propertyNames`
+constraint is the structural signal that the dictionary keys carry
+semantic content (typically an index, identifier, or categorical
+label) distinct from any field on the value type.
+
+A `type: object` with `additionalProperties: $ref → types/...` but
+**no `propertyNames:`** SHALL NOT appear. The keys would be arbitrary
+handles — typically redundant with a field already on the value type.
+Such a collection SHALL instead be expressed as a typed array
+(`type: array, items: $ref → types/...`) or promoted to a named Sema
+type.
+
+### Blessed key formats
+
+A typed map's `propertyNames.$ref` SHALL reference one of the
+following key formats:
+
+- `non.empty.string` — any non-empty string key (free-form
+  identifiers).
+- `positive.int.as.str` — string form of a positive integer
+  (`"1"`, `"2"`, ...). Used when keys are tank indices, sequence
+  positions, or other integer-like labels.
+
+Adding a new key format SHALL be justified by at least one concrete
+schema consumer. The construct's mental model (keys are either
+free-form strings or integer-shaped strings) is load-bearing and the
+spec SHALL be conservative about widening it.
+
+### Example
+
+```yaml
+Tank:
+  type: object
+  propertyNames:
+    $ref: "https://schemas.electricity.works/formats/positive.int.as.str"
+  additionalProperties:
+    $ref: "https://schemas.electricity.works/types/gw1.tank.temp.calibration/000"
+```
+
+### Dependencies
+
+The value type referenced via `additionalProperties.$ref` appears in
+`direct_dependencies.structural` by virtue of the `$ref`. The key
+format referenced via `propertyNames.$ref` SHALL likewise appear in
+`direct_dependencies.structural`.
+
+### Axioms on typed maps
+
+The Open Containers rule above applies. A typed map's `propertyNames`
++ `additionalProperties` already enforce key shape and value type
+structurally; axioms on a typed map's contents are reserved for
+**discriminator / conditional** cases (the same exception that
+justifies derived.channel.gt's axioms 3 and 4). Unconditional axioms
+about a typed map's contents SHALL NOT be added — express the
+constraint in `propertyNames` / `additionalProperties` or refactor.
+
 ## Referencing Other Vocabulary
+
+Every `$ref` value in a type or enum schema SHALL be a canonical Sema
+schema URL of one of the following shapes:
+
+- `https://schemas.electricity.works/formats/<format-name>`
+- `https://schemas.electricity.works/enums/<enum-name>/<3-digit-version>`
+- `https://schemas.electricity.works/types/<type-name>` (versionless)
+- `https://schemas.electricity.works/types/<type-name>/<3-digit-version>` (versioned)
+
+(Draft schemas use the parallel `…/draft/{formats,enums,types}/…`
+prefix per the draft-publication rules.) A `$ref` value SHALL NOT be a
+bare JSON Schema primitive name (`"string"`, `"integer"`, etc.), a
+relative path, a fragment, or any other non-canonical string.
 
 **Format references:**
 

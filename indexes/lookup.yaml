@@ -552,10 +552,12 @@ formats:
   hex.char: definitions/formats/hex.char.yaml
   left.right.dot: definitions/formats/left.right.dot.yaml
   market.slot.name: definitions/formats/market.slot.name.yaml
+  non.empty.string: definitions/formats/non.empty.string.yaml
   non.negative.int: definitions/formats/non.negative.int.yaml
   pascal.case: definitions/formats/pascal.case.yaml
   positive.float: definitions/formats/positive.float.yaml
   positive.int: definitions/formats/positive.int.yaml
+  positive.int.as.str: definitions/formats/positive.int.as.str.yaml
   spaceheat.name: definitions/formats/spaceheat.name.yaml
   utc.iso8601.millis: definitions/formats/utc.iso8601.millis.yaml
   utc.iso8601.seconds: definitions/formats/utc.iso8601.seconds.yaml

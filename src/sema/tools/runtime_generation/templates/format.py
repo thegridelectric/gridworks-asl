@@ -202,6 +202,37 @@ MarketSlotName = Annotated[
 """,
     },
 
+    "non.empty.string": {
+        "class_name": "NonEmptyString",
+        "imports": ["from pydantic import Field"],
+        "methods": "",
+        "annotated_type": """
+NonEmptyString = Annotated[
+    str,
+    Field(min_length=1),
+]
+""",
+    },
+
+    "positive.int.as.str": {
+        "class_name": "PositiveIntAsStr",
+        "pattern": r"^[1-9][0-9]*$",
+        "methods": """
+def is_positive_int_as_str(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: positive.int.as.str must be a string.")
+    if not POSITIVE_INT_AS_STR_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails positive.int.as.str format.")
+    return v
+""",
+        "annotated_type": """
+PositiveIntAsStr = Annotated[
+    str,
+    BeforeValidator(is_positive_int_as_str),
+]
+""",
+    },
+
     "non.negative.int": {
         "class_name": "NonNegativeInt",
         "imports": ["from pydantic import Field, StrictInt"],

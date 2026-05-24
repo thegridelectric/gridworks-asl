@@ -14,9 +14,13 @@ properties:
   Tank:
     type: object
     propertyNames:
-      pattern: "^[1-9][0-9]*$"
+      $ref: "https://schemas.electricity.works/formats/positive.int.as.str"
     additionalProperties:
       $ref: "https://schemas.electricity.works/types/gw1.tank.temp.calibration/000"
+    description: >
+      Typed map of per-tank calibrations keyed by the string form of a
+      positive tank index ("1", "2", ...). See `sema/spec/authoring/types.md`
+      §Typed Maps.
 
   TypeName:
     const: "gw1.tank.temp.calibration.map"
@@ -34,9 +38,3 @@ additionalProperties: false
 
 x-gridworks:
   owner: "gridworks-energy"
-  axioms:
-    - number: 1
-      name: "ContiguousTankIndexConstraint"
-      statement: >
-        Tank SHALL contain between 1 and 6 entries, and its keys SHALL be the
-        contiguous integer strings starting at 1.

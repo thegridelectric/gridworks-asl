@@ -17,13 +17,14 @@ description: >
 properties:
 
   GNodes:
-    type: object
-    description: >
-      Dictionary of Grid Node identity objects included in this layout snapshot.
-      Keys are arbitrary handles for local reference within the layout. Each
-      value is a fully specified g.node.gt instance.
-    additionalProperties:
+    type: array
+    items:
       $ref: "https://schemas.electricity.works/types/g.node.gt/004"
+    description: >
+      List of Grid Node identity objects included in this layout snapshot.
+      Each element is a fully specified g.node.gt instance; the set of
+      GNodeClass values that must be present is constrained by
+      NolanGNodeSet (axiom 1).
 
   ShNodes:
     type: array
@@ -108,9 +109,9 @@ x-gridworks:
     - number: 1
       name: "NolanGNodeSet"
       statement: >
-        the GNodes object SHALL contain exactly three entries
-        with keys "Scada", "TerminalAsset", and "LeafTransactiveNode". These keys SHALL match
-        the GNodeClass of their corresponding g.node.gt objects.
+        GNodes SHALL contain exactly three elements. The set of their
+        GNodeClass values SHALL be exactly {"Scada", "TerminalAsset",
+        "LeafTransactiveNode"}.
 
         The Alias of the LeafTransactiveNode SHALL be the parent alias of both the Scada and
         TerminalAsset aliases (i.e., the Scada alias SHALL equal "<LeafAlias>.scada" and the

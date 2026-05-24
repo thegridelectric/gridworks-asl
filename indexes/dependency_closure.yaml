@@ -298,7 +298,8 @@ types:
   gw1.tank.temp.calibration.map:
     '000':
       enums: []
-      formats: []
+      formats:
+      - positive.int.as.str
       types:
       - gw1.tank.temp.calibration:000
       versionless_types: []
@@ -359,6 +360,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - non.empty.string
       - positive.int
       - spaceheat.name
       - uuid4.str
@@ -373,6 +375,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - non.empty.string
       - positive.int
       - spaceheat.name
       - uuid4.str
@@ -387,6 +390,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - non.empty.string
       - positive.int
       - spaceheat.name
       - uuid4.str
@@ -450,7 +454,9 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - non.empty.string
       - positive.int
+      - positive.int.as.str
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -486,7 +492,9 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - non.empty.string
       - positive.int
+      - positive.int.as.str
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -523,7 +531,9 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - non.empty.string
       - positive.int
+      - positive.int.as.str
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -562,7 +572,9 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - non.empty.string
       - positive.int
+      - positive.int.as.str
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -602,7 +614,9 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - non.empty.string
       - positive.int
+      - positive.int.as.str
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -643,7 +657,9 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - non.empty.string
       - positive.int
+      - positive.int.as.str
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -683,7 +699,9 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - non.empty.string
       - positive.int
+      - positive.int.as.str
       - spaceheat.name
       - utc.milliseconds
       - utc.seconds
@@ -791,6 +809,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - non.empty.string
       - positive.int
       - spaceheat.name
       types: []
@@ -803,6 +822,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - non.empty.string
       - positive.int
       - spaceheat.name
       types: []
@@ -901,6 +921,7 @@ types:
       - spaceheat.unit:001
       formats:
       - left.right.dot
+      - non.empty.string
       - positive.int
       - spaceheat.name
       - utc.milliseconds
@@ -920,6 +941,7 @@ types:
       formats:
       - handle.name
       - left.right.dot
+      - non.empty.string
       - positive.int
       - spaceheat.name
       - utc.milliseconds

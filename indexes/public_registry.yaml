@@ -32,6 +32,11 @@ formats:
     created: '2024-12-05T19:25:00Z'
     description: Dot-separated identifier for a specific market slot, ending in a
       10-digit Unix start timestamp aligned to the market type duration
+  non.empty.string:
+    owner: gridworks-energy
+    schema_url: https://schemas.electricity.works/formats/non.empty.string
+    created: '2024-12-31T15:00:00Z'
+    description: String with at least one character
   non.negative.int:
     owner: gridworks-energy
     schema_url: https://schemas.electricity.works/formats/non.negative.int
@@ -52,6 +57,12 @@ formats:
     schema_url: https://schemas.electricity.works/formats/positive.int
     created: '2024-09-02T15:00:00Z'
     description: Positive integer with non-coercive serialized validation
+  positive.int.as.str:
+    owner: gridworks-energy
+    schema_url: https://schemas.electricity.works/formats/positive.int.as.str
+    created: '2024-12-31T15:00:00Z'
+    description: Canonical decimal string form of a positive integer; used as the
+      propertyNames $ref for int-keyed Typed Maps
   spaceheat.name:
     owner: gridworks-energy
     schema_url: https://schemas.electricity.works/formats/spaceheat.name
@@ -948,6 +959,7 @@ types:
         direct_dependencies:
           structural:
           - gw1.tank.temp.calibration:000
+          - positive.int.as.str
   gw1.telemetry.name.quantity.projection:
     latest_version: '000'
     owner: gridworks-energy
@@ -1451,6 +1463,7 @@ types:
         direct_dependencies:
           structural:
           - left.right.dot
+          - non.empty.string
           - positive.int
           - relay.wiring.config:000
           - spaceheat.name
@@ -1465,6 +1478,7 @@ types:
         direct_dependencies:
           structural:
           - left.right.dot
+          - non.empty.string
           - positive.int
           - relay.wiring.config:000
           - spaceheat.name
