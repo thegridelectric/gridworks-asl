@@ -1,7 +1,7 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "https://schemas.electricity.works/types/gw1.telemetry.name.quantity.projection/000"
 
-title: "telemetry.name.quantity.projection"
+title: "gw1.telemetry.name.quantity.projection"
 type: object
 description: >
   Canonical projection from spaceheat.telemetry.name to gw1.quantity.
