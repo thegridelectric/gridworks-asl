@@ -437,6 +437,7 @@ formats:
     - ticklist.hall.report:000
     - ticklist.reed.report:000
     - weather.forecast:000
+    - weather:000
   market.slot.name:
     used_by:
     - atn.bid:002
@@ -572,6 +573,7 @@ formats:
     - sim.ready:000
     - sim.timestep:000
     - weather.forecast:000
+    - weather:000
   uuid4.str:
     used_by:
     - channel.readings:001

@@ -360,6 +360,11 @@ types:
     versions:
       '002': definitions/types/synced.readings.bundle/002.yaml
       '001': definitions/types/synced.readings.bundle/001.yaml
+  weather:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/weather/000.yaml
   weather.forecast:
     latest_version: '000'
     versioning_strategy: literal

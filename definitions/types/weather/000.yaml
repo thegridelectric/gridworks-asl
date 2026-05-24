@@ -1,0 +1,79 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/weather/000"
+
+title: "weather"
+type: object
+description: >
+  Single-instant real-time outside-air-temperature and wind-speed observation
+  from a third-party weather source, identified by a weather channel name
+  (e.g. weather.gov.kmlt).
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the node that produced this observation.
+
+  WeatherChannelName:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Dotted name identifying the weather source the observation came from,
+      for example weather.gov.kmlt for the KMLT weather station.
+
+  UnixTimeS:
+    $ref: "https://schemas.electricity.works/formats/utc.seconds"
+    description: >
+      Unix-second timestamp the source reported for this observation.
+
+  OutsideAirTempF:
+    type: number
+    description: >
+      Reported outside air temperature, in degrees Fahrenheit.
+
+  WindSpeedMph:
+    type: number
+    description: >
+      Reported wind speed, in miles per hour. Optional — some upstream
+      observations omit wind.
+
+  TypeName:
+    const: "weather"
+
+  Version:
+    const: "000"
+
+required:
+  - FromGNodeAlias
+  - WeatherChannelName
+  - UnixTimeS
+  - OutsideAirTempF
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "WindSpeedNonNegative"
+      statement: >
+        If WindSpeedMph is present, it SHALL be greater than or equal to 0.
+
+  extended_description: >
+    weather carries a single-instant observation pulled directly from a
+    third-party weather source. The legacy GridWorks weather_service.py polled
+    the National Weather Service (api.weather.gov) for the KMLT station every
+    ten minutes and broadcast one weather message per observation; the new
+    gridworks-weather-forecast service (gwwf) is a like-for-like port of that
+    flow onto gridworks-base 0.4.0.
+
+    Floats in OutsideAirTempF and WindSpeedMph reflect today's legacy form;
+    a future version is likely to switch numeric fields to integer-tenths
+    (decidegrees Fahrenheit, deci-mph) to eliminate float precision artifacts.
+
+    Long-term, GridWorks plans to retire the bare `weather` namespace in
+    favor of `gw.weather` (or a more descriptive name like `gw.actual.weather`)
+    once observed data is reliably landing in the ear pipeline for long-term
+    analytics storage.

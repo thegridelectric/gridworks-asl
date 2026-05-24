@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-05-15T00:00:00Z"
+  last_updated: "2026-05-24T17:00:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -2282,6 +2282,22 @@ types:
           axiom:
             - "gw1.unit:001"
             - "spaceheat.telemetry.name:007"
+
+  weather:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Single-instant real-time outside-air-temperature and wind-speed observation from a third-party weather source, identified by a weather channel name (e.g. weather.gov.kmlt)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/weather/000"
+        created: "2026-05-24T16:59:25Z"
+        summary: "Initial Sema version — like-for-like port of the legacy weather_service.py wire shape onto Sema."
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.seconds"
 
   weather.forecast:
     latest_version: "000"

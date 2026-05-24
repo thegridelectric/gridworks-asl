@@ -1172,6 +1172,14 @@ types:
       types:
       - ticklist.reed:101
       versionless_types: []
+  weather:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.seconds
+      types: []
+      versionless_types: []
   weather.forecast:
     '000':
       enums: []

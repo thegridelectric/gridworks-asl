@@ -62,6 +62,7 @@ from sema.runtime.types.ticklist_hall import TicklistHall
 from sema.runtime.types.ticklist_hall_report import TicklistHallReport
 from sema.runtime.types.ticklist_reed import TicklistReed
 from sema.runtime.types.ticklist_reed_report import TicklistReedReport
+from sema.runtime.types.weather import Weather
 from sema.runtime.types.weather_forecast import WeatherForecast
 
 __all__ = [
@@ -129,5 +130,6 @@ __all__ = [
     "TicklistHallReport",
     "TicklistReed",
     "TicklistReedReport",
+    "Weather",
     "WeatherForecast",
 ]

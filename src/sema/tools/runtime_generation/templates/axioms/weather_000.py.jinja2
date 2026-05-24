@@ -1,0 +1,12 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ weather_000_class_name }}":
+        """
+        Axiom 1: WindSpeedNonNegative
+        If WindSpeedMph is present, it SHALL be greater than or equal to 0.
+        """
+        if self.wind_speed_mph is not None and self.wind_speed_mph < 0:
+            raise ValueError(
+                "Axiom 1 failed: WindSpeedMph must be >= 0 when present, "
+                f"got {self.wind_speed_mph}."
+            )
+        return self
