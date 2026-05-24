@@ -44,12 +44,15 @@ required:
 additionalProperties: false
 
 examples:
-  - ChannelName: "buffer-depth1"
-    ValueList: [4973, 4966, 4979]
-    Unit: "FahrenheitX100"
-    UnitType: "gw1.unit"
-    TypeName: "channel.readings.list.item"
-    Version: "000"
+  - |
+    {
+      "ChannelName": "buffer-depth1",
+      "ValueList": [4973, 4966, 4979],
+      "Unit": "FahrenheitX100",
+      "UnitType": "gw1.unit",
+      "TypeName": "channel.readings.list.item",
+      "Version": "000"
+    }
 
 x-gridworks:
   owner: "gridworks-energy"

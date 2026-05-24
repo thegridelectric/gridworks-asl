@@ -118,7 +118,7 @@ examples:
       "DisplayName": "Required Energy Wh",
       "Id": "26c5f643-96cc-4ede-b958-75d626790c01",
       "Name": "required-energy",
-      "OutputUnit": "WattHours"
+      "OutputUnit": "WattHours",
       "OutputQuantity": "Energy",
       "Strategy": "system-model",
       "EmissionMethod": "Periodic",
