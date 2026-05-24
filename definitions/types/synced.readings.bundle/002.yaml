@@ -158,8 +158,7 @@ x-gridworks:
     including `Name`, `Id`, `Unit` and `UnitType`, sufficient to interpret the
     numeric values in this bundle without requiring access to the full layout.
 
-    The `Id` together with the channel TypeName (e.g. `data.channel.gt`,
-    `derived.channel.gt`, or `analytics.channel.gt`) enables resolution of the
-    authoritative channel definition. This bundle is not a source of semantic
-    authority; it provides a convenient projection for transport, indexing,
-    and querying.
+    The `Id` together with the channel TypeName (e.g. `data.channel.gt` or
+    `derived.channel.gt`) enables resolution of the authoritative channel
+    definition. This bundle is not a source of semantic authority; it
+    provides a convenient projection for transport, indexing, and querying.

@@ -81,7 +81,14 @@ def build_seed_dag_from_data(seed: dict, registry: dict) -> SeedDag:
             ref = normalize_ref(ref)
             dep = resolve_ref_to_node(ref, type_registry, enum_registry)
             if dep is None:
-                continue
+                # `normalize_ref` already rejected non-canonical URLs; a
+                # canonical URL that doesn't resolve means the registry
+                # is out of sync with the schemas referencing it.
+                raise ValueError(
+                    f"{node_to_string(node)}: $ref {ref!r} is a canonical "
+                    f"Sema URL but does not resolve to a registered "
+                    f"vocabulary node."
+                )
             if dep not in nodes:
                 raise ValueError(
                     f"{node_to_string(node)} references {node_to_string(dep)} "
@@ -235,17 +242,18 @@ def extract_refs(node: object) -> set[str]:
 
 
 def normalize_ref(ref: str) -> str:
+    # Per `sema/spec/authoring/types.md` §Referencing Other Vocabulary,
+    # every `$ref` value SHALL be a canonical Sema schema URL. The
+    # `tests/registry/test_ref_values.py` test enforces this on all
+    # registered schemas, so by the time refs reach this function they
+    # must already be canonical. Reject anything else loudly rather
+    # than silently masking a malformed schema.
     ref = ref.strip()
-
-    if ref.startswith("https://schemas.electricity.works/"):
-        return ref
-
-    if ref.startswith("/"):
-        return "https://schemas.electricity.works" + ref
-
-    if ref.startswith("types/") or ref.startswith("enums/") or ref.startswith("formats/"):
-        return "https://schemas.electricity.works/" + ref
-
+    if not ref.startswith("https://schemas.electricity.works/"):
+        raise ValueError(
+            f"non-canonical $ref value {ref!r}; expected a "
+            "`https://schemas.electricity.works/{formats,enums,types}/...` URL"
+        )
     return ref
 
 
