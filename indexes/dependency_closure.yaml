@@ -744,7 +744,9 @@ types:
       versionless_types: []
   new.command.tree:
     '000':
-      enums: []
+      enums:
+      - gw1.actor.class:009
+      - gw1.actor.class:011
       formats:
       - handle.name
       - left.right.dot
@@ -754,6 +756,8 @@ types:
       - uuid4.str
       types:
       - spaceheat.node.gt:200
+      - spaceheat.node.gt:300
+      - spaceheat.node.gt:301
       versionless_types: []
   pico.flow.module.component.gt:
     '000':

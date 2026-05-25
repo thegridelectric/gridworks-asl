@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import yaml
 from pathlib import Path
 from typing import Set, Tuple
+
+import yaml
 
 
 def find_repo_root() -> Path:
@@ -10,7 +11,9 @@ def find_repo_root() -> Path:
     for parent in p.parents:
         if (parent / "definitions").exists() and (parent / "indexes").exists():
             return parent
-    raise RuntimeError("Could not locate repo root (definitions/ and indexes/ not found)")
+    raise RuntimeError(
+        "Could not locate repo root (definitions/ and indexes/ not found)"
+    )
 
 
 ROOT = find_repo_root()
@@ -26,10 +29,9 @@ def _key(name: str, version: str | None) -> str:
     return f"{name}:{version}" if version else name
 
 
-
 def reverse_transitive(
     *,
-    category: str,   # "type" | "enum" | "format"
+    category: str,  # "type" | "enum" | "format"
     name: str,
     version: str | None = None,
 ) -> Set[str]:

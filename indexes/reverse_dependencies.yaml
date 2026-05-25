@@ -187,6 +187,7 @@ types:
       - layout.lite:009
       - layout.lite:010
       - layout.lite:011
+      - new.command.tree:000
       - scada.control.capabilities:001
     '301':
       used_by:
@@ -194,6 +195,7 @@ types:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - new.command.tree:000
   spaceheat.telemetry.quantity.projection:
     '000':
       used_by:
