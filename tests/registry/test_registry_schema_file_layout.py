@@ -42,34 +42,34 @@ def _draft_segment(status: str) -> str:
 
 
 def _registry_word_status(entry: dict) -> str:
-    return entry.get("status", "active")
+    return entry.get("status", "published")
 
 
 def _registry_version_status(entry: dict, version: str) -> str:
     # Versioned words carry status ONLY at the version level (per spec).
     # The placement rule itself is enforced separately.
-    return entry["versions"][version].get("status", "active")
+    return entry["versions"][version].get("status", "published")
 
 
-def expected_format_id_line(name: str, status: str = "active") -> str:
+def expected_format_id_line(name: str, status: str = "published") -> str:
     return f'$id: "https://schemas.electricity.works/{_draft_segment(status)}formats/{name}"'
 
 
-def expected_enum_id_line(name: str, version: str, status: str = "active") -> str:
+def expected_enum_id_line(name: str, version: str, status: str = "published") -> str:
     return (
         f'$id: "https://schemas.electricity.works/'
         f'{_draft_segment(status)}enums/{name}/{version}"'
     )
 
 
-def expected_versioned_type_id_line(name: str, version: str, status: str = "active") -> str:
+def expected_versioned_type_id_line(name: str, version: str, status: str = "published") -> str:
     return (
         f'$id: "https://schemas.electricity.works/'
         f'{_draft_segment(status)}types/{name}/{version}"'
     )
 
 
-def expected_versionless_type_id_line(name: str, status: str = "active") -> str:
+def expected_versionless_type_id_line(name: str, status: str = "published") -> str:
     return f'$id: "https://schemas.electricity.works/{_draft_segment(status)}types/{name}"'
 
 
@@ -160,7 +160,7 @@ def test_schema_files_resolve_back_to_registry_entries() -> None:
          except those listed in EXEMPTED_TYPE_FILES).
       2. Each registered word has a corresponding file (no missing schemas).
       3. The file's $id line matches the canonical URL for its kind, name,
-         version, and registry-declared status (active vs draft, where draft
+         version, and registry-declared status (published vs draft, where draft
          schemas live at .../draft/<kind>s/...).
       4. For enums, the schema's declared ``type`` matches the registry's
          declared ``value_type``.

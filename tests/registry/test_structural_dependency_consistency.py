@@ -116,7 +116,7 @@ def test_structural_dependencies_match_schema_refs():
     for type_name, entry in types.items():
 
         strategy = entry["versioning_strategy"]
-        status = entry.get("status", "active")
+        status = entry.get("status", "published")
 
         # Skip draft types (allowed to be inconsistent)
         if status == "draft":
@@ -169,7 +169,7 @@ def test_structural_dependencies_match_schema_refs():
         versions = entry["versions"]
 
         for version, v_entry in versions.items():
-            if v_entry.get("status", "active") == "draft":
+            if v_entry.get("status", "published") == "draft":
                 continue
 
             schema_path = schema_path_for("types", type_name, version)

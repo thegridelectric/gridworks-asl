@@ -168,7 +168,7 @@ this hub.
 | **axiom dependency** | A vocabulary word required to implement one or more axioms for a type version, but not referenced via `$ref`. |
 | **projection** | Declared deterministic mapping between two enum-valued properties of a type, with an exhaustive table covering every source value. |
 | **axiom** | A semantic invariant that cannot be expressed via structural JSON Schema constraints. Numbered per type version. |
-| **draft** vs **active** | Lifecycle status. Drafts are mutable, not published, excluded from `latest_version`. Active is published and immutable. |
+| **draft** vs **published** | Lifecycle status. Drafts are mutable and not yet published; excluded from `latest_version`. Published vocabulary is immutable. |
 | **replaced_by** | Advisory hint on a vocabulary word pointing at successor words. Does not affect validation, lifecycle, or dependency closure. |
 | **owner** | Identifier from `owners.yaml`. Every vocabulary word has exactly one owner. |
 

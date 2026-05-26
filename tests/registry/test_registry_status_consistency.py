@@ -1,14 +1,14 @@
 """
 Verify that the schema files under definitions/ agree with registry.yaml on
-publication status (active vs draft).
+publication status (published vs draft).
 
 Per docs/sema-specification.md (Registry Status Field):
-- registry status defaults to "active" when omitted
+- registry status defaults to "published" when omitted
 - formats and versionless types: status lives on the word entry
 - versioned enums and versioned types: status lives on each version entry
 
 Schema-side encoding: the schema's lifecycle is recorded in the ``$id`` URL
-itself. An active schema lives at::
+itself. A published schema lives at::
 
     https://schemas.electricity.works/<kind>s/<name>[/<version>]
 
@@ -30,8 +30,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFINITIONS_DIR = REPO_ROOT / "definitions"
 REGISTRY_PATH = DEFINITIONS_DIR / "registry.yaml"
 
-ALLOWED = {"active", "draft"}
-DEFAULT_STATUS = "active"
+ALLOWED = {"published", "draft"}
+DEFAULT_STATUS = "published"
 DRAFT_URL_SEGMENT = "/draft/"
 
 
@@ -55,7 +55,7 @@ def _registry_status(entry: dict, version: str | None = None) -> str:
 
 def _schema_status(schema: dict) -> str:
     schema_id = schema.get("$id", "")
-    return "draft" if DRAFT_URL_SEGMENT in schema_id else "active"
+    return "draft" if DRAFT_URL_SEGMENT in schema_id else "published"
 
 
 def _format_path(name: str) -> Path:

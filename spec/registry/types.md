@@ -65,7 +65,7 @@ A versioned type entry SHALL include the following fields:
 
   versions:
     "<version>":
-      status: "active" | "draft"   # optional; default active
+      status: "published" | "draft"   # optional; default published
       schema_url: "https://schemas.electricity.works/types/<type-name>/<version>"
       created: "<RFC 3339 timestamp>"
       summary: "<concise description of change>"
@@ -80,14 +80,14 @@ A versioned type entry SHALL include the following fields:
 ### Field Requirements
 
 - `latest_version`
-  - SHALL equal the highest active version listed under `versions`
+  - SHALL equal the highest published version listed under `versions`
   - SHALL NOT identify a draft version
 
 - `owner`
   - SHALL reference a valid owner identifier defined in `owners.yaml`
 
 - `versions`
-  - SHALL contain an entry for each published active version of the type
+  - SHALL contain an entry for each published version of the type
   - MAY contain draft version entries
   - SHALL be keyed by version string
   - SHALL be listed in decreasing order by version
@@ -103,8 +103,8 @@ Each entry under `versions` SHALL include:
 
 - `status`
   - MAY appear
-  - SHALL be `"active"` or `"draft"` if present
-  - SHALL be interpreted as `"active"` if omitted
+  - SHALL be `"published"` or `"draft"` if present
+  - SHALL be interpreted as `"published"` if omitted
 
 - `created`
   - SHALL be an RFC 3339 timestamp with seconds precision in UTC (e.g.,

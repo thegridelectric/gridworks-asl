@@ -129,7 +129,7 @@ def test_latest_literal_versions_use_version_const(
         # Skip if the latest version is a draft (drafts are excluded from
         # public surface and may be incomplete).
         latest_status = (
-            entry.get("versions", {}).get(latest_version, {}).get("status", "active")
+            entry.get("versions", {}).get(latest_version, {}).get("status", "published")
         )
         if latest_status == "draft":
             continue

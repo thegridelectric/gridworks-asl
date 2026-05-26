@@ -450,13 +450,13 @@ def test_registry_type_structure():
             sorted_versions = sorted(version_keys, reverse=True)
             assert version_keys == sorted_versions, f"{type_name} not sorted"
 
-            active_version_keys = [
+            published_version_keys = [
                 version
                 for version, version_entry in versions.items()
-                if version_entry.get("status", "active") == "active"
+                if version_entry.get("status", "published") == "published"
             ]
-            if active_version_keys:
-                assert entry["latest_version"] == active_version_keys[0]
+            if published_version_keys:
+                assert entry["latest_version"] == published_version_keys[0]
 
             # -----------------------------------------------------------------
             # Created timestamps
@@ -543,7 +543,7 @@ def test_registry_type_structure():
                 for dep in deps["structural"] + deps.get("axiom", []):
                     assert is_valid_dep(dep)
 
-                if v_entry.get("status", "active") == "draft":
+                if v_entry.get("status", "published") == "draft":
                     continue
 
                 for dep in deps["structural"] + deps.get("axiom", []):
@@ -579,7 +579,7 @@ def test_type_versioning_strategy_matches_schema_version_field():
             continue
 
         latest_version = entry["latest_version"]
-        if entry["versions"][latest_version].get("status", "active") == "draft":
+        if entry["versions"][latest_version].get("status", "published") == "draft":
             continue
         schema_path = DEFINITIONS_DIR / "types" / type_name / f"{latest_version}.yaml"
         schema = load_registry(schema_path)
@@ -588,7 +588,7 @@ def test_type_versioning_strategy_matches_schema_version_field():
         )
         assert inferred == strategy, (
             f"{type_name}:{latest_version} registry versioning_strategy is {strategy!r} "
-            f"but latest active schema uses {inferred!r}"
+            f"but latest published schema uses {inferred!r}"
         )
 
 
@@ -634,30 +634,30 @@ def test_type_versioning_strategy_evolution_is_monotonic():
             previous_strategy = strategy
 
 
-def test_registry_versioning_strategy_matches_latest_active_schema():
+def test_registry_versioning_strategy_matches_latest_published_schema():
     registry = load_registry(DEFINITIONS_DIR / "registry.yaml")
 
     for type_name, entry in registry["types"].items():
         if entry["versioning_strategy"] == "none":
             continue
 
-        active_versions = [
+        published_versions = [
             version
             for version, version_entry in entry["versions"].items()
-            if version_entry.get("status", "active") == "active"
+            if version_entry.get("status", "published") == "published"
         ]
-        if not active_versions:
+        if not published_versions:
             continue
 
-        latest_active = active_versions[0]
-        schema_path = DEFINITIONS_DIR / "types" / type_name / f"{latest_active}.yaml"
+        latest_published = published_versions[0]
+        schema_path = DEFINITIONS_DIR / "types" / type_name / f"{latest_published}.yaml"
         schema = load_registry(schema_path)
         inferred = infer_schema_versioning_strategy(
-            schema, latest_active, f"{type_name}:{latest_active}"
+            schema, latest_published, f"{type_name}:{latest_published}"
         )
         assert entry["versioning_strategy"] == inferred, (
             f"{type_name} registry versioning_strategy is {entry['versioning_strategy']!r} "
-            f"but latest active version {latest_active} uses {inferred!r}"
+            f"but latest published version {latest_published} uses {inferred!r}"
         )
 
 

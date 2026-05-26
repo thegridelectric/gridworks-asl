@@ -71,23 +71,22 @@ Registry entries MAY include a `status` field indicating publication
 lifecycle state.
 
 Allowed values:
-- `"draft"` — vocabulary definition is under active development, mutable,
-  and not published
-- `"active"` — vocabulary definition is stable, published or publishable,
-  and immutable according to this specification
+- `"draft"` — vocabulary definition is mutable and not yet published
+- `"published"` — vocabulary definition is immutable per this
+  specification
 
 For versionless vocabulary words (formats and versionless types), `status`
 MAY appear on the word entry. If omitted, it SHALL be interpreted as
-`"active"`.
+`"published"`.
 
 For versioned enums and versioned types, `status` applies to individual
 version entries under `versions`. If omitted from a version entry, it
-SHALL be interpreted as `"active"`.
+SHALL be interpreted as `"published"`.
 
-A versioned enum or type MAY have both active and draft versions at the
-same time. In that case:
+A versioned enum or type MAY have both published and draft versions at
+the same time. In that case:
 
-- `latest_version` SHALL identify the latest active version
+- `latest_version` SHALL identify the latest published version
 - Draft versions SHALL NOT be selected by `latest_version`
 - Draft versions MAY be numerically greater than `latest_version`
 - Tooling MAY expose draft versions only when explicitly requested
@@ -99,9 +98,9 @@ schema indexes, public schema pages, and default public schema serving.
 
 For draft definitions, `created` records the time the draft entry was
 first added to the working registry. When a draft definition is promoted
-to active, `created` SHALL be updated to the activation or publication
-timestamp. From that point forward, `created` is governed by the
-immutability rules for active definitions.
+to published, `created` SHALL be updated to the publication timestamp.
+From that point forward, `created` is governed by the immutability rules
+for published definitions.
 
 If a draft schema file appears under `definitions/`, it SHALL remain
 parseable YAML and SHALL use the normal Sema schema file layout. Draft

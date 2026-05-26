@@ -41,7 +41,7 @@ DEFINITIONS_DIR = Path("definitions")
 def all_schemas() -> dict:
     """Every schema file on the filesystem under `definitions/`.
 
-    Includes published-active, published-draft, and registry-orphan
+    Includes published, draft, and registry-orphan
     schemas. Per the spec, draft schemas relax immutability and some
     completeness checks but MUST still be well-formed Sema schemas;
     orphan files (present on disk but not in `registry.yaml`) are also
@@ -51,7 +51,7 @@ def all_schemas() -> dict:
     Keys are short canonical identifiers derived from `$id` (e.g.,
     `bid:000`, `gw`, `uuid4.str`). For schemas whose `$id` includes a
     `/draft/` segment the key still drops the `draft/` prefix, so an
-    active and a draft schema of the same name+version would collide
+    published and draft schemas of the same name+version would collide
     (which would be a registry inconsistency the duplicate-key check
     surfaces).
     """

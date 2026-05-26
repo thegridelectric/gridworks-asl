@@ -94,7 +94,7 @@ def prepare_snapshot(seed_request: Path) -> Path:
     # Regenerate indexes/public_registry.yaml first. This validates:
     #   - status placement (word-level only on versionless / literal /
     #     formats; otherwise version-level)
-    #   - active-vs-draft dependency closure (active SHALL NOT depend on
+    #   - published-vs-draft dependency closure (published SHALL NOT depend on
     #     draft, transitively or directly)
     # and raises ValueError if the registry is in an inconsistent state.
     public_registry = build_public_registry_index()

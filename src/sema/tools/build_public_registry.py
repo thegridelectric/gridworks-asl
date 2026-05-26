@@ -23,8 +23,8 @@ def load_registry() -> dict[str, Any]:
         return yaml.safe_load(handle)
 
 
-def is_active(entry: dict[str, Any]) -> bool:
-    return entry.get("status", "active") == "active"
+def is_published(entry: dict[str, Any]) -> bool:
+    return entry.get("status", "published") == "published"
 
 
 def sorted_versions(versions: dict[str, Any]) -> dict[str, Any]:
@@ -41,7 +41,7 @@ def validate_status_placement(registry: dict[str, Any]) -> None:
     - on the version entry for versioned enums and versioned types.
 
     Any other placement is rejected up front so we never silently default a
-    misplaced ``status`` to active.
+    misplaced ``status`` to published.
     """
     bad: list[str] = []
     for name, entry in registry["enums"].items():
@@ -71,45 +71,45 @@ def build_public_registry(registry: dict[str, Any]) -> dict[str, Any]:
     }
 
     for name, entry in registry["formats"].items():
-        if is_active(entry):
+        if is_published(entry):
             public["formats"][name] = copy.deepcopy(entry)
 
     for name, entry in registry["enums"].items():
         if entry["enum_type"] == "literal":
-            if is_active(entry):
+            if is_published(entry):
                 public["enums"][name] = copy.deepcopy(entry)
             continue
 
-        active_versions = {
+        published_versions = {
             version: copy.deepcopy(version_entry)
             for version, version_entry in entry.get("versions", {}).items()
-            if is_active(version_entry)
+            if is_published(version_entry)
         }
-        if not active_versions:
+        if not published_versions:
             continue
 
         public_entry = copy.deepcopy(entry)
-        public_entry["versions"] = sorted_versions(active_versions)
-        public_entry["latest_version"] = max(active_versions, key=int)
+        public_entry["versions"] = sorted_versions(published_versions)
+        public_entry["latest_version"] = max(published_versions, key=int)
         public["enums"][name] = public_entry
 
     for name, entry in registry["types"].items():
         if entry["versioning_strategy"] == "none":
-            if is_active(entry):
+            if is_published(entry):
                 public["types"][name] = copy.deepcopy(entry)
             continue
 
-        active_versions = {
+        published_versions = {
             version: copy.deepcopy(version_entry)
             for version, version_entry in entry.get("versions", {}).items()
-            if is_active(version_entry)
+            if is_published(version_entry)
         }
-        if not active_versions:
+        if not published_versions:
             continue
 
         public_entry = copy.deepcopy(entry)
-        public_entry["versions"] = sorted_versions(active_versions)
-        public_entry["latest_version"] = max(active_versions, key=int)
+        public_entry["versions"] = sorted_versions(published_versions)
+        public_entry["latest_version"] = max(published_versions, key=int)
         public["types"][name] = public_entry
 
     validate_dependency_closure(public)
@@ -179,7 +179,7 @@ def build() -> dict[str, Any]:
     """Regenerate ``indexes/public_registry.yaml`` from ``registry.yaml``.
 
     Returns the public registry dict. Raises ``ValueError`` if the source
-    registry has misplaced status fields or if any active word references
+    registry has misplaced status fields or if any published word references
     a missing (e.g. draft) dependency.
     """
     public = build_public_registry(load_registry())
