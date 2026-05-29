@@ -14,7 +14,6 @@ class GwGNodeClass(SemaEnum):
     Scada = auto()
     PriceForecastService = auto()
     WeatherForecastService = auto()
-    TimeCoordinator = auto()
 
     @classmethod
     def default(cls) -> "GwGNodeClass":

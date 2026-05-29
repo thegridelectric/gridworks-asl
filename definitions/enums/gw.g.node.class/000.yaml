@@ -22,7 +22,6 @@ enum:
   - "Scada"
   - "PriceForecastService"
   - "WeatherForecastService"
-  - "TimeCoordinator"
 
 default: "Unknown"
 
@@ -62,7 +61,3 @@ x-gridworks:
 
     "WeatherForecastService": >
       A service that provides meteorological forecasts used for load and generation prediction.
-
-    "TimeCoordinator": >
-      A service responsible for maintaining simulation time or orchestrated 
-      test time across actors.

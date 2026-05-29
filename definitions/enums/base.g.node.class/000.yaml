@@ -49,7 +49,4 @@ x-gridworks:
 
     "Logical": >
       A non-physical Grid Node whose identity carries no inherent conductor-topology or
-      metering semantics. Used for purely logical or service-level nodes such as SCADA,
-      forecasting services, market-maker actors, simulation nodes, or organizational
-      microservices. Logical nodes may coordinate with or operate on physical nodes, but do
-      not themselves represent physical grid structure.
+      metering semantics. Used by GridWorks for SCADA and forecasting services.
