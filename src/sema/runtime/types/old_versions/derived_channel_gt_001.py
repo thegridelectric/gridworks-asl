@@ -3,8 +3,8 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import Gw1EmissionMethod
 from sema.runtime.enums import Gw1Quantity
-from sema.runtime.enums import Gw1Unit
 from sema.runtime.enums.old_versions.gw1_unit_000 import Gw1Unit000
+from sema.runtime.enums.old_versions.gw1_unit_001 import Gw1Unit001
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import SpaceheatName
@@ -73,7 +73,7 @@ class DerivedChannelGt001(SemaType):
         else:
             data["output_unit"] = self.output_unit.value
             data["output_quantity"] = Gw1UnitQuantityProjection.project(
-                Gw1Unit(self.output_unit.value)
+                Gw1Unit001(self.output_unit.value)
             )
 
         data["version"] = "002"
