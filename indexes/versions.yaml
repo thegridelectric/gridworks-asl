@@ -739,6 +739,7 @@ enums:
         added_values:
           - "DollarsX1000"
           - "MilesPerHourX1000"
+          - "KilowattHoursX1000"
       "001":
         added_values:
           - "Seconds"

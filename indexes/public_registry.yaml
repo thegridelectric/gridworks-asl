@@ -322,6 +322,7 @@ enums:
         added_values:
         - DollarsX1000
         - MilesPerHourX1000
+        - KilowattHoursX1000
       '001':
         schema_url: https://schemas.electricity.works/enums/gw1.unit/001
         created: '2026-03-04T19:00:00Z'

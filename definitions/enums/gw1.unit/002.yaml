@@ -21,6 +21,7 @@ enum:
   - "Milliseconds"
   - "DollarsX1000"
   - "MilesPerHourX1000"
+  - "KilowattHoursX1000"
 
 default: "Unknown"
 
@@ -42,3 +43,5 @@ x-gridworks:
       Monetary value in US Dollars multiplied by 1,000.
     "MilesPerHourX1000": >
       Velocity in miles per hour multiplied by 1,000.
+    "KilowattHoursX1000": >
+      Energy in kilowatt-hours multiplied by 1,000.

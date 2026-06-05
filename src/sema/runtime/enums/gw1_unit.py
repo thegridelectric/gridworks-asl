@@ -18,6 +18,7 @@ class Gw1Unit(SemaEnum):
     Milliseconds = auto()
     DollarsX1000 = auto()
     MilesPerHourX1000 = auto()
+    KilowattHoursX1000 = auto()
 
     @classmethod
     def default(cls) -> "Gw1Unit":
