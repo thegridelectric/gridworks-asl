@@ -1,0 +1,90 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/market.product/000"
+
+title: "market.product"
+type: object
+description: >
+  One of the kinds of market a MarketMaker offers; the same market product is
+  offered at every node the maker runs. A market product is the anchor for
+  that market's full rulebook — settlement, dispatch and response timing, the
+  penalty when a cleared bid is not met, and how price is formed. RIGHT NOW it
+  is deliberately minimal: a stable identity plus which product-name
+  vocabulary the product is drawn from. How that rulebook attaches to the
+  product — embedded as fields on a later version of this type, or carried by
+  separate structures that reference a market.product — is intentionally left
+  open and will be decided as real markets are built. The name-decodable
+  dimensions stay out of this type regardless: commodity class, slot minutes,
+  gate offset, and quantity unit are decoded from the product-name token (Name)
+  by the structured enum that ProductNameEnum points to (GridWorks's own is
+  gw.market.product.name, but that is just one maker's vocabulary).
+
+properties:
+
+  MarketProductId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique, stable identity for this market product.
+
+  ProductNameEnum:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Name of the structured enum that Name is drawn from, e.g.
+      gw.market.product.name. Disambiguates the namespaced per-maker product
+      vocabularies and encodes ownership (the namespace segment).
+
+  Name:
+    type: string
+    description: >
+      A value from the enum named by ProductNameEnum, e.g. rt60gate5. A bare
+      token, deliberately NOT a $ref to that enum: market.product stays one
+      open, maker-agnostic type rather than pinning a single maker's
+      vocabulary, so membership and attribute decode are an opt-in,
+      consumer-side step.
+
+  TypeName:
+    const: "market.product"
+
+  Version:
+    const: "000"
+
+required:
+  - MarketProductId
+  - ProductNameEnum
+  - Name
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  extended_description: >
+    market.product represents a product as an object, complementing the
+    structured product-name enum that ProductNameEnum points to (GridWorks's
+    own is gw.market.product.name, but each maker may carry its own), which
+    decodes a product token to its slot timing. It mirrors the EMIX/TeMIX
+    model, where a market product is multi-dimensional and orthogonal —
+    commodity x delivery interval x location x response time x units x price
+    formation — rather than a flat token. The name-implicit dimensions
+    (commodity class, slot minutes, gate offset, quantity unit) are decoded
+    from the product-name token by that enum, and location stays out of the
+    product entirely: it lives in market.slot.name's maker-alias segment
+    (analogous to an EMIX Interface or a CAISO sub-LAP).
+
+    The remaining dimensions — settlement interval (which may differ from the
+    dispatch interval), dispatch response time, non-performance penalties, and
+    stacked price-formation components — are associated with the product but
+    are NOT modeled yet. Whether they later become fields on a market.product
+    version or separate Sema types that reference a market.product is an open
+    decision, to be made as concrete markets are designed. This v000 commits
+    only to identity (MarketProductId) and the product-name discriminator
+    (ProductNameEnum + Name).
+
+    Name is a bare string, not a $ref to ProductNameEnum's enum, on purpose:
+    GridWorks expects to scale to many market makers, each potentially
+    carrying its own *.market.product.name vocabulary. A single shared
+    market.product type cannot statically $ref thousands of enums, and
+    pinning one would make the type maker-specific. ProductNameEnum (a
+    left.right.dot identifier) is the discriminator naming which vocabulary
+    Name belongs to; a consumer that wants the decode seeds that maker's
+    structured enum and looks Name up in it.

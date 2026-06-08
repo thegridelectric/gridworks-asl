@@ -3,22 +3,33 @@ $id: "https://schemas.electricity.works/formats/market.slot.name"
 
 title: "market.slot.name"
 description: >
-  Dot-separated identifier for a specific market slot.
+  Dot-separated identifier for a specific market slot, maker-agnostic by design.
 
-  The first segment identifies the market commodity class and MUST be one of
-  `e`, `r`, or `d`. The second segment identifies the market type. The final
-  segment is a 10-digit Unix timestamp in seconds giving the slot start. The
-  middle segments identify the market maker alias and must satisfy the
-  left-right-dot naming rules.
+  Four parts: the first segment is the market commodity class and MUST be one of
+  `e`, `r`, or `d`; the second segment is the market-product name token and MUST
+  match the single-token spaceheat.name shape (lowercase, starting with a
+  letter, internal hyphens allowed, no dots); the middle segments are the market
+  maker alias and MUST satisfy the left-right-dot shape; the final segment is a
+  10-digit Unix timestamp in seconds giving the slot start.
 
-  The slot start timestamp MUST align to the duration required by the market
-  type.
+  This format validates structure only. Whether the product token names a real
+  product, and whether the slot start aligns to that product's slot duration,
+  are the receiving market maker's concern — decoded opt-in against that maker's
+  product-name enum (e.g. gw.market.product.name). Keeping the format
+  maker-agnostic lets bid and latest.price stay uniform across market makers.
 
 type: string
-pattern: "^[erd]\\.[a-z0-9]+(?:\\.[a-z0-9]+)*(?:\\.[a-z0-9]+)+\\.[0-9]{10}$"
+pattern: "^[erd]\\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*\\.[a-z][a-z0-9]*(?:\\.[a-z0-9]+)*\\.[0-9]{10}$"
 
 examples:
   - "e.rt60gate5.d1.isone.ver.keene.1673539200"
+  - "e.rt-60-gate5.d1.isone.ver.keene.1673539200"
+
+counterexamples:
+  - "rt60gate5.d1.isone.ver.keene.1673539200"
+  - "x.rt60gate5.d1.isone.1673539200"
+  - "e.RT60.d1.isone.1673539200"
+  - "e.rt60gate5.d1.isone.167353920"
 
 x-gridworks:
   owner: "gridworks-energy"

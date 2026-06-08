@@ -20,7 +20,7 @@ LEFT_RIGHT_DOT_PATTERN = re.compile(
 )
 
 MARKET_SLOT_NAME_PATTERN = re.compile(
-    r"^[erd]\.[a-z0-9]+(?:\.[a-z0-9]+)*(?:\.[a-z0-9]+)+\.[0-9]{10}$"
+    r"^[erd]\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*\.[a-z][a-z0-9]*(?:\.[a-z0-9]+)*\.[0-9]{10}$"
 )
 
 PASCAL_CASE_PATTERN = re.compile(
@@ -79,44 +79,6 @@ def is_left_right_dot(v: str) -> str:
     return v
 
 
-def is_market_name(v: str) -> str:
-    market_type_name_enum = _market_type_name_enum()
-    try:
-        x = v.split(".")
-    except AttributeError as e:
-        raise ValueError(f"{v} failed to split on '.'") from e
-    if len(x) < 3:
-        raise ValueError("MarketNames need at least 3 words")
-    if x[0] not in {"e", "r", "d"}:
-        raise ValueError(
-            f"{v} first word must be e,r or d (energy, regulation, distribution)"
-        )
-    if x[1] not in market_type_name_enum.values():
-        raise ValueError(f"{v} not recognized MarketType")
-    g_node_alias = ".".join(x[2:])
-    is_left_right_dot(g_node_alias)
-    return v
-
-
-def _market_type_name_enum():
-    from sema.runtime.enums import MarketTypeName  # noqa: PLC0415
-
-    return MarketTypeName
-
-
-def _market_minutes() -> dict:
-    market_type_name_enum = _market_type_name_enum()
-    return {
-        market_type_name_enum.da60: 60,
-        market_type_name_enum.rt15gate5: 15,
-        market_type_name_enum.rt30gate5: 30,
-        market_type_name_enum.rt5gate5: 5,
-        market_type_name_enum.rt60gate30: 60,
-        market_type_name_enum.rt60gate30b: 60,
-        market_type_name_enum.rt60gate5: 60,
-    }
-
-
 def is_market_slot_name(v: str) -> str:
     if not isinstance(v, str):
         raise ValueError(f"<{v}>: market.slot.name must be a string.")
@@ -124,27 +86,6 @@ def is_market_slot_name(v: str) -> str:
     if not MARKET_SLOT_NAME_PATTERN.fullmatch(v):
         raise ValueError(f"<{v}>: Fails market.slot.name format.")
 
-    try:
-        x = v.split(".")
-    except AttributeError as e:
-        raise ValueError(f"{v} failed to split on '.'") from e
-    slot_start = x[-1]
-    if len(slot_start) != 10:
-        raise ValueError(f"slot start {slot_start} not of length 10")
-    try:
-        slot_start = int(slot_start)
-    except ValueError as e:
-        raise ValueError(f"slot start {slot_start} not an int") from e
-    is_market_name(".".join(x[:-1]))
-    market_type_name = _market_type_name_enum()(x[1])
-    market_minutes = _market_minutes()
-    if market_type_name not in market_minutes:
-        raise ValueError(f"{market_type_name} not recognized MarketType")
-    market_duration_minutes = market_minutes[market_type_name]
-    if not slot_start % (market_duration_minutes * 60) == 0:
-        raise ValueError(
-            f"market_slot_start_s mod {market_duration_minutes * 60} must be 0"
-        )
     return v
 
 
@@ -279,11 +220,6 @@ HexChar = Annotated[
 LeftRightDot = Annotated[
     str,
     BeforeValidator(is_left_right_dot),
-]
-
-MarketName = Annotated[
-    str,
-    BeforeValidator(is_market_name),
 ]
 
 MarketSlotName = Annotated[

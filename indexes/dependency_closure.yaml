@@ -742,6 +742,14 @@ types:
       - utc.milliseconds
       types: []
       versionless_types: []
+  market.product:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types: []
+      versionless_types: []
   new.command.tree:
     '000':
       enums:

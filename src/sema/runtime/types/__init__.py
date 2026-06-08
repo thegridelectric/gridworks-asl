@@ -34,6 +34,7 @@ from sema.runtime.types.latest_price import LatestPrice
 from sema.runtime.types.layout_lite import LayoutLite
 from sema.runtime.types.linear_one_dimensional_calibration import LinearOneDimensionalCalibration
 from sema.runtime.types.machine_states import MachineStates
+from sema.runtime.types.market_product import MarketProduct
 from sema.runtime.types.new_command_tree import NewCommandTree
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
@@ -102,6 +103,7 @@ __all__ = [
     "LayoutLite",
     "LinearOneDimensionalCalibration",
     "MachineStates",
+    "MarketProduct",
     "NewCommandTree",
     "PicoFlowModuleComponentGt",
     "PicoTankModuleComponentGt",

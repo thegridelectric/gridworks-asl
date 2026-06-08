@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-05-24T17:00:00Z"
+  last_updated: "2026-06-08T00:00:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -26,7 +26,7 @@ formats:
     owner: gridworks-energy
     schema_url: "https://schemas.electricity.works/formats/market.slot.name"
     created: "2024-12-05T19:25:00Z"
-    description: "Dot-separated identifier for a specific market slot, ending in a 10-digit Unix start timestamp aligned to the market type duration"
+    description: "Dot-separated identifier for a specific market slot: commodity class, a market-product name token, the market-maker alias, and a 10-digit Unix slot-start timestamp"
 
   non.empty.string:
     owner: gridworks-energy
@@ -465,11 +465,25 @@ enums:
     owner: gridworks-energy
     enum_type: "versioned"
     description: "Categorizes different markets run by MarketMaker"
+    replaced_by:
+      - gw.market.product.name
+    frozen_at: "2026-06-08T00:00:00Z"
 
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/enums/market.type.name/000"
         created: "2022-10-17T16:55:39Z"
+
+  gw.market.product.name:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "GridWorks's structured market-product vocabulary; each token decodes to its slot timing"
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw.market.product.name/000"
+        created: "2026-06-08T00:00:00Z"
 
   relay.closed.or.open:
     owner: gridworks-energy
@@ -575,6 +589,7 @@ types:
     owner: gridworks-energy
     replaced_by:
       - bid
+    frozen_at: "2026-06-08T00:00:00Z"
     versioning_strategy: "literal"
     description: "Legacy market bid submitted by a LeafTransactiveNode for a specific market slot; superseded by bid."
 
@@ -1656,6 +1671,22 @@ types:
             - "utc.milliseconds"
           axiom:
             - "relay.closed.or.open:000"
+
+  market.product:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A market product: a named token from a maker's product-name enum, plus stable identity."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/market.product/000"
+        created: "2026-06-08T00:00:00Z"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "uuid4.str"
 
   new.command.tree:
     latest_version: "000"

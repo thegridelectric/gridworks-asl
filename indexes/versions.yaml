@@ -347,6 +347,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  market.product:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   new.command.tree:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -785,6 +792,12 @@ enums:
       "000": {}
 
   market.type.name:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  gw.market.product.name:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

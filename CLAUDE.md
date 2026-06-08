@@ -17,7 +17,8 @@ All changes to sema sub-folders or the sema repository MUST:
 - Preserve `TypeName` and `Version` semantics
 - Use CamelCase for all serialized fields
 - Treat formats as immutable
-- Ensure enums are additive only
+- Ensure enums are additive only (for structured enums this extends to
+  attribute rows/columns: append-only, never mutate a published cell)
 - Bump type versions when required by the specification
 - Maintain correct dependency declarations (direct vs all)
 - Not modify historical versions

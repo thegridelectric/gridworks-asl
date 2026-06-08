@@ -159,7 +159,7 @@ this hub.
 | Term | Meaning |
 |---|---|
 | **format** | Immutable, unversioned vocabulary word that refines a JSON primitive (`string`, `integer`, `number`, `boolean`) with validation constraints. Examples: `uuid4.str`, `utc.seconds`. Cannot reference other Sema vocabulary. |
-| **enum** | Vocabulary word defining a closed set of named values. `literal` enums are fixed; `versioned` enums are additive over time. Value type is `string` (default) or `integer`. |
+| **enum** | Vocabulary word defining a closed set of named values. `literal` enums are fixed; `versioned` enums are additive over time. Value type is `string` (default) or `integer`. A **structured enum** additionally carries, per value, a typed row of primitive attributes (a machine-readable decode of the token) — vocabulary metadata, not a serialized field. |
 | **type** | Structured, versioned semantic contract. Types may reference formats, enums, and other versioned types. Types are what get serialized between applications. |
 | **versioned** type | Type with `versioning_strategy: "string"` or `"literal"`. Versions are three-digit numeric strings (`"000"`, `"001"`, …) in strict order. |
 | **versionless** type | Type with `versioning_strategy: "none"`. No `versions` block; single `schema_url`. |

@@ -211,6 +211,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/machine.states/000.yaml
+  market.product:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/market.product/000.yaml
   new.command.tree:
     latest_version: '000'
     versioning_strategy: literal
@@ -516,6 +521,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/market.type.name/000.yaml
+  gw.market.product.name:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gw.market.product.name/000.yaml
   relay.closed.or.open:
     enum_type: literal
     schema: definitions/enums/relay.closed.or.open/000.yaml

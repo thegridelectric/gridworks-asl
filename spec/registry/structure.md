@@ -143,6 +143,48 @@ Specifically, `replaced_by`:
 - does not create an automatic upgrade or migration path
 - does not alter immutability requirements for published definitions
 
+## `frozen_at` Field
+
+Registry word entries MAY include a `frozen_at` field marking the word's
+version lineage as **closed** — the owner will cut no further versions.
+
+`frozen_at`:
+
+- SHALL appear only on a vocabulary **word** entry, never on a version entry
+- SHALL be an RFC 3339 timestamp (seconds precision, UTC `Z`), per the
+  Timestamp Rules above; its **presence** means the word is frozen, and it
+  records when the lineage was closed
+- is a **different axis** than `status`: `status` (`draft`/`published`)
+  describes whether a *version* is published; `frozen_at` describes whether
+  the *word* will gain new versions. A frozen word's existing versions remain
+  exactly as published.
+
+Semantics. A word with `frozen_at`:
+
+- remains valid; its existing published versions stay decodable indefinitely
+  (freezing is **not** deletion or deprecation of existing versions)
+- SHALL NOT gain a new version: no version entry may carry a `created`
+  timestamp later than `frozen_at` (authoring a new version after the freeze
+  is a registry-validation error)
+- is unaffected in its description fields — `frozen_at` gates *new versions*
+  only; permitted description clarifications to existing published versions
+  are governed by the normal immutability rules
+- for structurally single-version words (versionless formats, literal enums,
+  versionless types), which cannot gain versions anyway, `frozen_at` is a
+  retirement *signal* rather than an additional gate
+
+`frozen_at` is **orthogonal to `replaced_by`** and the two compose freely:
+
+- a word MAY be frozen with no `replaced_by` (retire a concept with no
+  successor)
+- a word MAY carry `replaced_by` without being frozen (a migration window in
+  which the old lineage is still maintained)
+- when both are present, `replaced_by` names the preferred successor(s) while
+  `frozen_at` closes the lineage; neither implies the other
+
+There is no MUST coupling `replaced_by` to `frozen_at`; tooling MAY emit an
+advisory warning when a `replaced_by` word is not also frozen.
+
 ## `owners.yaml` — Vocabulary Ownership Registry
 
 The `owners.yaml` file defines the authoritative registry of vocabulary

@@ -27,7 +27,10 @@ ALLOWED_X_GRIDWORKS_KEYS = {
     "version",
     "value_descriptions",
     "extended_description",
+    "value_attribute_schema",
+    "value_attributes",
 }
+ALLOWED_ATTR_TYPES = {"string", "integer", "number", "boolean"}
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -129,5 +132,93 @@ def test_enum_schema_correctness() -> None:
         if "owner" not in xg or not isinstance(xg["owner"], str):
             findings.append(f"{path} missing string x-gridworks.owner")
 
+        findings.extend(_structured_enum_findings(path, schema, xg))
+
     if findings:
         raise AssertionError("\n".join(findings))
+
+
+def _cell_matches(col_type: str, cell: Any) -> bool:
+    if col_type == "string":
+        return isinstance(cell, str)
+    if col_type == "boolean":
+        return isinstance(cell, bool)
+    if col_type == "integer":
+        return isinstance(cell, int) and not isinstance(cell, bool)
+    if col_type == "number":
+        return isinstance(cell, (int, float)) and not isinstance(cell, bool)
+    return False
+
+
+def _structured_enum_findings(
+    path: Path, schema: dict[str, Any], xg: dict[str, Any]
+) -> list[str]:
+    """Validate the structured-enum invariants (totality / primitive / conformance).
+
+    A schema is a *structured enum* iff it carries x-gridworks.value_attribute_schema.
+    """
+    findings: list[str] = []
+    value_attribute_schema = xg.get("value_attribute_schema")
+    value_attributes = xg.get("value_attributes")
+
+    if value_attribute_schema is None:
+        if value_attributes is not None:
+            findings.append(f"{path} has value_attributes without value_attribute_schema")
+        return findings
+
+    if schema.get("type") != "string":
+        findings.append(f"{path} structured enums must be type string (v1)")
+
+    if not isinstance(value_attribute_schema, dict) or not value_attribute_schema:
+        findings.append(f"{path} value_attribute_schema must be a non-empty map")
+        return findings
+
+    columns: dict[str, str] = {}
+    for col, col_spec in value_attribute_schema.items():
+        col_type = col_spec.get("type") if isinstance(col_spec, dict) else None
+        if col_type not in ALLOWED_ATTR_TYPES:
+            findings.append(
+                f"{path} column {col!r} must declare type in {sorted(ALLOWED_ATTR_TYPES)}"
+            )
+            continue
+        columns[col] = col_type
+
+    if not isinstance(value_attributes, dict):
+        findings.append(f"{path} structured enum missing value_attributes map")
+        return findings
+
+    enum_values = schema.get("enum") or []
+    default_value = schema.get("default")
+
+    # Totality: every value except the single default carries a complete row.
+    for value in enum_values:
+        row = value_attributes.get(value)
+        if row is None:
+            if value != default_value:
+                findings.append(
+                    f"{path} value {value!r} missing attribute row (only default may omit)"
+                )
+            continue
+        if not isinstance(row, dict):
+            findings.append(f"{path} value {value!r} attribute row must be a map")
+            continue
+        missing = sorted(set(columns) - set(row))
+        if missing:
+            findings.append(f"{path} value {value!r} row missing columns: {missing}")
+        undeclared = sorted(set(row) - set(columns))
+        if undeclared:
+            findings.append(f"{path} value {value!r} row has undeclared columns: {undeclared}")
+        for col, col_type in columns.items():
+            if col not in row or row[col] is None:
+                continue
+            if not _cell_matches(col_type, row[col]):
+                findings.append(
+                    f"{path} value {value!r} column {col!r} expected {col_type}, "
+                    f"got {type(row[col]).__name__}"
+                )
+
+    for value in value_attributes:
+        if value not in enum_values:
+            findings.append(f"{path} value_attributes has row for unknown value {value!r}")
+
+    return findings

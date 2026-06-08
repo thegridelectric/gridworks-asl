@@ -1,0 +1,49 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/gw.market.product.name/000"
+
+title: "gw.market.product.name"
+type: "string"
+description: >
+  GridWorks's own market-product vocabulary (the maker's products, across
+  whatever territories GridWorks operates in). A structured enum: each token
+  decodes directly to its slot timing — timeframe class, slot minutes, gate
+  minutes prior to start, and the quantity-unit variant the name encodes.
+
+enum:
+  - "unknown"
+  - "da60"
+  - "rt60gate5"
+  - "rt60gate30"
+  - "rt60gate30b"
+  - "rt30gate5"
+  - "rt15gate5"
+  - "rt5gate5"
+
+default: "unknown"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+    "unknown": "Default unknown"
+    "da60": "Day-ahead energy, 60-minute slots"
+    "rt60gate5": "Real-time energy, 60-minute slots, gate closing 5 minutes prior to start"
+    "rt60gate30": "Real-time energy, 60-minute slots, gate closing 30 minutes prior to start"
+    "rt60gate30b": "As rt60gate30 but QuantityUnit = average kW"
+    "rt30gate5": "Real-time energy, 30-minute slots, gate closing 5 minutes prior to start"
+    "rt15gate5": "Real-time energy, 15-minute slots, gate closing 5 minutes prior to start"
+    "rt5gate5": "Real-time energy, 5-minute slots, gate closing 5 minutes prior to start"
+  value_attribute_schema:
+    timeframe: { type: "string" }
+    slot_minutes: { type: "integer" }
+    gate_minutes: { type: "integer" }
+    quantity_unit: { type: "string" }
+  value_attributes:
+    # "unknown" is the default sentinel — no row (decodes to .attrs == None)
+    "da60": { timeframe: "da", slot_minutes: 60, gate_minutes: null, quantity_unit: "AvgkWh" }
+    "rt60gate5": { timeframe: "rt", slot_minutes: 60, gate_minutes: 5, quantity_unit: "AvgkWh" }
+    "rt60gate30": { timeframe: "rt", slot_minutes: 60, gate_minutes: 30, quantity_unit: "AvgkWh" }
+    "rt60gate30b": { timeframe: "rt", slot_minutes: 60, gate_minutes: 30, quantity_unit: "AvgkW" }
+    "rt30gate5": { timeframe: "rt", slot_minutes: 30, gate_minutes: 5, quantity_unit: "AvgkWh" }
+    "rt15gate5": { timeframe: "rt", slot_minutes: 15, gate_minutes: 5, quantity_unit: "AvgkWh" }
+    "rt5gate5": { timeframe: "rt", slot_minutes: 5, gate_minutes: 5, quantity_unit: "AvgkWh" }

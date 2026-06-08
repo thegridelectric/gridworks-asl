@@ -22,6 +22,7 @@ from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode
 from sema.runtime.enums.gw1_system_mode import Gw1SystemMode
 from sema.runtime.enums.gw1_unit import Gw1Unit
 from sema.runtime.enums.gw_g_node_class import GwGNodeClass
+from sema.runtime.enums.gw_market_product_name import GwMarketProductName
 from sema.runtime.enums.heatcall_source import HeatcallSource
 from sema.runtime.enums.hz_calc_method import HzCalcMethod
 from sema.runtime.enums.i2c_adc_channel import I2cAdcChannel
@@ -63,6 +64,7 @@ __all__ = [
     "Gw1SystemMode",
     "Gw1Unit",
     "GwGNodeClass",
+    "GwMarketProductName",
     "HeatcallSource",
     "HzCalcMethod",
     "I2cAdcChannel",

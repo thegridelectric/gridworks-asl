@@ -415,6 +415,7 @@ formats:
     - layout.lite:012
     - layout.lite:013
     - machine.states:000
+    - market.product:000
     - new.command.tree:000
     - relay.actor.config:002
     - relay.actor.config:003
@@ -611,6 +612,7 @@ formats:
     - layout.lite:011
     - layout.lite:012
     - layout.lite:013
+    - market.product:000
     - pico.flow.module.component.gt:000
     - pico.tank.module.component.gt:011
     - position.point.gt:000

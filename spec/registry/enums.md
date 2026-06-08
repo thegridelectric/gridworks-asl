@@ -27,6 +27,13 @@ file SHALL have `type: string`. The enum schema file remains
 authoritative; the registry copy exists for compact tooling and
 validation.
 
+**Structured enums.** Whether an enum is *structured* (its values carry typed
+attribute rows — see [../authoring/enums.md](../authoring/enums.md)) is **not**
+recorded in the registry. Structured-ness is detected from the schema file's
+`value_attribute_schema`, which stays authoritative (same posture as
+`value_type`). No registry-shape change; `enum_type` and `value_type` are
+unaffected — structured-ness is orthogonal.
+
 ---
 
 ## Literal Enum Structure
