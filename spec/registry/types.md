@@ -295,6 +295,11 @@ The following changes are permitted, provided they do not alter semantics:
 
 - Correction of typographical errors
 - Clarification of descriptive text
+- Addition or improvement of non-normative `examples`. Examples are developer
+  guidance / validation fixtures (see
+  [../authoring/types.md](../authoring/types.md) "Examples") and alter no
+  validation behavior or semantics, so adding one to a published version is in
+  the same family as clarifying descriptive text — it is explicitly permitted.
 - Correction of `created` timestamps, provided that:
   - Timestamp uniqueness is preserved
   - Timestamp ordering remains consistent with version ordering as
