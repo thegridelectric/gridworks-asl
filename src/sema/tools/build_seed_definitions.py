@@ -4,7 +4,6 @@ import argparse
 import copy
 import re
 import shutil
-from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
@@ -107,12 +106,8 @@ def _copy_definition_path(definitions_root: Path, relative_path: str) -> None:
 
 
 def build_restricted_registry(seed: dict, registry: dict) -> dict:
-    built_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     restricted: dict[str, object] = {
         "metadata": copy.deepcopy(registry["metadata"]),
-        "snapshot": {
-            "built_at": built_at,
-        },
         "formats": {},
         "enums": {},
         "types": {},
@@ -267,7 +262,7 @@ def _needs_section_spacing(indent: int, mapping: dict, index: int) -> bool:
 
 
 def _is_top_level_sections_mapping(mapping: dict) -> bool:
-    return list(mapping.keys()) == ["metadata", "snapshot", "formats", "enums", "types"]
+    return list(mapping.keys()) == ["metadata", "formats", "enums", "types"]
 
 
 def _is_metadata_mapping(mapping: dict) -> bool:
