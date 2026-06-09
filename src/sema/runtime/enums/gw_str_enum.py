@@ -95,21 +95,3 @@ class SymbolizedEnum(SemaEnum):
     @classmethod
     def symbols(cls) -> list[str]:
         raise NotImplementedError
-
-
-class StructuredEnum(SemaEnum):
-    """
-    Base for structured Sema enums: each value carries a frozen, typed
-    attribute record exposed via ``member.attrs``. ``.attrs`` is ``None`` only
-    for a value with no row (per spec, just the ``default`` value may omit it).
-
-    The generated subclass defines a ``@dataclass(frozen=True)`` record, a
-    module-level attribute table, and the ``.attrs`` property. The table is
-    attached at module scope, NOT as a class-body member, since the Enum
-    metaclass would otherwise absorb it as a pseudo-member (the same reason
-    ``_init_index_maps`` defers its index maps).
-    """
-
-    @property
-    def attrs(self) -> Any:  # pragma: no cover - overridden by generated subclass
-        raise NotImplementedError

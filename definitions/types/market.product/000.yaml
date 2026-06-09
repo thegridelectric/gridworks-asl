@@ -5,18 +5,16 @@ title: "market.product"
 type: object
 description: >
   One of the kinds of market a MarketMaker offers; the same market product is
-  offered at every node the maker runs. A market product is the anchor for
-  that market's full rulebook — settlement, dispatch and response timing, the
-  penalty when a cleared bid is not met, and how price is formed. RIGHT NOW it
-  is deliberately minimal: a stable identity plus which product-name
-  vocabulary the product is drawn from. How that rulebook attaches to the
-  product — embedded as fields on a later version of this type, or carried by
-  separate structures that reference a market.product — is intentionally left
-  open and will be decided as real markets are built. The name-decodable
-  dimensions stay out of this type regardless: commodity class, slot minutes,
-  gate offset, and quantity unit are decoded from the product-name token (Name)
-  by the structured enum that ProductNameEnum points to (GridWorks's own is
-  gw.market.product.name, but that is just one maker's vocabulary).
+  offered at every node the maker runs. A market product anchors that market's
+  full rulebook — settlement, dispatch and response timing, the penalty when a
+  cleared bid is not met, and how price is formed. This v000 carries a stable
+  identity, the product-name discriminator (which maker's product vocabulary the
+  Name token is drawn from), and the dimensions that are encoded in the name
+  token itself: slot duration, gate-closing offset, and quantity unit. The
+  remaining rulebook dimensions — settlement interval (which
+  may differ from the dispatch interval), response time, non-performance
+  penalties, and stacked price-formation components — are NOT modeled yet and
+  will be added as real markets are designed.
 
 properties:
 
@@ -28,7 +26,7 @@ properties:
   ProductNameEnum:
     $ref: "https://schemas.electricity.works/formats/left.right.dot"
     description: >
-      Name of the structured enum that Name is drawn from, e.g.
+      Name of the product-name enum that Name is drawn from, e.g.
       gw.market.product.name. Disambiguates the namespaced per-maker product
       vocabularies and encodes ownership (the namespace segment).
 
@@ -38,8 +36,26 @@ properties:
       A value from the enum named by ProductNameEnum, e.g. rt60gate5. A bare
       token, deliberately NOT a $ref to that enum: market.product stays one
       open, maker-agnostic type rather than pinning a single maker's
-      vocabulary, so membership and attribute decode are an opt-in,
-      consumer-side step.
+      vocabulary, so a membership check is an opt-in, consumer-side step.
+
+  SlotDurationMinutes:
+    type: integer
+    description: >
+      Duration of each market slot, in minutes (e.g. 60, 30, 15, 5). One of the
+      dimensions encoded in the Name token, carried here as a validated field.
+
+  GateClosingSeconds:
+    type: integer
+    description: >
+      Seconds before a slot start after which bids are no longer accepted (the
+      gate offset encoded in the Name token, e.g. gate5 -> 300).
+
+  QuantityUnit:
+    $ref: "https://schemas.electricity.works/enums/market.quantity.unit/000"
+    description: >
+      Unit of the cleared quantity — a power unit (e.g. AvgkW), so quantities
+      are meaningful and comparable across market slots of different durations.
+      One of the dimensions encoded in the Name token.
 
   TypeName:
     const: "market.product"
@@ -51,6 +67,8 @@ required:
   - MarketProductId
   - ProductNameEnum
   - Name
+  - SlotDurationMinutes
+  - GateClosingSeconds
   - TypeName
   - Version
 
@@ -60,31 +78,29 @@ x-gridworks:
   owner: "gridworks-energy"
   extended_description: >
     market.product represents a product as an object, complementing the
-    structured product-name enum that ProductNameEnum points to (GridWorks's
-    own is gw.market.product.name, but each maker may carry its own), which
-    decodes a product token to its slot timing. It mirrors the EMIX/TeMIX
-    model, where a market product is multi-dimensional and orthogonal —
-    commodity x delivery interval x location x response time x units x price
-    formation — rather than a flat token. The name-implicit dimensions
-    (commodity class, slot minutes, gate offset, quantity unit) are decoded
-    from the product-name token by that enum, and location stays out of the
-    product entirely: it lives in market.slot.name's maker-alias segment
-    (analogous to an EMIX Interface or a CAISO sub-LAP).
+    product-name enum that ProductNameEnum points to (GridWorks's own is
+    gw.market.product.name, but each maker may carry its own). It mirrors the
+    EMIX/TeMIX model, where a market product is multi-dimensional and orthogonal
+    — commodity x delivery interval x location x response time x units x price
+    formation — rather than a flat token. The dimensions encoded in the
+    product-name token (slot duration, gate offset, and quantity unit) are
+    carried here as validated fields rather than left to string-parsing or a
+    side decode. Location stays out of the product entirely: it lives in
+    market.slot.name's maker-alias segment (analogous to an EMIX Interface or a
+    CAISO sub-LAP).
 
     The remaining dimensions — settlement interval (which may differ from the
     dispatch interval), dispatch response time, non-performance penalties, and
-    stacked price-formation components — are associated with the product but
-    are NOT modeled yet. Whether they later become fields on a market.product
+    stacked price-formation components — are associated with the product but are
+    NOT modeled yet. Whether they later become fields on a market.product
     version or separate Sema types that reference a market.product is an open
-    decision, to be made as concrete markets are designed. This v000 commits
-    only to identity (MarketProductId) and the product-name discriminator
-    (ProductNameEnum + Name).
+    decision, to be made as concrete markets are designed.
 
     Name is a bare string, not a $ref to ProductNameEnum's enum, on purpose:
-    GridWorks expects to scale to many market makers, each potentially
-    carrying its own *.market.product.name vocabulary. A single shared
-    market.product type cannot statically $ref thousands of enums, and
+    the ecosystem will host many independent market makers — across different
+    owners and regulatory environments, not all of them GridWorks — each
+    potentially carrying its own *.market.product.name vocabulary. A single
+    shared market.product type cannot statically $ref every maker's enum, and
     pinning one would make the type maker-specific. ProductNameEnum (a
-    left.right.dot identifier) is the discriminator naming which vocabulary
-    Name belongs to; a consumer that wants the decode seeds that maker's
-    structured enum and looks Name up in it.
+    left.right.dot identifier) is the discriminator naming which vocabulary Name
+    belongs to.

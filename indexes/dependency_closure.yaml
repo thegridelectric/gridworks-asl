@@ -744,7 +744,8 @@ types:
       versionless_types: []
   market.product:
     '000':
-      enums: []
+      enums:
+      - market.quantity.unit:000
       formats:
       - left.right.dot
       - uuid4.str

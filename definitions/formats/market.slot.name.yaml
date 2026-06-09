@@ -10,13 +10,17 @@ description: >
   match the single-token spaceheat.name shape (lowercase, starting with a
   letter, internal hyphens allowed, no dots); the middle segments are the market
   maker alias and MUST satisfy the left-right-dot shape; the final segment is a
-  10-digit Unix timestamp in seconds giving the slot start.
+  10-digit Unix timestamp in seconds giving the slot start, which MUST be
+  divisible by 300 — every market slot starts on a 5-minute grid (a GridWorks
+  ecosystem invariant; arithmetic, so enforced by the validator rather than the
+  pattern).
 
-  This format validates structure only. Whether the product token names a real
-  product, and whether the slot start aligns to that product's slot duration,
-  are the receiving market maker's concern — decoded opt-in against that maker's
-  product-name enum (e.g. gw.market.product.name). Keeping the format
-  maker-agnostic lets bid and latest.price stay uniform across market makers.
+  Beyond that grid invariant the format is maker-agnostic: whether the product
+  token names a real product, and whether the slot start aligns to that
+  product's specific slot duration, are the receiving market maker's concern —
+  decoded opt-in against that maker's product-name enum (e.g.
+  gw.market.product.name). Keeping the rest maker-agnostic lets bid and
+  latest.price stay uniform across market makers.
 
 type: string
 pattern: "^[erd]\\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*\\.[a-z][a-z0-9]*(?:\\.[a-z0-9]+)*\\.[0-9]{10}$"

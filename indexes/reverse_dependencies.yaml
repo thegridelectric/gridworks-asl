@@ -322,6 +322,7 @@ enums:
       used_by:
       - atn.bid:002
       - bid:000
+      - market.product:000
   relay.closed.or.open:
     '000':
       used_by:

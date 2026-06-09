@@ -110,77 +110,6 @@ x-gridworks:
   - MUST NOT introduce new normative constraints
   - MUST NOT change the meaning of any enum value
 
-## Structured Enums
-
-A **structured enum** is an ordinary enum (`literal` or `versioned`,
-`string`-valued) that additionally declares, per value, a row of typed
-**attributes** — a faithful, machine-readable decode of the value token (e.g.
-the slot timing a market-product token encodes). Attributes are **vocabulary
-metadata**, not serialized message fields: the on-the-wire value stays the bare
-token, so Principle 2 (CamelCase serialized fields) and Principle 2a are
-untouched. The decode is available at authoring and codegen time, carried by the
-vocabulary word itself, and is the structural expression of Principle 4
-(semantics that affect interpretation are declared in the schema, not left to
-comments or code).
-
-"Structured" is **orthogonal** to `enum_type`: a structured enum MAY be `literal`
-or `versioned`. An enum is a structured enum **iff** it carries
-`value_attribute_schema`.
-
-```
-x-gridworks:
-  value_attribute_schema:
-    "<attribute-name>": { type: string|integer|number|boolean }
-  value_attributes:
-    "<EnumValue>": { "<attribute-name>": <primitive> }
-```
-
-### Rules
-
-- `value_attribute_schema`
-  - MAY appear only within `x-gridworks`
-  - declares the columns once: a map of `<attribute-name>` →
-    `{ type: "string" | "integer" | "number" | "boolean" }`
-  - attribute names use snake_case (they are not serialized fields, so the
-    CamelCase rule does not bind them; snake_case matches their codegen surface)
-  - every column is implicitly nullable (a value's row MAY set it `null`);
-    `type` constrains the non-null values
-  - the enum `type` SHALL be `"string"` (integer structured enums are not yet
-    supported)
-
-- `value_attributes`
-  - MAY appear only within `x-gridworks`, and only when
-    `value_attribute_schema` is also present
-  - the rows: a map of `<EnumValue>` → `{ <attribute-name>: <primitive> }`
-  - each row SHALL conform to `value_attribute_schema` (every declared column
-    present; each value matching its declared `type`, or `null`)
-
-### Structured-enum invariants
-
-1. **Totality.** Every enum value SHALL have exactly one attribute row, and each
-   row SHALL provide a value for *every* declared column. A structured enum is a
-   *total* decode. **Exemption:** only the single value named in `default` MAY
-   omit its row, decoding to a null attribute record. An enum with no `default`
-   has no exempt value and SHALL be row-total. Enforced at authoring/registry
-   validation (build-time), the same pass that checks `value_descriptions`.
-2. **Primitive, dependency-free attributes.** Attribute values SHALL be JSON
-   primitives (`string`, `integer`, `number`, `boolean`, `null`). An attribute
-   value SHALL NOT be a `$ref` to any other Sema vocabulary, and SHALL NOT be a
-   nested object or array. This keeps a structured enum a closure leaf: it
-   introduces no new dependency edges. (A token like `"AvgkW"` is a bare string
-   literal here, not a reference to `market.quantity.unit`; for v1 columns are
-   free text.)
-3. **Attribute immutability per value.** Once a value's attribute row is
-   published, the existing **cells** of that row SHALL NOT change in any later
-   version — the same stability rule enums apply to value *meaning*. A changed
-   decode of an existing column means a new value, not a mutated cell.
-4. **Additive attribute schema.** In a `versioned` structured enum a new version
-   MAY **add** an attribute column (appended after existing columns; never
-   inserted, removed, renamed, reordered, or retyped) and SHALL then populate it
-   for *every* existing value, preserving totality. The back-populated cell is
-   frozen by invariant 3 from the version it ships in. `literal` structured enums
-   have a fixed attribute schema (version `000` only).
-
 ## Forbidden Extra Fields
 
 Enum schema files SHALL NOT include any top-level fields other than:
@@ -201,8 +130,6 @@ other than:
 - `version`
 - `value_descriptions`
 - `extended_description`
-- `value_attribute_schema`
-- `value_attributes`
 
 ## Evolution Rules
 

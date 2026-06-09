@@ -13,7 +13,12 @@ Sema. Formats are immutable vocabulary words that refine JSON primitive
 types (e.g., `string`, `integer`) with additional structural or semantic
 constraints.
 
-Formats SHALL NOT reference other Sema vocabulary.
+Formats SHALL NOT reference other Sema vocabulary. This binds a format's
+**validation behaviour**, not only its schema: a format's validator — and the
+code generated from it — SHALL NOT depend on any other Sema vocabulary (e.g. a
+pattern validator MUST NOT consult an enum's members). A format is a
+dependency-free leaf; if validation genuinely needs another word, the construct
+belongs in a type or an axiom, not a format.
 
 ## Naming
 

@@ -478,7 +478,7 @@ enums:
     latest_version: "000"
     owner: gridworks-energy
     enum_type: "versioned"
-    description: "GridWorks's structured market-product vocabulary; each token decodes to its slot timing"
+    description: "GridWorks's market-product vocabulary; each token names a product whose slot timing is encoded in the token"
 
     versions:
       "000":
@@ -1686,6 +1686,7 @@ types:
         direct_dependencies:
           structural:
             - "left.right.dot"
+            - "market.quantity.unit:000"
             - "uuid4.str"
 
   new.command.tree:

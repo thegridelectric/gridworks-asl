@@ -86,6 +86,13 @@ def is_market_slot_name(v: str) -> str:
     if not MARKET_SLOT_NAME_PATTERN.fullmatch(v):
         raise ValueError(f"<{v}>: Fails market.slot.name format.")
 
+    slot_start = int(v.rsplit(".", 1)[1])
+    if slot_start % 300 != 0:
+        raise ValueError(
+            f"<{v}>: market.slot.name slot start {slot_start} must be divisible "
+            "by 300 (every market slot starts on a 5-minute grid)."
+        )
+
     return v
 
 

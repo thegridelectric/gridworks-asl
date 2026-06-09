@@ -119,12 +119,16 @@ HexChar = Annotated[
 
     "market.slot.name": {
         "class_name": "MarketSlotName",
-        # Self-contained shape-only leaf (no enum, no other-format calls):
+        # Self-contained leaf (no enum, no other-format calls):
         #   [erd] . <product: spaceheat.name shape> . <maker alias: left.right.dot shape> . <10-digit slot start>
         # The product segment is constrained to the single-token spaceheat.name
-        # shape (lowercase, internal hyphens, no dots). Whether the token is a
-        # real product, and slot-start alignment, are the receiving market
-        # maker's concern (decoded opt-in via that maker's product-name enum).
+        # shape (lowercase, internal hyphens, no dots). The slot start MUST be
+        # divisible by 300 — every market slot starts on a 5-minute grid (a
+        # GridWorks ecosystem invariant; arithmetic, so enforced in the
+        # validator, not the pattern). Whether the token is a real product, and
+        # whether the start aligns to that product's specific slot duration,
+        # remain the receiving market maker's concern (decoded opt-in via that
+        # maker's product-name enum).
         "pattern": r"^[erd]\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*\.[a-z][a-z0-9]*(?:\.[a-z0-9]+)*\.[0-9]{10}$",
         "methods": """
 def is_market_slot_name(v: str) -> str:
@@ -133,6 +137,13 @@ def is_market_slot_name(v: str) -> str:
 
     if not MARKET_SLOT_NAME_PATTERN.fullmatch(v):
         raise ValueError(f"<{v}>: Fails market.slot.name format.")
+
+    slot_start = int(v.rsplit(".", 1)[1])
+    if slot_start % 300 != 0:
+        raise ValueError(
+            f"<{v}>: market.slot.name slot start {slot_start} must be divisible "
+            "by 300 (every market slot starts on a 5-minute grid)."
+        )
 
     return v
 """,
