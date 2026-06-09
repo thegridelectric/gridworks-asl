@@ -3,7 +3,7 @@
         - B: number -> integer
         - Semantics: clarify OutputUnit scaling domain
         """
-        raise ValueError(
+        raise SemaType.upgrade_requires_context(
             "{{ linear_one_dimensional_calibration_000_class_name }} cannot be "
             "upgraded to {{ linear_one_dimensional_calibration_001_class_name }} "
             "without calibration source context needed to convert B into the "

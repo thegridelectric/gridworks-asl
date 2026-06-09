@@ -20,7 +20,7 @@ class SendLayout000(SemaType):
         - ToName: remove
         - MessageCreatedMs: add
         """
-        raise ValueError(
+        raise SemaType.upgrade_requires_context(
             "SendLayout000 cannot be upgraded to "
             "SendLayout without the source message context "
             "needed to supply MessageCreatedMs."

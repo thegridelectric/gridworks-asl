@@ -4,7 +4,7 @@
         - ToName: remove
         - MessageCreatedMs: add
         """
-        raise ValueError(
+        raise SemaType.upgrade_requires_context(
             "{{ send_layout_000_class_name }} cannot be upgraded to "
             "{{ send_layout_001_class_name }} without the source message context "
             "needed to supply MessageCreatedMs."

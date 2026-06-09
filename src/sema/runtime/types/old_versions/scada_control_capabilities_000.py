@@ -63,7 +63,7 @@ class ScadaControlCapabilities000(SemaType):
         - ControlChannels[]: inline object -> data.channel.gt:001
         - Axioms: add control surface consistency checks
         """
-        raise ValueError(
+        raise SemaType.upgrade_requires_context(
             "ScadaControlCapabilities000 cannot be upgraded to "
             "ScadaControlCapabilities without the source "
             "layout context needed to supply SpaceheatNodeGt.Handle, "

@@ -30,6 +30,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+from {{ import_root }}.base import UpgradeRequiresContext
 from {{ import_root }}.codec import default_codec
 
 SAMPLES_DIR = Path(__file__).resolve().parent / "samples"
@@ -69,12 +70,17 @@ def check_sample(path: Path) -> RoundTripFailure | None:
             f"round-trip). sample={data!r} reencoded={reencoded!r}",
         )
 
-    # Superseded version: exercise the upgrade chain to latest.
+    # Superseded version: exercise the upgrade chain to latest. A version whose
+    # upgrade legitimately needs out-of-band context refuses with
+    # UpgradeRequiresContext — that is an expected outcome, not a failure (the
+    # sample still proved decode-at-own-version above).
     current_cls = default_codec.registry.get(type_name)
     if current_cls is not None and version != current_cls.version_value():
         try:
             upgraded = default_codec.from_dict(data, mode="strict", auto_upgrade=True)
             upgraded.to_dict()
+        except UpgradeRequiresContext:
+            pass
         except Exception as exc:  # noqa: BLE001
             return RoundTripFailure(
                 path.name, f"upgrade decode-old -> latest failed: {exc}"
