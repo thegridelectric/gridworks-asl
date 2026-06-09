@@ -83,11 +83,13 @@ class LayoutLite007(SemaType):
         """
         - SystemMode: add
         - SeasonalStorageMode: add
+        - ShNodes[]: spaceheat.node.gt:200 -> 300
         - TankModuleComponents[]: pico.tank.module.component.gt only -> pico.tank.module.component.gt | sim.pico.tank.module.component.gt
         - DerivedNodeConsistency axiom: add
         """
         data = self.model_dump()
         data["system_mode"] = "Heating"
         data["seasonal_storage_mode"] = "AllTanks"
+        data["sh_nodes"] = [node.upgrade() for node in self.sh_nodes]
         data["version"] = "008"
         return LayoutLite008.model_validate(data)

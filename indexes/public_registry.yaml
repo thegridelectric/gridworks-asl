@@ -1268,9 +1268,9 @@ types:
       008:
         schema_url: https://schemas.electricity.works/types/layout.lite/008
         created: '2026-01-15T18:00:00Z'
-        summary: '- SystemMode: add - SeasonalStorageMode: add - TankModuleComponents[]:
-          pico.tank.module.component.gt only -> pico.tank.module.component.gt | sim.pico.tank.module.component.gt
-          - DerivedNodeConsistency axiom: add'
+        summary: '- SystemMode: add - SeasonalStorageMode: add - ShNodes[]: spaceheat.node.gt:200
+          -> 300 - TankModuleComponents[]: pico.tank.module.component.gt only -> pico.tank.module.component.gt
+          | sim.pico.tank.module.component.gt - DerivedNodeConsistency axiom: add'
         direct_dependencies:
           structural:
           - data.channel.gt:001
