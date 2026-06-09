@@ -17,7 +17,7 @@ class LinearOneDimensionalCalibration000(SemaType):
         - B: number -> integer
         - Semantics: clarify OutputUnit scaling domain
         """
-        raise ValueError(
+        raise SemaType.upgrade_requires_context(
             "LinearOneDimensionalCalibration000 cannot be "
             "upgraded to LinearOneDimensionalCalibration "
             "without calibration source context needed to convert B into the "

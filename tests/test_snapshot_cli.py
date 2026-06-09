@@ -54,7 +54,14 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
     assert (target_root / "indexes" / "lookup.yaml").exists()
     assert (target_root / "indexes" / "reverse_dependencies.yaml").exists()
     assert (target_root / "indexes" / "versions.yaml").exists()
-    assert (target_root / "tests" / "test_property_format.py").exists()
+    # Snapshots ship data, not test code: no vendored tests/ directory.
+    assert not (target_root / "tests").exists()
+    # Round-trip harness + generated samples ship instead.
+    assert (target_root / "roundtrip.py").exists()
+    assert (target_root / "samples" / "README.md").exists()
+    sample_files = list((target_root / "samples").glob("*.json"))
+    assert sample_files, "expected at least one generated sample"
+    assert any("channel.readings.list.item" in p.name for p in sample_files)
     assert "from gjk.sema.base import" in (target_root / "codec.py").read_text()
     assert (target_root / "enums" / "emission_method.py").exists()
     assert not (target_root / "enums" / "gw1_emission_method.py").exists()

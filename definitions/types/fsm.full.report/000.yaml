@@ -34,5 +34,27 @@ required:
 
 additionalProperties: true
 
+examples:
+  - |
+    {
+      "FromName": "s",
+      "TriggerId": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+      "AtomicList": [
+        {
+          "MachineHandle": "auto.pico-cycler.vdc-relay-gpio-23",
+          "StateEnum": "relay.closed.or.open",
+          "ReportType": "Action",
+          "ActionType": "RelayPinSet",
+          "Action": 1,
+          "UnixTimeMs": 1774956898001,
+          "TriggerId": "2f18a5a0-cdf9-4782-95a9-5fbb44d3512f",
+          "TypeName": "fsm.atomic.report",
+          "Version": "000"
+        }
+      ],
+      "TypeName": "fsm.full.report",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

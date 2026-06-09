@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
 import yaml
@@ -22,6 +26,19 @@ from sema.tools.build_seed_definitions import (
 )
 from sema.tools.build_seed_expanded import expand_seed
 from sema.tools.runtime_generation.generate_runtime import generate_runtime_from_dag
+from sema.tools.snapshot_lint import lint_generated_tree
+
+# Files and directories the runtime generator owns inside a snapshot. Cleared
+# and rewritten on every build; the prepared `definitions/` and `indexes/` are
+# left alone.
+_RUNTIME_FILES = (
+    "__init__.py",
+    "base.py",
+    "codec.py",
+    "property_format.py",
+    "roundtrip.py",
+)
+_RUNTIME_DIRS = ("enums", "types", "samples", "tests")
 
 
 def snapshot_root() -> Path:
@@ -126,17 +143,76 @@ def prepare_snapshot(seed_request: Path) -> Path:
 
 
 def _clear_runtime_outputs(target_root: Path) -> None:
-    for name in ("enums", "types", "tests"):
+    for name in _RUNTIME_DIRS:
         path = target_root / name
         if path.exists():
             shutil.rmtree(path)
-    for name in ("__init__.py", "base.py", "codec.py", "property_format.py"):
+    for name in _RUNTIME_FILES:
         path = target_root / name
         if path.exists():
             path.unlink()
 
 
-def build_snapshot_runtime(package_name: str) -> Path:
+def _run_samples_and_roundtrip(
+    staged_parent: Path, definitions_root: Path, samples_dir: Path, import_root: str
+) -> None:
+    """Generate ``samples/`` and run the round-trip gate in a subprocess.
+
+    The staged package's internal imports use ``import_root`` (e.g. ``gjk.sema``),
+    so it is importable only when ``staged_parent`` is on ``sys.path``. Running in
+    a subprocess gives that import a clean process and isolates pydantic model
+    registration from the build. A non-zero exit (round-trip failure) raises, so
+    the caller aborts before touching the previous snapshot.
+    """
+    env = dict(os.environ)
+    env["PYTHONPATH"] = os.pathsep.join(
+        [str(staged_parent), env.get("PYTHONPATH", "")]
+    ).rstrip(os.pathsep)
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "sema.tools.snapshot_check",
+            "--definitions",
+            str(definitions_root),
+            "--samples",
+            str(samples_dir),
+            "--import-root",
+            import_root,
+        ],
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.stdout:
+        print(result.stdout, end="")
+    if result.returncode != 0:
+        raise RuntimeError(
+            "Snapshot round-trip gate failed (snapshot left unchanged):\n"
+            + result.stdout
+            + result.stderr
+        )
+
+
+def _swap_runtime_into(target_root: Path, staged: Path) -> None:
+    """Replace the runtime portion of ``target_root`` with the staged tree.
+
+    Runs only after every gate is green, so a failed build never reaches here —
+    the previous snapshot is left byte-for-byte unchanged on any gate failure.
+    """
+    _clear_runtime_outputs(target_root)
+    for name in _RUNTIME_FILES:
+        source = staged / name
+        if source.exists():
+            shutil.copy2(source, target_root / name)
+    for name in _RUNTIME_DIRS:
+        source = staged / name
+        if source.exists():
+            shutil.copytree(source, target_root / name)
+
+
+def build_snapshot_runtime(package_name: str, *, strict_lint: bool = False) -> Path:
     package_name = validate_package_name(package_name)
     target_root = snapshot_root()
     expanded_seed = target_root / "indexes" / "seed_expanded.yaml"
@@ -150,15 +226,43 @@ def build_snapshot_runtime(package_name: str) -> Path:
     seed = load_seed(expanded_seed)
     restricted_registry = load_seed(target_root / "definitions" / "registry.yaml")
     import_root = f"{package_name}.sema"
-    _clear_runtime_outputs(target_root)
-    generate_runtime_from_dag(
-        target_root,
-        seed,
-        restricted_registry,
-        import_root=import_root,
-        local_names=local_names,
-        write_tests=True,
-    )
+
+    # Generate into a staged tree, gate it there, and swap into place only on
+    # green. The staged package lives at ``<tmp>/<package_name>/sema`` so its
+    # ``import_root`` resolves for the round-trip subprocess. A failed gate is a
+    # no-op: ``target_root`` is untouched until every gate passes.
+    with tempfile.TemporaryDirectory() as tmp:
+        staged_parent = Path(tmp)
+        (staged_parent / package_name).mkdir(parents=True, exist_ok=True)
+        (staged_parent / package_name / "__init__.py").write_text("")
+        staged = staged_parent / package_name / "sema"
+        staged.mkdir(parents=True, exist_ok=True)
+
+        generate_runtime_from_dag(
+            staged,
+            seed,
+            restricted_registry,
+            import_root=import_root,
+            local_names=local_names,
+        )
+
+        # ruff format (in place) + ruff check / mypy report. Format makes a
+        # re-build a zero diff; check/mypy surface generator bugs.
+        violations = lint_generated_tree(staged, strict=strict_lint)
+        for violation in violations:
+            print(f"[lint] {violation}")
+
+        # Generate samples/ and run the per-type round-trip gate (the atn.bid
+        # guard). Raises on failure, leaving the previous snapshot untouched.
+        _run_samples_and_roundtrip(
+            staged_parent,
+            target_root / "definitions",
+            staged / "samples",
+            import_root,
+        )
+
+        _swap_runtime_into(target_root, staged)
+
     return target_root
 
 
@@ -170,7 +274,9 @@ def _run_prepare(args: argparse.Namespace) -> None:
 
 
 def _run_build(args: argparse.Namespace) -> None:
-    target_root = build_snapshot_runtime(args.package_name)
+    target_root = build_snapshot_runtime(
+        args.package_name, strict_lint=args.strict_lint
+    )
     print(f"Built snapshot runtime at {target_root}")
 
 
@@ -211,4 +317,12 @@ def add_parser(subparsers: argparse._SubParsersAction) -> None:
         ),
     )
     build_parser.add_argument("--package-name", required=True)
+    build_parser.add_argument(
+        "--strict-lint",
+        action="store_true",
+        help=(
+            "Treat ruff check / mypy findings on generated code as build "
+            "failures (default: report only). ruff format always runs."
+        ),
+    )
     build_parser.set_defaults(handler=_run_build)

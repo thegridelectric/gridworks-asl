@@ -77,6 +77,20 @@ required:
 
 additionalProperties: true
 
+examples:
+  - |
+    {
+      "Name": "relay1",
+      "ActorHierarchyName": "s.relay1",
+      "Handle": "auto.pico-cycler.relay1",
+      "ActorClass": "Relay",
+      "DisplayName": "5VDC Relay",
+      "ComponentId": "25f344ee-39ea-4904-bff9-54f2022337af",
+      "ShNodeId": "a7f4becc-8e35-4118-a3e9-ab6ad13f5a67",
+      "TypeName": "spaceheat.node.gt",
+      "Version": "300"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
   axioms:

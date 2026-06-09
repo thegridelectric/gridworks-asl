@@ -40,6 +40,17 @@ required:
 
 additionalProperties: true
 
+examples:
+  - |
+    {
+      "ChannelName": "s",
+      "ChannelId": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+      "ValueList": [100, 200],
+      "ScadaReadTimeUnixMsList": [1704067200000, 1704067260000],
+      "TypeName": "channel.readings",
+      "Version": "001"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
   axioms:

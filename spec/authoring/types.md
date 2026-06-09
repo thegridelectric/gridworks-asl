@@ -394,9 +394,11 @@ Over time, as schemas stabilize, types SHOULD transition toward:
 additionalProperties: false
 ```
 
-## Examples (Optional)
+## Examples
 
-Types MAY include an `examples` field.
+Types MAY include an `examples` field. It is **optional for the latest version
+of a type and for versionless types**, but **a superseded type version MUST
+carry at least one `examples:` entry** (see *Superseded versions* below).
 
 If present:
 
@@ -430,3 +432,19 @@ examples:
 
 Examples are optional but strongly recommended for public-facing types
 and core system messages.
+
+### Superseded versions
+
+A type version that has a successor (a numerically higher version exists for the
+same type) is **superseded** and MUST carry at least one `examples:` entry. The
+mandate binds only once a version has a successor — the latest version stays
+optional (above).
+
+Rationale: superseded versions exist precisely to be **upgraded**, and the
+`decode-old → upgrade() → decode-current` path is where snapshot/runtime bugs
+concentrate (a restricted snapshot whose vocabulary no longer matches the older
+data it must carry). The example is the fixture the snapshot round-trip
+exercises against that version, so a superseded version without one is silently
+untested. Adding an example to an already-published version is permitted — it is
+non-normative and alters no validation behavior (see
+[../registry/types.md](../registry/types.md) "Permitted Changes (All Types)").

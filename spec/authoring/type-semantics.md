@@ -278,3 +278,26 @@ value is assigned. Optional defaults declared in the schema SHALL NOT be
 relied upon for this purpose (see [types.md — Property
 Definitions](types.md#property-definitions)). The upgrade implementation
 is the canonical place for the assignment rule.
+
+### Context-Dependent Upgrades
+
+Some `old → new` upgrades cannot be performed on a standalone instance
+because the transformation needs information the isolated message does not
+carry — for example, a new version that replaces inline node/channel stubs
+with full vocabulary objects requiring handles or ids that only the source
+**layout** holds, or a field that can only be derived from the originating
+**request**. Such an upgrade SHALL NOT fabricate or guess the missing
+values. It MUST refuse, and it SHALL signal the refusal with a typed,
+machine-detectable error rather than a generic one.
+
+In the Python SDK this is the `UpgradeRequiresContext` exception (a
+`SemaError`/`ValueError` subclass on the runtime base), raised via
+`SemaType.upgrade_requires_context(<reason>)`. Tooling that exercises the
+upgrade chain (the snapshot round-trip gate) treats `UpgradeRequiresContext`
+as an **expected outcome**, not a failure: a version with a context-dependent
+upgrade is still required to carry an `examples:` entry and still MUST
+round-trip at its **own** version (decode → re-encode), but is exempt from
+the `decode-old → upgrade() → decode-current` leg. A context-dependent
+upgrade is a property of the version transition, not a license to skip the
+example — the own-version round-trip is what proves the (possibly restricted)
+runtime can still decode that version's wire form.

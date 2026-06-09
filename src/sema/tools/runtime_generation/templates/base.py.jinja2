@@ -46,6 +46,20 @@ class SemaError(Exception):
     """Base exception for Sema-related errors."""
 
 
+class UpgradeRequiresContext(SemaError, ValueError):
+    """Raised by an ``upgrade()`` that cannot run on a standalone instance.
+
+    Some old -> new upgrades need out-of-band context the isolated message
+    does not carry (e.g. the source layout that supplies node handles / ids,
+    or the originating request). Such an upgrade refuses by design rather
+    than fabricating values. The round-trip gate recognizes this exception
+    as an *expected* outcome for that version: the sample is still required
+    and still round-trips at its own version, but the decode-old -> upgrade
+    step is exempt. Subclasses ``ValueError`` so existing ``except ValueError``
+    callers keep working.
+    """
+
+
 T = TypeVar("T", bound="SemaType")
 
 
@@ -98,6 +112,15 @@ class SemaType(BaseModel):
     # ------------------------------------------------------------------------
     # Introspection
     # ------------------------------------------------------------------------
+
+    @staticmethod
+    def upgrade_requires_context(message: str) -> "UpgradeRequiresContext":
+        """Factory for the exception an ``upgrade()`` raises when it needs
+        out-of-band context to run (see :class:`UpgradeRequiresContext`).
+        Lets an upgrade body raise it via the already-imported ``SemaType``
+        without an extra import:
+        ``raise SemaType.upgrade_requires_context("...")``."""
+        return UpgradeRequiresContext(message)
 
     @classmethod
     def type_name_value(cls) -> str:

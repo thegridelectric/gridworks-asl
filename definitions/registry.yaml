@@ -1575,6 +1575,7 @@ types:
         summary: >-
           - SystemMode: add
           - SeasonalStorageMode: add
+          - ShNodes[]: spaceheat.node.gt:200 -> 300
           - TankModuleComponents[]: pico.tank.module.component.gt only -> pico.tank.module.component.gt | sim.pico.tank.module.component.gt
           - DerivedNodeConsistency axiom: add
         direct_dependencies:

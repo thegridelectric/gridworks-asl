@@ -41,13 +41,18 @@ def _write_codec(target_root, import_root: str) -> None:
     )
 
 
+def _write_roundtrip(target_root, import_root: str) -> None:
+    (target_root / "roundtrip.py").write_text(
+        _render_template("roundtrip.py.jinja2", import_root=import_root)
+    )
+
+
 def generate_runtime_from_dag(
     target_root,
     seed,
     registry,
     import_root: str,
     local_names=None,
-    write_tests: bool = False,
 ):
     """Generate a sema runtime package.
 
@@ -67,7 +72,7 @@ def generate_runtime_from_dag(
     _write_package_init(target_root, import_root)
     _write_base(target_root)
 
-    generate_formats(target_root, dag, seed, import_root, write_tests=write_tests)
+    generate_formats(target_root, dag, seed, import_root)
     generate_enums(
         target_root,
         dag,
@@ -86,3 +91,4 @@ def generate_runtime_from_dag(
         import_root,
         local_names,
     )
+    _write_roundtrip(target_root, import_root)
