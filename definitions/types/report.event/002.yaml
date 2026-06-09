@@ -37,6 +37,80 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "MessageId": "693f6cb2-3cfa-4fdd-a5af-bdf18f5221f0",
+      "TimeCreatedMs": 1771866033942,
+      "Src": "hw1.isone.me.versant.keene.beech.scada",
+      "Report": {
+        "FromGNodeAlias": "hw1.isone.me.versant.keene.beech.scada",
+        "FromGNodeInstanceId": "f5139dbe-87f0-4f2c-aa59-bd14d65f49f3",
+        "AboutGNodeAlias": "d1.isone.me.versant.keene.beech",
+        "SlotStartUnixS": 1771866000,
+        "SlotDurationS": 300,
+        "ChannelReadingList": [
+          {
+            "ChannelName": "primary-flow",
+            "ValueList": [
+              0
+            ],
+            "ScadaReadTimeUnixMsList": [
+              1774915200601
+            ],
+            "TypeName": "channel.readings",
+            "Version": "002"
+          },
+          {
+            "ChannelName": "hp-lwt",
+            "ValueList": [
+              14720
+            ],
+            "ScadaReadTimeUnixMsList": [
+              1774915200601
+            ],
+            "TypeName": "channel.readings",
+            "Version": "002"
+          }
+        ],
+        "StateList": [
+          {
+            "MachineHandle": "ltn.la",
+            "StateEnum": "gw1.leaf.ally.all.tanks.state",
+            "StateList": [
+              "HpOffStoreDischarge"
+            ],
+            "UnixMsList": [
+              1774915252787
+            ],
+            "TypeName": "machine.states",
+            "Version": "000"
+          },
+          {
+            "MachineHandle": "ltn.la.relay9",
+            "StateEnum": "relay.closed.or.open",
+            "StateList": [
+              "RelayClosed",
+              "RelayClosed"
+            ],
+            "UnixMsList": [
+              1774915252813,
+              1774915498004
+            ],
+            "TypeName": "machine.states",
+            "Version": "000"
+          }
+        ],
+        "FsmReportList": [],
+        "MessageCreatedMs": 1771866033942,
+        "Id": "693f6cb2-3cfa-4fdd-a5af-bdf18f5221f0",
+        "TypeName": "report",
+        "Version": "002"
+      },
+      "TypeName": "report.event",
+      "Version": "002"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
 

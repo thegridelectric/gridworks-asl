@@ -154,6 +154,13 @@ this hub.
   conflict resolution, reserved namespaces. The canonical home for "how
   vocabulary gets in and how it changes."
 
+- **[snapshot.md](snapshot.md)** — the tooling contract for producing a
+  **restricted runtime snapshot** for a consumer: determinism (zero-diff
+  regen), atomic build, the generated `samples/`, and the round-trip gate
+  (including the context-dependent-upgrade exemption). Language-neutral
+  guarantees; the reference implementation is the Python SDK under
+  `src/sema/tools/`.
+
 ## Glossary
 
 | Term | Meaning |

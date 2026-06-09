@@ -6,16 +6,14 @@ latest version (and versionless types) stay optional. The example is the fixture
 the snapshot round-trip exercises along the ``decode-old -> upgrade() ->
 decode-current`` path, so a superseded version without one is silently untested.
 
-Marked ``xfail`` (non-strict) while the one-time backfill of existing old
-versions is outstanding (OPS-380 thread 4). When the backfill lands this xpasses
-— remove the marker to promote it to a hard gate.
+Hard gate: the one-time backfill of existing old versions landed (OPS-380
+thread 4), so every superseded version now carries an example.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
 import yaml
 
 TYPES_DIR = Path("definitions/types")
@@ -46,10 +44,6 @@ def _superseded_versions_missing_examples() -> list[str]:
     return missing
 
 
-@pytest.mark.xfail(
-    reason="OPS-380 thread 4 backfill outstanding; remove marker once complete",
-    strict=False,
-)
 def test_superseded_type_versions_have_examples() -> None:
     missing = _superseded_versions_missing_examples()
     assert not missing, (

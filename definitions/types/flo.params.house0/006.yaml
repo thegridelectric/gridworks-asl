@@ -428,6 +428,63 @@ required:
 
 additionalProperties: true
 
+examples:
+  - |
+    {
+      "GNodeAlias": "d1.isone.me.versant.keene.beech.scada",
+      "FloParamsUid": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+      "TimezoneStr": "America/New_York",
+      "StartUnixS": 1704067200,
+      "NumLayers": 24,
+      "HorizonHours": 48,
+      "StorageVolumeGallons": 240,
+      "StorageLossesPercent": 2.0,
+      "HpMinElecKw": 0.0,
+      "HpMaxElecKw": 6.0,
+      "MaxHpKwhTh": 3.0,
+      "MaxLoadKwhTh": 3.0,
+      "BufferAvailableKwh": 0.0,
+      "HouseAvailableKwh": 0.0,
+      "CopIntercept": 1.4,
+      "CopOatCoeff": 0.04,
+      "CopMin": 1.4,
+      "CopMinOatF": 15.0,
+      "CopLwtCoeff": 0.0,
+      "InitialTopTempF": 140,
+      "InitialMiddleTempF": 130,
+      "InitialBottomTempF": 120,
+      "HpIsOff": true,
+      "HpTurnOnMinutes": 10,
+      "InitialThermocline1": 8,
+      "InitialThermocline2": 16,
+      "PriceForecastUid": "8d2a4c1e-0b3f-4a6d-9c7e-1f2a3b4c5d6e",
+      "WeatherUid": "7a1b2c3d-4e5f-4061-8273-849506a7b8c9",
+      "AlphaTimes10": 120,
+      "BetaTimes100": -22,
+      "GammaEx6": 0,
+      "IntermediatePowerKw": 1.5,
+      "IntermediateRswtF": 110,
+      "DdPowerKw": 5.0,
+      "DdRswtF": 150,
+      "DdDeltaTF": 20,
+      "MaxEwtF": 170,
+      "RswtPenaltyEnabled": true,
+      "StabilityPenaltyEnabled": true,
+      "RswtPenaltyWeight": 1.0,
+      "RswtPenaltyDecay": 0.9,
+      "RswtPenaltyExponentRate": 2.0,
+      "RswtPenaltyDecayMaxHour": 12,
+      "StabilityPenaltyWeight": 1.0,
+      "StabilityPenaltyDecay": 0.9,
+      "StabilityPenaltyThresholdKwh": 0.5,
+      "StabilityPenaltyHorizonHours": 12,
+      "PriceUnit": "USDPerMWh",
+      "ParamsGeneratedS": 1704067200,
+      "ConstantDeltaT": 20,
+      "TypeName": "flo.params.house0",
+      "Version": "006"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
   extended_description: >
