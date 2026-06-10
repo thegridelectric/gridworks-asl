@@ -488,8 +488,9 @@ enums:
       '000': definitions/enums/gw1.heat.call.interpretation/000.yaml
   gw1.unit:
     enum_type: versioned
-    latest_version: '001'
+    latest_version: '002'
     versions:
+      '002': definitions/enums/gw1.unit/002.yaml
       '001': definitions/enums/gw1.unit/001.yaml
       '000': definitions/enums/gw1.unit/000.yaml
   heatcall.source:

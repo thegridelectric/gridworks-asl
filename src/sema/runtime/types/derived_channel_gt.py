@@ -2,9 +2,9 @@ from typing import Any, Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import Gw1EmissionMethod
-from sema.runtime.enums import Gw1Unit
 from sema.runtime.enums.old_versions.gw1_quantity_000 import Gw1Quantity000
 from sema.runtime.enums.old_versions.gw1_unit_000 import Gw1Unit000
+from sema.runtime.enums.old_versions.gw1_unit_001 import Gw1Unit001
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import SpaceheatName
@@ -66,7 +66,7 @@ class DerivedChannelGt(SemaType):
         OutputQuantity SHALL equal the Quantity defined by the canonical
         gw1.unit.quantity.projection:000 instance for the specified OutputUnit.
         """
-        expected = Gw1UnitQuantityProjection.project(Gw1Unit(self.output_unit.value))
+        expected = Gw1UnitQuantityProjection.project(Gw1Unit001(self.output_unit.value))
         if self.output_quantity != expected:
             raise ValueError(
                 "Axiom 2 failed: output_quantity must match the canonical quantity "
