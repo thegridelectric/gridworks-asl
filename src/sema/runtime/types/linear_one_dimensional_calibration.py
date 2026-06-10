@@ -8,5 +8,7 @@ class LinearOneDimensionalCalibration(SemaType):
 
     m: StrictFloat
     b: StrictInt
-    type_name: Literal["linear.one.dimensional.calibration"] = "linear.one.dimensional.calibration"
+    type_name: Literal["linear.one.dimensional.calibration"] = (
+        "linear.one.dimensional.calibration"
+    )
     version: Literal["001"] = "001"

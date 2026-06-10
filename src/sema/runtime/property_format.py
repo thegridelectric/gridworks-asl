@@ -11,29 +11,19 @@ HANDLE_NAME_PATTERN = re.compile(
     r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)*$"
 )
 
-HEX_CHAR_PATTERN = re.compile(
-    r"^[0-9a-fA-F]$"
-)
+HEX_CHAR_PATTERN = re.compile(r"^[0-9a-fA-F]$")
 
-LEFT_RIGHT_DOT_PATTERN = re.compile(
-    r"^[a-z][a-z0-9]*(\.[a-z0-9]+)*$"
-)
+LEFT_RIGHT_DOT_PATTERN = re.compile(r"^[a-z][a-z0-9]*(\.[a-z0-9]+)*$")
 
 MARKET_SLOT_NAME_PATTERN = re.compile(
     r"^[erd]\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*\.[a-z][a-z0-9]*(?:\.[a-z0-9]+)*\.[0-9]{10}$"
 )
 
-PASCAL_CASE_PATTERN = re.compile(
-    r"^[A-Z][A-Za-z0-9]*$"
-)
+PASCAL_CASE_PATTERN = re.compile(r"^[A-Z][A-Za-z0-9]*$")
 
-POSITIVE_INT_AS_STR_PATTERN = re.compile(
-    r"^[1-9][0-9]*$"
-)
+POSITIVE_INT_AS_STR_PATTERN = re.compile(r"^[1-9][0-9]*$")
 
-SPACEHEAT_NAME_PATTERN = re.compile(
-    r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
-)
+SPACEHEAT_NAME_PATTERN = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 
 UTC_ISO8601_MILLIS_PATTERN = re.compile(
     r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$"

@@ -31,9 +31,7 @@ class Gw1UnitQuantityProjection(SemaType):
     def project(cls, unit: Gw1Unit001) -> Gw1Quantity:
         expected = _PROJECTION.get(unit)
         if expected is None:
-            raise ValueError(
-                f"No projection defined for unit {unit!r}."
-            )
+            raise ValueError(f"No projection defined for unit {unit!r}.")
         return expected
 
     @model_validator(mode="after")

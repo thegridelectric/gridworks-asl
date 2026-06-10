@@ -47,7 +47,7 @@ class SyncedReadingsBundle(SemaType):
 
         if duplicates:
             raise ValueError(
-                f'ChannelDefinitionBijection: ChannelName values {",".join(sorted(duplicates))} were repeated.'
+                f"ChannelDefinitionBijection: ChannelName values {','.join(sorted(duplicates))} were repeated."
             )
         return self
 
@@ -94,23 +94,27 @@ class SyncedReadingsBundle(SemaType):
         """
         if Gw1Unit001.enum_version() != "001":
             raise ValueError(
-                f'UnitTypeAndValueRepresentationConsistency: Gw1Unit version should be "001", is { Gw1Unit001.enum_version()}'
+                f'UnitTypeAndValueRepresentationConsistency: Gw1Unit version should be "001", is {Gw1Unit001.enum_version()}'
             )
 
         if SpaceheatTelemetryName.enum_version() != "007":
             raise ValueError(
                 "UnitTypeAndValueRepresentationConsistency: "
-                f'SpaceheatTelemetryName version should be "007", is { SpaceheatTelemetryName.enum_version()}'
+                f'SpaceheatTelemetryName version should be "007", is {SpaceheatTelemetryName.enum_version()}'
             )
 
         errors = []
         for crl in self.channel_readings_list:
             if crl.unit_type == Gw1Unit001.enum_name():
                 if crl.unit not in Gw1Unit001.values():
-                    errors.append(f"{crl.channel_name}: {crl.unit} not found in {crl.unit_type}")
+                    errors.append(
+                        f"{crl.channel_name}: {crl.unit} not found in {crl.unit_type}"
+                    )
             elif crl.unit_type == SpaceheatTelemetryName.enum_name():
                 if crl.unit not in SpaceheatTelemetryName.values():
-                    errors.append(f"{crl.channel_name}: {crl.unit} not found in {crl.unit_type}")
+                    errors.append(
+                        f"{crl.channel_name}: {crl.unit} not found in {crl.unit_type}"
+                    )
             else:
                 errors.append(f"{crl.channel_name}: invalid unit type {crl.unit_type}")
 

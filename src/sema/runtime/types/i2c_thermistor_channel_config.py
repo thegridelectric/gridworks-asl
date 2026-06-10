@@ -20,5 +20,7 @@ class I2cThermistorChannelConfig(SemaType):
     adc_channel: I2cAdcChannel
     send_to_derived: bool = False
     thermistor_beta: PositiveInt
-    type_name: Literal["i2c.thermistor.channel.config"] = "i2c.thermistor.channel.config"
+    type_name: Literal["i2c.thermistor.channel.config"] = (
+        "i2c.thermistor.channel.config"
+    )
     version: Literal["000"] = "000"

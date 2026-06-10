@@ -103,7 +103,9 @@ def run_roundtrip(samples_dir: Path | None = None) -> list[RoundTripFailure]:
 
 def main() -> int:
     failures = run_roundtrip()
-    sample_count = len(sorted(SAMPLES_DIR.glob("*.json"))) if SAMPLES_DIR.exists() else 0
+    sample_count = (
+        len(sorted(SAMPLES_DIR.glob("*.json"))) if SAMPLES_DIR.exists() else 0
+    )
     if failures:
         print(f"Round-trip FAILED for {len(failures)}/{sample_count} sample(s):")
         for failure in failures:

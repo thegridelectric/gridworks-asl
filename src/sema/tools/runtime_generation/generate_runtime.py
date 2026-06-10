@@ -9,6 +9,7 @@ from sema.tools.runtime_generation.enums import generate_enums
 from sema.tools.runtime_generation.formats import generate_formats
 from sema.tools.runtime_generation.helpers import load_local_names_yaml
 from sema.tools.runtime_generation.types import generate_types
+from sema.tools.snapshot_lint import format_in_place
 
 
 TEMPLATE_ROOT = Path(__file__).parent / "templates"
@@ -92,3 +93,10 @@ def generate_runtime_from_dag(
         local_names,
     )
     _write_roundtrip(target_root, import_root)
+
+    # Canonicalize generated code with ruff format — the single source of style.
+    # The committed runtime is therefore ruff-clean (templates need not match
+    # ruff exactly), and the test_runtime_generation_* drift guards compare
+    # against formatted output. Idempotent for the snapshot path, which also
+    # formats via its lint gate.
+    format_in_place(Path(target_root))

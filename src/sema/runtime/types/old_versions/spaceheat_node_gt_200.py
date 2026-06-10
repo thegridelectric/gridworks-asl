@@ -33,7 +33,9 @@ class SpaceheatNodeGt200(SemaType):
         If InPowerMetering is true, NameplatePowerW SHALL be present.
         """
         if self.in_power_metering and self.nameplate_power_w is None:
-            raise ValueError("Axiom 1 failed: if in_power_metering is true, nameplate_power_w must be present.")
+            raise ValueError(
+                "Axiom 1 failed: if in_power_metering is true, nameplate_power_w must be present."
+            )
         return self
 
     def upgrade(self) -> SpaceheatNodeGt300:

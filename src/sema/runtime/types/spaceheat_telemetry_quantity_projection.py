@@ -37,7 +37,9 @@ class SpaceheatTelemetryQuantityProjection(SemaType):
 
     telemetry_name: SpaceheatTelemetryName
     quantity: Gw1Quantity000
-    type_name: Literal["spaceheat.telemetry.quantity.projection"] = "spaceheat.telemetry.quantity.projection"
+    type_name: Literal["spaceheat.telemetry.quantity.projection"] = (
+        "spaceheat.telemetry.quantity.projection"
+    )
     version: Literal["000"] = "000"
 
     @classmethod

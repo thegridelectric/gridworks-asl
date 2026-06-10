@@ -21,8 +21,8 @@ class GNodeGt(SemaType):
     type_name: Literal["g.node.gt"] = "g.node.gt"
     version: Literal["004"] = "004"
 
-    @model_validator(mode="after") 
-    def check_axiom_1(self) -> Self: 
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> Self:
         """
         Axiom 1: ClassConsistency
         a. If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass.

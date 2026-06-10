@@ -90,9 +90,7 @@ class FsmAtomicReport000(SemaType):
                 raise ValueError(
                     "FsmAtomicReport000.upgrade() only supports ActionType 'RelayPinSet'."
                 )
-            data["action"] = {
-                "Value": RelayEnergizationState(self.action).value
-            }
+            data["action"] = {"Value": RelayEnergizationState(self.action).value}
 
         data["version"] = "001"
         return FsmAtomicReport.model_validate(data)

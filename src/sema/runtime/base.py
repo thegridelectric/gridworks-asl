@@ -42,6 +42,7 @@ def snake_to_pascal(word: str) -> str:
 # BASE EXCEPTIONS
 # ============================================================================
 
+
 class SemaError(Exception):
     """Base exception for Sema-related errors."""
 
@@ -66,6 +67,7 @@ T = TypeVar("T", bound="SemaType")
 # ============================================================================
 # STRICT SEMA TYPE
 # ============================================================================
+
 
 class SemaType(BaseModel):
     """
@@ -180,6 +182,7 @@ class SemaType(BaseModel):
 # ============================================================================
 # DEGRADED TYPE
 # ============================================================================
+
 
 class DegradedSemaType:
     """

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from sema.tools.runtime_generation.formats import generate_formats
+from sema.tools.snapshot_lint import format_in_place
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -35,6 +36,7 @@ def test_generated_property_format_matches_runtime_property_format(tmp_path: Pat
         seed,
         import_root="sema.runtime",
     )
+    format_in_place(target_root)
 
     generated = (target_root / "property_format.py").read_text()
     checked_in = (REPO_ROOT / "src" / "sema" / "runtime" / "property_format.py").read_text()

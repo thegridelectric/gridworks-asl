@@ -12,12 +12,16 @@ from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.old_versions.data_channel_gt_001 import DataChannelGt001
 from sema.runtime.types.old_versions.derived_channel_gt_000 import DerivedChannelGt000
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
-from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import I2cMultichannelDtRelayComponentGt002
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
+    I2cMultichannelDtRelayComponentGt002,
+)
 from sema.runtime.types.old_versions.layout_lite_012 import LayoutLite012
 from sema.runtime.types.old_versions.spaceheat_node_gt_300 import SpaceheatNodeGt300
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
-from sema.runtime.types.sim_pico_tank_module_component_gt import SimPicoTankModuleComponentGt
+from sema.runtime.types.sim_pico_tank_module_component_gt import (
+    SimPicoTankModuleComponentGt,
+)
 from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 
 
@@ -37,7 +41,9 @@ class LayoutLite011(SemaType):
     sh_nodes: list[SpaceheatNodeGt300 | SpaceheatNodeGt]
     data_channels: list[DataChannelGt001]
     derived_channels: list[DerivedChannelGt000 | DerivedChannelGt001]
-    tank_module_components: list[PicoTankModuleComponentGt | SimPicoTankModuleComponentGt]
+    tank_module_components: list[
+        PicoTankModuleComponentGt | SimPicoTankModuleComponentGt
+    ]
     flow_module_components: list[PicoFlowModuleComponentGt]
     ha1_params: Ha1Params
     i2c_relay_component: I2cMultichannelDtRelayComponentGt002 | None = None
@@ -55,11 +61,22 @@ class LayoutLite011(SemaType):
         node_names = {node.name for node in self.sh_nodes}
         active_actorless = {"NoActor"}
         for channel in self.data_channels:
-            if channel.about_node_name not in node_names or channel.captured_by_node_name not in node_names:
-                raise ValueError("Axiom 1 failed: data channel node references must exist in sh_nodes.")
-            captured = next(node for node in self.sh_nodes if node.name == channel.captured_by_node_name)
+            if (
+                channel.about_node_name not in node_names
+                or channel.captured_by_node_name not in node_names
+            ):
+                raise ValueError(
+                    "Axiom 1 failed: data channel node references must exist in sh_nodes."
+                )
+            captured = next(
+                node
+                for node in self.sh_nodes
+                if node.name == channel.captured_by_node_name
+            )
             if str(captured.actor_class) in active_actorless:
-                raise ValueError("Axiom 1 failed: captured-by node must have an active actor class.")
+                raise ValueError(
+                    "Axiom 1 failed: captured-by node must have an active actor class."
+                )
         return self
 
     @model_validator(mode="after")
@@ -74,7 +91,9 @@ class LayoutLite011(SemaType):
             if node.handle and "." in node.handle:
                 immediate_boss = node.handle.split(".")[-2]
                 if immediate_boss not in node_names:
-                    raise ValueError("Axiom 2 failed: missing immediate boss node for handle hierarchy.")
+                    raise ValueError(
+                        "Axiom 2 failed: missing immediate boss node for handle hierarchy."
+                    )
         return self
 
     @model_validator(mode="after")
@@ -84,7 +103,9 @@ class LayoutLite011(SemaType):
         CriticalZoneList SHALL be a subset of ZoneList.
         """
         if not set(self.critical_zone_list).issubset(set(self.zone_list)):
-            raise ValueError("Axiom 3 failed: critical_zone_list must be a subset of zone_list.")
+            raise ValueError(
+                "Axiom 3 failed: critical_zone_list must be a subset of zone_list."
+            )
         return self
 
     @model_validator(mode="after")
@@ -98,7 +119,9 @@ class LayoutLite011(SemaType):
         for channel in self.derived_channels:
             created_by = nodes.get(channel.created_by_node_name)
             if created_by is None or str(created_by.actor_class) == "NoActor":
-                raise ValueError("Axiom 4 failed: derived channel created_by_node_name must reference an active node.")
+                raise ValueError(
+                    "Axiom 4 failed: derived channel created_by_node_name must reference an active node."
+                )
         return self
 
     def upgrade(self) -> LayoutLite012:
@@ -111,9 +134,13 @@ class LayoutLite011(SemaType):
 
         data = self.model_dump()
 
-        data["derived_channels"] = [ch.upgrade() if ch.version == "000" else ch for ch in self.derived_channels]
+        data["derived_channels"] = [
+            ch.upgrade() if ch.version == "000" else ch for ch in self.derived_channels
+        ]
         data["data_channels"] = [ch.upgrade() for ch in self.data_channels]
-        data["sh_nodes"] = [node.upgrade() if node.version == "300" else node for node in self.sh_nodes]
+        data["sh_nodes"] = [
+            node.upgrade() if node.version == "300" else node for node in self.sh_nodes
+        ]
 
         if self.i2c_relay_component is not None:
             data["i2c_relay_component"] = self.i2c_relay_component.upgrade()

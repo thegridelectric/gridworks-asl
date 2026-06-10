@@ -64,7 +64,10 @@ class SyncedReadingsBundle001(SemaType):
         for item in self.channel_readings_list:
             item_data = dict(item)
 
-            if any(key in item_data for key in ("ChannelName", "ValueList", "Unit", "UnitType")):
+            if any(
+                key in item_data
+                for key in ("ChannelName", "ValueList", "Unit", "UnitType")
+            ):
                 item_data["TypeName"] = "channel.readings.list.item"
                 item_data["Version"] = "000"
             else:
