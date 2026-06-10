@@ -1,8 +1,8 @@
 from typing import Literal, Self
 from pydantic import model_validator
 from sema.runtime.base import SemaType
-from sema.runtime.enums import Gw1Unit
 from sema.runtime.enums import SpaceheatTelemetryName
+from sema.runtime.enums.old_versions.gw1_unit_001 import Gw1Unit001
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UtcIso8601Seconds
 from sema.runtime.types.channel_readings_list_item import ChannelReadingsListItem
@@ -92,9 +92,9 @@ class SyncedReadingsBundle(SemaType):
         spaceheat.telemetry.name - Unit SHALL be a valid value from the specified UnitType
         version: gw1.unit → version 001 spaceheat.telemetry.name → version 007
         """
-        if Gw1Unit.enum_version() != "001":
+        if Gw1Unit001.enum_version() != "001":
             raise ValueError(
-                f'UnitTypeAndValueRepresentationConsistency: Gw1Unit version should be "001", is { Gw1Unit.enum_version()}'
+                f'UnitTypeAndValueRepresentationConsistency: Gw1Unit version should be "001", is { Gw1Unit001.enum_version()}'
             )
 
         if SpaceheatTelemetryName.enum_version() != "007":
@@ -105,8 +105,8 @@ class SyncedReadingsBundle(SemaType):
 
         errors = []
         for crl in self.channel_readings_list:
-            if crl.unit_type == Gw1Unit.enum_name():
-                if crl.unit not in Gw1Unit.values():
+            if crl.unit_type == Gw1Unit001.enum_name():
+                if crl.unit not in Gw1Unit001.values():
                     errors.append(f"{crl.channel_name}: {crl.unit} not found in {crl.unit_type}")
             elif crl.unit_type == SpaceheatTelemetryName.enum_name():
                 if crl.unit not in SpaceheatTelemetryName.values():

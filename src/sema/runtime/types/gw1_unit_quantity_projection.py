@@ -2,33 +2,33 @@ from typing import Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import Gw1Quantity
-from sema.runtime.enums import Gw1Unit
+from sema.runtime.enums.old_versions.gw1_unit_001 import Gw1Unit001
 
 
 _PROJECTION = {
-    Gw1Unit.Unknown: Gw1Quantity.Unknown,
-    Gw1Unit.Unitless: Gw1Quantity.Unitless,
-    Gw1Unit.FahrenheitX100: Gw1Quantity.Temperature,
-    Gw1Unit.Watts: Gw1Quantity.Power,
-    Gw1Unit.WattHours: Gw1Quantity.Energy,
-    Gw1Unit.Gallons: Gw1Quantity.Volume,
-    Gw1Unit.GpmX100: Gw1Quantity.FlowRate,
-    Gw1Unit.Seconds: Gw1Quantity.Time,
-    Gw1Unit.SecondsX10: Gw1Quantity.Time,
-    Gw1Unit.Milliseconds: Gw1Quantity.Time,
+    Gw1Unit001.Unknown: Gw1Quantity.Unknown,
+    Gw1Unit001.Unitless: Gw1Quantity.Unitless,
+    Gw1Unit001.FahrenheitX100: Gw1Quantity.Temperature,
+    Gw1Unit001.Watts: Gw1Quantity.Power,
+    Gw1Unit001.WattHours: Gw1Quantity.Energy,
+    Gw1Unit001.Gallons: Gw1Quantity.Volume,
+    Gw1Unit001.GpmX100: Gw1Quantity.FlowRate,
+    Gw1Unit001.Seconds: Gw1Quantity.Time,
+    Gw1Unit001.SecondsX10: Gw1Quantity.Time,
+    Gw1Unit001.Milliseconds: Gw1Quantity.Time,
 }
 
 
 class Gw1UnitQuantityProjection(SemaType):
     """Sema: https://schemas.electricity.works/types/gw1.unit.quantity.projection/000"""
 
-    unit: Gw1Unit
+    unit: Gw1Unit001
     quantity: Gw1Quantity
     type_name: Literal["gw1.unit.quantity.projection"] = "gw1.unit.quantity.projection"
     version: Literal["000"] = "000"
 
     @classmethod
-    def project(cls, unit: Gw1Unit) -> Gw1Quantity:
+    def project(cls, unit: Gw1Unit001) -> Gw1Quantity:
         expected = _PROJECTION.get(unit)
         if expected is None:
             raise ValueError(
