@@ -22,7 +22,9 @@ class I2cThermistorReaderComponentGt(SemaType):
     adc_reference_volts: PositiveFloat = 3.3
     series_resistance_k_ohms: PositiveFloat
     temp_calc_method: TempCalcMethod
-    type_name: Literal["i2c.thermistor.reader.component.gt"] = "i2c.thermistor.reader.component.gt"
+    type_name: Literal["i2c.thermistor.reader.component.gt"] = (
+        "i2c.thermistor.reader.component.gt"
+    )
     version: Literal["000"] = "000"
 
     @model_validator(mode="after")

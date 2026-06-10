@@ -28,9 +28,13 @@ class SimPicoTankModuleComponentGt(SemaType):
     serial_number: str
     async_capture_delta_micro_volts: StrictInt
     sensor_order: list[StrictInt] | None = None
-    simulates_type_name: Literal["pico.tank.module.component.gt"] = "pico.tank.module.component.gt"
+    simulates_type_name: Literal["pico.tank.module.component.gt"] = (
+        "pico.tank.module.component.gt"
+    )
     simulates_version: Literal["011"] = "011"
-    type_name: Literal["sim.pico.tank.module.component.gt"] = "sim.pico.tank.module.component.gt"
+    type_name: Literal["sim.pico.tank.module.component.gt"] = (
+        "sim.pico.tank.module.component.gt"
+    )
     version: Literal["000"] = "000"
 
     model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))

@@ -2,7 +2,9 @@ from typing import Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums.old_versions.gw1_quantity_000 import Gw1Quantity000
-from sema.runtime.enums.old_versions.spaceheat_telemetry_name_006 import SpaceheatTelemetryName006
+from sema.runtime.enums.old_versions.spaceheat_telemetry_name_006 import (
+    SpaceheatTelemetryName006,
+)
 
 
 _PROJECTION = {
@@ -36,7 +38,9 @@ class Gw1TelemetryNameQuantityProjection(SemaType):
 
     telemetry_name: SpaceheatTelemetryName006
     quantity: Gw1Quantity000
-    type_name: Literal["gw1.telemetry.name.quantity.projection"] = "gw1.telemetry.name.quantity.projection"
+    type_name: Literal["gw1.telemetry.name.quantity.projection"] = (
+        "gw1.telemetry.name.quantity.projection"
+    )
     version: Literal["000"] = "000"
 
     @classmethod

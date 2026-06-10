@@ -1,7 +1,9 @@
 from typing import Literal
 from pydantic import StrictFloat
 from sema.runtime.base import SemaType
-from sema.runtime.types.linear_one_dimensional_calibration import LinearOneDimensionalCalibration
+from sema.runtime.types.linear_one_dimensional_calibration import (
+    LinearOneDimensionalCalibration,
+)
 
 
 class LinearOneDimensionalCalibration000(SemaType):
@@ -9,7 +11,9 @@ class LinearOneDimensionalCalibration000(SemaType):
 
     m: StrictFloat = 1.0
     b: StrictFloat = 0.0
-    type_name: Literal["linear.one.dimensional.calibration"] = "linear.one.dimensional.calibration"
+    type_name: Literal["linear.one.dimensional.calibration"] = (
+        "linear.one.dimensional.calibration"
+    )
     version: Literal["000"] = "000"
 
     def upgrade(self) -> LinearOneDimensionalCalibration:

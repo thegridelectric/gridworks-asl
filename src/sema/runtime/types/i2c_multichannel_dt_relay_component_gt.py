@@ -16,7 +16,9 @@ class I2cMultichannelDtRelayComponentGt(SemaType):
     hw_uid: str | None = None
     i2c_bus: SpaceheatName
     i2c_address_list: list[StrictInt]
-    type_name: Literal["i2c.multichannel.dt.relay.component.gt"] = "i2c.multichannel.dt.relay.component.gt"
+    type_name: Literal["i2c.multichannel.dt.relay.component.gt"] = (
+        "i2c.multichannel.dt.relay.component.gt"
+    )
     version: Literal["004"] = "004"
 
     model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))
@@ -30,7 +32,11 @@ class I2cMultichannelDtRelayComponentGt(SemaType):
         actor_names = [cfg.actor_name for cfg in self.config_list]
         relay_idxs = [cfg.relay_idx for cfg in self.config_list]
         if len(set(actor_names)) != len(actor_names):
-            raise ValueError("Axiom 1 failed: config_list contains duplicate actor_name values.")
+            raise ValueError(
+                "Axiom 1 failed: config_list contains duplicate actor_name values."
+            )
         if len(set(relay_idxs)) != len(relay_idxs):
-            raise ValueError("Axiom 1 failed: config_list contains duplicate relay_idx values.")
+            raise ValueError(
+                "Axiom 1 failed: config_list contains duplicate relay_idx values."
+            )
         return self

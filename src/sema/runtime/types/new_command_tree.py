@@ -20,10 +20,10 @@ class NewCommandTree(SemaType):
     @model_validator(mode="after")
     def check_axiom_1(self) -> "NewCommandTree":
         """
-        Axiom 1: PrefixClosedHandles 
-        Let the effective handle of an ShNode be its Handle if present, otherwise 
-        its Name. The set of effective handles SHALL be prefix-closed: for every ShNode 
-        in ShNodes, each dot-separated prefix of its effective handle SHALL also be the 
+        Axiom 1: PrefixClosedHandles
+        Let the effective handle of an ShNode be its Handle if present, otherwise
+        its Name. The set of effective handles SHALL be prefix-closed: for every ShNode
+        in ShNodes, each dot-separated prefix of its effective handle SHALL also be the
         effective handle of some ShNode in ShNodes.
         """
         effective = {

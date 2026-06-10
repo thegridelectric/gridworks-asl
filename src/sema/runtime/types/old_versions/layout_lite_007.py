@@ -9,7 +9,9 @@ from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrat
 from sema.runtime.types.old_versions.data_channel_gt_001 import DataChannelGt001
 from sema.runtime.types.old_versions.derived_channel_gt_000 import DerivedChannelGt000
 from sema.runtime.types.old_versions.ha1_params_004 import Ha1Params004
-from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import I2cMultichannelDtRelayComponentGt002
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
+    I2cMultichannelDtRelayComponentGt002,
+)
 from sema.runtime.types.old_versions.layout_lite_008 import LayoutLite008
 from sema.runtime.types.old_versions.spaceheat_node_gt_200 import SpaceheatNodeGt200
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
@@ -47,11 +49,22 @@ class LayoutLite007(SemaType):
         node_names = {node.name for node in self.sh_nodes}
         active_actorless = {"NoActor"}
         for channel in self.data_channels:
-            if channel.about_node_name not in node_names or channel.captured_by_node_name not in node_names:
-                raise ValueError("Axiom 1 failed: data channel node references must exist in sh_nodes.")
-            captured = next(node for node in self.sh_nodes if node.name == channel.captured_by_node_name)
+            if (
+                channel.about_node_name not in node_names
+                or channel.captured_by_node_name not in node_names
+            ):
+                raise ValueError(
+                    "Axiom 1 failed: data channel node references must exist in sh_nodes."
+                )
+            captured = next(
+                node
+                for node in self.sh_nodes
+                if node.name == channel.captured_by_node_name
+            )
             if str(captured.actor_class) in active_actorless:
-                raise ValueError("Axiom 1 failed: captured-by node must have an active actor class.")
+                raise ValueError(
+                    "Axiom 1 failed: captured-by node must have an active actor class."
+                )
         return self
 
     @model_validator(mode="after")
@@ -66,7 +79,9 @@ class LayoutLite007(SemaType):
             if node.handle and "." in node.handle:
                 immediate_boss = node.handle.split(".")[-2]
                 if immediate_boss not in node_names:
-                    raise ValueError("Axiom 2 failed: missing immediate boss node for handle hierarchy.")
+                    raise ValueError(
+                        "Axiom 2 failed: missing immediate boss node for handle hierarchy."
+                    )
         return self
 
     @model_validator(mode="after")
@@ -76,7 +91,9 @@ class LayoutLite007(SemaType):
         CriticalZoneList SHALL be a subset of ZoneList.
         """
         if not set(self.critical_zone_list).issubset(set(self.zone_list)):
-            raise ValueError("Axiom 3 failed: critical_zone_list must be a subset of zone_list.")
+            raise ValueError(
+                "Axiom 3 failed: critical_zone_list must be a subset of zone_list."
+            )
         return self
 
     def upgrade(self) -> LayoutLite008:

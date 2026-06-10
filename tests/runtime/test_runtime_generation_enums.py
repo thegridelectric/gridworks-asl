@@ -3,6 +3,7 @@ from pathlib import Path
 import yaml
 
 from sema.tools.runtime_generation.enums import render_enum, write_enum_base
+from sema.tools.snapshot_lint import format_in_place
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -54,6 +55,7 @@ def test_generated_enum_base_matches_runtime_enum_base(tmp_path: Path) -> None:
     target_root = tmp_path / "sema" / "runtime"
 
     write_enum_base(target_root)
+    format_in_place(target_root)
 
     generated = (target_root / "enums" / "gw_str_enum.py").read_text()
     checked_in = (

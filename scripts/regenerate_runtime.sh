@@ -2,25 +2,23 @@
 #
 # Regenerate the in-repo runtime (src/sema/runtime) and report hygiene.
 #
-# CANONICAL OUTPUT == the raw `scripts/regenerate_runtime.py` output. That is
-# what the committed runtime IS and what the `test_runtime_generation_*` drift
-# guards compare against. This wrapper MUST NOT mutate the runtime into a
-# *different* canonical form, or it silently breaks those guards.
+# CANONICAL OUTPUT == ruff-formatted generator output. `regenerate_runtime.py`
+# runs `ruff format` as its final pass (via generate_runtime_from_dag), so the
+# committed runtime is ruff-clean and the `test_runtime_generation_*` drift
+# guards compare against formatted output. ruff is the single source of style —
+# the templates need not match it exactly.
 #
 # So `ruff format` / `ruff check` / `mypy` all run as REPORTS here, never in
-# place: they surface generator hygiene (e.g. an over-long `e.compile(...)` line
-# `ruff format` would wrap) as the tracked generator-cleanup signal, but they do
-# not touch the files. The generator already sorts its output (imports,
-# topo_sort) and is deterministic, so a second `.py` regen is already zero-diff
-# without any formatting step. Findings are reported by default and become fatal
-# only with `--strict`.
+# place: the `.py` already formatted the tree, so `ruff format --check` should
+# pass clean; `ruff check` + `mypy` surface the remaining known generator
+# hygiene findings (over-/under-tracked typing imports; pydantic/enum dynamics
+# mypy can't follow) without mutating anything. Findings are reported by default
+# and become fatal only with `--strict`.
 #
-# (History: this script used to run `ruff format` in place on the theory that
-# the committed runtime was ruff-formatted. It isn't — the drift guards pin it
-# to the raw generator output — so the in-place format diverged from canonical
-# and broke the build. Making the runtime ruff-clean at the source is the
-# tracked generator-cleanup follow-up; until then the format step stays a
-# report.)
+# (History: this script once ran `ruff format` *in place*, which diverged from a
+# then-raw committed runtime and broke the drift guards. The fix landed in two
+# steps: first make this wrapper report-only; then make the generator format at
+# the source — done — so canonical and `--check` now agree.)
 #
 # Usage:
 #   scripts/regenerate_runtime.sh            # regenerate, report hygiene

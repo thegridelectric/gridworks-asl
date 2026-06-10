@@ -62,6 +62,7 @@ class GwStrEnum(StrEnum):
             raise ValueError(f"'{value}' is not valid {cls.__name__}")
         return default
 
+
 class SemaEnum(GwStrEnum):
     """
     Base for enums published in Sema.
@@ -71,16 +72,12 @@ class SemaEnum(GwStrEnum):
     @classmethod
     def enum_name(cls) -> str:
         """Sema identifier (e.g., 'gw1.relay.state')"""
-        raise NotImplementedError(
-            f"{cls.__name__} must implement enum_name() for Sema"
-        )
+        raise NotImplementedError(f"{cls.__name__} must implement enum_name() for Sema")
 
     @classmethod
     def enum_version(cls) -> str:
         """Sema identifier (e.g., '000')"""
-        raise NotImplementedError(
-            f"{cls.__name__} must implement enum_name() for Sema"
-        )
+        raise NotImplementedError(f"{cls.__name__} must implement enum_name() for Sema")
 
 
 class SymbolizedEnum(SemaEnum):

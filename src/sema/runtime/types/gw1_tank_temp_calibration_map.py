@@ -8,5 +8,7 @@ class Gw1TankTempCalibrationMap(SemaType):
 
     buffer: Gw1TankTempCalibration
     tank: dict[str, Gw1TankTempCalibration]
-    type_name: Literal["gw1.tank.temp.calibration.map"] = "gw1.tank.temp.calibration.map"
+    type_name: Literal["gw1.tank.temp.calibration.map"] = (
+        "gw1.tank.temp.calibration.map"
+    )
     version: Literal["000"] = "000"

@@ -13,8 +13,8 @@ class PositionPointGt(SemaType):
     type_name: Literal["position.point.gt"] = "position.point.gt"
     version: Literal["000"] = "000"
 
-    @model_validator(mode="after") 
-    def check_axiom_1(self) -> Self: 
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> Self:
         """
         Axiom 1: ValidEarthCoordinates
         LatitudeMicroDeg SHALL be between -90,000,000 and 90,000,000 inclusive.

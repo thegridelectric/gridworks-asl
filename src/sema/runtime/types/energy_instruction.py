@@ -25,9 +25,7 @@ class EnergyInstruction(SemaType):
         SlotStartS SHALL be divisible by 60.
         """
         if self.slot_start_s % 60 != 0:
-            raise ValueError(
-                "Axiom 1 failed: slot_start_s must be divisible by 60."
-            )
+            raise ValueError("Axiom 1 failed: slot_start_s must be divisible by 60.")
         return self
 
     @model_validator(mode="after")

@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 class SemaCodec:
-
     def __init__(self) -> None:
         self.registry = get_current_types()
         self.old_versions = get_old_versions()
@@ -31,9 +30,8 @@ class SemaCodec:
         self,
         data: dict,
         mode: Literal["strict", "degraded"] = "strict",
-        auto_upgrade: bool = True
+        auto_upgrade: bool = True,
     ) -> SemaType | DegradedSemaType:
-
         if not isinstance(data, dict):
             raise ValueError("Input must be dict")
 
@@ -65,19 +63,16 @@ class SemaCodec:
             return current_cls.from_dict(data)
 
         # Old version
-        if (
-            type_name in self.old_versions
-            and version in self.old_versions[type_name]
-        ):
+        if type_name in self.old_versions and version in self.old_versions[type_name]:
             old_cls = self.old_versions[type_name][version]
             old_instance = old_cls.from_dict(data)
-            return old_instance.to_latest(self.registry) if auto_upgrade else old_instance
+            return (
+                old_instance.to_latest(self.registry) if auto_upgrade else old_instance
+            )
 
         # Unknown version
         if mode == "strict":
-            raise ValueError(
-                f"Unsupported version {version} for {type_name}"
-            )
+            raise ValueError(f"Unsupported version {version} for {type_name}")
 
         # --------------------------------------------------------------------
         # DEGRADED MODE
@@ -119,7 +114,6 @@ class SemaCodec:
         data: bytes,
         mode: Literal["strict", "degraded"] = "strict",
     ) -> SemaType | DegradedSemaType:
-
         try:
             d = json.loads(data.decode("utf-8"))
         except Exception as e:
@@ -135,8 +129,10 @@ class SemaCodec:
 # AUTO-DISCOVERY
 # ============================================================================
 
+
 def get_current_types() -> dict[str, type[SemaType]]:
     from sema.runtime import types
+
     return {
         getattr(types, name).type_name_value(): getattr(types, name)
         for name in types.__all__

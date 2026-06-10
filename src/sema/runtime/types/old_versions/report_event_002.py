@@ -16,7 +16,7 @@ class ReportEvent002(SemaType):
     src: LeftRightDot
     report: Report002
     type_name: Literal["report.event"] = "report.event"
-    version: str = '002'
+    version: str = "002"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "ReportEvent002":

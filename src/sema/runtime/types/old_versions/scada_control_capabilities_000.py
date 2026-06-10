@@ -5,7 +5,9 @@ from sema.runtime.enums.old_versions.gw1_actor_class_009 import Gw1ActorClass009
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UTCMilliseconds
-from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import I2cMultichannelDtRelayComponentGt002
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
+    I2cMultichannelDtRelayComponentGt002,
+)
 from sema.runtime.types.scada_control_capabilities import ScadaControlCapabilities
 
 

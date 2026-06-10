@@ -7,7 +7,9 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UTCSeconds
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.spaceheat_telemetry_quantity_projection import SpaceheatTelemetryQuantityProjection
+from sema.runtime.types.spaceheat_telemetry_quantity_projection import (
+    SpaceheatTelemetryQuantityProjection,
+)
 
 
 class DataChannelGt(SemaType):
@@ -32,7 +34,10 @@ class DataChannelGt(SemaType):
         Axiom 1: PowerMeteringConstraint
         If InPowerMetering is true, TelemetryName SHALL equal PowerW.
         """
-        if self.in_power_metering and self.telemetry_name != SpaceheatTelemetryName.PowerW:
+        if (
+            self.in_power_metering
+            and self.telemetry_name != SpaceheatTelemetryName.PowerW
+        ):
             raise ValueError(
                 "Axiom 1 failed: telemetry_name must be PowerW when in_power_metering is true."
             )

@@ -12,10 +12,18 @@ from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
 from sema.runtime.enums.gw1_heat_call_interpretation import Gw1HeatCallInterpretation
 from sema.runtime.enums.gw1_lc_top_state import Gw1LcTopState
 from sema.runtime.enums.gw1_leaf_ally_all_tanks_state import Gw1LeafAllyAllTanksState
-from sema.runtime.enums.gw1_leaf_ally_buffer_only_state import Gw1LeafAllyBufferOnlyState
-from sema.runtime.enums.gw1_local_control_all_tanks_state import Gw1LocalControlAllTanksState
-from sema.runtime.enums.gw1_local_control_buffer_only_state import Gw1LocalControlBufferOnlyState
-from sema.runtime.enums.gw1_local_control_standby_top_state import Gw1LocalControlStandbyTopState
+from sema.runtime.enums.gw1_leaf_ally_buffer_only_state import (
+    Gw1LeafAllyBufferOnlyState,
+)
+from sema.runtime.enums.gw1_local_control_all_tanks_state import (
+    Gw1LocalControlAllTanksState,
+)
+from sema.runtime.enums.gw1_local_control_buffer_only_state import (
+    Gw1LocalControlBufferOnlyState,
+)
+from sema.runtime.enums.gw1_local_control_standby_top_state import (
+    Gw1LocalControlStandbyTopState,
+)
 from sema.runtime.enums.gw1_main_auto_state import Gw1MainAutoState
 from sema.runtime.enums.gw1_quantity import Gw1Quantity
 from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode

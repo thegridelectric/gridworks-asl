@@ -80,7 +80,10 @@ class RelayActorConfig(SemaType):
         """
         if self.event_type == "change.relay.state":
             valid = set(ChangeRelayState.values())
-            if self.de_energizing_event not in valid or self.energizing_event not in valid:
+            if (
+                self.de_energizing_event not in valid
+                or self.energizing_event not in valid
+            ):
                 raise ValueError(
                     "Axiom 3 failed: relay state events must be valid change.relay.state values."
                 )
@@ -95,7 +98,10 @@ class RelayActorConfig(SemaType):
         """
         if self.state_type == "relay.closed.or.open":
             valid = set(RelayClosedOrOpen.values())
-            if self.de_energized_state not in valid or self.energized_state not in valid:
+            if (
+                self.de_energized_state not in valid
+                or self.energized_state not in valid
+            ):
                 raise ValueError(
                     "Axiom 4 failed: relay states must be valid relay.closed.or.open values."
                 )
@@ -111,7 +117,10 @@ class RelayActorConfig(SemaType):
         "CloseRelay" SHALL imply EnergizedState "RelayClosed" - EnergizingEvent "OpenRelay"
         SHALL imply EnergizedState "RelayOpen"
         """
-        if self.state_type != "relay.closed.or.open" or self.event_type != "change.relay.state":
+        if (
+            self.state_type != "relay.closed.or.open"
+            or self.event_type != "change.relay.state"
+        ):
             return self
 
         event_to_state = {
