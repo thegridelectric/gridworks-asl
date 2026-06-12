@@ -297,6 +297,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/sim.pico.tank.module.component.gt/000.yaml
+  sim.plant.flux:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.plant.flux/000.yaml
   sim.timestep:
     latest_version: '000'
     versioning_strategy: literal
