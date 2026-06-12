@@ -213,6 +213,10 @@ enums:
     '000':
       used_by:
       - g.node.gt:004
+  change.relay.pin:
+    '000':
+      used_by:
+      - sim.plant.actuation:000
   change.relay.state:
     '000':
       used_by:
@@ -511,6 +515,7 @@ formats:
     - scada.params:004
     - scada.params:005
     - send.layout:000
+    - sim.plant.actuation:000
     - sim.plant.flux:000
     - single.reading:000
     - spaceheat.node.gt:200
@@ -523,6 +528,7 @@ formats:
     - ticklist.reed.report:000
   utc.iso8601.millis:
     used_by:
+    - sim.plant.actuation:000
     - sim.plant.flux:000
   utc.iso8601.seconds:
     used_by:
@@ -558,6 +564,7 @@ formats:
     - scada.params:005
     - send.control.capabilities:000
     - send.layout:001
+    - sim.plant.actuation:000
     - sim.plant.flux:000
     - sim.timestep:000
     - single.machine.state:000
