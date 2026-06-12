@@ -297,6 +297,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/sim.pico.tank.module.component.gt/000.yaml
+  sim.plant.actuation:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.plant.actuation/000.yaml
+  sim.plant.flux:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.plant.flux/000.yaml
   sim.timestep:
     latest_version: '000'
     versioning_strategy: literal
@@ -387,6 +397,9 @@ enums:
   change.heatcall.source:
     enum_type: literal
     schema: definitions/enums/change.heatcall.source/000.yaml
+  change.relay.pin:
+    enum_type: literal
+    schema: definitions/enums/change.relay.pin/000.yaml
   change.relay.state:
     enum_type: literal
     schema: definitions/enums/change.relay.state/000.yaml

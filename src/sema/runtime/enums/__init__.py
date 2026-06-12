@@ -1,6 +1,7 @@
 from sema.runtime.enums.base_g_node_class import BaseGNodeClass
 from sema.runtime.enums.buffer_regulation_mode import BufferRegulationMode
 from sema.runtime.enums.change_heatcall_source import ChangeHeatcallSource
+from sema.runtime.enums.change_relay_pin import ChangeRelayPin
 from sema.runtime.enums.change_relay_state import ChangeRelayState
 from sema.runtime.enums.fsm_report_type import FsmReportType
 from sema.runtime.enums.g_node_instance_status import GNodeInstanceStatus
@@ -51,6 +52,7 @@ __all__ = [
     "BaseGNodeClass",
     "BufferRegulationMode",
     "ChangeHeatcallSource",
+    "ChangeRelayPin",
     "ChangeRelayState",
     "FsmReportType",
     "GNodeInstanceStatus",

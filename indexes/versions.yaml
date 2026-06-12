@@ -483,6 +483,20 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  sim.plant.actuation:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  sim.plant.flux:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   sim.timestep:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -610,6 +624,12 @@ enums:
       "000": {}
 
   change.heatcall.source:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
+
+  change.relay.pin:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
     versions:
