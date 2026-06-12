@@ -153,3 +153,7 @@ x-gridworks:
     This differs from snapshot messages, which represent the most recent
     value of each channel at a single point in time and are optimized
     for near-real-time visualization rather than historical accuracy.
+
+    NOTE -- this version's oneOf over multiple versions of the same type is an
+    early lenience accommodating back-dated production traffic as sema came
+    online, not a pattern to copy. Newer versions carry a single type version.

@@ -5,8 +5,8 @@ from sema.runtime.codec import default_codec
 from sema.runtime.types.layout_lite import LayoutLite
 
 
-def test_layout_lite_latest_version_is_013() -> None:
-    assert LayoutLite.version_value() == "013"
+def test_layout_lite_latest_version_is_014() -> None:
+    assert LayoutLite.version_value() == "014"
 
 
 def test_real_beech_v011_upgrades_to_latest() -> None:
@@ -17,7 +17,7 @@ def test_real_beech_v011_upgrades_to_latest() -> None:
 
     assert isinstance(decoded, LayoutLite)
     assert decoded.type_name == "layout.lite"
-    assert decoded.version == "013"
+    assert decoded.version == "014"
 
 
 def test_real_spruce_v012_upgrades_to_latest() -> None:
@@ -28,4 +28,4 @@ def test_real_spruce_v012_upgrades_to_latest() -> None:
 
     assert isinstance(decoded, LayoutLite)
     assert decoded.type_name == "layout.lite"
-    assert decoded.version == "013"
+    assert decoded.version == "014"

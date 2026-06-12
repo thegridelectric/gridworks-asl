@@ -185,9 +185,10 @@ types:
     versions:
       '000': definitions/types/keyparam.change.log/000.yaml
   layout.lite:
-    latest_version: '013'
+    latest_version: '014'
     versioning_strategy: literal
     versions:
+      '014': definitions/types/layout.lite/014.yaml
       '013': definitions/types/layout.lite/013.yaml
       '012': definitions/types/layout.lite/012.yaml
       '011': definitions/types/layout.lite/011.yaml
@@ -217,9 +218,10 @@ types:
     versions:
       '000': definitions/types/market.product/000.yaml
   new.command.tree:
-    latest_version: '000'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/new.command.tree/002.yaml
       '000': definitions/types/new.command.tree/000.yaml
   pico.flow.module.component.gt:
     latest_version: '000'

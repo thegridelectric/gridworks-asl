@@ -30,6 +30,7 @@ types:
       used_by:
       - layout.lite:012
       - layout.lite:013
+      - layout.lite:014
   derived.channel.gt:
     '000':
       used_by:
@@ -43,6 +44,7 @@ types:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - layout.lite:014
   fsm.atomic.report:
     '000':
       used_by:
@@ -72,6 +74,7 @@ types:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - layout.lite:014
   gw1.unit.quantity.projection:
     '000':
       used_by:
@@ -93,6 +96,7 @@ types:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - layout.lite:014
       - scada.params:005
   i2c.multichannel.dt.relay.component.gt:
     '002':
@@ -110,6 +114,7 @@ types:
     '004':
       used_by:
       - layout.lite:013
+      - layout.lite:014
   i2c.thermistor.channel.config:
     '000':
       used_by:
@@ -129,6 +134,7 @@ types:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - layout.lite:014
   pico.tank.module.component.gt:
     '011':
       used_by:
@@ -139,6 +145,7 @@ types:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - layout.lite:014
   price.quantity.unitless:
     '001':
       used_by:
@@ -168,6 +175,7 @@ types:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - layout.lite:014
   single.machine.state:
     '000':
       used_by:
@@ -188,6 +196,7 @@ types:
       - layout.lite:010
       - layout.lite:011
       - new.command.tree:000
+      - scada.control.capabilities:001
     '301':
       used_by:
       - layout.lite:010
@@ -197,7 +206,8 @@ types:
       - new.command.tree:000
     '302':
       used_by:
-      - scada.control.capabilities:001
+      - layout.lite:014
+      - new.command.tree:002
   spaceheat.telemetry.quantity.projection:
     '000':
       used_by:
@@ -283,6 +293,7 @@ enums:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - layout.lite:014
   gw1.system.mode:
     '000':
       used_by:
@@ -292,6 +303,7 @@ enums:
       - layout.lite:011
       - layout.lite:012
       - layout.lite:013
+      - layout.lite:014
   gw1.unit:
     '000':
       used_by:
@@ -425,9 +437,11 @@ formats:
     - layout.lite:011
     - layout.lite:012
     - layout.lite:013
+    - layout.lite:014
     - machine.states:000
     - market.product:000
     - new.command.tree:000
+    - new.command.tree:002
     - relay.actor.config:002
     - relay.actor.config:003
     - report.event:002
@@ -483,6 +497,7 @@ formats:
     - layout.lite:011
     - layout.lite:012
     - layout.lite:013
+    - layout.lite:014
     - pico.tank.module.component.gt:011
     - relay.actor.config:002
     - relay.actor.config:003
@@ -560,8 +575,10 @@ formats:
     - layout.lite:011
     - layout.lite:012
     - layout.lite:013
+    - layout.lite:014
     - machine.states:000
     - new.command.tree:000
+    - new.command.tree:002
     - report.event:002
     - report.event:003
     - report:002
@@ -633,6 +650,7 @@ formats:
     - layout.lite:011
     - layout.lite:012
     - layout.lite:013
+    - layout.lite:014
     - market.product:000
     - pico.flow.module.component.gt:000
     - pico.tank.module.component.gt:011

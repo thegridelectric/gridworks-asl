@@ -1460,12 +1460,34 @@ types:
             - "left.right.dot"
 
   layout.lite:
-    latest_version: "013"
+    latest_version: "014"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Runtime projection of the active SCADA context used to interpret reports, snapshots, and control-adjacent messages."
 
     versions:
+      "014":
+        schema_url: "https://schemas.electricity.works/types/layout.lite/014"
+        created: "2026-06-12T00:00:00Z"
+        summary: >-
+          - ShNodes: spaceheat.node.gt:301 -> 302
+        direct_dependencies:
+          structural:
+            - "data.channel.gt:002"
+            - "derived.channel.gt:001"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "gw1.tank.temp.calibration.map:000"
+            - "ha1.params:006"
+            - "i2c.multichannel.dt.relay.component.gt:004"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:000"
+            - "pico.tank.module.component.gt:011"
+            - "positive.int"
+            - "sim.pico.tank.module.component.gt:000"
+            - "spaceheat.node.gt:302"
+            - "utc.milliseconds"
+            - "uuid4.str"
       "013":
         schema_url: "https://schemas.electricity.works/types/layout.lite/013"
         created: "2026-04-01T10:49:00Z"
@@ -1711,12 +1733,22 @@ types:
             - "uuid4.str"
 
   new.command.tree:
-    latest_version: "000"
+    latest_version: "002"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Full set of SpaceheatNodes describing a SCADA node's actor command hierarchy, sent to its LeafTransactiveNode."
 
     versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/new.command.tree/002"
+        created: "2026-06-12T00:00:00Z"
+        summary: >-
+          - ShNodes: spaceheat.node.gt:302 only (drop the multi-version oneOf anti-pattern)
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "spaceheat.node.gt:302"
+            - "utc.milliseconds"
       "000":
         schema_url: "https://schemas.electricity.works/types/new.command.tree/000"
         created: "2026-05-13T00:00:00Z"
@@ -1987,7 +2019,7 @@ types:
     versions:
       "001":
         schema_url: "https://schemas.electricity.works/types/scada.control.capabilities/001"
-        created: "2026-06-12T00:00:00Z"
+        created: "2026-05-07T20:00:00Z"
         summary: >-
           - RelayNodes[]: inline object -> spaceheat.node.gt:300
           - DacNodes[]: inline object -> spaceheat.node.gt:300
@@ -1998,7 +2030,7 @@ types:
             - "data.channel.gt:001"
             - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
-            - "spaceheat.node.gt:302"
+            - "spaceheat.node.gt:300"
             - "utc.milliseconds"
           axiom:
             - "gw1.actor.class:009"

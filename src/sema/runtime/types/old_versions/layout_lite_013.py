@@ -13,11 +13,8 @@ from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
+from sema.runtime.types.layout_lite import LayoutLite
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
-from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_003 import (
-    I2cMultichannelDtRelayComponentGt003,
-)
-from sema.runtime.types.old_versions.layout_lite_013 import LayoutLite013
 from sema.runtime.types.old_versions.spaceheat_node_gt_301 import SpaceheatNodeGt301
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
@@ -26,8 +23,8 @@ from sema.runtime.types.sim_pico_tank_module_component_gt import (
 )
 
 
-class LayoutLite012(SemaType):
-    """Sema: https://schemas.electricity.works/types/layout.lite/012"""
+class LayoutLite013(SemaType):
+    """Sema: https://schemas.electricity.works/types/layout.lite/013"""
 
     from_g_node_alias: LeftRightDot
     message_created_ms: UTCMilliseconds
@@ -47,13 +44,13 @@ class LayoutLite012(SemaType):
     ]
     flow_module_components: list[PicoFlowModuleComponentGt]
     ha1_params: Ha1Params
-    i2c_relay_component: I2cMultichannelDtRelayComponentGt003 | None = None
+    i2c_relay_component: I2cMultichannelDtRelayComponentGt | None = None
     t_map: Gw1TankTempCalibrationMap | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
-    version: Literal["012"] = "012"
+    version: Literal["013"] = "013"
 
     @model_validator(mode="after")
-    def check_axiom_1(self) -> "LayoutLite012":
+    def check_axiom_1(self) -> "LayoutLite013":
         """
         Axiom 1: DcNodeConsistency
         Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference an
@@ -81,7 +78,7 @@ class LayoutLite012(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_2(self) -> "LayoutLite012":
+    def check_axiom_2(self) -> "LayoutLite013":
         """
         Axiom 2: NodeHandleHierarchyConsistency
         Every ShNode with a dotted handle SHALL have its immediate boss present as another
@@ -98,7 +95,7 @@ class LayoutLite012(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_3(self) -> "LayoutLite012":
+    def check_axiom_3(self) -> "LayoutLite013":
         """
         Axiom 3: CriticalZoneSubset
         CriticalZoneList SHALL be a subset of ZoneList.
@@ -110,7 +107,7 @@ class LayoutLite012(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_4(self) -> "LayoutLite012":
+    def check_axiom_4(self) -> "LayoutLite013":
         """
         Axiom 4: DerivedNodeConsistency
         Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name whose
@@ -125,15 +122,9 @@ class LayoutLite012(SemaType):
                 )
         return self
 
-    def upgrade(self) -> LayoutLite013:
-        """- I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004"""
+    def upgrade(self) -> LayoutLite:
+        """- ShNodes: spaceheat.node.gt:301 -> 302"""
         data = self.model_dump()
-        if self.i2c_relay_component is not None:
-            upgraded_component = self.i2c_relay_component.upgrade()
-            if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt):
-                raise TypeError(
-                    "Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt"
-                )
-            data["i2c_relay_component"] = upgraded_component
-        data["version"] = "013"
-        return LayoutLite013.model_validate(data)
+        data["sh_nodes"] = [node.upgrade() for node in self.sh_nodes]
+        data["version"] = "014"
+        return LayoutLite.model_validate(data)

@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/new.command.tree/000"
+$id: "https://schemas.electricity.works/types/new.command.tree/002"
 
 title: "new.command.tree"
 type: object
@@ -26,16 +26,11 @@ properties:
   ShNodes:
     type: array
     items:
-      oneOf:
-        - $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/200"
-        - $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/300"
-        - $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/301"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
     description: >
       The complete set of SpaceheatNodes that make up the command tree. The
       handle of each node encodes its position in the hierarchy: a node's
-      boss is found by dropping the last segment of its handle. Each entry
-      MUST be a spaceheat.node.gt at one of versions 200, 300, or 301; the
-      version is distinguished by the Version field of each node.
+      boss is found by dropping the last segment of its handle.
 
   UnixMs:
     $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
@@ -46,7 +41,7 @@ properties:
     const: "new.command.tree"
 
   Version:
-    const: "000"
+    const: "002"
 
 required:
   - FromGNodeAlias
@@ -56,18 +51,6 @@ required:
   - Version
 
 additionalProperties: false
-
-examples:
-  - |
-    {
-      "FromGNodeAlias": "d1.isone.me.versant.keene.maple.scada",
-      "ShNodes": [
-        {"Name": "s", "ActorClass": "PrimaryScada", "ShNodeId": "8f3c27de-6a41-4bb0-9df2-51b7ac94e203", "TypeName": "spaceheat.node.gt", "Version": "301"}
-      ],
-      "UnixMs": 1704067200000,
-      "TypeName": "new.command.tree",
-      "Version": "000"
-    }
 
 x-gridworks:
   owner: "gridworks-energy"
@@ -111,6 +94,7 @@ x-gridworks:
      -- or refused action -- can be matched against the command tree in force at
     that moment to determine who was authorized to command whom.
 
-    NOTE -- this version's oneOf over multiple versions of the same type is an
-    early lenience accommodating back-dated production traffic as sema came
-    online, not a pattern to copy. Newer versions carry a single type version.
+    This version accepts ShNodes at spaceheat.node.gt:302 only. Earlier versions
+    accepted a oneOf of several node versions in one payload; that was an early
+    lenience accommodating back-dated production traffic, not a pattern to copy
+    (see the v000 note).

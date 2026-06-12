@@ -107,3 +107,7 @@ x-gridworks:
     therefore accept both, expressed as a oneOf of those two ha1.params
     versions; the ha1.params Version field discriminates which one a given
     message carries.
+
+    NOTE -- this version's oneOf over multiple versions of the same type is an
+    early lenience accommodating back-dated production traffic as sema came
+    online, not a pattern to copy. Newer versions carry a single type version.

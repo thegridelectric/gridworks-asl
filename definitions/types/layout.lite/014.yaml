@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/layout.lite/009"
+$id: "https://schemas.electricity.works/types/layout.lite/014"
 
 title: "layout.lite"
 type: object
@@ -71,14 +71,14 @@ properties:
   ShNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/300"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
     description: >
       Spaceheat nodes available in the running SCADA context.
 
   DataChannels:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/data.channel.gt/001"
+      $ref: "https://schemas.electricity.works/types/data.channel.gt/002"
     description: >
       Raw telemetry channel definitions used to interpret channel names appearing
       in reports and snapshots.
@@ -86,7 +86,7 @@ properties:
   DerivedChannels:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/derived.channel.gt/000"
+      $ref: "https://schemas.electricity.works/types/derived.channel.gt/001"
     description: >
       Derived telemetry channel definitions used to interpret derived channel
       names appearing in reports and snapshots.
@@ -108,16 +108,14 @@ properties:
       Flow module components present in the running deployment.
 
   Ha1Params:
-    oneOf:
-      - $ref: "https://schemas.electricity.works/types/ha1.params/004"
-      - $ref: "https://schemas.electricity.works/types/ha1.params/005"
+    $ref: "https://schemas.electricity.works/types/ha1.params/006"
     description: >
       Active HA1 parameter set used by the running deployment.
 
   I2cRelayComponent:
-    $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002"
+    $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004"
     description: >
-      Relay component configuration used by the running deployment.
+      Optional relay component configuration used by the running deployment.
 
   TMap:
     $ref: "https://schemas.electricity.works/types/gw1.tank.temp.calibration.map/000"
@@ -128,7 +126,7 @@ properties:
     const: "layout.lite"
 
   Version:
-    const: "009"
+    const: "014"
 
 required:
   - FromGNodeAlias
@@ -147,37 +145,10 @@ required:
   - TankModuleComponents
   - FlowModuleComponents
   - Ha1Params
-  - I2cRelayComponent
   - TypeName
   - Version
 
 additionalProperties: false
-
-examples:
-  - |
-    {
-      "FromGNodeAlias": "d1.isone.me.versant.keene.beech.scada",
-      "MessageCreatedMs": 1704067200000,
-      "MessageId": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
-      "Strategy": "House0Sieg",
-      "SystemMode": "Heating",
-      "SeasonalStorageMode": "AllTanks",
-      "BufferShortCycling": false,
-      "ZoneList": [],
-      "CriticalZoneList": [],
-      "TotalStoreTanks": 3,
-      "ShNodes": [
-        {"Name": "s", "ActorClass": "PrimaryScada", "ShNodeId": "da9a0427-d6c0-44c0-b51c-492c1e580dc5", "TypeName": "spaceheat.node.gt", "Version": "300"}
-      ],
-      "DataChannels": [],
-      "DerivedChannels": [],
-      "TankModuleComponents": [],
-      "FlowModuleComponents": [],
-      "Ha1Params": {"AlphaTimes10": 120, "BetaTimes100": -22, "GammaEx6": 0, "IntermediatePowerKw": 1.5, "IntermediateRswtF": 100, "DdPowerKw": 9.0, "DdRswtF": 160, "DdDeltaTF": 20, "HpMaxKwTh": 6.0, "MaxEwtF": 170, "LoadOverestimationPercent": 10, "TypeName": "ha1.params", "Version": "004"},
-      "I2cRelayComponent": {"ComponentId": "25f344ee-39ea-4904-bff9-54f2022337af", "ComponentAttributeClassId": "29eab8b1-100f-4230-bb44-3a2fcba33cc3", "ConfigList": [{"ActorName": "relay1", "AsyncCapture": true, "AsyncCaptureDelta": null, "CapturePeriodS": 300, "ChannelName": "vdc-relay1", "DeEnergizedState": "RelayClosed", "DeEnergizingEvent": "CloseRelay", "EnergizedState": "RelayOpen", "EnergizingEvent": "OpenRelay", "EventType": "change.relay.state", "Exponent": 0, "PollPeriodMs": 200, "RelayIdx": 1, "StateType": "relay.closed.or.open", "TypeName": "relay.actor.config", "Unit": "Unitless", "Version": "002", "WiringConfig": "NormallyClosed"}], "DisplayName": "I2C Relay Board", "HwUid": "i2c.krida.double.emr16.v1.29eab8", "I2cAddressList": [32, 33], "TypeName": "i2c.multichannel.dt.relay.component.gt", "Version": "002"},
-      "TypeName": "layout.lite",
-      "Version": "009"
-    }
 
 x-gridworks:
   owner: "gridworks-energy"
@@ -217,11 +188,3 @@ x-gridworks:
     `layout.lite` for channel interpretation. `ChannelName` references inside
     those messages SHALL be resolved against `DataChannels` and
     `DerivedChannels` in the relevant `layout.lite` context.
-
-    `layout.lite` also carries selected runtime settings whose values affect
-    the interpretation of the running system, including system mode, seasonal
-    storage mode, short-cycling behavior, and active HA1 parameters.
-
-    NOTE -- this version's oneOf over multiple versions of the same type is an
-    early lenience accommodating back-dated production traffic as sema came
-    online, not a pattern to copy. Newer versions carry a single type version.

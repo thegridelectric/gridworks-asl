@@ -8,7 +8,7 @@ from sema.runtime.types.old_versions.data_channel_gt_001 import DataChannelGt001
 from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
     I2cMultichannelDtRelayComponentGt002,
 )
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
+from sema.runtime.types.old_versions.spaceheat_node_gt_300 import SpaceheatNodeGt300
 
 
 class ScadaControlCapabilities(SemaType):
@@ -16,8 +16,8 @@ class ScadaControlCapabilities(SemaType):
 
     from_g_node_alias: LeftRightDot
     message_created_ms: UTCMilliseconds
-    relay_nodes: list[SpaceheatNodeGt]
-    dac_nodes: list[SpaceheatNodeGt]
+    relay_nodes: list[SpaceheatNodeGt300]
+    dac_nodes: list[SpaceheatNodeGt300]
     control_channels: list[DataChannelGt001]
     i2c_relay_component: I2cMultichannelDtRelayComponentGt002
     type_name: Literal["scada.control.capabilities"] = "scada.control.capabilities"

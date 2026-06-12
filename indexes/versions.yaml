@@ -289,9 +289,11 @@ types:
         summary: "Initial Sema version"
 
   layout.lite:
-    latest_version: "013"
+    latest_version: "014"
     versioning_strategy: "literal"
     versions:
+      "014":
+        summary: "- ShNodes: spaceheat.node.gt:301 -> 302"
       "013":
         summary: "- I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004"
       "012":
@@ -356,9 +358,11 @@ types:
         summary: "Initial Sema version"
 
   new.command.tree:
-    latest_version: "000"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- ShNodes: spaceheat.node.gt:302 only (drop the multi-version oneOf anti-pattern)"
       "000":
         summary: "Initial Sema version"
 

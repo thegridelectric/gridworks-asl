@@ -222,3 +222,7 @@ x-gridworks:
     `layout.lite` also carries selected runtime settings whose values affect
     the interpretation of the running system, including system mode, seasonal
     storage mode, short-cycling behavior, and active HA1 parameters.
+
+    NOTE -- this version's oneOf over multiple versions of the same type is an
+    early lenience accommodating back-dated production traffic as sema came
+    online, not a pattern to copy. Newer versions carry a single type version.

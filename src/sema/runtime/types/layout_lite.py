@@ -14,16 +14,16 @@ from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
-from sema.runtime.types.old_versions.spaceheat_node_gt_301 import SpaceheatNodeGt301
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 from sema.runtime.types.sim_pico_tank_module_component_gt import (
     SimPicoTankModuleComponentGt,
 )
+from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 
 
 class LayoutLite(SemaType):
-    """Sema: https://schemas.electricity.works/types/layout.lite/013"""
+    """Sema: https://schemas.electricity.works/types/layout.lite/014"""
 
     from_g_node_alias: LeftRightDot
     message_created_ms: UTCMilliseconds
@@ -35,7 +35,7 @@ class LayoutLite(SemaType):
     zone_list: list[str]
     critical_zone_list: list[str]
     total_store_tanks: PositiveInt
-    sh_nodes: list[SpaceheatNodeGt301]
+    sh_nodes: list[SpaceheatNodeGt]
     data_channels: list[DataChannelGt]
     derived_channels: list[DerivedChannelGt001]
     tank_module_components: list[
@@ -46,7 +46,7 @@ class LayoutLite(SemaType):
     i2c_relay_component: I2cMultichannelDtRelayComponentGt | None = None
     t_map: Gw1TankTempCalibrationMap | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
-    version: Literal["013"] = "013"
+    version: Literal["014"] = "014"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "LayoutLite":
