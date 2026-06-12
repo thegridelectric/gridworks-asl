@@ -29,7 +29,7 @@ properties:
   ShNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/301"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
     description: >
       List of Spaceheat nodes representing operational roles in the system.
       Keys are SpaceheatName identifiers. Each node corresponds to a functional

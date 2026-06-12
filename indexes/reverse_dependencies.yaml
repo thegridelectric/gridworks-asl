@@ -188,7 +188,6 @@ types:
       - layout.lite:010
       - layout.lite:011
       - new.command.tree:000
-      - scada.control.capabilities:001
     '301':
       used_by:
       - layout.lite:010
@@ -196,6 +195,9 @@ types:
       - layout.lite:012
       - layout.lite:013
       - new.command.tree:000
+    '302':
+      used_by:
+      - scada.control.capabilities:001
   spaceheat.telemetry.quantity.projection:
     '000':
       used_by:
@@ -254,6 +256,9 @@ enums:
     '011':
       used_by:
       - spaceheat.node.gt:301
+    '012':
+      used_by:
+      - spaceheat.node.gt:302
   gw1.emission.method:
     '000':
       used_by:
@@ -383,6 +388,7 @@ formats:
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
+    - spaceheat.node.gt:302
   hex.char:
     used_by:
     - heartbeat.a:000
@@ -486,6 +492,7 @@ formats:
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
+    - spaceheat.node.gt:302
     - synth.channel.gt:000
   positive.int.as.str:
     used_by:
@@ -521,6 +528,7 @@ formats:
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
+    - spaceheat.node.gt:302
     - synced.readings.bundle:001
     - synced.readings:000
     - synth.channel.gt:000
@@ -642,5 +650,6 @@ formats:
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
+    - spaceheat.node.gt:302
     - synth.channel.gt:000
     - weather.forecast:000

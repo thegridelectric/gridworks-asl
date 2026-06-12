@@ -1216,7 +1216,7 @@ types:
       "000":
         status: "draft"
         schema_url: "https://schemas.electricity.works/draft/types/gw.nolan.layout/000"
-        created: "2026-03-20T19:00:00Z"
+        created: "2026-06-12T00:00:00Z"
         summary: "Initial draft"
         direct_dependencies:
           structural:
@@ -1240,7 +1240,7 @@ types:
             - "pico.tank.module.component.gt:000"
             - "relay.closed.or.open:000"
             - "relay.wiring.config:000"
-            - "spaceheat.node.gt:301"
+            - "spaceheat.node.gt:302"
             - "web.server.component.gt:001"
 
   gw1.tank.temp.calibration:
@@ -1987,7 +1987,7 @@ types:
     versions:
       "001":
         schema_url: "https://schemas.electricity.works/types/scada.control.capabilities/001"
-        created: "2026-05-07T20:00:00Z"
+        created: "2026-06-12T00:00:00Z"
         summary: >-
           - RelayNodes[]: inline object -> spaceheat.node.gt:300
           - DacNodes[]: inline object -> spaceheat.node.gt:300
@@ -1998,7 +1998,7 @@ types:
             - "data.channel.gt:001"
             - "i2c.multichannel.dt.relay.component.gt:002"
             - "left.right.dot"
-            - "spaceheat.node.gt:300"
+            - "spaceheat.node.gt:302"
             - "utc.milliseconds"
           axiom:
             - "gw1.actor.class:009"
@@ -2266,12 +2266,24 @@ types:
             - "uuid4.str"
 
   spaceheat.node.gt:
-    latest_version: "301"
+    latest_version: "302"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "A Spaceheat node representing a named element in the SCADA system."
 
     versions:
+      "302":
+        schema_url: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
+        created: "2026-06-12T00:00:00Z"
+        summary: >-
+          - ActorClass: gw1.actor.class:011 -> 012
+        direct_dependencies:
+          structural:
+            - "gw1.actor.class:012"
+            - "handle.name"
+            - "positive.int"
+            - "spaceheat.name"
+            - "uuid4.str"
       "301":
         schema_url: "https://schemas.electricity.works/types/spaceheat.node.gt/301"
         created: "2026-02-18T21:34:00Z"

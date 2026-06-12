@@ -30,7 +30,7 @@ properties:
       List of Spaceheat nodes representing controllable relays exposed by
       this SCADA. Each node is dispatch-addressable by Name.
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/300"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
 
   DacNodes:
     type: array
@@ -38,7 +38,7 @@ properties:
       List of Spaceheat nodes representing controllable 0-10V outputs exposed
       by this SCADA. Each node is dispatch-addressable by Name.
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/300"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
 
   ControlChannels:
     type: array

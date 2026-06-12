@@ -561,9 +561,11 @@ types:
         summary: "Initial Sema version"
 
   spaceheat.node.gt:
-    latest_version: "301"
+    latest_version: "302"
     versioning_strategy: "literal"
     versions:
+      "302":
+        summary: "- ActorClass: gw1.actor.class:011 -> 012"
       "301":
         summary: >
           - BoardComponentId: add as Optional

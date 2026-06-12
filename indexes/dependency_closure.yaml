@@ -947,6 +947,7 @@ types:
       enums:
       - change.relay.state:000
       - gw1.actor.class:009
+      - gw1.actor.class:012
       - relay.closed.or.open:000
       - relay.wiring.config:000
       - spaceheat.telemetry.name:006
@@ -964,7 +965,7 @@ types:
       - data.channel.gt:001
       - i2c.multichannel.dt.relay.component.gt:002
       - relay.actor.config:002
-      - spaceheat.node.gt:300
+      - spaceheat.node.gt:302
       versionless_types: []
   scada.params:
     '004':
@@ -1116,6 +1117,16 @@ types:
     '301':
       enums:
       - gw1.actor.class:011
+      formats:
+      - handle.name
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types: []
+      versionless_types: []
+    '302':
+      enums:
+      - gw1.actor.class:012
       formats:
       - handle.name
       - positive.int

@@ -353,9 +353,10 @@ types:
     versions:
       '000': definitions/types/synth.channel.gt/000.yaml
   spaceheat.node.gt:
-    latest_version: '301'
+    latest_version: '302'
     versioning_strategy: literal
     versions:
+      '302': definitions/types/spaceheat.node.gt/302.yaml
       '301': definitions/types/spaceheat.node.gt/301.yaml
       '300': definitions/types/spaceheat.node.gt/300.yaml
       '200': definitions/types/spaceheat.node.gt/200.yaml

@@ -14,12 +14,12 @@ from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
+from sema.runtime.types.old_versions.spaceheat_node_gt_301 import SpaceheatNodeGt301
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 from sema.runtime.types.sim_pico_tank_module_component_gt import (
     SimPicoTankModuleComponentGt,
 )
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 
 
 class LayoutLite(SemaType):
@@ -35,7 +35,7 @@ class LayoutLite(SemaType):
     zone_list: list[str]
     critical_zone_list: list[str]
     total_store_tanks: PositiveInt
-    sh_nodes: list[SpaceheatNodeGt]
+    sh_nodes: list[SpaceheatNodeGt301]
     data_channels: list[DataChannelGt]
     derived_channels: list[DerivedChannelGt001]
     tank_module_components: list[
