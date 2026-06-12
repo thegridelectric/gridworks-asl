@@ -1,7 +1,7 @@
 from typing import Literal
 from pydantic import ConfigDict, model_validator
 from sema.runtime.base import SemaType
-from sema.runtime.enums import Gw1ActorClass
+from sema.runtime.enums.old_versions.gw1_actor_class_011 import Gw1ActorClass011
 from sema.runtime.property_format import HandleName
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import SpaceheatName
@@ -14,7 +14,7 @@ class SpaceheatNodeGt(SemaType):
     name: SpaceheatName
     actor_hierarchy_name: HandleName | None = None
     handle: HandleName | None = None
-    actor_class: Gw1ActorClass
+    actor_class: Gw1ActorClass011
     display_name: str | None = None
     component_id: UUID4Str | None = None
     board_component_id: UUID4Str | None = None
@@ -47,7 +47,7 @@ class SpaceheatNodeGt(SemaType):
         "SecondaryScada". If ActorHierarchyName is present, its final segment SHALL equal Name
         and all segments SHALL be unique.
         """
-        if self.actor_class == Gw1ActorClass.NoActor:
+        if self.actor_class == Gw1ActorClass011.NoActor:
             if self.actor_hierarchy_name is not None:
                 raise ValueError(
                     "Axiom 2 failed: actor_hierarchy_name must be absent when actor_class is NoActor."
@@ -56,8 +56,8 @@ class SpaceheatNodeGt(SemaType):
 
         if self.actor_hierarchy_name is None:
             if self.actor_class not in {
-                Gw1ActorClass.PrimaryScada,
-                Gw1ActorClass.SecondaryScada,
+                Gw1ActorClass011.PrimaryScada,
+                Gw1ActorClass011.SecondaryScada,
             }:
                 raise ValueError(
                     "Axiom 2 failed: only PrimaryScada or SecondaryScada may omit actor_hierarchy_name."

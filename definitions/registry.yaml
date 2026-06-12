@@ -230,12 +230,18 @@ enums:
         created: "2026-02-23T17:08:00Z"
 
   gw1.actor.class:
-    latest_version: "011"
+    latest_version: "012"
     owner: gridworks-energy
     enum_type: "versioned"
     description: "Classification of actors in the GridWorks SCADA system."
 
     versions:
+      "012":
+        schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/012"
+        created: "2026-06-12T00:00:00Z"
+        added_values:
+          - "SimSensorActor"
+          - "SimRelayActor"
       "011":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/011"
         created: "2026-02-18T21:34:00Z"

@@ -433,8 +433,9 @@ enums:
       '000': definitions/enums/gw.g.node.class/000.yaml
   gw1.actor.class:
     enum_type: versioned
-    latest_version: '011'
+    latest_version: '012'
     versions:
+      '012': definitions/enums/gw1.actor.class/012.yaml
       '011': definitions/enums/gw1.actor.class/011.yaml
       '010': definitions/enums/gw1.actor.class/010.yaml
       009: definitions/enums/gw1.actor.class/009.yaml
