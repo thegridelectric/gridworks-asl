@@ -1,0 +1,51 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/component.attribute.class.gt/001"
+
+title: "component.attribute.class.gt"
+type: object
+description: >
+  A Component Attribute Class (CAC): the make/model device type shared by every
+  component built on the same hardware. A CAC carries the attributes that depend
+  only on the device type — not on the individual installed instance — and is
+  identified by its MakeModel. This is the generic CAC; specific device families
+  (electric meters, the SCADA board, …) are their own flat CAC types.
+
+properties:
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this device type. For a known MakeModel this
+      is the canonical id registered for that MakeModel (see axiom 1).
+
+  MakeModel:
+    $ref: "https://schemas.electricity.works/enums/spaceheat.make.model/007"
+    description: >
+      The manufacturer make and model identifying this device type.
+
+  DisplayName:
+    type: string
+    description: >
+      Human-readable name for this device type.
+
+  MinPollPeriodMs:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Shortest polling period, in milliseconds, that this device type supports.
+
+  TypeName:
+    const: "component.attribute.class.gt"
+
+  Version:
+    const: "001"
+
+required:
+  - ComponentAttributeClassId
+  - MakeModel
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

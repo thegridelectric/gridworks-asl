@@ -1,14 +1,14 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/i2c.thermistor.channel.config/000"
+$id: "https://schemas.electricity.works/types/i2c.thermistor.channel.config/001"
 
 title: "i2c.thermistor.channel.config"
 type: object
 description: >
   Channel configuration for one thermistor input read through an I2C ADC.
 
-  This type extends the base channel configuration with the ADC pin selection,
-  thermistor beta parameter, and whether the channel should also be forwarded
-  into derived-channel processing.
+  This type spells out the base channel-configuration fields together with the ADC
+  pin selection, thermistor beta parameter, and whether the channel should also be
+  forwarded into derived-channel processing.
 
 properties:
   ChannelName:
@@ -51,7 +51,6 @@ properties:
 
   SendToDerived:
     type: boolean
-    default: false
     description: >
       Whether this raw thermistor reading should also be provided to derived
       channel logic.
@@ -66,7 +65,7 @@ properties:
     const: "i2c.thermistor.channel.config"
 
   Version:
-    const: "000"
+    const: "001"
 
 required:
   - ChannelName

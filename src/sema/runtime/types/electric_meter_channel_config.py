@@ -1,14 +1,14 @@
 from typing import Literal
 from pydantic import StrictInt
 from sema.runtime.base import SemaType
-from sema.runtime.enums import I2cAdcChannel
 from sema.runtime.enums import SpaceheatUnit
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import SpaceheatName
+from sema.runtime.types.egauge_register_config import EgaugeRegisterConfig
 
 
-class I2cThermistorChannelConfig(SemaType):
-    """Sema: https://schemas.electricity.works/types/i2c.thermistor.channel.config/001"""
+class ElectricMeterChannelConfig(SemaType):
+    """Sema: https://schemas.electricity.works/types/electric.meter.channel.config/000"""
 
     channel_name: SpaceheatName
     poll_period_ms: PositiveInt | None = None
@@ -17,10 +17,8 @@ class I2cThermistorChannelConfig(SemaType):
     async_capture_delta: PositiveInt | None = None
     exponent: StrictInt
     unit: SpaceheatUnit
-    adc_channel: I2cAdcChannel
-    send_to_derived: bool
-    thermistor_beta: PositiveInt
-    type_name: Literal["i2c.thermistor.channel.config"] = (
-        "i2c.thermistor.channel.config"
+    egauge_register_config: EgaugeRegisterConfig | None = None
+    type_name: Literal["electric.meter.channel.config"] = (
+        "electric.meter.channel.config"
     )
-    version: Literal["001"] = "001"
+    version: Literal["000"] = "000"

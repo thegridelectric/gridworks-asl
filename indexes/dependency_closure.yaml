@@ -57,6 +57,15 @@ types:
       - spaceheat.name
       types: []
       versionless_types: []
+  component.attribute.class.gt:
+    '001':
+      enums:
+      - spaceheat.make.model:007
+      formats:
+      - positive.int
+      - uuid4.str
+      types: []
+      versionless_types: []
   connectivity.edge.gt:
     '000':
       enums:
@@ -124,6 +133,44 @@ types:
       - uuid4.str
       types:
       - gw1.unit.quantity.projection:000
+      versionless_types: []
+  egauge.register.config:
+    '000':
+      enums: []
+      formats: []
+      types: []
+      versionless_types: []
+  electric.meter.cac.gt:
+    '001':
+      enums:
+      - spaceheat.make.model:007
+      - spaceheat.telemetry.name:007
+      formats:
+      - positive.int
+      - uuid4.str
+      types: []
+      versionless_types: []
+  electric.meter.channel.config:
+    '000':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - positive.int
+      - spaceheat.name
+      types:
+      - egauge.register.config:000
+      versionless_types: []
+  electric.meter.component.gt:
+    '001':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - egauge.register.config:000
+      - electric.meter.channel.config:000
       versionless_types: []
   energy.instruction:
     '000':
@@ -319,6 +366,34 @@ types:
       formats: []
       types: []
       versionless_types: []
+  gw108.gpio.sensor.component.gt:
+    '001':
+      enums:
+      - gpio.sense.mode:000
+      - spaceheat.unit:001
+      formats:
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      versionless_types: []
+  gw108.vdc.relay.component.gt:
+    '001':
+      enums:
+      - change.relay.state:000
+      - relay.closed.or.open:000
+      - relay.wiring.config:000
+      - spaceheat.unit:001
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - relay.actor.config:003
+      versionless_types: []
   ha1.params:
     '004':
       enums: []
@@ -398,7 +473,7 @@ types:
       - relay.actor.config:003
       versionless_types: []
   i2c.thermistor.channel.config:
-    '000':
+    '001':
       enums:
       - i2c.adc.channel:000
       - spaceheat.unit:001
@@ -408,7 +483,7 @@ types:
       types: []
       versionless_types: []
   i2c.thermistor.reader.component.gt:
-    '000':
+    '001':
       enums:
       - i2c.adc.channel:000
       - spaceheat.unit:001
@@ -419,7 +494,7 @@ types:
       - spaceheat.name
       - uuid4.str
       types:
-      - i2c.thermistor.channel.config:000
+      - i2c.thermistor.channel.config:001
       versionless_types: []
   keyparam.change.log:
     '000':
@@ -823,6 +898,22 @@ types:
       types:
       - spaceheat.node.gt:302
       versionless_types: []
+  pico.btu.meter.component.gt:
+    '000':
+      enums:
+      - gpm.from.hz.method:000
+      - hz.calc.method:001
+      - spaceheat.make.model:007
+      - spaceheat.unit:001
+      - temp.calc.method:000
+      formats:
+      - positive.float
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      versionless_types: []
   pico.flow.module.component.gt:
     '000':
       enums:
@@ -1106,6 +1197,17 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  sim.sensor.component.gt:
+    '000':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      versionless_types: []
   sim.timestep:
     '000':
       enums: []
@@ -1285,6 +1387,17 @@ types:
       - utc.seconds
       - uuid4.str
       types: []
+      versionless_types: []
+  web.server.component.gt:
+    '001':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
       versionless_types: []
 versionless_types:
   gridworks.ack:

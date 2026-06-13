@@ -1,0 +1,69 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/electric.meter.channel.config/000"
+
+title: "electric.meter.channel.config"
+type: object
+description: >
+  Per-channel configuration for one telemetry channel read from an electric meter.
+  Flat — it spells out the shared channel-config fields (it does not inherit a base
+  config type) and adds the optional EGauge modbus register mapping for meters read
+  over modbus.
+
+properties:
+
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  PollPeriodMs:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      How often SCADA polls the meter for a fresh value, in milliseconds.
+
+  CapturePeriodS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      How often SCADA reports this channel value into the telemetry stream, in
+      seconds.
+
+  AsyncCapture:
+    type: boolean
+
+  AsyncCaptureDelta:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Threshold for asynchronous emission, expressed in Unit-scaled values.
+
+  Exponent:
+    type: integer
+    description: >
+      Base-10 scaling exponent applied to the serialized integer reading in
+      combination with Unit.
+
+  Unit:
+    $ref: "https://schemas.electricity.works/enums/spaceheat.unit/001"
+
+  EgaugeRegisterConfig:
+    $ref: "https://schemas.electricity.works/types/egauge.register.config/000"
+    description: >
+      EGauge modbus register mapping for this channel, when the meter is read over
+      modbus. Absent for non-modbus meters.
+
+  TypeName:
+    const: "electric.meter.channel.config"
+
+  Version:
+    const: "000"
+
+required:
+  - ChannelName
+  - CapturePeriodS
+  - AsyncCapture
+  - Exponent
+  - Unit
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

@@ -7,6 +7,7 @@ from sema.runtime.enums.fsm_report_type import FsmReportType
 from sema.runtime.enums.g_node_instance_status import GNodeInstanceStatus
 from sema.runtime.enums.g_node_instance_transport import GNodeInstanceTransport
 from sema.runtime.enums.g_node_status import GNodeStatus
+from sema.runtime.enums.gpio_sense_mode import GpioSenseMode
 from sema.runtime.enums.gpm_from_hz_method import GpmFromHzMethod
 from sema.runtime.enums.gw1_actor_class import Gw1ActorClass
 from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
@@ -58,6 +59,7 @@ __all__ = [
     "GNodeInstanceStatus",
     "GNodeInstanceTransport",
     "GNodeStatus",
+    "GpioSenseMode",
     "GpmFromHzMethod",
     "Gw1ActorClass",
     "Gw1EmissionMethod",

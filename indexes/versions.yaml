@@ -42,6 +42,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  component.attribute.class.gt:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version (flattened from the scada ComponentAttributeClassGt runtime)."
+
   connectivity.edge.gt:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -77,6 +84,34 @@ types:
           - Parameters: add (Optional)
       "000":
         summary: "Initial Sema version"
+
+  egauge.register.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada EgaugeRegisterConfig runtime)."
+
+  electric.meter.cac.gt:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version (flattened from the scada ElectricMeterCacGt runtime)."
+
+  electric.meter.channel.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada ElectricMeterChannelConfig runtime)."
+
+  electric.meter.component.gt:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version (flattened from the scada ElectricMeterComponentGt runtime)."
 
   energy.instruction:
     latest_version: "000"
@@ -223,6 +258,20 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  gw108.gpio.sensor.component.gt:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version (flattened from the scada Gw108GpioSensorComponentGt runtime)."
+
+  gw108.vdc.relay.component.gt:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version (flattened from the scada Gw108GpioRelayComponentGt runtime, TypeName gw108.vdc.relay.component.gt)."
+
   ha1.params:
     latest_version: "006"
     versioning_strategy: "literal"
@@ -268,18 +317,18 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   i2c.thermistor.channel.config:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "001":
+        summary: "Initial Sema version. Starts at 001 to match the only version ever emitted in the field; the never-emitted sema 000 was dropped."
 
   i2c.thermistor.reader.component.gt:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
-      "000":
-        summary: "Initial Sema version"
+      "001":
+        summary: "Initial Sema version. Starts at 001 to match the only field-emitted version; the never-emitted sema 000 was dropped. Structural-only (gwsproto ConfigUniqueness/AddressValidity axioms deferred)."
 
   keyparam.change.log:
     latest_version: "000"
@@ -372,6 +421,13 @@ types:
     versions:
       "000":
         summary: "Initial Sema version"
+
+  pico.btu.meter.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada PicoBtuMeterComponentGt runtime)."
 
   pico.tank.module.component.gt:
     latest_version: "011"
@@ -501,6 +557,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  sim.sensor.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (new sim-marker component for simulated layouts; structurally component.gt)."
+
   sim.timestep:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -616,6 +679,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  web.server.component.gt:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version (flattened from the scada WebServerComponentGt runtime; WebServer is an inline object)."
+
 enums:
   base.g.node.class:
     enum_type: "versioned"
@@ -666,6 +736,12 @@ enums:
       "000": {}
 
   g.node.status:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  gpio.sense.mode:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

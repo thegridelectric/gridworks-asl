@@ -42,6 +42,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/channel.readings.list.item/000.yaml
+  component.attribute.class.gt:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/component.attribute.class.gt/001.yaml
   connectivity.edge.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -60,6 +65,26 @@ types:
       '002': definitions/types/derived.channel.gt/002.yaml
       '001': definitions/types/derived.channel.gt/001.yaml
       '000': definitions/types/derived.channel.gt/000.yaml
+  egauge.register.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/egauge.register.config/000.yaml
+  electric.meter.cac.gt:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/electric.meter.cac.gt/001.yaml
+  electric.meter.channel.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/electric.meter.channel.config/000.yaml
+  electric.meter.component.gt:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/electric.meter.component.gt/001.yaml
   energy.instruction:
     latest_version: '000'
     versioning_strategy: literal
@@ -145,6 +170,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw1.unit.quantity.projection/000.yaml
+  gw108.gpio.sensor.component.gt:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gw108.gpio.sensor.component.gt/001.yaml
+  gw108.vdc.relay.component.gt:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gw108.vdc.relay.component.gt/001.yaml
   ha1.params:
     latest_version: '006'
     versioning_strategy: literal
@@ -170,15 +205,15 @@ types:
       '003': definitions/types/i2c.multichannel.dt.relay.component.gt/003.yaml
       '002': definitions/types/i2c.multichannel.dt.relay.component.gt/002.yaml
   i2c.thermistor.channel.config:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/i2c.thermistor.channel.config/000.yaml
+      '001': definitions/types/i2c.thermistor.channel.config/001.yaml
   i2c.thermistor.reader.component.gt:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/i2c.thermistor.reader.component.gt/000.yaml
+      '001': definitions/types/i2c.thermistor.reader.component.gt/001.yaml
   keyparam.change.log:
     latest_version: '000'
     versioning_strategy: literal
@@ -228,6 +263,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/pico.flow.module.component.gt/000.yaml
+  pico.btu.meter.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/pico.btu.meter.component.gt/000.yaml
   pico.tank.module.component.gt:
     latest_version: '011'
     versioning_strategy: literal
@@ -309,6 +349,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/sim.plant.flux/000.yaml
+  sim.sensor.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.sensor.component.gt/000.yaml
   sim.timestep:
     latest_version: '000'
     versioning_strategy: literal
@@ -388,6 +433,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/weather.forecast/000.yaml
+  web.server.component.gt:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/web.server.component.gt/001.yaml
 enums:
   base.g.node.class:
     enum_type: versioned
@@ -424,6 +474,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/g.node.status/000.yaml
+  gpio.sense.mode:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gpio.sense.mode/000.yaml
   gpm.from.hz.method:
     enum_type: versioned
     latest_version: '000'

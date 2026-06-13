@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-06-12T00:00:00Z'
+  last_updated: '2026-06-12T20:00:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -168,6 +168,16 @@ enums:
       '000':
         schema_url: https://schemas.electricity.works/enums/g.node.status/000
         created: '2026-02-22T16:43:00Z'
+  gpio.sense.mode:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: "How a GPIO sensor input is read \u2014 by polling or by hardware\
+      \ edge detection."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/gpio.sense.mode/000
+        created: '2026-06-12T19:14:40Z'
   gpm.from.hz.method:
     latest_version: '000'
     owner: gridworks-energy
@@ -601,6 +611,23 @@ types:
           structural:
           - left.right.dot
           - spaceheat.name
+  component.attribute.class.gt:
+    latest_version: '001'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'A Component Attribute Class (CAC): the make/model device type shared
+      by all components built on the same hardware.'
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/types/component.attribute.class.gt/001
+        created: '2026-06-12T19:14:10Z'
+        summary: Initial Sema version (flattened from the scada ComponentAttributeClassGt
+          runtime).
+        direct_dependencies:
+          structural:
+          - positive.int
+          - spaceheat.make.model:007
+          - uuid4.str
   connectivity.edge.gt:
     latest_version: '000'
     owner: gridworks-energy
@@ -695,6 +722,73 @@ types:
           - gw1.unit:000
           - left.right.dot
           - spaceheat.name
+          - uuid4.str
+  egauge.register.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Configuration for one EGauge modbus register mapped to a telemetry
+      channel.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/egauge.register.config/000
+        created: '2026-06-12T19:14:25Z'
+        summary: Initial Sema version (flattened from the scada EgaugeRegisterConfig
+          runtime).
+        direct_dependencies:
+          structural: []
+  electric.meter.cac.gt:
+    latest_version: '001'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'Electric-meter Component Attribute Class: a power-meter device type
+      with its reportable telemetry names and default baud.'
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/types/electric.meter.cac.gt/001
+        created: '2026-06-12T19:14:20Z'
+        summary: Initial Sema version (flattened from the scada ElectricMeterCacGt
+          runtime).
+        direct_dependencies:
+          structural:
+          - positive.int
+          - spaceheat.make.model:007
+          - spaceheat.telemetry.name:007
+          - uuid4.str
+  electric.meter.channel.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Per-channel configuration for one telemetry channel read from an
+      electric meter (with optional EGauge modbus register mapping).
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/electric.meter.channel.config/000
+        created: '2026-06-12T19:14:30Z'
+        summary: Initial Sema version (flattened from the scada ElectricMeterChannelConfig
+          runtime).
+        direct_dependencies:
+          structural:
+          - egauge.register.config:000
+          - positive.int
+          - spaceheat.name
+          - spaceheat.unit:001
+  electric.meter.component.gt:
+    latest_version: '001'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A specific electric-meter component instance with its per-channel
+      telemetry configs and optional modbus connection.
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/types/electric.meter.component.gt/001
+        created: '2026-06-12T19:14:35Z'
+        summary: Initial Sema version (flattened from the scada ElectricMeterComponentGt
+          runtime).
+        direct_dependencies:
+          structural:
+          - electric.meter.channel.config:000
+          - positive.int
           - uuid4.str
   energy.instruction:
     latest_version: '000'
@@ -1023,6 +1117,41 @@ types:
           structural:
           - gw1.quantity:001
           - gw1.unit:001
+  gw108.gpio.sensor.component.gt:
+    latest_version: '001'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'A GW108-board GPIO sensor component instance: a digital sensor on
+      a GPIO pin, read by polling or edge detection.'
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/001
+        created: '2026-06-12T19:14:45Z'
+        summary: Initial Sema version (flattened from the scada Gw108GpioSensorComponentGt
+          runtime).
+        direct_dependencies:
+          structural:
+          - channel.config:000
+          - gpio.sense.mode:000
+          - positive.int
+          - uuid4.str
+  gw108.vdc.relay.component.gt:
+    latest_version: '001'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'A GW108-board VDC relay component instance: a relay driven from
+      a GPIO pin, configured by one relay.actor.config.'
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/001
+        created: '2026-06-12T19:14:50Z'
+        summary: Initial Sema version (flattened from the scada Gw108GpioRelayComponentGt
+          runtime, TypeName gw108.vdc.relay.component.gt).
+        direct_dependencies:
+          structural:
+          - positive.int
+          - relay.actor.config:003
+          - uuid4.str
   ha1.params:
     latest_version: '006'
     owner: gridworks-energy
@@ -1114,16 +1243,17 @@ types:
           - relay.actor.config:002
           - uuid4.str
   i2c.thermistor.channel.config:
-    latest_version: '000'
+    latest_version: '001'
     owner: gridworks-energy
     versioning_strategy: literal
     description: Per-channel configuration for a thermistor input read through an
       I2C ADC.
     versions:
-      '000':
-        schema_url: https://schemas.electricity.works/types/i2c.thermistor.channel.config/000
+      '001':
+        schema_url: https://schemas.electricity.works/types/i2c.thermistor.channel.config/001
         created: '2026-03-30T16:07:00Z'
-        summary: Initial Sema version
+        summary: Initial Sema version. Starts at 001 to match the only version ever
+          emitted in the field; the never-emitted sema 000 was dropped.
         direct_dependencies:
           structural:
           - i2c.adc.channel:000
@@ -1131,19 +1261,21 @@ types:
           - spaceheat.name
           - spaceheat.unit:001
   i2c.thermistor.reader.component.gt:
-    latest_version: '000'
+    latest_version: '001'
     owner: gridworks-energy
     versioning_strategy: literal
     description: Configuration for an I2C thermistor reader component that samples
       one ADC device and publishes one or more thermistor-backed temperature channels.
     versions:
-      '000':
-        schema_url: https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/000
+      '001':
+        schema_url: https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/001
         created: '2026-03-30T16:07:00Z'
-        summary: Initial Sema version
+        summary: Initial Sema version. Starts at 001 to match the only field-emitted
+          version; the never-emitted sema 000 was dropped. Structural-only (gwsproto
+          ConfigUniqueness/AddressValidity axioms deferred).
         direct_dependencies:
           structural:
-          - i2c.thermistor.channel.config:000
+          - i2c.thermistor.channel.config:001
           - positive.float
           - spaceheat.name
           - temp.calc.method:000
@@ -1463,6 +1595,28 @@ types:
           - hz.calc.method:001
           - spaceheat.make.model:003
           - spaceheat.name
+          - uuid4.str
+  pico.btu.meter.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'A Pico BTU-meter component instance: flow meter plus hot/cold thermistors
+      (and optional CT voltage) sampled by a Pico to compute thermal power.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/pico.btu.meter.component.gt/000
+        created: '2026-06-12T19:15:00Z'
+        summary: Initial Sema version (flattened from the scada PicoBtuMeterComponentGt
+          runtime).
+        direct_dependencies:
+          structural:
+          - channel.config:000
+          - gpm.from.hz.method:000
+          - hz.calc.method:001
+          - positive.float
+          - spaceheat.make.model:007
+          - spaceheat.name
+          - temp.calc.method:000
           - uuid4.str
   pico.tank.module.component.gt:
     latest_version: '011'
@@ -1785,6 +1939,23 @@ types:
           - spaceheat.name
           - utc.iso8601.millis
           - utc.milliseconds
+  sim.sensor.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'A simulated sensor component (what a SimSensorActor uses): structurally
+      a generic component, but a distinct sim.* type so simulated layouts are visibly
+      simulated by construction.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/sim.sensor.component.gt/000
+        created: '2026-06-12T19:15:05Z'
+        summary: Initial Sema version (new sim-marker component for simulated layouts;
+          structurally component.gt).
+        direct_dependencies:
+          structural:
+          - channel.config:000
+          - uuid4.str
   sim.timestep:
     latest_version: '000'
     owner: gridworks-energy
@@ -2072,4 +2243,20 @@ types:
           structural:
           - left.right.dot
           - utc.seconds
+          - uuid4.str
+  web.server.component.gt:
+    latest_version: '001'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A web-server component instance exposing a local HTTP server (e.g.
+      for Pico devices to POST to).
+    versions:
+      '001':
+        schema_url: https://schemas.electricity.works/types/web.server.component.gt/001
+        created: '2026-06-12T19:14:55Z'
+        summary: Initial Sema version (flattened from the scada WebServerComponentGt
+          runtime; WebServer is an inline object).
+        direct_dependencies:
+          structural:
+          - channel.config:000
           - uuid4.str

@@ -1,11 +1,12 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/000"
+$id: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/001"
 
 title: "i2c.thermistor.reader.component.gt"
 type: object
 description: >
   Configuration for an I2C thermistor reader component that samples one ADC
-  device and publishes one or more thermistor-backed temperature channels.
+  device and publishes one or more thermistor-backed temperature channels. Flat —
+  the shared component fields are spelled out here.
 
 properties:
   ComponentId:
@@ -17,7 +18,7 @@ properties:
   ConfigList:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/i2c.thermistor.channel.config/000"
+      $ref: "https://schemas.electricity.works/types/i2c.thermistor.channel.config/001"
     description: >
       Thermistor channel configurations attached to this ADC reader.
 
@@ -39,7 +40,6 @@ properties:
 
   AdcReferenceVolts:
     $ref: "https://schemas.electricity.works/formats/positive.float"
-    default: 3.3
     description: >
       Reference voltage used by the ADC when converting measured voltage to a
       serialized reading.
@@ -56,7 +56,7 @@ properties:
     const: "i2c.thermistor.reader.component.gt"
 
   Version:
-    const: "000"
+    const: "001"
 
 required:
   - ComponentId
@@ -74,17 +74,3 @@ additionalProperties: false
 
 x-gridworks:
   owner: "gridworks-energy"
-
-  axioms:
-    - number: 1
-      name: "ConfigUniquenessAndDeviceChannelConsistency"
-      statement: >
-        Each ChannelName SHALL appear at most once in ConfigList. For each
-        AdcChannel, at most one config in ConfigList may use Unit equal to
-        Celcius.
-
-    - number: 2
-      name: "AddressValidity"
-      statement: >
-        AdcAddress SHALL be a valid 7-bit I2C address in the range 0 through
-        127.
