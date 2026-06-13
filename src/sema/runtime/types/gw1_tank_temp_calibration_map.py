@@ -1,4 +1,4 @@
-from typing import Any, Literal
+from typing import Literal
 from sema.runtime.base import SemaType
 from sema.runtime.types.gw1_tank_temp_calibration import Gw1TankTempCalibration
 
