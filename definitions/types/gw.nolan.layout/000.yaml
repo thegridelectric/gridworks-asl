@@ -781,5 +781,25 @@ x-gridworks:
               - TypeName equal to "gw1.heat.call.interpretation"
               - Version equal to "000"
 
+    - number:
+      name: "MakeModelCacIdConsistency"
+      statement: >
+        DRAFT / DEFERRED ENFORCEMENT (this layout is draft, so this axiom is
+        documentation of intent until the layout publishes). For each DeviceType
+        that is a component.attribute.class.gt with a known (non-Unknown) MakeModel,
+        ComponentAttributeClassId SHALL equal the canonical id assigned to that
+        MakeModel by the GridWorks MakeModel -> ComponentAttributeClassId mapping;
+        a DeviceType with MakeModel UnknownMake__UnknownModel MAY use any UUID. This
+        is the in-canon home for the bijection currently hardcoded in scada
+        (CACS_BY_MAKE_MODEL, component_attribute_class_gt.py). Enforcement stays
+        scada-side for now; this axiom goes live when the mapping is formalized as
+        gw1.* vocabulary (a gw1.cac.id enum + a gw1.make.model.cac.id projection)
+        and this layout type publishes. TODO: formalize the gw1.* projection and
+        migrate enforcement from scada into this axiom. Rationale: enforcing here (on
+        the layout, the cross-system artifact) keeps device-type + components
+        version-stable while making the layout self-validating; enforcing on the
+        device-type itself would version-couple it to the mapping and ripple on
+        every device-type addition.
+
   extended_description: >
     TODO: add Nolan specific information (e.g. radiant floor heating, Gw108).
