@@ -1,0 +1,50 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/sim.relay.component.gt/000"
+
+title: "sim.relay.component.gt"
+type: object
+description: >
+  A simulated relay component — the component the scada-side SimRelayActor's relay
+  node uses in a simulated hardware layout. Structurally a relay component (id, cac,
+  a ConfigList of relay.actor.config), but a distinct `sim.*` type so a simulated
+  layout is visibly simulated by construction. Parallel to sim.sensor.component.gt.
+  Flat — every field spelled out here.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/relay.actor.config/003"
+    description: >
+      Relay actor configurations the simulated relay bank manages.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "sim.relay.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - ComponentAttributeClassId
+  - ConfigList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

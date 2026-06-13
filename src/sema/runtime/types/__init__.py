@@ -70,6 +70,7 @@ from sema.runtime.types.sim_pico_tank_module_component_gt import (
 from sema.runtime.types.sim_plant_actuation import SimPlantActuation
 from sema.runtime.types.sim_plant_flux import SimPlantFlux
 from sema.runtime.types.sim_ready import SimReady
+from sema.runtime.types.sim_relay_component_gt import SimRelayComponentGt
 from sema.runtime.types.sim_sensor_component_gt import SimSensorComponentGt
 from sema.runtime.types.sim_timestep import SimTimestep
 from sema.runtime.types.single_machine_state import SingleMachineState
@@ -153,6 +154,7 @@ __all__ = [
     "SimPlantActuation",
     "SimPlantFlux",
     "SimReady",
+    "SimRelayComponentGt",
     "SimSensorComponentGt",
     "SimTimestep",
     "SingleMachineState",

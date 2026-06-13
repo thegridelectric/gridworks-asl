@@ -551,12 +551,18 @@ enums:
 
 
   spaceheat.make.model:
-    latest_version: "007"
+    latest_version: "008"
     owner: gridworks-energy
     enum_type: "versioned"
     description: "Make and model taxonomy used by Spaceheat SCADA for physical and simulated devices."
 
     versions:
+      "008":
+        schema_url: "https://schemas.electricity.works/enums/spaceheat.make.model/008"
+        created: "2026-06-12T19:30:00Z"
+        added_values:
+          - "GRIDWORKS__SIM_SENSOR"
+          - "GRIDWORKS__SIM_RELAY_BANK"
       "007":
         schema_url: "https://schemas.electricity.works/enums/spaceheat.make.model/007"
         created: "2026-01-03T14:27:00Z"
@@ -2311,6 +2317,22 @@ types:
             - "spaceheat.name"
             - "utc.iso8601.millis"
             - "utc.milliseconds"
+
+  sim.relay.component.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A simulated relay component — what the scada-side SimRelayActor's relay node uses in a simulated layout (the sim.* counterpart of a relay component)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/sim.relay.component.gt/000"
+        created: "2026-06-12T19:30:05Z"
+        summary: "Initial Sema version (sim-marker relay component for simulated layouts)."
+        direct_dependencies:
+          structural:
+            - "relay.actor.config:003"
+            - "uuid4.str"
 
   sim.sensor.component.gt:
     latest_version: "000"

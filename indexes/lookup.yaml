@@ -349,6 +349,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/sim.plant.flux/000.yaml
+  sim.relay.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.relay.component.gt/000.yaml
   sim.sensor.component.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -615,8 +620,9 @@ enums:
       '000': definitions/enums/relay.wiring.config/000.yaml
   spaceheat.make.model:
     enum_type: versioned
-    latest_version: '007'
+    latest_version: 008
     versions:
+      008: definitions/enums/spaceheat.make.model/008.yaml
       '007': definitions/enums/spaceheat.make.model/007.yaml
       '003': definitions/enums/spaceheat.make.model/003.yaml
   spaceheat.telemetry.name:

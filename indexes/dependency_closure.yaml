@@ -1197,6 +1197,22 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  sim.relay.component.gt:
+    '000':
+      enums:
+      - change.relay.state:000
+      - relay.closed.or.open:000
+      - relay.wiring.config:000
+      - spaceheat.unit:001
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - relay.actor.config:003
+      versionless_types: []
   sim.sensor.component.gt:
     '000':
       enums:

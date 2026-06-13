@@ -3,8 +3,10 @@ from pydantic import StrictInt
 from sema.runtime.base import SemaType
 from sema.runtime.enums import GpmFromHzMethod
 from sema.runtime.enums import HzCalcMethod
-from sema.runtime.enums import SpaceheatMakeModel
 from sema.runtime.enums import TempCalcMethod
+from sema.runtime.enums.old_versions.spaceheat_make_model_007 import (
+    SpaceheatMakeModel007,
+)
 from sema.runtime.property_format import PositiveFloat
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
@@ -25,7 +27,7 @@ class PicoBtuMeterComponentGt(SemaType):
     ct_channel_name: SpaceheatName | None = None
     read_ct_voltage: bool
     send_hz: bool
-    flow_meter_type: SpaceheatMakeModel
+    flow_meter_type: SpaceheatMakeModel007
     hz_calc_method: HzCalcMethod
     temp_calc_method: TempCalcMethod
     gpm_from_hz_method: GpmFromHzMethod

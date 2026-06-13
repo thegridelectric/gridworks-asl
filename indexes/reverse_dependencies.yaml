@@ -172,6 +172,7 @@ types:
       used_by:
       - gw108.vdc.relay.component.gt:001
       - i2c.multichannel.dt.relay.component.gt:004
+      - sim.relay.component.gt:000
   report:
     '002':
       used_by:
@@ -705,6 +706,7 @@ formats:
     - scada.params:005
     - sim.pico.tank.module.component.gt:000
     - sim.ready:000
+    - sim.relay.component.gt:000
     - sim.sensor.component.gt:000
     - sim.timestep:000
     - snapshot.spaceheat:003

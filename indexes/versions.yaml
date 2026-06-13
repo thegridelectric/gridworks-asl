@@ -557,6 +557,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  sim.relay.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (sim-marker relay component for simulated layouts)."
+
   sim.sensor.component.gt:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -943,6 +950,10 @@ enums:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
+      "008":
+        added_values:
+          - "GRIDWORKS__SIM_SENSOR"
+          - "GRIDWORKS__SIM_RELAY_BANK"
       "007":
         added_values:
           - "SAIER__SENHZG1WA"
