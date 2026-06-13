@@ -32,12 +32,12 @@ class ScadaParams004(SemaType):
         """
         data = self.model_dump()
         if self.new_params is not None:
-            new_params = self.new_params
+            new_params: SemaType = self.new_params
             while new_params.version != "006":
                 new_params = new_params.upgrade()
             data["new_params"] = new_params
         if self.old_params is not None:
-            old_params = self.old_params
+            old_params: SemaType = self.old_params
             while old_params.version != "006":
                 old_params = old_params.upgrade()
             data["old_params"] = old_params

@@ -408,7 +408,6 @@ def _annotation_for_schema(
             )
         additional = prop_schema.get("additionalProperties")
         if isinstance(additional, dict):
-            ctx.needs_any = True
             value_annotation = _annotation_for_schema(
                 additional,
                 ctx,
