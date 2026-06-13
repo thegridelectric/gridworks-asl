@@ -38,7 +38,7 @@ properties:
   DataChannels:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/data.channel.gt/001"
+      $ref: "https://schemas.electricity.works/types/data.channel.gt/002"
     description: >
       List of raw telemetry channels produced by the SCADA system.
       
@@ -57,11 +57,14 @@ properties:
     items:
       oneOf:
         - $ref: "https://schemas.electricity.works/types/electric.meter.component.gt/001"
-        - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/003"
         - $ref: "https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/001"
-        - $ref: "https://schemas.electricity.works/types/gw108.gpio.relay.component.gt/001"
-        - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/000"
+        - $ref: "https://schemas.electricity.works/draft/types/gw108.gpio.relay.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004"
+        - $ref: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/001"
         - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/000"
+        - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"
+        - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/web.server.component.gt/001"
 
   DeviceTypes:
@@ -72,7 +75,6 @@ properties:
       oneOf:
         - $ref: "https://schemas.electricity.works/types/component.attribute.class.gt/001"
         - $ref: "https://schemas.electricity.works/types/electric.meter.cac.gt/001"
-        - $ref: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
 
   Hydronic:
     type: object
@@ -481,14 +483,14 @@ x-gridworks:
             one object with:
 
                 - TypeName equal to "relay.actor.config"
-                - Version equal to "002"
+                - Version equal to "003"
                 - ActorName equal to the ShNode Name.
 
         2.For every component in Components, and for every object in that
           component's ConfigList with:
 
           - TypeName equal to "relay.actor.config"
-          - Version equal to "002"
+          - Version equal to "003"
 
           there SHALL exist exactly one ShNode with:
           
@@ -776,7 +778,7 @@ x-gridworks:
           - Parameters SHALL contain:
             - "Interpretation"
             - Parameters["Interpretation"] SHALL be an object with:
-              - TypeName equal to "heatcall.interpretation"
+              - TypeName equal to "gw1.heat.call.interpretation"
               - Version equal to "000"
 
   extended_description: >
