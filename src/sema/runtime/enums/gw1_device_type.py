@@ -6,7 +6,6 @@ from sema.runtime.enums.gw_str_enum import SemaEnum
 class Gw1DeviceType(SemaEnum):
     """Sema: https://schemas.electricity.works/enums/gw1.device.type/000"""
 
-    UnknownDeviceType = auto()
     EgaugePowerMeter = auto()
     GridworksTsnap1ScadaBoard = auto()
     GridworksSimPowerMeter = auto()
@@ -16,7 +15,6 @@ class Gw1DeviceType(SemaEnum):
     HoneywellT6Thermostat = auto()
     TewaThermistor = auto()
     EkmFlowMeter = auto()
-    GridworksSimMultiTemp = auto()
     KridaDoubleRelayBoard16 = auto()
     GridworksPicoFlowHall = auto()
     GridworksPicoFlowReed = auto()
@@ -27,10 +25,11 @@ class Gw1DeviceType(SemaEnum):
     GridworksScadaGw108 = auto()
     GridworksSimSensor = auto()
     GridworksSimRelayBank = auto()
+    AbstractWebServer = auto()
 
     @classmethod
     def default(cls) -> "Gw1DeviceType":
-        return cls.UnknownDeviceType
+        return cls.EgaugePowerMeter
 
     @classmethod
     def values(cls) -> list[str]:

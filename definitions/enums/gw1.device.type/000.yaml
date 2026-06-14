@@ -11,7 +11,6 @@ description: 'The kind of device a component is built on — a device *category*
   (e.g. `gw1.scada.device.type.gt` for GridworksScadaGw108). Migrated from `spaceheat.make.model` (now
   frozen) — each value notes its old MakeModel.'
 enum:
-- UnknownDeviceType
 - EgaugePowerMeter
 - GridworksTsnap1ScadaBoard
 - GridworksSimPowerMeter
@@ -21,7 +20,6 @@ enum:
 - HoneywellT6Thermostat
 - TewaThermistor
 - EkmFlowMeter
-- GridworksSimMultiTemp
 - KridaDoubleRelayBoard16
 - GridworksPicoFlowHall
 - GridworksPicoFlowReed
@@ -32,12 +30,12 @@ enum:
 - GridworksScadaGw108
 - GridworksSimSensor
 - GridworksSimRelayBank
-default: UnknownDeviceType
+- AbstractWebServer
+default: EgaugePowerMeter
 x-gridworks:
   owner: gridworks-energy
   version: '000'
   value_descriptions:
-    UnknownDeviceType: Unknown / unset device type (sentinel default).
     EgaugePowerMeter: eGauge 4030 power meter. (was MakeModel EGAUGE__4030)
     GridworksTsnap1ScadaBoard: GridWorks TSnap1 SCADA hardware. (was MakeModel GRIDWORKS__TSNAP1)
     GridworksSimPowerMeter: GridWorks simulated power meter. (was MakeModel GRIDWORKS__SIMPM1)
@@ -47,7 +45,6 @@ x-gridworks:
     HoneywellT6Thermostat: Honeywell T6 Z-Wave thermostat. (was MakeModel HONEYWELL__T6ZWAVETHERMOSTAT)
     TewaThermistor: Tewa TT0P-10KC3-T105-1500 thermistor. (was MakeModel TEWA__TT0P10KC3T1051500)
     EkmFlowMeter: EKM HOT-SPWM-075-HD flow meter. (was MakeModel EKM__HOTSPWM075HD)
-    GridworksSimMultiTemp: GridWorks simulated multi-temperature sensor. (was MakeModel GRIDWORKS__SIMMULTITEMP)
     KridaDoubleRelayBoard16: Krida double EMR16 I2C V3 relay board. (was MakeModel KRIDA__DOUBLEEMR16I2CV3)
     GridworksPicoFlowHall: GridWorks Pico flow hall sensor. (was MakeModel GRIDWORKS__PICOFLOWHALL)
     GridworksPicoFlowReed: GridWorks Pico flow reed sensor. (was MakeModel GRIDWORKS__PICOFLOWREED)
@@ -56,7 +53,8 @@ x-gridworks:
     GridworksTankModule3: GridWorks Tank Module 3. (was MakeModel GRIDWORKS__TANKMODULE3)
     GridworksGw101: GridWorks GW101 device. (was MakeModel GRIDWORKS__GW101)
     GridworksScadaGw108: GridWorks SCADA GW108 board. (was MakeModel GRIDWORKS__SCADA_GW108)
-    GridworksSimSensor: GridWorks simulated sensor (the SimSensorActor's device type). (was MakeModel
-      GRIDWORKS__SIM_SENSOR)
-    GridworksSimRelayBank: GridWorks simulated relay bank (the SimRelayActor's device type). (was MakeModel
-      GRIDWORKS__SIM_RELAY_BANK)
+    GridworksSimSensor: GridWorks simulated sensor — the SimSensorActor's device type; fully configured
+      from its Component ConfigList.
+    GridworksSimRelayBank: GridWorks simulated relay bank — the SimRelayActor's device type.
+    AbstractWebServer: An abstract (generic) web server — a service component, not a hardware make/model;
+      defined by its component config. Replaces the UNKNOWNMAKE web-server hack.
