@@ -1,0 +1,62 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/hubitat.poller.component.gt/000"
+
+title: "hubitat.poller.component.gt"
+type: object
+description: >
+  A Hubitat poller component (one polled Hubitat device instance): the poller settings that
+  map a Hubitat device's attributes onto SCADA channels. Flat — the shared component fields
+  are spelled out here; Poller references the hubitat.poller.gt word by $ref.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this installed component instance.
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case` string
+      (a `gw1.device.type` value). The hardware layout enforces membership in
+      `gw1.device.type`.
+
+  Poller:
+    $ref: "https://schemas.electricity.works/types/hubitat.poller.gt/000"
+    description: >
+      The poller settings for this Hubitat device.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.config/000"
+    description: >
+      Per-channel configurations for the channels this device feeds.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+    description: >
+      Hardware unique id of the installed device, when known.
+
+  TypeName:
+    const: "hubitat.poller.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - DeviceType
+  - Poller
+  - ConfigList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

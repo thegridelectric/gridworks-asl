@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-06-14T13:00:00Z'
+  last_updated: '2026-06-14T15:30:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -853,6 +853,89 @@ types:
         direct_dependencies:
           structural:
           - ads.channel.config:000
+          - pascal.case
+          - uuid4.str
+  maker.api.attribute.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: One Hubitat MakerAPI device attribute mapped onto a SCADA channel
+      (telemetry name, unit, exponent, reporting flags).
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/maker.api.attribute.gt/000
+        created: '2026-06-14T15:30:00Z'
+        summary: Initial Sema version (flattened from the scada MakerAPIAttributeGt
+          runtime; snake_case fields re-cased to CamelCase).
+        direct_dependencies:
+          structural:
+          - spaceheat.name
+          - spaceheat.telemetry.name:007
+          - spaceheat.unit:001
+  hubitat.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Connection settings for one Hubitat hub reached through its MakerAPI
+      (host, app id, access token, MAC, web-listen flag).
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/hubitat.gt/000
+        created: '2026-06-14T15:30:00Z'
+        summary: Initial Sema version (flattened from the scada HubitatGt runtime;
+          derived URL helpers excluded from the contract).
+        direct_dependencies:
+          structural: []
+  hubitat.poller.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Poller settings for one Hubitat device (target component + device,
+      mapped attributes, poll cadence).
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/hubitat.poller.gt/000
+        created: '2026-06-14T15:30:00Z'
+        summary: Initial Sema version (flattened from the scada HubitatPollerGt runtime).
+        direct_dependencies:
+          structural:
+          - maker.api.attribute.gt:000
+          - positive.int
+          - uuid4.str
+  hubitat.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'A Hubitat hub component instance: the MakerAPI connection settings
+      for one installed hub.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/hubitat.component.gt/000
+        created: '2026-06-14T15:30:00Z'
+        summary: Initial Sema version (flattened from the scada HubitatComponentGt
+          runtime).
+        direct_dependencies:
+          structural:
+          - channel.config:000
+          - hubitat.gt:000
+          - pascal.case
+          - uuid4.str
+  hubitat.poller.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'A Hubitat poller component instance: poller settings mapping one
+      Hubitat device''s attributes onto SCADA channels.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/hubitat.poller.component.gt/000
+        created: '2026-06-14T15:30:00Z'
+        summary: Initial Sema version (flattened from the scada HubitatPollerComponentGt
+          runtime).
+        direct_dependencies:
+          structural:
+          - channel.config:000
+          - hubitat.poller.gt:000
           - pascal.case
           - uuid4.str
   electric.meter.channel.config:

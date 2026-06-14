@@ -11,6 +11,8 @@ types:
       used_by:
       - gw108.gpio.sensor.component.gt:001
       - gw108.gpio.sensor.component.gt:002
+      - hubitat.component.gt:000
+      - hubitat.poller.component.gt:000
       - pico.btu.meter.component.gt:000
       - pico.btu.meter.component.gt:001
       - pico.flow.module.component.gt:000
@@ -129,6 +131,14 @@ types:
       - layout.lite:014
       - layout.lite:015
       - scada.params:005
+  hubitat.gt:
+    '000':
+      used_by:
+      - hubitat.component.gt:000
+  hubitat.poller.gt:
+    '000':
+      used_by:
+      - hubitat.poller.component.gt:000
   i2c.multichannel.dt.relay.component.gt:
     '002':
       used_by:
@@ -159,6 +169,10 @@ types:
       used_by:
       - report:002
       - report:003
+  maker.api.attribute.gt:
+    '000':
+      used_by:
+      - hubitat.poller.gt:000
   pico.flow.module.component.gt:
     '000':
       used_by:
@@ -440,6 +454,7 @@ enums:
       used_by:
       - data.channel.gt:002
       - electric.meter.cac.gt:001
+      - maker.api.attribute.gt:000
       - spaceheat.telemetry.quantity.projection:000
       - synced.readings.bundle:001
       - synced.readings.bundle:002
@@ -452,6 +467,7 @@ enums:
       - dfr.config:000
       - electric.meter.channel.config:000
       - i2c.thermistor.channel.config:001
+      - maker.api.attribute.gt:000
       - relay.actor.config:002
       - relay.actor.config:003
   temp.calc.method:
@@ -564,6 +580,8 @@ formats:
     - electric.meter.component.gt:002
     - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:002
+    - hubitat.component.gt:000
+    - hubitat.poller.component.gt:000
     - i2c.multichannel.dt.relay.component.gt:005
     - i2c.thermistor.reader.component.gt:002
     - pico.btu.meter.component.gt:001
@@ -602,6 +620,7 @@ formats:
     - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:001
     - gw108.vdc.relay.component.gt:002
+    - hubitat.poller.gt:000
     - i2c.thermistor.channel.config:001
     - layout.lite:007
     - layout.lite:008
@@ -651,6 +670,7 @@ formats:
     - i2c.thermistor.channel.config:001
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
+    - maker.api.attribute.gt:000
     - pico.btu.meter.component.gt:000
     - pico.btu.meter.component.gt:001
     - pico.flow.module.component.gt:000
@@ -773,6 +793,9 @@ formats:
     - gw108.vdc.relay.component.gt:001
     - gw108.vdc.relay.component.gt:002
     - heating.forecast:000
+    - hubitat.component.gt:000
+    - hubitat.poller.component.gt:000
+    - hubitat.poller.gt:000
     - i2c.multichannel.dt.relay.component.gt:002
     - i2c.multichannel.dt.relay.component.gt:003
     - i2c.multichannel.dt.relay.component.gt:004

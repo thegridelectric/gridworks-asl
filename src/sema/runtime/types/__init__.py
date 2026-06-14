@@ -39,6 +39,10 @@ from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProje
 from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.heartbeat_a import HeartbeatA
 from sema.runtime.types.heating_forecast import HeatingForecast
+from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
+from sema.runtime.types.hubitat_gt import HubitatGt
+from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
+from sema.runtime.types.hubitat_poller_gt import HubitatPollerGt
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
@@ -53,6 +57,7 @@ from sema.runtime.types.linear_one_dimensional_calibration import (
     LinearOneDimensionalCalibration,
 )
 from sema.runtime.types.machine_states import MachineStates
+from sema.runtime.types.maker_api_attribute_gt import MakerApiAttributeGt
 from sema.runtime.types.market_product import MarketProduct
 from sema.runtime.types.new_command_tree import NewCommandTree
 from sema.runtime.types.pico_btu_meter_component_gt import PicoBtuMeterComponentGt
@@ -135,6 +140,10 @@ __all__ = [
     "Ha1Params",
     "HeartbeatA",
     "HeatingForecast",
+    "HubitatComponentGt",
+    "HubitatGt",
+    "HubitatPollerComponentGt",
+    "HubitatPollerGt",
     "I2cMultichannelDtRelayComponentGt",
     "I2cThermistorChannelConfig",
     "I2cThermistorReaderComponentGt",
@@ -143,6 +152,7 @@ __all__ = [
     "LayoutLite",
     "LinearOneDimensionalCalibration",
     "MachineStates",
+    "MakerApiAttributeGt",
     "MarketProduct",
     "NewCommandTree",
     "PicoBtuMeterComponentGt",

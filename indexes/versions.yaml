@@ -127,6 +127,41 @@ types:
       "000":
         summary: "Initial Sema version (flattened from the scada Ads111xBasedComponentGt runtime)."
 
+  maker.api.attribute.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada MakerAPIAttributeGt runtime; snake_case fields re-cased to CamelCase)."
+
+  hubitat.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatGt runtime; derived URL helpers excluded from the contract)."
+
+  hubitat.poller.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatPollerGt runtime)."
+
+  hubitat.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatComponentGt runtime)."
+
+  hubitat.poller.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatPollerComponentGt runtime)."
+
   electric.meter.channel.config:
     latest_version: "000"
     versioning_strategy: "literal"

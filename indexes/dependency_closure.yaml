@@ -511,6 +511,52 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  hubitat.component.gt:
+    '000':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      - hubitat.gt:000
+      versionless_types: []
+  hubitat.gt:
+    '000':
+      enums: []
+      formats: []
+      types: []
+      versionless_types: []
+  hubitat.poller.component.gt:
+    '000':
+      enums:
+      - spaceheat.telemetry.name:007
+      - spaceheat.unit:001
+      formats:
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      - hubitat.poller.gt:000
+      - maker.api.attribute.gt:000
+      versionless_types: []
+  hubitat.poller.gt:
+    '000':
+      enums:
+      - spaceheat.telemetry.name:007
+      - spaceheat.unit:001
+      formats:
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - maker.api.attribute.gt:000
+      versionless_types: []
   i2c.multichannel.dt.relay.component.gt:
     '002':
       enums:
@@ -1014,6 +1060,15 @@ types:
       - handle.name
       - left.right.dot
       - utc.milliseconds
+      types: []
+      versionless_types: []
+  maker.api.attribute.gt:
+    '000':
+      enums:
+      - spaceheat.telemetry.name:007
+      - spaceheat.unit:001
+      formats:
+      - spaceheat.name
       types: []
       versionless_types: []
   market.product:

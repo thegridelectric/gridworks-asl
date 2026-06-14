@@ -95,6 +95,31 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/ads111x.based.component.gt/000.yaml
+  maker.api.attribute.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/maker.api.attribute.gt/000.yaml
+  hubitat.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hubitat.gt/000.yaml
+  hubitat.poller.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hubitat.poller.gt/000.yaml
+  hubitat.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hubitat.component.gt/000.yaml
+  hubitat.poller.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hubitat.poller.component.gt/000.yaml
   electric.meter.channel.config:
     latest_version: '000'
     versioning_strategy: literal
