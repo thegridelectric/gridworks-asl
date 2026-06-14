@@ -13,42 +13,16 @@ description: 'The kind of device a component is built on — a device *category*
 enum:
 - UnknownDeviceType
 - EgaugePowerMeter
-- NcdRelayBoard
-- AdafruitWaterproofTempSensor
 - GridworksTsnap1ScadaBoard
-- GridworksHighPrecisionWaterTemp
 - GridworksSimPowerMeter
-- SchneiderPowerMeter
-- GridworksSim30AmpRelay
-- OpenenergyEmonPi
-- GridworksSimTsnap1
-- AtlasEzfloFlowMeter
 - HubitatC7Hub
-- GridworksTankModule1
-- FibaroAnalogTempSensor
 - Amphenol10kThermistor
-- YhdcCurrentTransformer
-- MagnelabCurrentTransformer
-- GridworksMultiTemp1
-- KridaRelayBoard16
-- OmegaFtb8007FlowMeter
-- IstecFlowMeter
 - OmegaFtb8010FlowMeter
-- BelimoBallValve
-- BelimoDiverterValve
-- Taco0034Pump
-- Taco007Pump
-- ArmstrongCompassHPump
 - HoneywellT6Thermostat
-- PrmFlowMeter
-- BellGossettEcocircPump
 - TewaThermistor
 - EkmFlowMeter
 - GridworksSimMultiTemp
-- GridworksSimTotalizer
 - KridaDoubleRelayBoard16
-- GridworksSimDouble16PinRelay
-- GridworksTankModule2
 - GridworksPicoFlowHall
 - GridworksPicoFlowReed
 - SaierFlowSensor
@@ -65,43 +39,16 @@ x-gridworks:
   value_descriptions:
     UnknownDeviceType: Unknown / unset device type (sentinel default).
     EgaugePowerMeter: eGauge 4030 power meter. (was MakeModel EGAUGE__4030)
-    NcdRelayBoard: NCD PR8-14-SPST relay board. (was MakeModel NCD__PR814SPST)
-    AdafruitWaterproofTempSensor: Adafruit 642 waterproof temperature sensor. (was MakeModel Adafruit__642)
     GridworksTsnap1ScadaBoard: GridWorks TSnap1 SCADA hardware. (was MakeModel GRIDWORKS__TSNAP1)
-    GridworksHighPrecisionWaterTemp: GridWorks high-precision water temperature device. (was MakeModel
-      GRIDWORKS__WATERTEMPHIGHPRECISION)
     GridworksSimPowerMeter: GridWorks simulated power meter. (was MakeModel GRIDWORKS__SIMPM1)
-    SchneiderPowerMeter: Schneider Electric IEM3455 power meter. (was MakeModel SCHNEIDERELECTRIC__IEM3455)
-    GridworksSim30AmpRelay: GridWorks simulated 30A relay. (was MakeModel GRIDWORKS__SIMBOOL30AMPRELAY)
-    OpenenergyEmonPi: OpenEnergy EmonPi. (was MakeModel OPENENERGY__EMONPI)
-    GridworksSimTsnap1: GridWorks simulated TSnap1. (was MakeModel GRIDWORKS__SIMTSNAP1)
-    AtlasEzfloFlowMeter: Atlas EZ Flo meter. (was MakeModel ATLAS__EZFLO)
     HubitatC7Hub: Hubitat C7 LAN integration. (was MakeModel HUBITAT__C7__LAN1)
-    GridworksTankModule1: GridWorks Tank Module 1. (was MakeModel GRIDWORKS__TANK_MODULE_1)
-    FibaroAnalogTempSensor: Fibaro analog temperature sensor. (was MakeModel FIBARO__ANALOG_TEMP_SENSOR)
     Amphenol10kThermistor: Amphenol 10K NTC thermistor. (was MakeModel AMPHENOL__NTC_10K_THERMISTOR_MA100GG103BN)
-    YhdcCurrentTransformer: YHDC SCT013-100 current transformer. (was MakeModel YHDC__SCT013100)
-    MagnelabCurrentTransformer: Magnelab SCT-0300-050 current transformer. (was MakeModel MAGNELAB__SCT0300050)
-    GridworksMultiTemp1: GridWorks MultiTemp1. (was MakeModel GRIDWORKS__MULTITEMP1)
-    KridaRelayBoard16: Krida EMR16 I2C V3 relay board. (was MakeModel KRIDA__EMR16I2CV3)
-    OmegaFtb8007FlowMeter: Omega FTB8007HW-PT flow meter. (was MakeModel OMEGA__FTB8007HWPT)
-    IstecFlowMeter: Istec 4440 flow meter. (was MakeModel ISTEC_4440)
     OmegaFtb8010FlowMeter: Omega FTB8010HW-PT flow meter. (was MakeModel OMEGA__FTB8010HWPT)
-    BelimoBallValve: Belimo Ball Valve 232VS. (was MakeModel BELIMO__BALLVALVE232VS)
-    BelimoDiverterValve: Belimo Diverter B332L. (was MakeModel BELIMO__DIVERTERB332L)
-    Taco0034Pump: Taco 0034ePlus pump. (was MakeModel TACO__0034EPLUS)
-    Taco007Pump: Taco 007e pump. (was MakeModel TACO__007E)
-    ArmstrongCompassHPump: Armstrong CompassH pump. (was MakeModel ARMSTRONG__COMPASSH)
     HoneywellT6Thermostat: Honeywell T6 Z-Wave thermostat. (was MakeModel HONEYWELL__T6ZWAVETHERMOSTAT)
-    PrmFlowMeter: PRM Filtration WM075 flow meter. (was MakeModel PRMFILTRATION__WM075)
-    BellGossettEcocircPump: Bell & Gossett Ecocirc 20-18 pump. (was MakeModel BELLGOSSETT__ECOCIRC20_18)
     TewaThermistor: Tewa TT0P-10KC3-T105-1500 thermistor. (was MakeModel TEWA__TT0P10KC3T1051500)
     EkmFlowMeter: EKM HOT-SPWM-075-HD flow meter. (was MakeModel EKM__HOTSPWM075HD)
     GridworksSimMultiTemp: GridWorks simulated multi-temperature sensor. (was MakeModel GRIDWORKS__SIMMULTITEMP)
-    GridworksSimTotalizer: GridWorks simulated totalizer. (was MakeModel GRIDWORKS__SIMTOTALIZER)
     KridaDoubleRelayBoard16: Krida double EMR16 I2C V3 relay board. (was MakeModel KRIDA__DOUBLEEMR16I2CV3)
-    GridworksSimDouble16PinRelay: GridWorks simulated double 16-pin I2C relay. (was MakeModel GRIDWORKS__SIMDOUBLE16PINI2CRELAY)
-    GridworksTankModule2: GridWorks Tank Module 2. (was MakeModel GRIDWORKS__TANKMODULE2)
     GridworksPicoFlowHall: GridWorks Pico flow hall sensor. (was MakeModel GRIDWORKS__PICOFLOWHALL)
     GridworksPicoFlowReed: GridWorks Pico flow reed sensor. (was MakeModel GRIDWORKS__PICOFLOWREED)
     SaierFlowSensor: Saier SEN-HZG1WA flow sensor. (was MakeModel SAIER__SENHZG1WA)
