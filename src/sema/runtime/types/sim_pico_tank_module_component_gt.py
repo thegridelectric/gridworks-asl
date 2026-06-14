@@ -2,16 +2,17 @@ from typing import Literal
 from pydantic import ConfigDict, StrictInt, model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import TempCalcMethod
+from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.channel_config import ChannelConfig
 
 
 class SimPicoTankModuleComponentGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"""
+    """Sema: https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"""
 
     component_id: UUID4Str
-    component_attribute_class_id: UUID4Str
+    device_type: PascalCase
     config_list: list[ChannelConfig]
     display_name: str | None = None
     hw_uid: str | None = None
@@ -31,11 +32,11 @@ class SimPicoTankModuleComponentGt(SemaType):
     simulates_type_name: Literal["pico.tank.module.component.gt"] = (
         "pico.tank.module.component.gt"
     )
-    simulates_version: Literal["011"] = "011"
+    simulates_version: Literal["012"] = "012"
     type_name: Literal["sim.pico.tank.module.component.gt"] = (
         "sim.pico.tank.module.component.gt"
     )
-    version: Literal["000"] = "000"
+    version: Literal["001"] = "001"
 
     model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))
 
@@ -43,16 +44,11 @@ class SimPicoTankModuleComponentGt(SemaType):
     def check_axiom_1(self) -> "SimPicoTankModuleComponentGt":
         """
         Axiom 1: PicoHardwareIdentityXor
-        Exactly one of the following SHALL hold: - PicoHwUid is present - both PicoAHwUid and
-        PicoBHwUid are present
+        Exactly one of the following SHALL hold:
+          - PicoHwUid is present
+          - both PicoAHwUid and PicoBHwUid are present
         """
-        has_single = self.pico_hw_uid is not None
-        has_pair = self.pico_a_hw_uid is not None and self.pico_b_hw_uid is not None
-        if has_single == has_pair:
-            raise ValueError(
-                "Axiom 1 failed: exactly one of pico_hw_uid or both pico_a_hw_uid and pico_b_hw_uid must be present."
-            )
-        return self
+        raise NotImplementedError("Axiom 1 validation is not implemented.")
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "SimPicoTankModuleComponentGt":
@@ -60,13 +56,7 @@ class SimPicoTankModuleComponentGt(SemaType):
         Axiom 2: PicoKOhmsConsistency
         PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
         """
-        if (self.temp_calc_method == TempCalcMethod.SimpleBetaForPico) != (
-            self.pico_k_ohms is not None
-        ):
-            raise ValueError(
-                "Axiom 2 failed: pico_k_ohms must be present iff temp_calc_method is SimpleBetaForPico."
-            )
-        return self
+        raise NotImplementedError("Axiom 2 validation is not implemented.")
 
     @model_validator(mode="after")
     def check_axiom_3(self) -> "SimPicoTankModuleComponentGt":
@@ -74,8 +64,4 @@ class SimPicoTankModuleComponentGt(SemaType):
         Axiom 3: SensorOrderPermutation
         If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
         """
-        if self.sensor_order is not None and sorted(self.sensor_order) != [1, 2, 3]:
-            raise ValueError(
-                "Axiom 3 failed: sensor_order must be a permutation of [1, 2, 3]."
-            )
-        return self
+        raise NotImplementedError("Axiom 3 validation is not implemented.")

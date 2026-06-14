@@ -150,6 +150,49 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "TypeName": "layout.lite",
+      "Version": "014",
+      "FromGNodeAlias": "hw1.isone.me.versant.keene.spruce.scada",
+      "MessageCreatedMs": 1774955735018,
+      "MessageId": "265891d4-7250-497e-a022-5c870db6c117",
+      "Strategy": "House0",
+      "SystemMode": "MonitorOnly",
+      "SeasonalStorageMode": "AllTanks",
+      "BufferShortCycling": true,
+      "ZoneList": [],
+      "CriticalZoneList": [],
+      "TotalStoreTanks": 1,
+      "ShNodes": [],
+      "DataChannels": [],
+      "DerivedChannels": [],
+      "TankModuleComponents": [],
+      "FlowModuleComponents": [],
+      "Ha1Params": {
+        "TypeName": "ha1.params",
+        "Version": "006",
+        "AlphaTimes10": 86,
+        "BetaTimes100": -14,
+        "GammaEx6": 2900,
+        "IntermediatePowerKw": 3.6,
+        "IntermediateRswtF": 105,
+        "DdPowerKw": 8.6,
+        "DdRswtF": 140,
+        "DdDeltaTF": 20,
+        "HpMaxKwEl": 9.66,
+        "MaxEwtF": 166,
+        "LoadOverestimationPercent": 0,
+        "CopIntercept": 1.02,
+        "CopOatCoeff": 0.0257,
+        "CopLwtCoeff": 0.0,
+        "CopMin": 1.4,
+        "CopMinOatF": 15.0,
+        "HpTurnOnMinutes": 12
+      }
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
 

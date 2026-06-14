@@ -3,8 +3,8 @@ from pydantic import ConfigDict, StrictInt, model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
-    I2cMultichannelDtRelayComponentGt,
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_004 import (
+    I2cMultichannelDtRelayComponentGt004,
 )
 from sema.runtime.types.old_versions.relay_actor_config_002 import RelayActorConfig002
 
@@ -44,7 +44,7 @@ class I2cMultichannelDtRelayComponentGt003(SemaType):
             )
         return self
 
-    def upgrade(self) -> I2cMultichannelDtRelayComponentGt:
+    def upgrade(self) -> I2cMultichannelDtRelayComponentGt004:
         """- ConfigList[]: relay.actor.config:002 -> 003"""
         data = self.model_dump()
 
@@ -58,4 +58,4 @@ class I2cMultichannelDtRelayComponentGt003(SemaType):
         data["config_list"] = upgraded_configs
         data["version"] = "004"
 
-        return I2cMultichannelDtRelayComponentGt.model_validate(data)
+        return I2cMultichannelDtRelayComponentGt004.model_validate(data)

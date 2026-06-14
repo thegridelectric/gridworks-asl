@@ -1,0 +1,8 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ pico_flow_module_component_gt_001_class_name }}":
+        """
+        Axiom 1: HwUidPattern
+        If HwUid is present, it SHALL match the pattern pico_xxxxxx where xxxxxx consists of
+        six lowercase hexadecimal characters.
+        """
+        raise NotImplementedError("Axiom 1 validation is not implemented.")

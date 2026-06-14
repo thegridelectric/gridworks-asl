@@ -1,0 +1,64 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/dfr.component.gt/000"
+
+title: "dfr.component.gt"
+type: object
+description: >
+  A DFRobot analog-output component (one installed device instance): one or more DFR0971
+  dual analog-out (0-10V DAC) boards driving pump-speed / control outputs. Flat — the shared
+  component fields are spelled out here; ConfigList references the dfr channel config by $ref.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this installed component instance.
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case` string
+      (a `gw1.device.type` value, e.g. `DfrobotDualAnalogOut`). The hardware layout
+      enforces membership in `gw1.device.type`.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/dfr.config/000"
+    description: >
+      Per-output configurations for this component's analog outputs.
+
+  I2cAddressList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      I2C addresses of the DFR boards backing this component.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+    description: >
+      Hardware unique id of the installed device, when known.
+
+  TypeName:
+    const: "dfr.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - I2cAddressList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

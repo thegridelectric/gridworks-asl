@@ -1,0 +1,56 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/draft/types/gw108.gpio.relay.component.gt/002"
+
+title: "gw108.gpio.relay.component.gt"
+type: object
+description: >
+  DRAFT placeholder. A GW108-board GPIO relay component instance. There is no
+  scada-runtime class for this TypeName yet — the real GW108 relay is
+  `gw108.vdc.relay.component.gt`. Kept as a draft so the (draft) `gw.nolan.layout`
+  Components union can reference it; finalize or drop once its runtime form is
+  decided. Flat.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/relay.actor.config/003"
+
+  GpioPin:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "gw108.gpio.relay.component.gt"
+
+  Version:
+    const: "002"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - GpioPin
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

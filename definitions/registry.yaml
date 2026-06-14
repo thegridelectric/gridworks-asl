@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-06-12T20:00:00Z"
+  last_updated: "2026-06-14T15:30:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -268,6 +268,17 @@ enums:
       "009":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/009"
         created: "2026-01-15T18:00:00Z"
+
+  gw1.device.type:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Device category (PascalCase) a component is built on; replaces make/model-as-CAC. Components carry DeviceType as an open pascal.case string; the hardware layout enforces membership here. Migrated from spaceheat.make.model (frozen)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.device.type/000"
+        created: "2026-06-13T21:30:00Z"
 
   gw1.emission.method:
     latest_version: "000"
@@ -617,6 +628,17 @@ enums:
         schema_url: "https://schemas.electricity.works/enums/temp.calc.method/000"
         created: "2024-10-21T23:19:00Z"
 
+  thermistor.data.method:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Method used to convert raw thermistor voltage readings into captured temperature readings."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/thermistor.data.method/000"
+        created: "2026-06-14T12:00:00Z"
+
 
 
 types:
@@ -727,6 +749,8 @@ types:
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "A Component Attribute Class (CAC): the make/model device type shared by all components built on the same hardware."
+    replaced_by:
+      - gw1.device.type
 
     versions:
       "001":
@@ -738,6 +762,56 @@ types:
             - "positive.int"
             - "spaceheat.make.model:007"
             - "uuid4.str"
+
+  ads111x.based.device.type.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "DRAFT specialized device-type record for an ADS111x-based analog temperature sensor category (used by beech/oak/maple/fir/elm); keyed by DeviceType."
+    versions:
+      "000":
+        status: "draft"
+        schema_url: "https://schemas.electricity.works/draft/types/ads111x.based.device.type.gt/000"
+        created: "2026-06-13T22:10:00Z"
+        summary: "Initial draft (specialized device-type record; per-family successor to the field ads111x.based.cac.gt, keyed by DeviceType)."
+        direct_dependencies:
+          structural:
+            - "pascal.case"
+            - "positive.int"
+            - "spaceheat.telemetry.name:007"
+
+  electric.meter.device.type.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "DRAFT specialized device-type record for an electric-meter category; the per-family successor to electric.meter.cac.gt, keyed by DeviceType."
+    versions:
+      "000":
+        status: "draft"
+        schema_url: "https://schemas.electricity.works/draft/types/electric.meter.device.type.gt/000"
+        created: "2026-06-13T22:11:00Z"
+        summary: "Initial draft (specialized device-type record; replaces electric.meter.cac.gt category data, keyed by DeviceType)."
+        direct_dependencies:
+          structural:
+            - "pascal.case"
+            - "positive.int"
+            - "spaceheat.telemetry.name:007"
+
+  gw1.scada.device.type.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "DRAFT minimal stub: specialized device-type record for a GridWorks SCADA board (gw108 family), board-level identity only; full board descriptor lands at gw108 codification."
+    versions:
+      "000":
+        status: "draft"
+        schema_url: "https://schemas.electricity.works/draft/types/gw1.scada.device.type.gt/000"
+        created: "2026-06-13T22:12:00Z"
+        summary: "Initial draft minimal stub (full NativeGpio/I2c*/Dac board descriptor deferred to gw108 codification / spruce-untangle)."
+        direct_dependencies:
+          structural:
+            - "pascal.case"
+            - "positive.int"
 
   connectivity.edge.gt:
     latest_version: "000"
@@ -866,6 +940,8 @@ types:
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Electric-meter Component Attribute Class: a power-meter device type with its reportable telemetry names and default baud."
+    replaced_by:
+      - electric.meter.device.type.gt
 
     versions:
       "001":
@@ -877,6 +953,161 @@ types:
             - "positive.int"
             - "spaceheat.make.model:007"
             - "spaceheat.telemetry.name:007"
+            - "uuid4.str"
+
+  dfr.config:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Per-output channel configuration for one DFRobot DFR0971 analog output (0-10V DAC)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/dfr.config/000"
+        created: "2026-06-14T12:00:00Z"
+        summary: "Initial Sema version (flattened from the scada DfrConfig runtime)."
+        direct_dependencies:
+          structural:
+            - "positive.int"
+            - "spaceheat.name"
+            - "spaceheat.unit:001"
+
+  dfr.component.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A DFRobot analog-output component instance: DFR0971 dual analog-out boards driving control outputs."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/dfr.component.gt/000"
+        created: "2026-06-14T12:00:00Z"
+        summary: "Initial Sema version (flattened from the scada DfrComponentGt runtime)."
+        direct_dependencies:
+          structural:
+            - "dfr.config:000"
+            - "pascal.case"
+            - "positive.int"
+            - "uuid4.str"
+
+  ads.channel.config:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Per-channel configuration for one thermistor read through an ADS111x ADC terminal block (the TSnap path)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/ads.channel.config/000"
+        created: "2026-06-14T12:00:00Z"
+        summary: "Initial Sema version (flattened from the scada AdsChannelConfig runtime; ThermistorMakeModel -> ThermistorDeviceType)."
+        direct_dependencies:
+          structural:
+            - "pascal.case"
+            - "positive.int"
+            - "spaceheat.name"
+            - "spaceheat.unit:001"
+            - "thermistor.data.method:000"
+
+  ads111x.based.component.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "An ADS111x-based multipurpose-sensor component instance: thermistor inputs read through ADS111x ADC terminal blocks (the TSnap path)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/ads111x.based.component.gt/000"
+        created: "2026-06-14T12:00:00Z"
+        summary: "Initial Sema version (flattened from the scada Ads111xBasedComponentGt runtime)."
+        direct_dependencies:
+          structural:
+            - "ads.channel.config:000"
+            - "pascal.case"
+            - "uuid4.str"
+
+  maker.api.attribute.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "One Hubitat MakerAPI device attribute mapped onto a SCADA channel (telemetry name, unit, exponent, reporting flags)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/maker.api.attribute.gt/000"
+        created: "2026-06-14T15:30:00Z"
+        summary: "Initial Sema version (flattened from the scada MakerAPIAttributeGt runtime; snake_case fields re-cased to CamelCase)."
+        direct_dependencies:
+          structural:
+            - "spaceheat.name"
+            - "spaceheat.telemetry.name:007"
+            - "spaceheat.unit:001"
+
+  hubitat.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Connection settings for one Hubitat hub reached through its MakerAPI (host, app id, access token, MAC, web-listen flag)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/hubitat.gt/000"
+        created: "2026-06-14T15:30:00Z"
+        summary: "Initial Sema version (flattened from the scada HubitatGt runtime; derived URL helpers excluded from the contract)."
+        direct_dependencies:
+          structural: []
+
+  hubitat.poller.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Poller settings for one Hubitat device (target component + device, mapped attributes, poll cadence)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/hubitat.poller.gt/000"
+        created: "2026-06-14T15:30:00Z"
+        summary: "Initial Sema version (flattened from the scada HubitatPollerGt runtime)."
+        direct_dependencies:
+          structural:
+            - "maker.api.attribute.gt:000"
+            - "positive.int"
+            - "uuid4.str"
+
+  hubitat.component.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A Hubitat hub component instance: the MakerAPI connection settings for one installed hub."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/hubitat.component.gt/000"
+        created: "2026-06-14T15:30:00Z"
+        summary: "Initial Sema version (flattened from the scada HubitatComponentGt runtime)."
+        direct_dependencies:
+          structural:
+            - "channel.config:000"
+            - "hubitat.gt:000"
+            - "pascal.case"
+            - "uuid4.str"
+
+  hubitat.poller.component.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A Hubitat poller component instance: poller settings mapping one Hubitat device's attributes onto SCADA channels."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/hubitat.poller.component.gt/000"
+        created: "2026-06-14T15:30:00Z"
+        summary: "Initial Sema version (flattened from the scada HubitatPollerComponentGt runtime)."
+        direct_dependencies:
+          structural:
+            - "channel.config:000"
+            - "hubitat.poller.gt:000"
+            - "pascal.case"
             - "uuid4.str"
 
   electric.meter.channel.config:
@@ -898,12 +1129,22 @@ types:
             - "spaceheat.unit:001"
 
   electric.meter.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "A specific electric-meter component instance with its per-channel telemetry configs and optional modbus connection."
 
     versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/electric.meter.component.gt/002"
+        created: "2026-06-13T22:00:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        direct_dependencies:
+          structural:
+            - "electric.meter.channel.config:000"
+            - "pascal.case"
+            - "positive.int"
+            - "uuid4.str"
       "001":
         schema_url: "https://schemas.electricity.works/types/electric.meter.component.gt/001"
         created: "2026-06-12T19:14:35Z"
@@ -1318,33 +1559,36 @@ types:
         status: "draft"
         schema_url: "https://schemas.electricity.works/draft/types/gw.nolan.layout/000"
         created: "2026-06-12T19:35:00Z"
-        summary: "Draft. Reconciled refs to the new shared layout vocabulary (sema 6f73174 / af2bf49): bumped versions, added the real nolan components, dropped gw1.scada.device.type.gt, heatcall.interpretation -> gw1.heat.call.interpretation. Stays draft."
+        summary: "Draft. Reconciled refs to the new shared layout vocabulary, then to hardware-layout-pass-one: Components rebound to the cac-free DeviceType component versions; DeviceTypes now holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada) instead of CACs; DeviceTypeReferenceIntegrity reworked into the DeviceTypeMembership axiom (DeviceType in gw1.device.type + specialized-record presence). Stays draft."
         direct_dependencies:
           structural:
+            - "ads111x.based.device.type.gt:000"
             - "change.heatcall.source:000"
             - "change.relay.state:000"
-            - "component.attribute.class.gt:001"
             - "data.channel.gt:002"
             - "derived.channel.gt:002"
-            - "electric.meter.cac.gt:001"
-            - "electric.meter.component.gt:001"
+            - "electric.meter.component.gt:002"
+            - "electric.meter.device.type.gt:000"
             - "g.node.gt:004"
             - "gw1.heat.call.interpretation:000"
             - "gw1.quantity:000"
+            - "gw1.scada.device.type.gt:000"
             - "gw1.unit:001"
-            - "gw108.gpio.relay.component.gt:001"
-            - "gw108.gpio.sensor.component.gt:001"
-            - "gw108.vdc.relay.component.gt:001"
+            - "gw108.gpio.relay.component.gt:002"
+            - "gw108.gpio.sensor.component.gt:002"
+            - "gw108.vdc.relay.component.gt:002"
             - "heatcall.source:000"
-            - "i2c.multichannel.dt.relay.component.gt:004"
-            - "i2c.thermistor.reader.component.gt:001"
-            - "pico.btu.meter.component.gt:000"
-            - "pico.tank.module.component.gt:011"
+            - "i2c.multichannel.dt.relay.component.gt:005"
+            - "i2c.thermistor.reader.component.gt:002"
+            - "pico.btu.meter.component.gt:001"
+            - "pico.tank.module.component.gt:012"
             - "relay.actor.config:003"
             - "relay.closed.or.open:000"
-            - "sim.pico.tank.module.component.gt:000"
+            - "sim.pico.tank.module.component.gt:001"
             - "spaceheat.node.gt:302"
-            - "web.server.component.gt:001"
+            - "web.server.component.gt:002"
+          axiom:
+            - "gw1.device.type:000"
 
   gw1.tank.temp.calibration:
     latest_version: "000"
@@ -1409,12 +1653,23 @@ types:
             - "gw1.unit:001"
 
   gw108.gpio.relay.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "DRAFT placeholder GW108 GPIO relay component (no scada-runtime class yet; the real one is gw108.vdc.relay.component.gt)."
 
     versions:
+      "002":
+        status: "draft"
+        schema_url: "https://schemas.electricity.works/draft/types/gw108.gpio.relay.component.gt/002"
+        created: "2026-06-13T22:09:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        direct_dependencies:
+          structural:
+            - "pascal.case"
+            - "positive.int"
+            - "relay.actor.config:003"
+            - "uuid4.str"
       "001":
         status: "draft"
         schema_url: "https://schemas.electricity.works/draft/types/gw108.gpio.relay.component.gt/001"
@@ -1427,12 +1682,23 @@ types:
             - "uuid4.str"
 
   gw108.gpio.sensor.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "A GW108-board GPIO sensor component instance: a digital sensor on a GPIO pin, read by polling or edge detection."
 
     versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/002"
+        created: "2026-06-13T22:01:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        direct_dependencies:
+          structural:
+            - "channel.config:000"
+            - "gpio.sense.mode:000"
+            - "pascal.case"
+            - "positive.int"
+            - "uuid4.str"
       "001":
         schema_url: "https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/001"
         created: "2026-06-12T19:14:45Z"
@@ -1445,12 +1711,22 @@ types:
             - "uuid4.str"
 
   gw108.vdc.relay.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "A GW108-board VDC relay component instance: a relay driven from a GPIO pin, configured by one relay.actor.config."
 
     versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/002"
+        created: "2026-06-13T22:02:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        direct_dependencies:
+          structural:
+            - "pascal.case"
+            - "positive.int"
+            - "relay.actor.config:003"
+            - "uuid4.str"
       "001":
         schema_url: "https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/001"
         created: "2026-06-12T19:14:50Z"
@@ -1528,12 +1804,22 @@ types:
             - "uuid4.str"
 
   i2c.multichannel.dt.relay.component.gt:
-    latest_version: "004"
+    latest_version: "005"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Configuration for a multi-channel I2C relay board component."
 
     versions:
+      "005":
+        schema_url: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/005"
+        created: "2026-06-13T22:03:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        direct_dependencies:
+          structural:
+            - "pascal.case"
+            - "relay.actor.config:003"
+            - "spaceheat.name"
+            - "uuid4.str"
       "004":
         schema_url: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004"
         created: "2026-04-01T10:49:00Z"
@@ -1582,12 +1868,24 @@ types:
             - "spaceheat.unit:001"
 
   i2c.thermistor.reader.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Configuration for an I2C thermistor reader component that samples one ADC device and publishes one or more thermistor-backed temperature channels."
 
     versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/002"
+        created: "2026-06-13T22:04:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        direct_dependencies:
+          structural:
+            - "i2c.thermistor.channel.config:001"
+            - "pascal.case"
+            - "positive.float"
+            - "spaceheat.name"
+            - "temp.calc.method:000"
+            - "uuid4.str"
       "001":
         schema_url: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/001"
         created: "2026-03-30T16:07:00Z"
@@ -1616,12 +1914,33 @@ types:
             - "left.right.dot"
 
   layout.lite:
-    latest_version: "014"
+    latest_version: "015"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Runtime projection of the active SCADA context used to interpret reports, snapshots, and control-adjacent messages."
 
     versions:
+      "015":
+        schema_url: "https://schemas.electricity.works/types/layout.lite/015"
+        created: "2026-06-14T00:00:00Z"
+        summary: "- TankModuleComponents / FlowModuleComponents / I2cRelayComponent: cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module 011->012, sim.pico.tank.module 000->001, pico.flow.module 000->001, i2c.multichannel.dt.relay 004->005). Context-dependent: the embedded components' DeviceType lives on their cac, not the component."
+        direct_dependencies:
+          structural:
+            - "data.channel.gt:002"
+            - "derived.channel.gt:001"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "gw1.tank.temp.calibration.map:000"
+            - "ha1.params:006"
+            - "i2c.multichannel.dt.relay.component.gt:005"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:001"
+            - "pico.tank.module.component.gt:012"
+            - "positive.int"
+            - "sim.pico.tank.module.component.gt:001"
+            - "spaceheat.node.gt:302"
+            - "utc.milliseconds"
+            - "uuid4.str"
       "014":
         schema_url: "https://schemas.electricity.works/types/layout.lite/014"
         created: "2026-06-12T00:00:00Z"
@@ -1918,12 +2237,24 @@ types:
             - "utc.milliseconds"
 
   pico.flow.module.component.gt:
-    latest_version: "000"
+    latest_version: "001"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Configuration for a Pico-based flow module component."
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/pico.flow.module.component.gt/001"
+        created: "2026-06-13T22:06:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component. - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout."
+        direct_dependencies:
+          structural:
+            - "channel.config:000"
+            - "gpm.from.hz.method:000"
+            - "hz.calc.method:001"
+            - "pascal.case"
+            - "spaceheat.name"
+            - "uuid4.str"
       "000":
         schema_url: "https://schemas.electricity.works/types/pico.flow.module.component.gt/000"
         created: "2024-10-23T19:32:00Z"
@@ -1938,12 +2269,26 @@ types:
             - "uuid4.str"
 
   pico.btu.meter.component.gt:
-    latest_version: "000"
+    latest_version: "001"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "A Pico BTU-meter component instance: flow meter plus hot/cold thermistors (and optional CT voltage) sampled by a Pico to compute thermal power."
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/001"
+        created: "2026-06-13T22:05:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component. - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout."
+        direct_dependencies:
+          structural:
+            - "channel.config:000"
+            - "gpm.from.hz.method:000"
+            - "hz.calc.method:001"
+            - "pascal.case"
+            - "positive.float"
+            - "spaceheat.name"
+            - "temp.calc.method:000"
+            - "uuid4.str"
       "000":
         schema_url: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/000"
         created: "2026-06-12T19:15:00Z"
@@ -1960,12 +2305,23 @@ types:
             - "uuid4.str"
 
   pico.tank.module.component.gt:
-    latest_version: "011"
+    latest_version: "012"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Configuration for a Pico-based tank temperature module component."
 
     versions:
+      "012":
+        schema_url: "https://schemas.electricity.works/types/pico.tank.module.component.gt/012"
+        created: "2026-06-13T22:07:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        direct_dependencies:
+          structural:
+            - "channel.config:000"
+            - "pascal.case"
+            - "positive.int"
+            - "temp.calc.method:000"
+            - "uuid4.str"
       "011":
         schema_url: "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"
         created: "2025-12-05T02:59:00Z"
@@ -2268,12 +2624,23 @@ types:
             - "spaceheat.name"
 
   sim.pico.tank.module.component.gt:
-    latest_version: "000"
+    latest_version: "001"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Simulation configuration corresponding to pico.tank.module.component.gt."
+    description: "Simulation configuration corresponding to pico.tank.module.component.gt (the component-faithful simulation facet)."
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"
+        created: "2026-06-13T22:13:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case); SimulatesVersion 011 -> 012. Context-dependent: the device type lived on the referenced cac, not the component."
+        direct_dependencies:
+          structural:
+            - "channel.config:000"
+            - "pascal.case"
+            - "positive.int"
+            - "temp.calc.method:000"
+            - "uuid4.str"
       "000":
         schema_url: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"
         created: "2026-01-03T14:27:00Z"
@@ -2333,6 +2700,7 @@ types:
         summary: "Initial Sema version (sim-marker relay component for simulated layouts)."
         direct_dependencies:
           structural:
+            - "pascal.case"
             - "relay.actor.config:003"
             - "uuid4.str"
 
@@ -2350,6 +2718,7 @@ types:
         direct_dependencies:
           structural:
             - "channel.config:000"
+            - "pascal.case"
             - "uuid4.str"
 
   sim.timestep:
@@ -2661,12 +3030,21 @@ types:
             - "uuid4.str"
 
   web.server.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "A web-server component instance exposing a local HTTP server (e.g. for Pico devices to POST to)."
 
     versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/web.server.component.gt/002"
+        created: "2026-06-13T22:08:00Z"
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        direct_dependencies:
+          structural:
+            - "channel.config:000"
+            - "pascal.case"
+            - "uuid4.str"
       "001":
         schema_url: "https://schemas.electricity.works/types/web.server.component.gt/001"
         created: "2026-06-12T19:14:55Z"

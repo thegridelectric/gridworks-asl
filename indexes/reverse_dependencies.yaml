@@ -2,16 +2,28 @@
 # Generated from indexes/public_registry.yaml
 
 types:
+  ads.channel.config:
+    '000':
+      used_by:
+      - ads111x.based.component.gt:000
   channel.config:
     '000':
       used_by:
       - gw108.gpio.sensor.component.gt:001
+      - gw108.gpio.sensor.component.gt:002
+      - hubitat.component.gt:000
+      - hubitat.poller.component.gt:000
       - pico.btu.meter.component.gt:000
+      - pico.btu.meter.component.gt:001
       - pico.flow.module.component.gt:000
+      - pico.flow.module.component.gt:001
       - pico.tank.module.component.gt:011
+      - pico.tank.module.component.gt:012
       - sim.pico.tank.module.component.gt:000
+      - sim.pico.tank.module.component.gt:001
       - sim.sensor.component.gt:000
       - web.server.component.gt:001
+      - web.server.component.gt:002
   channel.readings:
     '002':
       used_by:
@@ -35,6 +47,7 @@ types:
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+      - layout.lite:015
   derived.channel.gt:
     '000':
       used_by:
@@ -49,6 +62,11 @@ types:
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+      - layout.lite:015
+  dfr.config:
+    '000':
+      used_by:
+      - dfr.component.gt:000
   egauge.register.config:
     '000':
       used_by:
@@ -57,6 +75,7 @@ types:
     '000':
       used_by:
       - electric.meter.component.gt:001
+      - electric.meter.component.gt:002
   fsm.atomic.report:
     '000':
       used_by:
@@ -87,6 +106,7 @@ types:
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+      - layout.lite:015
   gw1.unit.quantity.projection:
     '000':
       used_by:
@@ -109,7 +129,16 @@ types:
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+      - layout.lite:015
       - scada.params:005
+  hubitat.gt:
+    '000':
+      used_by:
+      - hubitat.component.gt:000
+  hubitat.poller.gt:
+    '000':
+      used_by:
+      - hubitat.poller.component.gt:000
   i2c.multichannel.dt.relay.component.gt:
     '002':
       used_by:
@@ -127,15 +156,23 @@ types:
       used_by:
       - layout.lite:013
       - layout.lite:014
+    '005':
+      used_by:
+      - layout.lite:015
   i2c.thermistor.channel.config:
     '001':
       used_by:
       - i2c.thermistor.reader.component.gt:001
+      - i2c.thermistor.reader.component.gt:002
   machine.states:
     '000':
       used_by:
       - report:002
       - report:003
+  maker.api.attribute.gt:
+    '000':
+      used_by:
+      - hubitat.poller.gt:000
   pico.flow.module.component.gt:
     '000':
       used_by:
@@ -147,6 +184,9 @@ types:
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+    '001':
+      used_by:
+      - layout.lite:015
   pico.tank.module.component.gt:
     '011':
       used_by:
@@ -158,6 +198,9 @@ types:
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+    '012':
+      used_by:
+      - layout.lite:015
   price.quantity.unitless:
     '001':
       used_by:
@@ -171,7 +214,9 @@ types:
     '003':
       used_by:
       - gw108.vdc.relay.component.gt:001
+      - gw108.vdc.relay.component.gt:002
       - i2c.multichannel.dt.relay.component.gt:004
+      - i2c.multichannel.dt.relay.component.gt:005
       - sim.relay.component.gt:000
   report:
     '002':
@@ -190,6 +235,9 @@ types:
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+    '001':
+      used_by:
+      - layout.lite:015
   single.machine.state:
     '000':
       used_by:
@@ -221,6 +269,7 @@ types:
     '302':
       used_by:
       - layout.lite:014
+      - layout.lite:015
       - new.command.tree:002
   spaceheat.telemetry.quantity.projection:
     '000':
@@ -270,11 +319,14 @@ enums:
     '000':
       used_by:
       - gw108.gpio.sensor.component.gt:001
+      - gw108.gpio.sensor.component.gt:002
   gpm.from.hz.method:
     '000':
       used_by:
       - pico.btu.meter.component.gt:000
+      - pico.btu.meter.component.gt:001
       - pico.flow.module.component.gt:000
+      - pico.flow.module.component.gt:001
   gw1.actor.class:
     009:
       used_by:
@@ -313,6 +365,7 @@ enums:
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+      - layout.lite:015
   gw1.system.mode:
     '000':
       used_by:
@@ -323,6 +376,7 @@ enums:
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+      - layout.lite:015
   gw1.unit:
     '000':
       used_by:
@@ -338,7 +392,9 @@ enums:
     '001':
       used_by:
       - pico.btu.meter.component.gt:000
+      - pico.btu.meter.component.gt:001
       - pico.flow.module.component.gt:000
+      - pico.flow.module.component.gt:001
   i2c.adc.channel:
     '000':
       used_by:
@@ -398,6 +454,7 @@ enums:
       used_by:
       - data.channel.gt:002
       - electric.meter.cac.gt:001
+      - maker.api.attribute.gt:000
       - spaceheat.telemetry.quantity.projection:000
       - synced.readings.bundle:001
       - synced.readings.bundle:002
@@ -405,18 +462,29 @@ enums:
   spaceheat.unit:
     '001':
       used_by:
+      - ads.channel.config:000
       - channel.config:000
+      - dfr.config:000
       - electric.meter.channel.config:000
       - i2c.thermistor.channel.config:001
+      - maker.api.attribute.gt:000
       - relay.actor.config:002
       - relay.actor.config:003
   temp.calc.method:
     '000':
       used_by:
       - i2c.thermistor.reader.component.gt:001
+      - i2c.thermistor.reader.component.gt:002
       - pico.btu.meter.component.gt:000
+      - pico.btu.meter.component.gt:001
       - pico.tank.module.component.gt:011
+      - pico.tank.module.component.gt:012
       - sim.pico.tank.module.component.gt:000
+      - sim.pico.tank.module.component.gt:001
+  thermistor.data.method:
+    '000':
+      used_by:
+      - ads.channel.config:000
 formats:
   handle.name:
     used_by:
@@ -466,6 +534,7 @@ formats:
     - layout.lite:012
     - layout.lite:013
     - layout.lite:014
+    - layout.lite:015
     - machine.states:000
     - market.product:000
     - new.command.tree:000
@@ -503,19 +572,44 @@ formats:
     used_by:
     - relay.actor.config:002
     - relay.actor.config:003
+  pascal.case:
+    used_by:
+    - ads.channel.config:000
+    - ads111x.based.component.gt:000
+    - dfr.component.gt:000
+    - electric.meter.component.gt:002
+    - gw108.gpio.sensor.component.gt:002
+    - gw108.vdc.relay.component.gt:002
+    - hubitat.component.gt:000
+    - hubitat.poller.component.gt:000
+    - i2c.multichannel.dt.relay.component.gt:005
+    - i2c.thermistor.reader.component.gt:002
+    - pico.btu.meter.component.gt:001
+    - pico.flow.module.component.gt:001
+    - pico.tank.module.component.gt:012
+    - sim.pico.tank.module.component.gt:001
+    - sim.relay.component.gt:000
+    - sim.sensor.component.gt:000
+    - web.server.component.gt:002
   positive.float:
     used_by:
     - i2c.thermistor.reader.component.gt:001
+    - i2c.thermistor.reader.component.gt:002
     - pico.btu.meter.component.gt:000
+    - pico.btu.meter.component.gt:001
   positive.int:
     used_by:
+    - ads.channel.config:000
     - channel.config:000
     - component.attribute.class.gt:001
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - dfr.component.gt:000
+    - dfr.config:000
     - electric.meter.cac.gt:001
     - electric.meter.channel.config:000
     - electric.meter.component.gt:001
+    - electric.meter.component.gt:002
     - energy.instruction:000
     - flo.params.house0:003
     - flo.params.house0:004
@@ -523,7 +617,10 @@ formats:
     - flo.params.house0:006
     - flo.params.house0:007
     - gw108.gpio.sensor.component.gt:001
+    - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:001
+    - gw108.vdc.relay.component.gt:002
+    - hubitat.poller.gt:000
     - i2c.thermistor.channel.config:001
     - layout.lite:007
     - layout.lite:008
@@ -533,12 +630,15 @@ formats:
     - layout.lite:012
     - layout.lite:013
     - layout.lite:014
+    - layout.lite:015
     - pico.tank.module.component.gt:011
+    - pico.tank.module.component.gt:012
     - relay.actor.config:002
     - relay.actor.config:003
     - report:002
     - report:003
     - sim.pico.tank.module.component.gt:000
+    - sim.pico.tank.module.component.gt:001
     - spaceheat.node.gt:200
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
@@ -549,6 +649,7 @@ formats:
     - gw1.tank.temp.calibration.map:000
   spaceheat.name:
     used_by:
+    - ads.channel.config:000
     - channel.config:000
     - channel.readings.list.item:000
     - channel.readings:001
@@ -558,16 +659,22 @@ formats:
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - dfr.config:000
     - electric.meter.channel.config:000
     - fsm.full.report:000
     - fsm.full.report:001
     - glitch:000
     - i2c.multichannel.dt.relay.component.gt:003
     - i2c.multichannel.dt.relay.component.gt:004
+    - i2c.multichannel.dt.relay.component.gt:005
     - i2c.thermistor.channel.config:001
     - i2c.thermistor.reader.component.gt:001
+    - i2c.thermistor.reader.component.gt:002
+    - maker.api.attribute.gt:000
     - pico.btu.meter.component.gt:000
+    - pico.btu.meter.component.gt:001
     - pico.flow.module.component.gt:000
+    - pico.flow.module.component.gt:001
     - relay.actor.config:002
     - relay.actor.config:003
     - scada.control.capabilities:000
@@ -613,6 +720,7 @@ formats:
     - layout.lite:012
     - layout.lite:013
     - layout.lite:014
+    - layout.lite:015
     - machine.states:000
     - new.command.tree:000
     - new.command.tree:002
@@ -654,6 +762,7 @@ formats:
     - weather:000
   uuid4.str:
     used_by:
+    - ads111x.based.component.gt:000
     - channel.readings:001
     - component.attribute.class.gt:001
     - connectivity.edge.gt:000
@@ -662,8 +771,10 @@ formats:
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - dfr.component.gt:000
     - electric.meter.cac.gt:001
     - electric.meter.component.gt:001
+    - electric.meter.component.gt:002
     - flo.params.house0:003
     - flo.params.house0:004
     - flo.params.house0:005
@@ -678,12 +789,19 @@ formats:
     - g.node.instance.gt:000
     - gridworks.event.problem:001
     - gw108.gpio.sensor.component.gt:001
+    - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:001
+    - gw108.vdc.relay.component.gt:002
     - heating.forecast:000
+    - hubitat.component.gt:000
+    - hubitat.poller.component.gt:000
+    - hubitat.poller.gt:000
     - i2c.multichannel.dt.relay.component.gt:002
     - i2c.multichannel.dt.relay.component.gt:003
     - i2c.multichannel.dt.relay.component.gt:004
+    - i2c.multichannel.dt.relay.component.gt:005
     - i2c.thermistor.reader.component.gt:001
+    - i2c.thermistor.reader.component.gt:002
     - latest.price:000
     - layout.lite:007
     - layout.lite:008
@@ -693,10 +811,14 @@ formats:
     - layout.lite:012
     - layout.lite:013
     - layout.lite:014
+    - layout.lite:015
     - market.product:000
     - pico.btu.meter.component.gt:000
+    - pico.btu.meter.component.gt:001
     - pico.flow.module.component.gt:000
+    - pico.flow.module.component.gt:001
     - pico.tank.module.component.gt:011
+    - pico.tank.module.component.gt:012
     - position.point.gt:000
     - report.event:002
     - report.event:003
@@ -705,6 +827,7 @@ formats:
     - scada.params:004
     - scada.params:005
     - sim.pico.tank.module.component.gt:000
+    - sim.pico.tank.module.component.gt:001
     - sim.ready:000
     - sim.relay.component.gt:000
     - sim.sensor.component.gt:000
@@ -717,3 +840,4 @@ formats:
     - synth.channel.gt:000
     - weather.forecast:000
     - web.server.component.gt:001
+    - web.server.component.gt:002

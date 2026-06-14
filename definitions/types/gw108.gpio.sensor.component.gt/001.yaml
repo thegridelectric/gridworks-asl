@@ -62,5 +62,31 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "ComponentAttributeClassId": "8ad2f6fe-e834-4334-80c8-4a0d4ef4b04f",
+      "ComponentId": "9fa9c10a-30c7-414e-a9cb-65a47150b755",
+      "GpioPin": 17,
+      "SenseMode": "Polling",
+      "SendToDerived": true,
+      "ConfigList": [
+        {
+          "ChannelName": "zone1-bedrooms-opto-input",
+          "PollPeriodMs": 1000,
+          "CapturePeriodS": 300,
+          "AsyncCapture": true,
+          "AsyncCaptureDelta": 1,
+          "Exponent": 0,
+          "Unit": "Unitless",
+          "TypeName": "channel.config",
+          "Version": "000"
+        }
+      ],
+      "DisplayName": "Zone 1 Bedrooms Optocouple Input (0 means 24V)",
+      "TypeName": "gw108.gpio.sensor.component.gt",
+      "Version": "001"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

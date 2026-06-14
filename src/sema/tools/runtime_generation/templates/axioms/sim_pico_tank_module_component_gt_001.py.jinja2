@@ -1,0 +1,25 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ sim_pico_tank_module_component_gt_001_class_name }}":
+        """
+        Axiom 1: PicoHardwareIdentityXor
+        Exactly one of the following SHALL hold:
+          - PicoHwUid is present
+          - both PicoAHwUid and PicoBHwUid are present
+        """
+        raise NotImplementedError("Axiom 1 validation is not implemented.")
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ sim_pico_tank_module_component_gt_001_class_name }}":
+        """
+        Axiom 2: PicoKOhmsConsistency
+        PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
+        """
+        raise NotImplementedError("Axiom 2 validation is not implemented.")
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "{{ sim_pico_tank_module_component_gt_001_class_name }}":
+        """
+        Axiom 3: SensorOrderPermutation
+        If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
+        """
+        raise NotImplementedError("Axiom 3 validation is not implemented.")

@@ -1,0 +1,58 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/002"
+
+title: "gw108.vdc.relay.component.gt"
+type: object
+description: >
+  A GW108-board VDC relay component (one installed device instance): a single relay
+  driven from a GPIO pin, configured by one relay.actor.config. Flat — the shared
+  component fields are spelled out here.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/relay.actor.config/003"
+    description: >
+      Relay actor configuration(s) for this relay (one per the device).
+
+  GpioPin:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The GPIO pin (BCM numbering) driving this relay.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "gw108.vdc.relay.component.gt"
+
+  Version:
+    const: "002"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - GpioPin
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

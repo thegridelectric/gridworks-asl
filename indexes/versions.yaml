@@ -99,6 +99,69 @@ types:
       "001":
         summary: "Initial Sema version (flattened from the scada ElectricMeterCacGt runtime)."
 
+  dfr.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada DfrConfig runtime)."
+
+  dfr.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada DfrComponentGt runtime)."
+
+  ads.channel.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada AdsChannelConfig runtime; ThermistorMakeModel -> ThermistorDeviceType)."
+
+  ads111x.based.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada Ads111xBasedComponentGt runtime)."
+
+  maker.api.attribute.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada MakerAPIAttributeGt runtime; snake_case fields re-cased to CamelCase)."
+
+  hubitat.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatGt runtime; derived URL helpers excluded from the contract)."
+
+  hubitat.poller.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatPollerGt runtime)."
+
+  hubitat.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatComponentGt runtime)."
+
+  hubitat.poller.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatPollerComponentGt runtime)."
+
   electric.meter.channel.config:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -107,9 +170,11 @@ types:
         summary: "Initial Sema version (flattened from the scada ElectricMeterChannelConfig runtime)."
 
   electric.meter.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "001":
         summary: "Initial Sema version (flattened from the scada ElectricMeterComponentGt runtime)."
 
@@ -259,16 +324,20 @@ types:
         summary: "Initial Sema version"
 
   gw108.gpio.sensor.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "001":
         summary: "Initial Sema version (flattened from the scada Gw108GpioSensorComponentGt runtime)."
 
   gw108.vdc.relay.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "001":
         summary: "Initial Sema version (flattened from the scada Gw108GpioRelayComponentGt runtime, TypeName gw108.vdc.relay.component.gt)."
 
@@ -306,9 +375,11 @@ types:
         summary: "Initial Sema version"
 
   i2c.multichannel.dt.relay.component.gt:
-    latest_version: "004"
+    latest_version: "005"
     versioning_strategy: "literal"
     versions:
+      "005":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "004":
         summary: "- ConfigList[]: relay.actor.config:002 -> 003"
       "003":
@@ -324,9 +395,11 @@ types:
         summary: "Initial Sema version. Starts at 001 to match the only version ever emitted in the field; the never-emitted sema 000 was dropped."
 
   i2c.thermistor.reader.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "001":
         summary: "Initial Sema version. Starts at 001 to match the only field-emitted version; the never-emitted sema 000 was dropped. Structural-only (gwsproto ConfigUniqueness/AddressValidity axioms deferred)."
 
@@ -338,9 +411,11 @@ types:
         summary: "Initial Sema version"
 
   layout.lite:
-    latest_version: "014"
+    latest_version: "015"
     versioning_strategy: "literal"
     versions:
+      "015":
+        summary: "- TankModuleComponents / FlowModuleComponents / I2cRelayComponent: cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module 011->012, sim.pico.tank.module 000->001, pico.flow.module 000->001, i2c.multichannel.dt.relay 004->005). Context-dependent: the embedded components' DeviceType lives on their cac, not the component."
       "014":
         summary: "- ShNodes: spaceheat.node.gt:301 -> 302"
       "013":
@@ -416,23 +491,33 @@ types:
         summary: "Initial Sema version"
 
   pico.flow.module.component.gt:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: >
+          - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component.
+          - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout.
       "000":
         summary: "Initial Sema version"
 
   pico.btu.meter.component.gt:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: >
+          - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component.
+          - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout.
       "000":
         summary: "Initial Sema version (flattened from the scada PicoBtuMeterComponentGt runtime)."
 
   pico.tank.module.component.gt:
-    latest_version: "011"
+    latest_version: "012"
     versioning_strategy: "literal"
     versions:
+      "012":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "011":
         summary: "Baseline runtime version (no prior version tracked)."
 
@@ -537,9 +622,11 @@ types:
         summary: "Initial Sema version"
 
   sim.pico.tank.module.component.gt:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case); SimulatesVersion 011 -> 012. Context-dependent: the device type lived on the referenced cac, not the component."
       "000":
         summary: "Initial Sema version"
 
@@ -687,9 +774,11 @@ types:
         summary: "Initial Sema version"
 
   web.server.component.gt:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "001":
         summary: "Initial Sema version (flattened from the scada WebServerComponentGt runtime; WebServer is an inline object)."
 
@@ -783,6 +872,12 @@ enums:
           - "I2cBus"
           - "I2cRelayBoard"
       "009": {}
+
+  gw1.device.type:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
 
   gw1.emission.method:
     enum_type: "versioned"
@@ -979,6 +1074,12 @@ enums:
       "001": {}
 
   temp.calc.method:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  thermistor.data.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

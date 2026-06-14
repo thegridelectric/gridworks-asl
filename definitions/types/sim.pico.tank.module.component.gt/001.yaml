@@ -1,0 +1,133 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"
+
+title: "sim.pico.tank.module.component.gt"
+type: object
+description: >
+  A simulated pico tank-module component — the **component-faithful** facet of
+  simulation. It mirrors a specific real component (`SimulatesTypeName` /
+  `SimulatesVersion` → `pico.tank.module.component.gt`) so a simulated layout drives
+  the real scada pico-tank code path (`ApiTankModule`) with simulated hardware input.
+  This is distinct from the generic plant-seam sim components
+  (`sim.sensor.component.gt` / `sim.relay.component.gt`), which feed synthetic channels
+  to exercise comms infrastructure rather than device code. Kept because testing the
+  real pico code under simulation is worth it; the actor side is only partly worked
+  through (see the simulated-test-environment gleanings).
+
+properties:
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.config/000"
+    description: >
+      Channel configuration entries inherited from ComponentGt.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  Enabled:
+    type: boolean
+
+  PicoHwUid:
+    type: string
+
+  PicoAHwUid:
+    type: string
+
+  PicoBHwUid:
+    type: string
+
+  TempCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/temp.calc.method/000"
+
+  ThermistorBeta:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+
+  SendMicroVolts:
+    type: boolean
+
+  Samples:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+
+  NumSampleAverages:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+
+  PicoKOhms:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+
+  SerialNumber:
+    type: string
+
+  AsyncCaptureDeltaMicroVolts:
+    type: integer
+
+  SensorOrder:
+    type: array
+    items:
+      type: integer
+
+  SimulatesTypeName:
+    const: "pico.tank.module.component.gt"
+
+  SimulatesVersion:
+    const: "012"
+
+  TypeName:
+    const: "sim.pico.tank.module.component.gt"
+
+  Version:
+    const: "001"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - Enabled
+  - TempCalcMethod
+  - ThermistorBeta
+  - SendMicroVolts
+  - Samples
+  - NumSampleAverages
+  - SerialNumber
+  - AsyncCaptureDeltaMicroVolts
+  - SimulatesTypeName
+  - SimulatesVersion
+  - TypeName
+  - Version
+
+additionalProperties: true
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "PicoHardwareIdentityXor"
+      statement: >
+        Exactly one of the following SHALL hold:
+          - PicoHwUid is present
+          - both PicoAHwUid and PicoBHwUid are present
+
+    - number: 2
+      name: "PicoKOhmsConsistency"
+      statement: >
+        PicoKOhms SHALL be present if and only if TempCalcMethod equals
+        SimpleBetaForPico.
+
+    - number: 3
+      name: "SensorOrderPermutation"
+      statement: >
+        If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].

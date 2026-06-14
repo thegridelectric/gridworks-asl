@@ -10,17 +10,21 @@ from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
 from sema.runtime.types.ha1_params import Ha1Params
-from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
-    I2cMultichannelDtRelayComponentGt,
-)
-from sema.runtime.types.layout_lite import LayoutLite
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
-from sema.runtime.types.old_versions.spaceheat_node_gt_301 import SpaceheatNodeGt301
-from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
-from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
-from sema.runtime.types.sim_pico_tank_module_component_gt import (
-    SimPicoTankModuleComponentGt,
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_004 import (
+    I2cMultichannelDtRelayComponentGt004,
 )
+from sema.runtime.types.old_versions.layout_lite_014 import LayoutLite014
+from sema.runtime.types.old_versions.pico_flow_module_component_gt_000 import (
+    PicoFlowModuleComponentGt000,
+)
+from sema.runtime.types.old_versions.pico_tank_module_component_gt_011 import (
+    PicoTankModuleComponentGt011,
+)
+from sema.runtime.types.old_versions.sim_pico_tank_module_component_gt_000 import (
+    SimPicoTankModuleComponentGt000,
+)
+from sema.runtime.types.old_versions.spaceheat_node_gt_301 import SpaceheatNodeGt301
 
 
 class LayoutLite013(SemaType):
@@ -40,11 +44,11 @@ class LayoutLite013(SemaType):
     data_channels: list[DataChannelGt]
     derived_channels: list[DerivedChannelGt001]
     tank_module_components: list[
-        PicoTankModuleComponentGt | SimPicoTankModuleComponentGt
+        PicoTankModuleComponentGt011 | SimPicoTankModuleComponentGt000
     ]
-    flow_module_components: list[PicoFlowModuleComponentGt]
+    flow_module_components: list[PicoFlowModuleComponentGt000]
     ha1_params: Ha1Params
-    i2c_relay_component: I2cMultichannelDtRelayComponentGt | None = None
+    i2c_relay_component: I2cMultichannelDtRelayComponentGt004 | None = None
     t_map: Gw1TankTempCalibrationMap | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
     version: Literal["013"] = "013"
@@ -122,9 +126,9 @@ class LayoutLite013(SemaType):
                 )
         return self
 
-    def upgrade(self) -> LayoutLite:
+    def upgrade(self) -> LayoutLite014:
         """- ShNodes: spaceheat.node.gt:301 -> 302"""
         data = self.model_dump()
         data["sh_nodes"] = [node.upgrade() for node in self.sh_nodes]
         data["version"] = "014"
-        return LayoutLite.model_validate(data)
+        return LayoutLite014.model_validate(data)

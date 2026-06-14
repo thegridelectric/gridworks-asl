@@ -1,0 +1,132 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/001"
+
+title: "pico.btu.meter.component.gt"
+type: object
+description: >
+  A Pico BTU-meter component (one installed device instance): a flow meter plus hot
+  and cold thermistors (and optionally a CT voltage reading) that a Pico samples to
+  compute thermal power. Flat — the shared component fields are spelled out here.
+
+extended_description: >
+  `DeviceType` and `FlowMeterType` are open `pascal.case` strings. The device-type
+  enum (`gw1.device.type`) whose membership they must satisfy is articulated by any
+  hardware layout for which this type is a sub-type — the layout enforces it, so this
+  component type stays version-stable as device types are added.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.config/000"
+    description: >
+      Channel configurations attached to this BTU meter.
+
+  Enabled:
+    type: boolean
+
+  SerialNumber:
+    type: string
+
+  FlowChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  HotChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  ColdChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  CtChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Channel name for the CT voltage reading, when ReadCtVoltage is true.
+
+  ReadCtVoltage:
+    type: boolean
+
+  SendHz:
+    type: boolean
+
+  FlowMeterType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The flow meter, as an open `pascal.case` device-type string (a `gw1.device.type`
+      value, e.g. `SaierFlowSensor` / `GridworksPicoFlowHall` / `GridworksPicoFlowReed`).
+
+  HzCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/hz.calc.method/001"
+
+  TempCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/temp.calc.method/000"
+
+  GpmFromHzMethod:
+    $ref: "https://schemas.electricity.works/enums/gpm.from.hz.method/000"
+
+  ThermistorBeta:
+    type: integer
+
+  GallonsPerPulse:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+
+  AsyncCaptureDeltaGpmX100:
+    type: integer
+
+  AsyncCaptureDeltaCelsiusX100:
+    type: integer
+
+  AsyncCaptureDeltaCtVoltsX100:
+    type: integer
+    description: >
+      Async-capture threshold for the CT voltage channel; present when
+      ReadCtVoltage is true.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "pico.btu.meter.component.gt"
+
+  Version:
+    const: "001"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - Enabled
+  - SerialNumber
+  - FlowChannelName
+  - HotChannelName
+  - ColdChannelName
+  - ReadCtVoltage
+  - SendHz
+  - FlowMeterType
+  - HzCalcMethod
+  - TempCalcMethod
+  - GpmFromHzMethod
+  - ThermistorBeta
+  - GallonsPerPulse
+  - AsyncCaptureDeltaGpmX100
+  - AsyncCaptureDeltaCelsiusX100
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

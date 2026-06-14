@@ -1,0 +1,141 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/pico.flow.module.component.gt/001"
+
+title: "pico.flow.module.component.gt"
+type: object
+description: >
+  Configuration for a Pico-based flow module component in a Spaceheat SCADA
+  deployment.
+
+  This type includes the common component identity fields inherited from
+  ComponentGt together with flow-meter specific capture, conversion, and
+  publication parameters.
+
+extended_description: >
+  `DeviceType` and `FlowMeterType` are open `pascal.case` strings. The device-type
+  enum (`gw1.device.type`) whose membership they must satisfy is articulated by any
+  hardware layout for which this type is a sub-type — the layout enforces it, so this
+  component type stays version-stable as device types are added.
+
+properties:
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.config/000"
+    description: >
+      Channel configuration entries inherited from ComponentGt.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  Enabled:
+    type: boolean
+
+  SerialNumber:
+    type: string
+
+  FlowNodeName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  FlowMeterType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The configured flow meter, as an open `pascal.case` device-type string (a
+      `gw1.device.type` value, e.g. `SaierFlowSensor` / `GridworksPicoFlowHall` /
+      `GridworksPicoFlowReed`).
+
+  HzCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/hz.calc.method/001"
+    description: >
+      Method used to compute frequency from captured pulse data.
+
+  GpmFromHzMethod:
+    $ref: "https://schemas.electricity.works/enums/gpm.from.hz.method/000"
+    description: >
+      Method used to convert computed frequency into flow rate.
+
+  ConstantGallonsPerTick:
+    type: number
+
+  SendHz:
+    type: boolean
+
+  SendGallons:
+    type: boolean
+
+  SendTickLists:
+    type: boolean
+
+  NoFlowMs:
+    type: integer
+
+  AsyncCaptureThresholdGpmTimes100:
+    type: integer
+
+  PublishEmptyTicklistAfterS:
+    type: integer
+
+  PublishAnyTicklistAfterS:
+    type: integer
+
+  PublishTicklistPeriodS:
+    type: integer
+
+  PublishTicklistLength:
+    type: integer
+
+  ExpAlpha:
+    type: number
+
+  CutoffFrequency:
+    type: number
+
+  TypeName:
+    const: "pico.flow.module.component.gt"
+
+  Version:
+    const: "001"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - Enabled
+  - SerialNumber
+  - FlowNodeName
+  - FlowMeterType
+  - HzCalcMethod
+  - GpmFromHzMethod
+  - ConstantGallonsPerTick
+  - SendHz
+  - SendGallons
+  - SendTickLists
+  - NoFlowMs
+  - AsyncCaptureThresholdGpmTimes100
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "HwUidPattern"
+      statement: >
+        If HwUid is present, it SHALL match the pattern pico_xxxxxx where
+        xxxxxx consists of six lowercase hexadecimal characters.

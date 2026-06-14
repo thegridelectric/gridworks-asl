@@ -71,5 +71,23 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "ComponentAttributeClassId": "6e966031-d074-4a0f-8aa0-18baee37ff29",
+      "ComponentId": "a3f92c10-de37-4df7-8b4d-ec0cfaed46c2",
+      "ConfigList": [],
+      "DisplayName": "Web Server default",
+      "TypeName": "web.server.component.gt",
+      "Version": "001",
+      "WebServer": {
+        "Enabled": true,
+        "Host": "0.0.0.0",
+        "Kwargs": {},
+        "Name": "default",
+        "Port": 8080
+      }
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

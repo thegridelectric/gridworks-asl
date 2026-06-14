@@ -48,5 +48,38 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "ComponentId": "11111111-1111-4111-8111-111111111111",
+      "ComponentAttributeClassId": "8ad2f6fe-e834-4334-80c8-4a0d4ef4b04f",
+      "ConfigList": [
+        {
+          "ActorName": "gpio-relay-1",
+          "AsyncCapture": true,
+          "AsyncCaptureDelta": 1,
+          "CapturePeriodS": 300,
+          "ChannelName": "gpio-relay",
+          "DeEnergizedState": "RelayClosed",
+          "DeEnergizingEvent": "CloseRelay",
+          "EnergizedState": "RelayOpen",
+          "EnergizingEvent": "OpenRelay",
+          "EventType": "change.relay.state",
+          "Exponent": 0,
+          "PollPeriodMs": 200,
+          "RelayIdx": 1,
+          "StateType": "relay.closed.or.open",
+          "TypeName": "relay.actor.config",
+          "Unit": "Unitless",
+          "Version": "003",
+          "WiringConfig": "NormallyClosed"
+        }
+      ],
+      "GpioPin": 24,
+      "DisplayName": "GW108 GPIO Relay (draft placeholder)",
+      "TypeName": "gw108.gpio.relay.component.gt",
+      "Version": "001"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
