@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-06-14T00:30:00Z'
+  last_updated: '2026-06-14T13:00:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -533,6 +533,16 @@ enums:
       '000':
         schema_url: https://schemas.electricity.works/enums/temp.calc.method/000
         created: '2024-10-21T23:19:00Z'
+  thermistor.data.method:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Method used to convert raw thermistor voltage readings into captured
+      temperature readings.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/thermistor.data.method/000
+        created: '2026-06-14T12:00:00Z'
 types:
   atn.bid:
     latest_version: '002'
@@ -775,6 +785,75 @@ types:
           - positive.int
           - spaceheat.make.model:007
           - spaceheat.telemetry.name:007
+          - uuid4.str
+  dfr.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Per-output channel configuration for one DFRobot DFR0971 analog output
+      (0-10V DAC).
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/dfr.config/000
+        created: '2026-06-14T12:00:00Z'
+        summary: Initial Sema version (flattened from the scada DfrConfig runtime).
+        direct_dependencies:
+          structural:
+          - positive.int
+          - spaceheat.name
+          - spaceheat.unit:001
+  dfr.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'A DFRobot analog-output component instance: DFR0971 dual analog-out
+      boards driving control outputs.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/dfr.component.gt/000
+        created: '2026-06-14T12:00:00Z'
+        summary: Initial Sema version (flattened from the scada DfrComponentGt runtime).
+        direct_dependencies:
+          structural:
+          - dfr.config:000
+          - pascal.case
+          - positive.int
+          - uuid4.str
+  ads.channel.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Per-channel configuration for one thermistor read through an ADS111x
+      ADC terminal block (the TSnap path).
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/ads.channel.config/000
+        created: '2026-06-14T12:00:00Z'
+        summary: Initial Sema version (flattened from the scada AdsChannelConfig runtime;
+          ThermistorMakeModel -> ThermistorDeviceType).
+        direct_dependencies:
+          structural:
+          - pascal.case
+          - positive.int
+          - spaceheat.name
+          - spaceheat.unit:001
+          - thermistor.data.method:000
+  ads111x.based.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'An ADS111x-based multipurpose-sensor component instance: thermistor
+      inputs read through ADS111x ADC terminal blocks (the TSnap path).'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/ads111x.based.component.gt/000
+        created: '2026-06-14T12:00:00Z'
+        summary: Initial Sema version (flattened from the scada Ads111xBasedComponentGt
+          runtime).
+        direct_dependencies:
+          structural:
+          - ads.channel.config:000
+          - pascal.case
           - uuid4.str
   electric.meter.channel.config:
     latest_version: '000'

@@ -1,0 +1,85 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/dfr.config/000"
+
+title: "dfr.config"
+type: object
+description: >
+  Channel configuration for one analog output on a DFRobot DFR0971 dual analog-out
+  (0-10V DAC) board.
+
+  This type spells out the base channel-configuration fields together with the board
+  output index and the initial output voltage the channel drives on startup.
+
+properties:
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  PollPeriodMs:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      How often SCADA polls the underlying hardware device or source for a
+      fresh value, in milliseconds.
+
+  CapturePeriodS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      How often SCADA reports or emits the channel value into the telemetry
+      stream, in seconds.
+
+  AsyncCapture:
+    type: boolean
+
+  AsyncCaptureDelta:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Optional threshold for asynchronous emission, expressed in Unit-scaled
+      values.
+
+  Exponent:
+    type: integer
+    description: >
+      Base-10 scaling exponent applied to the serialized integer reading in
+      combination with Unit.
+
+  Unit:
+    $ref: "https://schemas.electricity.works/enums/spaceheat.unit/001"
+
+  OutputIdx:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Which analog output on the DFR board this channel drives.
+
+  InitialVoltsTimes100:
+    type: integer
+    description: >
+      Output voltage (in hundredths of a volt) the channel drives on startup.
+
+  TypeName:
+    const: "dfr.config"
+
+  Version:
+    const: "000"
+
+required:
+  - ChannelName
+  - CapturePeriodS
+  - AsyncCapture
+  - Exponent
+  - Unit
+  - OutputIdx
+  - InitialVoltsTimes100
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "CaptureAndPollingConsistency"
+      statement: >
+        If PollPeriodMs exists, then CapturePeriodMs (CapturePeriodS * 1000) must be
+        larger than PollPeriodMs. If CapturePeriodMs is less than 10 * PollPeriodMs,
+        then CapturePeriodMs must be a multiple of PollPeriodMs.

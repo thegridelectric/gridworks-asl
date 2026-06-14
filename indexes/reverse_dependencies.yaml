@@ -2,6 +2,10 @@
 # Generated from indexes/public_registry.yaml
 
 types:
+  ads.channel.config:
+    '000':
+      used_by:
+      - ads111x.based.component.gt:000
   channel.config:
     '000':
       used_by:
@@ -57,6 +61,10 @@ types:
       - layout.lite:013
       - layout.lite:014
       - layout.lite:015
+  dfr.config:
+    '000':
+      used_by:
+      - dfr.component.gt:000
   egauge.register.config:
     '000':
       used_by:
@@ -439,7 +447,9 @@ enums:
   spaceheat.unit:
     '001':
       used_by:
+      - ads.channel.config:000
       - channel.config:000
+      - dfr.config:000
       - electric.meter.channel.config:000
       - i2c.thermistor.channel.config:001
       - relay.actor.config:002
@@ -455,6 +465,10 @@ enums:
       - pico.tank.module.component.gt:012
       - sim.pico.tank.module.component.gt:000
       - sim.pico.tank.module.component.gt:001
+  thermistor.data.method:
+    '000':
+      used_by:
+      - ads.channel.config:000
 formats:
   handle.name:
     used_by:
@@ -544,6 +558,9 @@ formats:
     - relay.actor.config:003
   pascal.case:
     used_by:
+    - ads.channel.config:000
+    - ads111x.based.component.gt:000
+    - dfr.component.gt:000
     - electric.meter.component.gt:002
     - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:002
@@ -564,10 +581,13 @@ formats:
     - pico.btu.meter.component.gt:001
   positive.int:
     used_by:
+    - ads.channel.config:000
     - channel.config:000
     - component.attribute.class.gt:001
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - dfr.component.gt:000
+    - dfr.config:000
     - electric.meter.cac.gt:001
     - electric.meter.channel.config:000
     - electric.meter.component.gt:001
@@ -610,6 +630,7 @@ formats:
     - gw1.tank.temp.calibration.map:000
   spaceheat.name:
     used_by:
+    - ads.channel.config:000
     - channel.config:000
     - channel.readings.list.item:000
     - channel.readings:001
@@ -619,6 +640,7 @@ formats:
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - dfr.config:000
     - electric.meter.channel.config:000
     - fsm.full.report:000
     - fsm.full.report:001
@@ -720,6 +742,7 @@ formats:
     - weather:000
   uuid4.str:
     used_by:
+    - ads111x.based.component.gt:000
     - channel.readings:001
     - component.attribute.class.gt:001
     - connectivity.edge.gt:000
@@ -728,6 +751,7 @@ formats:
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - dfr.component.gt:000
     - electric.meter.cac.gt:001
     - electric.meter.component.gt:001
     - electric.meter.component.gt:002

@@ -75,6 +75,26 @@ types:
     versioning_strategy: literal
     versions:
       '001': definitions/types/electric.meter.cac.gt/001.yaml
+  dfr.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/dfr.config/000.yaml
+  dfr.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/dfr.component.gt/000.yaml
+  ads.channel.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/ads.channel.config/000.yaml
+  ads111x.based.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/ads111x.based.component.gt/000.yaml
   electric.meter.channel.config:
     latest_version: '000'
     versioning_strategy: literal
@@ -657,6 +677,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/temp.calc.method/000.yaml
+  thermistor.data.method:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/thermistor.data.method/000.yaml
 formats:
   handle.name: definitions/formats/handle.name.yaml
   hex.char: definitions/formats/hex.char.yaml

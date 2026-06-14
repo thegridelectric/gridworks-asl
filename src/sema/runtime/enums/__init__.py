@@ -49,6 +49,7 @@ from sema.runtime.enums.spaceheat_make_model import SpaceheatMakeModel
 from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
 from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
 from sema.runtime.enums.temp_calc_method import TempCalcMethod
+from sema.runtime.enums.thermistor_data_method import ThermistorDataMethod
 
 __all__ = [
     "BaseGNodeClass",
@@ -94,4 +95,5 @@ __all__ = [
     "SpaceheatTelemetryName",
     "SpaceheatUnit",
     "TempCalcMethod",
+    "ThermistorDataMethod",
 ]

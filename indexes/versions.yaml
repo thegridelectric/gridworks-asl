@@ -99,6 +99,34 @@ types:
       "001":
         summary: "Initial Sema version (flattened from the scada ElectricMeterCacGt runtime)."
 
+  dfr.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada DfrConfig runtime)."
+
+  dfr.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada DfrComponentGt runtime)."
+
+  ads.channel.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada AdsChannelConfig runtime; ThermistorMakeModel -> ThermistorDeviceType)."
+
+  ads111x.based.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada Ads111xBasedComponentGt runtime)."
+
   electric.meter.channel.config:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -1011,6 +1039,12 @@ enums:
       "001": {}
 
   temp.calc.method:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  thermistor.data.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

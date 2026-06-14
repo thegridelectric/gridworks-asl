@@ -1,0 +1,9 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ dfr_config_000_class_name }}":
+        """
+        Axiom 1: CaptureAndPollingConsistency
+        If PollPeriodMs exists, then CapturePeriodMs (CapturePeriodS * 1000) must be larger
+        than PollPeriodMs. If CapturePeriodMs is less than 10 * PollPeriodMs, then
+        CapturePeriodMs must be a multiple of PollPeriodMs.
+        """
+        raise NotImplementedError("Axiom 1 validation is not implemented.")

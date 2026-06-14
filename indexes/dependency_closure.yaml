@@ -2,6 +2,30 @@
 # Generated from indexes/public_registry.yaml
 
 types:
+  ads.channel.config:
+    '000':
+      enums:
+      - spaceheat.unit:001
+      - thermistor.data.method:000
+      formats:
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      types: []
+      versionless_types: []
+  ads111x.based.component.gt:
+    '000':
+      enums:
+      - spaceheat.unit:001
+      - thermistor.data.method:000
+      formats:
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - ads.channel.config:000
+      versionless_types: []
   atn.bid:
     '002':
       enums:
@@ -133,6 +157,27 @@ types:
       - uuid4.str
       types:
       - gw1.unit.quantity.projection:000
+      versionless_types: []
+  dfr.component.gt:
+    '000':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - dfr.config:000
+      versionless_types: []
+  dfr.config:
+    '000':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - positive.int
+      - spaceheat.name
+      types: []
       versionless_types: []
   egauge.register.config:
     '000':
