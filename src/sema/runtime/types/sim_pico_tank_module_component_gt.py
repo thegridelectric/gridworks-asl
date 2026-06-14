@@ -48,7 +48,14 @@ class SimPicoTankModuleComponentGt(SemaType):
           - PicoHwUid is present
           - both PicoAHwUid and PicoBHwUid are present
         """
-        raise NotImplementedError("Axiom 1 validation is not implemented.")
+        single = self.pico_hw_uid is not None
+        pair = self.pico_a_hw_uid is not None and self.pico_b_hw_uid is not None
+        if single == pair:
+            raise ValueError(
+                "Axiom 1 (PicoHardwareIdentityXor): exactly one of PicoHwUid, "
+                "or both PicoAHwUid and PicoBHwUid, SHALL be present."
+            )
+        return self
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "SimPicoTankModuleComponentGt":
@@ -56,7 +63,17 @@ class SimPicoTankModuleComponentGt(SemaType):
         Axiom 2: PicoKOhmsConsistency
         PicoKOhms SHALL be present if and only if TempCalcMethod equals SimpleBetaForPico.
         """
-        raise NotImplementedError("Axiom 2 validation is not implemented.")
+        kohms_present = self.pico_k_ohms is not None
+        is_pico_beta = (
+            str(getattr(self.temp_calc_method, "value", self.temp_calc_method))
+            == "SimpleBetaForPico"
+        )
+        if kohms_present != is_pico_beta:
+            raise ValueError(
+                "Axiom 2 (PicoKOhmsConsistency): PicoKOhms SHALL be present "
+                "if and only if TempCalcMethod is SimpleBetaForPico."
+            )
+        return self
 
     @model_validator(mode="after")
     def check_axiom_3(self) -> "SimPicoTankModuleComponentGt":
@@ -64,4 +81,9 @@ class SimPicoTankModuleComponentGt(SemaType):
         Axiom 3: SensorOrderPermutation
         If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
         """
-        raise NotImplementedError("Axiom 3 validation is not implemented.")
+        if self.sensor_order is not None and sorted(self.sensor_order) != [1, 2, 3]:
+            raise ValueError(
+                "Axiom 3 (SensorOrderPermutation): SensorOrder SHALL be a "
+                "permutation of [1, 2, 3]."
+            )
+        return self

@@ -62,5 +62,18 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "Address": 0,
+      "Name": "example",
+      "Description": "example",
+      "Type": "example",
+      "Denominator": 0,
+      "Unit": "example",
+      "TypeName": "egauge.register.config",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

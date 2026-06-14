@@ -59,5 +59,35 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "HubitatComponentId": "448913a3-e9ef-4f28-9c72-c507daaf4df8",
+      "DeviceId": 1,
+      "Attributes": [
+        {
+          "AttributeName": "example",
+          "ChannelName": "scada",
+          "NodeName": "scada",
+          "TelemetryName": "Unknown",
+          "Unit": "Unknown",
+          "Exponent": 0,
+          "InterpretAsNumber": false,
+          "Enabled": false,
+          "WebPollEnabled": false,
+          "WebListenEnabled": false,
+          "ReportMissing": false,
+          "ReportParseError": false,
+          "TypeName": "maker.api.attribute.gt",
+          "Version": "000"
+        }
+      ],
+      "Enabled": false,
+      "WebListenEnabled": false,
+      "PollPeriodSeconds": 0.0,
+      "TypeName": "hubitat.poller.gt",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

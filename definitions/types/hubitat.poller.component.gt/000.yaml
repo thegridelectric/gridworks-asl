@@ -58,5 +58,52 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "ComponentId": "e4dc08d9-ac73-4383-8b21-1331267f6c94",
+      "DeviceType": "HoneywellT6Thermostat",
+      "Poller": {
+        "HubitatComponentId": "2f51577c-1c95-4d91-b1aa-ec89d302e821",
+        "DeviceId": 1,
+        "Attributes": [
+          {
+            "AttributeName": "example",
+            "ChannelName": "scada",
+            "NodeName": "scada",
+            "TelemetryName": "Unknown",
+            "Unit": "Unknown",
+            "Exponent": 0,
+            "InterpretAsNumber": false,
+            "Enabled": false,
+            "WebPollEnabled": false,
+            "WebListenEnabled": false,
+            "ReportMissing": false,
+            "ReportParseError": false,
+            "TypeName": "maker.api.attribute.gt",
+            "Version": "000"
+          }
+        ],
+        "Enabled": false,
+        "WebListenEnabled": false,
+        "PollPeriodSeconds": 0.0,
+        "TypeName": "hubitat.poller.gt",
+        "Version": "000"
+      },
+      "ConfigList": [
+        {
+          "ChannelName": "scada",
+          "CapturePeriodS": 1,
+          "AsyncCapture": false,
+          "Exponent": 0,
+          "Unit": "Unknown",
+          "TypeName": "channel.config",
+          "Version": "000"
+        }
+      ],
+      "TypeName": "hubitat.poller.component.gt",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

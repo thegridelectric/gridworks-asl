@@ -5,4 +5,16 @@
         ConfigList SHALL NOT contain duplicate ActorName values or duplicate RelayIdx
         values.
         """
-        raise NotImplementedError("Axiom 1 validation is not implemented.")
+        actor_names = [c.actor_name for c in self.config_list]
+        relay_idxs = [c.relay_idx for c in self.config_list]
+        if len(actor_names) != len(set(actor_names)):
+            raise ValueError(
+                "Axiom 1 (ActorAndRelayIndexUniqueness): ConfigList SHALL NOT "
+                "contain duplicate ActorName values."
+            )
+        if len(relay_idxs) != len(set(relay_idxs)):
+            raise ValueError(
+                "Axiom 1 (ActorAndRelayIndexUniqueness): ConfigList SHALL NOT "
+                "contain duplicate RelayIdx values."
+            )
+        return self

@@ -60,6 +60,39 @@ required:
 
 additionalProperties: true
 
+examples:
+  - |
+    {
+      "ComponentId": "af037880-2e9c-41a8-890b-ff9e63ac8d90",
+      "DeviceType": "KridaDoubleRelayBoard16",
+      "ConfigList": [
+        {
+          "ChannelName": "scada",
+          "CapturePeriodS": 1,
+          "AsyncCapture": false,
+          "Exponent": 0,
+          "Unit": "Unknown",
+          "RelayIdx": 1,
+          "ActorName": "scada",
+          "WiringConfig": "NormallyClosed",
+          "EventType": "beech.1",
+          "DeEnergizingEvent": "a",
+          "EnergizingEvent": "a",
+          "StateType": "beech.1",
+          "DeEnergizedState": "a",
+          "EnergizedState": "a",
+          "TypeName": "relay.actor.config",
+          "Version": "003"
+        }
+      ],
+      "I2cBus": "scada",
+      "I2cAddressList": [
+        0
+      ],
+      "TypeName": "i2c.multichannel.dt.relay.component.gt",
+      "Version": "005"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
 

@@ -96,5 +96,24 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "AttributeName": "example",
+      "ChannelName": "scada",
+      "NodeName": "scada",
+      "TelemetryName": "Unknown",
+      "Unit": "Unknown",
+      "Exponent": 0,
+      "InterpretAsNumber": false,
+      "Enabled": false,
+      "WebPollEnabled": false,
+      "WebListenEnabled": false,
+      "ReportMissing": false,
+      "ReportParseError": false,
+      "TypeName": "maker.api.attribute.gt",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

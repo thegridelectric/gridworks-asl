@@ -95,6 +95,35 @@ required:
 
 additionalProperties: true
 
+examples:
+  - |
+    {
+      "ComponentId": "b58df331-f649-4563-9e40-d3e500529679",
+      "DeviceType": "GridworksTankModule3",
+      "ConfigList": [
+        {
+          "ChannelName": "scada",
+          "CapturePeriodS": 1,
+          "AsyncCapture": false,
+          "Exponent": 0,
+          "Unit": "Unknown",
+          "TypeName": "channel.config",
+          "Version": "000"
+        }
+      ],
+      "Enabled": false,
+      "TempCalcMethod": "SimpleBeta",
+      "ThermistorBeta": 1,
+      "SendMicroVolts": false,
+      "Samples": 1,
+      "NumSampleAverages": 1,
+      "SerialNumber": "example",
+      "AsyncCaptureDeltaMicroVolts": 0,
+      "TypeName": "pico.tank.module.component.gt",
+      "Version": "012",
+      "PicoHwUid": "pico_a1b2c3"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
 

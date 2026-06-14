@@ -54,5 +54,35 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "ComponentId": "4020eda2-c40b-48e3-81df-f7c76d40bc4c",
+      "DeviceType": "GridworksScadaGw108",
+      "ConfigList": [
+        {
+          "ChannelName": "scada",
+          "CapturePeriodS": 1,
+          "AsyncCapture": false,
+          "Exponent": 0,
+          "Unit": "Unknown",
+          "RelayIdx": 1,
+          "ActorName": "scada",
+          "WiringConfig": "NormallyClosed",
+          "EventType": "beech.1",
+          "DeEnergizingEvent": "a",
+          "EnergizingEvent": "a",
+          "StateType": "beech.1",
+          "DeEnergizedState": "a",
+          "EnergizedState": "a",
+          "TypeName": "relay.actor.config",
+          "Version": "003"
+        }
+      ],
+      "GpioPin": 1,
+      "TypeName": "gw108.vdc.relay.component.gt",
+      "Version": "002"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

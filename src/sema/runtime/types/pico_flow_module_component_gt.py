@@ -47,4 +47,14 @@ class PicoFlowModuleComponentGt(SemaType):
         If HwUid is present, it SHALL match the pattern pico_xxxxxx where xxxxxx consists of
         six lowercase hexadecimal characters.
         """
-        raise NotImplementedError("Axiom 1 validation is not implemented.")
+        import re
+
+        if (
+            self.hw_uid is not None
+            and re.fullmatch(r"pico_[0-9a-f]{6}", self.hw_uid) is None
+        ):
+            raise ValueError(
+                "Axiom 1 (HwUidPattern): HwUid SHALL match pico_xxxxxx "
+                "(six lowercase hexadecimal characters)."
+            )
+        return self

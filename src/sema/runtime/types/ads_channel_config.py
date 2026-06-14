@@ -33,4 +33,19 @@ class AdsChannelConfig(SemaType):
         than PollPeriodMs. If CapturePeriodMs is less than 10 * PollPeriodMs, then
         CapturePeriodMs must be a multiple of PollPeriodMs.
         """
-        raise NotImplementedError("Axiom 1 validation is not implemented.")
+        if self.poll_period_ms is not None:
+            capture_ms = self.capture_period_s * 1000
+            if not capture_ms > self.poll_period_ms:
+                raise ValueError(
+                    "Axiom 1 (CaptureAndPollingConsistency): CapturePeriodMs "
+                    "must be larger than PollPeriodMs."
+                )
+            if (
+                capture_ms < 10 * self.poll_period_ms
+                and capture_ms % self.poll_period_ms != 0
+            ):
+                raise ValueError(
+                    "Axiom 1 (CaptureAndPollingConsistency): CapturePeriodMs "
+                    "must be a multiple of PollPeriodMs."
+                )
+        return self

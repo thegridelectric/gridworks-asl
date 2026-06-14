@@ -55,6 +55,18 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "Host": "example",
+      "MakerApiId": 0,
+      "AccessToken": "example",
+      "MacAddress": "example",
+      "WebListenEnabled": false,
+      "TypeName": "hubitat.gt",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
 
