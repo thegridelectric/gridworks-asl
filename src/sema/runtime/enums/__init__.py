@@ -10,6 +10,7 @@ from sema.runtime.enums.g_node_status import GNodeStatus
 from sema.runtime.enums.gpio_sense_mode import GpioSenseMode
 from sema.runtime.enums.gpm_from_hz_method import GpmFromHzMethod
 from sema.runtime.enums.gw1_actor_class import Gw1ActorClass
+from sema.runtime.enums.gw1_device_type import Gw1DeviceType
 from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
 from sema.runtime.enums.gw1_heat_call_interpretation import Gw1HeatCallInterpretation
 from sema.runtime.enums.gw1_lc_top_state import Gw1LcTopState
@@ -62,6 +63,7 @@ __all__ = [
     "GpioSenseMode",
     "GpmFromHzMethod",
     "Gw1ActorClass",
+    "Gw1DeviceType",
     "Gw1EmissionMethod",
     "Gw1HeatCallInterpretation",
     "Gw1LcTopState",

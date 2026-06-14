@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-06-12T20:00:00Z'
+  last_updated: '2026-06-13T22:00:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -224,6 +224,17 @@ enums:
       009:
         schema_url: https://schemas.electricity.works/enums/gw1.actor.class/009
         created: '2026-01-15T18:00:00Z'
+  gw1.device.type:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Device category (PascalCase) a component is built on; replaces make/model-as-CAC.
+      Components carry DeviceType as an open pascal.case string; the hardware layout
+      enforces membership here. Migrated from spaceheat.make.model (frozen).
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/gw1.device.type/000
+        created: '2026-06-13T21:30:00Z'
   gw1.emission.method:
     latest_version: '000'
     owner: gridworks-energy
