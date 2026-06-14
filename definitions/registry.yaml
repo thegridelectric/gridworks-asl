@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-06-13T22:30:00Z"
+  last_updated: "2026-06-14T00:30:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1393,33 +1393,36 @@ types:
         status: "draft"
         schema_url: "https://schemas.electricity.works/draft/types/gw.nolan.layout/000"
         created: "2026-06-12T19:35:00Z"
-        summary: "Draft. Reconciled refs to the new shared layout vocabulary (sema 6f73174 / af2bf49): bumped versions, added the real nolan components, dropped gw1.scada.device.type.gt, heatcall.interpretation -> gw1.heat.call.interpretation. Stays draft."
+        summary: "Draft. Reconciled refs to the new shared layout vocabulary, then to hardware-layout-pass-one: Components rebound to the cac-free DeviceType component versions; DeviceTypes now holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada) instead of CACs; DeviceTypeReferenceIntegrity reworked into the DeviceTypeMembership axiom (DeviceType in gw1.device.type + specialized-record presence). Stays draft."
         direct_dependencies:
           structural:
+            - "ads111x.based.device.type.gt:000"
             - "change.heatcall.source:000"
             - "change.relay.state:000"
-            - "component.attribute.class.gt:001"
             - "data.channel.gt:002"
             - "derived.channel.gt:002"
-            - "electric.meter.cac.gt:001"
-            - "electric.meter.component.gt:001"
+            - "electric.meter.component.gt:002"
+            - "electric.meter.device.type.gt:000"
             - "g.node.gt:004"
             - "gw1.heat.call.interpretation:000"
             - "gw1.quantity:000"
+            - "gw1.scada.device.type.gt:000"
             - "gw1.unit:001"
-            - "gw108.gpio.relay.component.gt:001"
-            - "gw108.gpio.sensor.component.gt:001"
-            - "gw108.vdc.relay.component.gt:001"
+            - "gw108.gpio.relay.component.gt:002"
+            - "gw108.gpio.sensor.component.gt:002"
+            - "gw108.vdc.relay.component.gt:002"
             - "heatcall.source:000"
-            - "i2c.multichannel.dt.relay.component.gt:004"
-            - "i2c.thermistor.reader.component.gt:001"
-            - "pico.btu.meter.component.gt:000"
-            - "pico.tank.module.component.gt:011"
+            - "i2c.multichannel.dt.relay.component.gt:005"
+            - "i2c.thermistor.reader.component.gt:002"
+            - "pico.btu.meter.component.gt:001"
+            - "pico.tank.module.component.gt:012"
             - "relay.actor.config:003"
             - "relay.closed.or.open:000"
-            - "sim.pico.tank.module.component.gt:000"
+            - "sim.pico.tank.module.component.gt:001"
             - "spaceheat.node.gt:302"
-            - "web.server.component.gt:001"
+            - "web.server.component.gt:002"
+          axiom:
+            - "gw1.device.type:000"
 
   gw1.tank.temp.calibration:
     latest_version: "000"
@@ -1745,12 +1748,33 @@ types:
             - "left.right.dot"
 
   layout.lite:
-    latest_version: "014"
+    latest_version: "015"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Runtime projection of the active SCADA context used to interpret reports, snapshots, and control-adjacent messages."
 
     versions:
+      "015":
+        schema_url: "https://schemas.electricity.works/types/layout.lite/015"
+        created: "2026-06-14T00:00:00Z"
+        summary: "- TankModuleComponents / FlowModuleComponents / I2cRelayComponent: cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module 011->012, sim.pico.tank.module 000->001, pico.flow.module 000->001, i2c.multichannel.dt.relay 004->005). Context-dependent: the embedded components' DeviceType lives on their cac, not the component."
+        direct_dependencies:
+          structural:
+            - "data.channel.gt:002"
+            - "derived.channel.gt:001"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "gw1.tank.temp.calibration.map:000"
+            - "ha1.params:006"
+            - "i2c.multichannel.dt.relay.component.gt:005"
+            - "left.right.dot"
+            - "pico.flow.module.component.gt:001"
+            - "pico.tank.module.component.gt:012"
+            - "positive.int"
+            - "sim.pico.tank.module.component.gt:001"
+            - "spaceheat.node.gt:302"
+            - "utc.milliseconds"
+            - "uuid4.str"
       "014":
         schema_url: "https://schemas.electricity.works/types/layout.lite/014"
         created: "2026-06-12T00:00:00Z"

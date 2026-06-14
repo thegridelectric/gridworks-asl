@@ -56,25 +56,29 @@ properties:
       List of hardware components present in the system.
     items:
       oneOf:
-        - $ref: "https://schemas.electricity.works/types/electric.meter.component.gt/001"
-        - $ref: "https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/001"
-        - $ref: "https://schemas.electricity.works/draft/types/gw108.gpio.relay.component.gt/001"
-        - $ref: "https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/001"
-        - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004"
-        - $ref: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/001"
-        - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/000"
-        - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"
-        - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"
-        - $ref: "https://schemas.electricity.works/types/web.server.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/electric.meter.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/002"
+        - $ref: "https://schemas.electricity.works/draft/types/gw108.gpio.relay.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/005"
+        - $ref: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/012"
+        - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/web.server.component.gt/002"
 
   DeviceTypes:
     type: array
     description: >
-      List of device types (e.g. the make/model) represented by the system components
+      The specialized per-family device-type records (`<family>.device.type.gt`) for the
+      device categories present in `Components` that carry category-level data. A component
+      joins its record by the shared `DeviceType` value (see the device-type membership
+      axiom). Replaces the former make/model-as-CAC list.
     items:
       oneOf:
-        - $ref: "https://schemas.electricity.works/types/component.attribute.class.gt/001"
-        - $ref: "https://schemas.electricity.works/types/electric.meter.cac.gt/001"
+        - $ref: "https://schemas.electricity.works/draft/types/electric.meter.device.type.gt/000"
+        - $ref: "https://schemas.electricity.works/draft/types/ads111x.based.device.type.gt/000"
+        - $ref: "https://schemas.electricity.works/draft/types/gw1.scada.device.type.gt/000"
 
   Hydronic:
     type: object
@@ -126,7 +130,6 @@ x-gridworks:
 
           - ShNode.ShNodeId
           - Component.ComponentId
-          - DeviceType.ComponentAttributeClassId
           - DataChannel.Id
           - DerivedChannel.Id
           - GNode.GNodeId
@@ -135,10 +138,16 @@ x-gridworks:
         in any other set.
             
     - number:
-      name: "DeviceTypeReferenceIntegrity"
+      name: "DeviceTypeMembership"
       statement: >
-        For every Component, there SHALL exist a DeviceType whose ComponentAttributeClassId 
-        equals the Component's ComponentAttributeClassId.
+        Device-type membership. Every Component's DeviceType SHALL be a member of the
+        `gw1.device.type` enum. Furthermore, for every Component whose DeviceType requires a
+        specialized device-type record (a category that carries category-level data beyond
+        its name — e.g. an electric meter, an ADS111x-based sensor, a GW108 board), the
+        DeviceTypes array SHALL contain a `<family>.device.type.gt` whose DeviceType value
+        equals the Component's DeviceType. A Component whose category carries no
+        category-level data needs no record. Consistency is a layout invariant, not a
+        per-component flag.
   
     - number:
       name: "ComponentConfigListExistence"

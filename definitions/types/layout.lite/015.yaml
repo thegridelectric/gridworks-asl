@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/layout.lite/014"
+$id: "https://schemas.electricity.works/types/layout.lite/015"
 
 title: "layout.lite"
 type: object
@@ -7,10 +7,12 @@ description: >
   Runtime projection of the active SCADA context needed to interpret telemetry
   and snapshot messages for a running Spaceheat deployment.
 
-  `layout.lite` is emitted by SCADA on request. It is not intended to be a
-  lossless copy of the source layout artifact on disk. Some fields are projected
+  `layout.lite` is emitted by SCADA on request (and on boot). It is not intended to
+  be a lossless copy of the source layout artifact on disk. Some fields are projected
   directly from the loaded hardware layout, while others reflect active runtime
-  settings.
+  settings. As of `/015` the embedded component types are the cac-free `DeviceType`
+  shapes (hardware-layout pass one) — a layout.lite is coherent with the components a
+  migrated SCADA actually loads.
 
 properties:
 
@@ -95,15 +97,15 @@ properties:
     type: array
     items:
       oneOf:
-        - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"
-        - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/000"
+        - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/012"
+        - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"
     description: >
       Tank module components present in the running deployment.
 
   FlowModuleComponents:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/pico.flow.module.component.gt/000"
+      $ref: "https://schemas.electricity.works/types/pico.flow.module.component.gt/001"
     description: >
       Flow module components present in the running deployment.
 
@@ -113,7 +115,7 @@ properties:
       Active HA1 parameter set used by the running deployment.
 
   I2cRelayComponent:
-    $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004"
+    $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/005"
     description: >
       Optional relay component configuration used by the running deployment.
 
@@ -126,7 +128,7 @@ properties:
     const: "layout.lite"
 
   Version:
-    const: "014"
+    const: "015"
 
 required:
   - FromGNodeAlias
@@ -149,49 +151,6 @@ required:
   - Version
 
 additionalProperties: false
-
-examples:
-  - |
-    {
-      "TypeName": "layout.lite",
-      "Version": "014",
-      "FromGNodeAlias": "hw1.isone.me.versant.keene.spruce.scada",
-      "MessageCreatedMs": 1774955735018,
-      "MessageId": "265891d4-7250-497e-a022-5c870db6c117",
-      "Strategy": "House0",
-      "SystemMode": "MonitorOnly",
-      "SeasonalStorageMode": "AllTanks",
-      "BufferShortCycling": true,
-      "ZoneList": [],
-      "CriticalZoneList": [],
-      "TotalStoreTanks": 1,
-      "ShNodes": [],
-      "DataChannels": [],
-      "DerivedChannels": [],
-      "TankModuleComponents": [],
-      "FlowModuleComponents": [],
-      "Ha1Params": {
-        "TypeName": "ha1.params",
-        "Version": "006",
-        "AlphaTimes10": 86,
-        "BetaTimes100": -14,
-        "GammaEx6": 2900,
-        "IntermediatePowerKw": 3.6,
-        "IntermediateRswtF": 105,
-        "DdPowerKw": 8.6,
-        "DdRswtF": 140,
-        "DdDeltaTF": 20,
-        "HpMaxKwEl": 9.66,
-        "MaxEwtF": 166,
-        "LoadOverestimationPercent": 0,
-        "CopIntercept": 1.02,
-        "CopOatCoeff": 0.0257,
-        "CopLwtCoeff": 0.0,
-        "CopMin": 1.4,
-        "CopMinOatF": 15.0,
-        "HpTurnOnMinutes": 12
-      }
-    }
 
 x-gridworks:
   owner: "gridworks-energy"

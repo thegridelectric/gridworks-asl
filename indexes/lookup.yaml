@@ -225,9 +225,10 @@ types:
     versions:
       '000': definitions/types/keyparam.change.log/000.yaml
   layout.lite:
-    latest_version: '014'
+    latest_version: '015'
     versioning_strategy: literal
     versions:
+      '015': definitions/types/layout.lite/015.yaml
       '014': definitions/types/layout.lite/014.yaml
       '013': definitions/types/layout.lite/013.yaml
       '012': definitions/types/layout.lite/012.yaml

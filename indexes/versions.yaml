@@ -348,9 +348,11 @@ types:
         summary: "Initial Sema version"
 
   layout.lite:
-    latest_version: "014"
+    latest_version: "015"
     versioning_strategy: "literal"
     versions:
+      "015":
+        summary: "- TankModuleComponents / FlowModuleComponents / I2cRelayComponent: cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module 011->012, sim.pico.tank.module 000->001, pico.flow.module 000->001, i2c.multichannel.dt.relay 004->005). Context-dependent: the embedded components' DeviceType lives on their cac, not the component."
       "014":
         summary: "- ShNodes: spaceheat.node.gt:301 -> 302"
       "013":

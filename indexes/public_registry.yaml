@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-06-13T22:30:00Z'
+  last_updated: '2026-06-14T00:30:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -1379,12 +1379,37 @@ types:
           structural:
           - left.right.dot
   layout.lite:
-    latest_version: '014'
+    latest_version: '015'
     owner: gridworks-energy
     versioning_strategy: literal
     description: Runtime projection of the active SCADA context used to interpret
       reports, snapshots, and control-adjacent messages.
     versions:
+      '015':
+        schema_url: https://schemas.electricity.works/types/layout.lite/015
+        created: '2026-06-14T00:00:00Z'
+        summary: '- TankModuleComponents / FlowModuleComponents / I2cRelayComponent:
+          cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module
+          011->012, sim.pico.tank.module 000->001, pico.flow.module 000->001, i2c.multichannel.dt.relay
+          004->005). Context-dependent: the embedded components'' DeviceType lives
+          on their cac, not the component.'
+        direct_dependencies:
+          structural:
+          - data.channel.gt:002
+          - derived.channel.gt:001
+          - gw1.seasonal.storage.mode:000
+          - gw1.system.mode:000
+          - gw1.tank.temp.calibration.map:000
+          - ha1.params:006
+          - i2c.multichannel.dt.relay.component.gt:005
+          - left.right.dot
+          - pico.flow.module.component.gt:001
+          - pico.tank.module.component.gt:012
+          - positive.int
+          - sim.pico.tank.module.component.gt:001
+          - spaceheat.node.gt:302
+          - utc.milliseconds
+          - uuid4.str
       '014':
         schema_url: https://schemas.electricity.works/types/layout.lite/014
         created: '2026-06-12T00:00:00Z'
