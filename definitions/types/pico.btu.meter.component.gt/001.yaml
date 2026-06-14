@@ -8,6 +8,12 @@ description: >
   and cold thermistors (and optionally a CT voltage reading) that a Pico samples to
   compute thermal power. Flat — the shared component fields are spelled out here.
 
+extended_description: >
+  `DeviceType` and `FlowMeterType` are open `pascal.case` strings. The device-type
+  enum (`gw1.device.type`) whose membership they must satisfy is articulated by any
+  hardware layout for which this type is a sub-type — the layout enforces it, so this
+  component type stays version-stable as device types are added.
+
 properties:
 
   ComponentId:
@@ -54,9 +60,10 @@ properties:
     type: boolean
 
   FlowMeterType:
-    $ref: "https://schemas.electricity.works/enums/spaceheat.make.model/007"
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      Make/model of the flow meter.
+      The flow meter, as an open `pascal.case` device-type string (a `gw1.device.type`
+      value, e.g. `SaierFlowSensor` / `GridworksPicoFlowHall` / `GridworksPicoFlowReed`).
 
   HzCalcMethod:
     $ref: "https://schemas.electricity.works/enums/hz.calc.method/001"

@@ -3,9 +3,6 @@ from pydantic import StrictFloat, StrictInt, model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import GpmFromHzMethod
 from sema.runtime.enums import HzCalcMethod
-from sema.runtime.enums.old_versions.spaceheat_make_model_003 import (
-    SpaceheatMakeModel003,
-)
 from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
@@ -23,7 +20,7 @@ class PicoFlowModuleComponentGt(SemaType):
     enabled: bool
     serial_number: str
     flow_node_name: SpaceheatName
-    flow_meter_type: SpaceheatMakeModel003
+    flow_meter_type: PascalCase
     hz_calc_method: HzCalcMethod
     gpm_from_hz_method: GpmFromHzMethod
     constant_gallons_per_tick: StrictFloat

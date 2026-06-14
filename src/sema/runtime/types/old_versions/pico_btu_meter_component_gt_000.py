@@ -45,6 +45,7 @@ class PicoBtuMeterComponentGt000(SemaType):
     def upgrade(self) -> PicoBtuMeterComponentGt:
         """
         - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component.
+        - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout.
         """
         raise SemaType.upgrade_requires_context(
             "PicoBtuMeterComponentGt000 cannot be upgraded to "

@@ -921,7 +921,6 @@ types:
       - hz.calc.method:001
       - relay.closed.or.open:000
       - relay.wiring.config:000
-      - spaceheat.make.model:003
       - spaceheat.telemetry.name:007
       - spaceheat.unit:001
       - temp.calc.method:000
@@ -1031,7 +1030,6 @@ types:
       enums:
       - gpm.from.hz.method:000
       - hz.calc.method:001
-      - spaceheat.make.model:007
       - spaceheat.unit:001
       - temp.calc.method:000
       formats:
@@ -1061,7 +1059,6 @@ types:
       enums:
       - gpm.from.hz.method:000
       - hz.calc.method:001
-      - spaceheat.make.model:003
       - spaceheat.unit:001
       formats:
       - pascal.case

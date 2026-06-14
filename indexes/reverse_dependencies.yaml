@@ -418,13 +418,11 @@ enums:
     '003':
       used_by:
       - pico.flow.module.component.gt:000
-      - pico.flow.module.component.gt:001
     '007':
       used_by:
       - component.attribute.class.gt:001
       - electric.meter.cac.gt:001
       - pico.btu.meter.component.gt:000
-      - pico.btu.meter.component.gt:001
   spaceheat.telemetry.name:
     '006':
       used_by:

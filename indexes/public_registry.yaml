@@ -1698,14 +1698,15 @@ types:
         created: '2026-06-13T22:06:00Z'
         summary: '- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type
           value, pascal.case). Context-dependent: the device type lived on the referenced
-          cac, not the component.'
+          cac, not the component. - FlowMeterType: spaceheat.make.model enum value
+          -> gw1.device.type value (pascal.case); the device-type enum is articulated
+          by the hardware layout.'
         direct_dependencies:
           structural:
           - channel.config:000
           - gpm.from.hz.method:000
           - hz.calc.method:001
           - pascal.case
-          - spaceheat.make.model:003
           - spaceheat.name
           - uuid4.str
       '000':
@@ -1732,7 +1733,9 @@ types:
         created: '2026-06-13T22:05:00Z'
         summary: '- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type
           value, pascal.case). Context-dependent: the device type lived on the referenced
-          cac, not the component.'
+          cac, not the component. - FlowMeterType: spaceheat.make.model enum value
+          -> gw1.device.type value (pascal.case); the device-type enum is articulated
+          by the hardware layout.'
         direct_dependencies:
           structural:
           - channel.config:000
@@ -1740,7 +1743,6 @@ types:
           - hz.calc.method:001
           - pascal.case
           - positive.float
-          - spaceheat.make.model:007
           - spaceheat.name
           - temp.calc.method:000
           - uuid4.str

@@ -432,7 +432,9 @@ types:
     versioning_strategy: "literal"
     versions:
       "001":
-        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        summary: >
+          - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component.
+          - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout.
       "000":
         summary: "Initial Sema version"
 
@@ -441,7 +443,9 @@ types:
     versioning_strategy: "literal"
     versions:
       "001":
-        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+        summary: >
+          - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component.
+          - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout.
       "000":
         summary: "Initial Sema version (flattened from the scada PicoBtuMeterComponentGt runtime)."
 
