@@ -1,11 +1,12 @@
     def upgrade(self) -> {{ new_command_tree_002_class_name }}:
         """- ShNodes: spaceheat.node.gt:302 only (drop the multi-version oneOf anti-pattern)"""
         data = self.model_dump()
-        lifted = []
+        lifted: list[{{ spaceheat_node_gt_302_class_name }}] = []
         for node in self.sh_nodes:
-            while not isinstance(node, {{ spaceheat_node_gt_302_class_name }}):
-                node = node.upgrade()
-            lifted.append(node)
+            current: SemaType = node
+            while not isinstance(current, {{ spaceheat_node_gt_302_class_name }}):
+                current = current.upgrade()
+            lifted.append(current)
         data["sh_nodes"] = lifted
         data["version"] = "002"
         return {{ new_command_tree_002_class_name }}.model_validate(data)

@@ -118,6 +118,43 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "AsyncCaptureThresholdGpmTimes100": 10,
+      "ComponentAttributeClassId": "9d045a8d-12ee-43e6-8d7b-11c77b19de2f",
+      "ComponentId": "30e25b97-60bf-40e3-870a-1ba80bf3b164",
+      "ConfigList": [
+        {
+          "AsyncCapture": true,
+          "CapturePeriodS": 10,
+          "ChannelName": "sieg-flow",
+          "Exponent": 2,
+          "TypeName": "channel.config",
+          "Unit": "Gpm",
+          "Version": "000"
+        }
+      ],
+      "ConstantGallonsPerTick": 0.0009,
+      "DisplayName": "sieg-flow HallFlowModule",
+      "Enabled": true,
+      "ExpAlpha": 0.2,
+      "FlowMeterType": "SAIER__SENHZG1WA",
+      "FlowNodeName": "sieg-flow",
+      "GpmFromHzMethod": "Constant",
+      "HwUid": "pico_4e6e35",
+      "HzCalcMethod": "BasicExpWeightedAvg",
+      "NoFlowMs": 250,
+      "PublishEmptyTicklistAfterS": 7,
+      "PublishTicklistPeriodS": 10,
+      "SendGallons": false,
+      "SendHz": true,
+      "SendTickLists": false,
+      "SerialNumber": "1010",
+      "TypeName": "pico.flow.module.component.gt",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
 

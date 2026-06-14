@@ -47,11 +47,12 @@ class NewCommandTree000(SemaType):
     def upgrade(self) -> NewCommandTree:
         """- ShNodes: spaceheat.node.gt:302 only (drop the multi-version oneOf anti-pattern)"""
         data = self.model_dump()
-        lifted = []
+        lifted: list[SpaceheatNodeGt] = []
         for node in self.sh_nodes:
-            while not isinstance(node, SpaceheatNodeGt):
-                node = node.upgrade()
-            lifted.append(node)
+            current: SemaType = node
+            while not isinstance(current, SpaceheatNodeGt):
+                current = current.upgrade()
+            lifted.append(current)
         data["sh_nodes"] = lifted
         data["version"] = "002"
         return NewCommandTree.model_validate(data)

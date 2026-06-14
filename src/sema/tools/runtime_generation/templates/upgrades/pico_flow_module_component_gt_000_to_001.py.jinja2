@@ -1,0 +1,10 @@
+    def upgrade(self) -> {{ pico_flow_module_component_gt_001_class_name }}:
+        """
+        - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component.
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ pico_flow_module_component_gt_000_class_name }} cannot be upgraded to "
+            "{{ pico_flow_module_component_gt_001_class_name }} without the source layout "
+            "context: DeviceType is derived from the cac the component "
+            "referenced, which the standalone component does not carry."
+        )

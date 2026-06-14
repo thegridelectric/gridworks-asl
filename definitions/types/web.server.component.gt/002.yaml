@@ -1,0 +1,79 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/web.server.component.gt/002"
+
+title: "web.server.component.gt"
+type: object
+description: >
+  A web-server component (one installed device instance) that exposes a local HTTP
+  server (e.g. for Pico devices to POST to). Flat — the shared component fields are
+  spelled out here; the server settings are an inline WebServer object.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.config/000"
+    description: >
+      Channel configurations attached to this component (often empty for a web
+      server).
+
+  WebServer:
+    type: object
+    description: >
+      The local HTTP server settings.
+    properties:
+      Enabled:
+        type: boolean
+      Host:
+        type: string
+      Name:
+        type: string
+      Port:
+        type: integer
+      Kwargs:
+        type: object
+        description: >
+          Free-form keyword arguments passed through to the server.
+    required:
+      - Enabled
+      - Host
+      - Name
+      - Port
+      - Kwargs
+    additionalProperties: false
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "web.server.component.gt"
+
+  Version:
+    const: "002"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - WebServer
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

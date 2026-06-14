@@ -81,9 +81,10 @@ types:
     versions:
       '000': definitions/types/electric.meter.channel.config/000.yaml
   electric.meter.component.gt:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/electric.meter.component.gt/002.yaml
       '001': definitions/types/electric.meter.component.gt/001.yaml
   energy.instruction:
     latest_version: '000'
@@ -171,14 +172,16 @@ types:
     versions:
       '000': definitions/types/gw1.unit.quantity.projection/000.yaml
   gw108.gpio.sensor.component.gt:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/gw108.gpio.sensor.component.gt/002.yaml
       '001': definitions/types/gw108.gpio.sensor.component.gt/001.yaml
   gw108.vdc.relay.component.gt:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/gw108.vdc.relay.component.gt/002.yaml
       '001': definitions/types/gw108.vdc.relay.component.gt/001.yaml
   ha1.params:
     latest_version: '006'
@@ -198,9 +201,10 @@ types:
     versions:
       '000': definitions/types/heating.forecast/000.yaml
   i2c.multichannel.dt.relay.component.gt:
-    latest_version: '004'
+    latest_version: '005'
     versioning_strategy: literal
     versions:
+      '005': definitions/types/i2c.multichannel.dt.relay.component.gt/005.yaml
       '004': definitions/types/i2c.multichannel.dt.relay.component.gt/004.yaml
       '003': definitions/types/i2c.multichannel.dt.relay.component.gt/003.yaml
       '002': definitions/types/i2c.multichannel.dt.relay.component.gt/002.yaml
@@ -210,9 +214,10 @@ types:
     versions:
       '001': definitions/types/i2c.thermistor.channel.config/001.yaml
   i2c.thermistor.reader.component.gt:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/i2c.thermistor.reader.component.gt/002.yaml
       '001': definitions/types/i2c.thermistor.reader.component.gt/001.yaml
   keyparam.change.log:
     latest_version: '000'
@@ -259,19 +264,22 @@ types:
       '002': definitions/types/new.command.tree/002.yaml
       '000': definitions/types/new.command.tree/000.yaml
   pico.flow.module.component.gt:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/pico.flow.module.component.gt/001.yaml
       '000': definitions/types/pico.flow.module.component.gt/000.yaml
   pico.btu.meter.component.gt:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/pico.btu.meter.component.gt/001.yaml
       '000': definitions/types/pico.btu.meter.component.gt/000.yaml
   pico.tank.module.component.gt:
-    latest_version: '011'
+    latest_version: '012'
     versioning_strategy: literal
     versions:
+      '012': definitions/types/pico.tank.module.component.gt/012.yaml
       '011': definitions/types/pico.tank.module.component.gt/011.yaml
   position.point.gt:
     latest_version: '000'
@@ -335,9 +343,10 @@ types:
       '001': definitions/types/send.layout/001.yaml
       '000': definitions/types/send.layout/000.yaml
   sim.pico.tank.module.component.gt:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/sim.pico.tank.module.component.gt/001.yaml
       '000': definitions/types/sim.pico.tank.module.component.gt/000.yaml
   sim.plant.actuation:
     latest_version: '000'
@@ -439,9 +448,10 @@ types:
     versions:
       '000': definitions/types/weather.forecast/000.yaml
   web.server.component.gt:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/web.server.component.gt/002.yaml
       '001': definitions/types/web.server.component.gt/001.yaml
 enums:
   base.g.node.class:

@@ -1,0 +1,58 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/draft/types/electric.meter.device.type.gt/000"
+
+title: "electric.meter.device.type.gt"
+type: object
+description: >
+  DRAFT. The specialized device-type record for an electric-meter device category
+  — the per-family successor to `electric.meter.cac.gt`. Keyed by `DeviceType` (a
+  `gw1.device.type` value) instead of a make/model + cac UUID, it carries the
+  category-level data an electric-meter component does not: the telemetry names the
+  meter type can report, its shortest poll period, and its default serial baud. A
+  component joins this record by the shared `DeviceType` value. Flat.
+
+properties:
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this record describes, an open `pascal.case` string (a
+      `gw1.device.type` value, e.g. `EgaugePowerMeter`). The hardware layout
+      enforces membership in `gw1.device.type`.
+
+  DisplayName:
+    type: string
+
+  MinPollPeriodMs:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Shortest polling period, in milliseconds, that this meter type supports.
+
+  TelemetryNameList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/007"
+    description: >
+      The telemetry names this meter device type is able to report.
+
+  DefaultBaud:
+    type: integer
+    description: >
+      Default serial baud rate for this meter type, when read over a serial link.
+
+  TypeName:
+    const: "electric.meter.device.type.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - DeviceType
+  - TelemetryNameList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

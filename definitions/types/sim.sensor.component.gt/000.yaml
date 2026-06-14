@@ -5,8 +5,8 @@ title: "sim.sensor.component.gt"
 type: object
 description: >
   A simulated sensor component — the component a SimSensorActor uses in a simulated
-  hardware layout. Structurally the generic component (id, cac, ConfigList), but a
-  distinct `sim.*` type so a simulated layout is visibly simulated by construction:
+  hardware layout. Structurally the generic component (id, DeviceType, ConfigList), but
+  a distinct `sim.*` type so a simulated layout is visibly simulated by construction:
   simulated things MUST use `sim.*` component types rather than reusing real ones.
   Flat — every field spelled out here.
 
@@ -15,8 +15,12 @@ properties:
   ComponentId:
     $ref: "https://schemas.electricity.works/formats/uuid4.str"
 
-  ComponentAttributeClassId:
-    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case` string
+      (a `gw1.device.type` value, normally `GridworksSimSensor`). The hardware layout
+      enforces membership in `gw1.device.type`.
 
   ConfigList:
     type: array
@@ -39,7 +43,7 @@ properties:
 
 required:
   - ComponentId
-  - ComponentAttributeClassId
+  - DeviceType
   - ConfigList
   - TypeName
   - Version

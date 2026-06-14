@@ -1,0 +1,70 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/002"
+
+title: "gw108.gpio.sensor.component.gt"
+type: object
+description: >
+  A GW108-board GPIO sensor component (one installed device instance): a single
+  digital sensor wired to a GPIO pin, read either by polling or edge detection.
+  Flat — the shared component fields are spelled out here.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.config/000"
+    description: >
+      Channel configuration(s) for this sensor (one per the device).
+
+  GpioPin:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The GPIO pin (BCM numbering) this sensor is wired to.
+
+  SenseMode:
+    $ref: "https://schemas.electricity.works/enums/gpio.sense.mode/000"
+    description: >
+      Whether the pin is read by polling or by hardware edge detection.
+
+  SendToDerived:
+    type: boolean
+    description: >
+      Whether this raw sensor reading is also provided to derived-channel logic.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "gw108.gpio.sensor.component.gt"
+
+  Version:
+    const: "002"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - GpioPin
+  - SenseMode
+  - SendToDerived
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

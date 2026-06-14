@@ -15,12 +15,16 @@ from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 
     I2cMultichannelDtRelayComponentGt002,
 )
 from sema.runtime.types.old_versions.layout_lite_009 import LayoutLite009
-from sema.runtime.types.old_versions.spaceheat_node_gt_300 import SpaceheatNodeGt300
-from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
-from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
-from sema.runtime.types.sim_pico_tank_module_component_gt import (
-    SimPicoTankModuleComponentGt,
+from sema.runtime.types.old_versions.pico_flow_module_component_gt_000 import (
+    PicoFlowModuleComponentGt000,
 )
+from sema.runtime.types.old_versions.pico_tank_module_component_gt_011 import (
+    PicoTankModuleComponentGt011,
+)
+from sema.runtime.types.old_versions.sim_pico_tank_module_component_gt_000 import (
+    SimPicoTankModuleComponentGt000,
+)
+from sema.runtime.types.old_versions.spaceheat_node_gt_300 import SpaceheatNodeGt300
 
 
 class LayoutLite008(SemaType):
@@ -39,9 +43,9 @@ class LayoutLite008(SemaType):
     data_channels: list[DataChannelGt001]
     derived_channels: list[DerivedChannelGt000]
     tank_module_components: list[
-        PicoTankModuleComponentGt | SimPicoTankModuleComponentGt
+        PicoTankModuleComponentGt011 | SimPicoTankModuleComponentGt000
     ]
-    flow_module_components: list[PicoFlowModuleComponentGt]
+    flow_module_components: list[PicoFlowModuleComponentGt000]
     ha1_params: Ha1Params004
     i2c_relay_component: I2cMultichannelDtRelayComponentGt002
     t_map: Gw1TankTempCalibrationMap | None = None

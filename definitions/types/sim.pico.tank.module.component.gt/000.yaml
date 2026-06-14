@@ -98,6 +98,39 @@ required:
 
 additionalProperties: true
 
+examples:
+  - |
+    {
+      "ComponentId": "44b1c5fb-e122-4b33-985e-99d6c7c4c967",
+      "ComponentAttributeClassId": "627ac482-24fe-46b2-ba8c-3d6f1e1ee069",
+      "ConfigList": [
+        {
+          "AsyncCapture": true,
+          "AsyncCaptureDelta": 2000,
+          "CapturePeriodS": 60,
+          "ChannelName": "buffer-depth1-device",
+          "Exponent": 3,
+          "TypeName": "channel.config",
+          "Unit": "Celcius",
+          "Version": "000"
+        }
+      ],
+      "DisplayName": "Buffer",
+      "Enabled": true,
+      "NumSampleAverages": 30,
+      "PicoHwUid": "sim-buffer-pico",
+      "Samples": 1000,
+      "SendMicroVolts": true,
+      "SerialNumber": "NA",
+      "SimulatesTypeName": "pico.tank.module.component.gt",
+      "SimulatesVersion": "011",
+      "TempCalcMethod": "SimpleBeta",
+      "ThermistorBeta": 3977,
+      "AsyncCaptureDeltaMicroVolts": 2000,
+      "TypeName": "sim.pico.tank.module.component.gt",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
 

@@ -50,5 +50,38 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "ComponentAttributeClassId": "8ad2f6fe-e834-4334-80c8-4a0d4ef4b04f",
+      "ComponentId": "c8baa219-8dec-4fcb-8d05-2c3ce6d8e2af",
+      "GpioPin": 23,
+      "ConfigList": [
+        {
+          "ActorName": "vdc-relay-gpio-23",
+          "AsyncCapture": true,
+          "CapturePeriodS": 300,
+          "ChannelName": "vdc-relay",
+          "DeEnergizedState": "RelayClosed",
+          "DeEnergizingEvent": "CloseRelay",
+          "EnergizedState": "RelayOpen",
+          "EnergizingEvent": "OpenRelay",
+          "EventType": "change.relay.state",
+          "Exponent": 0,
+          "PollPeriodMs": 200,
+          "RelayIdx": 1,
+          "StateType": "relay.closed.or.open",
+          "TypeName": "relay.actor.config",
+          "Unit": "Unitless",
+          "Version": "003",
+          "WiringConfig": "NormallyClosed",
+          "AsyncCaptureDelta": 1
+        }
+      ],
+      "DisplayName": "VDC GPIO Relay",
+      "TypeName": "gw108.vdc.relay.component.gt",
+      "Version": "001"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

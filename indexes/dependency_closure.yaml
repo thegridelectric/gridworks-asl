@@ -172,6 +172,18 @@ types:
       - egauge.register.config:000
       - electric.meter.channel.config:000
       versionless_types: []
+    '002':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - egauge.register.config:000
+      - electric.meter.channel.config:000
+      versionless_types: []
   energy.instruction:
     '000':
       enums: []
@@ -378,6 +390,18 @@ types:
       types:
       - channel.config:000
       versionless_types: []
+    '002':
+      enums:
+      - gpio.sense.mode:000
+      - spaceheat.unit:001
+      formats:
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      versionless_types: []
   gw108.vdc.relay.component.gt:
     '001':
       enums:
@@ -388,6 +412,22 @@ types:
       formats:
       - left.right.dot
       - non.empty.string
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - relay.actor.config:003
+      versionless_types: []
+    '002':
+      enums:
+      - change.relay.state:000
+      - relay.closed.or.open:000
+      - relay.wiring.config:000
+      - spaceheat.unit:001
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - pascal.case
       - positive.int
       - spaceheat.name
       - uuid4.str
@@ -472,6 +512,22 @@ types:
       types:
       - relay.actor.config:003
       versionless_types: []
+    '005':
+      enums:
+      - change.relay.state:000
+      - relay.closed.or.open:000
+      - relay.wiring.config:000
+      - spaceheat.unit:001
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - relay.actor.config:003
+      versionless_types: []
   i2c.thermistor.channel.config:
     '001':
       enums:
@@ -489,6 +545,20 @@ types:
       - spaceheat.unit:001
       - temp.calc.method:000
       formats:
+      - positive.float
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - i2c.thermistor.channel.config:001
+      versionless_types: []
+    '002':
+      enums:
+      - i2c.adc.channel:000
+      - spaceheat.unit:001
+      - temp.calc.method:000
+      formats:
+      - pascal.case
       - positive.float
       - positive.int
       - spaceheat.name
@@ -914,6 +984,22 @@ types:
       types:
       - channel.config:000
       versionless_types: []
+    '001':
+      enums:
+      - gpm.from.hz.method:000
+      - hz.calc.method:001
+      - spaceheat.make.model:007
+      - spaceheat.unit:001
+      - temp.calc.method:000
+      formats:
+      - pascal.case
+      - positive.float
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      versionless_types: []
   pico.flow.module.component.gt:
     '000':
       enums:
@@ -928,12 +1014,38 @@ types:
       types:
       - channel.config:000
       versionless_types: []
+    '001':
+      enums:
+      - gpm.from.hz.method:000
+      - hz.calc.method:001
+      - spaceheat.make.model:003
+      - spaceheat.unit:001
+      formats:
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      versionless_types: []
   pico.tank.module.component.gt:
     '011':
       enums:
       - spaceheat.unit:001
       - temp.calc.method:000
       formats:
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      versionless_types: []
+    '012':
+      enums:
+      - spaceheat.unit:001
+      - temp.calc.method:000
+      formats:
+      - pascal.case
       - positive.int
       - spaceheat.name
       - uuid4.str
@@ -1169,6 +1281,18 @@ types:
       types:
       - channel.config:000
       versionless_types: []
+    '001':
+      enums:
+      - spaceheat.unit:001
+      - temp.calc.method:000
+      formats:
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      versionless_types: []
   sim.plant.actuation:
     '000':
       enums:
@@ -1207,6 +1331,7 @@ types:
       formats:
       - left.right.dot
       - non.empty.string
+      - pascal.case
       - positive.int
       - spaceheat.name
       - uuid4.str
@@ -1218,6 +1343,7 @@ types:
       enums:
       - spaceheat.unit:001
       formats:
+      - pascal.case
       - positive.int
       - spaceheat.name
       - uuid4.str
@@ -1409,6 +1535,17 @@ types:
       enums:
       - spaceheat.unit:001
       formats:
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - channel.config:000
+      versionless_types: []
+    '002':
+      enums:
+      - spaceheat.unit:001
+      formats:
+      - pascal.case
       - positive.int
       - spaceheat.name
       - uuid4.str

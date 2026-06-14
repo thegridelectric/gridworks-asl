@@ -117,5 +117,42 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "AsyncCaptureDeltaCelsiusX100": 20,
+      "AsyncCaptureDeltaGpmX100": 10,
+      "ColdChannelName": "hp-ewt",
+      "ComponentAttributeClassId": "d020608d-d5ed-4b12-9592-7135db34e4ba",
+      "ComponentId": "418b24f3-f05f-4d75-8d72-7f40b8e1aee3",
+      "ConfigList": [
+        {
+          "AsyncCapture": true,
+          "CapturePeriodS": 300,
+          "ChannelName": "primary-flow",
+          "Exponent": 2,
+          "TypeName": "channel.config",
+          "Unit": "Gpm",
+          "Version": "000"
+        }
+      ],
+      "DisplayName": "primary-btu BtuMeter",
+      "Enabled": true,
+      "FlowChannelName": "primary-flow",
+      "FlowMeterType": "SAIER__SENHZG1WA",
+      "GallonsPerPulse": 0.0009,
+      "GpmFromHzMethod": "Constant",
+      "HotChannelName": "hp-lwt",
+      "HwUid": "pico_7a4d2b",
+      "HzCalcMethod": "UniformWindow",
+      "ReadCtVoltage": false,
+      "SendHz": false,
+      "SerialNumber": "NA",
+      "TempCalcMethod": "SimpleBeta",
+      "ThermistorBeta": 3977,
+      "TypeName": "pico.btu.meter.component.gt",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
