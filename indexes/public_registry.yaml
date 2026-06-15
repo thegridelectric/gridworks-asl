@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-06-15T17:30:00Z'
+  last_updated: '2026-06-15T20:05:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -495,8 +495,13 @@ enums:
     latest_version: 008
     owner: gridworks-energy
     enum_type: versioned
-    description: Make and model taxonomy used by Spaceheat SCADA for physical and
-      simulated devices.
+    description: "Make and model taxonomy used by Spaceheat SCADA for physical and\
+      \ simulated devices. Frozen base vocabulary \u2014 superseded as device identity\
+      \ by gw1.device.type (the open DeviceType) when MakeModel was retired, summer\
+      \ 2026."
+    replaced_by:
+    - gw1.device.type
+    frozen_at: '2026-06-15T20:05:00Z'
     versions:
       008:
         schema_url: https://schemas.electricity.works/enums/spaceheat.make.model/008
