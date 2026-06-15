@@ -1607,6 +1607,7 @@ types:
             - "hubitat.component.gt:000"
             - "hubitat.poller.component.gt:000"
             - "i2c.multichannel.dt.relay.component.gt:005"
+            - "pico.btu.meter.component.gt:001"
             - "pico.flow.module.component.gt:001"
             - "pico.tank.module.component.gt:012"
             - "sim.pico.tank.module.component.gt:001"

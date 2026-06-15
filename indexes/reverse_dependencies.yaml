@@ -237,6 +237,7 @@ types:
   pico.btu.meter.component.gt:
     '001':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   pico.flow.module.component.gt:
     '000':

@@ -437,6 +437,7 @@ types:
       - mac.address
       - non.empty.string
       - pascal.case
+      - positive.float
       - positive.int
       - spaceheat.name
       - utc.seconds
@@ -463,6 +464,7 @@ types:
       - hubitat.poller.gt:000
       - i2c.multichannel.dt.relay.component.gt:005
       - maker.api.attribute.gt:000
+      - pico.btu.meter.component.gt:001
       - pico.flow.module.component.gt:001
       - pico.tank.module.component.gt:012
       - relay.actor.config:003
