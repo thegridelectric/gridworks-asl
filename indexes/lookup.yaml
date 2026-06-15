@@ -227,14 +227,16 @@ types:
     versions:
       '000': definitions/types/gw1.simple.sim.layout/000.yaml
   gw1.tank.temp.calibration:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/gw1.tank.temp.calibration/001.yaml
       '000': definitions/types/gw1.tank.temp.calibration/000.yaml
   gw1.tank.temp.calibration.map:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/gw1.tank.temp.calibration.map/001.yaml
       '000': definitions/types/gw1.tank.temp.calibration.map/000.yaml
   gw1.telemetry.name.quantity.projection:
     latest_version: '000'

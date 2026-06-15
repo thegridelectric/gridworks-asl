@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-06-15T03:35:00Z"
+  last_updated: "2026-06-15T15:10:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1629,12 +1629,20 @@ types:
           structural: []
 
   gw1.tank.temp.calibration:
-    latest_version: "000"
+    latest_version: "001"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Linear calibration coefficients for converting raw tank probe readings into calibrated temperatures."
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gw1.tank.temp.calibration/001"
+        created: "2026-06-15T15:10:00Z"
+        summary: >-
+          - Depth{1,2,3}B: number -> integer (offset in the OutputUnit/FahrenheitX100 scaling
+            domain, mirroring linear.one.dimensional.calibration/001)
+        direct_dependencies:
+          structural: []
       "000":
         schema_url: "https://schemas.electricity.works/types/gw1.tank.temp.calibration/000"
         created: "2025-12-25T22:18:00Z"
@@ -1643,12 +1651,21 @@ types:
           structural: []
 
   gw1.tank.temp.calibration.map:
-    latest_version: "000"
+    latest_version: "001"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Buffer and per-tank calibration map for converting raw probe readings into calibrated temperatures."
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gw1.tank.temp.calibration.map/001"
+        created: "2026-06-15T15:10:00Z"
+        summary: >-
+          - Buffer/Tank now reference gw1.tank.temp.calibration:001 (integer B)
+        direct_dependencies:
+          structural:
+            - "gw1.tank.temp.calibration:001"
+            - "positive.int.as.str"
       "000":
         schema_url: "https://schemas.electricity.works/types/gw1.tank.temp.calibration.map/000"
         created: "2025-12-25T22:18:00Z"

@@ -134,6 +134,9 @@ types:
     '000':
       used_by:
       - gw1.tank.temp.calibration.map:000
+    '001':
+      used_by:
+      - gw1.tank.temp.calibration.map:001
   gw1.tank.temp.calibration.map:
     '000':
       used_by:
@@ -736,6 +739,7 @@ formats:
   positive.int.as.str:
     used_by:
     - gw1.tank.temp.calibration.map:000
+    - gw1.tank.temp.calibration.map:001
   spaceheat.name:
     used_by:
     - ads.channel.config:000

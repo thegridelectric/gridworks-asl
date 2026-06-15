@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ gw1_tank_temp_calibration_map_001_class_name }}:
+        """
+        - Buffer/Tank now reference gw1.tank.temp.calibration:001 (integer B)
+        """
+        data = self.model_dump()
+        data["buffer"] = self.buffer.upgrade().model_dump()
+        data["tank"] = {k: v.upgrade().model_dump() for k, v in self.tank.items()}
+        data["version"] = "001"
+        return {{ gw1_tank_temp_calibration_map_001_class_name }}.model_validate(data)

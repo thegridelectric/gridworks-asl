@@ -338,16 +338,22 @@ types:
         summary: "Minimal baseline stub (TypeName + Version only) to seed the layout round-trip loop; built up bit by bit toward the simulated plant's needs."
 
   gw1.tank.temp.calibration:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: >
+          - Depth{1,2,3}B: number -> integer (offset in the OutputUnit/FahrenheitX100 scaling
+            domain, mirroring linear.one.dimensional.calibration/001)
       "000":
         summary: "Initial Sema version"
 
   gw1.tank.temp.calibration.map:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: "- Buffer/Tank now reference gw1.tank.temp.calibration:001 (integer B)"
       "000":
         summary: "Initial Sema version"
 
