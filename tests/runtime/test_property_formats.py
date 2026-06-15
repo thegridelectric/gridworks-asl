@@ -27,6 +27,7 @@ RUNTIME_FORMAT_TYPES: dict[str, Any] = {
     "utc.milliseconds": property_format.UTCMilliseconds,
     "utc.seconds": property_format.UTCSeconds,
     "uuid4.str": property_format.UUID4Str,
+    "mac.address": property_format.MacAddress,
 }
 
 

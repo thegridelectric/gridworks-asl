@@ -731,6 +731,7 @@ formats:
   handle.name: definitions/formats/handle.name.yaml
   hex.char: definitions/formats/hex.char.yaml
   left.right.dot: definitions/formats/left.right.dot.yaml
+  mac.address: definitions/formats/mac.address.yaml
   market.slot.name: definitions/formats/market.slot.name.yaml
   non.empty.string: definitions/formats/non.empty.string.yaml
   non.negative.int: definitions/formats/non.negative.int.yaml

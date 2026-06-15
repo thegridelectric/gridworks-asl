@@ -26,6 +26,12 @@ formats:
     created: '2022-01-01T00:00:00Z'
     description: Dot-separated hierarchical identifier composed of lowercase alphanumeric
       segments
+  mac.address:
+    owner: gridworks-energy
+    schema_url: https://schemas.electricity.works/formats/mac.address
+    created: '2026-06-15T02:10:00Z'
+    description: MAC address as six lowercase hexadecimal octet pairs, colon-separated
+      (e.g. 34:e1:d1:82:22:22).
   market.slot.name:
     owner: gridworks-energy
     schema_url: https://schemas.electricity.works/formats/market.slot.name
@@ -932,11 +938,13 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/hubitat.gt/000
-        created: '2026-06-14T15:30:00Z'
-        summary: Initial Sema version (flattened from the scada HubitatGt runtime;
-          derived URL helpers excluded from the contract).
+        created: '2026-06-15T02:10:00Z'
+        summary: Flattened from the scada HubitatGt runtime; derived URL helpers excluded.
+          MacAddress moved type:string -> $ref formats/mac.address (lowercase-hex
+          constraint; edited in place, not yet web-published).
         direct_dependencies:
-          structural: []
+          structural:
+          - mac.address
   hubitat.poller.gt:
     latest_version: '000'
     owner: gridworks-energy
@@ -962,7 +970,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/hubitat.component.gt/000
-        created: '2026-06-14T15:30:00Z'
+        created: '2026-06-15T02:10:00Z'
         summary: Initial Sema version (flattened from the scada HubitatComponentGt
           runtime).
         direct_dependencies:

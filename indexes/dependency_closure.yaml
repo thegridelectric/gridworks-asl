@@ -598,6 +598,7 @@ types:
       enums:
       - spaceheat.unit:001
       formats:
+      - mac.address
       - pascal.case
       - positive.int
       - spaceheat.name
@@ -609,7 +610,8 @@ types:
   hubitat.gt:
     '000':
       enums: []
-      formats: []
+      formats:
+      - mac.address
       types: []
       versionless_types: []
   hubitat.poller.component.gt:

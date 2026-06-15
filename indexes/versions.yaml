@@ -160,7 +160,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial Sema version (flattened from the scada HubitatGt runtime; derived URL helpers excluded from the contract)."
+        summary: "Flattened from the scada HubitatGt runtime; derived URL helpers excluded. MacAddress moved type:string -> $ref formats/mac.address (lowercase-hex constraint; edited in place, not yet web-published)."
 
   hubitat.poller.gt:
     latest_version: "000"

@@ -1,6 +1,7 @@
 from typing import Literal
 from pydantic import StrictInt
 from sema.runtime.base import SemaType
+from sema.runtime.property_format import MacAddress
 
 
 class HubitatGt(SemaType):
@@ -9,7 +10,7 @@ class HubitatGt(SemaType):
     host: str
     maker_api_id: StrictInt
     access_token: str
-    mac_address: str
+    mac_address: MacAddress
     web_listen_enabled: bool
     type_name: Literal["hubitat.gt"] = "hubitat.gt"
     version: Literal["000"] = "000"

@@ -1,5 +1,5 @@
 from typing import Literal
-from pydantic import StrictFloat
+from pydantic import StrictFloat, model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import UUID4Str
@@ -17,3 +17,18 @@ class Ads111xBasedComponentGt(SemaType):
     hw_uid: str | None = None
     type_name: Literal["ads111x.based.component.gt"] = "ads111x.based.component.gt"
     version: Literal["000"] = "000"
+
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "Ads111xBasedComponentGt":
+        """
+        Axiom 1: OpenVoltageByAdsRange
+        Every element of OpenVoltageByAds SHALL be between 4.5 and 5.5 inclusive
+        (the "near 5V" Raspberry-Pi-supply open-circuit range).
+        """
+        for v in self.open_voltage_by_ads:
+            if not 4.5 <= v <= 5.5:
+                raise ValueError(
+                    f"Axiom 1 (OpenVoltageByAdsRange): OpenVoltageByAds element {v} "
+                    "is not between 4.5 and 5.5."
+                )
+        return self

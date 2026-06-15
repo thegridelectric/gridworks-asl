@@ -88,3 +88,10 @@ examples:
 
 x-gridworks:
   owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "OpenVoltageByAdsRange"
+      statement: >
+        Every element of OpenVoltageByAds SHALL be between 4.5 and 5.5 inclusive
+        (the "near 5V" Raspberry-Pi-supply open-circuit range).

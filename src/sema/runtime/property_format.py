@@ -15,6 +15,8 @@ HEX_CHAR_PATTERN = re.compile(r"^[0-9a-fA-F]$")
 
 LEFT_RIGHT_DOT_PATTERN = re.compile(r"^[a-z][a-z0-9]*(\.[a-z0-9]+)*$")
 
+MAC_ADDRESS_PATTERN = re.compile(r"^([0-9a-f]{2}:){5}[0-9a-f]{2}$")
+
 MARKET_SLOT_NAME_PATTERN = re.compile(
     r"^[erd]\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*\.[a-z][a-z0-9]*(?:\.[a-z0-9]+)*\.[0-9]{10}$"
 )
@@ -65,6 +67,18 @@ def is_left_right_dot(v: str) -> str:
 
     if not LEFT_RIGHT_DOT_PATTERN.fullmatch(v):
         raise ValueError(f"<{v}>: Fails LeftRightDot format.")
+
+    return v
+
+
+def is_mac_address(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: mac.address must be a string.")
+
+    if not MAC_ADDRESS_PATTERN.fullmatch(v):
+        raise ValueError(
+            f"<{v}>: Fails mac.address format (six lowercase hex octet pairs, colon-separated)."
+        )
 
     return v
 
@@ -217,6 +231,11 @@ HexChar = Annotated[
 LeftRightDot = Annotated[
     str,
     BeforeValidator(is_left_right_dot),
+]
+
+MacAddress = Annotated[
+    str,
+    BeforeValidator(is_mac_address),
 ]
 
 MarketSlotName = Annotated[

@@ -613,6 +613,9 @@ formats:
     - ticklist.reed.report:000
     - weather.forecast:000
     - weather:000
+  mac.address:
+    used_by:
+    - hubitat.gt:000
   market.slot.name:
     used_by:
     - atn.bid:002

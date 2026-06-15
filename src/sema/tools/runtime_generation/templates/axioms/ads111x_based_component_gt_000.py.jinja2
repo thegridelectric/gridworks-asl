@@ -1,0 +1,14 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ ads111x_based_component_gt_000_class_name }}":
+        """
+        Axiom 1: OpenVoltageByAdsRange
+        Every element of OpenVoltageByAds SHALL be between 4.5 and 5.5 inclusive
+        (the "near 5V" Raspberry-Pi-supply open-circuit range).
+        """
+        for v in self.open_voltage_by_ads:
+            if not 4.5 <= v <= 5.5:
+                raise ValueError(
+                    f"Axiom 1 (OpenVoltageByAdsRange): OpenVoltageByAds element {v} "
+                    "is not between 4.5 and 5.5."
+                )
+        return self

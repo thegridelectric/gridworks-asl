@@ -155,6 +155,29 @@ MarketSlotName = Annotated[
 """,
     },
 
+    "mac.address": {
+        "class_name": "MacAddress",
+        "pattern": r"^([0-9a-f]{2}:){5}[0-9a-f]{2}$",
+        "methods": """
+def is_mac_address(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: mac.address must be a string.")
+
+    if not MAC_ADDRESS_PATTERN.fullmatch(v):
+        raise ValueError(
+            f"<{v}>: Fails mac.address format (six lowercase hex octet pairs, colon-separated)."
+        )
+
+    return v
+""",
+        "annotated_type": """
+MacAddress = Annotated[
+    str,
+    BeforeValidator(is_mac_address),
+]
+""",
+    },
+
     "non.empty.string": {
         "class_name": "NonEmptyString",
         "imports": ["from pydantic import Field"],

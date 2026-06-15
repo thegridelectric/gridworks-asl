@@ -28,10 +28,10 @@ properties:
       (an empty token marks an unconfigured stub).
 
   MacAddress:
-    type: string
+    $ref: "https://schemas.electricity.works/formats/mac.address"
     description: >
-      The hub MAC address. Normalized lowercase colon-separated form (e.g.
-      `34:e1:d1:82:22:22`) at the SCADA boundary.
+      The hub MAC address. Six lowercase hexadecimal octet pairs, colon-separated
+      (e.g. `34:e1:d1:82:22:22`) — the normalized form the SCADA boundary emits.
 
   WebListenEnabled:
     type: boolean
