@@ -1846,6 +1846,7 @@ examples:
           "Strategy": "system-model",
           "InputChannelNames": [],
           "OutputUnit": "WattHours",
+          "OutputQuantity": "Energy",
           "EmissionMethod": "Periodic",
           "EmitPeriodS": 60,
           "Parameters": {
@@ -1857,7 +1858,7 @@ examples:
           "DisplayName": "Usable Energy Wh",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "5fdf3b37-3d6d-478c-9fea-e58ea1ccde0d",
@@ -1866,6 +1867,7 @@ examples:
           "Strategy": "system-model",
           "InputChannelNames": [],
           "OutputUnit": "WattHours",
+          "OutputQuantity": "Energy",
           "EmissionMethod": "Periodic",
           "EmitPeriodS": 60,
           "Parameters": {
@@ -1877,7 +1879,7 @@ examples:
           "DisplayName": "Required Energy Wh",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "b813bfe4-872c-4b29-9b4b-0feb93ffc53c",
@@ -1888,6 +1890,7 @@ examples:
             "buffer-depth1-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "Parameters": {
             "Calibration": {
@@ -1900,7 +1903,7 @@ examples:
           "DisplayName": "Buffer Depth1 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "7e4bcfa2-a3b4-4648-996f-7e877b067196",
@@ -1911,11 +1914,12 @@ examples:
             "buffer-depth2-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "DisplayName": "Buffer Depth2 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "5c003b55-b9bc-449a-b037-1de6bf7c678a",
@@ -1926,6 +1930,7 @@ examples:
             "buffer-depth3-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "Parameters": {
             "Calibration": {
@@ -1938,7 +1943,7 @@ examples:
           "DisplayName": "Buffer Depth3 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "f6f9e184-521a-4397-8249-b182d0a095f4",
@@ -1949,6 +1954,7 @@ examples:
             "tank1-depth1-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "Parameters": {
             "Calibration": {
@@ -1961,7 +1967,7 @@ examples:
           "DisplayName": "Tank1 Depth1 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "d8495f87-1881-45d7-9c95-ecf17e245fdd",
@@ -1972,11 +1978,12 @@ examples:
             "tank1-depth2-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "DisplayName": "Tank1 Depth2 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "85719085-c8f0-4630-bd07-ba9180239b2b",
@@ -1987,6 +1994,7 @@ examples:
             "tank1-depth3-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "Parameters": {
             "Calibration": {
@@ -1999,7 +2007,7 @@ examples:
           "DisplayName": "Tank1 Depth3 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "7956b366-0aeb-4ce9-aa71-4311eb6c86b6",
@@ -2010,6 +2018,7 @@ examples:
             "tank2-depth1-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "Parameters": {
             "Calibration": {
@@ -2022,7 +2031,7 @@ examples:
           "DisplayName": "Tank2 Depth1 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "91adca60-9777-4c7c-9fee-b2639e99bf8e",
@@ -2033,11 +2042,12 @@ examples:
             "tank2-depth2-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "DisplayName": "Tank2 Depth2 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "9a3120f8-39e2-43d6-a961-282314ee86aa",
@@ -2048,6 +2058,7 @@ examples:
             "tank2-depth3-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "Parameters": {
             "Calibration": {
@@ -2060,7 +2071,7 @@ examples:
           "DisplayName": "Tank2 Depth3 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "d12cf12a-362f-462f-af9c-be8f6111afb5",
@@ -2071,6 +2082,7 @@ examples:
             "tank3-depth1-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "Parameters": {
             "Calibration": {
@@ -2083,7 +2095,7 @@ examples:
           "DisplayName": "Tank3 Depth1 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "26671bd0-55be-4d76-8761-e40050e700ed",
@@ -2094,11 +2106,12 @@ examples:
             "tank3-depth2-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "DisplayName": "Tank3 Depth2 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         },
         {
           "Id": "eb51285c-3115-4811-9910-3e7393a62a7b",
@@ -2109,6 +2122,7 @@ examples:
             "tank3-depth3-device"
           ],
           "OutputUnit": "FahrenheitX100",
+          "OutputQuantity": "Temperature",
           "EmissionMethod": "OnTrigger",
           "Parameters": {
             "Calibration": {
@@ -2121,7 +2135,7 @@ examples:
           "DisplayName": "Tank3 Depth3 Effective Temperature",
           "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
           "TypeName": "derived.channel.gt",
-          "Version": "001"
+          "Version": "002"
         }
       ],
       "Components": [
@@ -3107,63 +3121,63 @@ examples:
           "TypeName": "hubitat.poller.component.gt",
           "Version": "000",
           "Poller": {
-            "hubitat_component_id": "ddd3c95b-2b6b-4612-95b1-6892bcce6c06",
-            "device_id": 164,
-            "attributes": [
+            "HubitatComponentId": "ddd3c95b-2b6b-4612-95b1-6892bcce6c06",
+            "DeviceId": 164,
+            "Attributes": [
               {
-                "attribute_name": "temperature",
-                "channel_name": "zone1-down-temp",
-                "node_name": "zone1-down",
-                "telemetry_name": "AirTempFTimes1000",
-                "unit": "Fahrenheit",
-                "exponent": 3,
-                "interpret_as_number": true,
-                "enabled": true,
-                "web_poll_enabled": true,
-                "web_listen_enabled": true,
-                "report_missing": true,
-                "report_parse_error": true,
-                "type_name": "maker.api.attribute.gt",
-                "version": "000"
+                "AttributeName": "temperature",
+                "ChannelName": "zone1-down-temp",
+                "NodeName": "zone1-down",
+                "TelemetryName": "AirTempFTimes1000",
+                "Unit": "Fahrenheit",
+                "Exponent": 3,
+                "InterpretAsNumber": true,
+                "Enabled": true,
+                "WebPollEnabled": true,
+                "WebListenEnabled": true,
+                "ReportMissing": true,
+                "ReportParseError": true,
+                "TypeName": "maker.api.attribute.gt",
+                "Version": "000"
               },
               {
-                "attribute_name": "heatingSetpoint",
-                "channel_name": "zone1-down-set",
-                "node_name": "zone1-down-stat",
-                "telemetry_name": "AirTempFTimes1000",
-                "unit": "Fahrenheit",
-                "exponent": 3,
-                "interpret_as_number": true,
-                "enabled": true,
-                "web_poll_enabled": true,
-                "web_listen_enabled": true,
-                "report_missing": true,
-                "report_parse_error": true,
-                "type_name": "maker.api.attribute.gt",
-                "version": "000"
+                "AttributeName": "heatingSetpoint",
+                "ChannelName": "zone1-down-set",
+                "NodeName": "zone1-down-stat",
+                "TelemetryName": "AirTempFTimes1000",
+                "Unit": "Fahrenheit",
+                "Exponent": 3,
+                "InterpretAsNumber": true,
+                "Enabled": true,
+                "WebPollEnabled": true,
+                "WebListenEnabled": true,
+                "ReportMissing": true,
+                "ReportParseError": true,
+                "TypeName": "maker.api.attribute.gt",
+                "Version": "000"
               },
               {
-                "attribute_name": "thermostatOperatingState",
-                "channel_name": "zone1-down-state",
-                "node_name": "zone1-down",
-                "telemetry_name": "ThermostatState",
-                "unit": "Unitless",
-                "exponent": 3,
-                "interpret_as_number": false,
-                "enabled": true,
-                "web_poll_enabled": true,
-                "web_listen_enabled": true,
-                "report_missing": true,
-                "report_parse_error": true,
-                "type_name": "maker.api.attribute.gt",
-                "version": "000"
+                "AttributeName": "thermostatOperatingState",
+                "ChannelName": "zone1-down-state",
+                "NodeName": "zone1-down",
+                "TelemetryName": "ThermostatState",
+                "Unit": "Unitless",
+                "Exponent": 3,
+                "InterpretAsNumber": false,
+                "Enabled": true,
+                "WebPollEnabled": true,
+                "WebListenEnabled": true,
+                "ReportMissing": true,
+                "ReportParseError": true,
+                "TypeName": "maker.api.attribute.gt",
+                "Version": "000"
               }
             ],
-            "enabled": true,
-            "web_listen_enabled": true,
-            "poll_period_seconds": 300.0,
-            "type_name": "hubitat.poller.gt",
-            "version": "000"
+            "Enabled": true,
+            "WebListenEnabled": true,
+            "PollPeriodSeconds": 300.0,
+            "TypeName": "hubitat.poller.gt",
+            "Version": "000"
           }
         },
         {
@@ -3207,63 +3221,63 @@ examples:
           "TypeName": "hubitat.poller.component.gt",
           "Version": "000",
           "Poller": {
-            "hubitat_component_id": "ddd3c95b-2b6b-4612-95b1-6892bcce6c06",
-            "device_id": 218,
-            "attributes": [
+            "HubitatComponentId": "ddd3c95b-2b6b-4612-95b1-6892bcce6c06",
+            "DeviceId": 218,
+            "Attributes": [
               {
-                "attribute_name": "temperature",
-                "channel_name": "zone2-up-temp",
-                "node_name": "zone2-up",
-                "telemetry_name": "AirTempFTimes1000",
-                "unit": "Fahrenheit",
-                "exponent": 3,
-                "interpret_as_number": true,
-                "enabled": true,
-                "web_poll_enabled": true,
-                "web_listen_enabled": true,
-                "report_missing": true,
-                "report_parse_error": true,
-                "type_name": "maker.api.attribute.gt",
-                "version": "000"
+                "AttributeName": "temperature",
+                "ChannelName": "zone2-up-temp",
+                "NodeName": "zone2-up",
+                "TelemetryName": "AirTempFTimes1000",
+                "Unit": "Fahrenheit",
+                "Exponent": 3,
+                "InterpretAsNumber": true,
+                "Enabled": true,
+                "WebPollEnabled": true,
+                "WebListenEnabled": true,
+                "ReportMissing": true,
+                "ReportParseError": true,
+                "TypeName": "maker.api.attribute.gt",
+                "Version": "000"
               },
               {
-                "attribute_name": "heatingSetpoint",
-                "channel_name": "zone2-up-set",
-                "node_name": "zone2-up-stat",
-                "telemetry_name": "AirTempFTimes1000",
-                "unit": "Fahrenheit",
-                "exponent": 3,
-                "interpret_as_number": true,
-                "enabled": true,
-                "web_poll_enabled": true,
-                "web_listen_enabled": true,
-                "report_missing": true,
-                "report_parse_error": true,
-                "type_name": "maker.api.attribute.gt",
-                "version": "000"
+                "AttributeName": "heatingSetpoint",
+                "ChannelName": "zone2-up-set",
+                "NodeName": "zone2-up-stat",
+                "TelemetryName": "AirTempFTimes1000",
+                "Unit": "Fahrenheit",
+                "Exponent": 3,
+                "InterpretAsNumber": true,
+                "Enabled": true,
+                "WebPollEnabled": true,
+                "WebListenEnabled": true,
+                "ReportMissing": true,
+                "ReportParseError": true,
+                "TypeName": "maker.api.attribute.gt",
+                "Version": "000"
               },
               {
-                "attribute_name": "thermostatOperatingState",
-                "channel_name": "zone2-up-state",
-                "node_name": "zone2-up",
-                "telemetry_name": "ThermostatState",
-                "unit": "Unitless",
-                "exponent": 3,
-                "interpret_as_number": false,
-                "enabled": true,
-                "web_poll_enabled": true,
-                "web_listen_enabled": true,
-                "report_missing": true,
-                "report_parse_error": true,
-                "type_name": "maker.api.attribute.gt",
-                "version": "000"
+                "AttributeName": "thermostatOperatingState",
+                "ChannelName": "zone2-up-state",
+                "NodeName": "zone2-up",
+                "TelemetryName": "ThermostatState",
+                "Unit": "Unitless",
+                "Exponent": 3,
+                "InterpretAsNumber": false,
+                "Enabled": true,
+                "WebPollEnabled": true,
+                "WebListenEnabled": true,
+                "ReportMissing": true,
+                "ReportParseError": true,
+                "TypeName": "maker.api.attribute.gt",
+                "Version": "000"
               }
             ],
-            "enabled": true,
-            "web_listen_enabled": true,
-            "poll_period_seconds": 300.0,
-            "type_name": "hubitat.poller.gt",
-            "version": "000"
+            "Enabled": true,
+            "WebListenEnabled": true,
+            "PollPeriodSeconds": 300.0,
+            "TypeName": "hubitat.poller.gt",
+            "Version": "000"
           }
         },
         {
@@ -3594,70 +3608,19 @@ examples:
           "DeviceType": "GridworksTsnap1ScadaBoard",
           "DisplayName": "GridWorks TSnap1.0 as 12-channel analog temp sensor",
           "MinPollPeriodMs": 200,
-          "TypeName": "ads111x.based.cac.gt",
+          "AdsI2cAddressList": [72, 73, 74],
+          "TotalTerminalBlocks": 12,
+          "TelemetryNameList": ["WaterTempCTimes1000"],
+          "TypeName": "ads111x.based.device.type.gt",
           "Version": "000"
         },
         {
           "DeviceType": "EgaugePowerMeter",
           "DisplayName": "EGauge 4030",
           "MinPollPeriodMs": 1000,
-          "TypeName": "electric.meter.cac.gt",
-          "Version": "001"
-        },
-        {
-          "DeviceType": "GridworksGw101",
-          "DisplayName": "Pico BtuMeter1 Gw101",
-          "TypeName": "component.attribute.class.gt",
-          "Version": "002"
-        },
-        {
-          "DeviceType": "KridaDoubleRelayBoard16",
-          "DisplayName": "16-channel i2c krida relay",
-          "TypeName": "component.attribute.class.gt",
-          "Version": "002"
-        },
-        {
-          "DeviceType": "AbstractWebServer",
-          "DisplayName": "Web Server CAC",
-          "TypeName": "component.attribute.class.gt",
-          "Version": "002"
-        },
-        {
-          "DeviceType": "DfrobotDualAnalogOut",
-          "DisplayName": "DFRobot DFR0971 X 2",
-          "TypeName": "component.attribute.class.gt",
-          "Version": "002"
-        },
-        {
-          "DeviceType": "GridworksPicoFlowHall",
-          "DisplayName": "Pico Flow Hall",
-          "TypeName": "component.attribute.class.gt",
-          "Version": "002"
-        },
-        {
-          "DeviceType": "GridworksPicoFlowReed",
-          "DisplayName": "Pico Flow Reed",
-          "TypeName": "component.attribute.class.gt",
-          "Version": "002"
-        },
-        {
-          "DeviceType": "HubitatC7Hub",
-          "DisplayName": "Hubitat Elevation C-7",
-          "TypeName": "component.attribute.class.gt",
-          "Version": "002"
-        },
-        {
-          "DeviceType": "HoneywellT6Thermostat",
-          "DisplayName": "Honeywell T6 Thermostat",
-          "MinPollPeriodMs": 5000,
-          "TypeName": "component.attribute.class.gt",
-          "Version": "002"
-        },
-        {
-          "DeviceType": "GridworksTankModule3",
-          "DisplayName": "GridWorks TankModule3 (Uses 1 pico)",
-          "TypeName": "component.attribute.class.gt",
-          "Version": "002"
+          "TelemetryNameList": ["PowerW"],
+          "TypeName": "electric.meter.device.type.gt",
+          "Version": "000"
         }
       ],
       "Hydronic": {

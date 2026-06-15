@@ -92,6 +92,8 @@ class GwHouse0Layout(SemaType):
         ShNodes SHALL include the primary-scada (s), ltn, leaf-ally (la),
         local-control (lc) and derived-generator nodes.
         """
+        if not self.sh_nodes:
+            return self
         required = {"s", "ltn", "la", "lc", "derived-generator"}
         names = {n.name for n in (self.sh_nodes or [])}
         missing = sorted(required - names)
