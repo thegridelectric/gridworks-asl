@@ -1,0 +1,94 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.house0.hydronic/000"
+
+title: "gw.house0.hydronic"
+type: object
+description: >
+  The hydronic / flow-topology configuration of a House0-fleet layout: its
+  heating zones, store-tank count, Siegenthaler-loop topology (plumbed? actively
+  controlled?), how primary-loop flow is obtained, and the control strategy. The
+  measured-vs-derived "primary-flow" choice is a physical-topology fact carried
+  here so the layout states it rather than it being inferred from channel
+  presence.
+
+properties:
+  Zones:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/gw1.hvac.zone/000"
+    description: >
+      The heating zones in order; the 1-based position of each is its zone
+      index. Replaces the former parallel ZoneList / CriticalZoneList /
+      ZoneKwhPerDegFList (their subset / equal-length invariants are now
+      structural).
+
+  TotalStoreTanks:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      Number of thermal-storage tanks (buffer excluded). House0 homes carry 0..6.
+
+  UseSiegLoop:
+    type: boolean
+    description: >
+      True if the scada actively controls the Siegenthaler loop (runs the
+      SiegLoop + HpBoss actors). Operational fact; requires SiegLoopPlumbed.
+
+  SiegLoopPlumbed:
+    type: boolean
+    description: >
+      True if the Siegenthaler mixing loop is physically present in the
+      plumbing (the former FlowManifoldVariant House0Sieg).
+
+  PrimaryFlowSource:
+    $ref: "https://schemas.electricity.works/enums/gw.house0.primary.flow.source/000"
+    description: >
+      Whether "primary-flow" is a measured DataChannel (a meter at the primary
+      pump) or a derived sum over the Siegenthaler loop sensors.
+
+  Strategy:
+    type: string
+    description: >
+      The layout's control strategy label (e.g. "House0").
+
+  TypeName:
+    const: "gw.house0.hydronic"
+
+  Version:
+    const: "000"
+
+required:
+  - Zones
+  - TotalStoreTanks
+  - UseSiegLoop
+  - SiegLoopPlumbed
+  - PrimaryFlowSource
+  - Strategy
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Zones": [
+        {"Name": "down", "Critical": true, "KwhPerDegF": 1, "TypeName": "gw1.hvac.zone", "Version": "000"},
+        {"Name": "up", "Critical": true, "KwhPerDegF": 0, "TypeName": "gw1.hvac.zone", "Version": "000"}
+      ],
+      "TotalStoreTanks": 3,
+      "UseSiegLoop": false,
+      "SiegLoopPlumbed": true,
+      "PrimaryFlowSource": "Measured",
+      "Strategy": "House0",
+      "TypeName": "gw.house0.hydronic",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "SiegLoopControlImpliesPlumbed"
+      statement: >
+        If UseSiegLoop is true then SiegLoopPlumbed SHALL be true — the scada
+        cannot run the Siegenthaler loop unless it is plumbed.

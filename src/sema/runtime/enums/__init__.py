@@ -33,6 +33,7 @@ from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode
 from sema.runtime.enums.gw1_system_mode import Gw1SystemMode
 from sema.runtime.enums.gw1_unit import Gw1Unit
 from sema.runtime.enums.gw_g_node_class import GwGNodeClass
+from sema.runtime.enums.gw_house0_primary_flow_source import GwHouse0PrimaryFlowSource
 from sema.runtime.enums.gw_market_product_name import GwMarketProductName
 from sema.runtime.enums.heatcall_source import HeatcallSource
 from sema.runtime.enums.hz_calc_method import HzCalcMethod
@@ -79,6 +80,7 @@ __all__ = [
     "Gw1SystemMode",
     "Gw1Unit",
     "GwGNodeClass",
+    "GwHouse0PrimaryFlowSource",
     "GwMarketProductName",
     "HeatcallSource",
     "HzCalcMethod",

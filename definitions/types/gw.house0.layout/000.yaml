@@ -83,13 +83,7 @@ properties:
         - $ref: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
 
   Hydronic:
-    type: object
-    description: >
-      Hydronic / topology-driving configuration: ZoneList, CriticalZoneList,
-      TotalStoreTanks, ZoneKwhPerDegFList, TankTempCalibrationMap,
-      FlowManifoldVariant (House0 | House0Sieg), UseSiegLoop, Strategy. Freeform
-      while the shape is built up; to be tightened into typed fields/axioms.
-    additionalProperties: true
+    $ref: "https://schemas.electricity.works/types/gw.house0.hydronic/000"
 
   TypeName:
     const: "gw.house0.layout"
@@ -3667,68 +3661,17 @@ examples:
         }
       ],
       "Hydronic": {
-        "ZoneList": [
-          "down",
-          "up"
-        ],
-        "CriticalZoneList": [
-          "down",
-          "up"
-        ],
-        "ZoneKwhPerDegFList": [
-          1,
-          0
+        "Zones": [
+          {"Name": "down", "Critical": true, "KwhPerDegF": 1, "TypeName": "gw1.hvac.zone", "Version": "000"},
+          {"Name": "up", "Critical": true, "KwhPerDegF": 0, "TypeName": "gw1.hvac.zone", "Version": "000"}
         ],
         "TotalStoreTanks": 3,
-        "TankTempCalibrationMap": {
-          "Buffer": {
-            "Depth1B": -430.0,
-            "Depth1M": 1.069,
-            "Depth2B": 0.0,
-            "Depth2M": 1.0,
-            "Depth3B": -430.0,
-            "Depth3M": 1.069,
-            "TypeName": "gw1.tank.temp.calibration",
-            "Version": "000"
-          },
-          "Tank": {
-            "1": {
-              "Depth1B": -543.0,
-              "Depth1M": 1.045,
-              "Depth2B": 0.0,
-              "Depth2M": 1.0,
-              "Depth3B": -543.0,
-              "Depth3M": 1.045,
-              "TypeName": "gw1.tank.temp.calibration",
-              "Version": "000"
-            },
-            "2": {
-              "Depth1B": -339.0,
-              "Depth1M": 1.047,
-              "Depth2B": 0.0,
-              "Depth2M": 1.0,
-              "Depth3B": -339.0,
-              "Depth3M": 1.047,
-              "TypeName": "gw1.tank.temp.calibration",
-              "Version": "000"
-            },
-            "3": {
-              "Depth1B": -481.0,
-              "Depth1M": 1.085,
-              "Depth2B": 0.0,
-              "Depth2M": 1.0,
-              "Depth3B": -481.0,
-              "Depth3M": 1.085,
-              "TypeName": "gw1.tank.temp.calibration",
-              "Version": "000"
-            }
-          },
-          "TypeName": "gw1.tank.temp.calibration.map",
-          "Version": "000"
-        },
         "UseSiegLoop": false,
-        "FlowManifoldVariant": "House0Sieg",
-        "Strategy": "House0"
+        "SiegLoopPlumbed": true,
+        "PrimaryFlowSource": "Measured",
+        "Strategy": "House0",
+        "TypeName": "gw.house0.hydronic",
+        "Version": "000"
       },
       "TypeName": "gw.house0.layout",
       "Version": "000"
@@ -3743,18 +3686,21 @@ x-gridworks:
         ShNode.ShNodeId, Component.ComponentId, DataChannel.Id, DerivedChannel.Id and GNode.GNodeId
         SHALL each be globally unique; no id value SHALL appear in more than one of these sets.
     - number: 2
-      name: "HydronicStructure"
-      statement: >
-        Hydronic SHALL define TotalStoreTanks (int 0..6), ZoneList (1..6 entries), CriticalZoneList
-        (a subset of ZoneList) and ZoneKwhPerDegFList (length equal to ZoneList).
-    - number: 3
       name: "EssentialNodesExistence"
       statement: >
         ShNodes SHALL include the primary-scada (s), ltn, leaf-ally (la), local-control (lc) and
         derived-generator nodes.
-    - number: 4
+    - number: 3
       name: "ZoneWhitewirePwrChannel"
       statement: >
-        For each zone label Z at 1-based index i in Hydronic.ZoneList, a channel named
-        "zone{i}-{Z}-whitewire-pwr" (lowercased) SHALL exist in the union of DataChannels and
-        DerivedChannels.
+        For each zone at 1-based index i in Hydronic.Zones, a channel named
+        "zone{i}-{Zone.Name}-whitewire-pwr" (lowercased) SHALL exist in the union of DataChannels
+        and DerivedChannels.
+    - number: 4
+      name: "PrimaryFlowSourceChannelAgreement"
+      statement: >
+        The "primary-flow" channel SHALL agree with Hydronic.PrimaryFlowSource. If
+        PrimaryFlowSource is "Measured", a DataChannel named "primary-flow" SHALL exist and no
+        DerivedChannel named "primary-flow" SHALL exist. If PrimaryFlowSource is "DerivedSiegSum",
+        a DerivedChannel named "primary-flow" with Strategy "sum" SHALL exist and no DataChannel
+        named "primary-flow" SHALL exist.

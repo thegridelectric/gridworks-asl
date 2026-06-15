@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> Self:
+        """
+        Axiom 1: SiegLoopControlImpliesPlumbed
+        If UseSiegLoop is true then SiegLoopPlumbed SHALL be true — the scada
+        cannot run the Siegenthaler loop unless it is plumbed.
+        """
+        if self.use_sieg_loop and not self.sieg_loop_plumbed:
+            raise ValueError(
+                "Axiom 1 (SiegLoopControlImpliesPlumbed) failed: UseSiegLoop requires "
+                "SiegLoopPlumbed to be true."
+            )
+        return self

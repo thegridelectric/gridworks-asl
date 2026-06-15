@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-06-15T15:10:00Z"
+  last_updated: "2026-06-15T17:30:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -245,6 +245,17 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw.g.node.class/000"
         created: "2026-02-23T17:08:00Z"
+
+  gw.house0.primary.flow.source:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "How House0's primary-loop flow is obtained: measured at the primary pump, or derived as a sum over the Siegenthaler loop sensors."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw.house0.primary.flow.source/000"
+        created: "2026-06-15T17:30:00Z"
 
   gw1.actor.class:
     latest_version: "012"
@@ -1582,6 +1593,24 @@ types:
             - "spaceheat.node.gt:302"
             - "web.server.component.gt:002"
 
+  gw.house0.hydronic:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "House0-fleet hydronic / flow-topology config: zones, store-tank count, Siegenthaler-loop topology, primary-flow source, strategy."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.house0.hydronic/000"
+        created: "2026-06-15T17:30:00Z"
+        summary: >-
+          - Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axiom 1: UseSiegLoop implies SiegLoopPlumbed.
+        direct_dependencies:
+          structural:
+            - "gw.house0.primary.flow.source:000"
+            - "gw1.hvac.zone:000"
+            - "non.negative.int"
+
   gw.house0.layout:
     latest_version: "000"
     owner: gridworks-energy
@@ -1591,7 +1620,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.layout/000"
-        created: "2026-06-15T03:35:00Z"
+        created: "2026-06-15T17:30:00Z"
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). Optional-first — only TypeName + Version required while collections + axioms are built up bit by bit."
         direct_dependencies:
           structural:
@@ -1603,6 +1632,7 @@ types:
             - "electric.meter.component.gt:002"
             - "electric.meter.device.type.gt:000"
             - "g.node.gt:004"
+            - "gw.house0.hydronic:000"
             - "gw1.scada.device.type.gt:000"
             - "hubitat.component.gt:000"
             - "hubitat.poller.component.gt:000"
@@ -1613,6 +1643,22 @@ types:
             - "sim.pico.tank.module.component.gt:001"
             - "spaceheat.node.gt:302"
             - "web.server.component.gt:002"
+
+  gw1.hvac.zone:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "One heating zone of a hydronic layout (label, critical flag, kWh-per-degF weight); shared across House0 and Nolan."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw1.hvac.zone/000"
+        created: "2026-06-15T17:30:00Z"
+        summary: >-
+          - New shared zone type (Name, Critical, KwhPerDegF) replacing the former parallel ZoneList / CriticalZoneList / ZoneKwhPerDegFList in the hydronic block.
+        direct_dependencies:
+          structural:
+            - "spaceheat.name"
 
   gw1.simple.sim.layout:
     latest_version: "000"

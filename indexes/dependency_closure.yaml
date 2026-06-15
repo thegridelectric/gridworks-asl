@@ -411,6 +411,16 @@ types:
       - left.right.dot
       types: []
       versionless_types: []
+  gw.house0.hydronic:
+    '000':
+      enums:
+      - gw.house0.primary.flow.source:000
+      formats:
+      - non.negative.int
+      - spaceheat.name
+      types:
+      - gw1.hvac.zone:000
+      versionless_types: []
   gw.house0.layout:
     '000':
       enums:
@@ -418,6 +428,7 @@ types:
       - change.relay.state:000
       - g.node.status:000
       - gpm.from.hz.method:000
+      - gw.house0.primary.flow.source:000
       - gw1.actor.class:012
       - gw1.emission.method:000
       - gw1.quantity:000
@@ -436,6 +447,7 @@ types:
       - left.right.dot
       - mac.address
       - non.empty.string
+      - non.negative.int
       - pascal.case
       - positive.float
       - positive.int
@@ -456,6 +468,8 @@ types:
       - electric.meter.component.gt:002
       - electric.meter.device.type.gt:000
       - g.node.gt:004
+      - gw.house0.hydronic:000
+      - gw1.hvac.zone:000
       - gw1.scada.device.type.gt:000
       - gw1.unit.quantity.projection:000
       - hubitat.component.gt:000
@@ -528,6 +542,13 @@ types:
       - spaceheat.node.gt:302
       - spaceheat.telemetry.quantity.projection:000
       - web.server.component.gt:002
+      versionless_types: []
+  gw1.hvac.zone:
+    '000':
+      enums: []
+      formats:
+      - spaceheat.name
+      types: []
       versionless_types: []
   gw1.scada.device.type.gt:
     '000':

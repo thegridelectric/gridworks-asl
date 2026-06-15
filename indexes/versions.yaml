@@ -323,12 +323,26 @@ types:
       "000":
         summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay is gw108.vdc.relay)."
 
+  gw.house0.hydronic:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axiom 1: UseSiegLoop implies SiegLoopPlumbed."
+
   gw.house0.layout:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). Optional-first — only TypeName + Version required while collections + axioms are built up bit by bit."
+
+  gw1.hvac.zone:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- New shared zone type (Name, Critical, KwhPerDegF) replacing the former parallel ZoneList / CriticalZoneList / ZoneKwhPerDegFList in the hydronic block."
 
   gw1.simple.sim.layout:
     latest_version: "000"
@@ -898,6 +912,12 @@ enums:
       "000": {}
 
   gw.g.node.class:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  gw.house0.primary.flow.source:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

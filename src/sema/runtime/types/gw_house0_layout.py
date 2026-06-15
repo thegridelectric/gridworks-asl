@@ -1,4 +1,4 @@
-from typing import Any, Literal, Self
+from typing import Literal, Self
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.types.ads111x_based_component_gt import Ads111xBasedComponentGt
@@ -10,6 +10,7 @@ from sema.runtime.types.electric_meter_component_gt import ElectricMeterComponen
 from sema.runtime.types.electric_meter_device_type_gt import ElectricMeterDeviceTypeGt
 from sema.runtime.types.g_node_gt import GNodeGt
 from sema.runtime.types.gw1_scada_device_type_gt import Gw1ScadaDeviceTypeGt
+from sema.runtime.types.gw_house0_hydronic import GwHouse0Hydronic
 from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
@@ -54,7 +55,7 @@ class GwHouse0Layout(SemaType):
         ]
         | None
     ) = None
-    hydronic: dict[str, Any] | None = None
+    hydronic: GwHouse0Hydronic | None = None
     type_name: Literal["gw.house0.layout"] = "gw.house0.layout"
     version: Literal["000"] = "000"
 
@@ -87,38 +88,7 @@ class GwHouse0Layout(SemaType):
     @model_validator(mode="after")
     def check_axiom_2(self) -> Self:
         """
-        Axiom 2: HydronicStructure
-        Hydronic SHALL define TotalStoreTanks (int 0..6), ZoneList (1..6 entries),
-        CriticalZoneList (a subset of ZoneList) and ZoneKwhPerDegFList (length equal
-        to ZoneList).
-        """
-        h = self.hydronic or {}
-        tst = h.get("TotalStoreTanks")
-        if not isinstance(tst, int) or isinstance(tst, bool) or not 0 <= tst <= 6:
-            raise ValueError(
-                "Axiom 2 (HydronicStructure) failed: TotalStoreTanks must be an int in 0..6."
-            )
-        zone_list = h.get("ZoneList")
-        if not isinstance(zone_list, list) or not 1 <= len(zone_list) <= 6:
-            raise ValueError(
-                "Axiom 2 (HydronicStructure) failed: ZoneList must have 1..6 entries."
-            )
-        critical = h.get("CriticalZoneList", [])
-        if not isinstance(critical, list) or any(z not in zone_list for z in critical):
-            raise ValueError(
-                "Axiom 2 (HydronicStructure) failed: CriticalZoneList must be a subset of ZoneList."
-            )
-        kwh = h.get("ZoneKwhPerDegFList")
-        if not isinstance(kwh, list) or len(kwh) != len(zone_list):
-            raise ValueError(
-                "Axiom 2 (HydronicStructure) failed: ZoneKwhPerDegFList length must equal ZoneList length."
-            )
-        return self
-
-    @model_validator(mode="after")
-    def check_axiom_3(self) -> Self:
-        """
-        Axiom 3: EssentialNodesExistence
+        Axiom 2: EssentialNodesExistence
         ShNodes SHALL include the primary-scada (s), ltn, leaf-ally (la),
         local-control (lc) and derived-generator nodes.
         """
@@ -127,26 +97,65 @@ class GwHouse0Layout(SemaType):
         missing = sorted(required - names)
         if missing:
             raise ValueError(
-                f"Axiom 3 (EssentialNodesExistence) failed: missing essential nodes {missing}."
+                f"Axiom 2 (EssentialNodesExistence) failed: missing essential nodes {missing}."
             )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> Self:
+        """
+        Axiom 3: ZoneWhitewirePwrChannel
+        For each zone at 1-based index i in Hydronic.Zones, a channel named
+        "zone{i}-{Zone.Name}-whitewire-pwr" (lowercased) SHALL exist in the union
+        of DataChannels and DerivedChannels.
+        """
+        if self.hydronic is None:
+            return self
+        channels = {d.name for d in (self.data_channels or [])}
+        channels |= {d.name for d in (self.derived_channels or [])}
+        for i, zone in enumerate(self.hydronic.zones or [], start=1):
+            name = f"zone{i}-{zone.name}".lower() + "-whitewire-pwr"
+            if name not in channels:
+                raise ValueError(
+                    f"Axiom 3 (ZoneWhitewirePwrChannel) failed: missing channel '{name}'."
+                )
         return self
 
     @model_validator(mode="after")
     def check_axiom_4(self) -> Self:
         """
-        Axiom 4: ZoneWhitewirePwrChannel
-        For each zone label Z at 1-based index i in Hydronic.ZoneList, a channel
-        named "zone{i}-{Z}-whitewire-pwr" (lowercased) SHALL exist in the union of
-        DataChannels and DerivedChannels.
+        Axiom 4: PrimaryFlowSourceChannelAgreement
+        The "primary-flow" channel SHALL agree with Hydronic.PrimaryFlowSource. If
+        PrimaryFlowSource is "Measured", a DataChannel named "primary-flow" SHALL exist
+        and no DerivedChannel named "primary-flow" SHALL exist. If PrimaryFlowSource is
+        "DerivedSiegSum", a DerivedChannel named "primary-flow" with Strategy "sum" SHALL
+        exist and no DataChannel named "primary-flow" SHALL exist.
         """
-        h = self.hydronic or {}
-        zone_list = h.get("ZoneList") or []
-        channels = {d.name for d in (self.data_channels or [])}
-        channels |= {d.name for d in (self.derived_channels or [])}
-        for i, zone in enumerate(zone_list, start=1):
-            name = f"zone{i}-{zone}".lower() + "-whitewire-pwr"
-            if name not in channels:
+        if self.hydronic is None:
+            return self
+        source = self.hydronic.primary_flow_source
+        has_data = any(d.name == "primary-flow" for d in (self.data_channels or []))
+        derived = [d for d in (self.derived_channels or []) if d.name == "primary-flow"]
+        if source == "Measured":
+            if not has_data:
                 raise ValueError(
-                    f"Axiom 4 (ZoneWhitewirePwrChannel) failed: missing channel '{name}'."
+                    "Axiom 4 (PrimaryFlowSourceChannelAgreement) failed: Measured requires a "
+                    "'primary-flow' DataChannel."
+                )
+            if derived:
+                raise ValueError(
+                    "Axiom 4 (PrimaryFlowSourceChannelAgreement) failed: Measured forbids a "
+                    "'primary-flow' DerivedChannel."
+                )
+        elif source == "DerivedSiegSum":
+            if not any(d.strategy == "sum" for d in derived):
+                raise ValueError(
+                    "Axiom 4 (PrimaryFlowSourceChannelAgreement) failed: DerivedSiegSum requires "
+                    "a 'primary-flow' DerivedChannel with Strategy 'sum'."
+                )
+            if has_data:
+                raise ValueError(
+                    "Axiom 4 (PrimaryFlowSourceChannelAgreement) failed: DerivedSiegSum forbids a "
+                    "'primary-flow' DataChannel."
                 )
         return self

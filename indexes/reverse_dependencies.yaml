@@ -125,6 +125,14 @@ types:
       used_by:
       - gw.house0.layout:000
       - gw.nolan.layout:000
+  gw.house0.hydronic:
+    '000':
+      used_by:
+      - gw.house0.layout:000
+  gw1.hvac.zone:
+    '000':
+      used_by:
+      - gw.house0.hydronic:000
   gw1.scada.device.type.gt:
     '000':
       used_by:
@@ -408,6 +416,10 @@ enums:
       - pico.btu.meter.component.gt:001
       - pico.flow.module.component.gt:000
       - pico.flow.module.component.gt:001
+  gw.house0.primary.flow.source:
+    '000':
+      used_by:
+      - gw.house0.hydronic:000
   gw1.actor.class:
     009:
       used_by:
@@ -658,6 +670,9 @@ formats:
     used_by:
     - relay.actor.config:002
     - relay.actor.config:003
+  non.negative.int:
+    used_by:
+    - gw.house0.hydronic:000
   pascal.case:
     used_by:
     - ads.channel.config:000
@@ -757,6 +772,7 @@ formats:
     - fsm.full.report:000
     - fsm.full.report:001
     - glitch:000
+    - gw1.hvac.zone:000
     - i2c.multichannel.dt.relay.component.gt:003
     - i2c.multichannel.dt.relay.component.gt:004
     - i2c.multichannel.dt.relay.component.gt:005

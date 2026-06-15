@@ -216,11 +216,21 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.nolan.layout/000.yaml
+  gw.house0.hydronic:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.house0.hydronic/000.yaml
   gw.house0.layout:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.house0.layout/000.yaml
+  gw1.hvac.zone:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw1.hvac.zone/000.yaml
   gw1.simple.sim.layout:
     latest_version: '000'
     versioning_strategy: literal
@@ -582,6 +592,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/gw.g.node.class/000.yaml
+  gw.house0.primary.flow.source:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gw.house0.primary.flow.source/000.yaml
   gw1.actor.class:
     enum_type: versioned
     latest_version: '012'
