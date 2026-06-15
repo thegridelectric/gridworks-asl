@@ -216,6 +216,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.nolan.layout/000.yaml
+  gw.house0.layout:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.house0.layout/000.yaml
+  gw1.simple.sim.layout:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw1.simple.sim.layout/000.yaml
   gw1.tank.temp.calibration:
     latest_version: '000'
     versioning_strategy: literal

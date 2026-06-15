@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-06-15T02:10:00Z"
+  last_updated: "2026-06-15T03:35:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1581,6 +1581,51 @@ types:
             - "sim.pico.tank.module.component.gt:001"
             - "spaceheat.node.gt:302"
             - "web.server.component.gt:002"
+
+  gw.house0.layout:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "House0-fleet (gw108-era hand-built) hydronic layout schema."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.house0.layout/000"
+        created: "2026-06-15T03:35:00Z"
+        summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). Optional-first — only TypeName + Version required while collections + axioms are built up bit by bit."
+        direct_dependencies:
+          structural:
+            - "ads111x.based.component.gt:000"
+            - "ads111x.based.device.type.gt:000"
+            - "data.channel.gt:002"
+            - "derived.channel.gt:002"
+            - "dfr.component.gt:000"
+            - "electric.meter.component.gt:002"
+            - "electric.meter.device.type.gt:000"
+            - "g.node.gt:004"
+            - "gw1.scada.device.type.gt:000"
+            - "hubitat.component.gt:000"
+            - "hubitat.poller.component.gt:000"
+            - "i2c.multichannel.dt.relay.component.gt:005"
+            - "pico.flow.module.component.gt:001"
+            - "pico.tank.module.component.gt:012"
+            - "sim.pico.tank.module.component.gt:001"
+            - "spaceheat.node.gt:302"
+            - "web.server.component.gt:002"
+
+  gw1.simple.sim.layout:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Simple simulated-test-environment hydronic layout schema (1 storage tank, 360-gallon store)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw1.simple.sim.layout/000"
+        created: "2026-06-15T03:35:00Z"
+        summary: "Minimal baseline stub (TypeName + Version only) to seed the layout round-trip loop; built up bit by bit toward the simulated plant's needs."
+        direct_dependencies:
+          structural: []
 
   gw1.tank.temp.calibration:
     latest_version: "000"

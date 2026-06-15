@@ -6,9 +6,14 @@ types:
     '000':
       used_by:
       - ads111x.based.component.gt:000
+  ads111x.based.component.gt:
+    '000':
+      used_by:
+      - gw.house0.layout:000
   ads111x.based.device.type.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   channel.config:
     '000':
@@ -48,6 +53,7 @@ types:
       - scada.control.capabilities:001
     '002':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:012
       - layout.lite:013
@@ -70,7 +76,12 @@ types:
       - layout.lite:015
     '002':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
+  dfr.component.gt:
+    '000':
+      used_by:
+      - gw.house0.layout:000
   dfr.config:
     '000':
       used_by:
@@ -87,10 +98,12 @@ types:
   electric.meter.component.gt:
     '002':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   electric.meter.device.type.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   fsm.atomic.report:
     '000':
@@ -110,10 +123,12 @@ types:
   g.node.gt:
     '004':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   gw1.scada.device.type.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   gw1.tank.temp.calibration:
     '000':
@@ -163,10 +178,18 @@ types:
       - layout.lite:014
       - layout.lite:015
       - scada.params:005
+  hubitat.component.gt:
+    '000':
+      used_by:
+      - gw.house0.layout:000
   hubitat.gt:
     '000':
       used_by:
       - hubitat.component.gt:000
+  hubitat.poller.component.gt:
+    '000':
+      used_by:
+      - gw.house0.layout:000
   hubitat.poller.gt:
     '000':
       used_by:
@@ -190,6 +213,7 @@ types:
       - layout.lite:014
     '005':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:015
   i2c.thermistor.channel.config:
@@ -227,6 +251,7 @@ types:
       - layout.lite:014
     '001':
       used_by:
+      - gw.house0.layout:000
       - layout.lite:015
   pico.tank.module.component.gt:
     '011':
@@ -241,6 +266,7 @@ types:
       - layout.lite:014
     '012':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:015
   price.quantity.unitless:
@@ -279,6 +305,7 @@ types:
       - layout.lite:014
     '001':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:015
   single.machine.state:
@@ -311,6 +338,7 @@ types:
       - new.command.tree:000
     '302':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:014
       - layout.lite:015
@@ -330,6 +358,7 @@ types:
   web.server.component.gt:
     '002':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
 enums:
   base.g.node.class:
