@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-06-14T15:30:00Z"
+  last_updated: "2026-06-15T02:10:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -767,11 +767,10 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "DRAFT specialized device-type record for an ADS111x-based analog temperature sensor category (used by beech/oak/maple/fir/elm); keyed by DeviceType."
+    description: "Specialized device-type record for an ADS111x-based analog temperature sensor category (used by beech/oak/maple/fir/elm); keyed by DeviceType."
     versions:
       "000":
-        status: "draft"
-        schema_url: "https://schemas.electricity.works/draft/types/ads111x.based.device.type.gt/000"
+        schema_url: "https://schemas.electricity.works/types/ads111x.based.device.type.gt/000"
         created: "2026-06-13T22:10:00Z"
         summary: "Initial draft (specialized device-type record; per-family successor to the field ads111x.based.cac.gt, keyed by DeviceType)."
         direct_dependencies:
@@ -784,11 +783,10 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "DRAFT specialized device-type record for an electric-meter category; the per-family successor to electric.meter.cac.gt, keyed by DeviceType."
+    description: "Specialized device-type record for an electric-meter category; the per-family successor to electric.meter.cac.gt, keyed by DeviceType."
     versions:
       "000":
-        status: "draft"
-        schema_url: "https://schemas.electricity.works/draft/types/electric.meter.device.type.gt/000"
+        schema_url: "https://schemas.electricity.works/types/electric.meter.device.type.gt/000"
         created: "2026-06-13T22:11:00Z"
         summary: "Initial draft (specialized device-type record; replaces electric.meter.cac.gt category data, keyed by DeviceType)."
         direct_dependencies:
@@ -801,11 +799,10 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "DRAFT minimal stub: specialized device-type record for a GridWorks SCADA board (gw108 family), board-level identity only; full board descriptor lands at gw108 codification."
+    description: "Minimal stub: specialized device-type record for a GridWorks SCADA board (gw108 family), board-level identity only; full board descriptor lands at gw108 codification."
     versions:
       "000":
-        status: "draft"
-        schema_url: "https://schemas.electricity.works/draft/types/gw1.scada.device.type.gt/000"
+        schema_url: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
         created: "2026-06-13T22:12:00Z"
         summary: "Initial draft minimal stub (full NativeGpio/I2c*/Dac board descriptor deferred to gw108 codification / spruce-untangle)."
         direct_dependencies:
@@ -1552,43 +1549,31 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Draft Nolan-specific layout schema."
+    description: "Nolan-specific (gw108) hydronic layout schema."
 
     versions:
       "000":
-        status: "draft"
-        schema_url: "https://schemas.electricity.works/draft/types/gw.nolan.layout/000"
-        created: "2026-06-12T19:35:00Z"
-        summary: "Draft. Reconciled refs to the new shared layout vocabulary, then to hardware-layout-pass-one: Components rebound to the cac-free DeviceType component versions; DeviceTypes now holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada) instead of CACs; DeviceTypeReferenceIntegrity reworked into the DeviceTypeMembership axiom (DeviceType in gw1.device.type + specialized-record presence). Stays draft."
+        schema_url: "https://schemas.electricity.works/types/gw.nolan.layout/000"
+        created: "2026-06-15T02:10:00Z"
+        summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay is gw108.vdc.relay)."
         direct_dependencies:
           structural:
             - "ads111x.based.device.type.gt:000"
-            - "change.heatcall.source:000"
-            - "change.relay.state:000"
             - "data.channel.gt:002"
             - "derived.channel.gt:002"
             - "electric.meter.component.gt:002"
             - "electric.meter.device.type.gt:000"
             - "g.node.gt:004"
-            - "gw1.heat.call.interpretation:000"
-            - "gw1.quantity:000"
             - "gw1.scada.device.type.gt:000"
-            - "gw1.unit:001"
-            - "gw108.gpio.relay.component.gt:002"
             - "gw108.gpio.sensor.component.gt:002"
             - "gw108.vdc.relay.component.gt:002"
-            - "heatcall.source:000"
             - "i2c.multichannel.dt.relay.component.gt:005"
             - "i2c.thermistor.reader.component.gt:002"
             - "pico.btu.meter.component.gt:001"
             - "pico.tank.module.component.gt:012"
-            - "relay.actor.config:003"
-            - "relay.closed.or.open:000"
             - "sim.pico.tank.module.component.gt:001"
             - "spaceheat.node.gt:302"
             - "web.server.component.gt:002"
-          axiom:
-            - "gw1.device.type:000"
 
   gw1.tank.temp.calibration:
     latest_version: "000"

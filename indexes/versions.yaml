@@ -49,6 +49,27 @@ types:
       "001":
         summary: "Initial Sema version (flattened from the scada ComponentAttributeClassGt runtime)."
 
+  ads111x.based.device.type.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (specialized device-type record; per-family successor to the field ads111x.based.cac.gt, keyed by DeviceType)."
+
+  electric.meter.device.type.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (specialized device-type record; replaces electric.meter.cac.gt category data, keyed by DeviceType)."
+
+  gw1.scada.device.type.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft minimal stub (full NativeGpio/I2c*/Dac board descriptor deferred to gw108 codification / spruce-untangle)."
+
   connectivity.edge.gt:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -294,6 +315,13 @@ types:
   gw:
     versioning_strategy: "none"
     summary: "Versionless GridWorks message envelope (gwproto Message wire format)."
+
+  gw.nolan.layout:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay is gw108.vdc.relay)."
 
   gw1.tank.temp.calibration:
     latest_version: "000"

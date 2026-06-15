@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/draft/types/gw1.scada.device.type.gt/000"
+$id: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
 
 title: "gw1.scada.device.type.gt"
 type: object

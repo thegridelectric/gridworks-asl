@@ -47,6 +47,21 @@ types:
     versioning_strategy: literal
     versions:
       '001': definitions/types/component.attribute.class.gt/001.yaml
+  ads111x.based.device.type.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/ads111x.based.device.type.gt/000.yaml
+  electric.meter.device.type.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/electric.meter.device.type.gt/000.yaml
+  gw1.scada.device.type.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw1.scada.device.type.gt/000.yaml
   connectivity.edge.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -196,6 +211,11 @@ types:
   gw:
     versioning_strategy: none
     schema: definitions/types/gw.yaml
+  gw.nolan.layout:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.nolan.layout/000.yaml
   gw1.tank.temp.calibration:
     latest_version: '000'
     versioning_strategy: literal

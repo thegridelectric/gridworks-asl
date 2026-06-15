@@ -6,6 +6,10 @@ types:
     '000':
       used_by:
       - ads111x.based.component.gt:000
+  ads111x.based.device.type.gt:
+    '000':
+      used_by:
+      - gw.nolan.layout:000
   channel.config:
     '000':
       used_by:
@@ -44,6 +48,7 @@ types:
       - scada.control.capabilities:001
     '002':
       used_by:
+      - gw.nolan.layout:000
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
@@ -63,6 +68,9 @@ types:
       - layout.lite:013
       - layout.lite:014
       - layout.lite:015
+    '002':
+      used_by:
+      - gw.nolan.layout:000
   dfr.config:
     '000':
       used_by:
@@ -76,6 +84,14 @@ types:
       used_by:
       - electric.meter.component.gt:001
       - electric.meter.component.gt:002
+  electric.meter.component.gt:
+    '002':
+      used_by:
+      - gw.nolan.layout:000
+  electric.meter.device.type.gt:
+    '000':
+      used_by:
+      - gw.nolan.layout:000
   fsm.atomic.report:
     '000':
       used_by:
@@ -91,6 +107,14 @@ types:
       used_by:
       - report:002
       - report:003
+  g.node.gt:
+    '004':
+      used_by:
+      - gw.nolan.layout:000
+  gw1.scada.device.type.gt:
+    '000':
+      used_by:
+      - gw.nolan.layout:000
   gw1.tank.temp.calibration:
     '000':
       used_by:
@@ -111,6 +135,14 @@ types:
     '000':
       used_by:
       - derived.channel.gt:002
+  gw108.gpio.sensor.component.gt:
+    '002':
+      used_by:
+      - gw.nolan.layout:000
+  gw108.vdc.relay.component.gt:
+    '002':
+      used_by:
+      - gw.nolan.layout:000
   ha1.params:
     '004':
       used_by:
@@ -158,12 +190,17 @@ types:
       - layout.lite:014
     '005':
       used_by:
+      - gw.nolan.layout:000
       - layout.lite:015
   i2c.thermistor.channel.config:
     '001':
       used_by:
       - i2c.thermistor.reader.component.gt:001
       - i2c.thermistor.reader.component.gt:002
+  i2c.thermistor.reader.component.gt:
+    '002':
+      used_by:
+      - gw.nolan.layout:000
   machine.states:
     '000':
       used_by:
@@ -173,6 +210,10 @@ types:
     '000':
       used_by:
       - hubitat.poller.gt:000
+  pico.btu.meter.component.gt:
+    '001':
+      used_by:
+      - gw.nolan.layout:000
   pico.flow.module.component.gt:
     '000':
       used_by:
@@ -200,6 +241,7 @@ types:
       - layout.lite:014
     '012':
       used_by:
+      - gw.nolan.layout:000
       - layout.lite:015
   price.quantity.unitless:
     '001':
@@ -237,6 +279,7 @@ types:
       - layout.lite:014
     '001':
       used_by:
+      - gw.nolan.layout:000
       - layout.lite:015
   single.machine.state:
     '000':
@@ -268,6 +311,7 @@ types:
       - new.command.tree:000
     '302':
       used_by:
+      - gw.nolan.layout:000
       - layout.lite:014
       - layout.lite:015
       - new.command.tree:002
@@ -283,6 +327,10 @@ types:
     '101':
       used_by:
       - ticklist.reed.report:000
+  web.server.component.gt:
+    '002':
+      used_by:
+      - gw.nolan.layout:000
 enums:
   base.g.node.class:
     '000':
@@ -452,8 +500,10 @@ enums:
       - gw1.telemetry.name.quantity.projection:000
     '007':
       used_by:
+      - ads111x.based.device.type.gt:000
       - data.channel.gt:002
       - electric.meter.cac.gt:001
+      - electric.meter.device.type.gt:000
       - maker.api.attribute.gt:000
       - spaceheat.telemetry.quantity.projection:000
       - synced.readings.bundle:001
@@ -576,8 +626,11 @@ formats:
     used_by:
     - ads.channel.config:000
     - ads111x.based.component.gt:000
+    - ads111x.based.device.type.gt:000
     - dfr.component.gt:000
     - electric.meter.component.gt:002
+    - electric.meter.device.type.gt:000
+    - gw1.scada.device.type.gt:000
     - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:002
     - hubitat.component.gt:000
@@ -600,6 +653,7 @@ formats:
   positive.int:
     used_by:
     - ads.channel.config:000
+    - ads111x.based.device.type.gt:000
     - channel.config:000
     - component.attribute.class.gt:001
     - derived.channel.gt:001
@@ -610,12 +664,14 @@ formats:
     - electric.meter.channel.config:000
     - electric.meter.component.gt:001
     - electric.meter.component.gt:002
+    - electric.meter.device.type.gt:000
     - energy.instruction:000
     - flo.params.house0:003
     - flo.params.house0:004
     - flo.params.house0:005
     - flo.params.house0:006
     - flo.params.house0:007
+    - gw1.scada.device.type.gt:000
     - gw108.gpio.sensor.component.gt:001
     - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:001
