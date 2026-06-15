@@ -80,7 +80,7 @@ examples:
         }
       ],
       "OpenVoltageByAds": [
-        0.0
+        4.95
       ],
       "TypeName": "ads111x.based.component.gt",
       "Version": "000"

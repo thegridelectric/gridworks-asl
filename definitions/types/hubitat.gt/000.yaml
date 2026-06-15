@@ -61,7 +61,7 @@ examples:
       "Host": "example",
       "MakerApiId": 0,
       "AccessToken": "example",
-      "MacAddress": "example",
+      "MacAddress": "34:e1:d1:82:22:22",
       "WebListenEnabled": false,
       "TypeName": "hubitat.gt",
       "Version": "000"
