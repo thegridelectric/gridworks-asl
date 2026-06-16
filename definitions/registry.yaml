@@ -898,13 +898,13 @@ types:
         summary: >-
           - OutputUnit: gw1.unit 000 -> 001
           - OutputUnit: required
-          - OutputQuantity: gw1.qauntity 000 -> 001
+          - OutputQuantity: gw1.quantity 000 -> 001
           - OutputQuantity: add
           - OutputUnitQuantityConsistency axiom: add
         direct_dependencies:
           structural:
             - "gw1.emission.method:000"
-            - "gw1.quantity:000"
+            - "gw1.quantity:001"
             - "gw1.unit:001"
             - "left.right.dot"
             - "positive.int"

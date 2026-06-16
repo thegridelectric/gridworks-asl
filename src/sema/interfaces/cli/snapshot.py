@@ -26,6 +26,7 @@ from sema.tools.build_seed_definitions import (
 )
 from sema.tools.build_seed_expanded import expand_seed
 from sema.tools.runtime_generation.generate_runtime import generate_runtime_from_dag
+from sema.tools.runtime_generation.helpers import render_local_names_yaml
 from sema.tools.snapshot_lint import lint_generated_tree
 
 # Files and directories the runtime generator owns inside a snapshot. Cleared
@@ -45,21 +46,6 @@ def snapshot_root() -> Path:
     return resolve_target_path("snapshot", str(OUTPUT_DIR))
 
 
-def _write_local_names_yaml(dag, path: Path) -> None:
-    data: dict[str, dict[str, str]] = {
-        "types": {},
-        "enums": {},
-    }
-
-    for kind, name, _version in sorted(dag.nodes):
-        if kind == "format":
-            continue
-        section = f"{kind}s"
-        data[section][name] = name
-
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w") as handle:
-        yaml.safe_dump(data, handle, sort_keys=True)
 
 
 def _reject_drafts_in_seed_request(seed_request: dict, public_registry: dict) -> None:
@@ -129,6 +115,11 @@ def prepare_snapshot(seed_request: Path) -> Path:
 
     expand_seed(seed_request_path, expanded_seed)
 
+    # Record the original seed request alongside the expansion so the snapshot is
+    # self-describing and exactly replicable. (Previously only the expanded seed
+    # was kept, so the request that built a snapshot had to be reconstructed.)
+    shutil.copyfile(seed_request_path, indexes_root / "seed_request.yaml")
+
     seed = load_seed(expanded_seed)
 
     registry = load_registry()
@@ -138,7 +129,17 @@ def prepare_snapshot(seed_request: Path) -> Path:
     write_restricted_indexes(target_root, restricted_registry)
 
     dag = build_seed_dag_from_data(seed, restricted_registry)
-    _write_local_names_yaml(dag, local_names)
+
+    # Local class/module names are declared in the seed request, not hand-edited:
+    # `local_names.strip_prefixes` (e.g. [gw1, gw]) + per-type `overrides`.
+    # Materialize the effective file here for build to consume.
+    local_names_cfg = seed_request_data.get("local_names", {}) or {}
+    render_local_names_yaml(
+        dag,
+        local_names,
+        strip_prefixes=tuple(local_names_cfg.get("strip_prefixes", []) or []),
+        overrides=local_names_cfg.get("overrides", {}) or {},
+    )
     return target_root
 
 

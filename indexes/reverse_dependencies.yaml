@@ -442,11 +442,11 @@ enums:
     '000':
       used_by:
       - data.channel.gt:002
-      - derived.channel.gt:002
       - gw1.telemetry.name.quantity.projection:000
       - spaceheat.telemetry.quantity.projection:000
     '001':
       used_by:
+      - derived.channel.gt:002
       - gw1.unit.quantity.projection:000
   gw1.seasonal.storage.mode:
     '000':

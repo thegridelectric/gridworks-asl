@@ -73,27 +73,63 @@ def local_name_to_module(local_name: LeftRightDot) -> str:
 # --- local names yaml ---
 # ============================================================
 
-def generate_local_names_yaml(dag, path: Path) -> None:
+def apply_local_name_rules(
+    name: str,
+    *,
+    strip_prefixes: set[str],
+    overrides: dict[str, str],
+) -> str:
+    """The local (class/module) name for a sema ``name`` under the rules.
+
+    An explicit override wins. Otherwise drop a single leading dotted segment
+    iff it is one of ``strip_prefixes`` (so ``gw1.unit`` -> ``unit`` but
+    ``gw108.gpio.sensor.component.gt`` is untouched — its head is ``gw108``,
+    not ``gw1``). Otherwise the name is unchanged.
     """
-    Creates a local_names.yaml file if it does not exist.
+    if name in overrides:
+        return overrides[name]
+    head, sep, rest = name.partition(".")
+    if sep and head in strip_prefixes:
+        return rest
+    return name
 
-    Does NOT overwrite existing file.
+
+def render_local_names_yaml(
+    dag,
+    path: Path,
+    *,
+    strip_prefixes: tuple[str, ...] = (),
+    overrides: dict[str, str] | None = None,
+) -> None:
+    """Materialize local_names.yaml from declarative rules (no hand-editing).
+
+    The snapshot's class/module names derive from local names via
+    ``local_name_to_class`` / ``local_name_to_module``. Rather than hand-edit a
+    flat file, the seed request declares the intent — ``strip_prefixes`` (e.g.
+    ``[gw1, gw]``) plus per-type ``overrides`` — and this renders the effective
+    file. Local names must be unique within the snapshot and valid
+    ``LeftRightDot``; a collision raises naming both sema types so the human adds
+    an override.
     """
-    if path.exists():
-        return
+    strip = set(strip_prefixes)
+    overrides = dict(overrides or {})
 
-    data: dict[str, dict[str, LeftRightDot]] = {
-        "types": {},
-        "enums": {},
-    }
-
+    data: dict[str, dict[str, LeftRightDot]] = {"types": {}, "enums": {}}
+    seen: dict[str, str] = {}  # local name -> sema name (across both sections)
     for kind, name, _version in sorted(dag.nodes):
         if kind == "format":
             continue
-        section = f"{kind}s"
-        if name not in data[section]:
-            data[section][name] = name
+        local = apply_local_name_rules(name, strip_prefixes=strip, overrides=overrides)
+        is_left_right_dot(local)
+        if local in seen and seen[local] != name:
+            raise ValueError(
+                f"local name collision: {name!r} and {seen[local]!r} both map to "
+                f"{local!r}. Add an override in the seed request's `local_names`."
+            )
+        seen[local] = name
+        data[f"{kind}s"][name] = local
 
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w") as f:
         yaml.safe_dump(data, f, sort_keys=True)
 

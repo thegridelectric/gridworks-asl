@@ -97,7 +97,7 @@ types:
         summary: >
           - OutputUnit: gw1.unit 000 -> 001
           - OutputUnit: required
-          - OutputQuantity: gw1.qauntity 000 -> 001
+          - OutputQuantity: gw1.quantity 000 -> 001
           - OutputQuantity: add
           - OutputUnitQuantityConsistency axiom: add
       "001":

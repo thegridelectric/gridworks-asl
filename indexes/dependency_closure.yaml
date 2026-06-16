@@ -155,7 +155,6 @@ types:
     '002':
       enums:
       - gw1.emission.method:000
-      - gw1.quantity:000
       - gw1.quantity:001
       - gw1.unit:001
       formats:
