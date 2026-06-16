@@ -9,10 +9,10 @@ description: >
   selects between SCADA and a local wall thermostat.
 
 enum:
-  - "WallThermostat"
-  - "Scada"
+  - "SwitchToWallThermostat"
+  - "SwitchToScada"
 
-default: "WallThermostat"
+default: "SwitchToWallThermostat"
 
 x-gridworks:
   owner: "gridworks-energy"
