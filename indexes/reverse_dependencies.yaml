@@ -475,9 +475,9 @@ enums:
       used_by:
       - derived.channel.gt:000
       - derived.channel.gt:001
-      - derived.channel.gt:002
     '001':
       used_by:
+      - derived.channel.gt:002
       - gw1.unit.quantity.projection:000
       - synced.readings.bundle:001
       - synced.readings.bundle:002

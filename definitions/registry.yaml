@@ -896,14 +896,16 @@ types:
         schema_url: "https://schemas.electricity.works/types/derived.channel.gt/002"
         created: "2026-03-04T19:00:00Z"
         summary: >-
+          - OutputUnit: gw1.unit 000 -> 001
           - OutputUnit: required
+          - OutputQuantity: gw1.qauntity 000 -> 001
           - OutputQuantity: add
           - OutputUnitQuantityConsistency axiom: add
         direct_dependencies:
           structural:
             - "gw1.emission.method:000"
             - "gw1.quantity:000"
-            - "gw1.unit:000"
+            - "gw1.unit:001"
             - "left.right.dot"
             - "positive.int"
             - "spaceheat.name"
