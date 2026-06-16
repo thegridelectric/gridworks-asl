@@ -25,7 +25,8 @@ properties:
   TotalStoreTanks:
     $ref: "https://schemas.electricity.works/formats/non.negative.int"
     description: >
-      Number of thermal-storage tanks (buffer excluded). House0 homes carry 0..6.
+      Number of thermal-storage tanks (buffer excluded). House0 homes carry 1..6
+      (enforced by the Cardinality axiom).
 
   UseSiegLoop:
     type: boolean
@@ -92,3 +93,8 @@ x-gridworks:
       statement: >
         If UseSiegLoop is true then SiegLoopPlumbed SHALL be true — the scada
         cannot run the Siegenthaler loop unless it is plumbed.
+    - number: 2
+      name: "Cardinality"
+      statement: >
+        a. TotalStoreTanks SHALL be between 1 and 6 inclusive.
+        b. The number of Zones SHALL be between 1 and 6 inclusive.

@@ -31,3 +31,22 @@ class GwHouse0Hydronic(SemaType):
                 "SiegLoopPlumbed to be true."
             )
         return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> Self:
+        """
+        Axiom 2: Cardinality
+        a. TotalStoreTanks SHALL be between 1 and 6 inclusive.
+        b. The number of Zones SHALL be between 1 and 6 inclusive.
+        """
+        if not 1 <= self.total_store_tanks <= 6:
+            raise ValueError(
+                "Axiom 2 (Cardinality) failed: TotalStoreTanks "
+                f"({self.total_store_tanks}) must be between 1 and 6 inclusive."
+            )
+        if not 1 <= len(self.zones) <= 6:
+            raise ValueError(
+                "Axiom 2 (Cardinality) failed: number of Zones "
+                f"({len(self.zones)}) must be between 1 and 6 inclusive."
+            )
+        return self
