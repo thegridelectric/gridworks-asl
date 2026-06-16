@@ -1626,7 +1626,7 @@ types:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.layout/000"
         created: "2026-06-15T17:30:00Z"
-        summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). Optional-first — only TypeName + Version required while collections + axioms are built up bit by bit."
+        summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). All collections + Hydronic required (mirrors gw.nolan.layout) — a layout is a complete deployable artifact."
         direct_dependencies:
           structural:
             - "ads111x.based.component.gt:000"

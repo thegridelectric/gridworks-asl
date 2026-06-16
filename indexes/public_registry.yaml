@@ -1395,8 +1395,8 @@ types:
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new\
           \ DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida\
           \ / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server).\
-          \ Optional-first \u2014 only TypeName + Version required while collections\
-          \ + axioms are built up bit by bit."
+          \ All collections + Hydronic required (mirrors gw.nolan.layout) \u2014 a\
+          \ layout is a complete deployable artifact."
         direct_dependencies:
           structural:
           - ads111x.based.component.gt:000

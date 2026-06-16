@@ -16,9 +16,9 @@ description: >
   device-type records (DeviceTypes), and a Hydronic config block into one
   semantically consistent, deployable artifact.
 
-  Shape laid out, content built up bit by bit: only TypeName + Version are
-  required at v000 so the layout round-trip stays green while the collections and
-  axioms are populated. Mutable in place while unpublished.
+  All collections plus the Hydronic block are required — a layout is a complete,
+  deployable artifact, never a partial one (mirrors gw.nolan.layout). Mutable in
+  place while unpublished.
 
 properties:
 
@@ -92,6 +92,13 @@ properties:
     const: "000"
 
 required:
+  - GNodes
+  - ShNodes
+  - DataChannels
+  - DerivedChannels
+  - Components
+  - DeviceTypes
+  - Hydronic
   - TypeName
   - Version
 

@@ -337,7 +337,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). Optional-first — only TypeName + Version required while collections + axioms are built up bit by bit."
+        summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). All collections + Hydronic required (mirrors gw.nolan.layout) — a layout is a complete deployable artifact."
 
   gw1.hvac.zone:
     latest_version: "000"
