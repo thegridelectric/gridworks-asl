@@ -54,3 +54,8 @@ additionalProperties: false
 
 x-gridworks:
   owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.

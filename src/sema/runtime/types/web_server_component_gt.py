@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, StrictInt
+from pydantic import BaseModel, ConfigDict, StrictInt, model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import UUID4Str
@@ -31,3 +31,16 @@ class WebServerComponentGt(SemaType):
     hw_uid: str | None = None
     type_name: Literal["web.server.component.gt"] = "web.server.component.gt"
     version: Literal["002"] = "002"
+
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "WebServerComponentGt":
+        """
+        Axiom 1: EmptyConfigList
+        ConfigList SHALL be empty.
+        """
+        if len(self.config_list) != 0:
+            raise ValueError(
+                "Axiom 1 (EmptyConfigList) failed: a web server has no channels; "
+                "ConfigList must be empty."
+            )
+        return self

@@ -89,6 +89,11 @@ examples:
 
 x-gridworks:
   owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.
 
   extended_description: >
     The MakerAPI URL helpers on the hub (url_config / maker_api_url_config / refresh_url and

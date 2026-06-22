@@ -167,6 +167,10 @@ x-gridworks:
 
   axioms:
     - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.
+    - number: 2
       name: "HwUidPattern"
       statement: >
         If HwUid is present, it SHALL match the pattern pico_xxxxxx where

@@ -98,6 +98,10 @@ x-gridworks:
 
   axioms:
     - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.
+    - number: 2
       name: "ActorAndRelayIndexUniqueness"
       statement: >
         ConfigList SHALL NOT contain duplicate ActorName values or duplicate

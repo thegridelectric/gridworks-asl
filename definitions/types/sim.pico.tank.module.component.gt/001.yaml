@@ -146,19 +146,24 @@ x-gridworks:
 
   axioms:
     - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.
+
+    - number: 2
       name: "PicoHardwareIdentityXor"
       statement: >
         Exactly one of the following SHALL hold:
           - PicoHwUid is present
           - both PicoAHwUid and PicoBHwUid are present
 
-    - number: 2
+    - number: 3
       name: "PicoKOhmsConsistency"
       statement: >
         PicoKOhms SHALL be present if and only if TempCalcMethod equals
         SimpleBetaForPico.
 
-    - number: 3
+    - number: 4
       name: "SensorOrderPermutation"
       statement: >
         If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].
