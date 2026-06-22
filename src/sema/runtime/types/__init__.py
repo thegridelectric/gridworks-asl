@@ -43,6 +43,7 @@ from sema.runtime.types.gw1_telemetry_name_quantity_projection import (
 from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProjection
 from sema.runtime.types.gw_house0_hydronic import GwHouse0Hydronic
 from sema.runtime.types.gw_house0_layout import GwHouse0Layout
+from sema.runtime.types.gw_native_gpio_pin import GwNativeGpioPin
 from sema.runtime.types.gw_nolan_layout import GwNolanLayout
 from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.heartbeat_a import HeartbeatA
@@ -51,13 +52,27 @@ from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_gt import HubitatGt
 from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
 from sema.runtime.types.hubitat_poller_gt import HubitatPollerGt
+from sema.runtime.types.i2c_adc_config import I2cAdcConfig
+from sema.runtime.types.i2c_bit_address import I2cBitAddress
+from sema.runtime.types.i2c_bus import I2cBus
+from sema.runtime.types.i2c_dac_config import I2cDacConfig
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
+from sema.runtime.types.i2c_read_bit import I2cReadBit
+from sema.runtime.types.i2c_read_reg import I2cReadReg
+from sema.runtime.types.i2c_reg_address import I2cRegAddress
+from sema.runtime.types.i2c_relay_config import I2cRelayConfig
+from sema.runtime.types.i2c_result import I2cResult
 from sema.runtime.types.i2c_thermistor_channel_config import I2cThermistorChannelConfig
+from sema.runtime.types.i2c_thermistor_interface_config import (
+    I2cThermistorInterfaceConfig,
+)
 from sema.runtime.types.i2c_thermistor_reader_component_gt import (
     I2cThermistorReaderComponentGt,
 )
+from sema.runtime.types.i2c_write_bit import I2cWriteBit
+from sema.runtime.types.i2c_write_reg import I2cWriteReg
 from sema.runtime.types.keyparam_change_log import KeyparamChangeLog
 from sema.runtime.types.latest_price import LatestPrice
 from sema.runtime.types.layout_lite import LayoutLite
@@ -152,6 +167,7 @@ __all__ = [
     "Gw1UnitQuantityProjection",
     "GwHouse0Hydronic",
     "GwHouse0Layout",
+    "GwNativeGpioPin",
     "GwNolanLayout",
     "Ha1Params",
     "HeartbeatA",
@@ -160,9 +176,21 @@ __all__ = [
     "HubitatGt",
     "HubitatPollerComponentGt",
     "HubitatPollerGt",
+    "I2cAdcConfig",
+    "I2cBitAddress",
+    "I2cBus",
+    "I2cDacConfig",
     "I2cMultichannelDtRelayComponentGt",
+    "I2cReadBit",
+    "I2cReadReg",
+    "I2cRegAddress",
+    "I2cRelayConfig",
+    "I2cResult",
     "I2cThermistorChannelConfig",
+    "I2cThermistorInterfaceConfig",
     "I2cThermistorReaderComponentGt",
+    "I2cWriteBit",
+    "I2cWriteReg",
     "KeyparamChangeLog",
     "LatestPrice",
     "LayoutLite",

@@ -68,7 +68,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial draft minimal stub (full NativeGpio/I2c*/Dac board descriptor deferred to gw108 codification / spruce-untangle)."
+        summary: "Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList, NativeGpio, I2cRelays, CtAdc, ThermistorAdcs, Dacs)."
 
   connectivity.edge.gt:
     latest_version: "000"
@@ -338,6 +338,97 @@ types:
     versions:
       "000":
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). All collections + Hydronic required (mirrors gw.nolan.layout) — a layout is a complete deployable artifact."
+
+  i2c.adc.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Name, I2cBus, I2cAddress, AdcType, Channels)."
+
+  i2c.bit.address:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (I2cAddress, RegisterIndex, BitIndex)."
+
+  i2c.bus:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Name, BusNumber)."
+
+  i2c.dac.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (DacName, I2cBus, I2cAddress, DacType, Channels)."
+
+  i2c.read.bit:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Bus, Address, TriggerId)."
+
+  i2c.read.reg:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Bus, Address, NumBytes, TriggerId)."
+
+  i2c.reg.address:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (I2cAddress, RegisterIndex)."
+
+  i2c.relay.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (RelayName, I2cBus, Address, SupportedWiringConfigs, Notes)."
+
+  i2c.result:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Bus, Operation, Value, Success, Error, UnixTimeMs, TriggerId)."
+
+  i2c.thermistor.interface.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, SeriesResistanceKOhms)."
+
+  i2c.write.bit:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Bus, Address, Value, TriggerId)."
+
+  i2c.write.reg:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Bus, Address, NumBytes, Value, TriggerId)."
+
+  gw.native.gpio.pin:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Name, BcmPin)."
 
   gw1.hvac.zone:
     latest_version: "000"
@@ -920,6 +1011,24 @@ enums:
       "000": {}
 
   gw.house0.primary.flow.source:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  i2c.adc.type:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  i2c.dac.type:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  i2c.operation:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

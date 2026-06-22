@@ -4,22 +4,14 @@ $id: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
 title: "gw1.scada.device.type.gt"
 type: object
 description: >
-  DRAFT minimal stub. The specialized device-type record for a GridWorks SCADA board
-  (the gw108 family) — the per-family successor to make/model-as-CAC for the board
-  itself. Keyed by `DeviceType` (a `gw1.device.type` value, e.g. `GridworksScadaGw108`),
-  it carries the board-level identity now. The full board descriptor — NativeGpio
-  (Inputs/Outputs BCM pin maps), I2cRelays, CtAdc, ThermistorAdcs, Dacs (mirroring the
-  scada `ScadaDeviceTypeGt` and Joe's `starter-scripts/gw108_test_code.py`) — lands when
-  the gw108 board is codified. Flat.
+  The device-type record for a GridWorks SCADA board designed by GridWorks.
 
 properties:
 
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this record describes, an open `pascal.case` string (a
-      `gw1.device.type` value, normally `GridworksScadaGw108`). The hardware layout
-      enforces membership in `gw1.device.type`.
+      The device category this record describes.
 
   DisplayName:
     type: string
@@ -28,6 +20,60 @@ properties:
     $ref: "https://schemas.electricity.works/formats/positive.int"
     description: >
       Shortest polling period, in milliseconds, that this board supports.
+
+  BusList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.bus/000"
+    description: >
+      The physical I²C buses this board exposes.
+
+  TelemetryNameList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/007"
+    description: >
+      The telemetry names this board can produce.
+
+  NativeGpioInputs:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/gw.native.gpio.pin/000"
+    description: >
+      The board's native (on-board) GPIO input pins.
+
+  NativeGpioOutputs:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/gw.native.gpio.pin/000"
+    description: >
+      The board's native (on-board) GPIO output pins.
+
+  I2cRelays:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.relay.config/000"
+    description: >
+      The relays driven through the board's I²C GPIO expanders.
+
+  CtAdc:
+    $ref: "https://schemas.electricity.works/types/i2c.adc.config/000"
+    description: >
+      The current-transformer ADC, when present.
+
+  ThermistorAdcs:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.thermistor.interface.config/000"
+    description: >
+      The thermistor-reading ADC interfaces on the board.
+
+  Dacs:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.dac.config/000"
+    description: >
+      The digital-to-analog converters on the board.
 
   TypeName:
     const: "gw1.scada.device.type.gt"
@@ -44,3 +90,13 @@ additionalProperties: false
 
 x-gridworks:
   owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "BusMembership"
+      statement: >
+        Every I2cBus referenced by an entry in I2cRelays, CtAdc, ThermistorAdcs,
+        or Dacs SHALL appear as a Name in BusList.
+  extended_description: >
+    Various hardware layouts enforce membership in `gw1.device.type` for the
+    DeviceType (e.g. `GridworksScadaGw108`).
+

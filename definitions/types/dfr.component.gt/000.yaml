@@ -5,8 +5,7 @@ title: "dfr.component.gt"
 type: object
 description: >
   A DFRobot analog-output component (one installed device instance): one or more DFR0971
-  dual analog-out (0-10V DAC) boards driving pump-speed / control outputs. Flat — the shared
-  component fields are spelled out here; ConfigList references the dfr channel config by $ref.
+  dual analog-out (0-10V DAC) boards driving pump-speed / control outputs.
 
 properties:
 

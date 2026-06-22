@@ -1,0 +1,16 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ i2c_result_000_class_name }}":
+        """
+        Axiom 1: ErrorIffFailure
+        Error SHALL be present and non-blank if and only if Success is false.
+        """
+        has_error = self.error is not None and self.error.strip() != ""
+        if self.success and has_error:
+            raise ValueError(
+                "Axiom 1 (ErrorIffFailure) failed: Success is true but Error is present."
+            )
+        if not self.success and not has_error:
+            raise ValueError(
+                "Axiom 1 (ErrorIffFailure) failed: Success is false but Error is missing or blank."
+            )
+        return self

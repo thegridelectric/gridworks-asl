@@ -20,9 +20,7 @@ properties:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
       The device category this component is built on, an open `pascal.case` string
-      (a `gw1.device.type` value, e.g. `EgaugePowerMeter` or `EkmFlowMeter`). The
-      hardware layout enforces membership in `gw1.device.type`, and — for an electric
-      meter — that the matching `electric.meter.device.type.gt` record is present.
+      (e.g. `EgaugePowerMeter` or `EkmFlowMeter`).
 
   ConfigList:
     type: array
@@ -86,3 +84,12 @@ examples:
 
 x-gridworks:
   owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.
+  extended_description: >
+    DeviceType holds a `gw1.device.type` value: the hardware layout enforces its
+    membership in `gw1.device.type` and, for an electric meter, that the matching
+    `electric.meter.device.type.gt` record is present.

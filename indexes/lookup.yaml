@@ -226,6 +226,71 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.house0.layout/000.yaml
+  i2c.adc.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.adc.config/000.yaml
+  i2c.bit.address:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.bit.address/000.yaml
+  i2c.bus:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.bus/000.yaml
+  i2c.dac.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.dac.config/000.yaml
+  i2c.read.bit:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.read.bit/000.yaml
+  i2c.read.reg:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.read.reg/000.yaml
+  i2c.reg.address:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.reg.address/000.yaml
+  i2c.relay.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.relay.config/000.yaml
+  i2c.result:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.result/000.yaml
+  i2c.thermistor.interface.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.thermistor.interface.config/000.yaml
+  i2c.write.bit:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.write.bit/000.yaml
+  i2c.write.reg:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.write.reg/000.yaml
+  gw.native.gpio.pin:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.native.gpio.pin/000.yaml
   gw1.hvac.zone:
     latest_version: '000'
     versioning_strategy: literal
@@ -597,6 +662,21 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/gw.house0.primary.flow.source/000.yaml
+  i2c.adc.type:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.adc.type/000.yaml
+  i2c.dac.type:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.dac.type/000.yaml
+  i2c.operation:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.operation/000.yaml
   gw1.actor.class:
     enum_type: versioned
     latest_version: '012'

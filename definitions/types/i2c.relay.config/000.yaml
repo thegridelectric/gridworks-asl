@@ -1,0 +1,56 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/i2c.relay.config/000"
+
+title: "i2c.relay.config"
+type: object
+description: >
+  Configuration of one named relay driven through an I²C GPIO expander on a
+  GridWorks SCADA board.
+
+properties:
+
+  RelayName:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The name of this relay on the board.
+
+  I2cBus:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The name of the board bus this relay is driven through.
+
+  Address:
+    $ref: "https://schemas.electricity.works/types/i2c.bit.address/000"
+    description: >
+      The expander bit that drives this relay.
+
+  SupportedWiringConfigs:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/enums/relay.wiring.config/000"
+    description: >
+      The wiring configurations this relay supports.
+
+  Notes:
+    type: string
+    description: >
+      Free-form notes about this relay.
+
+  TypeName:
+    const: "i2c.relay.config"
+
+  Version:
+    const: "000"
+
+required:
+  - RelayName
+  - I2cBus
+  - Address
+  - SupportedWiringConfigs
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

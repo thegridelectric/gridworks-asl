@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-06-15T20:05:00Z'
+  last_updated: '2026-06-22T16:35:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -213,6 +213,35 @@ enums:
       '000':
         schema_url: https://schemas.electricity.works/enums/gw.house0.primary.flow.source/000
         created: '2026-06-15T17:30:00Z'
+  i2c.adc.type:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: "The model of the I\xB2C analog-to-digital converter chipset used\
+      \ by a GridWorks SCADA board."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/i2c.adc.type/000
+        created: '2026-06-17T14:20:00Z'
+  i2c.dac.type:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: "The model of the I\xB2C digital-to-analog converter chipset used\
+      \ by a GridWorks SCADA board."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/i2c.dac.type/000
+        created: '2026-06-17T14:20:00Z'
+  i2c.operation:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: "The kind of I\xB2C bus operation an i2c.result reports."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/i2c.operation/000
+        created: '2026-06-22T16:35:00Z'
   gw1.actor.class:
     latest_version: '012'
     owner: gridworks-energy
@@ -716,19 +745,26 @@ types:
     latest_version: '000'
     owner: gridworks-energy
     versioning_strategy: literal
-    description: 'Minimal stub: specialized device-type record for a GridWorks SCADA
-      board (gw108 family), board-level identity only; full board descriptor lands
-      at gw108 codification.'
+    description: "Specialized device-type record for a GridWorks SCADA board (gw108\
+      \ family): the full board descriptor \u2014 telemetry names, native GPIO, I\xB2\
+      C relays, ADCs and DACs."
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw1.scada.device.type.gt/000
-        created: '2026-06-13T22:12:00Z'
-        summary: Initial draft minimal stub (full NativeGpio/I2c*/Dac board descriptor
-          deferred to gw108 codification / spruce-untangle).
+        created: '2026-06-17T14:20:00Z'
+        summary: Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList,
+          NativeGpio, I2cRelays, CtAdc, ThermistorAdcs, Dacs).
         direct_dependencies:
           structural:
+          - gw.native.gpio.pin:000
+          - i2c.adc.config:000
+          - i2c.bus:000
+          - i2c.dac.config:000
+          - i2c.relay.config:000
+          - i2c.thermistor.interface.config:000
           - pascal.case
           - positive.int
+          - spaceheat.telemetry.name:007
   connectivity.edge.gt:
     latest_version: '000'
     owner: gridworks-energy
@@ -1339,7 +1375,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.nolan.layout/000
-        created: '2026-06-15T02:10:00Z'
+        created: '2026-06-17T14:20:00Z'
         summary: Un-drafted for hardware-layout-pass-one (full layouts now, axioms
           later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components
           are the cac-free DeviceType versions; DeviceTypes holds the specialized
@@ -1391,7 +1427,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.house0.layout/000
-        created: '2026-06-15T17:30:00Z'
+        created: '2026-06-17T14:20:00Z'
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new\
           \ DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida\
           \ / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server).\
@@ -1418,6 +1454,220 @@ types:
           - sim.pico.tank.module.component.gt:001
           - spaceheat.node.gt:302
           - web.server.component.gt:002
+  i2c.adc.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Configuration of an analog-to-digital converter on a GridWorks SCADA
+      board.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.adc.config/000
+        created: '2026-06-17T14:20:00Z'
+        summary: Initial draft (Name, I2cBus, I2cAddress, AdcType, Channels).
+        direct_dependencies:
+          structural:
+          - i2c.adc.type:000
+          - non.negative.int
+          - pascal.case
+          - positive.int
+  i2c.bit.address:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "The address of a single bit on an I\xB2C GPIO expander (expander\
+      \ I\xB2C address, register, bit index)."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.bit.address/000
+        created: '2026-06-17T14:20:00Z'
+        summary: Initial draft (I2cAddress, RegisterIndex, BitIndex).
+        direct_dependencies:
+          structural:
+          - non.negative.int
+  i2c.bus:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "One physical I\xB2C bus on a GridWorks SCADA board (board name +\
+      \ Linux i\xB2c adapter number)."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.bus/000
+        created: '2026-06-17T14:20:00Z'
+        summary: Initial draft (Name, BusNumber).
+        direct_dependencies:
+          structural:
+          - non.negative.int
+          - pascal.case
+  i2c.dac.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Configuration of one named digital-to-analog converter on a GridWorks
+      SCADA board.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.dac.config/000
+        created: '2026-06-17T14:20:00Z'
+        summary: Initial draft (DacName, I2cBus, I2cAddress, DacType, Channels).
+        direct_dependencies:
+          structural:
+          - i2c.dac.type:000
+          - non.negative.int
+          - pascal.case
+          - positive.int
+  i2c.read.bit:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "A request to read a single bit from a device register on a named\
+      \ I\xB2C bus."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.read.bit/000
+        created: '2026-06-22T16:35:00Z'
+        summary: Initial draft (Bus, Address, TriggerId).
+        direct_dependencies:
+          structural:
+          - i2c.bit.address:000
+          - spaceheat.name
+          - uuid4.str
+  i2c.read.reg:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "A request to read a 1- or 2-byte register from a device on a named\
+      \ I\xB2C bus."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.read.reg/000
+        created: '2026-06-22T16:35:00Z'
+        summary: Initial draft (Bus, Address, NumBytes, TriggerId).
+        direct_dependencies:
+          structural:
+          - i2c.reg.address:000
+          - positive.int
+          - spaceheat.name
+          - uuid4.str
+  i2c.reg.address:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "The address of a register on an I\xB2C device (device I\xB2C address\
+      \ + register index)."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.reg.address/000
+        created: '2026-06-22T16:35:00Z'
+        summary: Initial draft (I2cAddress, RegisterIndex).
+        direct_dependencies:
+          structural:
+          - non.negative.int
+  i2c.relay.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "Configuration of one named relay driven through an I\xB2C GPIO expander\
+      \ on a GridWorks SCADA board."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.relay.config/000
+        created: '2026-06-17T14:20:00Z'
+        summary: Initial draft (RelayName, I2cBus, Address, SupportedWiringConfigs,
+          Notes).
+        direct_dependencies:
+          structural:
+          - i2c.bit.address:000
+          - pascal.case
+          - relay.wiring.config:000
+  i2c.result:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "The result of an I\xB2C bus operation, correlated to its request\
+      \ by TriggerId."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.result/000
+        created: '2026-06-22T16:35:00Z'
+        summary: Initial draft (Bus, Operation, Value, Success, Error, UnixTimeMs,
+          TriggerId).
+        direct_dependencies:
+          structural:
+          - i2c.operation:000
+          - non.negative.int
+          - spaceheat.name
+          - utc.milliseconds
+          - uuid4.str
+  i2c.thermistor.interface.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Configuration of a thermistor-reading ADC interface on a GridWorks
+      SCADA board.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.thermistor.interface.config/000
+        created: '2026-06-17T14:20:00Z'
+        summary: Initial draft (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts,
+          SeriesResistanceKOhms).
+        direct_dependencies:
+          structural:
+          - i2c.adc.type:000
+          - non.negative.int
+          - pascal.case
+          - positive.float
+  i2c.write.bit:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "A request to write a single bit to a device register on a named\
+      \ I\xB2C bus."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.write.bit/000
+        created: '2026-06-22T16:35:00Z'
+        summary: Initial draft (Bus, Address, Value, TriggerId).
+        direct_dependencies:
+          structural:
+          - i2c.bit.address:000
+          - non.negative.int
+          - spaceheat.name
+          - uuid4.str
+  i2c.write.reg:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "A request to write a 1- or 2-byte register to a device on a named\
+      \ I\xB2C bus."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.write.reg/000
+        created: '2026-06-22T16:35:00Z'
+        summary: Initial draft (Bus, Address, NumBytes, Value, TriggerId).
+        direct_dependencies:
+          structural:
+          - i2c.reg.address:000
+          - non.negative.int
+          - positive.int
+          - spaceheat.name
+          - uuid4.str
+  gw.native.gpio.pin:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: One named native (on-board) GPIO pin of a GridWorks SCADA board,
+      with its BCM pin number.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.native.gpio.pin/000
+        created: '2026-06-17T14:20:00Z'
+        summary: Initial draft (Name, BcmPin).
+        direct_dependencies:
+          structural:
+          - non.negative.int
+          - pascal.case
   gw1.hvac.zone:
     latest_version: '000'
     owner: gridworks-energy

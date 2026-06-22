@@ -5,7 +5,7 @@ title: "ads111x.based.component.gt"
 type: object
 description: >
   An ADS111x-based multipurpose-sensor component (one installed device instance): thermistor
-  inputs read through ADS111x ADC terminal blocks (the TSnap path). Flat — the shared component
+  inputs read through ADS111x ADC terminal blocks. Flat — the shared component
   fields are spelled out here; ConfigList references the ads channel config by $ref.
 
 properties:

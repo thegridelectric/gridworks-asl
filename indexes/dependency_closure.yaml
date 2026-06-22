@@ -433,6 +433,8 @@ types:
       - gw1.quantity:001
       - gw1.unit:001
       - hz.calc.method:001
+      - i2c.adc.type:000
+      - i2c.dac.type:000
       - relay.closed.or.open:000
       - relay.wiring.config:000
       - spaceheat.telemetry.name:007
@@ -466,6 +468,7 @@ types:
       - electric.meter.device.type.gt:000
       - g.node.gt:004
       - gw.house0.hydronic:000
+      - gw.native.gpio.pin:000
       - gw1.hvac.zone:000
       - gw1.scada.device.type.gt:000
       - gw1.unit.quantity.projection:000
@@ -473,7 +476,13 @@ types:
       - hubitat.gt:000
       - hubitat.poller.component.gt:000
       - hubitat.poller.gt:000
+      - i2c.adc.config:000
+      - i2c.bit.address:000
+      - i2c.bus:000
+      - i2c.dac.config:000
       - i2c.multichannel.dt.relay.component.gt:005
+      - i2c.relay.config:000
+      - i2c.thermistor.interface.config:000
       - maker.api.attribute.gt:000
       - pico.btu.meter.component.gt:001
       - pico.flow.module.component.gt:001
@@ -483,6 +492,14 @@ types:
       - spaceheat.node.gt:302
       - spaceheat.telemetry.quantity.projection:000
       - web.server.component.gt:002
+      versionless_types: []
+  gw.native.gpio.pin:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      - pascal.case
+      types: []
       versionless_types: []
   gw.nolan.layout:
     '000':
@@ -499,6 +516,8 @@ types:
       - gw1.unit:001
       - hz.calc.method:001
       - i2c.adc.channel:000
+      - i2c.adc.type:000
+      - i2c.dac.type:000
       - relay.closed.or.open:000
       - relay.wiring.config:000
       - spaceheat.telemetry.name:007
@@ -508,6 +527,7 @@ types:
       - handle.name
       - left.right.dot
       - non.empty.string
+      - non.negative.int
       - pascal.case
       - positive.float
       - positive.int
@@ -524,12 +544,19 @@ types:
       - electric.meter.component.gt:002
       - electric.meter.device.type.gt:000
       - g.node.gt:004
+      - gw.native.gpio.pin:000
       - gw1.scada.device.type.gt:000
       - gw1.unit.quantity.projection:000
       - gw108.gpio.sensor.component.gt:002
       - gw108.vdc.relay.component.gt:002
+      - i2c.adc.config:000
+      - i2c.bit.address:000
+      - i2c.bus:000
+      - i2c.dac.config:000
       - i2c.multichannel.dt.relay.component.gt:005
+      - i2c.relay.config:000
       - i2c.thermistor.channel.config:001
+      - i2c.thermistor.interface.config:000
       - i2c.thermistor.reader.component.gt:002
       - pico.btu.meter.component.gt:001
       - pico.tank.module.component.gt:012
@@ -548,11 +575,24 @@ types:
       versionless_types: []
   gw1.scada.device.type.gt:
     '000':
-      enums: []
+      enums:
+      - i2c.adc.type:000
+      - i2c.dac.type:000
+      - relay.wiring.config:000
+      - spaceheat.telemetry.name:007
       formats:
+      - non.negative.int
       - pascal.case
+      - positive.float
       - positive.int
-      types: []
+      types:
+      - gw.native.gpio.pin:000
+      - i2c.adc.config:000
+      - i2c.bit.address:000
+      - i2c.bus:000
+      - i2c.dac.config:000
+      - i2c.relay.config:000
+      - i2c.thermistor.interface.config:000
       versionless_types: []
   gw1.simple.sim.layout:
     '000':
@@ -738,6 +778,41 @@ types:
       types:
       - maker.api.attribute.gt:000
       versionless_types: []
+  i2c.adc.config:
+    '000':
+      enums:
+      - i2c.adc.type:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.int
+      types: []
+      versionless_types: []
+  i2c.bit.address:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      types: []
+      versionless_types: []
+  i2c.bus:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      - pascal.case
+      types: []
+      versionless_types: []
+  i2c.dac.config:
+    '000':
+      enums:
+      - i2c.dac.type:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.int
+      types: []
+      versionless_types: []
   i2c.multichannel.dt.relay.component.gt:
     '002':
       enums:
@@ -800,6 +875,55 @@ types:
       types:
       - relay.actor.config:003
       versionless_types: []
+  i2c.read.bit:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - i2c.bit.address:000
+      versionless_types: []
+  i2c.read.reg:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - i2c.reg.address:000
+      versionless_types: []
+  i2c.reg.address:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      types: []
+      versionless_types: []
+  i2c.relay.config:
+    '000':
+      enums:
+      - relay.wiring.config:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      types:
+      - i2c.bit.address:000
+      versionless_types: []
+  i2c.result:
+    '000':
+      enums:
+      - i2c.operation:000
+      formats:
+      - non.negative.int
+      - spaceheat.name
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
   i2c.thermistor.channel.config:
     '001':
       enums:
@@ -808,6 +932,16 @@ types:
       formats:
       - positive.int
       - spaceheat.name
+      types: []
+      versionless_types: []
+  i2c.thermistor.interface.config:
+    '000':
+      enums:
+      - i2c.adc.type:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.float
       types: []
       versionless_types: []
   i2c.thermistor.reader.component.gt:
@@ -837,6 +971,27 @@ types:
       - uuid4.str
       types:
       - i2c.thermistor.channel.config:001
+      versionless_types: []
+  i2c.write.bit:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - i2c.bit.address:000
+      versionless_types: []
+  i2c.write.reg:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - i2c.reg.address:000
       versionless_types: []
   keyparam.change.log:
     '000':
