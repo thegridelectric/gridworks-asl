@@ -39,6 +39,16 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "I2cAddress": 32,
+      "RegisterIndex": 2,
+      "BitIndex": 1,
+      "TypeName": "i2c.bit.address",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
   extended_description: >
