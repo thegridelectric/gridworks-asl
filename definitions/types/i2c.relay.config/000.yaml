@@ -52,5 +52,25 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "RelayName": "BufferTop",
+      "I2cBus": "DefaultBus",
+      "Address": {
+        "I2cAddress": 33,
+        "RegisterIndex": 2,
+        "BitIndex": 1,
+        "TypeName": "i2c.bit.address",
+        "Version": "000"
+      },
+      "SupportedWiringConfigs": [
+        "NormallyOpen"
+      ],
+      "Notes": "Upper buffer element",
+      "TypeName": "i2c.relay.config",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

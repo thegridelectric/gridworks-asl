@@ -50,5 +50,17 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "DacName": "Zones",
+      "I2cBus": "DefaultBus",
+      "I2cAddress": 96,
+      "DacType": "Mcp4728",
+      "Channels": 4,
+      "TypeName": "i2c.dac.config",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

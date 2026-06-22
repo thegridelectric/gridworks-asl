@@ -50,5 +50,17 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "Name": "CtAdc",
+      "I2cBus": "DefaultBus",
+      "I2cAddress": 72,
+      "AdcType": "Ads1115",
+      "Channels": 4,
+      "TypeName": "i2c.adc.config",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"

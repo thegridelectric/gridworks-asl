@@ -57,5 +57,18 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "Name": "ThermistorAdc",
+      "I2cBus": "DefaultBus",
+      "I2cAddress": 73,
+      "AdcType": "Ads1115",
+      "AdcReferenceVolts": 3.3,
+      "SeriesResistanceKOhms": 5.65,
+      "TypeName": "i2c.thermistor.interface.config",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
