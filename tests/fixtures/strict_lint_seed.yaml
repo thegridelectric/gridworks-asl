@@ -1,0 +1,61 @@
+# strict_lint_seed.yaml
+#
+# Committed seed fixture for tests/test_snapshot_strict_lint.py. The strict-lint
+# regression guard needs a seed that exercises the generator paths that once
+# raised LintGateError (the scada.params 004->005 nested-upgrade loop, the
+# legacy GwStrEnum index API, and the unused `Any` import on typed-map types).
+# The repo-root seed_request.yaml is a gitignored local artifact, so it is not
+# available in a fresh checkout; this fixture pins the same production targets so
+# the guard runs everywhere.
+#
+# initial_targets may contain only types and enums. Formats are never listed
+# directly; they are pulled in through type dependencies.
+
+initial_targets:
+  types:
+    report.event:
+      versions: ["002","003"]
+    layout.lite:
+      include_all_versions: true
+    glitch:
+      include_all_versions: true
+    flo.params.house0:
+      include_all_versions: true
+    gridworks.event.problem:
+      include_all_versions: true
+    power.watts:
+      include_all_versions: true
+    heating.forecast:
+      include_all_versions: true
+    weather.forecast:
+      include_all_versions: true
+    weather:
+      include_all_versions: true
+    energy.instruction:
+      include_all_versions: true
+    new.command.tree:
+      include_all_versions: true
+    snapshot.spaceheat:
+      include_all_versions: true
+    scada.params:
+      include_all_versions: true
+    ticklist.reed.report:
+      include_all_versions: true
+    ticklist.hall.report:
+      include_all_versions: true
+    report:
+      include_all_versions: true
+    atn.bid:
+      include_all_versions: true
+    latest.price:
+      include_all_versions: true
+
+  enums:
+    gw1.main.auto.state: {}
+    gw1.lc.top.state: {}
+    gw1.leaf.ally.all.tanks.state: {}
+    gw1.leaf.ally.buffer.only.state: {}
+    gw1.local.control.all.tanks.state: {}
+    gw1.local.control.buffer.only.state: {}
+    gw1.local.control.standby.top.state: {}
+    market.type.name: {}
