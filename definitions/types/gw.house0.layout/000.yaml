@@ -3661,11 +3661,14 @@ x-gridworks:
         ShNodes SHALL include the primary-scada (s), ltn, leaf-ally (la), local-control (lc) and
         derived-generator nodes.
     - number: 3
-      name: "ZoneWhitewirePwrChannel"
+      name: "ZoneHeatCallChannel"
       statement: >
-        For each zone at 1-based index i in Hydronic.Zones, a channel named
-        "zone{i}-{Zone.Name}-whitewire-pwr" (lowercased) SHALL exist in the union of DataChannels
-        and DerivedChannels.
+        For each zone at 1-based index i in Hydronic.Zones, a DerivedChannel named
+        "zone{i}-{Zone.Name}-heat-call" (lowercased) with Strategy "heat-call" SHALL exist, and a
+        source DataChannel SHALL exist for that zone — either "zone{i}-{Zone.Name}-whitewire-pwr"
+        (power-sourced, e.g. an eGauge whitewire reading) or "zone{i}-{Zone.Name}-opto-input"
+        (opto-sourced, e.g. a gw108 reading the thermostat opto-coupler). The choice of source is
+        per-zone.
     - number: 4
       name: "PrimaryFlowSourceChannelAgreement"
       statement: >
