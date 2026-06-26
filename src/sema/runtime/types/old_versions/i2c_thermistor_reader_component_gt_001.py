@@ -5,9 +5,11 @@ from sema.runtime.enums import TempCalcMethod
 from sema.runtime.property_format import PositiveFloat
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.i2c_thermistor_channel_config import I2cThermistorChannelConfig
 from sema.runtime.types.i2c_thermistor_reader_component_gt import (
     I2cThermistorReaderComponentGt,
+)
+from sema.runtime.types.old_versions.i2c_thermistor_channel_config_001 import (
+    I2cThermistorChannelConfig001,
 )
 
 
@@ -16,7 +18,7 @@ class I2cThermistorReaderComponentGt001(SemaType):
 
     component_id: UUID4Str
     component_attribute_class_id: UUID4Str
-    config_list: list[I2cThermistorChannelConfig]
+    config_list: list[I2cThermistorChannelConfig001]
     display_name: str | None = None
     hw_uid: str | None = None
     bus: SpaceheatName

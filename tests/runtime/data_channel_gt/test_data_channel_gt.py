@@ -6,7 +6,7 @@ from sema.runtime.types.data_channel_gt import DataChannelGt
 
 
 def test_data_channel_gt_latest_version_is_002() -> None:
-    assert DataChannelGt.version_value() == "002"
+    assert DataChannelGt.version_value() == "003"
 
 
 def test_default_v001_upgrades_to_latest() -> None:
@@ -17,7 +17,7 @@ def test_default_v001_upgrades_to_latest() -> None:
 
     assert isinstance(decoded, DataChannelGt)
     assert decoded.type_name == "data.channel.gt"
-    assert decoded.version == "002"
+    assert decoded.version == "003"
 
 
 def test_default_v002_loads_as_data_channel_gt() -> None:
@@ -28,4 +28,4 @@ def test_default_v002_loads_as_data_channel_gt() -> None:
 
     assert isinstance(decoded, DataChannelGt)
     assert decoded.type_name == "data.channel.gt"
-    assert decoded.version == "002"
+    assert decoded.version == "003"

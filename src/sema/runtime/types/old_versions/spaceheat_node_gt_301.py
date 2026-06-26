@@ -6,7 +6,7 @@ from sema.runtime.property_format import HandleName
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
+from sema.runtime.types.old_versions.spaceheat_node_gt_302 import SpaceheatNodeGt302
 
 
 class SpaceheatNodeGt301(SemaType):
@@ -88,10 +88,10 @@ class SpaceheatNodeGt301(SemaType):
             )
         return self
 
-    def upgrade(self) -> SpaceheatNodeGt:
+    def upgrade(self) -> SpaceheatNodeGt302:
         """
         - ActorClass: gw1.actor.class:011 -> 012
         """
         data = self.model_dump()
         data["version"] = "302"
-        return SpaceheatNodeGt.model_validate(data)
+        return SpaceheatNodeGt302.model_validate(data)

@@ -45,7 +45,7 @@ class NewCommandTree000(SemaType):
         return self
 
     def upgrade(self) -> NewCommandTree:
-        """- ShNodes: spaceheat.node.gt:302 only (drop the multi-version oneOf anti-pattern)"""
+        """- ShNodes: spaceheat.node.gt:303 only (drop the multi-version oneOf anti-pattern)"""
         data = self.model_dump()
         lifted: list[SpaceheatNodeGt] = []
         for node in self.sh_nodes:

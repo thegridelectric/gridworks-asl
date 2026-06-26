@@ -3,7 +3,7 @@ from sema.runtime.base import SemaType
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.gw108_vdc_relay_component_gt import Gw108VdcRelayComponentGt
-from sema.runtime.types.relay_actor_config import RelayActorConfig
+from sema.runtime.types.old_versions.relay_actor_config_003 import RelayActorConfig003
 
 
 class Gw108VdcRelayComponentGt001(SemaType):
@@ -11,7 +11,7 @@ class Gw108VdcRelayComponentGt001(SemaType):
 
     component_id: UUID4Str
     component_attribute_class_id: UUID4Str
-    config_list: list[RelayActorConfig]
+    config_list: list[RelayActorConfig003]
     gpio_pin: PositiveInt
     display_name: str | None = None
     hw_uid: str | None = None

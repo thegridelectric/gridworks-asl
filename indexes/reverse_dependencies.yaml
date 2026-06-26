@@ -3,7 +3,7 @@
 
 types:
   ads.channel.config:
-    '000':
+    '001':
       used_by:
       - ads111x.based.component.gt:000
   ads111x.based.component.gt:
@@ -19,19 +19,21 @@ types:
     '000':
       used_by:
       - gw108.gpio.sensor.component.gt:001
+      - pico.btu.meter.component.gt:000
+      - pico.flow.module.component.gt:000
+      - pico.tank.module.component.gt:011
+      - sim.pico.tank.module.component.gt:000
+      - web.server.component.gt:001
+    '001':
+      used_by:
       - gw108.gpio.sensor.component.gt:002
       - hubitat.component.gt:000
       - hubitat.poller.component.gt:000
-      - pico.btu.meter.component.gt:000
       - pico.btu.meter.component.gt:001
-      - pico.flow.module.component.gt:000
       - pico.flow.module.component.gt:001
-      - pico.tank.module.component.gt:011
       - pico.tank.module.component.gt:012
-      - sim.pico.tank.module.component.gt:000
       - sim.pico.tank.module.component.gt:001
       - sim.sensor.component.gt:000
-      - web.server.component.gt:001
       - web.server.component.gt:002
   channel.readings:
     '002':
@@ -53,12 +55,15 @@ types:
       - scada.control.capabilities:001
     '002':
       used_by:
-      - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
+    '003':
+      used_by:
+      - gw.house0.layout:000
       - layout.lite:015
+      - scada.control.capabilities:002
   derived.channel.gt:
     '000':
       used_by:
@@ -83,17 +88,20 @@ types:
       used_by:
       - gw.house0.layout:000
   dfr.config:
-    '000':
+    '001':
       used_by:
       - dfr.component.gt:000
   egauge.register.config:
     '000':
       used_by:
       - electric.meter.channel.config:000
+      - electric.meter.channel.config:001
   electric.meter.channel.config:
     '000':
       used_by:
       - electric.meter.component.gt:001
+    '001':
+      used_by:
       - electric.meter.component.gt:002
   electric.meter.component.gt:
     '002':
@@ -237,6 +245,7 @@ types:
       - layout.lite:011
       - scada.control.capabilities:000
       - scada.control.capabilities:001
+      - scada.control.capabilities:002
     '003':
       used_by:
       - layout.lite:012
@@ -262,6 +271,8 @@ types:
     '001':
       used_by:
       - i2c.thermistor.reader.component.gt:001
+    '002':
+      used_by:
       - i2c.thermistor.reader.component.gt:002
   i2c.thermistor.interface.config:
     '000':
@@ -329,8 +340,10 @@ types:
     '003':
       used_by:
       - gw108.vdc.relay.component.gt:001
-      - gw108.vdc.relay.component.gt:002
       - i2c.multichannel.dt.relay.component.gt:004
+    '004':
+      used_by:
+      - gw108.vdc.relay.component.gt:002
       - i2c.multichannel.dt.relay.component.gt:005
       - sim.relay.component.gt:000
   report:
@@ -385,15 +398,19 @@ types:
       - new.command.tree:000
     '302':
       used_by:
-      - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:014
+    '303':
+      used_by:
+      - gw.house0.layout:000
       - layout.lite:015
       - new.command.tree:002
+      - scada.control.capabilities:002
   spaceheat.telemetry.quantity.projection:
     '000':
       used_by:
       - data.channel.gt:002
+      - data.channel.gt:003
   ticklist.hall:
     '101':
       used_by:
@@ -421,6 +438,7 @@ enums:
       used_by:
       - relay.actor.config:002
       - relay.actor.config:003
+      - relay.actor.config:004
   fsm.report.type:
     '000':
       used_by:
@@ -467,7 +485,9 @@ enums:
       - spaceheat.node.gt:301
     '012':
       used_by:
+      - scada.control.capabilities:002
       - spaceheat.node.gt:302
+      - spaceheat.node.gt:303
   gw1.emission.method:
     '000':
       used_by:
@@ -477,6 +497,7 @@ enums:
     '000':
       used_by:
       - data.channel.gt:002
+      - data.channel.gt:003
       - gw1.telemetry.name.quantity.projection:000
       - spaceheat.telemetry.quantity.projection:000
     '001':
@@ -527,6 +548,7 @@ enums:
     '000':
       used_by:
       - i2c.thermistor.channel.config:001
+      - i2c.thermistor.channel.config:002
   i2c.adc.type:
     '000':
       used_by:
@@ -567,6 +589,7 @@ enums:
       - machine.states:000
       - relay.actor.config:002
       - relay.actor.config:003
+      - relay.actor.config:004
       - single.machine.state:000
   relay.energization.state:
     '000':
@@ -578,6 +601,7 @@ enums:
       - i2c.relay.config:000
       - relay.actor.config:002
       - relay.actor.config:003
+      - relay.actor.config:004
   spaceheat.make.model:
     '003':
       used_by:
@@ -596,6 +620,7 @@ enums:
       used_by:
       - ads111x.based.device.type.gt:000
       - data.channel.gt:002
+      - data.channel.gt:003
       - electric.meter.cac.gt:001
       - electric.meter.device.type.gt:000
       - gw1.scada.device.type.gt:000
@@ -630,6 +655,7 @@ enums:
     '000':
       used_by:
       - ads.channel.config:000
+      - ads.channel.config:001
 formats:
   handle.name:
     used_by:
@@ -642,6 +668,7 @@ formats:
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - spaceheat.node.gt:302
+    - spaceheat.node.gt:303
   hex.char:
     used_by:
     - heartbeat.a:000
@@ -653,6 +680,7 @@ formats:
     - connectivity.edge.gt:000
     - data.channel.gt:001
     - data.channel.gt:002
+    - data.channel.gt:003
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
@@ -686,12 +714,14 @@ formats:
     - new.command.tree:002
     - relay.actor.config:002
     - relay.actor.config:003
+    - relay.actor.config:004
     - report.event:002
     - report.event:003
     - report:002
     - report:003
     - scada.control.capabilities:000
     - scada.control.capabilities:001
+    - scada.control.capabilities:002
     - scada.params:004
     - scada.params:005
     - send.control.capabilities:000
@@ -720,6 +750,7 @@ formats:
     used_by:
     - relay.actor.config:002
     - relay.actor.config:003
+    - relay.actor.config:004
   non.negative.int:
     used_by:
     - gw.house0.hydronic:000
@@ -736,6 +767,7 @@ formats:
   pascal.case:
     used_by:
     - ads.channel.config:000
+    - ads.channel.config:001
     - ads111x.based.component.gt:000
     - ads111x.based.device.type.gt:000
     - dfr.component.gt:000
@@ -771,15 +803,19 @@ formats:
   positive.int:
     used_by:
     - ads.channel.config:000
+    - ads.channel.config:001
     - ads111x.based.device.type.gt:000
     - channel.config:000
+    - channel.config:001
     - component.attribute.class.gt:001
     - derived.channel.gt:001
     - derived.channel.gt:002
     - dfr.component.gt:000
     - dfr.config:000
+    - dfr.config:001
     - electric.meter.cac.gt:001
     - electric.meter.channel.config:000
+    - electric.meter.channel.config:001
     - electric.meter.component.gt:001
     - electric.meter.component.gt:002
     - electric.meter.device.type.gt:000
@@ -799,6 +835,7 @@ formats:
     - i2c.dac.config:000
     - i2c.read.reg:000
     - i2c.thermistor.channel.config:001
+    - i2c.thermistor.channel.config:002
     - i2c.write.reg:000
     - layout.lite:007
     - layout.lite:008
@@ -813,6 +850,7 @@ formats:
     - pico.tank.module.component.gt:012
     - relay.actor.config:002
     - relay.actor.config:003
+    - relay.actor.config:004
     - report:002
     - report:003
     - sim.pico.tank.module.component.gt:000
@@ -821,6 +859,7 @@ formats:
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - spaceheat.node.gt:302
+    - spaceheat.node.gt:303
     - synth.channel.gt:000
   positive.int.as.str:
     used_by:
@@ -829,17 +868,22 @@ formats:
   spaceheat.name:
     used_by:
     - ads.channel.config:000
+    - ads.channel.config:001
     - channel.config:000
+    - channel.config:001
     - channel.readings.list.item:000
     - channel.readings:001
     - channel.readings:002
     - data.channel.gt:001
     - data.channel.gt:002
+    - data.channel.gt:003
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
     - dfr.config:000
+    - dfr.config:001
     - electric.meter.channel.config:000
+    - electric.meter.channel.config:001
     - fsm.full.report:000
     - fsm.full.report:001
     - glitch:000
@@ -851,6 +895,7 @@ formats:
     - i2c.read.reg:000
     - i2c.result:000
     - i2c.thermistor.channel.config:001
+    - i2c.thermistor.channel.config:002
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
     - i2c.write.bit:000
@@ -862,6 +907,7 @@ formats:
     - pico.flow.module.component.gt:001
     - relay.actor.config:002
     - relay.actor.config:003
+    - relay.actor.config:004
     - scada.control.capabilities:000
     - scada.params:004
     - scada.params:005
@@ -873,6 +919,7 @@ formats:
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - spaceheat.node.gt:302
+    - spaceheat.node.gt:303
     - synced.readings.bundle:001
     - synced.readings:000
     - synth.channel.gt:000
@@ -916,6 +963,7 @@ formats:
     - report:003
     - scada.control.capabilities:000
     - scada.control.capabilities:001
+    - scada.control.capabilities:002
     - scada.params:004
     - scada.params:005
     - send.control.capabilities:000
@@ -933,6 +981,7 @@ formats:
     used_by:
     - data.channel.gt:001
     - data.channel.gt:002
+    - data.channel.gt:003
     - energy.instruction:000
     - flo.params.house0:003
     - flo.params.house0:004
@@ -954,6 +1003,7 @@ formats:
     - connectivity.edge.gt:000
     - data.channel.gt:001
     - data.channel.gt:002
+    - data.channel.gt:003
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
@@ -1028,6 +1078,7 @@ formats:
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - spaceheat.node.gt:302
+    - spaceheat.node.gt:303
     - synth.channel.gt:000
     - weather.forecast:000
     - web.server.component.gt:001

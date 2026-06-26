@@ -6,7 +6,7 @@ from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
-from sema.runtime.types.relay_actor_config import RelayActorConfig
+from sema.runtime.types.old_versions.relay_actor_config_003 import RelayActorConfig003
 
 
 class I2cMultichannelDtRelayComponentGt004(SemaType):
@@ -14,7 +14,7 @@ class I2cMultichannelDtRelayComponentGt004(SemaType):
 
     component_id: UUID4Str
     component_attribute_class_id: UUID4Str
-    config_list: list[RelayActorConfig]
+    config_list: list[RelayActorConfig003]
     display_name: str | None = None
     hw_uid: str | None = None
     i2c_bus: SpaceheatName

@@ -7,9 +7,9 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.layout_lite import LayoutLite
+from sema.runtime.types.old_versions.data_channel_gt_002 import DataChannelGt002
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
 from sema.runtime.types.old_versions.gw1_tank_temp_calibration_map_000 import (
     Gw1TankTempCalibrationMap000,
@@ -26,7 +26,7 @@ from sema.runtime.types.old_versions.pico_tank_module_component_gt_011 import (
 from sema.runtime.types.old_versions.sim_pico_tank_module_component_gt_000 import (
     SimPicoTankModuleComponentGt000,
 )
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
+from sema.runtime.types.old_versions.spaceheat_node_gt_302 import SpaceheatNodeGt302
 
 
 class LayoutLite014(SemaType):
@@ -42,8 +42,8 @@ class LayoutLite014(SemaType):
     zone_list: list[str]
     critical_zone_list: list[str]
     total_store_tanks: PositiveInt
-    sh_nodes: list[SpaceheatNodeGt]
-    data_channels: list[DataChannelGt]
+    sh_nodes: list[SpaceheatNodeGt302]
+    data_channels: list[DataChannelGt002]
     derived_channels: list[DerivedChannelGt001]
     tank_module_components: list[
         PicoTankModuleComponentGt011 | SimPicoTankModuleComponentGt000

@@ -10,7 +10,7 @@ from sema.runtime.enums.old_versions.spaceheat_make_model_007 import (
 from sema.runtime.property_format import PositiveFloat
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.channel_config import ChannelConfig
+from sema.runtime.types.old_versions.channel_config_000 import ChannelConfig000
 from sema.runtime.types.pico_btu_meter_component_gt import PicoBtuMeterComponentGt
 
 
@@ -19,7 +19,7 @@ class PicoBtuMeterComponentGt000(SemaType):
 
     component_id: UUID4Str
     component_attribute_class_id: UUID4Str
-    config_list: list[ChannelConfig]
+    config_list: list[ChannelConfig000]
     enabled: bool
     serial_number: str
     flow_channel_name: SpaceheatName

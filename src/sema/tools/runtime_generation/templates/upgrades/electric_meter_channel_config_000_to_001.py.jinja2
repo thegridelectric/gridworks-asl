@@ -1,0 +1,10 @@
+    def upgrade(self) -> {{ electric_meter_channel_config_001_class_name }}:
+        """
+        - Unit: drop (redundant; unit and scaling are carried by channel identity)
+        - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+        """
+        data = self.model_dump()
+        del data["unit"]
+        del data["exponent"]
+        data["version"] = "001"
+        return {{ electric_meter_channel_config_001_class_name }}.model_validate(data)

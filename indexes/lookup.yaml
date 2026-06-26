@@ -17,9 +17,10 @@
 
 types:
   ads.channel.config:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/ads.channel.config/001.yaml
       '000': definitions/types/ads.channel.config/000.yaml
   ads111x.based.component.gt:
     latest_version: '000'
@@ -42,9 +43,10 @@ types:
     versions:
       '000': definitions/types/bid/000.yaml
   channel.config:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/channel.config/001.yaml
       '000': definitions/types/channel.config/000.yaml
   channel.readings:
     latest_version: '002'
@@ -68,9 +70,10 @@ types:
     versions:
       '000': definitions/types/connectivity.edge.gt/000.yaml
   data.channel.gt:
-    latest_version: '002'
+    latest_version: '003'
     versioning_strategy: literal
     versions:
+      '003': definitions/types/data.channel.gt/003.yaml
       '002': definitions/types/data.channel.gt/002.yaml
       '001': definitions/types/data.channel.gt/001.yaml
   derived.channel.gt:
@@ -86,9 +89,10 @@ types:
     versions:
       '000': definitions/types/dfr.component.gt/000.yaml
   dfr.config:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/dfr.config/001.yaml
       '000': definitions/types/dfr.config/000.yaml
   egauge.register.config:
     latest_version: '000'
@@ -101,9 +105,10 @@ types:
     versions:
       '001': definitions/types/electric.meter.cac.gt/001.yaml
   electric.meter.channel.config:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/electric.meter.channel.config/001.yaml
       '000': definitions/types/electric.meter.channel.config/000.yaml
   electric.meter.component.gt:
     latest_version: '002'
@@ -341,9 +346,10 @@ types:
     versions:
       '000': definitions/types/i2c.result/000.yaml
   i2c.thermistor.channel.config:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/i2c.thermistor.channel.config/002.yaml
       '001': definitions/types/i2c.thermistor.channel.config/001.yaml
   i2c.thermistor.interface.config:
     latest_version: '000'
@@ -450,9 +456,10 @@ types:
     versions:
       '001': definitions/types/price.quantity.unitless/001.yaml
   relay.actor.config:
-    latest_version: '003'
+    latest_version: '004'
     versioning_strategy: literal
     versions:
+      '004': definitions/types/relay.actor.config/004.yaml
       '003': definitions/types/relay.actor.config/003.yaml
       '002': definitions/types/relay.actor.config/002.yaml
   report:
@@ -468,9 +475,10 @@ types:
       '003': definitions/types/report.event/003.yaml
       '002': definitions/types/report.event/002.yaml
   scada.control.capabilities:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/scada.control.capabilities/002.yaml
       '001': definitions/types/scada.control.capabilities/001.yaml
       '000': definitions/types/scada.control.capabilities/000.yaml
   scada.params:
@@ -542,9 +550,10 @@ types:
     versions:
       '003': definitions/types/snapshot.spaceheat/003.yaml
   spaceheat.node.gt:
-    latest_version: '302'
+    latest_version: '303'
     versioning_strategy: literal
     versions:
+      '303': definitions/types/spaceheat.node.gt/303.yaml
       '302': definitions/types/spaceheat.node.gt/302.yaml
       '301': definitions/types/spaceheat.node.gt/301.yaml
       '300': definitions/types/spaceheat.node.gt/300.yaml

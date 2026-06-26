@@ -9,7 +9,7 @@ from sema.runtime.property_format import UUID4Str
 
 
 class SpaceheatNodeGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/spaceheat.node.gt/302"""
+    """Sema: https://schemas.electricity.works/types/spaceheat.node.gt/303"""
 
     name: SpaceheatName
     actor_hierarchy_name: HandleName | None = None
@@ -19,29 +19,16 @@ class SpaceheatNodeGt(SemaType):
     component_id: UUID4Str | None = None
     board_component_id: UUID4Str | None = None
     nameplate_power_w: PositiveInt | None = None
-    in_power_metering: bool | None = None
     sh_node_id: UUID4Str
     type_name: Literal["spaceheat.node.gt"] = "spaceheat.node.gt"
-    version: Literal["302"] = "302"
+    version: Literal["303"] = "303"
 
     model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "SpaceheatNodeGt":
         """
-        Axiom 1: InPowerMeteringRequiresNameplate
-        If InPowerMetering is true, NameplatePowerW SHALL be present.
-        """
-        if self.in_power_metering and self.nameplate_power_w is None:
-            raise ValueError(
-                "Axiom 1 failed: nameplate_power_w is required when in_power_metering is true."
-            )
-        return self
-
-    @model_validator(mode="after")
-    def check_axiom_2(self) -> "SpaceheatNodeGt":
-        """
-        Axiom 2: ActorHierarchyConstraints
+        Axiom 1: ActorHierarchyConstraints
         If ActorClass is "NoActor", ActorHierarchyName SHALL be absent. If ActorClass is not
         "NoActor" and ActorHierarchyName is absent, then ActorClass SHALL be "PrimaryScada"
         or "SecondaryScada". If ActorHierarchyName is present, its final segment SHALL equal
@@ -50,7 +37,7 @@ class SpaceheatNodeGt(SemaType):
         if self.actor_class == Gw1ActorClass.NoActor:
             if self.actor_hierarchy_name is not None:
                 raise ValueError(
-                    "Axiom 2 failed: actor_hierarchy_name must be absent when actor_class is NoActor."
+                    "Axiom 1 failed: actor_hierarchy_name must be absent when actor_class is NoActor."
                 )
             return self
 
@@ -60,21 +47,21 @@ class SpaceheatNodeGt(SemaType):
                 Gw1ActorClass.SecondaryScada,
             }:
                 raise ValueError(
-                    "Axiom 2 failed: only PrimaryScada or SecondaryScada may omit actor_hierarchy_name."
+                    "Axiom 1 failed: only PrimaryScada or SecondaryScada may omit actor_hierarchy_name."
                 )
             return self
 
         segments = self.actor_hierarchy_name.split(".")
         if segments[-1] != self.name or len(set(segments)) != len(segments):
             raise ValueError(
-                "Axiom 2 failed: actor_hierarchy_name must end with name and have unique segments."
+                "Axiom 1 failed: actor_hierarchy_name must end with name and have unique segments."
             )
         return self
 
     @model_validator(mode="after")
-    def check_axiom_3(self) -> "SpaceheatNodeGt":
+    def check_axiom_2(self) -> "SpaceheatNodeGt":
         """
-        Axiom 3: HandleConstraints
+        Axiom 2: HandleConstraints
         If Handle is present, its final segment SHALL equal Name and all segments SHALL be
         unique.
         """
@@ -83,6 +70,6 @@ class SpaceheatNodeGt(SemaType):
         segments = self.handle.split(".")
         if segments[-1] != self.name or len(set(segments)) != len(segments):
             raise ValueError(
-                "Axiom 3 failed: handle must end with name and have unique segments."
+                "Axiom 2 failed: handle must end with name and have unique segments."
             )
         return self

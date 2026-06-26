@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ spaceheat_node_gt_303_class_name }}:
+        """
+        - InPowerMetering: drop (routing is owned by the consuming transactive declaration, not the node)
+        - InPowerMeteringRequiresNameplate axiom: drop
+        """
+        data = self.model_dump()
+        data.pop("in_power_metering", None)
+        data["version"] = "303"
+        return {{ spaceheat_node_gt_303_class_name }}.model_validate(data)

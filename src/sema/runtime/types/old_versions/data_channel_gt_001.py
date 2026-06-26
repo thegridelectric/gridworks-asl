@@ -9,7 +9,7 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UTCSeconds
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.data_channel_gt import DataChannelGt
+from sema.runtime.types.old_versions.data_channel_gt_002 import DataChannelGt002
 from sema.runtime.types.spaceheat_telemetry_quantity_projection import (
     SpaceheatTelemetryQuantityProjection,
 )
@@ -45,7 +45,7 @@ class DataChannelGt001(SemaType):
             )
         return self
 
-    def upgrade(self) -> DataChannelGt:
+    def upgrade(self) -> DataChannelGt002:
         """
         - Quantity: add
         - TelemetryName: spaceheat.telemetry.name:006 -> 007
@@ -59,4 +59,4 @@ class DataChannelGt001(SemaType):
             upgraded_telemetry_name
         )
         data["version"] = "002"
-        return DataChannelGt.model_validate(data)
+        return DataChannelGt002.model_validate(data)

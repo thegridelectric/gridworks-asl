@@ -4,7 +4,7 @@ from sema.runtime.base import SemaType
 from sema.runtime.enums import TempCalcMethod
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.channel_config import ChannelConfig
+from sema.runtime.types.old_versions.channel_config_000 import ChannelConfig000
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 
 
@@ -13,7 +13,7 @@ class PicoTankModuleComponentGt011(SemaType):
 
     component_id: UUID4Str
     component_attribute_class_id: UUID4Str
-    config_list: list[ChannelConfig]
+    config_list: list[ChannelConfig000]
     display_name: str | None = None
     hw_uid: str | None = None
     enabled: bool

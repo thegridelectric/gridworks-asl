@@ -2,8 +2,10 @@ from typing import Literal
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.electric_meter_channel_config import ElectricMeterChannelConfig
 from sema.runtime.types.electric_meter_component_gt import ElectricMeterComponentGt
+from sema.runtime.types.old_versions.electric_meter_channel_config_000 import (
+    ElectricMeterChannelConfig000,
+)
 
 
 class ElectricMeterComponentGt001(SemaType):
@@ -11,7 +13,7 @@ class ElectricMeterComponentGt001(SemaType):
 
     component_id: UUID4Str
     component_attribute_class_id: UUID4Str
-    config_list: list[ElectricMeterChannelConfig]
+    config_list: list[ElectricMeterChannelConfig000]
     modbus_host: str | None = None
     modbus_port: PositiveInt | None = None
     display_name: str | None = None

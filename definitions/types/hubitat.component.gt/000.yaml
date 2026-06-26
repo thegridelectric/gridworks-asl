@@ -30,7 +30,7 @@ properties:
   ConfigList:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/channel.config/000"
+      $ref: "https://schemas.electricity.works/types/channel.config/001"
     description: >
       Channel configurations for this component (empty in practice for a hub).
 
@@ -77,10 +77,8 @@ examples:
           "ChannelName": "scada",
           "CapturePeriodS": 1,
           "AsyncCapture": false,
-          "Exponent": 0,
-          "Unit": "Unknown",
           "TypeName": "channel.config",
-          "Version": "000"
+          "Version": "001"
         }
       ],
       "TypeName": "hubitat.component.gt",

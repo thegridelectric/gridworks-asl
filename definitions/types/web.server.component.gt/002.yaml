@@ -23,7 +23,7 @@ properties:
   ConfigList:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/channel.config/000"
+      $ref: "https://schemas.electricity.works/types/channel.config/001"
     description: >
       Always empty — a web server produces no telemetry channels. Present only
       because the shared component shape requires a ConfigList (enforced empty by

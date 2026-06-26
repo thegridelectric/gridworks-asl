@@ -1,0 +1,10 @@
+    def upgrade(self) -> {{ relay_actor_config_004_class_name }}:
+        """
+        - Unit: drop (redundant; unit and scaling are carried by channel identity)
+        - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+        """
+        data = self.model_dump()
+        del data["unit"]
+        del data["exponent"]
+        data["version"] = "004"
+        return {{ relay_actor_config_004_class_name }}.model_validate(data)

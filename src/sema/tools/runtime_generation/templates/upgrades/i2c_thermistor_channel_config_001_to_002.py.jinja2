@@ -1,0 +1,10 @@
+    def upgrade(self) -> {{ i2c_thermistor_channel_config_002_class_name }}:
+        """
+        - Unit: drop (redundant; unit and scaling are carried by channel identity)
+        - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+        """
+        data = self.model_dump()
+        del data["unit"]
+        del data["exponent"]
+        data["version"] = "002"
+        return {{ i2c_thermistor_channel_config_002_class_name }}.model_validate(data)

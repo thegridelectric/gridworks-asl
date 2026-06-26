@@ -2,7 +2,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, StrictInt
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.channel_config import ChannelConfig
+from sema.runtime.types.old_versions.channel_config_000 import ChannelConfig000
 from sema.runtime.types.web_server_component_gt import WebServerComponentGt
 
 
@@ -25,7 +25,7 @@ class WebServerComponentGt001(SemaType):
 
     component_id: UUID4Str
     component_attribute_class_id: UUID4Str
-    config_list: list[ChannelConfig]
+    config_list: list[ChannelConfig000]
     web_server: WebServer
     display_name: str | None = None
     hw_uid: str | None = None

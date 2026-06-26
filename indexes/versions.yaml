@@ -4,9 +4,13 @@
 
 types:
   ads.channel.config:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
       "000":
         summary: "Initial Sema version (flattened from the scada AdsChannelConfig runtime; ThermistorMakeModel -> ThermistorDeviceType)."
 
@@ -39,9 +43,13 @@ types:
         summary: "Initial Sema version"
 
   channel.config:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
       "000":
         summary: "Initial Sema version"
 
@@ -78,9 +86,13 @@ types:
         summary: "Initial Sema version"
 
   data.channel.gt:
-    latest_version: "002"
+    latest_version: "003"
     versioning_strategy: "literal"
     versions:
+      "003":
+        summary: >
+          - InPowerMetering: drop (metering is declared by the consuming transactive channel, not here)
+          - PowerMeteringConstraint axiom: drop
       "002":
         summary: >
           - Quantity: add
@@ -116,9 +128,13 @@ types:
         summary: "Initial Sema version (flattened from the scada DfrComponentGt runtime)."
 
   dfr.config:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
       "000":
         summary: "Initial Sema version (flattened from the scada DfrConfig runtime)."
 
@@ -137,9 +153,13 @@ types:
         summary: "Initial Sema version (flattened from the scada ElectricMeterCacGt runtime)."
 
   electric.meter.channel.config:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
       "000":
         summary: "Initial Sema version (flattened from the scada ElectricMeterChannelConfig runtime)."
 
@@ -515,9 +535,13 @@ types:
         summary: "Initial draft (Bus, Operation, Value, Success, Error, UnixTimeMs, TriggerId)."
 
   i2c.thermistor.channel.config:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
       "001":
         summary: "Initial Sema version. Starts at 001 to match the only version ever emitted in the field; the never-emitted sema 000 was dropped."
 
@@ -641,7 +665,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "002":
-        summary: "- ShNodes: spaceheat.node.gt:302 only (drop the multi-version oneOf anti-pattern)"
+        summary: "- ShNodes: spaceheat.node.gt:303 only (drop the multi-version oneOf anti-pattern)"
       "000":
         summary: "Initial Sema version"
 
@@ -698,9 +722,13 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   relay.actor.config:
-    latest_version: "003"
+    latest_version: "004"
     versioning_strategy: "literal"
     versions:
+      "004":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
       "003":
         summary: "- AsyncCaptureDelta: require when AsyncCapture is true"
       "002":
@@ -727,9 +755,14 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   scada.control.capabilities:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: >
+          - RelayNodes[]: spaceheat.node.gt:300 -> 303
+          - DacNodes[]: spaceheat.node.gt:300 -> 303
+          - ControlChannels[]: data.channel.gt:001 -> 003
       "001":
         summary: >
           - RelayNodes[]: inline object -> spaceheat.node.gt:300
@@ -842,9 +875,13 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   spaceheat.node.gt:
-    latest_version: "302"
+    latest_version: "303"
     versioning_strategy: "literal"
     versions:
+      "303":
+        summary: >
+          - InPowerMetering: drop (routing is owned by the consuming transactive declaration, not the node)
+          - InPowerMeteringRequiresNameplate axiom: drop
       "302":
         summary: "- ActorClass: gw1.actor.class:011 -> 012"
       "301":

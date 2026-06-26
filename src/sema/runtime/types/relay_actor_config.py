@@ -1,10 +1,9 @@
 from typing import Literal
-from pydantic import StrictInt, model_validator
+from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import ChangeRelayState
 from sema.runtime.enums import RelayClosedOrOpen
 from sema.runtime.enums import RelayWiringConfig
-from sema.runtime.enums import SpaceheatUnit
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import NonEmptyString
 from sema.runtime.property_format import PositiveInt
@@ -12,15 +11,13 @@ from sema.runtime.property_format import SpaceheatName
 
 
 class RelayActorConfig(SemaType):
-    """Sema: https://schemas.electricity.works/types/relay.actor.config/003"""
+    """Sema: https://schemas.electricity.works/types/relay.actor.config/004"""
 
     channel_name: SpaceheatName
     poll_period_ms: PositiveInt | None = None
     capture_period_s: PositiveInt
     async_capture: bool
     async_capture_delta: PositiveInt | None = None
-    exponent: StrictInt
-    unit: SpaceheatUnit
     relay_idx: PositiveInt
     actor_name: SpaceheatName
     wiring_config: RelayWiringConfig
@@ -31,7 +28,7 @@ class RelayActorConfig(SemaType):
     de_energized_state: NonEmptyString
     energized_state: NonEmptyString
     type_name: Literal["relay.actor.config"] = "relay.actor.config"
-    version: Literal["003"] = "003"
+    version: Literal["004"] = "004"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "RelayActorConfig":

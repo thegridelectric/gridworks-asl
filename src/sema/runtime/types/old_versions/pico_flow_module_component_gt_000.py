@@ -8,7 +8,7 @@ from sema.runtime.enums.old_versions.spaceheat_make_model_003 import (
 )
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.channel_config import ChannelConfig
+from sema.runtime.types.old_versions.channel_config_000 import ChannelConfig000
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 
 
@@ -17,7 +17,7 @@ class PicoFlowModuleComponentGt000(SemaType):
 
     component_id: UUID4Str
     component_attribute_class_id: UUID4Str
-    config_list: list[ChannelConfig]
+    config_list: list[ChannelConfig000]
     display_name: str | None = None
     hw_uid: str | None = None
     enabled: bool

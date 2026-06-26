@@ -1,27 +1,27 @@
 from typing import Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
-from sema.runtime.enums.old_versions.gw1_actor_class_009 import Gw1ActorClass009
+from sema.runtime.enums import Gw1ActorClass
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UTCMilliseconds
-from sema.runtime.types.old_versions.data_channel_gt_001 import DataChannelGt001
+from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
     I2cMultichannelDtRelayComponentGt002,
 )
-from sema.runtime.types.old_versions.spaceheat_node_gt_300 import SpaceheatNodeGt300
+from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 
 
 class ScadaControlCapabilities(SemaType):
-    """Sema: https://schemas.electricity.works/types/scada.control.capabilities/001"""
+    """Sema: https://schemas.electricity.works/types/scada.control.capabilities/002"""
 
     from_g_node_alias: LeftRightDot
     message_created_ms: UTCMilliseconds
-    relay_nodes: list[SpaceheatNodeGt300]
-    dac_nodes: list[SpaceheatNodeGt300]
-    control_channels: list[DataChannelGt001]
+    relay_nodes: list[SpaceheatNodeGt]
+    dac_nodes: list[SpaceheatNodeGt]
+    control_channels: list[DataChannelGt]
     i2c_relay_component: I2cMultichannelDtRelayComponentGt002
     type_name: Literal["scada.control.capabilities"] = "scada.control.capabilities"
-    version: Literal["001"] = "001"
+    version: Literal["002"] = "002"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "ScadaControlCapabilities":
@@ -31,12 +31,12 @@ class ScadaControlCapabilities(SemaType):
         b. All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.
         """
         for node in self.relay_nodes:
-            if node.actor_class != Gw1ActorClass009.Relay:
+            if node.actor_class != Gw1ActorClass.Relay:
                 raise ValueError(
                     "Axiom 1 failed: every relay_nodes actor_class must be Relay."
                 )
         for node in self.dac_nodes:
-            if node.actor_class != Gw1ActorClass009.ZeroTenOutputer:
+            if node.actor_class != Gw1ActorClass.ZeroTenOutputer:
                 raise ValueError(
                     "Axiom 1 failed: every dac_nodes actor_class must be ZeroTenOutputer."
                 )

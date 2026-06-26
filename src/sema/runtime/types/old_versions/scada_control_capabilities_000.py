@@ -8,7 +8,9 @@ from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
     I2cMultichannelDtRelayComponentGt002,
 )
-from sema.runtime.types.scada_control_capabilities import ScadaControlCapabilities
+from sema.runtime.types.old_versions.scada_control_capabilities_001 import (
+    ScadaControlCapabilities001,
+)
 
 
 class RelayNodesItem(BaseModel):
@@ -58,7 +60,7 @@ class ScadaControlCapabilities000(SemaType):
     type_name: Literal["scada.control.capabilities"] = "scada.control.capabilities"
     version: Literal["000"] = "000"
 
-    def upgrade(self) -> ScadaControlCapabilities:
+    def upgrade(self) -> ScadaControlCapabilities001:
         """
         - RelayNodes[]: inline object -> spaceheat.node.gt:300
         - DacNodes[]: inline object -> spaceheat.node.gt:300
@@ -67,7 +69,7 @@ class ScadaControlCapabilities000(SemaType):
         """
         raise SemaType.upgrade_requires_context(
             "ScadaControlCapabilities000 cannot be upgraded to "
-            "ScadaControlCapabilities without the source "
+            "ScadaControlCapabilities001 without the source "
             "layout context needed to supply SpaceheatNodeGt.Handle, "
             "SpaceheatNodeGt.ShNodeId, DataChannelGt.Id, and related channel fields."
         )
