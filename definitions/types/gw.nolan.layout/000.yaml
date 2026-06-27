@@ -109,5 +109,17 @@ additionalProperties: false
 x-gridworks:
   owner: "gridworks-energy"
 
+  axioms:
+    - number: 1
+      name: "TransactivePowerChannel"
+      statement: >
+        DerivedChannels SHALL contain exactly one channel whose Strategy is "transactive-power" —
+        the metered transactive boundary, computed by the power-meter actor (not the
+        derived-generator). Each name in that channel's InputChannelNames SHALL resolve to an
+        existing DataChannel with TelemetryName "PowerW", and the AboutNode of each such DataChannel
+        SHALL carry a NameplatePowerW. (The metered set is declared once here, replacing the former
+        per-node InPowerMetering flag; the NameplatePowerW obligation folds in spaceheat.node.gt's
+        retired InPowerMetering-requires-nameplate axiom.)
+
   extended_description: >
     TODO: add Nolan specific information (e.g. radiant floor heating, Gw108).
