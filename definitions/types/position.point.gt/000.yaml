@@ -78,9 +78,21 @@ x-gridworks:
     intentionally restricts this type to a single latitude/longitude pair
     to provide a deterministic and minimal spatial anchor for coordination.
 
-    Position accuracy is not prescribed by this type. The microdegree
-    representation provides sufficient precision to distinguish
-    distribution-level assets (e.g., residential footprints, poles,
-    transformers, substations). The actual positional accuracy of a
-    PositionPoint depends entirely on the source of the underlying
-    geographic data.
+    Position accuracy is prescribed by intent rather than by a stored
+    measurement: a PositionPoint SHALL identify the GNode it locates to
+    within the footprint of that GNode's building (a house-scale bound,
+    on the order of tens of metres). The microdegree representation
+    provides ample precision for this; the obligation falls on the data
+    source, certified by a TaValidator at the GNode's certification.
+
+    A PositionPoint is immutable. Its location anchors the GNode's TaDeed
+    and TaTradingRights, so a corrected position is not an in-place edit
+    but a re-certification: a new validated GNodeGt, the home re-visited
+    by a TaValidator, with a reputation consequence for a validator who
+    certified a wrong location. A merely mis-recorded coordinate is
+    replaced by retiring the point and attaching a new one; a node whose
+    physical identity was mis-determined is itself retired.
+
+    A recorded per-fix accuracy (e.g. an R95 horizontal-uncertainty
+    radius) is intentionally omitted here; it is expected to be added
+    alongside the TaValidator / deed machinery when a consumer exists.

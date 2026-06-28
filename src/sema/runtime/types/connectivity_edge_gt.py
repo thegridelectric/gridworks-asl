@@ -2,7 +2,6 @@ from typing import Literal, Self
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import GNodeStatus
-from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UUID4Str
 
 
@@ -12,8 +11,6 @@ class ConnectivityEdgeGt(SemaType):
     id: UUID4Str
     from_g_node_id: UUID4Str
     to_g_node_id: UUID4Str
-    from_g_node_alias: LeftRightDot
-    to_g_node_alias: LeftRightDot
     status: GNodeStatus
     type_name: Literal["connectivity.edge.gt"] = "connectivity.edge.gt"
     version: Literal["000"] = "000"

@@ -677,7 +677,6 @@ formats:
     - atn.bid:002
     - bid:000
     - channel.readings.list.item:000
-    - connectivity.edge.gt:000
     - data.channel.gt:001
     - data.channel.gt:002
     - data.channel.gt:003

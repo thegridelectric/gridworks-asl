@@ -41,20 +41,6 @@ properties:
       Unique identifier of the downstream GNode in the directed relationship.
       This node is the target of the positive reference direction.
 
-  FromGNodeAlias:
-    $ref: "https://schemas.electricity.works/formats/left.right.dot"
-    description: >
-      Canonical alias of the upstream GNode. Provided for readability,
-      registry lookup, and human interpretability. MUST correspond to
-      FromGNodeId.
-
-  ToGNodeAlias:
-    $ref: "https://schemas.electricity.works/formats/left.right.dot"
-    description: >
-      Canonical alias of the downstream GNode. Provided for readability,
-      registry lookup, and human interpretability. MUST correspond to
-      ToGNodeId.
-
   Status:
     $ref: "https://schemas.electricity.works/enums/g.node.status/000"
     description: >
@@ -79,8 +65,6 @@ required:
   - Id
   - FromGNodeId
   - ToGNodeId
-  - FromGNodeAlias
-  - ToGNodeAlias
   - Status
   - TypeName
   - Version
@@ -93,8 +77,6 @@ examples:
       "Id": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
       "FromGNodeId": "86f3c021-e217-4197-b55f-547a7ab88c30",
       "ToGNodeId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-      "FromGNodeAlias": "d1.isone.me.versant.keene",
-      "ToGNodeAlias": "d1.isone.me.versant.keene.beech",
       "Status": "Active",
       "TypeName": "connectivity.edge.gt",
       "Version": "000"
@@ -116,6 +98,15 @@ x-gridworks:
     downstream connectivity node). In these cases, the directed edge
     makes explicit the physical copper relationship already implied by
     the structural topology.
+
+    An edge identifies its endpoints by GNodeId only. GNode aliases are
+    intentionally NOT carried on the edge: an alias is mutable (it is
+    rewritten when a subtree re-parents), whereas a GNodeId is immutable.
+    Storing the alias would oblige every rename to rewrite every incident
+    edge and would create an edge-vs-GNode consistency burden; instead the
+    current alias of an endpoint is derived by looking up its GNodeId in
+    the registry. An edge is retired and a new one created when topology
+    changes, never mutated in place.
 
     However, real distribution systems may contain tie-lines, loops,
     and alternate routing paths. The graph formed by ConnectivityEdge
