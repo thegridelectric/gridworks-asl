@@ -609,7 +609,6 @@ types:
         direct_dependencies:
           structural:
           - g.node.status:000
-          - left.right.dot
           - uuid4.str
   data.channel.gt:
     latest_version: '002'
