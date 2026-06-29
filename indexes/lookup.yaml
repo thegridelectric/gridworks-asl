@@ -162,6 +162,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/g.node.instance.gt/000.yaml
+  g.node.reparent.cmd:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/g.node.reparent.cmd/000.yaml
+  g.node.topology.broadcast:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/g.node.topology.broadcast/000.yaml
   glitch:
     latest_version: '000'
     versioning_strategy: literal

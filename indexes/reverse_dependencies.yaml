@@ -131,6 +131,8 @@ types:
   g.node.gt:
     '004':
       used_by:
+      - g.node.reparent.cmd:000
+      - g.node.topology.broadcast:000
       - gw.house0.layout:000
       - gw.nolan.layout:000
   gw.house0.hydronic:
@@ -1022,6 +1024,7 @@ formats:
     - fsm.full.report:001
     - g.node.gt:004
     - g.node.instance.gt:000
+    - g.node.reparent.cmd:000
     - gridworks.event.problem:001
     - gw108.gpio.sensor.component.gt:001
     - gw108.gpio.sensor.component.gt:002

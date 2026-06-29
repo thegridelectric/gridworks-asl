@@ -423,6 +423,28 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  g.node.reparent.cmd:
+    '000':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types:
+      - g.node.gt:004
+      versionless_types: []
+  g.node.topology.broadcast:
+    '000':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types:
+      - g.node.gt:004
+      versionless_types: []
   glitch:
     '000':
       enums:
