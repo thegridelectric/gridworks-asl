@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/draft/types/g.node.reparent.cmd/000"
+$id: "https://schemas.electricity.works/types/g.node.reparent.cmd/000"
 
 title: "g.node.reparent.cmd"
 type: object

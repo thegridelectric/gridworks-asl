@@ -1125,10 +1125,9 @@ types:
 
     versions:
       "000":
-        schema_url: "https://schemas.electricity.works/draft/types/g.node.reparent.cmd/000"
+        schema_url: "https://schemas.electricity.works/types/g.node.reparent.cmd/000"
         created: "2026-06-29T04:50:00Z"
         summary: "Initial Sema version"
-        status: "draft"
         direct_dependencies:
           structural:
             - "g.node.gt:004"
@@ -1142,10 +1141,9 @@ types:
 
     versions:
       "000":
-        schema_url: "https://schemas.electricity.works/draft/types/g.node.topology.broadcast/000"
+        schema_url: "https://schemas.electricity.works/types/g.node.topology.broadcast/000"
         created: "2026-06-29T04:50:00Z"
         summary: "Initial Sema version"
-        status: "draft"
         direct_dependencies:
           structural:
             - "g.node.gt:004"
