@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-06-29T04:50:00Z'
+  last_updated: '2026-06-29T19:40:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -698,6 +698,23 @@ types:
           - market.quantity.unit:000
           - market.slot.name
           - price.quantity.unitless:001
+  capture.tuning:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Per-channel telemetry capture/report tuning (operational-params),
+      authored apart from the static hardware layout.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/capture.tuning/000
+        created: '2026-06-29T19:40:00Z'
+        summary: "Initial Sema version \u2014 the per-channel capture params (CapturePeriodS,\
+          \ AsyncCapture, AsyncCaptureDelta, PollPeriodMs) extracted from the channel-config\
+          \ family into operational-params."
+        direct_dependencies:
+          structural:
+          - positive.int
+          - spaceheat.name
   channel.config:
     latest_version: '001'
     owner: gridworks-energy

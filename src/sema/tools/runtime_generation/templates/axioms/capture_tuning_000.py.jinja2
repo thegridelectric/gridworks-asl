@@ -1,0 +1,24 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ capture_tuning_000_class_name }}":
+        """
+        Axiom 1: CaptureAndPollingConsistency
+        a. If PollPeriodMs is present, CapturePeriodS*1000 SHALL be greater than PollPeriodMs.
+        b. If PollPeriodMs is present and CapturePeriodS*1000 is less than 10*PollPeriodMs,
+           then CapturePeriodS*1000 SHALL be an integer multiple of PollPeriodMs.
+        """
+        if self.poll_period_ms is not None:
+            capture_ms = self.capture_period_s * 1000
+            if not capture_ms > self.poll_period_ms:
+                raise ValueError(
+                    "Axiom 1 (CaptureAndPollingConsistency) failed: CapturePeriodMs "
+                    "must be larger than PollPeriodMs."
+                )
+            if (
+                capture_ms < 10 * self.poll_period_ms
+                and capture_ms % self.poll_period_ms != 0
+            ):
+                raise ValueError(
+                    "Axiom 1 (CaptureAndPollingConsistency) failed: CapturePeriodMs "
+                    "must be a multiple of PollPeriodMs."
+                )
+        return self

@@ -806,6 +806,7 @@ formats:
     - ads.channel.config:000
     - ads.channel.config:001
     - ads111x.based.device.type.gt:000
+    - capture.tuning:000
     - channel.config:000
     - channel.config:001
     - component.attribute.class.gt:001
@@ -870,6 +871,7 @@ formats:
     used_by:
     - ads.channel.config:000
     - ads.channel.config:001
+    - capture.tuning:000
     - channel.config:000
     - channel.config:001
     - channel.readings.list.item:000

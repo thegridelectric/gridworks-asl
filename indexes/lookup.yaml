@@ -42,6 +42,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/bid/000.yaml
+  capture.tuning:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/capture.tuning/000.yaml
   channel.config:
     latest_version: '001'
     versioning_strategy: literal

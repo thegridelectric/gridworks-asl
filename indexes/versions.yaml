@@ -42,6 +42,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  capture.tuning:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version — the per-channel capture params (CapturePeriodS, AsyncCapture, AsyncCaptureDelta, PollPeriodMs) extracted from the channel-config family into operational-params."
+
   channel.config:
     latest_version: "001"
     versioning_strategy: "literal"

@@ -3,6 +3,7 @@ from sema.runtime.types.ads111x_based_device_type_gt import Ads111xBasedDeviceTy
 from sema.runtime.types.ads_channel_config import AdsChannelConfig
 from sema.runtime.types.atn_bid import AtnBid
 from sema.runtime.types.bid import Bid
+from sema.runtime.types.capture_tuning import CaptureTuning
 from sema.runtime.types.channel_config import ChannelConfig
 from sema.runtime.types.channel_readings import ChannelReadings
 from sema.runtime.types.channel_readings_list_item import ChannelReadingsListItem
@@ -131,6 +132,7 @@ __all__ = [
     "AdsChannelConfig",
     "AtnBid",
     "Bid",
+    "CaptureTuning",
     "ChannelConfig",
     "ChannelReadings",
     "ChannelReadingsListItem",
