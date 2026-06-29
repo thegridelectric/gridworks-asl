@@ -58,6 +58,11 @@ types:
       used_by:
       - report:002
       - report:003
+  g.node.gt:
+    '004':
+      used_by:
+      - g.node.reparent.cmd:000
+      - g.node.topology.broadcast:000
   gw1.tank.temp.calibration:
     '000':
       used_by:
@@ -610,6 +615,7 @@ formats:
     - fsm.full.report:001
     - g.node.gt:004
     - g.node.instance.gt:000
+    - g.node.reparent.cmd:000
     - gridworks.event.problem:001
     - heating.forecast:000
     - i2c.multichannel.dt.relay.component.gt:002

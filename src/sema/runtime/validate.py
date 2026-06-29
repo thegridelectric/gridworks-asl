@@ -26,7 +26,9 @@ class ValidationResult:
     error: str | None = None
 
 
-def validate(data: dict | str | bytes, *, expected_type: str | None = None) -> ValidationResult:
+def validate(
+    data: dict | str | bytes, *, expected_type: str | None = None
+) -> ValidationResult:
     """Validate `data` (a dict or JSON text) against the Sema vocabulary.
 
     Returns a `ValidationResult`. On success, `type_name`/`version` reflect the
@@ -53,4 +55,6 @@ def validate(data: dict | str | bytes, *, expected_type: str | None = None) -> V
         return ValidationResult(ok=True, type_name=type_name, version=version)
     except Exception as e:  # noqa: BLE001 — report any decode/validation failure
         tn = parsed.get("TypeName") if isinstance(parsed, dict) else None
-        return ValidationResult(ok=False, type_name=tn, error=f"{type(e).__name__}: {e}")
+        return ValidationResult(
+            ok=False, type_name=tn, error=f"{type(e).__name__}: {e}"
+        )

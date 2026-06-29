@@ -1,0 +1,61 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/g.node.reparent.cmd/000"
+
+title: "g.node.reparent.cmd"
+type: object
+description: >
+  Command to re-parent a subtree in the Grid Node Registry. A new node N is
+  introduced downstream of an existing node, and one or more of that node's
+  children re-parent beneath N. The registry computes the recursive descendant
+  alias rewrite and the connectivity-edge changes and applies them atomically.
+
+properties:
+
+  NewNode:
+    $ref: "https://schemas.electricity.works/types/g.node.gt/004"
+    description: >
+      The new GNode N being introduced. Its Alias places it in the topology;
+      the named children re-parent beneath it.
+
+  MovedChildGNodeIds:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      GNodeIds of the existing children that re-parent under NewNode. Each moved
+      child, and every descendant, has its Alias recursively rewritten.
+
+  TypeName:
+    const: "g.node.reparent.cmd"
+
+  Version:
+    const: "000"
+
+required:
+  - NewNode
+  - MovedChildGNodeIds
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "NewNode": {
+        "GNodeId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        "Alias": "d1.isone.me.versant.keene.sub5",
+        "BaseClass": "ConnectivityNode",
+        "GNodeClass": "ConnectivityNode",
+        "Status": "Active",
+        "PositionPointId": "198ca6af-5a4b-43a2-a8a9-7546deabc731",
+        "TypeName": "g.node.gt",
+        "Version": "004"
+      },
+      "MovedChildGNodeIds": ["dcb05390-5bca-40ef-b63d-7908ccb33d9b"],
+      "TypeName": "g.node.reparent.cmd",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

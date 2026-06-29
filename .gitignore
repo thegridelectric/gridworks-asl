@@ -1,4 +1,9 @@
 seed_request.yaml
+# Per-consumer snapshot build tooling — lives in the consumer repo, not sema
+# (e.g. build_gnr_snapshot.sh + gnr_seed_request.yaml in grid-node-registry);
+# when run from a sema checkout it leaves these stray artifacts behind.
+*_seed_request.yaml
+build_*_snapshot.sh
 # Python-generated files
 __pycache__/
 *.py[oc]

@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-06-12T00:00:00Z'
+  last_updated: '2026-06-29T04:50:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -882,6 +882,35 @@ types:
           - g.node.instance.transport:000
           - utc.milliseconds
           - uuid4.str
+  g.node.reparent.cmd:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'Command to re-parent a subtree in the Grid Node Registry: introduce
+      a new node N and re-parent one or more children beneath it.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/g.node.reparent.cmd/000
+        created: '2026-06-29T04:50:00Z'
+        summary: Initial Sema version
+        direct_dependencies:
+          structural:
+          - g.node.gt:004
+          - uuid4.str
+  g.node.topology.broadcast:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'Broadcast of a Grid Node Registry topology change: the affected
+      subtree as updated GNodes carrying their new aliases.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/g.node.topology.broadcast/000
+        created: '2026-06-29T04:50:00Z'
+        summary: Initial Sema version
+        direct_dependencies:
+          structural:
+          - g.node.gt:004
   glitch:
     latest_version: '000'
     owner: gridworks-energy
