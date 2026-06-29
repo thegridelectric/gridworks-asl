@@ -5,6 +5,22 @@ generates a runtime **without** axiom validators (per hardware-layout-pass-one �
 now, axioms implemented later). To re-enable, drop this block back under `x-gridworks:` in
 `000.yaml`. Markdown (not yaml) so sema tooling/tests skip it.
 
+This is the reference list of structural axioms we march through for **many** layouts
+(house0, nolan, …). Two pass-one revisions to the channel↔component cluster below — apply them
+when porting, don't re-enable the stale forms verbatim:
+
+- **`ComponentConfigListExistence` is dropped.** A component carries a `ConfigList` only when it has
+  per-channel hardware binding (ADS terminal blocks, eGauge registers, thermistor types). A no-binding
+  component (relay multiplexer, flow module, pico tank/flow/btu, gw108 gpio, hubitat, web server) has
+  **no `ConfigList`** — a bare `{ChannelName}` list is information-free redundancy. The bare base
+  `channel.config` type is **removed** entirely; only the specialty `*.channel.config` types remain.
+- **`ComponentDataChannelBijection` (global `C == D`) is revised** to a **per-component local bijection**
+  (only for components that *have* a `ConfigList`), composing with `ChannelCaptureConsistency`.
+- **`CaptureNodeHasComponent` is added** (below, after `ChannelBindingIntegrity`) to recover the
+  "captured by a real component" guarantee the dropped global bijection used to give for free. The
+  by-*kind* capability check (the component is a *kind* that can capture the channel) stays **deferred to
+  pass-two** with the i2c board model — see the `DEFERRED (pass-2)` marker below.
+
 ```yaml
   axioms:
     - number: 1
@@ -286,8 +302,28 @@ now, axioms implemented later). To re-enable, drop this block back under `x-grid
             - The Name field SHALL be unique across the union of all
               DataChannels and DerivedChannels.
     - number:
+      name: "CaptureNodeHasComponent"
+      statement: >
+        For each DataChannel, if CapturedByNodeName is present, the ShNode with
+        Name equal to CapturedByNodeName SHALL have a non-null ComponentId.
+        (Composes with ComponentReferenceIntegrity, which requires that ComponentId
+        to resolve to a real Component — so together: a captured channel is bound to
+        a real, hardware-bearing component.)
+        DerivedChannels are EXEMPT: they carry CreatedByNodeName (a derived-generator,
+        legitimately component-less), not a capturer.
+        NOTE (pass-1 scope): this is the STRUCTURAL "real component" guarantee only.
+        The SEMANTIC "right KIND of component" guarantee (a thermistor reads a temp,
+        a flow module a flow, a meter power) is the DEFERRED (pass-2) capability axiom
+        below.
+    - number:
       name: "ComponentDataChannelBijection"
       statement: >
+        REVISED (pass-1) — global C == D no longer holds, because a component carries
+        a ConfigList only when it has per-channel hardware binding. The live form is a
+        PER-COMPONENT LOCAL bijection: for a component that HAS a ConfigList, its set of
+        ChannelName values SHALL equal exactly the set of Names of DataChannels whose
+        CapturedByNodeName is that component's node. (Original global form kept below for
+        reference; do not re-enable verbatim.)
         Let C be the set of all ChannelName values appearing in the ConfigList
         of all components.
         Let D be the set of all Name values of DataChannels.
@@ -299,6 +335,19 @@ now, axioms implemented later). To re-enable, drop this block back under `x-grid
         then for each such ChannelName:
           Let DC be the DataChannel with Name equal to ChannelName.
           - DC.CapturedByNodeName SHALL equal N.Name.    
+    - number:
+      name: "CapturerComponentKindCapability"
+      statement: >
+        DEFERRED (pass-2) — the capturer↔channel CAPABILITY axiom. Goes live with the
+        i2c board model. Intent: a DataChannel SHALL be captured only by a node whose
+        component is of a KIND able to produce that channel's quantity — a temperature
+        by a thermistor/ADS sensor, a flow by a flow module, power by an electric meter,
+        a relay state by a relay component. Requires a channel-kind ↔ component-kind
+        capability map, which the board-resident decomposition reorganizes, so it is NOT
+        encoded this pass. Pass-1 enforces only the structural CaptureNodeHasComponent
+        ("a real component"); this adds the semantic "the RIGHT KIND of component". The
+        right altitude until then: require the semantic channel (about-node + unit), stay
+        silent on the hardware that produces it.
     - number: 
       name: "RelayBoardConfigBijection"
       statement: >
