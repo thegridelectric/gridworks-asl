@@ -55,9 +55,18 @@ class AdsChannelConfig000(SemaType):
         """
         - Unit: drop (redundant; unit and scaling are carried by channel identity)
         - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+        - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop
+          (capture/report tuning moved to operational-params capture.tuning)
         """
         data = self.model_dump()
         del data["unit"]
         del data["exponent"]
+        for key in (
+            "capture_period_s",
+            "async_capture",
+            "async_capture_delta",
+            "poll_period_ms",
+        ):
+            data.pop(key, None)
         data["version"] = "001"
         return AdsChannelConfig.model_validate(data)

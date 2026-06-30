@@ -255,7 +255,6 @@ types:
     '001':
       enums: []
       formats:
-      - positive.int
       - spaceheat.name
       types:
       - egauge.register.config:000

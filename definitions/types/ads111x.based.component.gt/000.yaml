@@ -69,8 +69,6 @@ examples:
       "ConfigList": [
         {
           "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
           "TerminalBlockIdx": 1,
           "ThermistorDeviceType": "MakeModel",
           "TypeName": "ads.channel.config",
@@ -83,7 +81,6 @@ examples:
       "TypeName": "ads111x.based.component.gt",
       "Version": "000"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
 

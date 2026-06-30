@@ -817,7 +817,6 @@ formats:
     - dfr.config:001
     - electric.meter.cac.gt:001
     - electric.meter.channel.config:000
-    - electric.meter.channel.config:001
     - electric.meter.component.gt:001
     - electric.meter.component.gt:002
     - electric.meter.device.type.gt:000

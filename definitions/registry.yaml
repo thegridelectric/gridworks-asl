@@ -709,6 +709,7 @@ types:
         summary: >-
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
         direct_dependencies:
           structural:
             - "pascal.case"
@@ -1062,6 +1063,7 @@ types:
         summary: >-
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
         direct_dependencies:
           structural:
             - "positive.int"
@@ -1123,10 +1125,10 @@ types:
         summary: >-
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
         direct_dependencies:
           structural:
             - "egauge.register.config:000"
-            - "positive.int"
             - "spaceheat.name"
       "000":
         schema_url: "https://schemas.electricity.works/types/electric.meter.channel.config/000"
@@ -2255,6 +2257,7 @@ types:
         summary: >-
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
         direct_dependencies:
           structural:
             - "i2c.adc.channel:000"
@@ -2862,6 +2865,7 @@ types:
         summary: >-
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
         direct_dependencies:
           structural:
             - "left.right.dot"

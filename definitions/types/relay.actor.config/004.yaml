@@ -9,37 +9,15 @@ description: >
 
   A relay.actor.config binds a specific relay index on a relay component to a
   named actor and declares the event/state semantics associated with energizing
-  and de-energizing that relay. The config also carries the channel capture
-  settings required to report the relay-controlled actor's state into the
-  telemetry system.
+  and de-energizing that relay. It carries only the per-channel hardware binding
+  and relay semantics; capture/report tuning for the relay-state channel lives in
+  operational-params (capture.tuning), not in the static layout.
 
 properties:
   ChannelName:
     $ref: "https://schemas.electricity.works/formats/spaceheat.name"
     description: >
       Name of the telemetry channel associated with this relay actor.
-
-  PollPeriodMs:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      Polling period in milliseconds used to check the relay state.
-
-  CapturePeriodS:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      Period in seconds for periodic capture of the relay state channel.
-
-  AsyncCapture:
-    type: boolean
-    description: >
-      If true, state changes SHALL be captured asynchronously in addition to
-      periodic capture.
-
-  AsyncCaptureDelta:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      Minimum change required to trigger asynchronous capture. For relay-backed
-      state channels this is typically 1.
 
   RelayIdx:
     $ref: "https://schemas.electricity.works/formats/positive.int"
@@ -95,8 +73,6 @@ properties:
 
 required:
   - ChannelName
-  - CapturePeriodS
-  - AsyncCapture
   - RelayIdx
   - ActorName
   - WiringConfig
@@ -115,16 +91,12 @@ examples:
   - |
     {
       "ActorName": "relay17",
-      "AsyncCapture": true,
-      "AsyncCaptureDelta": 1,
-      "CapturePeriodS": 300,
       "ChannelName": "zone1-down-failsafe-relay17",
       "DeEnergizedState": "RelayClosed",
       "DeEnergizingEvent": "CloseRelay",
       "EnergizedState": "RelayOpen",
       "EnergizingEvent": "OpenRelay",
       "EventType": "change.relay.state",
-      "PollPeriodMs": 200,
       "RelayIdx": 17,
       "StateType": "relay.closed.or.open",
       "TypeName": "relay.actor.config",
@@ -137,33 +109,20 @@ x-gridworks:
 
   axioms:
     - number: 1
-      name: "AsyncCaptureConsistency"
-      statement: >
-        If AsyncCapture is true, then AsyncCaptureDelta SHALL be present.
-
-    - number: 2
-      name: "CapturePollingConsistency"
-      statement: >
-        If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS *
-        1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less
-        than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple
-        of PollPeriodMs.
-
-    - number: 3
       name: "RelayEventEnumConsistency"
       statement: >
         If EventType equals "change.relay.state", then DeEnergizingEvent and
         EnergizingEvent SHALL both be valid values of
         change.relay.state:000.
 
-    - number: 4
+    - number: 2
       name: "RelayStateEnumConsistency"
       statement: >
         If StateType equals "relay.closed.or.open", then DeEnergizedState and
         EnergizedState SHALL both be valid values of
         relay.closed.or.open:000.
 
-    - number: 5
+    - number: 3
       name: "RelayEventStateMatch"
       statement: >
         If EventType equals "change.relay.state" and StateType equals
@@ -175,8 +134,8 @@ x-gridworks:
           - EnergizingEvent "OpenRelay" SHALL imply EnergizedState "RelayOpen"
 
   extended_description: >
-    relay.actor.config specializes generic channel capture configuration for
-    relay-backed actors in hydronic control systems.
+    relay.actor.config specializes per-channel hardware binding for relay-backed
+    actors in hydronic control systems.
 
     This type binds one relay position on a relay board to a specific actor and
     declares the event/state semantics associated with switching that relay.

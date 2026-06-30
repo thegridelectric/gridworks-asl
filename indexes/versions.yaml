@@ -11,6 +11,7 @@ types:
         summary: >
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
       "000":
         summary: "Initial Sema version (flattened from the scada AdsChannelConfig runtime; ThermistorMakeModel -> ThermistorDeviceType)."
 
@@ -142,6 +143,7 @@ types:
         summary: >
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
       "000":
         summary: "Initial Sema version (flattened from the scada DfrConfig runtime)."
 
@@ -167,6 +169,7 @@ types:
         summary: >
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
       "000":
         summary: "Initial Sema version (flattened from the scada ElectricMeterChannelConfig runtime)."
 
@@ -563,6 +566,7 @@ types:
         summary: >
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
       "001":
         summary: "Initial Sema version. Starts at 001 to match the only version ever emitted in the field; the never-emitted sema 000 was dropped."
 
@@ -750,6 +754,7 @@ types:
         summary: >
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
       "003":
         summary: "- AsyncCaptureDelta: require when AsyncCapture is true"
       "002":

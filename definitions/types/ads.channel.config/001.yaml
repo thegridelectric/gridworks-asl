@@ -6,33 +6,14 @@ type: object
 description: >
   Channel configuration for one thermistor input read through an ADS111x ADC terminal block.
 
-  This type spells out the base channel-configuration fields together with the ADS terminal
-  block index, the thermistor device type, and an optional data-processing method.
+  This type spells out the channel name together with the ADS terminal block index, the
+  thermistor device type, and an optional data-processing method. It carries only the
+  per-channel hardware binding; capture/report tuning lives in operational-params
+  (capture.tuning), not in the static layout.
 
 properties:
   ChannelName:
     $ref: "https://schemas.electricity.works/formats/spaceheat.name"
-
-  PollPeriodMs:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      How often SCADA polls the underlying hardware device or source for a
-      fresh value, in milliseconds.
-
-  CapturePeriodS:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      How often SCADA reports or emits the channel value into the telemetry
-      stream, in seconds.
-
-  AsyncCapture:
-    type: boolean
-
-  AsyncCaptureDelta:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      Optional threshold for asynchronous emission, expressed in the channel's
-      serialized integer reading units.
 
   TerminalBlockIdx:
     $ref: "https://schemas.electricity.works/formats/positive.int"
@@ -64,8 +45,6 @@ properties:
 
 required:
   - ChannelName
-  - CapturePeriodS
-  - AsyncCapture
   - TerminalBlockIdx
   - ThermistorDeviceType
   - TypeName
@@ -77,8 +56,6 @@ examples:
   - |
     {
       "ChannelName": "scada",
-      "CapturePeriodS": 1,
-      "AsyncCapture": false,
       "TerminalBlockIdx": 1,
       "ThermistorDeviceType": "MakeModel",
       "TypeName": "ads.channel.config",
@@ -87,11 +64,3 @@ examples:
 
 x-gridworks:
   owner: "gridworks-energy"
-
-  axioms:
-    - number: 1
-      name: "CaptureAndPollingConsistency"
-      statement: >
-        If PollPeriodMs exists, then CapturePeriodMs (CapturePeriodS * 1000) must be
-        larger than PollPeriodMs. If CapturePeriodMs is less than 10 * PollPeriodMs,
-        then CapturePeriodMs must be a multiple of PollPeriodMs.

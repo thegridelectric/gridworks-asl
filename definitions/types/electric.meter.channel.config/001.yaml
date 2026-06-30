@@ -5,34 +5,15 @@ title: "electric.meter.channel.config"
 type: object
 description: >
   Per-channel configuration for one telemetry channel read from an electric meter.
-  Flat — it spells out the shared channel-config fields (it does not inherit a base
-  config type) and adds the optional EGauge modbus register mapping for meters read
-  over modbus.
+  Flat — it spells out the channel name and the optional EGauge modbus register mapping
+  for meters read over modbus. It carries only the per-channel hardware binding;
+  capture/report tuning lives in operational-params (capture.tuning), not in the static
+  layout.
 
 properties:
 
   ChannelName:
     $ref: "https://schemas.electricity.works/formats/spaceheat.name"
-
-  PollPeriodMs:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      How often SCADA polls the meter for a fresh value, in milliseconds.
-
-  CapturePeriodS:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      How often SCADA reports this channel value into the telemetry stream, in
-      seconds.
-
-  AsyncCapture:
-    type: boolean
-
-  AsyncCaptureDelta:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      Threshold for asynchronous emission, expressed in the channel's serialized
-      integer reading units.
 
   EgaugeRegisterConfig:
     $ref: "https://schemas.electricity.works/types/egauge.register.config/000"
@@ -48,8 +29,6 @@ properties:
 
 required:
   - ChannelName
-  - CapturePeriodS
-  - AsyncCapture
   - TypeName
   - Version
 
@@ -59,8 +38,6 @@ examples:
   - |
     {
       "ChannelName": "scada",
-      "CapturePeriodS": 1,
-      "AsyncCapture": false,
       "TypeName": "electric.meter.channel.config",
       "Version": "001"
     }

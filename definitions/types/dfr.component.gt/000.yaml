@@ -67,8 +67,6 @@ examples:
       "ConfigList": [
         {
           "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
           "OutputIdx": 1,
           "InitialVoltsTimes100": 0,
           "TypeName": "dfr.config",
@@ -81,7 +79,6 @@ examples:
       "TypeName": "dfr.component.gt",
       "Version": "000"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
   axioms:

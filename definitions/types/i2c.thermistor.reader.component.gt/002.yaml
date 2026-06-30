@@ -84,8 +84,6 @@ examples:
       "ConfigList": [
         {
           "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
           "AdcChannel": "P0",
           "SendToDerived": false,
           "ThermistorBeta": 1,
@@ -101,7 +99,6 @@ examples:
       "TypeName": "i2c.thermistor.reader.component.gt",
       "Version": "002"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
   axioms:

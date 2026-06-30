@@ -62,8 +62,6 @@ examples:
       "ConfigList": [
         {
           "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
           "RelayIdx": 1,
           "ActorName": "scada",
           "WiringConfig": "NormallyClosed",
@@ -81,7 +79,6 @@ examples:
       "TypeName": "gw108.vdc.relay.component.gt",
       "Version": "002"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
   axioms:

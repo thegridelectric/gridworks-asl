@@ -70,8 +70,6 @@ examples:
       "ConfigList": [
         {
           "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
           "TypeName": "electric.meter.channel.config",
           "Version": "001"
         }
@@ -79,7 +77,6 @@ examples:
       "TypeName": "electric.meter.component.gt",
       "Version": "002"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
   axioms:
