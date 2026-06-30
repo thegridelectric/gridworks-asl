@@ -6,7 +6,6 @@ from sema.runtime.enums import HzCalcMethod
 from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.channel_config import ChannelConfig
 
 
 class PicoFlowModuleComponentGt(SemaType):
@@ -14,7 +13,6 @@ class PicoFlowModuleComponentGt(SemaType):
 
     component_id: UUID4Str
     device_type: PascalCase
-    config_list: list[ChannelConfig]
     display_name: str | None = None
     hw_uid: str | None = None
     enabled: bool
@@ -43,21 +41,7 @@ class PicoFlowModuleComponentGt(SemaType):
     @model_validator(mode="after")
     def check_axiom_1(self) -> "PicoFlowModuleComponentGt":
         """
-        Axiom 1: ChannelNameUniqueness
-        Channel names SHALL be unique across the ConfigList.
-        """
-        channel_names = [config.channel_name for config in self.config_list]
-        if len(channel_names) != len(set(channel_names)):
-            raise ValueError(
-                "Axiom 1 (ChannelNameUniqueness) failed: channel names must be "
-                "unique across the ConfigList."
-            )
-        return self
-
-    @model_validator(mode="after")
-    def check_axiom_2(self) -> "PicoFlowModuleComponentGt":
-        """
-        Axiom 2: HwUidPattern
+        Axiom 1: HwUidPattern
         If HwUid is present, it SHALL match the pattern pico_xxxxxx where xxxxxx consists of
         six lowercase hexadecimal characters.
         """
@@ -68,7 +52,7 @@ class PicoFlowModuleComponentGt(SemaType):
             and re.fullmatch(r"pico_[0-9a-f]{6}", self.hw_uid) is None
         ):
             raise ValueError(
-                "Axiom 2 (HwUidPattern): HwUid SHALL match pico_xxxxxx "
+                "Axiom 1 (HwUidPattern): HwUid SHALL match pico_xxxxxx "
                 "(six lowercase hexadecimal characters)."
             )
         return self

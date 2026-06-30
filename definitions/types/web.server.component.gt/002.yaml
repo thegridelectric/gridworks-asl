@@ -20,15 +20,6 @@ properties:
       string (a `gw1.device.type` value). The hardware layout enforces
       membership in `gw1.device.type`.
 
-  ConfigList:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/types/channel.config/001"
-    description: >
-      Always empty — a web server produces no telemetry channels. Present only
-      because the shared component shape requires a ConfigList (enforced empty by
-      the EmptyConfigList axiom).
-
   WebServer:
     type: object
     description: >
@@ -69,7 +60,6 @@ properties:
 required:
   - ComponentId
   - DeviceType
-  - ConfigList
   - WebServer
   - TypeName
   - Version
@@ -81,7 +71,6 @@ examples:
     {
       "ComponentId": "f7dca1af-d89d-463d-b3ab-a1c1a4fec75b",
       "DeviceType": "AbstractWebServer",
-      "ConfigList": [],
       "WebServer": {
         "Enabled": false,
         "Host": "example",
@@ -92,18 +81,12 @@ examples:
       "TypeName": "web.server.component.gt",
       "Version": "002"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
-  axioms:
-    - number: 1
-      name: "EmptyConfigList"
-      statement: >
-        ConfigList SHALL be empty.
+
   extended_description: >
     This is a bit of a dangler: a web server is a software service, not telemetry
     or actuation hardware, so it produces no channels. It rides the component
-    shape only because the layout references it by ComponentId; its ConfigList is
-    empty by construction (enforced structurally). A cleaner model would move the
-    local-server settings out of the component vocabulary — revisit when the
-    component model is next reworked.
+    shape only because the layout references it by ComponentId. A cleaner model
+    would move the local-server settings out of the component vocabulary — revisit
+    when the component model is next reworked.

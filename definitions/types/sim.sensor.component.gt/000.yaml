@@ -22,13 +22,6 @@ properties:
       (a `gw1.device.type` value, normally `GridworksSimSensor`). The hardware layout
       enforces membership in `gw1.device.type`.
 
-  ConfigList:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/types/channel.config/001"
-    description: >
-      Channel configurations the simulated sensor publishes.
-
   DisplayName:
     type: string
 
@@ -44,7 +37,6 @@ properties:
 required:
   - ComponentId
   - DeviceType
-  - ConfigList
   - TypeName
   - Version
 
@@ -55,23 +47,8 @@ examples:
     {
       "ComponentId": "933106d7-d6d0-4044-8766-627fd8ecb71b",
       "DeviceType": "GridworksSimSensor",
-      "ConfigList": [
-        {
-          "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
-          "TypeName": "channel.config",
-          "Version": "001"
-        }
-      ],
       "TypeName": "sim.sensor.component.gt",
       "Version": "000"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
-  axioms:
-    - number: 1
-      name: "ChannelNameUniqueness"
-      statement: >
-        Channel names SHALL be unique across the ConfigList.

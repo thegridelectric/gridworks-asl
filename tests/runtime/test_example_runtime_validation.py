@@ -49,6 +49,16 @@ VALIDATED_EXAMPLES = [
     ("i2c.multichannel.dt.relay.component.gt", "005"),
     ("i2c.thermistor.reader.component.gt", "002"),
     ("sim.relay.component.gt", "000"),
+    # bare-base components that dropped their ConfigList (channel.config orphaned)
+    ("gw108.gpio.sensor.component.gt", "002"),
+    ("hubitat.component.gt", "000"),
+    ("hubitat.poller.component.gt", "000"),
+    ("pico.btu.meter.component.gt", "001"),
+    ("pico.flow.module.component.gt", "001"),
+    ("pico.tank.module.component.gt", "012"),
+    ("sim.pico.tank.module.component.gt", "001"),
+    ("sim.sensor.component.gt", "000"),
+    ("web.server.component.gt", "002"),
 ]
 
 

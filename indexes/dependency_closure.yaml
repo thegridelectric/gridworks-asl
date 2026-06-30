@@ -525,7 +525,6 @@ types:
       - ads.channel.config:001
       - ads111x.based.component.gt:000
       - ads111x.based.device.type.gt:000
-      - channel.config:001
       - data.channel.gt:003
       - derived.channel.gt:002
       - dfr.component.gt:000
@@ -603,7 +602,6 @@ types:
       - uuid4.str
       types:
       - ads111x.based.device.type.gt:000
-      - channel.config:001
       - data.channel.gt:002
       - derived.channel.gt:002
       - egauge.register.config:000
@@ -727,10 +725,8 @@ types:
       formats:
       - pascal.case
       - positive.int
-      - spaceheat.name
       - uuid4.str
-      types:
-      - channel.config:001
+      types: []
       versionless_types: []
   gw108.vdc.relay.component.gt:
     '001':
@@ -801,11 +797,8 @@ types:
       formats:
       - mac.address
       - pascal.case
-      - positive.int
-      - spaceheat.name
       - uuid4.str
       types:
-      - channel.config:001
       - hubitat.gt:000
       versionless_types: []
   hubitat.gt:
@@ -826,7 +819,6 @@ types:
       - spaceheat.name
       - uuid4.str
       types:
-      - channel.config:001
       - hubitat.poller.gt:000
       - maker.api.attribute.gt:000
       versionless_types: []
@@ -1432,7 +1424,6 @@ types:
       - utc.seconds
       - uuid4.str
       types:
-      - channel.config:001
       - data.channel.gt:003
       - derived.channel.gt:001
       - gw1.tank.temp.calibration.map:000
@@ -1539,11 +1530,9 @@ types:
       formats:
       - pascal.case
       - positive.float
-      - positive.int
       - spaceheat.name
       - uuid4.str
-      types:
-      - channel.config:001
+      types: []
       versionless_types: []
   pico.flow.module.component.gt:
     '000':
@@ -1565,11 +1554,9 @@ types:
       - hz.calc.method:001
       formats:
       - pascal.case
-      - positive.int
       - spaceheat.name
       - uuid4.str
-      types:
-      - channel.config:001
+      types: []
       versionless_types: []
   pico.tank.module.component.gt:
     '011':
@@ -1589,10 +1576,8 @@ types:
       formats:
       - pascal.case
       - positive.int
-      - spaceheat.name
       - uuid4.str
-      types:
-      - channel.config:001
+      types: []
       versionless_types: []
   position.point.gt:
     '000':
@@ -1866,10 +1851,8 @@ types:
       formats:
       - pascal.case
       - positive.int
-      - spaceheat.name
       - uuid4.str
-      types:
-      - channel.config:001
+      types: []
       versionless_types: []
   sim.plant.actuation:
     '000':
@@ -1920,11 +1903,8 @@ types:
       enums: []
       formats:
       - pascal.case
-      - positive.int
-      - spaceheat.name
       - uuid4.str
-      types:
-      - channel.config:001
+      types: []
       versionless_types: []
   sim.timestep:
     '000':
@@ -2131,11 +2111,8 @@ types:
       enums: []
       formats:
       - pascal.case
-      - positive.int
-      - spaceheat.name
       - uuid4.str
-      types:
-      - channel.config:001
+      types: []
       versionless_types: []
 versionless_types:
   gridworks.ack:

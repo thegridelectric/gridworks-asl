@@ -1877,7 +1877,6 @@ types:
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
         direct_dependencies:
           structural:
-            - "channel.config:001"
             - "gpio.sense.mode:000"
             - "pascal.case"
             - "positive.int"
@@ -1999,7 +1998,6 @@ types:
         summary: "Initial Sema version (flattened from the scada HubitatComponentGt runtime)."
         direct_dependencies:
           structural:
-            - "channel.config:001"
             - "hubitat.gt:000"
             - "pascal.case"
             - "uuid4.str"
@@ -2032,7 +2030,6 @@ types:
         summary: "Initial Sema version (flattened from the scada HubitatPollerComponentGt runtime)."
         direct_dependencies:
           structural:
-            - "channel.config:001"
             - "hubitat.poller.gt:000"
             - "pascal.case"
             - "uuid4.str"
@@ -2725,7 +2722,6 @@ types:
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component. - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout."
         direct_dependencies:
           structural:
-            - "channel.config:001"
             - "gpm.from.hz.method:000"
             - "hz.calc.method:001"
             - "pascal.case"
@@ -2761,7 +2757,6 @@ types:
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component. - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout."
         direct_dependencies:
           structural:
-            - "channel.config:001"
             - "gpm.from.hz.method:000"
             - "hz.calc.method:001"
             - "pascal.case"
@@ -2793,7 +2788,6 @@ types:
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
         direct_dependencies:
           structural:
-            - "channel.config:001"
             - "pascal.case"
             - "positive.int"
             - "temp.calc.method:000"
@@ -3128,7 +3122,6 @@ types:
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case); SimulatesVersion 011 -> 012. Context-dependent: the device type lived on the referenced cac, not the component."
         direct_dependencies:
           structural:
-            - "channel.config:001"
             - "pascal.case"
             - "positive.int"
             - "temp.calc.method:000"
@@ -3226,7 +3219,6 @@ types:
         summary: "Initial Sema version (new sim-marker component for simulated layouts; structurally component.gt)."
         direct_dependencies:
           structural:
-            - "channel.config:001"
             - "pascal.case"
             - "uuid4.str"
 
@@ -3564,7 +3556,6 @@ types:
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
         direct_dependencies:
           structural:
-            - "channel.config:001"
             - "pascal.case"
             - "uuid4.str"
       "001":

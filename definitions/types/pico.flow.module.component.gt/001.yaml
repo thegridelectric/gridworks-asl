@@ -28,13 +28,6 @@ properties:
       string (a `gw1.device.type` value). The hardware layout enforces
       membership in `gw1.device.type`.
 
-  ConfigList:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/types/channel.config/001"
-    description: >
-      Channel configuration entries inherited from ComponentGt.
-
   DisplayName:
     type: string
 
@@ -112,7 +105,6 @@ properties:
 required:
   - ComponentId
   - DeviceType
-  - ConfigList
   - Enabled
   - SerialNumber
   - FlowNodeName
@@ -135,15 +127,6 @@ examples:
     {
       "ComponentId": "3702ecf7-32a5-4582-a073-13b8edc1154f",
       "DeviceType": "GridworksPicoFlowHall",
-      "ConfigList": [
-        {
-          "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
-          "TypeName": "channel.config",
-          "Version": "001"
-        }
-      ],
       "Enabled": false,
       "SerialNumber": "example",
       "FlowNodeName": "scada",
@@ -159,16 +142,11 @@ examples:
       "TypeName": "pico.flow.module.component.gt",
       "Version": "001"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
 
   axioms:
     - number: 1
-      name: "ChannelNameUniqueness"
-      statement: >
-        Channel names SHALL be unique across the ConfigList.
-    - number: 2
       name: "HwUidPattern"
       statement: >
         If HwUid is present, it SHALL match the pattern pico_xxxxxx where

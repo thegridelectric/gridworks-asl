@@ -20,13 +20,6 @@ properties:
       string (a `gw1.device.type` value). The hardware layout enforces
       membership in `gw1.device.type`.
 
-  ConfigList:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/types/channel.config/001"
-    description: >
-      Channel configuration(s) for this sensor (one per the device).
-
   GpioPin:
     $ref: "https://schemas.electricity.works/formats/positive.int"
     description: >
@@ -57,7 +50,6 @@ properties:
 required:
   - ComponentId
   - DeviceType
-  - ConfigList
   - GpioPin
   - SenseMode
   - SendToDerived
@@ -71,26 +63,11 @@ examples:
     {
       "ComponentId": "f49e721c-b510-418e-a6af-843de90b3032",
       "DeviceType": "GridworksScadaGw108",
-      "ConfigList": [
-        {
-          "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
-          "TypeName": "channel.config",
-          "Version": "001"
-        }
-      ],
       "GpioPin": 1,
       "SenseMode": "Polling",
       "SendToDerived": false,
       "TypeName": "gw108.gpio.sensor.component.gt",
       "Version": "002"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
-  axioms:
-    - number: 1
-      name: "ChannelNameUniqueness"
-      statement: >
-        Channel names SHALL be unique across the ConfigList.

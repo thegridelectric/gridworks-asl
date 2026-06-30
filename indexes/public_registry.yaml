@@ -1606,7 +1606,6 @@ types:
           cac, not the component.'
         direct_dependencies:
           structural:
-          - channel.config:001
           - gpio.sense.mode:000
           - pascal.case
           - positive.int
@@ -1723,7 +1722,6 @@ types:
           runtime).
         direct_dependencies:
           structural:
-          - channel.config:001
           - hubitat.gt:000
           - pascal.case
           - uuid4.str
@@ -1757,7 +1755,6 @@ types:
           runtime).
         direct_dependencies:
           structural:
-          - channel.config:001
           - hubitat.poller.gt:000
           - pascal.case
           - uuid4.str
@@ -2441,7 +2438,6 @@ types:
           by the hardware layout.'
         direct_dependencies:
           structural:
-          - channel.config:001
           - gpm.from.hz.method:000
           - hz.calc.method:001
           - pascal.case
@@ -2480,7 +2476,6 @@ types:
           by the hardware layout.'
         direct_dependencies:
           structural:
-          - channel.config:001
           - gpm.from.hz.method:000
           - hz.calc.method:001
           - pascal.case
@@ -2512,7 +2507,6 @@ types:
           cac, not the component.'
         direct_dependencies:
           structural:
-          - channel.config:001
           - pascal.case
           - positive.int
           - temp.calc.method:000
@@ -2812,7 +2806,6 @@ types:
           device type lived on the referenced cac, not the component.'
         direct_dependencies:
           structural:
-          - channel.config:001
           - pascal.case
           - positive.int
           - temp.calc.method:000
@@ -2908,7 +2901,6 @@ types:
           structurally component.gt).
         direct_dependencies:
           structural:
-          - channel.config:001
           - pascal.case
           - uuid4.str
   sim.timestep:
@@ -3226,7 +3218,6 @@ types:
           cac, not the component.'
         direct_dependencies:
           structural:
-          - channel.config:001
           - pascal.case
           - uuid4.str
       '001':

@@ -25,13 +25,6 @@ properties:
       string (a `gw1.device.type` value). The hardware layout enforces
       membership in `gw1.device.type`.
 
-  ConfigList:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/types/channel.config/001"
-    description: >
-      Channel configuration entries inherited from ComponentGt.
-
   DisplayName:
     type: string
 
@@ -94,7 +87,6 @@ properties:
 required:
   - ComponentId
   - DeviceType
-  - ConfigList
   - Enabled
   - TempCalcMethod
   - ThermistorBeta
@@ -115,15 +107,6 @@ examples:
     {
       "ComponentId": "4058e925-2399-4908-91a1-5c4c63cf89f0",
       "DeviceType": "GridworksTankModule3",
-      "ConfigList": [
-        {
-          "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
-          "TypeName": "channel.config",
-          "Version": "001"
-        }
-      ],
       "Enabled": false,
       "TempCalcMethod": "SimpleBeta",
       "ThermistorBeta": 1,
@@ -138,30 +121,24 @@ examples:
       "Version": "001",
       "PicoHwUid": "pico_a1b2c3"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
 
   axioms:
     - number: 1
-      name: "ChannelNameUniqueness"
-      statement: >
-        Channel names SHALL be unique across the ConfigList.
-
-    - number: 2
       name: "PicoHardwareIdentityXor"
       statement: >
         Exactly one of the following SHALL hold:
           - PicoHwUid is present
           - both PicoAHwUid and PicoBHwUid are present
 
-    - number: 3
+    - number: 2
       name: "PicoKOhmsConsistency"
       statement: >
         PicoKOhms SHALL be present if and only if TempCalcMethod equals
         SimpleBetaForPico.
 
-    - number: 4
+    - number: 3
       name: "SensorOrderPermutation"
       statement: >
         If SensorOrder is present, it SHALL be a permutation of [1, 2, 3].

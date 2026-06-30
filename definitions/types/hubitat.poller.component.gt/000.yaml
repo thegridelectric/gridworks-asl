@@ -27,13 +27,6 @@ properties:
     description: >
       The poller settings for this Hubitat device.
 
-  ConfigList:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/types/channel.config/001"
-    description: >
-      Per-channel configurations for the channels this device feeds.
-
   DisplayName:
     type: string
 
@@ -52,7 +45,6 @@ required:
   - ComponentId
   - DeviceType
   - Poller
-  - ConfigList
   - TypeName
   - Version
 
@@ -90,23 +82,8 @@ examples:
         "TypeName": "hubitat.poller.gt",
         "Version": "000"
       },
-      "ConfigList": [
-        {
-          "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
-          "TypeName": "channel.config",
-          "Version": "001"
-        }
-      ],
       "TypeName": "hubitat.poller.component.gt",
       "Version": "000"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
-  axioms:
-    - number: 1
-      name: "ChannelNameUniqueness"
-      statement: >
-        Channel names SHALL be unique across the ConfigList.

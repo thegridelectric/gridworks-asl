@@ -24,17 +24,6 @@ types:
       - pico.tank.module.component.gt:011
       - sim.pico.tank.module.component.gt:000
       - web.server.component.gt:001
-    '001':
-      used_by:
-      - gw108.gpio.sensor.component.gt:002
-      - hubitat.component.gt:000
-      - hubitat.poller.component.gt:000
-      - pico.btu.meter.component.gt:001
-      - pico.flow.module.component.gt:001
-      - pico.tank.module.component.gt:012
-      - sim.pico.tank.module.component.gt:001
-      - sim.sensor.component.gt:000
-      - web.server.component.gt:002
   channel.readings:
     '002':
       used_by:

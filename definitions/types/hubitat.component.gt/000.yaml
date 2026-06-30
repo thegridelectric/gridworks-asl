@@ -27,13 +27,6 @@ properties:
     description: >
       The MakerAPI connection settings for this hub.
 
-  ConfigList:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/types/channel.config/001"
-    description: >
-      Channel configurations for this component (empty in practice for a hub).
-
   DisplayName:
     type: string
 
@@ -52,7 +45,6 @@ required:
   - ComponentId
   - DeviceType
   - Hubitat
-  - ConfigList
   - TypeName
   - Version
 
@@ -72,26 +64,11 @@ examples:
         "TypeName": "hubitat.gt",
         "Version": "000"
       },
-      "ConfigList": [
-        {
-          "ChannelName": "scada",
-          "CapturePeriodS": 1,
-          "AsyncCapture": false,
-          "TypeName": "channel.config",
-          "Version": "001"
-        }
-      ],
       "TypeName": "hubitat.component.gt",
       "Version": "000"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
-  axioms:
-    - number: 1
-      name: "ChannelNameUniqueness"
-      statement: >
-        Channel names SHALL be unique across the ConfigList.
 
   extended_description: >
     The MakerAPI URL helpers on the hub (url_config / maker_api_url_config / refresh_url and
