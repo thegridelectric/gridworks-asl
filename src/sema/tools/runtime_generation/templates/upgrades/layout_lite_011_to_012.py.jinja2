@@ -2,6 +2,7 @@
         """
         - DerivedChannels[]: derived.channel.gt:000 | 001 -> 001
         - DataChannels[]: data.channel.gt:001 -> 002
+        - Ha1Params: ha1.params:004 | 005 | 006 -> ha1.params:006
         - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> 003
         - ShNodes[]: spaceheat.node.gt:300 | 301 -> 301
         """
@@ -11,6 +12,12 @@
         data["derived_channels"] = [ch.upgrade() if ch.version == "000" else ch for ch in self.derived_channels]
         data["data_channels"] = [ch.upgrade() for ch in self.data_channels]
         data["sh_nodes"] = [node.upgrade() if node.version == "300" else node for node in self.sh_nodes]
+
+        if self.ha1_params.version == "004":
+            data["ha1_params"] = self.ha1_params.upgrade().upgrade()
+
+        if self.ha1_params.version == "005":
+            data["ha1_params"] = self.ha1_params.upgrade()
 
         if self.i2c_relay_component is not None:
             data["i2c_relay_component"] = self.i2c_relay_component.upgrade()

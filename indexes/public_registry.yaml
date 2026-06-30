@@ -1217,8 +1217,9 @@ types:
         schema_url: https://schemas.electricity.works/types/layout.lite/012
         created: '2026-03-31T10:42:00Z'
         summary: '- DerivedChannels[]: derived.channel.gt:000 | 001 -> 001 - DataChannels[]:
-          data.channel.gt:001 -> 002 - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002
-          -> 003 - ShNodes[]: spaceheat.node.gt:300 | 301 -> 301'
+          data.channel.gt:001 -> 002 - Ha1Params: ha1.params:004 | 005 | 006 -> ha1.params:006
+          - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> 003 -
+          ShNodes[]: spaceheat.node.gt:300 | 301 -> 301'
         direct_dependencies:
           structural:
           - data.channel.gt:002
@@ -1239,8 +1240,8 @@ types:
       '011':
         schema_url: https://schemas.electricity.works/types/layout.lite/011
         created: '2026-02-25T19:23:00Z'
-        summary: '- Ha1Params: ha1.params:005 -> 006 - DerivedChannels[]: derived.channel.gt:000
-          -> 000 | 001'
+        summary: '- Ha1Params: ha1.params:004 | 005 -> ha1.params:004 | 005 | 006
+          - DerivedChannels[]: derived.channel.gt:000 -> 000 | 001'
         direct_dependencies:
           structural:
           - data.channel.gt:001
@@ -1249,6 +1250,8 @@ types:
           - gw1.seasonal.storage.mode:000
           - gw1.system.mode:000
           - gw1.tank.temp.calibration.map:000
+          - ha1.params:004
+          - ha1.params:005
           - ha1.params:006
           - i2c.multichannel.dt.relay.component.gt:002
           - left.right.dot
@@ -1263,8 +1266,8 @@ types:
       '010':
         schema_url: https://schemas.electricity.works/types/layout.lite/010
         created: '2026-02-18T21:34:00Z'
-        summary: '- Ha1Params: ha1.params:004 | 005 -> 005 - ShNodes[]: spaceheat.node.gt:300
-          -> 300 | 301 - I2cRelayComponent: required -> optional'
+        summary: '- ShNodes[]: spaceheat.node.gt:300 -> 300 | 301 - I2cRelayComponent:
+          required -> optional'
         direct_dependencies:
           structural:
           - data.channel.gt:001
@@ -1272,6 +1275,7 @@ types:
           - gw1.seasonal.storage.mode:000
           - gw1.system.mode:000
           - gw1.tank.temp.calibration.map:000
+          - ha1.params:004
           - ha1.params:005
           - i2c.multichannel.dt.relay.component.gt:002
           - left.right.dot

@@ -87,11 +87,14 @@ types:
       - layout.lite:007
       - layout.lite:008
       - layout.lite:009
+      - layout.lite:010
+      - layout.lite:011
       - scada.params:004
     '005':
       used_by:
       - layout.lite:009
       - layout.lite:010
+      - layout.lite:011
       - scada.params:004
     '006':
       used_by:
