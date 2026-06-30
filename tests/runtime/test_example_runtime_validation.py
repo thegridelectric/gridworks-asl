@@ -35,6 +35,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 # Grown as each type is touched in the hardware-layout-pass-one reshape.
 VALIDATED_EXAMPLES = [
     ("capture.tuning", "000"),
+    ("gw.house0.operational.params", "000"),
     # channel.config family — capture params stripped (moved to capture.tuning)
     ("ads.channel.config", "001"),
     ("dfr.config", "001"),

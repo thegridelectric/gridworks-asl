@@ -211,6 +211,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.house0.layout/000.yaml
+  gw.house0.operational.params:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.house0.operational.params/000.yaml
   gw.native.gpio.pin:
     latest_version: '000'
     versioning_strategy: literal

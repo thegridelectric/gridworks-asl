@@ -15,6 +15,10 @@ types:
       used_by:
       - gw.house0.layout:000
       - gw.nolan.layout:000
+  capture.tuning:
+    '000':
+      used_by:
+      - gw.house0.operational.params:000
   channel.config:
     '000':
       used_by:
@@ -123,6 +127,7 @@ types:
       - g.node.reparent.cmd:000
       - g.node.topology.broadcast:000
       - gw.house0.layout:000
+      - gw.house0.operational.params:000
       - gw.nolan.layout:000
   gw.house0.hydronic:
     '000':

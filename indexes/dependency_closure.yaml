@@ -560,6 +560,20 @@ types:
       - spaceheat.telemetry.quantity.projection:000
       - web.server.component.gt:002
       versionless_types: []
+  gw.house0.operational.params:
+    '000':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - capture.tuning:000
+      - g.node.gt:004
+      versionless_types: []
   gw.native.gpio.pin:
     '000':
       enums: []
