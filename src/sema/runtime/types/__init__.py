@@ -29,6 +29,7 @@ from sema.runtime.types.g_node_gt import GNodeGt
 from sema.runtime.types.g_node_instance_gt import GNodeInstanceGt
 from sema.runtime.types.g_node_reparent_cmd import GNodeReparentCmd
 from sema.runtime.types.glitch import Glitch
+from sema.runtime.types.gpio_relay_component_gt import GpioRelayComponentGt
 from sema.runtime.types.gridworks_ack import GridworksAck
 from sema.runtime.types.gridworks_event_problem import GridworksEventProblem
 from sema.runtime.types.gridworks_header import GridworksHeader
@@ -67,6 +68,7 @@ from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
 from sema.runtime.types.i2c_read_bit import I2cReadBit
 from sema.runtime.types.i2c_read_reg import I2cReadReg
 from sema.runtime.types.i2c_reg_address import I2cRegAddress
+from sema.runtime.types.i2c_relay_component_gt import I2cRelayComponentGt
 from sema.runtime.types.i2c_relay_config import I2cRelayConfig
 from sema.runtime.types.i2c_result import I2cResult
 from sema.runtime.types.i2c_thermistor_channel_config import I2cThermistorChannelConfig
@@ -95,6 +97,7 @@ from sema.runtime.types.position_point_gt import PositionPointGt
 from sema.runtime.types.power_watts import PowerWatts
 from sema.runtime.types.price_quantity_unitless import PriceQuantityUnitless
 from sema.runtime.types.relay_actor_config import RelayActorConfig
+from sema.runtime.types.relay_control_config import RelayControlConfig
 from sema.runtime.types.report import Report
 from sema.runtime.types.report_event import ReportEvent
 from sema.runtime.types.scada_control_capabilities import ScadaControlCapabilities
@@ -160,6 +163,7 @@ __all__ = [
     "GNodeInstanceGt",
     "GNodeReparentCmd",
     "Glitch",
+    "GpioRelayComponentGt",
     "GridworksAck",
     "GridworksEventProblem",
     "GridworksHeader",
@@ -194,6 +198,7 @@ __all__ = [
     "I2cReadBit",
     "I2cReadReg",
     "I2cRegAddress",
+    "I2cRelayComponentGt",
     "I2cRelayConfig",
     "I2cResult",
     "I2cThermistorChannelConfig",
@@ -216,6 +221,7 @@ __all__ = [
     "PowerWatts",
     "PriceQuantityUnitless",
     "RelayActorConfig",
+    "RelayControlConfig",
     "Report",
     "ReportEvent",
     "ScadaControlCapabilities",

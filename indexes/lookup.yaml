@@ -188,6 +188,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/glitch/000.yaml
+  gpio.relay.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gpio.relay.component.gt/000.yaml
   gridworks.ack:
     versioning_strategy: none
     schema: definitions/types/gridworks.ack.yaml
@@ -361,6 +366,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/i2c.reg.address/000.yaml
+  i2c.relay.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.relay.component.gt/000.yaml
   i2c.relay.config:
     latest_version: '000'
     versioning_strategy: literal
@@ -488,6 +498,11 @@ types:
       '004': definitions/types/relay.actor.config/004.yaml
       '003': definitions/types/relay.actor.config/003.yaml
       '002': definitions/types/relay.actor.config/002.yaml
+  relay.control.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/relay.control.config/000.yaml
   report:
     latest_version: '003'
     versioning_strategy: literal

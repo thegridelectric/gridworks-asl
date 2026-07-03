@@ -1336,6 +1336,25 @@ types:
           - log.level:000
           - spaceheat.name
           - utc.milliseconds
+  gpio.relay.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A single board-resident relay driven by a native GPIO pin, as one
+      Spaceheat component; board-generic, identified by GpioName against the board's
+      NativeGpioOutputs.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gpio.relay.component.gt/000
+        created: '2026-07-03T19:45:00Z'
+        summary: '- Initial version. Board-resident per-relay GPIO component: GpioName
+          (-> board NativeGpioOutputs), DeviceType (gw1.device.type value, e.g. Gw108GpioRelay),
+          ConfigList of exactly one relay.control.config.'
+        direct_dependencies:
+          structural:
+          - pascal.case
+          - relay.control.config:000
+          - uuid4.str
   gridworks.ack:
     owner: smoothstone-computing
     versioning_strategy: none
@@ -1979,6 +1998,25 @@ types:
         direct_dependencies:
           structural:
           - non.negative.int
+  i2c.relay.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "A single board-resident I\xB2C-driven relay, as one Spaceheat component;\
+      \ board-generic, identified by RelayName against the board's I2cRelays map."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.relay.component.gt/000
+        created: '2026-07-03T19:45:00Z'
+        summary: "- Initial version. Board-resident per-relay I\xB2C component: RelayName\
+          \ (-> board I2cRelays), DeviceType (gw1.device.type value, e.g. Gw108I2cRelay),\
+          \ ConfigList of exactly one relay.control.config. Replaces the legacy multiplexer\
+          \ (i2c.multichannel.dt.relay.component.gt)."
+        direct_dependencies:
+          structural:
+          - pascal.case
+          - relay.control.config:000
+          - uuid4.str
   i2c.relay.config:
     latest_version: '000'
     owner: gridworks-energy
@@ -2616,6 +2654,8 @@ types:
     versioning_strategy: literal
     description: Configuration for a relay-backed actor controlling a physical or
       logical switching device.
+    replaced_by:
+    - relay.control.config
     versions:
       '004':
         schema_url: https://schemas.electricity.works/types/relay.actor.config/004
@@ -2661,6 +2701,29 @@ types:
           - relay.wiring.config:000
           - spaceheat.name
           - spaceheat.unit:001
+          axiom:
+          - change.relay.state:000
+          - relay.closed.or.open:000
+  relay.control.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Board-resident control config for a relay-backed actor; the relay.actor.config
+      successor with the positional RelayIdx dropped (the relay is identified by name
+      against its board).
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/relay.control.config/000
+        created: '2026-07-03T19:45:00Z'
+        summary: '- Initial version. relay.actor.config minus RelayIdx: board-resident
+          relays are identified by name against the board (gw1.scada.device.type.gt),
+          not by a positional index.'
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - non.empty.string
+          - relay.wiring.config:000
+          - spaceheat.name
           axiom:
           - change.relay.state:000
           - relay.closed.or.open:000

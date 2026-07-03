@@ -480,6 +480,21 @@ types:
       - utc.milliseconds
       types: []
       versionless_types: []
+  gpio.relay.component.gt:
+    '000':
+      enums:
+      - change.relay.state:000
+      - relay.closed.or.open:000
+      - relay.wiring.config:000
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - pascal.case
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - relay.control.config:000
+      versionless_types: []
   gridworks.event.problem:
     '001':
       enums: []
@@ -989,6 +1004,21 @@ types:
       formats:
       - non.negative.int
       types: []
+      versionless_types: []
+  i2c.relay.component.gt:
+    '000':
+      enums:
+      - change.relay.state:000
+      - relay.closed.or.open:000
+      - relay.wiring.config:000
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - pascal.case
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - relay.control.config:000
       versionless_types: []
   i2c.relay.config:
     '000':
@@ -1666,6 +1696,18 @@ types:
       - left.right.dot
       - non.empty.string
       - positive.int
+      - spaceheat.name
+      types: []
+      versionless_types: []
+  relay.control.config:
+    '000':
+      enums:
+      - change.relay.state:000
+      - relay.closed.or.open:000
+      - relay.wiring.config:000
+      formats:
+      - left.right.dot
+      - non.empty.string
       - spaceheat.name
       types: []
       versionless_types: []

@@ -348,6 +348,11 @@ types:
       - gw108.vdc.relay.component.gt:002
       - i2c.multichannel.dt.relay.component.gt:005
       - sim.relay.component.gt:000
+  relay.control.config:
+    '000':
+      used_by:
+      - gpio.relay.component.gt:000
+      - i2c.relay.component.gt:000
   report:
     '002':
       used_by:
@@ -442,6 +447,7 @@ enums:
       - relay.actor.config:002
       - relay.actor.config:003
       - relay.actor.config:004
+      - relay.control.config:000
   fsm.report.type:
     '000':
       used_by:
@@ -594,6 +600,7 @@ enums:
       - relay.actor.config:002
       - relay.actor.config:003
       - relay.actor.config:004
+      - relay.control.config:000
       - single.machine.state:000
   relay.energization.state:
     '000':
@@ -606,6 +613,7 @@ enums:
       - relay.actor.config:002
       - relay.actor.config:003
       - relay.actor.config:004
+      - relay.control.config:000
   spaceheat.make.model:
     '003':
       used_by:
@@ -721,6 +729,7 @@ formats:
     - relay.actor.config:002
     - relay.actor.config:003
     - relay.actor.config:004
+    - relay.control.config:000
     - report.event:002
     - report.event:003
     - report:002
@@ -757,6 +766,7 @@ formats:
     - relay.actor.config:002
     - relay.actor.config:003
     - relay.actor.config:004
+    - relay.control.config:000
   non.negative.int:
     used_by:
     - gw.house0.hydronic:000
@@ -779,6 +789,7 @@ formats:
     - dfr.component.gt:000
     - electric.meter.component.gt:002
     - electric.meter.device.type.gt:000
+    - gpio.relay.component.gt:000
     - gw.native.gpio.pin:000
     - gw1.scada.device.type.gt:000
     - gw108.gpio.sensor.component.gt:002
@@ -789,6 +800,7 @@ formats:
     - i2c.bus:000
     - i2c.dac.config:000
     - i2c.multichannel.dt.relay.component.gt:005
+    - i2c.relay.component.gt:000
     - i2c.relay.config:000
     - i2c.thermistor.interface.config:000
     - i2c.thermistor.reader.component.gt:002
@@ -915,6 +927,7 @@ formats:
     - relay.actor.config:002
     - relay.actor.config:003
     - relay.actor.config:004
+    - relay.control.config:000
     - scada.control.capabilities:000
     - scada.params:004
     - scada.params:005
@@ -1033,6 +1046,7 @@ formats:
     - g.node.gt:005
     - g.node.instance.gt:000
     - g.node.reparent.cmd:000
+    - gpio.relay.component.gt:000
     - gridworks.event.problem:001
     - gw108.gpio.sensor.component.gt:001
     - gw108.gpio.sensor.component.gt:002
@@ -1048,6 +1062,7 @@ formats:
     - i2c.multichannel.dt.relay.component.gt:005
     - i2c.read.bit:000
     - i2c.read.reg:000
+    - i2c.relay.component.gt:000
     - i2c.result:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002

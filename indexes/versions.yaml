@@ -303,6 +303,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  gpio.relay.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Initial version. Board-resident per-relay GPIO component: GpioName (-> board NativeGpioOutputs), DeviceType (gw1.device.type value, e.g. Gw108GpioRelay), ConfigList of exactly one relay.control.config."
+
   gridworks.ack:
     versioning_strategy: "none"
     summary: "Versionless acknowledgement message."
@@ -560,6 +567,13 @@ types:
       "000":
         summary: "Initial draft (I2cAddress, RegisterIndex)."
 
+  i2c.relay.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Initial version. Board-resident per-relay I²C component: RelayName (-> board I2cRelays), DeviceType (gw1.device.type value, e.g. Gw108I2cRelay), ConfigList of exactly one relay.control.config. Replaces the legacy multiplexer (i2c.multichannel.dt.relay.component.gt)."
+
   i2c.relay.config:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -775,6 +789,13 @@ types:
         summary: "- AsyncCaptureDelta: require when AsyncCapture is true"
       "002":
         summary: "Baseline runtime version (no prior version tracked)."
+
+  relay.control.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Initial version. relay.actor.config minus RelayIdx: board-resident relays are identified by name against the board (gw1.scada.device.type.gt), not by a positional index."
 
   report:
     latest_version: "003"
