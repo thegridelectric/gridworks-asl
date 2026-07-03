@@ -8,7 +8,6 @@ from sema.runtime.types.derived_channel_gt import DerivedChannelGt
 from sema.runtime.types.dfr_component_gt import DfrComponentGt
 from sema.runtime.types.electric_meter_component_gt import ElectricMeterComponentGt
 from sema.runtime.types.electric_meter_device_type_gt import ElectricMeterDeviceTypeGt
-from sema.runtime.types.g_node_gt import GNodeGt
 from sema.runtime.types.gw1_scada_device_type_gt import Gw1ScadaDeviceTypeGt
 from sema.runtime.types.gw_house0_hydronic import GwHouse0Hydronic
 from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
@@ -16,6 +15,7 @@ from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponen
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
+from sema.runtime.types.old_versions.g_node_gt_004 import GNodeGt004
 from sema.runtime.types.pico_btu_meter_component_gt import PicoBtuMeterComponentGt
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
@@ -29,7 +29,7 @@ from sema.runtime.types.web_server_component_gt import WebServerComponentGt
 class GwHouse0Layout(SemaType):
     """Sema: https://schemas.electricity.works/types/gw.house0.layout/000"""
 
-    g_nodes: list[GNodeGt]
+    g_nodes: list[GNodeGt004]
     sh_nodes: list[SpaceheatNodeGt]
     data_channels: list[DataChannelGt]
     derived_channels: list[DerivedChannelGt]

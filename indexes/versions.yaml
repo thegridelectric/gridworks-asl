@@ -259,10 +259,26 @@ types:
       "000":
         summary: "Initial Sema version"
 
-  g.node.gt:
-    latest_version: "004"
+  g.node.forest:
+    latest_version: "000"
     versioning_strategy: "literal"
     versions:
+      "000":
+        summary: "Initial Sema version"
+
+  g.node.forest.request:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  g.node.gt:
+    latest_version: "005"
+    versioning_strategy: "literal"
+    versions:
+      "005":
+        summary: "adds axiom 6 GNodeAliasHasBody; no field changes"
       "004":
         summary: "Baseline runtime version (no prior version tracked)."
 
@@ -274,13 +290,6 @@ types:
         summary: "Initial Sema version"
 
   g.node.reparent.cmd:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
-
-  g.node.topology.broadcast:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:

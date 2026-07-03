@@ -1,0 +1,11 @@
+{
+  "GNodeId": "dcb05390-5bca-40ef-b63d-7908ccb33d9b",
+  "Alias": "d1.isone",
+  "BaseClass": "Logical",
+  "GNodeClass": "WeatherForecastService",
+  "Status": "Active",
+  "PrevAlias": "isone",
+  "DisplayName": "PrevAlias is a bare universe segment",
+  "TypeName": "g.node.gt",
+  "Version": "005"
+}

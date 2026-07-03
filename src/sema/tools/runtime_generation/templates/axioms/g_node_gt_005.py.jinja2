@@ -1,26 +1,3 @@
-from typing import Literal, Self
-from pydantic import model_validator
-from sema.runtime.base import SemaType
-from sema.runtime.enums import BaseGNodeClass
-from sema.runtime.enums import GNodeStatus
-from sema.runtime.property_format import LeftRightDot
-from sema.runtime.property_format import UUID4Str
-
-
-class GNodeGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/g.node.gt/005"""
-
-    g_node_id: UUID4Str
-    alias: LeftRightDot
-    base_class: BaseGNodeClass
-    g_node_class: str
-    status: GNodeStatus
-    prev_alias: LeftRightDot | None = None
-    position_point_id: UUID4Str | None = None
-    display_name: str | None = None
-    type_name: Literal["g.node.gt"] = "g.node.gt"
-    version: Literal["005"] = "005"
-
     @model_validator(mode="after")
     def check_axiom_1(self) -> Self:
         """
@@ -28,7 +5,7 @@ class GNodeGt(SemaType):
         a. If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass.
         b. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
         """
-        if self.base_class != BaseGNodeClass.Logical:
+        if self.base_class != {{ base_g_node_class_000_class_name }}.Logical:
             if self.g_node_class != self.base_class.value:
                 raise ValueError(
                     f"Axiom 1 failed: Physical GNodes must align BaseClass and GNodeClass. "
@@ -36,8 +13,8 @@ class GNodeGt(SemaType):
                     f"but got '{self.g_node_class}'."
                 )
         elif (
-            self.g_node_class in BaseGNodeClass.values()
-            and self.g_node_class != BaseGNodeClass.Logical.value
+            self.g_node_class in {{ base_g_node_class_000_class_name }}.values()
+            and self.g_node_class != {{ base_g_node_class_000_class_name }}.Logical.value
         ):
             raise ValueError(
                 "Axiom 1 failed: Logical GNodes must not use a non-Logical "
@@ -51,7 +28,7 @@ class GNodeGt(SemaType):
         Axiom 2: PhysicalGNodeLocations
         If BaseClass != Logical, PositionPointId SHALL NOT be null.
         """
-        if self.base_class != BaseGNodeClass.Logical:
+        if self.base_class != {{ base_g_node_class_000_class_name }}.Logical:
             if self.position_point_id is None:
                 raise ValueError(
                     "Axiom 2 failed: Physical GNodes must have a PositionPointId. "

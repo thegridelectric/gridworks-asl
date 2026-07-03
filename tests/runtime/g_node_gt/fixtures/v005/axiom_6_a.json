@@ -1,0 +1,10 @@
+{
+  "GNodeId": "dcb05390-5bca-40ef-b63d-7908ccb33d9b",
+  "Alias": "isone",
+  "BaseClass": "Logical",
+  "GNodeClass": "WeatherForecastService",
+  "Status": "Active",
+  "DisplayName": "Single-word alias is a namespace, not a GNodeAlias",
+  "TypeName": "g.node.gt",
+  "Version": "005"
+}

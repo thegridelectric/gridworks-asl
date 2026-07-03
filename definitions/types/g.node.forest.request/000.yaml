@@ -1,0 +1,52 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/g.node.forest.request/000"
+
+title: "g.node.forest.request"
+type: object
+description: >
+  A read query for one or more Grid Node forests. The caller names the root
+  aliases whose subtrees it wants; the registry answers with a
+  `g.node.forest` carrying those subtrees. The response echoes RequestId so
+  the caller can correlate it with this request.
+
+properties:
+
+  Roots:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The root aliases whose forests the caller wants. The registry returns
+      the subtrees rooted at these aliases.
+
+  RequestId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Application-level correlation id. The forest response echoes this value
+      so the caller can match it to this request.
+
+  TypeName:
+    const: "g.node.forest.request"
+
+  Version:
+    const: "000"
+
+required:
+  - Roots
+  - RequestId
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Roots": ["d1.isone.me.versant.keene"],
+      "RequestId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "TypeName": "g.node.forest.request",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

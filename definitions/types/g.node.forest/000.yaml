@@ -1,0 +1,109 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/g.node.forest/000"
+
+title: "g.node.forest"
+type: object
+description: >
+  A forest of Grid Node subtrees: the subtrees rooted at one or more named
+  GNode aliases, carried as the current GNodes plus the connectivity edges
+  that wire them together. The reusable topology payload — returned in
+  response to a read query, or broadcast after a topology change so consumers
+  can converge.
+
+properties:
+
+  Roots:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The forest-root aliases. Each names the top of a subtree; the forest is
+      the union of the subtrees rooted at these aliases.
+
+  Nodes:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/g.node.gt/005"
+    description: >
+      The GNodes making up the subtrees, each in its current form (its
+      current Alias). Immutable GNodeId identifies each node across renames.
+
+  Edges:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/connectivity.edge.gt/000"
+    description: >
+      The connectivity edges wiring the subtree GNodes together, identifying
+      endpoints by immutable GNodeId.
+
+  Proof:
+    type: string
+    description: >
+      Optional placeholder for a verifiable proof of the forest's veracity.
+
+  TypeName:
+    const: "g.node.forest"
+
+  Version:
+    const: "000"
+
+required:
+  - Roots
+  - Nodes
+  - Edges
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Roots": ["d1.isone.me.versant.keene"],
+      "Nodes": [
+        {
+          "GNodeId": "dcb05390-5bca-40ef-b63d-7908ccb33d9b",
+          "Alias": "d1.isone.me.versant.keene.beech",
+          "BaseClass": "LeafTransactiveNode",
+          "GNodeClass": "LeafTransactiveNode",
+          "Status": "Active",
+          "PositionPointId": "198ca6af-5a4b-43a2-a8a9-7546deabc731",
+          "TypeName": "g.node.gt",
+          "Version": "005"
+        }
+      ],
+      "Edges": [
+        {
+          "Id": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+          "FromGNodeId": "86f3c021-e217-4197-b55f-547a7ab88c30",
+          "ToGNodeId": "dcb05390-5bca-40ef-b63d-7908ccb33d9b",
+          "Status": "Active",
+          "TypeName": "connectivity.edge.gt",
+          "Version": "000"
+        }
+      ],
+      "TypeName": "g.node.forest",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  extended_description: >
+    A forest is the reusable topology payload of the Grid Node Registry. A
+    read query (`g.node.forest.request`) returns the forest under the
+    requested roots; a topology mutation publishes the affected forest so
+    consumers can converge. Convergence is by authorization, not by delivery.
+
+    An edge identifies its endpoints by GNodeId only — aliases are mutable
+    (rewritten when a subtree re-parents), whereas a GNodeId is immutable.
+    The current alias of an endpoint is derived by looking up its GNodeId
+    among the carried Nodes.
+
+    Proof is the distributed-authority seam. Today the registry's own
+    signature over the message is the single authority for the forest's
+    veracity. Later, Proof is intended to carry a verifiable
+    chain-inclusion proof so a consumer can check the forest against a
+    shared ledger without trusting the registry as a single point of
+    authority. It is optional and carries no meaning until that mechanism
+    lands.

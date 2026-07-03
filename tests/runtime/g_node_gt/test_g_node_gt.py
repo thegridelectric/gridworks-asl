@@ -14,20 +14,20 @@ def _axiom_match(n: int) -> re.Pattern[str]:
 
 
 def _load_fixture(name: str) -> dict:
-    fixture = Path(__file__).parent / "fixtures" / "v004" / name
+    fixture = Path(__file__).parent / "fixtures" / "v005" / name
     return json.loads(fixture.read_text())
 
 
-def test_g_node_gt_latest_version_is_004() -> None:
-    assert GNodeGt.version_value() == "004"
+def test_g_node_gt_latest_version_is_005() -> None:
+    assert GNodeGt.version_value() == "005"
 
 
-def test_default_v004_loads_as_g_node_gt() -> None:
+def test_default_v005_loads_as_g_node_gt() -> None:
     decoded = default_codec.from_dict(_load_fixture("default.json"))
 
     assert isinstance(decoded, GNodeGt)
     assert decoded.type_name == "g.node.gt"
-    assert decoded.version == "004"
+    assert decoded.version == "005"
 
 
 @pytest.mark.parametrize(
@@ -84,4 +84,20 @@ def test_axiom_5(fixture_name: str) -> None:
     b. Alias SHALL end with ".scada" if and only if GNodeClass is "Scada".
     """
     with pytest.raises(SemaError, match=_axiom_match(5)):
+        default_codec.from_dict(_load_fixture(fixture_name))
+
+
+@pytest.mark.parametrize(
+    "fixture_name",
+    [
+        "axiom_6_a.json",
+        "axiom_6_b.json",
+    ],
+)
+def test_axiom_6(fixture_name: str) -> None:
+    """
+    a. Alias SHALL have at least two dotted words.
+    b. If PrevAlias is present, it SHALL likewise have at least two dotted words.
+    """
+    with pytest.raises(SemaError, match=_axiom_match(6)):
         default_codec.from_dict(_load_fixture(fixture_name))

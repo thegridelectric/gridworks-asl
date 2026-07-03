@@ -410,8 +410,37 @@ types:
       types:
       - fsm.atomic.report:001
       versionless_types: []
+  g.node.forest:
+    '000':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types:
+      - connectivity.edge.gt:000
+      - g.node.gt:005
+      versionless_types: []
+  g.node.forest.request:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types: []
+      versionless_types: []
   g.node.gt:
     '004':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types: []
+      versionless_types: []
+    '005':
       enums:
       - base.g.node.class:000
       - g.node.status:000
@@ -439,18 +468,7 @@ types:
       - left.right.dot
       - uuid4.str
       types:
-      - g.node.gt:004
-      versionless_types: []
-  g.node.topology.broadcast:
-    '000':
-      enums:
-      - base.g.node.class:000
-      - g.node.status:000
-      formats:
-      - left.right.dot
-      - uuid4.str
-      types:
-      - g.node.gt:004
+      - g.node.gt:005
       versionless_types: []
   glitch:
     '000':
