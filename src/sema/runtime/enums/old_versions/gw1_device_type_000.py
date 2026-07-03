@@ -3,8 +3,8 @@ from enum import auto
 from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
-class Gw1DeviceType(SemaEnum):
-    """Sema: https://schemas.electricity.works/enums/gw1.device.type/001"""
+class Gw1DeviceType000(SemaEnum):
+    """Sema: https://schemas.electricity.works/enums/gw1.device.type/000"""
 
     EgaugePowerMeter = auto()
     GridworksTsnap1ScadaBoard = auto()
@@ -26,11 +26,9 @@ class Gw1DeviceType(SemaEnum):
     GridworksSimSensor = auto()
     GridworksSimRelayBank = auto()
     AbstractWebServer = auto()
-    Gw108I2cRelay = auto()
-    Gw108GpioRelay = auto()
 
     @classmethod
-    def default(cls) -> "Gw1DeviceType":
+    def default(cls) -> "Gw1DeviceType000":
         return cls.EgaugePowerMeter
 
     @classmethod
@@ -43,4 +41,4 @@ class Gw1DeviceType(SemaEnum):
 
     @classmethod
     def enum_version(cls) -> str:
-        return "001"
+        return "000"

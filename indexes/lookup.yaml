@@ -712,8 +712,9 @@ enums:
       009: definitions/enums/gw1.actor.class/009.yaml
   gw1.device.type:
     enum_type: versioned
-    latest_version: '000'
+    latest_version: '001'
     versions:
+      '001': definitions/enums/gw1.device.type/001.yaml
       '000': definitions/enums/gw1.device.type/000.yaml
   gw1.emission.method:
     enum_type: versioned
