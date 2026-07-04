@@ -112,7 +112,10 @@ properties:
       Flow module components present in the running deployment.
 
   Ha1Params:
-    $ref: "https://schemas.electricity.works/types/ha1.params/006"
+    oneOf:
+      - $ref: "https://schemas.electricity.works/types/ha1.params/004"
+      - $ref: "https://schemas.electricity.works/types/ha1.params/005"
+      - $ref: "https://schemas.electricity.works/types/ha1.params/006"
     description: >
       Active HA1 parameter set used by the running deployment.
 

@@ -14,6 +14,8 @@ from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChanne
 from sema.runtime.types.old_versions.gw1_tank_temp_calibration_map_000 import (
     Gw1TankTempCalibrationMap000,
 )
+from sema.runtime.types.old_versions.ha1_params_004 import Ha1Params004
+from sema.runtime.types.old_versions.ha1_params_005 import Ha1Params005
 from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
     I2cMultichannelDtRelayComponentGt002,
 )
@@ -51,7 +53,7 @@ class LayoutLite011(SemaType):
         PicoTankModuleComponentGt011 | SimPicoTankModuleComponentGt000
     ]
     flow_module_components: list[PicoFlowModuleComponentGt000]
-    ha1_params: Ha1Params
+    ha1_params: Ha1Params004 | Ha1Params005 | Ha1Params
     i2c_relay_component: I2cMultichannelDtRelayComponentGt002 | None = None
     t_map: Gw1TankTempCalibrationMap000 | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
@@ -134,6 +136,7 @@ class LayoutLite011(SemaType):
         """
         - DerivedChannels[]: derived.channel.gt:000 | 001 -> 001
         - DataChannels[]: data.channel.gt:001 -> 002
+        - Ha1Params: ha1.params:004 | 005 | 006 -> ha1.params:006
         - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> 003
         - ShNodes[]: spaceheat.node.gt:300 | 301 -> 301
         """
@@ -147,6 +150,12 @@ class LayoutLite011(SemaType):
         data["sh_nodes"] = [
             node.upgrade() if node.version == "300" else node for node in self.sh_nodes
         ]
+
+        if self.ha1_params.version == "004":
+            data["ha1_params"] = self.ha1_params.upgrade().upgrade()
+
+        if self.ha1_params.version == "005":
+            data["ha1_params"] = self.ha1_params.upgrade()
 
         if self.i2c_relay_component is not None:
             data["i2c_relay_component"] = self.i2c_relay_component.upgrade()

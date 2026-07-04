@@ -1,9 +1,8 @@
     def upgrade(self) -> {{ layout_lite_011_class_name }}:
         """
-        - Ha1Params: ha1.params:005 -> 006
+        - Ha1Params: ha1.params:004 | 005 -> ha1.params:004 | 005 | 006
         - DerivedChannels[]: derived.channel.gt:000 -> 000 | 001
         """
         data = self.model_dump()
-        data["ha1_params"] = self.ha1_params.upgrade()
         data["version"] = "011"
         return {{ layout_lite_011_class_name }}.model_validate(data)
