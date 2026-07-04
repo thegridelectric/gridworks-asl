@@ -606,6 +606,7 @@ types:
       - derived.channel.gt:000
       - gw1.tank.temp.calibration.map:000
       - gw1.tank.temp.calibration:000
+      - ha1.params:004
       - ha1.params:005
       - i2c.multichannel.dt.relay.component.gt:002
       - pico.flow.module.component.gt:000
@@ -649,6 +650,8 @@ types:
       - derived.channel.gt:001
       - gw1.tank.temp.calibration.map:000
       - gw1.tank.temp.calibration:000
+      - ha1.params:004
+      - ha1.params:005
       - ha1.params:006
       - i2c.multichannel.dt.relay.component.gt:002
       - pico.flow.module.component.gt:000

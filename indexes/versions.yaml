@@ -312,15 +312,15 @@ types:
         summary: >
           - DerivedChannels[]: derived.channel.gt:000 | 001 -> 001
           - DataChannels[]: data.channel.gt:001 -> 002
+          - Ha1Params: ha1.params:004 | 005 | 006 -> ha1.params:006
           - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> 003
           - ShNodes[]: spaceheat.node.gt:300 | 301 -> 301
       "011":
         summary: >
-          - Ha1Params: ha1.params:005 -> 006
+          - Ha1Params: ha1.params:004 | 005 -> ha1.params:004 | 005 | 006
           - DerivedChannels[]: derived.channel.gt:000 -> 000 | 001
       "010":
         summary: >
-          - Ha1Params: ha1.params:004 | 005 -> 005
           - ShNodes[]: spaceheat.node.gt:300 -> 300 | 301
           - I2cRelayComponent: required -> optional
       "009":

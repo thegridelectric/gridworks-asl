@@ -125,12 +125,9 @@ class LayoutLite009(SemaType):
 
     def upgrade(self) -> LayoutLite010:
         """
-        - Ha1Params: ha1.params:004 | 005 -> 005
         - ShNodes[]: spaceheat.node.gt:300 -> 300 | 301
         - I2cRelayComponent: required -> optional
         """
         data = self.model_dump()
-        if self.ha1_params.version == "004":
-            data["ha1_params"] = self.ha1_params.upgrade()
         data["version"] = "010"
         return LayoutLite010.model_validate(data)
