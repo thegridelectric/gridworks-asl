@@ -566,7 +566,7 @@ types:
       - electric.meter.channel.config:001
       - electric.meter.component.gt:002
       - electric.meter.device.type.gt:000
-      - g.node.gt:004
+      - g.node.gt:005
       - gw.house0.hydronic:000
       - gw.native.gpio.pin:000
       - gw1.hvac.zone:000
@@ -605,7 +605,7 @@ types:
       - uuid4.str
       types:
       - capture.tuning:000
-      - g.node.gt:004
+      - g.node.gt:005
       versionless_types: []
   gw.native.gpio.pin:
     '000':
@@ -655,7 +655,7 @@ types:
       - electric.meter.channel.config:001
       - electric.meter.component.gt:002
       - electric.meter.device.type.gt:000
-      - g.node.gt:004
+      - g.node.gt:005
       - gw.native.gpio.pin:000
       - gw1.scada.device.type.gt:000
       - gw1.unit.quantity.projection:000

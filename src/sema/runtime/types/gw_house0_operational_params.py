@@ -2,13 +2,13 @@ from typing import Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.types.capture_tuning import CaptureTuning
-from sema.runtime.types.old_versions.g_node_gt_004 import GNodeGt004
+from sema.runtime.types.g_node_gt import GNodeGt
 
 
 class GwHouse0OperationalParams(SemaType):
     """Sema: https://schemas.electricity.works/types/gw.house0.operational.params/000"""
 
-    g_nodes: list[GNodeGt004]
+    g_nodes: list[GNodeGt]
     capture_tuning_list: list[CaptureTuning]
     type_name: Literal["gw.house0.operational.params"] = "gw.house0.operational.params"
     version: Literal["000"] = "000"

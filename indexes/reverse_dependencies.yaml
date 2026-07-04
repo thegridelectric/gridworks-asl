@@ -126,15 +126,13 @@ types:
       - report:002
       - report:003
   g.node.gt:
-    '004':
-      used_by:
-      - gw.house0.layout:000
-      - gw.house0.operational.params:000
-      - gw.nolan.layout:000
     '005':
       used_by:
       - g.node.forest:000
       - g.node.reparent.cmd:000
+      - gw.house0.layout:000
+      - gw.house0.operational.params:000
+      - gw.nolan.layout:000
   gw.house0.hydronic:
     '000':
       used_by:

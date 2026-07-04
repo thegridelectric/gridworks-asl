@@ -6,7 +6,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-07-03T19:45:00Z'
+  last_updated: '2026-07-04T14:50:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -1443,7 +1443,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.house0.layout/000
-        created: '2026-06-26T03:40:00Z'
+        created: '2026-07-04T14:50:00Z'
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new\
           \ DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida\
           \ / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server).\
@@ -1458,7 +1458,7 @@ types:
           - dfr.component.gt:000
           - electric.meter.component.gt:002
           - electric.meter.device.type.gt:000
-          - g.node.gt:004
+          - g.node.gt:005
           - gw.house0.hydronic:000
           - gw1.scada.device.type.gt:000
           - hubitat.component.gt:000
@@ -1479,14 +1479,14 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.house0.operational.params/000
-        created: '2026-06-30T22:55:00Z'
+        created: '2026-07-04T14:50:00Z'
         summary: "Initial Sema version \u2014 GNodes home identity (mirrors the layout)\
           \ + CaptureTuningList (per-channel capture params migrated out of the channel-config\
           \ family)."
         direct_dependencies:
           structural:
           - capture.tuning:000
-          - g.node.gt:004
+          - g.node.gt:005
   gw.native.gpio.pin:
     latest_version: '000'
     owner: gridworks-energy
@@ -1510,7 +1510,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.nolan.layout/000
-        created: '2026-06-26T03:40:00Z'
+        created: '2026-07-04T14:50:00Z'
         summary: Un-drafted for hardware-layout-pass-one (full layouts now, axioms
           later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components
           are the cac-free DeviceType versions; DeviceTypes holds the specialized
@@ -1524,7 +1524,7 @@ types:
           - derived.channel.gt:002
           - electric.meter.component.gt:002
           - electric.meter.device.type.gt:000
-          - g.node.gt:004
+          - g.node.gt:005
           - gw1.scada.device.type.gt:000
           - gw108.gpio.sensor.component.gt:002
           - gw108.vdc.relay.component.gt:002
