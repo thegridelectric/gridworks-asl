@@ -404,6 +404,7 @@ types:
       - layout.lite:012
       - layout.lite:013
       - new.command.tree:000
+      - new.command.tree:001
     '302':
       used_by:
       - gw.nolan.layout:000
@@ -726,6 +727,7 @@ formats:
     - machine.states:000
     - market.product:000
     - new.command.tree:000
+    - new.command.tree:001
     - new.command.tree:002
     - relay.actor.config:002
     - relay.actor.config:003
@@ -977,6 +979,7 @@ formats:
     - layout.lite:015
     - machine.states:000
     - new.command.tree:000
+    - new.command.tree:001
     - new.command.tree:002
     - report.event:002
     - report.event:003

@@ -1558,6 +1558,19 @@ types:
       - spaceheat.node.gt:300
       - spaceheat.node.gt:301
       versionless_types: []
+    '001':
+      enums:
+      - gw1.actor.class:011
+      formats:
+      - handle.name
+      - left.right.dot
+      - positive.int
+      - spaceheat.name
+      - utc.milliseconds
+      - uuid4.str
+      types:
+      - spaceheat.node.gt:301
+      versionless_types: []
     '002':
       enums:
       - gw1.actor.class:012

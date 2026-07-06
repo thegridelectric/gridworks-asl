@@ -720,7 +720,9 @@ types:
     versioning_strategy: "literal"
     versions:
       "002":
-        summary: "- ShNodes: spaceheat.node.gt:303 only (drop the multi-version oneOf anti-pattern)"
+        summary: "- ShNodes: spaceheat.node.gt:301 -> 303"
+      "001":
+        summary: "- ShNodes: spaceheat.node.gt:301 only (drop the multi-version oneOf; retroactive registration of the wire version the spruce scada emitted from 2026-01-28)"
       "000":
         summary: "Initial Sema version"
 

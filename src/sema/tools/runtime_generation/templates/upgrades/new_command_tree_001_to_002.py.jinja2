@@ -1,5 +1,5 @@
     def upgrade(self) -> {{ new_command_tree_002_class_name }}:
-        """- ShNodes: spaceheat.node.gt:303 only (drop the multi-version oneOf anti-pattern)"""
+        """- ShNodes: spaceheat.node.gt:301 -> 303"""
         data = self.model_dump()
         lifted: list[{{ spaceheat_node_gt_303_class_name }}] = []
         for node in self.sh_nodes:

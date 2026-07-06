@@ -457,6 +457,7 @@ types:
     versioning_strategy: literal
     versions:
       '002': definitions/types/new.command.tree/002.yaml
+      '001': definitions/types/new.command.tree/001.yaml
       '000': definitions/types/new.command.tree/000.yaml
   pico.btu.meter.component.gt:
     latest_version: '001'

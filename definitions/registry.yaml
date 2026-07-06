@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-04T14:50:00Z"
+  last_updated: "2026-07-06T17:10:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -2778,11 +2778,21 @@ types:
         schema_url: "https://schemas.electricity.works/types/new.command.tree/002"
         created: "2026-06-26T03:40:00Z"
         summary: >-
-          - ShNodes: spaceheat.node.gt:303 only (drop the multi-version oneOf anti-pattern)
+          - ShNodes: spaceheat.node.gt:301 -> 303
         direct_dependencies:
           structural:
             - "left.right.dot"
             - "spaceheat.node.gt:303"
+            - "utc.milliseconds"
+      "001":
+        schema_url: "https://schemas.electricity.works/types/new.command.tree/001"
+        created: "2026-06-26T03:35:00Z"
+        summary: >-
+          - ShNodes: spaceheat.node.gt:301 only (drop the multi-version oneOf; retroactive registration of the wire version the spruce scada emitted from 2026-01-28)
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "spaceheat.node.gt:301"
             - "utc.milliseconds"
       "000":
         schema_url: "https://schemas.electricity.works/types/new.command.tree/000"

@@ -1,0 +1,12 @@
+    def upgrade(self) -> {{ new_command_tree_001_class_name }}:
+        """- ShNodes: spaceheat.node.gt:301 only (drop the multi-version oneOf; retroactive registration of the wire version the spruce scada emitted from 2026-01-28)"""
+        data = self.model_dump()
+        lifted: list[{{ spaceheat_node_gt_301_class_name }}] = []
+        for node in self.sh_nodes:
+            current: SemaType = node
+            while not isinstance(current, {{ spaceheat_node_gt_301_class_name }}):
+                current = current.upgrade()
+            lifted.append(current)
+        data["sh_nodes"] = lifted
+        data["version"] = "001"
+        return {{ new_command_tree_001_class_name }}.model_validate(data)
