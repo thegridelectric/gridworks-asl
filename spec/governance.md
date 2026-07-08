@@ -110,6 +110,23 @@ Changes MUST pass:
 
 This is the single canonical Change Process for the Sema specification.
 
+## Promotion (staging → published)
+
+Promotion is a human act, and it belongs to the word's owner: the owner
+promotes on a branch — `sema promote <name> [version]` in the reference
+implementation — and opens a pull request. The PR diff is the promotion
+record: the flipped `status` line, the recorded content-hash pin, and the
+regenerated public registry index, nothing else. Promotion never changes
+`created` or the schema file itself; a promotion PR that alters published
+content fails the hash-pin check.
+
+Validation gates the merge as with any change: required statuses, the
+published dependency-closure rule (a published word's closure is
+published), pin/file agreement, and registry/schema status consistency.
+Promoting a dependency cluster is one branch with multiple promotions,
+bottom-up — a word cannot be promoted while any dependency is still
+staging or draft.
+
 ## Conflict Resolution
 
 If ambiguity or dispute arises regarding:
