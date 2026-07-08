@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-19T14:50:00Z"
+  last_updated: "2026-07-20T15:55:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1592,6 +1592,22 @@ types:
             - "fsm.atomic.report:000"
             - "spaceheat.name"
             - "uuid4.str"
+
+  g.node.create.cmd:
+    latest_version: "000"
+    owner: "gridworks-energy"
+    versioning_strategy: "literal"
+    description: "Command to create a single GNode in the Grid Node Registry: the registrar-facing write by which a node enters the registry, one node per command, parents first."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/g.node.create.cmd/000"
+        created: "2026-07-08T17:45:00Z"
+        status: "staging"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "g.node.gt:005"
 
   g.node.forest:
     latest_version: "000"

@@ -162,6 +162,11 @@ types:
     versions:
       '001': definitions/types/fsm.full.report/001.yaml
       '000': definitions/types/fsm.full.report/000.yaml
+  g.node.create.cmd:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/g.node.create.cmd/000.yaml
   g.node.forest:
     latest_version: '000'
     versioning_strategy: literal

@@ -132,6 +132,7 @@ types:
   g.node.gt:
     '005':
       used_by:
+      - g.node.create.cmd:000
       - g.node.forest:000
       - g.node.reparent.cmd:000
       - gw.house0.layout:000

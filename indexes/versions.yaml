@@ -266,6 +266,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  g.node.create.cmd:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   g.node.forest:
     latest_version: "000"
     versioning_strategy: "literal"

@@ -25,6 +25,16 @@ All changes to sema sub-folders or the sema repository MUST:
 
 If validation fails, fix and retry until green.
 
+## Branching
+
+Vocabulary work happens on a **topic branch cut from `dev`** (e.g.
+`jm/<topic>`), returned to `dev` by PR — one topic per branch. There is no
+long-lived vocabulary branch: with the staging tier, a word in real dev use
+lands on `dev` with `status: staging` (mutable in place) and is promoted to
+`published` when it freezes (see `spec/governance.md`), so nothing
+accumulates on a side branch. Check `git branch --show-current` before
+editing; never author on `dev` directly.
+
 ## Regen commands
 
 After registry or schema changes:

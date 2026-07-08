@@ -1,0 +1,64 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/g.node.create.cmd/000"
+
+title: "g.node.create.cmd"
+type: object
+description: >
+  Command to create a single GNode in the Grid Node Registry — the
+  registrar-facing write by which a node enters the registry. One node per
+  command, parents first: unless the new node is a forest root, its
+  alias-parent must already be active in the registry. The registry claims
+  the alias in the through-time ledger and appends the command to its log.
+  No connectivity edges are involved: parent-child structure is the alias
+  prefix itself, and the connectivity-edge table is reserved for non-tree
+  copper.
+
+properties:
+
+  NewNode:
+    $ref: "https://schemas.electricity.works/types/g.node.gt/005"
+    description: >
+      The GNode entering the registry. Its Alias places it in the topology;
+      its PositionPointId is carried in the command (submitter-assigned,
+      never derived from coordinates).
+
+  Proof:
+    type: string
+    description: >
+      Optional placeholder for a verifiable authorization artifact for this
+      create. Its format is machinery of the authority substrate and is
+      deliberately not fixed by this word; absent while write authority is
+      the authenticated connection.
+
+  TypeName:
+    const: "g.node.create.cmd"
+
+  Version:
+    const: "000"
+
+required:
+  - NewNode
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "NewNode": {
+        "GNodeId": "dcb05390-5bca-40ef-b63d-7908ccb33d9b",
+        "Alias": "hw1.isone.me.versant.keene.beech",
+        "BaseClass": "LeafTransactiveNode",
+        "GNodeClass": "LeafTransactiveNode",
+        "Status": "Active",
+        "PositionPointId": "198ca6af-5a4b-43a2-a8a9-7546deabc731",
+        "TypeName": "g.node.gt",
+        "Version": "005"
+      },
+      "TypeName": "g.node.create.cmd",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
