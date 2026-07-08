@@ -4,7 +4,7 @@ from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
 class SpaceheatMakeModel(SemaEnum):
-    """Sema: https://schemas.electricity.works/enums/spaceheat.make.model/007"""
+    """Sema: https://schemas.electricity.works/enums/spaceheat.make.model/008"""
 
     UnknownMake__UnknownModel = auto()
     EGAUGE__4030 = auto()
@@ -51,6 +51,8 @@ class SpaceheatMakeModel(SemaEnum):
     GRIDWORKS__TANKMODULE3 = auto()
     GRIDWORKS__GW101 = auto()
     GRIDWORKS__SCADA_GW108 = auto()
+    GRIDWORKS__SIM_SENSOR = auto()
+    GRIDWORKS__SIM_RELAY_BANK = auto()
 
     @classmethod
     def default(cls) -> "SpaceheatMakeModel":
@@ -66,4 +68,4 @@ class SpaceheatMakeModel(SemaEnum):
 
     @classmethod
     def enum_version(cls) -> str:
-        return "007"
+        return "008"

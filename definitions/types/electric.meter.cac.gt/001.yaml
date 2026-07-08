@@ -1,0 +1,63 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/electric.meter.cac.gt/001"
+
+title: "electric.meter.cac.gt"
+type: object
+description: >
+  An electric-meter Component Attribute Class (CAC): the device type for a power
+  meter, identified by MakeModel, together with the telemetry names the meter type
+  can report and its default serial baud rate. Flat — it does not inherit from the
+  generic CAC; the shared CAC fields are spelled out here.
+
+properties:
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this meter device type (the canonical id for
+      the MakeModel; see axiom 1).
+
+  MakeModel:
+    $ref: "https://schemas.electricity.works/enums/spaceheat.make.model/007"
+    description: >
+      The manufacturer make and model identifying this meter device type.
+
+  DisplayName:
+    type: string
+    description: >
+      Human-readable name for this meter device type.
+
+  MinPollPeriodMs:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Shortest polling period, in milliseconds, that this meter type supports.
+
+  TelemetryNameList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/007"
+    description: >
+      The telemetry names this meter device type is able to report.
+
+  DefaultBaud:
+    type: integer
+    description: >
+      Default serial baud rate for this meter type, when read over a serial link.
+
+  TypeName:
+    const: "electric.meter.cac.gt"
+
+  Version:
+    const: "001"
+
+required:
+  - ComponentAttributeClassId
+  - MakeModel
+  - TelemetryNameList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

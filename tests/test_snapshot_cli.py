@@ -1,10 +1,26 @@
 from pathlib import Path
 
+import pytest
+
 from sema.interfaces.cli import snapshot
 from sema.tools.build_public_registry import build_public_registry, load_registry
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_snapshot_prepare_rejects_staging_by_default(monkeypatch, tmp_path: Path) -> None:
+    # The template seed pulls layout.lite:013, which is staging — so the
+    # published-only default must fail and name the staging offenders.
+    monkeypatch.setattr(snapshot, "OUTPUT_DIR", tmp_path / "output")
+    monkeypatch.setattr(
+        snapshot,
+        "build_public_registry_index",
+        lambda: build_public_registry(load_registry()),
+    )
+    with pytest.raises(ValueError, match="STAGING") as excinfo:
+        snapshot.prepare_snapshot(ROOT / "template_seed_request.yaml")
+    assert "layout.lite:013" in str(excinfo.value)
 
 
 def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_path: Path) -> None:
@@ -16,7 +32,9 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
         lambda: build_public_registry(load_registry()),
     )
 
-    target_root = snapshot.prepare_snapshot(ROOT / "template_seed_request.yaml")
+    target_root = snapshot.prepare_snapshot(
+        ROOT / "template_seed_request.yaml", allow_staged=True
+    )
 
     assert target_root == output_root / "sema"
     assert not (output_root / "gjk").exists()
@@ -24,6 +42,12 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
     assert (target_root / "indexes" / "seed_expanded.yaml").exists()
     assert (target_root / "indexes" / "local_names.yaml").exists()
     assert not (target_root / "base.py").exists()
+    # staging closure + --allow-staged => the dev-only markers, both machine
+    # (indexes/staging.yaml) and human (README banner)
+    assert (target_root / "indexes" / "staging.yaml").exists()
+    readme = (target_root / "README.md").read_text()
+    assert "PLEASE ONLY USE IN DEV" in readme
+    assert "layout.lite:013" in readme
 
     stale_file = output_root / "stale.txt"
     stale_file.write_text("remove me")
@@ -32,7 +56,12 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
         local_names.read_text().replace("layout.lite: layout.lite", "layout.lite: lite.layout")
     )
 
-    assert snapshot.prepare_snapshot(ROOT / "template_seed_request.yaml") == target_root
+    assert (
+        snapshot.prepare_snapshot(
+            ROOT / "template_seed_request.yaml", allow_staged=True
+        )
+        == target_root
+    )
     assert not stale_file.exists()
     assert "lite.layout" not in local_names.read_text()
     local_names.write_text(

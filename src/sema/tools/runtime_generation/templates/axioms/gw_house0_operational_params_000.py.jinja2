@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw_house0_operational_params_000_class_name }}":
+        """
+        Axiom 1: CaptureTuningChannelUniqueness
+        ChannelName SHALL be unique across CaptureTuningList.
+        """
+        names = [ct.channel_name for ct in self.capture_tuning_list]
+        if len(names) != len(set(names)):
+            raise ValueError(
+                "Axiom 1 (CaptureTuningChannelUniqueness) failed: ChannelName "
+                "must be unique across CaptureTuningList."
+            )
+        return self

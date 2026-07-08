@@ -1,0 +1,66 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/i2c.adc.config/000"
+
+title: "i2c.adc.config"
+type: object
+description: >
+  Configuration of an analog-to-digital converter on a GridWorks SCADA board.
+
+properties:
+
+  Name:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The name of this ADC on the board.
+
+  I2cBus:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The name of the board bus this ADC is attached to.
+
+  I2cAddress:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      The I²C bus address of the ADC.
+
+  AdcType:
+    $ref: "https://schemas.electricity.works/enums/i2c.adc.type/000"
+    description: >
+      The ADC model.
+
+  Channels:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The number of channels the ADC provides.
+
+  TypeName:
+    const: "i2c.adc.config"
+
+  Version:
+    const: "000"
+
+required:
+  - Name
+  - I2cBus
+  - I2cAddress
+  - AdcType
+  - Channels
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Name": "CtAdc",
+      "I2cBus": "DefaultBus",
+      "I2cAddress": 72,
+      "AdcType": "Ads1115",
+      "Channels": 4,
+      "TypeName": "i2c.adc.config",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

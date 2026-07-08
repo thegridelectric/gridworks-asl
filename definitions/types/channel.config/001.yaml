@@ -1,0 +1,98 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/channel.config/001"
+
+title: "channel.config"
+type: object
+description: >
+  Base channel configuration used by component definitions to describe how a
+  telemetry channel is sampled and serialized.
+
+properties:
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  PollPeriodMs:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      How often SCADA polls the underlying hardware device or source for a
+      fresh value, in milliseconds. This applies to devices that do not emit
+      readings on their own and must instead be queried by SCADA.
+
+  CapturePeriodS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      How often SCADA reports or emits the channel value into the telemetry
+      stream, in seconds. This is distinct from hardware polling cadence.
+
+  AsyncCapture:
+    type: boolean
+
+  AsyncCaptureDelta:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Optional threshold for asynchronous emission. If present, an async
+      capture is triggered when the magnitude of the change since the last
+      published value is greater than or equal to AsyncCaptureDelta, expressed
+      in the channel's serialized integer reading units.
+
+  TypeName:
+    const: "channel.config"
+
+  Version:
+    const: "001"
+
+required:
+  - ChannelName
+  - CapturePeriodS
+  - AsyncCapture
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ChannelName": "scada",
+      "CapturePeriodS": 1,
+      "AsyncCapture": false,
+      "TypeName": "channel.config",
+      "Version": "001"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "CaptureAndPollingConsistency"
+      statement: >
+        If PollPeriodMs is present, then CapturePeriodMs (CapturePeriodS *
+        1000) SHALL be greater than PollPeriodMs. If CapturePeriodMs is less
+        than 10 times PollPeriodMs, then CapturePeriodMs SHALL be a multiple
+        of PollPeriodMs.
+  extended_description: >
+    `channel.config` captures both periodic sampling behavior and optional
+    asynchronous emission behavior for a telemetry channel.
+
+    `PollPeriodMs` and `CapturePeriodS` describe different stages of SCADA
+    behavior. `PollPeriodMs` is the cadence at which SCADA polls the hardware
+    device or upstream source for a value. `CapturePeriodS` is the cadence at
+    which SCADA emits that channel value into the telemetry stream.
+
+    These cadences may differ. For example, SCADA may poll a device frequently
+    to maintain fresh local state while only reporting the value periodically
+    or when an async trigger condition is met.
+
+    In current runtime practice, `AsyncCapture` may be true even when
+    `AsyncCaptureDelta` is omitted. This means asynchronous capture is enabled,
+    but the threshold semantics are not fully specified in the payload itself.
+
+    When `AsyncCaptureDelta` is present, the intended interpretation is:
+    publish asynchronously when the magnitude of the change since the last
+    published value is greater than or equal to `AsyncCaptureDelta`.
+
+    A channel's unit and scaling are not configured here. A channel's identity
+    — including its unit and any integer scaling — is carried by its
+    `TelemetryName` (for a data channel) or its `OutputUnit` (for a derived
+    channel). Version 000 carried redundant `Unit` and `Exponent` fields;
+    version 001 drops them.

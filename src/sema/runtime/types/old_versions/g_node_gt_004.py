@@ -1,0 +1,113 @@
+from typing import Literal, Self
+from pydantic import model_validator
+from sema.runtime.base import SemaType
+from sema.runtime.enums import BaseGNodeClass
+from sema.runtime.enums import GNodeStatus
+from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import UUID4Str
+from sema.runtime.types.g_node_gt import GNodeGt
+
+
+class GNodeGt004(SemaType):
+    """Sema: https://schemas.electricity.works/types/g.node.gt/004"""
+
+    g_node_id: UUID4Str
+    alias: LeftRightDot
+    base_class: BaseGNodeClass
+    g_node_class: str
+    status: GNodeStatus
+    prev_alias: LeftRightDot | None = None
+    position_point_id: UUID4Str | None = None
+    display_name: str | None = None
+    type_name: Literal["g.node.gt"] = "g.node.gt"
+    version: Literal["004"] = "004"
+
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> Self:
+        """
+        Axiom 1: ClassConsistency
+        a. If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass.
+        b. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
+        """
+        if self.base_class != BaseGNodeClass.Logical:
+            if self.g_node_class != self.base_class.value:
+                raise ValueError(
+                    f"Axiom 1 failed: Physical GNodes must align BaseClass and GNodeClass. "
+                    f"Expected GNodeClass='{self.base_class.value}' "
+                    f"but got '{self.g_node_class}'."
+                )
+        elif (
+            self.g_node_class in BaseGNodeClass.values()
+            and self.g_node_class != BaseGNodeClass.Logical.value
+        ):
+            raise ValueError(
+                "Axiom 1 failed: Logical GNodes must not use a non-Logical "
+                "base.g.node.class value as GNodeClass."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> Self:
+        """
+        Axiom 2: PhysicalGNodeLocations
+        If BaseClass != Logical, PositionPointId SHALL NOT be null.
+        """
+        if self.base_class != BaseGNodeClass.Logical:
+            if self.position_point_id is None:
+                raise ValueError(
+                    "Axiom 2 failed: Physical GNodes must have a PositionPointId. "
+                    f"BaseClass='{self.base_class.value}' has no location."
+                )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> Self:
+        """
+        Axiom 3: AliasTransitionConsistency
+        If PrevAlias is not null, it SHALL differ from Alias.
+        """
+        if self.prev_alias is not None and self.prev_alias == self.alias:
+            raise ValueError(
+                "Axiom 3 failed: PrevAlias must differ from Alias when present."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_4(self) -> Self:
+        """
+        Axiom 4: GNodeClassNamespacing
+        GNodeClass SHALL be a non-empty string containing no whitespace
+        """
+        if not self.g_node_class:
+            raise ValueError("Axiom 4 failed: GNodeClass must be non-empty.")
+        if any(char.isspace() for char in self.g_node_class):
+            raise ValueError("Axiom 4 failed: GNodeClass must not contain whitespace.")
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_5(self) -> Self:
+        """
+        Axiom 5: AliasSuffixSemantics
+        a. Alias SHALL end with ".ta" if and only if GNodeClass is "TerminalAsset".
+        b. Alias SHALL end with ".scada" if and only if GNodeClass is "Scada".
+        """
+        alias_has_ta_suffix = self.alias.endswith(".ta")
+        if (self.g_node_class == "TerminalAsset") != alias_has_ta_suffix:
+            raise ValueError(
+                'Axiom 5 failed: Alias must end with ".ta" if and only if '
+                'GNodeClass is "TerminalAsset".'
+            )
+
+        alias_has_scada_suffix = self.alias.endswith(".scada")
+        if (self.g_node_class == "Scada") != alias_has_scada_suffix:
+            raise ValueError(
+                'Axiom 5 failed: Alias must end with ".scada" if and only if '
+                'GNodeClass is "Scada".'
+            )
+        return self
+
+    def upgrade(self) -> GNodeGt:
+        """adds axiom 6 GNodeAliasHasBody; no field changes"""
+        data = self.model_dump()
+        data["version"] = "005"
+        return GNodeGt.model_validate(data)

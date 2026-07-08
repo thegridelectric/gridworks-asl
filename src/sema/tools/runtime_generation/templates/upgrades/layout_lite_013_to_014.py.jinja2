@@ -1,0 +1,6 @@
+    def upgrade(self) -> {{ layout_lite_014_class_name }}:
+        """- ShNodes: spaceheat.node.gt:301 -> 302"""
+        data = self.model_dump()
+        data["sh_nodes"] = [node.upgrade() for node in self.sh_nodes]
+        data["version"] = "014"
+        return {{ layout_lite_014_class_name }}.model_validate(data)

@@ -12,7 +12,7 @@ description: >
 properties:
 
   NewNode:
-    $ref: "https://schemas.electricity.works/types/g.node.gt/004"
+    $ref: "https://schemas.electricity.works/types/g.node.gt/005"
     description: >
       The new GNode N being introduced. Its Alias places it in the topology;
       the named children re-parent beneath it.
@@ -50,7 +50,7 @@ examples:
         "Status": "Active",
         "PositionPointId": "198ca6af-5a4b-43a2-a8a9-7546deabc731",
         "TypeName": "g.node.gt",
-        "Version": "004"
+        "Version": "005"
       },
       "MovedChildGNodeIds": ["dcb05390-5bca-40ef-b63d-7908ccb33d9b"],
       "TypeName": "g.node.reparent.cmd",

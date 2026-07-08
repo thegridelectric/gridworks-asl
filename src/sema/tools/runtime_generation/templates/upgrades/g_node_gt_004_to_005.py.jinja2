@@ -1,0 +1,5 @@
+    def upgrade(self) -> {{ g_node_gt_005_class_name }}:
+        """adds axiom 6 GNodeAliasHasBody; no field changes"""
+        data = self.model_dump()
+        data["version"] = "005"
+        return {{ g_node_gt_005_class_name }}.model_validate(data)

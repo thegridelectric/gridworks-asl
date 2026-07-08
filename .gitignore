@@ -39,3 +39,7 @@ app/**/.env
 .secrets/
 
 **/node_modules/**/*
+
+# Local-only gwta snapshot tooling (kept out of git by request)
+gwta_seed_request.yaml
+build_gwta_snapshot.sh

@@ -67,45 +67,59 @@ Example: `"2026-02-22T16:43:00Z"`.
 
 ## Status Field
 
-Registry entries MAY include a `status` field indicating publication
-lifecycle state.
+Every registry entry SHALL carry an explicit `status` field indicating its
+lifecycle state. There is no default: a missing `status` is a
+registry-validation error.
 
 Allowed values:
-- `"draft"` — vocabulary definition is mutable and not yet published
-- `"published"` — vocabulary definition is immutable per this
-  specification
+- `"draft"` — not ready for use. Mutable; excluded from `latest_version`,
+  the public registry surface, runtime generation, and snapshots.
+- `"staging"` — in real use across repos while still mutable in place.
+  Staging vocabulary is consumable by runtime generation and snapshots but
+  SHALL run against dev brokers only — never hybrid, never production.
+- `"published"` — immutable per this specification. Any semantic or
+  validation change to a published definition SHALL be expressed through a
+  new version. Published vocabulary is eligible for hybrid and production
+  brokers and for serving at `https://schemas.electricity.works`.
 
-For versionless vocabulary words (formats and versionless types), `status`
-MAY appear on the word entry. If omitted, it SHALL be interpreted as
-`"published"`.
+Placement:
 
-For versioned enums and versioned types, `status` applies to individual
-version entries under `versions`. If omitted from a version entry, it
-SHALL be interpreted as `"published"`.
+- For formats, versionless types, and literal enums, `status` appears on
+  the word entry. Formats never stage: a format's status is `"draft"` or
+  `"published"` only.
+- For versioned enums and versioned types, `status` applies to individual
+  version entries under `versions`.
 
-A versioned enum or type MAY have both published and draft versions at
-the same time. In that case:
+A versioned enum or type MAY hold versions in different statuses at the
+same time. In that case:
 
-- `latest_version` SHALL identify the latest published version
+- `latest_version` SHALL identify the latest non-draft (staging or
+  published) version
 - Draft versions SHALL NOT be selected by `latest_version`
 - Draft versions MAY be numerically greater than `latest_version`
 - Tooling MAY expose draft versions only when explicitly requested
 
-Draft definitions MAY appear in the working registry and in local schema
-files. Draft definitions SHALL NOT be published to
-`https://schemas.electricity.works` and SHALL be excluded from public
-schema indexes, public schema pages, and default public schema serving.
+A published version's full dependency closure (structural and axiom) SHALL
+itself be published — a published definition may not reference a staging
+or draft word. Staging definitions may reference staging or published
+words; nothing non-draft may reference a draft.
 
-For draft definitions, `created` records the time the draft entry was
-first added to the working registry. When a draft definition is promoted
-to published, `created` SHALL be updated to the publication timestamp.
-From that point forward, `created` is governed by the immutability rules
-for published definitions.
+Draft and staging definitions SHALL NOT be served at
+`https://schemas.electricity.works`. Draft definitions are additionally
+excluded from public schema indexes. A staging definition's `$id` uses the
+canonical (non-draft) URL: publication is a status change and a later
+serving event, not a URL change. Draft schemas use the `/draft/` URL
+segment.
+
+For draft and staging definitions, `created` records the time the entry
+was first added to the working registry. Promotion — draft to staging, or
+staging to published — never changes `created`. From publication forward,
+`created` is governed by the immutability rules for published definitions.
 
 If a draft schema file appears under `definitions/`, it SHALL remain
-parseable YAML and SHALL use the normal Sema schema file layout. Draft
-status relaxes immutability and may relax completeness checks defined by
-tooling, but it does not permit malformed schema files.
+parseable YAML and SHALL use the normal Sema schema file layout. Draft and
+staging status relax immutability and may relax completeness checks
+defined by tooling, but they do not permit malformed schema files.
 
 ## `replaced_by` Field
 

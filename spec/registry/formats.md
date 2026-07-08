@@ -17,7 +17,10 @@ Formats are immutable and unversioned. Each format entry MUST include:
   schema_url: "https://schemas.electricity.works/formats/<format-name>"
   created: "<RFC 3339 timestamp>"
   description: "<concise structural description>"
+  status: "published" | "draft"   # required; formats never stage
 ```
+
+See [structure.md](structure.md) "Status Field" for status semantics.
 
 For all vocabulary entries (formats, enums, and types), `schema_url`
 SHALL equal the `$id` declared in the referenced schema file.

@@ -1,0 +1,10 @@
+{
+  "GNodeId": "7fbc8ef3-5ba0-4896-8cf6-a8977ed82cec",
+  "Alias": "d1.isone.me.versant.keene.beech",
+  "BaseClass": "Logical",
+  "GNodeClass": "Scada",
+  "Status": "Active",
+  "DisplayName": "Beech Street SCADA",
+  "TypeName": "g.node.gt",
+  "Version": "005"
+}

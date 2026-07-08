@@ -19,6 +19,17 @@ consumer's package. It ships **data, not test code**: the restricted
 definitions, the generated runtime, and a generated `samples/` folder. It does
 NOT vendor a test suite.
 
+## Published-only by default
+
+A snapshot build SHALL default to a **published-only** closure: if the
+expanded seed reaches any staging word, the build fails and lists the
+staging offenders. An explicit opt-in (`--allow-staged` in the reference
+implementation) permits staging words — never drafts — and the resulting
+snapshot SHALL be marked as a staging snapshot, both machine-readably (a
+marker in the snapshot indexes) and for humans (a README stating the
+snapshot is for dev use only). A staging snapshot SHALL only run against
+dev brokers.
+
 ## Determinism (zero-diff regen)
 
 A second build over an unchanged registry SHALL produce **zero diff**. This

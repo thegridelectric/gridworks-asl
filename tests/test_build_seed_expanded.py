@@ -24,8 +24,8 @@ initial_targets:
 """,
     )
 
-    assert expanded["initial_targets"] == ["layout.lite:013"]
-    assert "013" in expanded["worklist"]["types"]["layout.lite"]
+    assert expanded["initial_targets"] == ["layout.lite:015"]
+    assert "015" in expanded["worklist"]["types"]["layout.lite"]
 
 
 def test_structured_seed_request_adds_intermediate_type_versions(tmp_path: Path) -> None:

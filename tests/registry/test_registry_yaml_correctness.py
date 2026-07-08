@@ -450,13 +450,15 @@ def test_registry_type_structure():
             sorted_versions = sorted(version_keys, reverse=True)
             assert version_keys == sorted_versions, f"{type_name} not sorted"
 
-            published_version_keys = [
+            # working latest_version = newest ACTIVE (staging or published)
+            # version; drafts are never selected by latest_version
+            active_version_keys = [
                 version
                 for version, version_entry in versions.items()
-                if version_entry.get("status", "published") == "published"
+                if version_entry["status"] != "draft"
             ]
-            if published_version_keys:
-                assert entry["latest_version"] == published_version_keys[0]
+            if active_version_keys:
+                assert entry["latest_version"] == active_version_keys[0]
 
             # -----------------------------------------------------------------
             # Created timestamps
@@ -543,7 +545,7 @@ def test_registry_type_structure():
                 for dep in deps["structural"] + deps.get("axiom", []):
                     assert is_valid_dep(dep)
 
-                if v_entry.get("status", "published") == "draft":
+                if v_entry["status"] == "draft":
                     continue
 
                 for dep in deps["structural"] + deps.get("axiom", []):
@@ -579,7 +581,7 @@ def test_type_versioning_strategy_matches_schema_version_field():
             continue
 
         latest_version = entry["latest_version"]
-        if entry["versions"][latest_version].get("status", "published") == "draft":
+        if entry["versions"][latest_version]["status"] == "draft":
             continue
         schema_path = DEFINITIONS_DIR / "types" / type_name / f"{latest_version}.yaml"
         schema = load_registry(schema_path)
@@ -644,7 +646,7 @@ def test_registry_versioning_strategy_matches_latest_published_schema():
         published_versions = [
             version
             for version, version_entry in entry["versions"].items()
-            if version_entry.get("status", "published") == "published"
+            if version_entry["status"] != "draft"
         ]
         if not published_versions:
             continue

@@ -1,0 +1,31 @@
+{
+  "DeviceType": "GridworksScadaGw108",
+  "BusList": [
+    {
+      "Name": "DefaultBus",
+      "BusNumber": 1,
+      "TypeName": "i2c.bus",
+      "Version": "000"
+    }
+  ],
+  "I2cRelays": [
+    {
+      "RelayName": "BufferTop",
+      "I2cBus": "GhostBus",
+      "Address": {
+        "I2cAddress": 33,
+        "RegisterIndex": 2,
+        "BitIndex": 1,
+        "TypeName": "i2c.bit.address",
+        "Version": "000"
+      },
+      "SupportedWiringConfigs": [
+        "NormallyOpen"
+      ],
+      "TypeName": "i2c.relay.config",
+      "Version": "000"
+    }
+  ],
+  "TypeName": "gw1.scada.device.type.gt",
+  "Version": "000"
+}

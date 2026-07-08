@@ -3,19 +3,17 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UTCMilliseconds
-from sema.runtime.types.old_versions.spaceheat_node_gt_200 import SpaceheatNodeGt200
-from sema.runtime.types.old_versions.spaceheat_node_gt_300 import SpaceheatNodeGt300
 from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 
 
 class NewCommandTree(SemaType):
-    """Sema: https://schemas.electricity.works/types/new.command.tree/000"""
+    """Sema: https://schemas.electricity.works/types/new.command.tree/002"""
 
     from_g_node_alias: LeftRightDot
-    sh_nodes: list[SpaceheatNodeGt200 | SpaceheatNodeGt300 | SpaceheatNodeGt]
+    sh_nodes: list[SpaceheatNodeGt]
     unix_ms: UTCMilliseconds
     type_name: Literal["new.command.tree"] = "new.command.tree"
-    version: Literal["000"] = "000"
+    version: Literal["002"] = "002"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "NewCommandTree":

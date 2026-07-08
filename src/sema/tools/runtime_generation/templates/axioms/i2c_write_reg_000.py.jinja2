@@ -1,0 +1,25 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ i2c_write_reg_000_class_name }}":
+        """
+        Axiom 1: NumBytesRange
+        NumBytes SHALL be 1 or 2.
+        """
+        if self.num_bytes not in (1, 2):
+            raise ValueError(
+                f"Axiom 1 (NumBytesRange) failed: NumBytes {self.num_bytes} must be 1 or 2."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ i2c_write_reg_000_class_name }}":
+        """
+        Axiom 2: ValueFitsNumBytes
+        Value SHALL fit in NumBytes bytes — 0 ≤ Value ≤ 256^NumBytes − 1 (≤ 255 for one
+        byte, ≤ 65535 for two).
+        """
+        if not (0 <= self.value <= (256 ** self.num_bytes) - 1):
+            raise ValueError(
+                f"Axiom 2 (ValueFitsNumBytes) failed: Value {self.value} does not fit "
+                f"in NumBytes {self.num_bytes} byte(s)."
+            )
+        return self

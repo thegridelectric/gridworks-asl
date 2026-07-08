@@ -1,0 +1,11 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ i2c_relay_component_gt_000_class_name }}":
+        """
+        Axiom 1: ExactlyOneConfig
+        ConfigList SHALL contain exactly one relay.control.config (one relay per component).
+        """
+        if len(self.config_list) != 1:
+            raise ValueError(
+                "Axiom 1 failed: ConfigList must contain exactly one relay.control.config."
+            )
+        return self

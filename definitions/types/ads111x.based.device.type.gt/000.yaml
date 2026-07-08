@@ -1,0 +1,68 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/ads111x.based.device.type.gt/000"
+
+title: "ads111x.based.device.type.gt"
+type: object
+description: >
+  DRAFT. The specialized device-type record for an ADS111x-based analog temperature
+  sensor device category — the per-family successor to the field `ads111x.based.cac.gt`.
+  This is what beech, oak, maple, fir, and elm use. Keyed by `DeviceType` (a
+  `gw1.device.type` value) instead of a make/model + cac UUID, it carries the
+  category-level data: the ADS111x I2C addresses, the number of terminal blocks, the
+  telemetry names it reports, and its shortest poll period. A component joins this
+  record by the shared `DeviceType` value. Flat.
+
+properties:
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this record describes, an open `pascal.case` string (a
+      `gw1.device.type` value). The hardware layout enforces membership in
+      `gw1.device.type`.
+
+  DisplayName:
+    type: string
+
+  MinPollPeriodMs:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Shortest polling period, in milliseconds, that this sensor type supports.
+
+  AdsI2cAddressList:
+    type: array
+    items:
+      type: integer
+    description: >
+      The I2C addresses of the ADS111x ADC chips on this device.
+
+  TotalTerminalBlocks:
+    type: integer
+    description: >
+      Total number of analog terminal blocks the device exposes.
+
+  TelemetryNameList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/enums/spaceheat.telemetry.name/007"
+    description: >
+      The telemetry names this sensor device type is able to report.
+
+  TypeName:
+    const: "ads111x.based.device.type.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - DeviceType
+  - AdsI2cAddressList
+  - TotalTerminalBlocks
+  - TelemetryNameList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"

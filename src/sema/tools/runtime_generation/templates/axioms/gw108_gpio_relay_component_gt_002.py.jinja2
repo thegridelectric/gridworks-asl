@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw108_gpio_relay_component_gt_002_class_name }}":
+        """
+        Axiom 1: ChannelNameUniqueness
+        Channel names SHALL be unique across the ConfigList.
+        """
+        channel_names = [config.channel_name for config in self.config_list]
+        if len(channel_names) != len(set(channel_names)):
+            raise ValueError(
+                "Axiom 1 (ChannelNameUniqueness) failed: channel names must be "
+                "unique across the ConfigList."
+            )
+        return self

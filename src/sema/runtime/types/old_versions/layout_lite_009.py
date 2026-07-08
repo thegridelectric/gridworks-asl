@@ -7,21 +7,27 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
 from sema.runtime.types.old_versions.data_channel_gt_001 import DataChannelGt001
 from sema.runtime.types.old_versions.derived_channel_gt_000 import DerivedChannelGt000
+from sema.runtime.types.old_versions.gw1_tank_temp_calibration_map_000 import (
+    Gw1TankTempCalibrationMap000,
+)
 from sema.runtime.types.old_versions.ha1_params_004 import Ha1Params004
 from sema.runtime.types.old_versions.ha1_params_005 import Ha1Params005
 from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
     I2cMultichannelDtRelayComponentGt002,
 )
 from sema.runtime.types.old_versions.layout_lite_010 import LayoutLite010
-from sema.runtime.types.old_versions.spaceheat_node_gt_300 import SpaceheatNodeGt300
-from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
-from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
-from sema.runtime.types.sim_pico_tank_module_component_gt import (
-    SimPicoTankModuleComponentGt,
+from sema.runtime.types.old_versions.pico_flow_module_component_gt_000 import (
+    PicoFlowModuleComponentGt000,
 )
+from sema.runtime.types.old_versions.pico_tank_module_component_gt_011 import (
+    PicoTankModuleComponentGt011,
+)
+from sema.runtime.types.old_versions.sim_pico_tank_module_component_gt_000 import (
+    SimPicoTankModuleComponentGt000,
+)
+from sema.runtime.types.old_versions.spaceheat_node_gt_300 import SpaceheatNodeGt300
 
 
 class LayoutLite009(SemaType):
@@ -41,12 +47,12 @@ class LayoutLite009(SemaType):
     data_channels: list[DataChannelGt001]
     derived_channels: list[DerivedChannelGt000]
     tank_module_components: list[
-        PicoTankModuleComponentGt | SimPicoTankModuleComponentGt
+        PicoTankModuleComponentGt011 | SimPicoTankModuleComponentGt000
     ]
-    flow_module_components: list[PicoFlowModuleComponentGt]
+    flow_module_components: list[PicoFlowModuleComponentGt000]
     ha1_params: Ha1Params004 | Ha1Params005
     i2c_relay_component: I2cMultichannelDtRelayComponentGt002
-    t_map: Gw1TankTempCalibrationMap | None = None
+    t_map: Gw1TankTempCalibrationMap000 | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
     version: Literal["009"] = "009"
 

@@ -1,0 +1,87 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/001"
+
+title: "gw108.vdc.relay.component.gt"
+type: object
+description: >
+  A GW108-board VDC relay component (one installed device instance): a single relay
+  driven from a GPIO pin, configured by one relay.actor.config. Flat — the shared
+  component fields are spelled out here.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/relay.actor.config/003"
+    description: >
+      Relay actor configuration(s) for this relay (one per the device).
+
+  GpioPin:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The GPIO pin (BCM numbering) driving this relay.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "gw108.vdc.relay.component.gt"
+
+  Version:
+    const: "001"
+
+required:
+  - ComponentId
+  - ComponentAttributeClassId
+  - ConfigList
+  - GpioPin
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ComponentAttributeClassId": "8ad2f6fe-e834-4334-80c8-4a0d4ef4b04f",
+      "ComponentId": "c8baa219-8dec-4fcb-8d05-2c3ce6d8e2af",
+      "GpioPin": 23,
+      "ConfigList": [
+        {
+          "ActorName": "vdc-relay-gpio-23",
+          "AsyncCapture": true,
+          "CapturePeriodS": 300,
+          "ChannelName": "vdc-relay",
+          "DeEnergizedState": "RelayClosed",
+          "DeEnergizingEvent": "CloseRelay",
+          "EnergizedState": "RelayOpen",
+          "EnergizingEvent": "OpenRelay",
+          "EventType": "change.relay.state",
+          "Exponent": 0,
+          "PollPeriodMs": 200,
+          "RelayIdx": 1,
+          "StateType": "relay.closed.or.open",
+          "TypeName": "relay.actor.config",
+          "Unit": "Unitless",
+          "Version": "003",
+          "WiringConfig": "NormallyClosed",
+          "AsyncCaptureDelta": 1
+        }
+      ],
+      "DisplayName": "VDC GPIO Relay",
+      "TypeName": "gw108.vdc.relay.component.gt",
+      "Version": "001"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

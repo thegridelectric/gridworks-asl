@@ -1,0 +1,10 @@
+{
+  "GNodeId": "dcb05390-5bca-40ef-b63d-7908ccb33d9b",
+  "Alias": "d1.isone.me.ws",
+  "BaseClass": "Logical",
+  "GNodeClass": "TerminalAsset",
+  "Status": "Active",
+  "DisplayName": "New England Weather Forecast Service",
+  "TypeName": "g.node.gt",
+  "Version": "005"
+}

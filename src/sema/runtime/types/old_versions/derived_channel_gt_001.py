@@ -61,7 +61,9 @@ class DerivedChannelGt001(SemaType):
 
     def upgrade(self) -> DerivedChannelGt:
         """
+        - OutputUnit: gw1.unit 000 -> 001
         - OutputUnit: required
+        - OutputQuantity: gw1.quantity 000 -> 001
         - OutputQuantity: add
         - OutputUnitQuantityConsistency axiom: add
         """

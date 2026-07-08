@@ -1,0 +1,100 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/i2c.thermistor.channel.config/001"
+
+title: "i2c.thermistor.channel.config"
+type: object
+description: >
+  Channel configuration for one thermistor input read through an I2C ADC.
+
+  This type spells out the base channel-configuration fields together with the ADC
+  pin selection, thermistor beta parameter, and whether the channel should also be
+  forwarded into derived-channel processing.
+
+properties:
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  PollPeriodMs:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      How often SCADA polls the underlying hardware device or source for a
+      fresh value, in milliseconds.
+
+  CapturePeriodS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      How often SCADA reports or emits the channel value into the telemetry
+      stream, in seconds.
+
+  AsyncCapture:
+    type: boolean
+
+  AsyncCaptureDelta:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Optional threshold for asynchronous emission, expressed in Unit-scaled
+      values.
+
+  Exponent:
+    type: integer
+    description: >
+      Base-10 scaling exponent applied to the serialized integer reading in
+      combination with Unit.
+
+  Unit:
+    $ref: "https://schemas.electricity.works/enums/spaceheat.unit/001"
+
+  AdcChannel:
+    $ref: "https://schemas.electricity.works/enums/i2c.adc.channel/000"
+    description: >
+      ADC input pin used for this thermistor channel.
+
+  SendToDerived:
+    type: boolean
+    description: >
+      Whether this raw thermistor reading should also be provided to derived
+      channel logic.
+
+  ThermistorBeta:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Beta parameter of the thermistor used to convert resistance to
+      temperature.
+
+  TypeName:
+    const: "i2c.thermistor.channel.config"
+
+  Version:
+    const: "001"
+
+required:
+  - ChannelName
+  - CapturePeriodS
+  - AsyncCapture
+  - Exponent
+  - Unit
+  - AdcChannel
+  - SendToDerived
+  - ThermistorBeta
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ChannelName": "scada",
+      "CapturePeriodS": 1,
+      "AsyncCapture": false,
+      "Exponent": 0,
+      "Unit": "Unknown",
+      "AdcChannel": "P0",
+      "SendToDerived": false,
+      "ThermistorBeta": 1,
+      "TypeName": "i2c.thermistor.channel.config",
+      "Version": "001"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

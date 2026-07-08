@@ -1,0 +1,12 @@
+    def upgrade(self) -> {{ new_command_tree_002_class_name }}:
+        """- ShNodes: spaceheat.node.gt:301 -> 303"""
+        data = self.model_dump()
+        lifted: list[{{ spaceheat_node_gt_303_class_name }}] = []
+        for node in self.sh_nodes:
+            current: SemaType = node
+            while not isinstance(current, {{ spaceheat_node_gt_303_class_name }}):
+                current = current.upgrade()
+            lifted.append(current)
+        data["sh_nodes"] = lifted
+        data["version"] = "002"
+        return {{ new_command_tree_002_class_name }}.model_validate(data)

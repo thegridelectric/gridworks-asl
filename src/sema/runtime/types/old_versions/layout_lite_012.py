@@ -7,23 +7,29 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.data_channel_gt import DataChannelGt
-from sema.runtime.types.gw1_tank_temp_calibration_map import Gw1TankTempCalibrationMap
 from sema.runtime.types.ha1_params import Ha1Params
-from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
-    I2cMultichannelDtRelayComponentGt,
-)
-from sema.runtime.types.layout_lite import LayoutLite
+from sema.runtime.types.old_versions.data_channel_gt_002 import DataChannelGt002
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
+from sema.runtime.types.old_versions.gw1_tank_temp_calibration_map_000 import (
+    Gw1TankTempCalibrationMap000,
+)
 from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_003 import (
     I2cMultichannelDtRelayComponentGt003,
 )
-from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
-from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
-from sema.runtime.types.sim_pico_tank_module_component_gt import (
-    SimPicoTankModuleComponentGt,
+from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_004 import (
+    I2cMultichannelDtRelayComponentGt004,
 )
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
+from sema.runtime.types.old_versions.layout_lite_013 import LayoutLite013
+from sema.runtime.types.old_versions.pico_flow_module_component_gt_000 import (
+    PicoFlowModuleComponentGt000,
+)
+from sema.runtime.types.old_versions.pico_tank_module_component_gt_011 import (
+    PicoTankModuleComponentGt011,
+)
+from sema.runtime.types.old_versions.sim_pico_tank_module_component_gt_000 import (
+    SimPicoTankModuleComponentGt000,
+)
+from sema.runtime.types.old_versions.spaceheat_node_gt_301 import SpaceheatNodeGt301
 
 
 class LayoutLite012(SemaType):
@@ -39,16 +45,16 @@ class LayoutLite012(SemaType):
     zone_list: list[str]
     critical_zone_list: list[str]
     total_store_tanks: PositiveInt
-    sh_nodes: list[SpaceheatNodeGt]
-    data_channels: list[DataChannelGt]
+    sh_nodes: list[SpaceheatNodeGt301]
+    data_channels: list[DataChannelGt002]
     derived_channels: list[DerivedChannelGt001]
     tank_module_components: list[
-        PicoTankModuleComponentGt | SimPicoTankModuleComponentGt
+        PicoTankModuleComponentGt011 | SimPicoTankModuleComponentGt000
     ]
-    flow_module_components: list[PicoFlowModuleComponentGt]
+    flow_module_components: list[PicoFlowModuleComponentGt000]
     ha1_params: Ha1Params
     i2c_relay_component: I2cMultichannelDtRelayComponentGt003 | None = None
-    t_map: Gw1TankTempCalibrationMap | None = None
+    t_map: Gw1TankTempCalibrationMap000 | None = None
     type_name: Literal["layout.lite"] = "layout.lite"
     version: Literal["012"] = "012"
 
@@ -125,15 +131,15 @@ class LayoutLite012(SemaType):
                 )
         return self
 
-    def upgrade(self) -> LayoutLite:
+    def upgrade(self) -> LayoutLite013:
         """- I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004"""
         data = self.model_dump()
         if self.i2c_relay_component is not None:
             upgraded_component = self.i2c_relay_component.upgrade()
-            if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt):
+            if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt004):
                 raise TypeError(
-                    "Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt"
+                    "Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt004"
                 )
             data["i2c_relay_component"] = upgraded_component
         data["version"] = "013"
-        return LayoutLite.model_validate(data)
+        return LayoutLite013.model_validate(data)

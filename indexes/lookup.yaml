@@ -16,6 +16,22 @@
 # ------------------------------------------------------------------
 
 types:
+  ads.channel.config:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/ads.channel.config/001.yaml
+      '000': definitions/types/ads.channel.config/000.yaml
+  ads111x.based.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/ads111x.based.component.gt/000.yaml
+  ads111x.based.device.type.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/ads111x.based.device.type.gt/000.yaml
   atn.bid:
     latest_version: '002'
     versioning_strategy: literal
@@ -26,10 +42,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/bid/000.yaml
-  channel.config:
+  capture.tuning:
     latest_version: '000'
     versioning_strategy: literal
     versions:
+      '000': definitions/types/capture.tuning/000.yaml
+  channel.config:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/channel.config/001.yaml
       '000': definitions/types/channel.config/000.yaml
   channel.readings:
     latest_version: '002'
@@ -42,15 +64,21 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/channel.readings.list.item/000.yaml
+  component.attribute.class.gt:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/component.attribute.class.gt/001.yaml
   connectivity.edge.gt:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/connectivity.edge.gt/000.yaml
   data.channel.gt:
-    latest_version: '002'
+    latest_version: '003'
     versioning_strategy: literal
     versions:
+      '003': definitions/types/data.channel.gt/003.yaml
       '002': definitions/types/data.channel.gt/002.yaml
       '001': definitions/types/data.channel.gt/001.yaml
   derived.channel.gt:
@@ -60,6 +88,44 @@ types:
       '002': definitions/types/derived.channel.gt/002.yaml
       '001': definitions/types/derived.channel.gt/001.yaml
       '000': definitions/types/derived.channel.gt/000.yaml
+  dfr.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/dfr.component.gt/000.yaml
+  dfr.config:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/dfr.config/001.yaml
+      '000': definitions/types/dfr.config/000.yaml
+  egauge.register.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/egauge.register.config/000.yaml
+  electric.meter.cac.gt:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/electric.meter.cac.gt/001.yaml
+  electric.meter.channel.config:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/electric.meter.channel.config/001.yaml
+      '000': definitions/types/electric.meter.channel.config/000.yaml
+  electric.meter.component.gt:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/electric.meter.component.gt/002.yaml
+      '001': definitions/types/electric.meter.component.gt/001.yaml
+  electric.meter.device.type.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/electric.meter.device.type.gt/000.yaml
   energy.instruction:
     latest_version: '000'
     versioning_strategy: literal
@@ -80,21 +146,32 @@ types:
     versions:
       '001': definitions/types/fsm.atomic.report/001.yaml
       '000': definitions/types/fsm.atomic.report/000.yaml
+  fsm.event:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/fsm.event/000.yaml
   fsm.full.report:
     latest_version: '001'
     versioning_strategy: literal
     versions:
       '001': definitions/types/fsm.full.report/001.yaml
       '000': definitions/types/fsm.full.report/000.yaml
-  fsm.event:
+  g.node.forest:
     latest_version: '000'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/fsm.event/000.yaml
-  g.node.gt:
-    latest_version: '004'
+      '000': definitions/types/g.node.forest/000.yaml
+  g.node.forest.request:
+    latest_version: '000'
     versioning_strategy: literal
     versions:
+      '000': definitions/types/g.node.forest.request/000.yaml
+  g.node.gt:
+    latest_version: '005'
+    versioning_strategy: literal
+    versions:
+      '005': definitions/types/g.node.gt/005.yaml
       '004': definitions/types/g.node.gt/004.yaml
   g.node.instance.gt:
     latest_version: '000'
@@ -106,16 +183,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/g.node.reparent.cmd/000.yaml
-  g.node.topology.broadcast:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/g.node.topology.broadcast/000.yaml
   glitch:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/glitch/000.yaml
+  gpio.relay.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gpio.relay.component.gt/000.yaml
   gridworks.ack:
     versioning_strategy: none
     schema: definitions/types/gridworks.ack.yaml
@@ -135,15 +212,57 @@ types:
   gw:
     versioning_strategy: none
     schema: definitions/types/gw.yaml
-  gw1.tank.temp.calibration:
+  gw.house0.hydronic:
     latest_version: '000'
     versioning_strategy: literal
     versions:
+      '000': definitions/types/gw.house0.hydronic/000.yaml
+  gw.house0.layout:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.house0.layout/000.yaml
+  gw.house0.operational.params:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.house0.operational.params/000.yaml
+  gw.native.gpio.pin:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.native.gpio.pin/000.yaml
+  gw.nolan.layout:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.nolan.layout/000.yaml
+  gw1.hvac.zone:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw1.hvac.zone/000.yaml
+  gw1.scada.device.type.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw1.scada.device.type.gt/000.yaml
+  gw1.simple.sim.layout:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw1.simple.sim.layout/000.yaml
+  gw1.tank.temp.calibration:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gw1.tank.temp.calibration/001.yaml
       '000': definitions/types/gw1.tank.temp.calibration/000.yaml
   gw1.tank.temp.calibration.map:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/gw1.tank.temp.calibration.map/001.yaml
       '000': definitions/types/gw1.tank.temp.calibration.map/000.yaml
   gw1.telemetry.name.quantity.projection:
     latest_version: '000'
@@ -155,6 +274,18 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw1.unit.quantity.projection/000.yaml
+  gw108.gpio.sensor.component.gt:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/gw108.gpio.sensor.component.gt/002.yaml
+      '001': definitions/types/gw108.gpio.sensor.component.gt/001.yaml
+  gw108.vdc.relay.component.gt:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/gw108.vdc.relay.component.gt/002.yaml
+      '001': definitions/types/gw108.vdc.relay.component.gt/001.yaml
   ha1.params:
     latest_version: '006'
     versioning_strategy: literal
@@ -172,32 +303,127 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/heating.forecast/000.yaml
-  i2c.multichannel.dt.relay.component.gt:
-    latest_version: '004'
+  hubitat.component.gt:
+    latest_version: '000'
     versioning_strategy: literal
     versions:
+      '000': definitions/types/hubitat.component.gt/000.yaml
+  hubitat.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hubitat.gt/000.yaml
+  hubitat.poller.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hubitat.poller.component.gt/000.yaml
+  hubitat.poller.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hubitat.poller.gt/000.yaml
+  i2c.adc.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.adc.config/000.yaml
+  i2c.bit.address:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.bit.address/000.yaml
+  i2c.bus:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.bus/000.yaml
+  i2c.dac.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.dac.config/000.yaml
+  i2c.multichannel.dt.relay.component.gt:
+    latest_version: '005'
+    versioning_strategy: literal
+    versions:
+      '005': definitions/types/i2c.multichannel.dt.relay.component.gt/005.yaml
       '004': definitions/types/i2c.multichannel.dt.relay.component.gt/004.yaml
       '003': definitions/types/i2c.multichannel.dt.relay.component.gt/003.yaml
       '002': definitions/types/i2c.multichannel.dt.relay.component.gt/002.yaml
+  i2c.read.bit:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.read.bit/000.yaml
+  i2c.read.reg:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.read.reg/000.yaml
+  i2c.reg.address:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.reg.address/000.yaml
+  i2c.relay.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.relay.component.gt/000.yaml
+  i2c.relay.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.relay.config/000.yaml
+  i2c.result:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.result/000.yaml
   i2c.thermistor.channel.config:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/i2c.thermistor.channel.config/002.yaml
+      '001': definitions/types/i2c.thermistor.channel.config/001.yaml
+  i2c.thermistor.interface.config:
     latest_version: '000'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/i2c.thermistor.channel.config/000.yaml
+      '000': definitions/types/i2c.thermistor.interface.config/000.yaml
   i2c.thermistor.reader.component.gt:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/i2c.thermistor.reader.component.gt/002.yaml
+      '001': definitions/types/i2c.thermistor.reader.component.gt/001.yaml
+  i2c.write.bit:
     latest_version: '000'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/i2c.thermistor.reader.component.gt/000.yaml
+      '000': definitions/types/i2c.write.bit/000.yaml
+  i2c.write.reg:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.write.reg/000.yaml
   keyparam.change.log:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/keyparam.change.log/000.yaml
-  layout.lite:
-    latest_version: '013'
+  latest.price:
+    latest_version: '000'
     versioning_strategy: literal
     versions:
+      '000': definitions/types/latest.price/000.yaml
+  layout.lite:
+    latest_version: '015'
+    versioning_strategy: literal
+    versions:
+      '015': definitions/types/layout.lite/015.yaml
+      '014': definitions/types/layout.lite/014.yaml
       '013': definitions/types/layout.lite/013.yaml
       '012': definitions/types/layout.lite/012.yaml
       '011': definitions/types/layout.lite/011.yaml
@@ -205,11 +431,6 @@ types:
       009: definitions/types/layout.lite/009.yaml
       008: definitions/types/layout.lite/008.yaml
       '007': definitions/types/layout.lite/007.yaml
-  latest.price:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/latest.price/000.yaml
   linear.one.dimensional.calibration:
     latest_version: '001'
     versioning_strategy: literal
@@ -221,52 +442,68 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/machine.states/000.yaml
+  maker.api.attribute.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/maker.api.attribute.gt/000.yaml
   market.product:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/market.product/000.yaml
   new.command.tree:
-    latest_version: '000'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/new.command.tree/002.yaml
+      '001': definitions/types/new.command.tree/001.yaml
       '000': definitions/types/new.command.tree/000.yaml
-  pico.flow.module.component.gt:
-    latest_version: '000'
+  pico.btu.meter.component.gt:
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/pico.btu.meter.component.gt/001.yaml
+      '000': definitions/types/pico.btu.meter.component.gt/000.yaml
+  pico.flow.module.component.gt:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/pico.flow.module.component.gt/001.yaml
       '000': definitions/types/pico.flow.module.component.gt/000.yaml
   pico.tank.module.component.gt:
-    latest_version: '011'
+    latest_version: '012'
     versioning_strategy: literal
     versions:
+      '012': definitions/types/pico.tank.module.component.gt/012.yaml
       '011': definitions/types/pico.tank.module.component.gt/011.yaml
   position.point.gt:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/position.point.gt/000.yaml
-  price.quantity.unitless:
-    latest_version: '001'
-    versioning_strategy: literal
-    versions:
-      '001': definitions/types/price.quantity.unitless/001.yaml
   power.watts:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/power.watts/000.yaml
-  sim.ready:
+  price.quantity.unitless:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/price.quantity.unitless/001.yaml
+  relay.actor.config:
+    latest_version: '004'
+    versioning_strategy: literal
+    versions:
+      '004': definitions/types/relay.actor.config/004.yaml
+      '003': definitions/types/relay.actor.config/003.yaml
+      '002': definitions/types/relay.actor.config/002.yaml
+  relay.control.config:
     latest_version: '000'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/sim.ready/000.yaml
-  relay.actor.config:
-    latest_version: '003'
-    versioning_strategy: literal
-    versions:
-      '003': definitions/types/relay.actor.config/003.yaml
-      '002': definitions/types/relay.actor.config/002.yaml
+      '000': definitions/types/relay.control.config/000.yaml
   report:
     latest_version: '003'
     versioning_strategy: literal
@@ -279,18 +516,19 @@ types:
     versions:
       '003': definitions/types/report.event/003.yaml
       '002': definitions/types/report.event/002.yaml
+  scada.control.capabilities:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/scada.control.capabilities/002.yaml
+      '001': definitions/types/scada.control.capabilities/001.yaml
+      '000': definitions/types/scada.control.capabilities/000.yaml
   scada.params:
     latest_version: '005'
     versioning_strategy: literal
     versions:
       '005': definitions/types/scada.params/005.yaml
       '004': definitions/types/scada.params/004.yaml
-  scada.control.capabilities:
-    latest_version: '001'
-    versioning_strategy: literal
-    versions:
-      '001': definitions/types/scada.control.capabilities/001.yaml
-      '000': definitions/types/scada.control.capabilities/000.yaml
   send.control.capabilities:
     latest_version: '000'
     versioning_strategy: literal
@@ -303,9 +541,10 @@ types:
       '001': definitions/types/send.layout/001.yaml
       '000': definitions/types/send.layout/000.yaml
   sim.pico.tank.module.component.gt:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/sim.pico.tank.module.component.gt/001.yaml
       '000': definitions/types/sim.pico.tank.module.component.gt/000.yaml
   sim.plant.actuation:
     latest_version: '000'
@@ -317,11 +556,71 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/sim.plant.flux/000.yaml
+  sim.ready:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.ready/000.yaml
+  sim.relay.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.relay.component.gt/000.yaml
+  sim.sensor.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.sensor.component.gt/000.yaml
   sim.timestep:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/sim.timestep/000.yaml
+  single.machine.state:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/single.machine.state/000.yaml
+  single.reading:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/single.reading/000.yaml
+  snapshot.spaceheat:
+    latest_version: '003'
+    versioning_strategy: literal
+    versions:
+      '003': definitions/types/snapshot.spaceheat/003.yaml
+  spaceheat.node.gt:
+    latest_version: '303'
+    versioning_strategy: literal
+    versions:
+      '303': definitions/types/spaceheat.node.gt/303.yaml
+      '302': definitions/types/spaceheat.node.gt/302.yaml
+      '301': definitions/types/spaceheat.node.gt/301.yaml
+      '300': definitions/types/spaceheat.node.gt/300.yaml
+      '200': definitions/types/spaceheat.node.gt/200.yaml
+  spaceheat.telemetry.quantity.projection:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/spaceheat.telemetry.quantity.projection/000.yaml
+  synced.readings:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/synced.readings/000.yaml
+  synced.readings.bundle:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/synced.readings.bundle/002.yaml
+      '001': definitions/types/synced.readings.bundle/001.yaml
+  synth.channel.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/synth.channel.gt/000.yaml
   ticklist.hall:
     latest_version: '101'
     versioning_strategy: literal
@@ -342,49 +641,6 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/ticklist.reed.report/000.yaml
-  single.machine.state:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/single.machine.state/000.yaml
-  single.reading:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/single.reading/000.yaml
-  snapshot.spaceheat:
-    latest_version: '003'
-    versioning_strategy: literal
-    versions:
-      '003': definitions/types/snapshot.spaceheat/003.yaml
-  synth.channel.gt:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/synth.channel.gt/000.yaml
-  spaceheat.node.gt:
-    latest_version: '301'
-    versioning_strategy: literal
-    versions:
-      '301': definitions/types/spaceheat.node.gt/301.yaml
-      '300': definitions/types/spaceheat.node.gt/300.yaml
-      '200': definitions/types/spaceheat.node.gt/200.yaml
-  spaceheat.telemetry.quantity.projection:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/spaceheat.telemetry.quantity.projection/000.yaml
-  synced.readings:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/synced.readings/000.yaml
-  synced.readings.bundle:
-    latest_version: '002'
-    versioning_strategy: literal
-    versions:
-      '002': definitions/types/synced.readings.bundle/002.yaml
-      '001': definitions/types/synced.readings.bundle/001.yaml
   weather:
     latest_version: '000'
     versioning_strategy: literal
@@ -395,6 +651,12 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/weather.forecast/000.yaml
+  web.server.component.gt:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/web.server.component.gt/002.yaml
+      '001': definitions/types/web.server.component.gt/001.yaml
 enums:
   base.g.node.class:
     enum_type: versioned
@@ -431,6 +693,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/g.node.status/000.yaml
+  gpio.sense.mode:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gpio.sense.mode/000.yaml
   gpm.from.hz.method:
     enum_type: versioned
     latest_version: '000'
@@ -441,23 +708,40 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/gw.g.node.class/000.yaml
+  gw.house0.primary.flow.source:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gw.house0.primary.flow.source/000.yaml
+  gw.market.product.name:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gw.market.product.name/000.yaml
   gw1.actor.class:
     enum_type: versioned
-    latest_version: '011'
+    latest_version: '012'
     versions:
+      '012': definitions/enums/gw1.actor.class/012.yaml
       '011': definitions/enums/gw1.actor.class/011.yaml
       '010': definitions/enums/gw1.actor.class/010.yaml
       009: definitions/enums/gw1.actor.class/009.yaml
+  gw1.device.type:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/gw1.device.type/001.yaml
+      '000': definitions/enums/gw1.device.type/000.yaml
   gw1.emission.method:
     enum_type: versioned
     latest_version: '000'
     versions:
       '000': definitions/enums/gw1.emission.method/000.yaml
-  gw1.main.auto.state:
+  gw1.heat.call.interpretation:
     enum_type: versioned
-    latest_version: '001'
+    latest_version: '000'
     versions:
-      '001': definitions/enums/gw1.main.auto.state/001.yaml
+      '000': definitions/enums/gw1.heat.call.interpretation/000.yaml
   gw1.lc.top.state:
     enum_type: versioned
     latest_version: '001'
@@ -488,6 +772,11 @@ enums:
     latest_version: '001'
     versions:
       '001': definitions/enums/gw1.local.control.standby.top.state/001.yaml
+  gw1.main.auto.state:
+    enum_type: versioned
+    latest_version: '001'
+    versions:
+      '001': definitions/enums/gw1.main.auto.state/001.yaml
   gw1.quantity:
     enum_type: versioned
     latest_version: '001'
@@ -504,11 +793,6 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/gw1.system.mode/000.yaml
-  gw1.heat.call.interpretation:
-    enum_type: versioned
-    latest_version: '000'
-    versions:
-      '000': definitions/enums/gw1.heat.call.interpretation/000.yaml
   gw1.unit:
     enum_type: versioned
     latest_version: '002'
@@ -527,6 +811,21 @@ enums:
   i2c.adc.channel:
     enum_type: literal
     schema: definitions/enums/i2c.adc.channel/000.yaml
+  i2c.adc.type:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.adc.type/000.yaml
+  i2c.dac.type:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.dac.type/000.yaml
+  i2c.operation:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.operation/000.yaml
   log.level:
     enum_type: literal
     schema: definitions/enums/log.level/000.yaml
@@ -545,11 +844,6 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/market.type.name/000.yaml
-  gw.market.product.name:
-    enum_type: versioned
-    latest_version: '000'
-    versions:
-      '000': definitions/enums/gw.market.product.name/000.yaml
   relay.closed.or.open:
     enum_type: literal
     schema: definitions/enums/relay.closed.or.open/000.yaml
@@ -566,8 +860,9 @@ enums:
       '000': definitions/enums/relay.wiring.config/000.yaml
   spaceheat.make.model:
     enum_type: versioned
-    latest_version: '007'
+    latest_version: 008
     versions:
+      008: definitions/enums/spaceheat.make.model/008.yaml
       '007': definitions/enums/spaceheat.make.model/007.yaml
       '003': definitions/enums/spaceheat.make.model/003.yaml
   spaceheat.telemetry.name:
@@ -586,10 +881,16 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/temp.calc.method/000.yaml
+  thermistor.data.method:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/thermistor.data.method/000.yaml
 formats:
   handle.name: definitions/formats/handle.name.yaml
   hex.char: definitions/formats/hex.char.yaml
   left.right.dot: definitions/formats/left.right.dot.yaml
+  mac.address: definitions/formats/mac.address.yaml
   market.slot.name: definitions/formats/market.slot.name.yaml
   non.empty.string: definitions/formats/non.empty.string.yaml
   non.negative.int: definitions/formats/non.negative.int.yaml

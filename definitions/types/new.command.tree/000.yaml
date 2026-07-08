@@ -57,6 +57,18 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "FromGNodeAlias": "d1.isone.me.versant.keene.maple.scada",
+      "ShNodes": [
+        {"Name": "s", "ActorClass": "PrimaryScada", "ShNodeId": "8f3c27de-6a41-4bb0-9df2-51b7ac94e203", "TypeName": "spaceheat.node.gt", "Version": "301"}
+      ],
+      "UnixMs": 1704067200000,
+      "TypeName": "new.command.tree",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
   axioms:
@@ -98,3 +110,7 @@ x-gridworks:
     command tree pattern makes after-the-fact debugging more tractable: any action
      -- or refused action -- can be matched against the command tree in force at
     that moment to determine who was authorized to command whom.
+
+    NOTE -- this version's oneOf over multiple versions of the same type is an
+    early lenience accommodating back-dated production traffic as sema came
+    online, not a pattern to copy. Newer versions carry a single type version.

@@ -1,0 +1,88 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/new.command.tree/001"
+
+title: "new.command.tree"
+type: object
+description: >
+  Full set of SpaceheatNodes describing a SCADA node's current actor command
+  hierarchy, sent by the SCADA node to its LeafTransactiveNode. Each node
+  carries the handle that locates it in the command tree; receiving a
+  new.command.tree replaces the recipient's prior view of that hierarchy in
+  its entirety.
+
+  An ShNode whose Handle is absent (null or missing) is interpreted as having
+  a handle equal to its Name. This convention lets root nodes of the command
+  tree omit Handle on the wire while still participating in prefix-closure of
+  the hierarchy.
+
+  Registered retroactively (2026-07-04): this is the wire version the spruce
+  scada has emitted since 2026-01-28 (the scada-side bump when
+  spaceheat.node.gt gained BoardComponentId at 301) — it existed on the wire
+  before it existed in the registry. Its registry `created` is backdated to
+  sit before 002's, preserving the version-order/created-order rule.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the SCADA node whose command hierarchy this message
+      describes.
+
+  ShNodes:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/301"
+    description: >
+      The complete set of SpaceheatNodes that make up the command tree. The
+      handle of each node encodes its position in the hierarchy: a node's
+      boss is found by dropping the last segment of its handle.
+
+  UnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Time at which the SCADA node generated this command tree.
+
+  TypeName:
+    const: "new.command.tree"
+
+  Version:
+    const: "001"
+
+required:
+  - FromGNodeAlias
+  - ShNodes
+  - UnixMs
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "FromGNodeAlias": "hw1.isone.me.versant.keene.spruce.scada",
+      "ShNodes": [
+        {"Name": "s", "ActorClass": "PrimaryScada", "ShNodeId": "8f3c27de-6a41-4bb0-9df2-51b7ac94e203", "TypeName": "spaceheat.node.gt", "Version": "301"}
+      ],
+      "UnixMs": 1738083600000,
+      "TypeName": "new.command.tree",
+      "Version": "001"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "PrefixClosedHandles"
+      statement: >
+        Let the effective handle of an ShNode be its Handle if present,
+        otherwise its Name. The set of effective handles SHALL be prefix-closed:
+        for every ShNode in ShNodes, each dot-separated prefix of its effective
+        handle SHALL also be the effective handle of some ShNode in ShNodes.
+  extended_description: >
+    Handle encodes the live command-authority chain. For an ShNode whose Handle
+    is "admin.hp-boss.relay6", the prefixes "admin.hp-boss" and "admin" name
+    its current boss and the boss above that. A node's current boss is the
+    unique ShNode whose effective handle equals the parent prefix; axiom 1's
+    prefix-closure guarantees that boss is present in the snapshot.

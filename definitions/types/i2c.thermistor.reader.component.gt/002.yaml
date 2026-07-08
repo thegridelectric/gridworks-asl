@@ -1,0 +1,108 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/002"
+
+title: "i2c.thermistor.reader.component.gt"
+type: object
+description: >
+  Configuration for an I2C thermistor reader component that samples one ADC
+  device and publishes one or more thermistor-backed temperature channels. Flat —
+  the shared component fields are spelled out here.
+
+properties:
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.thermistor.channel.config/002"
+    description: >
+      Thermistor channel configurations attached to this ADC reader.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  Bus:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Logical bus name identifying the I2C bus on which this ADC is attached.
+
+  AdcAddress:
+    type: integer
+    description: >
+      7-bit I2C address of the ADC device.
+
+  AdcReferenceVolts:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+    description: >
+      Reference voltage used by the ADC when converting measured voltage to a
+      serialized reading.
+
+  SeriesResistanceKOhms:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+    description: >
+      Series resistance, in kilo-ohms, used in the thermistor divider circuit.
+
+  TempCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/temp.calc.method/000"
+
+  TypeName:
+    const: "i2c.thermistor.reader.component.gt"
+
+  Version:
+    const: "002"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - Bus
+  - AdcAddress
+  - AdcReferenceVolts
+  - SeriesResistanceKOhms
+  - TempCalcMethod
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ComponentId": "8879f861-add7-4b45-a200-1c2e29c49fdf",
+      "DeviceType": "GridworksScadaGw108",
+      "ConfigList": [
+        {
+          "ChannelName": "scada",
+          "AdcChannel": "P0",
+          "SendToDerived": false,
+          "ThermistorBeta": 1,
+          "TypeName": "i2c.thermistor.channel.config",
+          "Version": "002"
+        }
+      ],
+      "Bus": "scada",
+      "AdcAddress": 0,
+      "AdcReferenceVolts": 1,
+      "SeriesResistanceKOhms": 1,
+      "TempCalcMethod": "SimpleBeta",
+      "TypeName": "i2c.thermistor.reader.component.gt",
+      "Version": "002"
+    }
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.

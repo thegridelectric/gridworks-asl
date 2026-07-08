@@ -276,7 +276,6 @@ Build a snapshot in two steps:
 
 ```bash
 uv run sema snapshot prepare template_seed_request.yaml
-vim output/sema/indexes/local_names.yaml
 uv run sema snapshot build --package-name gjk
 ```
 
@@ -288,12 +287,29 @@ The prepare step:
 - writes definitions under `output/sema/definitions`
 - writes restricted indexes under `output/sema/indexes`
 - writes `output/sema/indexes/seed_expanded.yaml`
-- creates `output/sema/indexes/local_names.yaml`
+- records the original request as `output/sema/indexes/seed_request.yaml`, so the
+  snapshot is self-describing and exactly replicable
+- materializes `output/sema/indexes/local_names.yaml` from the seed request's
+  `local_names` rules
 
-Edit `output/sema/indexes/local_names.yaml` between prepare and build to choose
-local names for generated types and enums. The keys remain canonical Sema names;
-values are local `left.right.dot` names. Python class and module names are
-derived from those local names.
+Local (Python) class and module names are declared **in the seed request**, not
+hand-edited. A `local_names` block sets `strip_prefixes` — leading dotted
+segments dropped from each name — plus per-type `overrides` for special cases or
+to resolve a collision:
+
+```yaml
+local_names:
+  strip_prefixes: [gw1, gw]   # gw1.unit -> class Unit; gw.house0.layout -> House0Layout
+                              # (gw108.* is untouched — its head is gw108, not gw1/gw)
+  overrides:
+    some.long.type.name: short.name
+```
+
+The keys remain canonical Sema names; the derived local names are
+`left.right.dot`, and Python class/module names are derived from them. Local
+names must be unique within a snapshot — a collision fails `prepare`, naming both
+types so you can add an `override`. The dotted `TypeName` wire identity is never
+affected; only the local class name is.
 
 The build step:
 
@@ -316,6 +332,7 @@ Each snapshot includes an `indexes/` directory containing precomputed dependency
 - `reverse_dependencies.yaml`
 - `lookup.yaml`
 - `versions.yaml`
+- `seed_request.yaml`
 - `seed_expanded.yaml`
 - `local_names.yaml`
 

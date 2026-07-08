@@ -1,0 +1,107 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/001"
+
+title: "i2c.thermistor.reader.component.gt"
+type: object
+description: >
+  Configuration for an I2C thermistor reader component that samples one ADC
+  device and publishes one or more thermistor-backed temperature channels. Flat —
+  the shared component fields are spelled out here.
+
+properties:
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.thermistor.channel.config/001"
+    description: >
+      Thermistor channel configurations attached to this ADC reader.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  Bus:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Logical bus name identifying the I2C bus on which this ADC is attached.
+
+  AdcAddress:
+    type: integer
+    description: >
+      7-bit I2C address of the ADC device.
+
+  AdcReferenceVolts:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+    description: >
+      Reference voltage used by the ADC when converting measured voltage to a
+      serialized reading.
+
+  SeriesResistanceKOhms:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+    description: >
+      Series resistance, in kilo-ohms, used in the thermistor divider circuit.
+
+  TempCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/temp.calc.method/000"
+
+  TypeName:
+    const: "i2c.thermistor.reader.component.gt"
+
+  Version:
+    const: "001"
+
+required:
+  - ComponentId
+  - ComponentAttributeClassId
+  - ConfigList
+  - Bus
+  - AdcAddress
+  - AdcReferenceVolts
+  - SeriesResistanceKOhms
+  - TempCalcMethod
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "AdcAddress": 73,
+      "AdcReferenceVolts": 3.3,
+      "Bus": "i2c-1",
+      "ComponentAttributeClassId": "8ad2f6fe-e834-4334-80c8-4a0d4ef4b04f",
+      "ComponentId": "d2f4d553-6ef0-453d-976d-a1cf297ed1c0",
+      "ConfigList": [
+        {
+          "AdcChannel": "P0",
+          "AsyncCapture": true,
+          "AsyncCaptureDelta": 50,
+          "CapturePeriodS": 60,
+          "ChannelName": "zone1-bedrooms-gw-temp",
+          "Exponent": 2,
+          "PollPeriodMs": 1000,
+          "SendToDerived": false,
+          "ThermistorBeta": 3977,
+          "TypeName": "i2c.thermistor.channel.config",
+          "Unit": "Celcius",
+          "Version": "001"
+        }
+      ],
+      "DisplayName": "GW108 Thermistor Reader",
+      "SeriesResistanceKOhms": 5.6,
+      "TempCalcMethod": "SimpleBeta",
+      "TypeName": "i2c.thermistor.reader.component.gt",
+      "Version": "001"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

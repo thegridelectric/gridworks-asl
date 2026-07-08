@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ data_channel_gt_003_class_name }}:
+        """
+        - InPowerMetering: drop (metering is declared by the consuming transactive channel, not here)
+        - PowerMeteringConstraint axiom: drop
+        """
+        data = self.model_dump()
+        data.pop("in_power_metering", None)
+        data["version"] = "003"
+        return {{ data_channel_gt_003_class_name }}.model_validate(data)

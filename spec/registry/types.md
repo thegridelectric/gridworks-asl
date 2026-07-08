@@ -65,7 +65,7 @@ A versioned type entry SHALL include the following fields:
 
   versions:
     "<version>":
-      status: "published" | "draft"   # optional; default published
+      status: "published" | "staging" | "draft"   # required; no default
       schema_url: "https://schemas.electricity.works/types/<type-name>/<version>"
       created: "<RFC 3339 timestamp>"
       summary: "<concise description of change>"
@@ -80,14 +80,16 @@ A versioned type entry SHALL include the following fields:
 ### Field Requirements
 
 - `latest_version`
-  - SHALL equal the highest published version listed under `versions`
+  - SHALL equal the highest non-draft (staging or published) version
+    listed under `versions`
   - SHALL NOT identify a draft version
 
 - `owner`
   - SHALL reference a valid owner identifier defined in `owners.yaml`
 
 - `versions`
-  - SHALL contain an entry for each published version of the type
+  - SHALL contain an entry for each published or staging version of the
+    type
   - MAY contain draft version entries
   - SHALL be keyed by version string
   - SHALL be listed in decreasing order by version
@@ -102,9 +104,9 @@ Each entry under `versions` SHALL include:
   - SHALL uniquely identify the schema for that version
 
 - `status`
-  - MAY appear
-  - SHALL be `"published"` or `"draft"` if present
-  - SHALL be interpreted as `"published"` if omitted
+  - SHALL appear — there is no default
+  - SHALL be `"published"`, `"staging"`, or `"draft"` (see
+    [structure.md](structure.md) "Status Field")
 
 - `created`
   - SHALL be an RFC 3339 timestamp with seconds precision in UTC (e.g.,
@@ -273,8 +275,9 @@ Additional constraints on modification of prior versions are defined in
 ## Immutability
 
 Sema registry entries are immutable except as explicitly permitted below.
-Types with `status: "draft"` are exempt from these immutability
-requirements.
+Type versions with `status: "draft"` or `status: "staging"` are exempt
+from these immutability requirements (staging vocabulary runs on dev
+brokers only; see [structure.md](structure.md) "Status Field").
 
 ### General Rules (All Types)
 

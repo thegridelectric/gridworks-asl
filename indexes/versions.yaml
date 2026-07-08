@@ -3,6 +3,32 @@
 
 
 types:
+  ads.channel.config:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
+      "000":
+        summary: "Initial Sema version (flattened from the scada AdsChannelConfig runtime; ThermistorMakeModel -> ThermistorDeviceType)."
+
+  ads111x.based.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada Ads111xBasedComponentGt runtime)."
+
+  ads111x.based.device.type.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (specialized device-type record; per-family successor to the field ads111x.based.cac.gt, keyed by DeviceType)."
+
   atn.bid:
     latest_version: "002"
     versioning_strategy: "literal"
@@ -17,10 +43,21 @@ types:
       "000":
         summary: "Initial Sema version"
 
-  channel.config:
+  capture.tuning:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
+      "000":
+        summary: "Initial Sema version — the per-channel capture params (CapturePeriodS, AsyncCapture, AsyncCaptureDelta, PollPeriodMs) extracted from the channel-config family into operational-params."
+
+  channel.config:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
       "000":
         summary: "Initial Sema version"
 
@@ -42,6 +79,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  component.attribute.class.gt:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version (flattened from the scada ComponentAttributeClassGt runtime)."
+
   connectivity.edge.gt:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -50,9 +94,13 @@ types:
         summary: "Initial Sema version"
 
   data.channel.gt:
-    latest_version: "002"
+    latest_version: "003"
     versioning_strategy: "literal"
     versions:
+      "003":
+        summary: >
+          - InPowerMetering: drop (metering is declared by the consuming transactive channel, not here)
+          - PowerMeteringConstraint axiom: drop
       "002":
         summary: >
           - Quantity: add
@@ -67,7 +115,9 @@ types:
     versions:
       "002":
         summary: >
+          - OutputUnit: gw1.unit 000 -> 001
           - OutputUnit: required
+          - OutputQuantity: gw1.quantity 000 -> 001
           - OutputQuantity: add
           - OutputUnitQuantityConsistency axiom: add
       "001":
@@ -77,6 +127,67 @@ types:
           - Parameters: add (Optional)
       "000":
         summary: "Initial Sema version"
+
+  dfr.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada DfrComponentGt runtime)."
+
+  dfr.config:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
+      "000":
+        summary: "Initial Sema version (flattened from the scada DfrConfig runtime)."
+
+  egauge.register.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada EgaugeRegisterConfig runtime)."
+
+  electric.meter.cac.gt:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version (flattened from the scada ElectricMeterCacGt runtime)."
+
+  electric.meter.channel.config:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
+      "000":
+        summary: "Initial Sema version (flattened from the scada ElectricMeterChannelConfig runtime)."
+
+  electric.meter.component.gt:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+      "001":
+        summary: "Initial Sema version (flattened from the scada ElectricMeterComponentGt runtime)."
+
+  electric.meter.device.type.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (specialized device-type record; replaces electric.meter.cac.gt category data, keyed by DeviceType)."
 
   energy.instruction:
     latest_version: "000"
@@ -132,6 +243,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  fsm.event:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   fsm.full.report:
     latest_version: "001"
     versioning_strategy: "literal"
@@ -141,7 +259,14 @@ types:
       "000":
         summary: "Initial Sema version"
 
-  fsm.event:
+  g.node.forest:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  g.node.forest.request:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
@@ -149,9 +274,11 @@ types:
         summary: "Initial Sema version"
 
   g.node.gt:
-    latest_version: "004"
+    latest_version: "005"
     versioning_strategy: "literal"
     versions:
+      "005":
+        summary: "adds axiom 6 GNodeAliasHasBody; no field changes"
       "004":
         summary: "Baseline runtime version (no prior version tracked)."
 
@@ -169,19 +296,19 @@ types:
       "000":
         summary: "Initial Sema version"
 
-  g.node.topology.broadcast:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
-
   glitch:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
         summary: "Initial Sema version"
+
+  gpio.relay.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Initial version. Board-resident per-relay GPIO component: GpioName (-> board NativeGpioOutputs), DeviceType (gw1.device.type value, e.g. Gw108GpioRelay), ConfigList of exactly one relay.control.config."
 
   gridworks.ack:
     versioning_strategy: "none"
@@ -209,17 +336,79 @@ types:
     versioning_strategy: "none"
     summary: "Versionless GridWorks message envelope (gwproto Message wire format)."
 
-  gw1.tank.temp.calibration:
+  gw.house0.hydronic:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial Sema version"
+        summary: "- Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axiom 1: UseSiegLoop implies SiegLoopPlumbed."
 
-  gw1.tank.temp.calibration.map:
+  gw.house0.layout:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
+      "000":
+        summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). All collections + Hydronic required (mirrors gw.nolan.layout) — a layout is a complete deployable artifact."
+
+  gw.house0.operational.params:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version — GNodes home identity (mirrors the layout) + CaptureTuningList (per-channel capture params migrated out of the channel-config family)."
+
+  gw.native.gpio.pin:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Name, BcmPin)."
+
+  gw.nolan.layout:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay is gw108.vdc.relay)."
+
+  gw1.hvac.zone:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- New shared zone type (Name, Critical, KwhPerDegF) replacing the former parallel ZoneList / CriticalZoneList / ZoneKwhPerDegFList in the hydronic block."
+
+  gw1.scada.device.type.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList, NativeGpio, I2cRelays, CtAdc, ThermistorAdcs, Dacs)."
+
+  gw1.simple.sim.layout:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Minimal baseline stub (TypeName + Version only) to seed the layout round-trip loop; built up bit by bit toward the simulated plant's needs."
+
+  gw1.tank.temp.calibration:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: >
+          - Depth{1,2,3}B: number -> integer (offset in the OutputUnit/FahrenheitX100 scaling
+            domain, mirroring linear.one.dimensional.calibration/001)
+      "000":
+        summary: "Initial Sema version"
+
+  gw1.tank.temp.calibration.map:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "- Buffer/Tank now reference gw1.tank.temp.calibration:001 (integer B)"
       "000":
         summary: "Initial Sema version"
 
@@ -236,6 +425,24 @@ types:
     versions:
       "000":
         summary: "Initial Sema version"
+
+  gw108.gpio.sensor.component.gt:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+      "001":
+        summary: "Initial Sema version (flattened from the scada Gw108GpioSensorComponentGt runtime)."
+
+  gw108.vdc.relay.component.gt:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+      "001":
+        summary: "Initial Sema version (flattened from the scada Gw108GpioRelayComponentGt runtime, TypeName gw108.vdc.relay.component.gt)."
 
   ha1.params:
     latest_version: "006"
@@ -270,10 +477,68 @@ types:
       "000":
         summary: "Initial Sema version"
 
-  i2c.multichannel.dt.relay.component.gt:
-    latest_version: "004"
+  hubitat.component.gt:
+    latest_version: "000"
     versioning_strategy: "literal"
     versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatComponentGt runtime)."
+
+  hubitat.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Flattened from the scada HubitatGt runtime; derived URL helpers excluded. MacAddress moved type:string -> $ref formats/mac.address (lowercase-hex constraint; edited in place, not yet web-published)."
+
+  hubitat.poller.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatPollerComponentGt runtime)."
+
+  hubitat.poller.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada HubitatPollerGt runtime)."
+
+  i2c.adc.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Name, I2cBus, I2cAddress, AdcType, Channels)."
+
+  i2c.bit.address:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (I2cAddress, RegisterIndex, BitIndex)."
+
+  i2c.bus:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Name, BusNumber)."
+
+  i2c.dac.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (DacName, I2cBus, I2cAddress, DacType, Channels)."
+
+  i2c.multichannel.dt.relay.component.gt:
+    latest_version: "005"
+    versioning_strategy: "literal"
+    versions:
+      "005":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "004":
         summary: "- ConfigList[]: relay.actor.config:002 -> 003"
       "003":
@@ -281,19 +546,89 @@ types:
       "002":
         summary: "Baseline runtime version (no prior version tracked)."
 
-  i2c.thermistor.channel.config:
+  i2c.read.bit:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial Sema version"
+        summary: "Initial draft (Bus, Address, TriggerId)."
+
+  i2c.read.reg:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Bus, Address, NumBytes, TriggerId)."
+
+  i2c.reg.address:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (I2cAddress, RegisterIndex)."
+
+  i2c.relay.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Initial version. Board-resident per-relay I²C component: RelayName (-> board I2cRelays), DeviceType (gw1.device.type value, e.g. Gw108I2cRelay), ConfigList of exactly one relay.control.config. Replaces the legacy multiplexer (i2c.multichannel.dt.relay.component.gt)."
+
+  i2c.relay.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (RelayName, I2cBus, Address, SupportedWiringConfigs, Notes)."
+
+  i2c.result:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Bus, Operation, Value, Success, Error, UnixTimeMs, TriggerId)."
+
+  i2c.thermistor.channel.config:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
+      "001":
+        summary: "Initial Sema version. Starts at 001 to match the only version ever emitted in the field; the never-emitted sema 000 was dropped."
+
+  i2c.thermistor.interface.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, SeriesResistanceKOhms)."
 
   i2c.thermistor.reader.component.gt:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+      "001":
+        summary: "Initial Sema version. Starts at 001 to match the only field-emitted version; the never-emitted sema 000 was dropped. Structural-only (gwsproto ConfigUniqueness/AddressValidity axioms deferred)."
+
+  i2c.write.bit:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial Sema version"
+        summary: "Initial draft (Bus, Address, Value, TriggerId)."
+
+  i2c.write.reg:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial draft (Bus, Address, NumBytes, Value, TriggerId)."
 
   keyparam.change.log:
     latest_version: "000"
@@ -302,10 +637,21 @@ types:
       "000":
         summary: "Initial Sema version"
 
-  layout.lite:
-    latest_version: "013"
+  latest.price:
+    latest_version: "000"
     versioning_strategy: "literal"
     versions:
+      "000":
+        summary: "Initial Sema version"
+
+  layout.lite:
+    latest_version: "015"
+    versioning_strategy: "literal"
+    versions:
+      "015":
+        summary: "- TankModuleComponents / FlowModuleComponents / I2cRelayComponent: cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module 011->012, sim.pico.tank.module 000->001, pico.flow.module 000->001, i2c.multichannel.dt.relay 004->005). Context-dependent: the embedded components' DeviceType lives on their cac, not the component."
+      "014":
+        summary: "- ShNodes: spaceheat.node.gt:301 -> 302"
       "013":
         summary: "- I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004"
       "012":
@@ -337,13 +683,6 @@ types:
       "007":
         summary: "Baseline runtime version (no prior version tracked)."
 
-  latest.price:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
-
   linear.one.dimensional.calibration:
     latest_version: "001"
     versioning_strategy: "literal"
@@ -362,6 +701,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  maker.api.attribute.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (flattened from the scada MakerAPIAttributeGt runtime; snake_case fields re-cased to CamelCase)."
+
   market.product:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -370,27 +716,55 @@ types:
         summary: "Initial Sema version"
 
   new.command.tree:
-    latest_version: "000"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- ShNodes: spaceheat.node.gt:301 -> 303"
+      "001":
+        summary: "- ShNodes: spaceheat.node.gt:301 only (drop the multi-version oneOf; retroactive registration of the wire version the spruce scada emitted from 2026-01-28)"
       "000":
         summary: "Initial Sema version"
 
-  pico.flow.module.component.gt:
-    latest_version: "000"
+  pico.btu.meter.component.gt:
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: >
+          - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component.
+          - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout.
+      "000":
+        summary: "Initial Sema version (flattened from the scada PicoBtuMeterComponentGt runtime)."
+
+  pico.flow.module.component.gt:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: >
+          - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component.
+          - FlowMeterType: spaceheat.make.model enum value -> gw1.device.type value (pascal.case); the device-type enum is articulated by the hardware layout.
       "000":
         summary: "Initial Sema version"
 
   pico.tank.module.component.gt:
-    latest_version: "011"
+    latest_version: "012"
     versioning_strategy: "literal"
     versions:
+      "012":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "011":
         summary: "Baseline runtime version (no prior version tracked)."
 
   position.point.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  power.watts:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
@@ -404,28 +778,26 @@ types:
       "001":
         summary: "Baseline runtime version (no prior version tracked)."
 
-  power.watts:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
-
-  sim.ready:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version."
-
   relay.actor.config:
-    latest_version: "003"
+    latest_version: "004"
     versioning_strategy: "literal"
     versions:
+      "004":
+        summary: >
+          - Unit: drop (redundant; unit and scaling are carried by channel identity)
+          - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+          - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
       "003":
         summary: "- AsyncCaptureDelta: require when AsyncCapture is true"
       "002":
         summary: "Baseline runtime version (no prior version tracked)."
+
+  relay.control.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Initial version. relay.actor.config minus RelayIdx: board-resident relays are identified by name against the board (gw1.scada.device.type.gt), not by a positional index."
 
   report:
     latest_version: "003"
@@ -447,6 +819,24 @@ types:
       "002":
         summary: "Baseline runtime version (no prior version tracked)."
 
+  scada.control.capabilities:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: >
+          - RelayNodes[]: spaceheat.node.gt:300 -> 303
+          - DacNodes[]: spaceheat.node.gt:300 -> 303
+          - ControlChannels[]: data.channel.gt:001 -> 003
+      "001":
+        summary: >
+          - RelayNodes[]: inline object -> spaceheat.node.gt:300
+          - DacNodes[]: inline object -> spaceheat.node.gt:300
+          - ControlChannels[]: inline object -> data.channel.gt:001
+          - Axioms: add control surface consistency checks
+      "000":
+        summary: "Initial Sema version"
+
   scada.params:
     latest_version: "005"
     versioning_strategy: "literal"
@@ -456,19 +846,6 @@ types:
           - NewParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
           - OldParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
       "004":
-        summary: "Initial Sema version"
-
-  scada.control.capabilities:
-    latest_version: "001"
-    versioning_strategy: "literal"
-    versions:
-      "001":
-        summary: >
-          - RelayNodes[]: inline object -> spaceheat.node.gt:300
-          - DacNodes[]: inline object -> spaceheat.node.gt:300
-          - ControlChannels[]: inline object -> data.channel.gt:001
-          - Axioms: add control surface consistency checks
-      "000":
         summary: "Initial Sema version"
 
   send.control.capabilities:
@@ -491,9 +868,11 @@ types:
         summary: "Initial Sema version"
 
   sim.pico.tank.module.component.gt:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case); SimulatesVersion 011 -> 012. Context-dependent: the device type lived on the referenced cac, not the component."
       "000":
         summary: "Initial Sema version"
 
@@ -511,40 +890,33 @@ types:
       "000":
         summary: "Initial Sema version"
 
-  sim.timestep:
+  sim.ready:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
         summary: "Initial Sema version."
 
-  ticklist.hall:
-    latest_version: "101"
-    versioning_strategy: "literal"
-    versions:
-      "101":
-        summary: "Initial Sema version"
-
-  ticklist.hall.report:
+  sim.relay.component.gt:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial Sema version"
+        summary: "Initial Sema version (sim-marker relay component for simulated layouts)."
 
-  ticklist.reed:
-    latest_version: "101"
-    versioning_strategy: "literal"
-    versions:
-      "101":
-        summary: "Initial Sema version"
-
-  ticklist.reed.report:
+  sim.sensor.component.gt:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial Sema version"
+        summary: "Initial Sema version (new sim-marker component for simulated layouts; structurally component.gt)."
+
+  sim.timestep:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version."
 
   single.machine.state:
     latest_version: "000"
@@ -567,17 +939,16 @@ types:
       "003":
         summary: "Baseline runtime version (no prior version tracked)."
 
-  synth.channel.gt:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial Sema version"
-
   spaceheat.node.gt:
-    latest_version: "301"
+    latest_version: "303"
     versioning_strategy: "literal"
     versions:
+      "303":
+        summary: >
+          - InPowerMetering: drop (routing is owned by the consuming transactive declaration, not the node)
+          - InPowerMeteringRequiresNameplate axiom: drop
+      "302":
+        summary: "- ActorClass: gw1.actor.class:011 -> 012"
       "301":
         summary: >
           - BoardComponentId: add as Optional
@@ -610,6 +981,41 @@ types:
       "001":
         summary: "Baseline runtime version (no prior version tracked)."
 
+  synth.channel.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  ticklist.hall:
+    latest_version: "101"
+    versioning_strategy: "literal"
+    versions:
+      "101":
+        summary: "Initial Sema version"
+
+  ticklist.hall.report:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  ticklist.reed:
+    latest_version: "101"
+    versioning_strategy: "literal"
+    versions:
+      "101":
+        summary: "Initial Sema version"
+
+  ticklist.reed.report:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   weather:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -623,6 +1029,15 @@ types:
     versions:
       "000":
         summary: "Initial Sema version"
+
+  web.server.component.gt:
+    latest_version: "002"
+    versioning_strategy: "literal"
+    versions:
+      "002":
+        summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
+      "001":
+        summary: "Initial Sema version (flattened from the scada WebServerComponentGt runtime; WebServer is an inline object)."
 
 enums:
   base.g.node.class:
@@ -679,6 +1094,12 @@ enums:
     versions:
       "000": {}
 
+  gpio.sense.mode:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
   gpm.from.hz.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
@@ -691,10 +1112,26 @@ enums:
     versions:
       "000": {}
 
+  gw.house0.primary.flow.source:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  gw.market.product.name:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
   gw1.actor.class:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
+      "012":
+        added_values:
+          - "SimSensorActor"
+          - "SimRelayActor"
       "011":
         added_values:
           - "I2cThermistorReader"
@@ -705,17 +1142,27 @@ enums:
           - "I2cRelayBoard"
       "009": {}
 
+  gw1.device.type:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001":
+        added_values:
+          - "Gw108I2cRelay"
+          - "Gw108GpioRelay"
+      "000": {}
+
   gw1.emission.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
       "000": {}
 
-  gw1.main.auto.state:
+  gw1.heat.call.interpretation:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
-      "001": {}
+      "000": {}
 
   gw1.lc.top.state:
     enum_type: "versioned"
@@ -753,6 +1200,12 @@ enums:
     versions:
       "001": {}
 
+  gw1.main.auto.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "001": {}
+
   gw1.quantity:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
@@ -769,12 +1222,6 @@ enums:
       "000": {}
 
   gw1.system.mode:
-    enum_type: "versioned"
-    note: "This enum is versioned; new versions are additive only."
-    versions:
-      "000": {}
-
-  gw1.heat.call.interpretation:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
@@ -813,6 +1260,24 @@ enums:
     versions:
       "000": {}
 
+  i2c.adc.type:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  i2c.dac.type:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  i2c.operation:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
   log.level:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
@@ -832,12 +1297,6 @@ enums:
       "000": {}
 
   market.type.name:
-    enum_type: "versioned"
-    note: "This enum is versioned; new versions are additive only."
-    versions:
-      "000": {}
-
-  gw.market.product.name:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
@@ -871,6 +1330,10 @@ enums:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
+      "008":
+        added_values:
+          - "GRIDWORKS__SIM_SENSOR"
+          - "GRIDWORKS__SIM_RELAY_BANK"
       "007":
         added_values:
           - "SAIER__SENHZG1WA"
@@ -896,6 +1359,12 @@ enums:
       "001": {}
 
   temp.calc.method:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  thermistor.data.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

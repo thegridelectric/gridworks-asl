@@ -2,8 +2,7 @@ from typing import Any, Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import Gw1EmissionMethod
-from sema.runtime.enums.old_versions.gw1_quantity_000 import Gw1Quantity000
-from sema.runtime.enums.old_versions.gw1_unit_000 import Gw1Unit000
+from sema.runtime.enums import Gw1Quantity
 from sema.runtime.enums.old_versions.gw1_unit_001 import Gw1Unit001
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import PositiveInt
@@ -20,8 +19,8 @@ class DerivedChannelGt(SemaType):
     created_by_node_name: SpaceheatName
     strategy: SpaceheatName
     input_channel_names: list[SpaceheatName]
-    output_unit: Gw1Unit000
-    output_quantity: Gw1Quantity000
+    output_unit: Gw1Unit001
+    output_quantity: Gw1Quantity
     emission_method: Gw1EmissionMethod
     async_emit_delta: PositiveInt | None = None
     emit_period_s: PositiveInt | None = None

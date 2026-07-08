@@ -1,0 +1,175 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/g.node.gt/005"
+
+title: "g.node.gt"
+type: object
+description: >
+  A GNode (“Grid Node”) is the fundamental identity object in the GridWorks
+  ecosystem. Every physical location, metered unit, device, service, or actor
+  interacting with the transactive system is represented as a GNode.
+
+properties:
+
+  GNodeId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this GNode. Immutable for the lifetime
+      of the GNode.
+
+  Alias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Human-readable hierarchical identifier. Forms the basis of the
+      GNodeTree topology. Alias may change over time as the physical
+      or conceptual topology is refined.
+
+  BaseClass:
+    $ref: "https://schemas.electricity.works/enums/base.g.node.class/000"
+    description: >
+      Universal structural ontology classification for the GNode.
+      Defines the physical or logical topology role used for
+      interoperability, copper-tree construction, and market
+      coordination across organizations.
+
+  GNodeClass:
+    type: string
+    description: >
+      Functional or role-based classification for the GNode. Interpreted
+      according to the namespace of the registering organization. This field is a
+      free-form string, not a universal enum.
+
+  Status:
+    $ref: "https://schemas.electricity.works/enums/g.node.status/000"
+    description: >
+      Lifecycle status of the GNode within the registry.
+
+  PrevAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      Previous Alias value during alias transitions. Required only when
+      Alias changes. Must be null if Alias has not changed.
+
+  PositionPointId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Reference to a PositionPoint GT type giving physical location
+      (WGS84 microdegrees). Required for physical GNodes; null for
+      logical/service nodes.
+
+  DisplayName:
+    type: "string"
+    description: >
+      Optional human-friendly label for UI or documentation.
+
+  TypeName:
+    const: "g.node.gt"
+
+  Version:
+    const: "005"
+
+required:
+  - GNodeId
+  - Alias
+  - BaseClass
+  - GNodeClass
+  - Status
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "GNodeId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "Alias": "d1.isone.me.versant.keene.beech",
+      "BaseClass": "LeafTransactiveNode",
+      "GNodeClass": "LeafTransactiveNode",
+      "Status": "Active",
+      "PositionPointId": "198ca6af-5a4b-43a2-a8a9-7546deabc731",
+      "DisplayName": "Beech Street Meter",
+      "TypeName": "g.node.gt",
+      "Version": "005"
+    }
+  - |
+    {
+      "GNodeId": "dcb05390-5bca-40ef-b63d-7908ccb33d9b",
+      "Alias": "d1.isone.me.ws",
+      "BaseClass": "Logical",
+      "GNodeClass": "WeatherForecastService",
+      "Status": "Active",
+      "DisplayName": "New England Weather Forecast Service",
+      "TypeName": "g.node.gt",
+      "Version": "005"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+
+    - number: 1
+      name: "ClassConsistency"
+      statement: >
+        a. If BaseClass is not Logical, GNodeClass SHALL equal the string value of BaseClass.
+        b. If BaseClass is Logical, GNodeClass SHALL NOT equal any value of base.g.node.class other than Logical.
+
+    - number: 2
+      name: "PhysicalGNodeLocations"
+      statement: >
+        If BaseClass != Logical, PositionPointId SHALL NOT be null.
+
+    - number: 3
+      name: "AliasTransitionConsistency"
+      statement: >
+        If PrevAlias is not null, it SHALL differ from Alias.
+
+    - number: 4
+      name: "GNodeClassNamespacing"
+      statement: >
+        GNodeClass SHALL be a non-empty string containing no whitespace
+
+    - number: 5
+      name: "AliasSuffixSemantics"
+      statement: >
+        a. Alias SHALL end with ".ta" if and only if GNodeClass is "TerminalAsset".
+        b. Alias SHALL end with ".scada" if and only if GNodeClass is "Scada".
+
+    - number: 6
+      name: "GNodeAliasHasBody"
+      statement: >
+        a. Alias SHALL have at least two dotted words (the universe segment is a namespace, not a GNodeAlias, so the shortest valid GNodeAlias is like "d1.isone").
+        b. If PrevAlias is present, it SHALL likewise have at least two dotted words.
+
+  extended_description: >
+    Grid Nodes (GNodes) provide the stable identity layer for distributed
+    coordination in the GridWorks ecosystem. Each GNode participates in a
+    hierarchical alias structure that encodes topology, routing semantics,
+    and coordination scope.
+
+    GNodes may represent physical grid structure (e.g., metered boundaries,
+    connectivity nodes, constraint points) or logical and service roles
+    (e.g., SCADA agents, forecasting services, market participants).
+    BaseClass defines the universal structural ontology required for
+    interoperability. GNodeClass expresses organization-specific
+    functional roles and does not alter structural semantics.
+
+    `g.node.gt` is an immutable serialized snapshot of declared node state.
+    Any change to a GNode (alias updates, status changes, relocations,
+    or classification changes) SHALL be represented by publishing a new
+    `g.node.gt` message rather than mutating a previously published instance.
+    This preserves durable identity (GNodeId) while allowing controlled
+    evolution of descriptive attributes.
+
+    GNode is designed as the atomic unit of coordination in a recursively
+    composable grid architecture. Systems of arbitrary scale are formed by
+    composing GNodes into hierarchical or heterarchical structures. This
+    allows optimal power flow (OPF), market clearing, and constraint
+    coordination mechanisms to operate centrally, regionally, or in
+    distributed configurations without altering the underlying identity model.
+
+    Conceptually, GNode aligns with node abstractions in IEC 61970/61968
+    CIM (e.g., ConnectivityNode and TopologicalNode), while unifying
+    physical and logical coordination entities within a single identity
+    abstraction suitable for graph-based modeling and transactive
+    coordination.

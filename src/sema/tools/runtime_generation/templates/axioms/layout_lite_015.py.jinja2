@@ -1,0 +1,35 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ layout_lite_015_class_name }}":
+        """
+        Axiom 1: DcNodeConsistency
+        Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName SHALL reference
+        an existing ShNodes.Name, and every captured-by node SHALL have an active
+        ActorClass.
+        """
+        raise NotImplementedError("Axiom 1 validation is not implemented.")
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ layout_lite_015_class_name }}":
+        """
+        Axiom 2: NodeHandleHierarchyConsistency
+        Every ShNode with a dotted handle SHALL have its immediate boss present as another
+        ShNode in the same payload.
+        """
+        raise NotImplementedError("Axiom 2 validation is not implemented.")
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "{{ layout_lite_015_class_name }}":
+        """
+        Axiom 3: CriticalZoneSubset
+        CriticalZoneList SHALL be a subset of ZoneList.
+        """
+        raise NotImplementedError("Axiom 3 validation is not implemented.")
+
+    @model_validator(mode="after")
+    def check_axiom_4(self) -> "{{ layout_lite_015_class_name }}":
+        """
+        Axiom 4: DerivedNodeConsistency
+        Every DerivedChannels.CreatedByNodeName SHALL reference an existing ShNodes.Name
+        whose ActorClass is active.
+        """
+        raise NotImplementedError("Axiom 4 validation is not implemented.")

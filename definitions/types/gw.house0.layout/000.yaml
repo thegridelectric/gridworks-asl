@@ -1,0 +1,146 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.house0.layout/000"
+
+title: "gw.house0.layout"
+type: object
+description: >
+  A complete, self-contained configuration and topology snapshot for a House0
+  hydronic space heating system — the fleet layout running the first five homes
+  (beech, elm, oak, fir, maple): George-built electronics, Hubitat hubs driving
+  Honeywell thermostats, dual Krida I2C relay banks, DFRobot 0-10V DACs, an
+  eGauge power meter, TSnap (ADS111x) multipurpose sensors, pico flow meters, and
+  store + buffer tank modules. Siegenthaler loops appear on beech and maple.
+
+  Like gw.nolan.layout, the layout binds identity (GNodes), topology (ShNodes),
+  telemetry (DataChannels + DerivedChannels), hardware (Components), per-family
+  device-type records (DeviceTypes), and a Hydronic config block into one
+  semantically consistent, deployable artifact.
+
+  All collections plus the Hydronic block are required — a layout is a complete,
+  deployable artifact, never a partial one (mirrors gw.nolan.layout). Mutable in
+  place while unpublished.
+
+properties:
+
+  GNodes:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/g.node.gt/005"
+    description: >
+      Grid Node identity objects in this layout snapshot (LeafTransactiveNode,
+      TerminalAsset, Scada).
+
+  ShNodes:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/303"
+    description: >
+      Spaceheat nodes — the operational roles (scada, ltn, leaf-ally,
+      local-control, derived-generator, power-meter, pumps, pipes, relays, tank
+      depths, per-zone thermostat/whitewire nodes, ...).
+
+  DataChannels:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/data.channel.gt/003"
+    description: "Raw telemetry channels produced by the SCADA system."
+
+  DerivedChannels:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/derived.channel.gt/002"
+    description: >
+      Computed telemetry channels (calibrated tank depths, zone heat-call +
+      predicted setpoint, usable/required energy, ...).
+
+  Components:
+    type: array
+    description: "Hardware components present in the House0 system."
+    items:
+      oneOf:
+        - $ref: "https://schemas.electricity.works/types/electric.meter.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/ads111x.based.component.gt/000"
+        - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/005"
+        - $ref: "https://schemas.electricity.works/types/dfr.component.gt/000"
+        - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/pico.flow.module.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/012"
+        - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/hubitat.component.gt/000"
+        - $ref: "https://schemas.electricity.works/types/hubitat.poller.component.gt/000"
+        - $ref: "https://schemas.electricity.works/types/web.server.component.gt/002"
+
+  DeviceTypes:
+    type: array
+    description: >
+      The specialized per-family device-type records (`<family>.device.type.gt`) for the
+      device categories present in `Components` that carry category-level data. A component
+      joins its record by the shared `DeviceType` value.
+    items:
+      oneOf:
+        - $ref: "https://schemas.electricity.works/types/electric.meter.device.type.gt/000"
+        - $ref: "https://schemas.electricity.works/types/ads111x.based.device.type.gt/000"
+        - $ref: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
+
+  Hydronic:
+    $ref: "https://schemas.electricity.works/types/gw.house0.hydronic/000"
+
+  TypeName:
+    const: "gw.house0.layout"
+
+  Version:
+    const: "000"
+
+required:
+  - GNodes
+  - ShNodes
+  - DataChannels
+  - DerivedChannels
+  - Components
+  - DeviceTypes
+  - Hydronic
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "GlobalIdUniqueness"
+      statement: >
+        ShNode.ShNodeId, Component.ComponentId, DataChannel.Id, DerivedChannel.Id and GNode.GNodeId
+        SHALL each be globally unique; no id value SHALL appear in more than one of these sets.
+    - number: 2
+      name: "EssentialNodesExistence"
+      statement: >
+        ShNodes SHALL include the primary-scada (s), ltn, leaf-ally (la), local-control (lc) and
+        derived-generator nodes.
+    - number: 3
+      name: "ZoneHeatCallChannel"
+      statement: >
+        For each zone at 1-based index i in Hydronic.Zones, a DerivedChannel named
+        "zone{i}-{Zone.Name}-heat-call" (lowercased) with Strategy "heat-call" SHALL exist, and a
+        source DataChannel SHALL exist for that zone — either "zone{i}-{Zone.Name}-whitewire-pwr"
+        (power-sourced, e.g. an eGauge whitewire reading) or "zone{i}-{Zone.Name}-opto-input"
+        (opto-sourced, e.g. a gw108 reading the thermostat opto-coupler). The choice of source is
+        per-zone.
+    - number: 4
+      name: "PrimaryFlowSourceChannelAgreement"
+      statement: >
+        The "primary-flow" channel SHALL agree with Hydronic.PrimaryFlowSource. If
+        PrimaryFlowSource is "Measured", a DataChannel named "primary-flow" SHALL exist and no
+        DerivedChannel named "primary-flow" SHALL exist. If PrimaryFlowSource is "DerivedSiegSum",
+        a DerivedChannel named "primary-flow" with Strategy "sum" SHALL exist and no DataChannel
+        named "primary-flow" SHALL exist.
+    - number: 5
+      name: "TransactivePowerChannel"
+      statement: >
+        DerivedChannels SHALL contain exactly one channel whose Strategy is "transactive-power" —
+        the metered transactive boundary, computed by the power-meter actor (not the
+        derived-generator). Each name in that channel's InputChannelNames SHALL resolve to an
+        existing DataChannel with TelemetryName "PowerW", and the AboutNode of each such DataChannel
+        SHALL carry a NameplatePowerW. (The metered set is declared once here, replacing the former
+        per-node InPowerMetering flag; the NameplatePowerW obligation folds in spaceheat.node.gt's
+        retired InPowerMetering-requires-nameplate axiom.)

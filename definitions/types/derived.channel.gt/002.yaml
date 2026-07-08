@@ -43,12 +43,12 @@ properties:
       Names of input channels consumed by the computation strategy.
 
   OutputUnit:
-    $ref: "https://schemas.electricity.works/enums/gw1.unit/000"
+    $ref: "https://schemas.electricity.works/enums/gw1.unit/001"
     description: >
       Measurement unit of the derived output values.
 
   OutputQuantity:
-    $ref: "https://schemas.electricity.works/enums/gw1.quantity/000"
+    $ref: "https://schemas.electricity.works/enums/gw1.quantity/001"
     description: >
       Canonical physical dimension of the derived output.
       OutputQuantity SHALL equal the quantity defined by the canonical

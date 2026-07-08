@@ -1,0 +1,31 @@
+from typing import Literal
+from pydantic import model_validator
+from sema.runtime.base import SemaType
+from sema.runtime.property_format import PascalCase
+from sema.runtime.property_format import UUID4Str
+from sema.runtime.types.relay_control_config import RelayControlConfig
+
+
+class I2cRelayComponentGt(SemaType):
+    """Sema: https://schemas.electricity.works/types/i2c.relay.component.gt/000"""
+
+    component_id: UUID4Str
+    device_type: PascalCase
+    relay_name: PascalCase
+    config_list: list[RelayControlConfig]
+    display_name: str | None = None
+    hw_uid: str | None = None
+    type_name: Literal["i2c.relay.component.gt"] = "i2c.relay.component.gt"
+    version: Literal["000"] = "000"
+
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "I2cRelayComponentGt":
+        """
+        Axiom 1: ExactlyOneConfig
+        ConfigList SHALL contain exactly one relay.control.config (one relay per component).
+        """
+        if len(self.config_list) != 1:
+            raise ValueError(
+                "Axiom 1 failed: ConfigList must contain exactly one relay.control.config."
+            )
+        return self

@@ -73,6 +73,76 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "FromGNodeAlias": "hw1.isone.me.versant.keene.beech.scada",
+      "MessageCreatedMs": 1719340800000,
+      "RelayNodes": [
+        {
+          "Name": "relay1",
+          "ActorHierarchyName": "s.relay1",
+          "Handle": "auto.pico-cycler.relay1",
+          "ActorClass": "Relay",
+          "DisplayName": "5VDC Relay",
+          "ComponentId": "25f344ee-39ea-4904-bff9-54f2022337af",
+          "ShNodeId": "a7f4becc-8e35-4118-a3e9-ab6ad13f5a67",
+          "TypeName": "spaceheat.node.gt",
+          "Version": "300"
+        }
+      ],
+      "DacNodes": [],
+      "ControlChannels": [
+        {
+          "Name": "vdc-relay1",
+          "DisplayName": "5VDC Relay1 State",
+          "AboutNodeName": "relay1",
+          "CapturedByNodeName": "relay1",
+          "TelemetryName": "RelayState",
+          "TerminalAssetAlias": "hw1.isone.me.versant.keene.beech.ta",
+          "Id": "9c33d7af-59e0-415b-8208-ecf64916a64b",
+          "TypeName": "data.channel.gt",
+          "Version": "001"
+        }
+      ],
+      "I2cRelayComponent": {
+        "ComponentId": "25f344ee-39ea-4904-bff9-54f2022337af",
+        "ComponentAttributeClassId": "29eab8b1-100f-4230-bb44-3a2fcba33cc3",
+        "ConfigList": [
+          {
+            "ActorName": "relay1",
+            "AsyncCapture": true,
+            "AsyncCaptureDelta": null,
+            "CapturePeriodS": 300,
+            "ChannelName": "vdc-relay1",
+            "DeEnergizedState": "RelayClosed",
+            "DeEnergizingEvent": "CloseRelay",
+            "EnergizedState": "RelayOpen",
+            "EnergizingEvent": "OpenRelay",
+            "EventType": "change.relay.state",
+            "Exponent": 0,
+            "PollPeriodMs": 200,
+            "RelayIdx": 1,
+            "StateType": "relay.closed.or.open",
+            "TypeName": "relay.actor.config",
+            "Unit": "Unitless",
+            "Version": "002",
+            "WiringConfig": "NormallyClosed"
+          }
+        ],
+        "DisplayName": "I2C Relay Board",
+        "HwUid": "i2c.krida.double.emr16.v1.29eab8",
+        "I2cAddressList": [
+          32,
+          33
+        ],
+        "TypeName": "i2c.multichannel.dt.relay.component.gt",
+        "Version": "002"
+      },
+      "TypeName": "scada.control.capabilities",
+      "Version": "001"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
 

@@ -1,0 +1,101 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/electric.meter.component.gt/001"
+
+title: "electric.meter.component.gt"
+type: object
+description: >
+  A specific electric-meter component (one installed device instance) with its
+  per-channel telemetry configs and optional modbus connection. Flat — the shared
+  component fields are spelled out here; ConfigList references the meter channel
+  config type by $ref.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this installed component instance.
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Identifier of this component's device type (its electric.meter.cac.gt).
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/electric.meter.channel.config/000"
+    description: >
+      Per-channel telemetry configurations read from this meter.
+
+  ModbusHost:
+    type: string
+    description: >
+      Hostname or IP of the meter's modbus interface, when read over modbus.
+
+  ModbusPort:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      TCP port of the meter's modbus interface, when read over modbus.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+    description: >
+      Hardware unique id of the installed device, when known.
+
+  TypeName:
+    const: "electric.meter.component.gt"
+
+  Version:
+    const: "001"
+
+required:
+  - ComponentId
+  - ComponentAttributeClassId
+  - ConfigList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ComponentId": "9633adef-2373-422d-8a0e-dfbd16ae081c",
+      "ComponentAttributeClassId": "739a6e32-bb9c-43bc-a28d-fb61be665522",
+      "ConfigList": [
+        {
+          "AsyncCapture": true,
+          "AsyncCaptureDelta": 300,
+          "CapturePeriodS": 300,
+          "ChannelName": "hp-odu-pwr",
+          "EgaugeRegisterConfig": {
+            "Address": 9006,
+            "Denominator": 1,
+            "Description": "change in value",
+            "Name": "hp-odu",
+            "Type": "f32",
+            "TypeName": "egauge.register.config",
+            "Unit": "W",
+            "Version": "000"
+          },
+          "Exponent": 0,
+          "PollPeriodMs": 1000,
+          "TypeName": "electric.meter.channel.config",
+          "Unit": "W",
+          "Version": "000"
+        }
+      ],
+      "DisplayName": "EGauge Power Meter",
+      "HwUid": "BP01349",
+      "ModbusHost": "eGauge6069.local",
+      "ModbusPort": 502,
+      "TypeName": "electric.meter.component.gt",
+      "Version": "001"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

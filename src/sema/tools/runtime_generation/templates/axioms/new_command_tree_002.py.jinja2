@@ -1,0 +1,24 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ new_command_tree_002_class_name }}":
+        """
+        Axiom 1: PrefixClosedHandles
+        Let the effective handle of an ShNode be its Handle if present, otherwise
+        its Name. The set of effective handles SHALL be prefix-closed: for every ShNode
+        in ShNodes, each dot-separated prefix of its effective handle SHALL also be the
+        effective handle of some ShNode in ShNodes.
+        """
+        effective = {
+            node.handle if node.handle is not None else node.name
+            for node in self.sh_nodes
+        }
+        for value in effective:
+            segments = value.split(".")
+            for n in range(1, len(segments)):
+                prefix = ".".join(segments[:n])
+                if prefix not in effective:
+                    raise ValueError(
+                        f"Axiom 1 failed: effective handle {value!r} has "
+                        f"prefix {prefix!r} that is not the effective handle "
+                        "of any ShNode."
+                    )
+        return self

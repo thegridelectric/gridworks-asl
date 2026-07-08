@@ -66,6 +66,32 @@ x-gridworks:
 - `default`
   - SHALL be one of the declared enum values
 
+## String Enum Value Constraints — values are Python identifiers
+
+For a **string** enum, every value SHALL be a valid Python identifier — it MUST
+match `^[A-Za-z_][A-Za-z0-9_]*$` (ASCII letters, digits, underscores; not starting
+with a digit). This is not stylistic. The runtime generator emits each value as a
+Python `Enum` **member name** — `GwStrEnum` sets the serialized wire value *equal to*
+the member name (via `auto()` + `_generate_next_value_`) — so a value that is not a
+legal Python identifier fails `regenerate_runtime.py` with
+`String enum value is not a Python identifier`.
+
+Design around the limit:
+
+- **No hyphens, dots, spaces, or leading digits** — therefore **UUIDs, dotted
+  names, ISO dates, and the like cannot be string-enum values.** If you need a closed
+  set of such things, carry them in a separate field / `format`, not as enum members.
+- **Projections inherit the limit.** Projection codegen references the source *and*
+  target enum **members by name**, so both the source and target enum of a projection
+  must have identifier values — a UUID-valued or format-valued projection target will
+  not generate.
+- By **convention**, string-enum values are **PascalCase** (`TerminalAsset`,
+  `FahrenheitX100`, `NormallyClosed`). The legacy `spaceheat.make.model`
+  `MAKE__MODEL` shouting-snake is an outlier, not the pattern to follow.
+
+Integer enums are exempt from this rule: an integer cannot be a member name, so they
+derive member names from `x-gridworks.value_descriptions` instead.
+
 ## `x-gridworks` Metadata
 
 Each enum schema SHALL include:

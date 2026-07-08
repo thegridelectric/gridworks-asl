@@ -1,0 +1,90 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/electric.meter.component.gt/002"
+
+title: "electric.meter.component.gt"
+type: object
+description: >
+  A specific electric-meter component (one installed device instance) with its
+  per-channel telemetry configs and optional modbus connection. Flat — the shared
+  component fields are spelled out here; ConfigList references the meter channel
+  config type by $ref.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this installed component instance.
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case` string
+      (e.g. `EgaugePowerMeter` or `EkmFlowMeter`).
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/electric.meter.channel.config/001"
+    description: >
+      Per-channel telemetry configurations read from this meter.
+
+  ModbusHost:
+    type: string
+    description: >
+      Hostname or IP of the meter's modbus interface, when read over modbus.
+
+  ModbusPort:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      TCP port of the meter's modbus interface, when read over modbus.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+    description: >
+      Hardware unique id of the installed device, when known.
+
+  TypeName:
+    const: "electric.meter.component.gt"
+
+  Version:
+    const: "002"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ComponentId": "6f74e8b9-4fc9-4b95-bd6f-2c150662b40e",
+      "DeviceType": "EgaugePowerMeter",
+      "ConfigList": [
+        {
+          "ChannelName": "scada",
+          "TypeName": "electric.meter.channel.config",
+          "Version": "001"
+        }
+      ],
+      "TypeName": "electric.meter.component.gt",
+      "Version": "002"
+    }
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.
+  extended_description: >
+    DeviceType holds a `gw1.device.type` value: the hardware layout enforces its
+    membership in `gw1.device.type` and, for an electric meter, that the matching
+    `electric.meter.device.type.gt` record is present.

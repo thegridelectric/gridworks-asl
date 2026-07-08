@@ -1,0 +1,134 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.house0.operational.params/000"
+
+title: "gw.house0.operational.params"
+type: object
+description: >
+  Operational and optimization parameters for one House0-fleet home — the tunable
+  state that changes without rewiring hardware. The third SCADA artifact alongside
+  deployment config and the static hardware layout, which it pairs with by GNodes.
+
+  Pass one carries only the per-channel capture/report tuning (CaptureTuningList).
+  The control and optimization parameters (system mode, criticality, COP curve,
+  heating curve, FLO knobs) are added in a later version.
+
+properties:
+  GNodes:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/g.node.gt/005"
+    description: >
+      The home's three Grid Node identities — its LeafTransactiveNode, TerminalAsset,
+      and Scada — the same set the hardware layout carries, which pairs this artifact
+      with its layout. The three are distinct roles, not duplicates; see
+      extended_description for how they relate and why the TerminalAsset and the Scada
+      are different GNodes.
+
+  CaptureTuningList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/capture.tuning/000"
+    description: >
+      Per-channel capture/report tuning, one entry per captured channel.
+
+  TypeName:
+    const: "gw.house0.operational.params"
+
+  Version:
+    const: "000"
+
+required:
+  - GNodes
+  - CaptureTuningList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "GNodes": [
+        {
+          "GNodeId": "4da8659f-d455-45f2-ac63-16817c1a6322",
+          "Alias": "hw1.isone.me.versant.keene.beech",
+          "BaseClass": "LeafTransactiveNode",
+          "GNodeClass": "LeafTransactiveNode",
+          "Status": "Active",
+          "PositionPointId": "9756f665-4ec5-4ca8-9db9-aab13c08f80b",
+          "DisplayName": "Beech Ltn",
+          "TypeName": "g.node.gt",
+          "Version": "005"
+        },
+        {
+          "GNodeId": "7e152072-c91b-49d2-9ebd-f4fe1b684d06",
+          "Alias": "hw1.isone.me.versant.keene.beech.ta",
+          "BaseClass": "TerminalAsset",
+          "GNodeClass": "TerminalAsset",
+          "Status": "Active",
+          "PositionPointId": "edf578ba-5209-4b06-8bfb-8e47a1843df9",
+          "DisplayName": "TerminalAsset GNode",
+          "TypeName": "g.node.gt",
+          "Version": "005"
+        },
+        {
+          "GNodeId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+          "Alias": "hw1.isone.me.versant.keene.beech.scada",
+          "BaseClass": "Logical",
+          "GNodeClass": "Scada",
+          "Status": "Active",
+          "DisplayName": "Scada GNode",
+          "TypeName": "g.node.gt",
+          "Version": "005"
+        }
+      ],
+      "CaptureTuningList": [
+        {
+          "ChannelName": "dist-swt",
+          "CapturePeriodS": 300,
+          "AsyncCapture": true,
+          "AsyncCaptureDelta": 250,
+          "TypeName": "capture.tuning",
+          "Version": "000"
+        }
+      ],
+      "TypeName": "gw.house0.operational.params",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "CaptureTuningChannelUniqueness"
+      statement: >
+        ChannelName SHALL be unique across CaptureTuningList.
+
+  extended_description: >
+    The home is identified by its three GNodes, and the distinction among them is
+    load-bearing — it is a common point of confusion, so it is spelled out here:
+
+      - TerminalAsset: the physical transactive asset itself — the heat pump plus
+        thermal storage located behind the atomic metered point. It is the *thing*
+        that consumes power and is metered. Its alias ends in `.ta`.
+      - Scada: the GNode responsible for local telemetry, data acquisition, and
+        control *of* that TerminalAsset. It is the *controller*, not the asset. Its
+        alias ends in `.scada`. This is why TerminalAsset and Scada are separate
+        GNodes and are NOT interchangeable: one is the asset, the other is the
+        control system acting on it. These operational params are applied by the
+        Scada, but they describe how the TerminalAsset is operated.
+      - LeafTransactiveNode: the atomic metered unit that participates in markets and
+        enters Dispatch Contracts on behalf of the TerminalAsset (exactly one per
+        TerminalAsset). It is the *market / metering boundary*; it is the parent
+        alias of both the TerminalAsset and the Scada.
+
+    operational-params is the authored home for the tunable state that left the static
+    hardware layout in hardware-layout-pass-one: the per-channel capture params
+    (CapturePeriodS, AsyncCapture, AsyncCaptureDelta, PollPeriodMs) that are
+    operational, not topology. It mirrors the layout's GNodes identity so the two pair
+    unambiguously. A pass-one instance carries only the CaptureTuningList; a later
+    version adds the control/optimization parameters. The assembly step
+    (ops_and_sema_to_dc) merges this artifact with the static layout to build the
+    runtime dc HardwareLayout the device actors read, so moving these params here does
+    not change what the actors see.

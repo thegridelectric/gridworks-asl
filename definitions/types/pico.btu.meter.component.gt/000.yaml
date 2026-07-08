@@ -1,0 +1,158 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/000"
+
+title: "pico.btu.meter.component.gt"
+type: object
+description: >
+  A Pico BTU-meter component (one installed device instance): a flow meter plus hot
+  and cold thermistors (and optionally a CT voltage reading) that a Pico samples to
+  compute thermal power. Flat — the shared component fields are spelled out here.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ComponentAttributeClassId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.config/000"
+    description: >
+      Channel configurations attached to this BTU meter.
+
+  Enabled:
+    type: boolean
+
+  SerialNumber:
+    type: string
+
+  FlowChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  HotChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  ColdChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  CtChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Channel name for the CT voltage reading, when ReadCtVoltage is true.
+
+  ReadCtVoltage:
+    type: boolean
+
+  SendHz:
+    type: boolean
+
+  FlowMeterType:
+    $ref: "https://schemas.electricity.works/enums/spaceheat.make.model/007"
+    description: >
+      Make/model of the flow meter.
+
+  HzCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/hz.calc.method/001"
+
+  TempCalcMethod:
+    $ref: "https://schemas.electricity.works/enums/temp.calc.method/000"
+
+  GpmFromHzMethod:
+    $ref: "https://schemas.electricity.works/enums/gpm.from.hz.method/000"
+
+  ThermistorBeta:
+    type: integer
+
+  GallonsPerPulse:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+
+  AsyncCaptureDeltaGpmX100:
+    type: integer
+
+  AsyncCaptureDeltaCelsiusX100:
+    type: integer
+
+  AsyncCaptureDeltaCtVoltsX100:
+    type: integer
+    description: >
+      Async-capture threshold for the CT voltage channel; present when
+      ReadCtVoltage is true.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "pico.btu.meter.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - ComponentAttributeClassId
+  - ConfigList
+  - Enabled
+  - SerialNumber
+  - FlowChannelName
+  - HotChannelName
+  - ColdChannelName
+  - ReadCtVoltage
+  - SendHz
+  - FlowMeterType
+  - HzCalcMethod
+  - TempCalcMethod
+  - GpmFromHzMethod
+  - ThermistorBeta
+  - GallonsPerPulse
+  - AsyncCaptureDeltaGpmX100
+  - AsyncCaptureDeltaCelsiusX100
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "AsyncCaptureDeltaCelsiusX100": 20,
+      "AsyncCaptureDeltaGpmX100": 10,
+      "ColdChannelName": "hp-ewt",
+      "ComponentAttributeClassId": "d020608d-d5ed-4b12-9592-7135db34e4ba",
+      "ComponentId": "418b24f3-f05f-4d75-8d72-7f40b8e1aee3",
+      "ConfigList": [
+        {
+          "AsyncCapture": true,
+          "CapturePeriodS": 300,
+          "ChannelName": "primary-flow",
+          "Exponent": 2,
+          "TypeName": "channel.config",
+          "Unit": "Gpm",
+          "Version": "000"
+        }
+      ],
+      "DisplayName": "primary-btu BtuMeter",
+      "Enabled": true,
+      "FlowChannelName": "primary-flow",
+      "FlowMeterType": "SAIER__SENHZG1WA",
+      "GallonsPerPulse": 0.0009,
+      "GpmFromHzMethod": "Constant",
+      "HotChannelName": "hp-lwt",
+      "HwUid": "pico_7a4d2b",
+      "HzCalcMethod": "UniformWindow",
+      "ReadCtVoltage": false,
+      "SendHz": false,
+      "SerialNumber": "NA",
+      "TempCalcMethod": "SimpleBeta",
+      "ThermistorBeta": 3977,
+      "TypeName": "pico.btu.meter.component.gt",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

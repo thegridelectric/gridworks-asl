@@ -6,12 +6,12 @@ from sema.runtime.enums.gw_str_enum import SemaEnum
 class ChangeHeatcallSource(SemaEnum):
     """Sema: https://schemas.electricity.works/enums/change.heatcall.source/000"""
 
-    WallThermostat = auto()
-    Scada = auto()
+    SwitchToWallThermostat = auto()
+    SwitchToScada = auto()
 
     @classmethod
     def default(cls) -> "ChangeHeatcallSource":
-        return cls.WallThermostat
+        return cls.SwitchToWallThermostat
 
     @classmethod
     def values(cls) -> list[str]:

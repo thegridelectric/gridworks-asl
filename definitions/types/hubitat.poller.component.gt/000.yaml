@@ -1,0 +1,89 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/hubitat.poller.component.gt/000"
+
+title: "hubitat.poller.component.gt"
+type: object
+description: >
+  A Hubitat poller component (one polled Hubitat device instance): the poller settings that
+  map a Hubitat device's attributes onto SCADA channels. Flat — the shared component fields
+  are spelled out here; Poller references the hubitat.poller.gt word by $ref.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this installed component instance.
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case` string
+      (a `gw1.device.type` value). The hardware layout enforces membership in
+      `gw1.device.type`.
+
+  Poller:
+    $ref: "https://schemas.electricity.works/types/hubitat.poller.gt/000"
+    description: >
+      The poller settings for this Hubitat device.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+    description: >
+      Hardware unique id of the installed device, when known.
+
+  TypeName:
+    const: "hubitat.poller.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - DeviceType
+  - Poller
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ComponentId": "e4dc08d9-ac73-4383-8b21-1331267f6c94",
+      "DeviceType": "HoneywellT6Thermostat",
+      "Poller": {
+        "HubitatComponentId": "2f51577c-1c95-4d91-b1aa-ec89d302e821",
+        "DeviceId": 1,
+        "Attributes": [
+          {
+            "AttributeName": "example",
+            "ChannelName": "scada",
+            "NodeName": "scada",
+            "TelemetryName": "Unknown",
+            "Unit": "Unknown",
+            "Exponent": 0,
+            "InterpretAsNumber": false,
+            "Enabled": false,
+            "WebPollEnabled": false,
+            "WebListenEnabled": false,
+            "ReportMissing": false,
+            "ReportParseError": false,
+            "TypeName": "maker.api.attribute.gt",
+            "Version": "000"
+          }
+        ],
+        "Enabled": false,
+        "WebListenEnabled": false,
+        "PollPeriodSeconds": 0.0,
+        "TypeName": "hubitat.poller.gt",
+        "Version": "000"
+      },
+      "TypeName": "hubitat.poller.component.gt",
+      "Version": "000"
+    }
+x-gridworks:
+  owner: "gridworks-energy"

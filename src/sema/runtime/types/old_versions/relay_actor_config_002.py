@@ -9,7 +9,7 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import NonEmptyString
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import SpaceheatName
-from sema.runtime.types.relay_actor_config import RelayActorConfig
+from sema.runtime.types.old_versions.relay_actor_config_003 import RelayActorConfig003
 
 
 class RelayActorConfig002(SemaType):
@@ -123,7 +123,7 @@ class RelayActorConfig002(SemaType):
             )
         return self
 
-    def upgrade(self) -> RelayActorConfig:
+    def upgrade(self) -> RelayActorConfig003:
         """- AsyncCaptureDelta: require when AsyncCapture is true"""
         data = self.model_dump()
 
@@ -134,4 +134,4 @@ class RelayActorConfig002(SemaType):
         # Update version
         data["version"] = "003"
 
-        return RelayActorConfig.model_validate(data)
+        return RelayActorConfig003.model_validate(data)
