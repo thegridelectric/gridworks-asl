@@ -59,6 +59,10 @@ For `literal` enums:
 - `created`
   - SHALL be an RFC 3339 timestamp with seconds precision in UTC
 
+- `status`
+  - SHALL appear at the word level (see [structure.md](structure.md)
+    "Status Field")
+
 - `value_type`
   - MAY be present
   - if present, SHALL equal `"integer"`
@@ -93,10 +97,13 @@ For `versioned` enums:
 ### Versioned Enum Field Requirements
 
 - `latest_version`
-  - SHALL equal the highest version listed under `versions`
+  - SHALL equal the highest non-draft (staging or published) version
+    listed under `versions`
 
 - `versions`
-  - SHALL contain an entry for each published version
+  - SHALL contain an entry for each published or staging version
+  - Each version entry SHALL carry a required `status` (see
+    [structure.md](structure.md) "Status Field")
   - SHALL be keyed by three-digit numeric strings
   - SHALL be listed in decreasing order by version
 

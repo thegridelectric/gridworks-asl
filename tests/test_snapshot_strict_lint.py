@@ -28,7 +28,11 @@ def test_strict_lint_build_is_clean(monkeypatch, tmp_path: Path) -> None:
         lambda: build_public_registry(load_registry()),
     )
 
-    snapshot.prepare_snapshot(ROOT / "tests" / "fixtures" / "strict_lint_seed.yaml")
+    # layout.lite include_all_versions pulls staging versions (013+), so this
+    # is a dev snapshot; the lint guard's coverage is what matters here.
+    snapshot.prepare_snapshot(
+        ROOT / "tests" / "fixtures" / "strict_lint_seed.yaml", allow_staged=True
+    )
     # strict_lint=True turns any ruff/mypy violation into a LintGateError; no
     # assertion is needed, the call raises on a dirty generated tree.
     snapshot.build_snapshot_runtime("gjk", strict_lint=True)

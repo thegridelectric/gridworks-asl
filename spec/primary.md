@@ -36,12 +36,16 @@ incrementally — as a single format, a single type, or an entire vocabulary
 tree.
 
 For the purposes of immutability and version governance, a vocabulary
-definition is considered **published** when it is available at
-`https://schemas.electricity.works`. Before publication, a schema MAY be
-revised in place to correct mistakes or to better align the initial Sema
-contract with demonstrated runtime behavior. After publication, historical
-versions are immutable and any semantic or validation change SHALL be
-expressed through a new version.
+definition's lifecycle is its registry `status`: `draft` (not ready for
+use), `staging` (in real use, still mutable in place, dev brokers only), or
+`published` (immutable). Before publication, a schema MAY be revised in
+place to correct mistakes or to better align the initial Sema contract with
+demonstrated runtime behavior. After publication, historical versions are
+immutable and any semantic or validation change SHALL be expressed through
+a new version. Serving a definition at `https://schemas.electricity.works`
+is a separate, later event that only published definitions are eligible
+for; going live at the URL does not change status. See
+[registry/structure.md](registry/structure.md) "Status Field".
 
 ## Core Principles
 
@@ -175,7 +179,7 @@ this hub.
 | **axiom dependency** | A vocabulary word required to implement one or more axioms for a type version, but not referenced via `$ref`. |
 | **projection** | Declared deterministic mapping between two enum-valued properties of a type, with an exhaustive table covering every source value. |
 | **axiom** | A semantic invariant that cannot be expressed via structural JSON Schema constraints. Numbered per type version. |
-| **draft** vs **published** | Lifecycle status. Drafts are mutable and not yet published; excluded from `latest_version`. Published vocabulary is immutable. |
+| **draft** / **staging** / **published** | Lifecycle status (`status`, required on every registry entry). Drafts are mutable and not usable; excluded from `latest_version`. Staging vocabulary is in real use but still mutable — dev brokers only. Published vocabulary is immutable. |
 | **replaced_by** | Advisory hint on a vocabulary word pointing at successor words. Does not affect validation, lifecycle, or dependency closure. |
 | **owner** | Identifier from `owners.yaml`. Every vocabulary word has exactly one owner. |
 

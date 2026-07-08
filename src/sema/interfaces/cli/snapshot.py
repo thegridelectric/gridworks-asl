@@ -48,6 +48,79 @@ def snapshot_root() -> Path:
 
 
 
+STAGING_README_BANNER = """\
+# STAGING SNAPSHOT — PLEASE ONLY USE IN DEV
+
+This snapshot contains STAGING vocabulary: mutable words that run on dev
+brokers only. It MUST NOT be used against hybrid or production brokers.
+
+Staging words in this snapshot:
+
+{words}
+
+When these words promote to published, rebuild without `--allow-staged` to
+get a publication-grade snapshot (and this file disappears).
+"""
+
+
+def _collect_staging_words(seed: dict, public_registry: dict) -> list[str]:
+    """Every word/version in the expanded worklist whose status is staging.
+
+    Formats are skipped — they never stage. Drafts cannot appear here: the
+    public registry (which the expansion works from) excludes them entirely.
+    """
+    staging: list[str] = []
+    worklist = seed.get("worklist", {})
+
+    for name, spec in (worklist.get("enums", {}) or {}).items():
+        entry = public_registry["enums"][name]
+        if entry.get("enum_type") == "literal":
+            if entry["status"] == "staging":
+                staging.append(f"enum {name}")
+            continue
+        for version in spec:
+            if entry["versions"][version]["status"] == "staging":
+                staging.append(f"enum {name}:{version}")
+
+    for name, spec in (worklist.get("types", {}) or {}).items():
+        entry = public_registry["types"][name]
+        if "path" in spec:  # versionless type
+            if entry["status"] == "staging":
+                staging.append(f"type {name}")
+            continue
+        for version in spec:
+            if entry["versions"][version]["status"] == "staging":
+                staging.append(f"type {name}:{version}")
+
+    return sorted(staging)
+
+
+def _apply_staging_gate(
+    target_root: Path, seed: dict, public_registry: dict, *, allow_staged: bool
+) -> None:
+    """Published-only is the default: a staging closure fails the build.
+
+    With ``--allow-staged`` the snapshot is built anyway and marked twice —
+    machine-readably (``indexes/staging.yaml``) and for humans (a README
+    banner at the snapshot root).
+    """
+    staging = _collect_staging_words(seed, public_registry)
+    if not staging:
+        return
+    if not allow_staged:
+        raise ValueError(
+            "Snapshot closure contains STAGING words (published-only is the "
+            "default; pass --allow-staged to build a dev-only snapshot):\n  "
+            + "\n  ".join(staging)
+        )
+    with (target_root / "indexes" / "staging.yaml").open("w") as handle:
+        yaml.safe_dump({"staging": True, "staging_words": staging}, handle)
+    (target_root / "README.md").write_text(
+        STAGING_README_BANNER.format(words="\n".join(f"- {word}" for word in staging))
+    )
+    print(f"STAGING snapshot ({len(staging)} staging words) — PLEASE ONLY USE IN DEV")
+
+
 def _reject_drafts_in_seed_request(seed_request: dict, public_registry: dict) -> None:
     """Fail if the seed REQUEST directly names a draft (or unknown) word.
 
@@ -93,7 +166,7 @@ def _reject_drafts_in_seed_request(seed_request: dict, public_registry: dict) ->
         )
 
 
-def prepare_snapshot(seed_request: Path) -> Path:
+def prepare_snapshot(seed_request: Path, *, allow_staged: bool = False) -> Path:
     # Regenerate indexes/public_registry.yaml first. This validates:
     #   - status placement (word-level only on versionless / literal /
     #     formats; otherwise version-level)
@@ -121,6 +194,7 @@ def prepare_snapshot(seed_request: Path) -> Path:
     shutil.copyfile(seed_request_path, indexes_root / "seed_request.yaml")
 
     seed = load_seed(expanded_seed)
+    _apply_staging_gate(target_root, seed, public_registry, allow_staged=allow_staged)
 
     registry = load_registry()
     copy_seed_definitions(target_root, seed)
@@ -268,7 +342,9 @@ def build_snapshot_runtime(package_name: str, *, strict_lint: bool = False) -> P
 
 
 def _run_prepare(args: argparse.Namespace) -> None:
-    target_root = prepare_snapshot(Path(args.seed_request))
+    target_root = prepare_snapshot(
+        Path(args.seed_request), allow_staged=args.allow_staged
+    )
     print(f"Prepared snapshot at {target_root}")
     print(f"Expanded seed: {target_root / 'indexes' / 'seed_expanded.yaml'}")
     print(f"Local names: {target_root / 'indexes' / 'local_names.yaml'}")
@@ -306,6 +382,15 @@ def add_parser(subparsers: argparse._SubParsersAction) -> None:
         ),
     )
     prepare_parser.add_argument("seed_request")
+    prepare_parser.add_argument(
+        "--allow-staged",
+        action="store_true",
+        help=(
+            "Permit STAGING words in the closure (default: published-only). "
+            "The result is a dev-only snapshot, marked in indexes/staging.yaml "
+            "and by a README banner."
+        ),
+    )
     prepare_parser.set_defaults(handler=_run_prepare)
 
     build_parser = snapshot_subparsers.add_parser(

@@ -1,0 +1,297 @@
+# Published schema content hashes — the immutability pin (OPS-445).
+# Written by tooling (`python -m sema.tools.published_hashes`, `sema promote`),
+# committed, and verified by tests/registry/test_published_hashes.py.
+# A hash mismatch means a published schema file was edited in place;
+# the fix is a NEW version, never an in-place change.
+
+formats:
+  handle.name: sha256:8766362cd0940fa5451273dc0866f11f4a09e3496fe502e82ea448ffaab75c4f
+  hex.char: sha256:855097c34bc9ac8bddbfe7cf1934f666e18229ce564e5f9575fa0577aaff1ef1
+  left.right.dot: sha256:095da668f40e14bd806ae04c56eed0ebbb2f71c8ccfb2d82488226e73d901acf
+  mac.address: sha256:dfa51f397bc5fd0487d187b1f0a58b63e0ba22357874d46dd7e5caabf39daef7
+  market.slot.name: sha256:75c347c8cfa8e3b50decc66d724ee2012798994b84a2e2841868530aa04ecca8
+  non.empty.string: sha256:2c700a2c4c924c97ca97d6f3ba04c31b2cc5644cc049003032295dfd23500dc8
+  non.negative.int: sha256:f15a96dbf40270c2fe468a82bf3721297841b46a7bd0a3ad88f985a3a018ad85
+  pascal.case: sha256:63ebe6a4d6eee79374e6557b6d86f1cff93611ad500109b884f8cc975c0ce618
+  positive.float: sha256:2db5a0b6bf88b53d75b93c7881c1d9f736e6a3970663a794b46c98d6af371458
+  positive.int: sha256:28e862c6f1e82d88e8d7e814dee3f92375ac38ea4ceb89b26229854638eb52fc
+  positive.int.as.str: sha256:b5f860c7166b0512f9942460b706fddf638598aebb4f9a96561f0bc623fa9f55
+  spaceheat.name: sha256:6bf5f0d31a42aaf65cf36deab91dd5d44b3a4c977d2f05739dd8e96c948c5ced
+  utc.iso8601.millis: sha256:65f6a012ba134884db2b5881414d90fa1488f16da7346a0b784775ee8cf0bb52
+  utc.iso8601.seconds: sha256:f5eed6b7848f73fbe765c2ed4d5f9fae35e5afe6b286dfcca27f592f55c799b2
+  utc.milliseconds: sha256:f3aef103ef8ef1ab7f616a280f144d6421a6d7509f5c683531e85912c56d3c1d
+  utc.seconds: sha256:a411b781dee8ad943d358801d862a1b8943dc9f50d991043bfb3c3c0d916b3f4
+  uuid4.str: sha256:f063a5ddddf8e7cc80f12f2efd7b8cb488213ff4290a3193662483037d8c5caf
+enums:
+  base.g.node.class:
+    '000': sha256:6204acd9171dde319e9eabd86e1c85d32de46b7f090e1a4389fbd16c173722cb
+  buffer.regulation.mode: sha256:cb442d790b57cb93d43cf29a976f2105499ec53dc19e80ab725d81c7e336da11
+  change.heatcall.source: sha256:4089a28148abe7224cbff18fbb74642a777af10fdabb8cd7615cc3a47bbcd50a
+  change.relay.pin: sha256:9917b91acdb9edbe686feb6dc6b4b1f0391cd054bbe6f2498a6b320ee59bc2cd
+  change.relay.state: sha256:b1e51227bc8f0408e1707da1e232b607f9a297f13e12e4e0f8fa0a9ab3251841
+  fsm.report.type: sha256:6827c748cd5b4118a570c92639bc0ffeeb5fb26bd1e3fc800ac539e6ac93e4cf
+  g.node.instance.status:
+    '000': sha256:b8eb871eb2017c18efd9ccf187838ed390a86e3116a8c2f9990ef791e48bd067
+  g.node.instance.transport:
+    '000': sha256:b4d7bdd8d7509247afcd47bc60b386bfea0fb0b817892676e304c5bdedfa8664
+  g.node.status:
+    '000': sha256:2d764e05f0c45813d20966bdf2060c358c1f5c7859be29cc240d39f2a0ec3343
+  gpm.from.hz.method:
+    '000': sha256:cd987e3452dd431563b404dd4b0c7043f6dec40b274815f2db2240574cae5c2d
+  gw.g.node.class:
+    '000': sha256:492ac9defec62dc025adc0dccf8d2198acd9fb22d1c21f56ac33f07c06fbbee2
+  gw.market.product.name:
+    '000': sha256:b1c91cdca4978f783c836abd6e1e646df2fd940c2cd240cc4f852788e4046324
+  gw1.actor.class:
+    009: sha256:8c0d27b981175a268edf8da95d3c4980ca36444635e6713fd271fc1ee3d7d585
+    '010': sha256:1d72b732de69d3afc45432d7922b4ed4683a89ef195c9469fa3fd1ddfb0a65e0
+    '011': sha256:eba4b35ca37d460f898237761bc6ade950cfc80c30512b54bd39ff4a0bf1b521
+    '012': sha256:b03c66d697c53815856f1d4b98d2419a5d02161dd7babd219758e9d8601b72f1
+  gw1.emission.method:
+    '000': sha256:8761e11feac0374ed545a20f62908fa4bc9c80722c875e054f65b01cac431746
+  gw1.heat.call.interpretation:
+    '000': sha256:f4c8907ca3adcdc22f343f320879ea57a692a30f524cf4e4e7a9e29fa5fb3be1
+  gw1.lc.top.state:
+    '001': sha256:3119e597501e11f6f2a070e6a991c559e85482348818a50fee83a660defe7960
+  gw1.leaf.ally.all.tanks.state:
+    '001': sha256:c895b82f20eee5c8265ca1ca41c07a18d7e9cc7c97fe357822ecffa4dd93ea74
+  gw1.leaf.ally.buffer.only.state:
+    '001': sha256:dc51215f3fc55645f48dfca90d24ac969ef2ac563382bd8ba61b325b8487329f
+  gw1.local.control.all.tanks.state:
+    '001': sha256:c7c06750ef889f2b47da974362e98676d8638f85a6b56cd575c489dd95fda18f
+  gw1.local.control.buffer.only.state:
+    '001': sha256:3f6b5146a9811741c2b63aaa54e44550e9eec4ff40dd8b5e80e2eb4d5d21f72c
+  gw1.local.control.standby.top.state:
+    '001': sha256:c93be0ab308c3503dce9a47c6f8a96b38845004be8242ec7b809aae427fe9a62
+  gw1.main.auto.state:
+    '001': sha256:8a1adb8574450dc582ef1e48cc6b17aeecda07f27df78a07b632526d580943df
+  gw1.quantity:
+    '000': sha256:a10290f710eeba99d2c8dc8e64ae66942a01879a0bc96b63c5c073efdda57013
+    '001': sha256:bb7089d99ec32f0a02874088c6632d501b5500b775eaa1c84e9ad307bd38a5cb
+  gw1.seasonal.storage.mode:
+    '000': sha256:f245d03751f1a574eb360c4cef74e59825745f2410e8e28d1d5a6d98ea27448d
+  gw1.system.mode:
+    '000': sha256:f596392589f830437397da70e0744499f8e8e2277e917c022ddaab1a41e8e1ee
+  gw1.unit:
+    '000': sha256:4282e523fa773da75a12681c4d407d624e9e886f0284f2db18c30f483dda4ca7
+    '001': sha256:d5c1897ec2006fdf0e8a53c594738efe335c14292674af81911134443b6b75da
+    '002': sha256:d12e4b1cdc84c6c018d2466b813c486546525a82774776daab9ae807276f9d33
+  heatcall.source: sha256:ebcfcba38a9a0c299e2f68f87a4e3aeb6c4aa109dfd2b82f4dacee951212340b
+  hz.calc.method:
+    '001': sha256:bb80a91e5401b4984e4f68b0639d9371ecbe2b5c46abde78d8e8bf79aa5900eb
+  i2c.operation:
+    '000': sha256:5b4c47eee2a3101fe0e45bb84c80237c9f586f92c4e4ec1c4833b01ed5115d08
+  log.level: sha256:72ea5496287e4e248aa4074c6659baacf43888cb7133ad97b8d92f20fb811a33
+  market.price.unit:
+    '000': sha256:44031cf8b86618c08b4512f405094b760409b3af054b3ac4e2ee2e06649a1157
+  market.quantity.unit:
+    '000': sha256:af16ab9e45c4a60c9026b46ae64e004b2bfb3319e5f16a8778780a0e0b0eabae
+  market.type.name:
+    '000': sha256:8eebaee538a7b5ba69d52ba0ad6439d56ef7014d892dc359fcf04a487a9f1d2b
+  relay.closed.or.open: sha256:84aac238f3b62c2fc5f8eaff3ed93c968c01c9928533e11989bc86a1549f6667
+  relay.energization.state: sha256:c7bed48839e9740afd960c0a354f57c18fd18ce35f459754877a0d5c12a91a04
+  relay.open.or.closed: sha256:c22cf9cde67209cfb4ba1c3dddfe8ba639a5c4bf19c8054aae24946bfe38854a
+  relay.wiring.config:
+    '000': sha256:3a511bdd979d29c260decfd807428c4a0ddd54ccb0188717cc723f79de354a79
+  spaceheat.make.model:
+    '003': sha256:0e5926b2e85539b5ee499628542c564dfb8d23d1b517a23ebe4c6ac67c0531c6
+    '007': sha256:1aaa480e50ba56713c1f5f6ef65e1281d2db009f01a235533b39f5c310dda022
+    008: sha256:93dbb8b60d54d8d274cd2c8cc7abd1f16de803b9696eeac4aaea5d5a16f2d3c9
+  spaceheat.telemetry.name:
+    '006': sha256:ed87950d8c871900204c24643d2465373b885bce912db0eb0446d169d1f9370d
+    '007': sha256:246b55063cac9b95a2a07f61c306fc00d09e18c5ff36cb20329d3947b5b617d1
+  spaceheat.unit:
+    '001': sha256:b20627885ed36e161aba50aea71ebf9bae27319518c6b8a4330245eba51a7364
+  temp.calc.method:
+    '000': sha256:d2062d94e196d585c3c3f7ad60ca8165b1980b0a2d5a2f1cf5039d303d179817
+types:
+  atn.bid:
+    '002': sha256:8f93f00ce2f19d2d8dd40d224926fecda4b378d47ae5ac6dee31626adee79679
+  bid:
+    '000': sha256:fdbf94c2b786e17856c363ed20328c2280c3ec2f26f4bc8f0abace159f8e5502
+  channel.config:
+    '000': sha256:18e736f60b3dd7e1263f21a22eeb89eb889c27004398b1563b14f5d7ec37b24f
+  channel.readings:
+    '001': sha256:2799517fe85d5168c1d9584eb4fde9720635a5388703171a1f1f03d7ad11d6bb
+    '002': sha256:c4e97686e89290c7d6328a785a88932faf6b6812160d0017e2f45b9305730bad
+  channel.readings.list.item:
+    '000': sha256:94c20bb372d9fe89d1e46137d969632de4efb4d0e88473784c1f54bbd1199f4c
+  component.attribute.class.gt:
+    '001': sha256:8070c330f5d8e24ac44dacf046d297f4a18a24458f400553aa6b4cf056bbb30a
+  connectivity.edge.gt:
+    '000': sha256:b11f00aaae288ef38e7b52ac5d5e8c78c58f097bd16b4a09448fae72f0f68085
+  data.channel.gt:
+    '001': sha256:53b3e0ab0dd7bc2eae6ed85d32134cd7bb4854aa0bc623b84e05e1b9a4297587
+    '002': sha256:c7fbfb7c83380ae8835b256f4a6b37f95d833aa9015ffa71a36f70a50c207a6a
+    '003': sha256:fc18026709423c936cba70f38852ab2f779cccf0926aa5e0397b9009ed5772d5
+  derived.channel.gt:
+    '000': sha256:7c54b0fe5dda8c5e8a8688bf5322004d354712834416fa133a88a880b79f576b
+    '001': sha256:04a8c7cfe608c6ecf78bfeeaec2a2e6c4611944703d0cb9fe863e9278db77c38
+    '002': sha256:16ef1c004d27095ff2ac7e19b8d09eab0275b4128c9a269620c2069a087a16bc
+  electric.meter.cac.gt:
+    '001': sha256:b3e9b63b0c57fe7165387518bd78a406dc7d930041e70322c4cbd622309b8933
+  energy.instruction:
+    '000': sha256:47eec0459c841bb3658d96f443631a67d5be36c54d4abf2156cf9d2808665344
+  flo.params.house0:
+    '003': sha256:c4fc899c26a2847fca0806696b2c9fb4f9d970aebc259999d5bb586fecd5e093
+    '004': sha256:f9d2bc6176c205c4eab00d02e87ecf68dd76262ae7399597a32f663e4052a5e6
+    '005': sha256:c7b885dc47a82c6f325fe163821ee745cafc18abb1cd0e290786f102549d7c18
+    '006': sha256:92419603aa11d932176ee8600dfd477199a508aedcc546b4d10bcd853ffbbb13
+    '007': sha256:f6815669324c9da51f9b5cd6bcc89c38f301d4667f64f456f350461bf18c80e6
+  fsm.atomic.report:
+    '000': sha256:d394b1840408b17d8dbc3cd029916ebba67c7280b56548661cf657ab0f9439d2
+    '001': sha256:5a911731e555d89da1bbb487bc8fa88a06ce340e2763e47d2cd24645d30076ec
+  fsm.event:
+    '000': sha256:eb9f0fbdde5f48855d6df26de0a0097a48fa0933ec9190c0ad8aa24f1b60b8f5
+  fsm.full.report:
+    '000': sha256:14d7fb95a528b873675a228944ecb2daf1a187eee660128f2675df97492609ba
+    '001': sha256:ed8d51302c6e5062b1de24d42ea72d695208b3c5eeeb3012651b6996eeef80bc
+  g.node.forest:
+    '000': sha256:cfd0039c4b4e64d5aa5b92fb5ad220ae9fca7f64911ff8947c46f001351fa948
+  g.node.forest.request:
+    '000': sha256:6ab65b69199818a3603993212c37c3623c06dc16da3f9f7e902c52ee6b2c68bd
+  g.node.gt:
+    '004': sha256:f0272ddef524481a38cc6fd24d9450f4db7666fd42ad023246cf47e12bd427af
+    '005': sha256:ed781ca2ebee5efc73371de26599960ac066360b7929730ad4eb76590741ea32
+  g.node.instance.gt:
+    '000': sha256:f2959be6ddfb33f083ee420fd0d039919886c4c9cb1d7b52dc94b7f7403c3544
+  g.node.reparent.cmd:
+    '000': sha256:9681925bba2f52ce1841e61a7610e521354e2bc1b145444a6fe69ee8b94c00a6
+  glitch:
+    '000': sha256:b7f1edde383c035e9cc2ea16fe30d91652e2de28ecc7f94c25b62a1aa045477a
+  gridworks.ack: sha256:75ef891128872befe952aa946f7c7833715b7174fdd9a05346209c6fdf03fa9b
+  gridworks.event.problem:
+    '001': sha256:fe425cf781adeed4506c2b22d42945ee16693f23250d58624aa09c56731fa26d
+  gridworks.header:
+    '001': sha256:f346bf8e152bca26c9a3edf7c54c7a47883929cd2c8deae63dc4f2e81e9e6f73
+  gridworks.ping: sha256:2d9b1cbcc31974562514f23fc41ffc3b69de136642788ba0a0c0d413ab5c3c87
+  gw: sha256:7cc842d93a9e1e9cf7ebacdafb945a6baadd1692ac626cdf2155b90dbbf32629
+  gw1.tank.temp.calibration:
+    '000': sha256:d08ceb4454acf350886a795fc372f39961eb52ffcac3ea7746f65cf467f3f769
+  gw1.tank.temp.calibration.map:
+    '000': sha256:80a99a3305890bc848bcd4f173fea4ea0682e9eacaf3a0cec25fc91669bd25f8
+  gw1.telemetry.name.quantity.projection:
+    '000': sha256:05fd6b963346cece740760acd7ee98aa6590c79a89c1accb965295f53bc00c37
+  gw1.unit.quantity.projection:
+    '000': sha256:79bc7313683f4a7da3d6458155ea89958572b22209e7d521e9dc5b3971183806
+  ha1.params:
+    '004': sha256:d2719779564181ebb06b8c5f1f8acf28c32e12199e28c3e7017f572e0e070ff6
+    '005': sha256:f34812ac285843bf87e301801a57122bda2eb3ef635e565c88c7c531df9e5bd0
+    '006': sha256:42226b69cc7b2413a52b80644fe00f3b3757985d9cf9e28aebaee42c4f7fbd15
+  heartbeat.a:
+    '000': sha256:bb19c3f6c23efd5f064b8490c6c126923581186d38869d5d9db32c546db3a9c7
+  heating.forecast:
+    '000': sha256:85abd447a33764a88ae6e83a2512428ca514b326d92548c42832e2f6efb8d8c9
+  hubitat.gt:
+    '000': sha256:eaa615c7699f48559020c070695c578f87e77415504c6c96c392dac7b2a91cdb
+  hubitat.poller.gt:
+    '000': sha256:4739b0fbbe11a0a1c1f065bb9439066a8faf0bbc82b8b950843b3b832e9eaf55
+  i2c.bit.address:
+    '000': sha256:97e39bcd29d5382d8df6b94ab9b9939370fd654dcccd5072079084d30117d7b5
+  i2c.multichannel.dt.relay.component.gt:
+    '002': sha256:66a297547b744c8419d0c1b13d4af95034681d38b6c5c7b36b43404e53022fa8
+    '003': sha256:325e2e2ec459fc720f400e940d29a636200c3babc071d972f35c5f4ef2d3f337
+  i2c.read.bit:
+    '000': sha256:13f580d1527f0c9a1e560608fc2897012d53de937d103576cef26bf584ca9b76
+  i2c.read.reg:
+    '000': sha256:43ffd6940f9778d4e7293d14ce25c7ae3659e8a4d8e85fb7ae4a48f6950142ac
+  i2c.reg.address:
+    '000': sha256:572cc23309681a3ca3fb2521ea03591d23b444816bd9c76b5c1d5e6fe1bac50a
+  i2c.relay.config:
+    '000': sha256:3a915471206e290680acc5df85735c3816bd85a21842228b8139c168c7ae6d90
+  i2c.result:
+    '000': sha256:e8ec18f5917378500626e4a62eeab3c6666eccd7e63bc8a648725813b7e79cf9
+  i2c.write.bit:
+    '000': sha256:8ea999c65754464d7d71cda87abb8eab41f9ef09bc792dcc6a7cdcb3657cc5ed
+  i2c.write.reg:
+    '000': sha256:a25943e29a8ce24e50232d949415bfda7f5f6d30c3b9541f750f81bd8efc2804
+  keyparam.change.log:
+    '000': sha256:9dd996221cd074d001df2a069bdab3e46a3ad6fdc37a2a9feea5475b6b626cf8
+  latest.price:
+    '000': sha256:a0d294e1cc6dd83d2bfbef32a393a42b882dbc6017c0987a224daa06939c0726
+  layout.lite:
+    '007': sha256:4ad88a642339a6333e68eff8e2e5738526ff4932e9167c56c3203b620cd2e896
+    008: sha256:65f522c8328c9c8016a21817fd54bf84c0c6caedd6fb398ac3a0ce0a355f3fad
+    009: sha256:cec4e9416b3a69b98213609c6eacb167b016dcb12176ecb67bfc12f60a2777bd
+    '010': sha256:428896646203ef7e219448e55185bac9efdaf5f6b8da07f92a1ca8fa5ed132ee
+    '011': sha256:8e6a3dc8883c530658968bee9ab4b9c423166fc28503fc17b549321f5fbdcb74
+    '012': sha256:f26e2b4fef9a462bc8e8a8113afd9034301dfc849a79afbc814e421a3fdf54c8
+  machine.states:
+    '000': sha256:49fff482427d076c0f72c10410769aded1b163e202600c90d875beaede2dcaec
+  maker.api.attribute.gt:
+    '000': sha256:751e3825ac1d733b164eb7ebf1d80aaff4b076f2d4af55a128e651b3e114a19a
+  market.product:
+    '000': sha256:b0eabecc24170c2fd5013a2abea2dae753c7706bdef87b6c84f1d54f077eafb2
+  new.command.tree:
+    '000': sha256:701f13cb81b52d44a5ff701490f1bb42185f283b86040c7d94450cd33eddfb80
+    '001': sha256:15a6a5d408555d79ebf7157dd1b1a6a72c35be89fa7bf39eef419ae9279940ae
+    '002': sha256:e5c5bc11903bfc7a7f7de26a61e461b1fcd7f755e756ddd5db4a538fdbe63b56
+  pico.flow.module.component.gt:
+    '000': sha256:15e6432383c8fc190246aa4f1329a855d5ad9b723f840d58814212dd6cd8b7ab
+  pico.tank.module.component.gt:
+    '011': sha256:175d636f794bcac7a432882ba700562785d724c993ea1cc6b4a9504e9c3f0f7a
+  position.point.gt:
+    '000': sha256:0152226314e1a7f963d59d17afaa2c2c774ac2a36213b0adab96eb29d7e69d49
+  power.watts:
+    '000': sha256:4df82a50075ca35495fe4d9192be6fc0460bc581c8403bdf15e2b5dfb139c79f
+  price.quantity.unitless:
+    '001': sha256:874dfd7fde7583b73afe517dd7d7b1e07b3cc7fc49e49ccca800f9d959fe1904
+  relay.actor.config:
+    '002': sha256:9ca90fd17808e8e062ab0fd5a8fb0b5c5c7609105cea8de20bf812f0eb11ec06
+  report:
+    '002': sha256:655d229ce983aa1b056ad3f3cfa62c51a864cd61ce20d6eec551acab0e7cb750
+    '003': sha256:f9edd9191b79047bdf8aedd0d1c63a21e1911d073d0ed3b6f592bcd45562255e
+  report.event:
+    '002': sha256:e5014c22fb91c7ccf2d5b94ab8123af710b3a5bcf407cfaa02d35830f96ed61a
+    '003': sha256:e6a0bdc7a28a4c3a9e5bc56fdd00a2e5d06b0961097bd69ded8ed2182423db67
+  scada.control.capabilities:
+    '000': sha256:7c92095d5d784185be98d4161de8a8460e845b87a12d7e648bc43715e9fc4287
+    '001': sha256:e8c3954a848fbad8c29514940d80c1d160e500b98e43cbd551c41e3df4cceca2
+    '002': sha256:2cd06edbce622031f70cf66aab4755c282be1f219cf2827af939a3f2a4a61383
+  scada.params:
+    '004': sha256:d04206e2eb6f0bb68aecf826d22de33721b8ed2b7b46a6697f5e6e5fc181b0d8
+    '005': sha256:44b5abec55439712f7190231b80193521f74c9a9b728385e6359775881775372
+  send.control.capabilities:
+    '000': sha256:0b688cbe4318da96bcea0083e48abeeaec3779ff3638c5884f0634deeeaba718
+  send.layout:
+    '000': sha256:8c4b97cc329435a19ba1ac17cb7e068af8c259873ca7dad2af3c233066236cd8
+    '001': sha256:57b644344098385069911b833027cd5989bfafa1999defe97353ee661d404ac6
+  sim.pico.tank.module.component.gt:
+    '000': sha256:283d4b770877fe8bc767e44c0023dbe8d0e0c36146814450409d4719369dfa26
+  sim.ready:
+    '000': sha256:c654c02a8b870cc4bab29874b46b03a0ea8eeeaa8d994c312651d22c67a65b32
+  sim.timestep:
+    '000': sha256:b5af4445aebc7cbcd7b4b33b73b0869b6cf4fd26441aab3159f080373cca1380
+  single.machine.state:
+    '000': sha256:22f4b053464e2fb87e9c93a39986189a4acbd166424a6127e2435e8c3f9b455f
+  single.reading:
+    '000': sha256:75c9f0b52d0f29a08ffeda33992fa81e1bd8f83efc940c90d1a1c6d7fb838fd0
+  snapshot.spaceheat:
+    '003': sha256:5da50700a2947a7268206681a51573c65be59cdce26aa872447d216be3b1b05e
+  spaceheat.node.gt:
+    '200': sha256:66d27efe41e7933b28f2e909ca7e4bdf1c07145aa8704bc66e562de17314d23a
+    '300': sha256:202a8a01bdf41523cc13b7bb813d422af7a9039bb2a67415a4f20f8c7e0b6b79
+    '301': sha256:0ecaea4494e1247856bcddc47cee42731aad9caa2a51517039843539e1ff7416
+    '302': sha256:f07844c82948ea5ba09a6a9138f751e00fa5cc046c48dcfbc6a1afbffd26c4bc
+    '303': sha256:307926065770c1e7c7ddcf0ad6d46a79f7574de4ebca414c5ea1c55cde3966e3
+  spaceheat.telemetry.quantity.projection:
+    '000': sha256:530e1cbcb9be4c7507c5105fad1bf63aea630c12784dfc08204ce131ba7668d5
+  synced.readings:
+    '000': sha256:a4c3a4c48d361057bf384b168e647c09e23386ad53d00a3a6b2438dd5b42d80c
+  synced.readings.bundle:
+    '001': sha256:18032c0f6dc709795d338a4221150be0940a3915713b60c553046fd7f216cb0f
+    '002': sha256:576152faf6832b2c52d986fb8669250725ea0b35512e74918c4eecdb6f2c0e33
+  synth.channel.gt:
+    '000': sha256:2a0aa5c7fca044b52aba29c77220aa457939cbe4d8052d1fdd175511100d9f61
+  ticklist.hall:
+    '101': sha256:06e78b373868c1d4bade376c9bc80d4fb6d74582faa212de5fe4d1a088ea2028
+  ticklist.hall.report:
+    '000': sha256:d786fac0d76cdc071bee5356d04fd1478b4205a19cd78058db95bfa017f3a177
+  ticklist.reed:
+    '101': sha256:46b2db1ab5a3b3c156b12e3f54e65ddd277c01ed93d9201d9e6a854f17042f05
+  ticklist.reed.report:
+    '000': sha256:df6601a9e10280c23bbc79b968da43f0ec793c56c96bec4f2bd9e1b11b658535
+  weather:
+    '000': sha256:0505741db7f3ba845fe0b7dfb9e5f88eca9f3cc6e9e7510b22f3e73b0103e8fe
+  weather.forecast:
+    '000': sha256:d5898d35fd8250e8c80811e6df2c90c66cddc316efaf4ca36bc4fdd38c931601
