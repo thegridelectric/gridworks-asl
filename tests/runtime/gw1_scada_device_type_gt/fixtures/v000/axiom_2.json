@@ -1,5 +1,5 @@
 {
-  "DeviceType": "GridworksScadaGw108",
+  "DeviceType": "KridaDoubleRelayBoard16",
   "BusList": [
     {
       "Name": "DefaultBus",
@@ -11,20 +11,20 @@
   "Expanders": [
     {
       "ExpanderIdx": 1,
-      "I2cBus": "GhostBus",
-      "I2cAddress": 32,
+      "I2cBus": "DefaultBus",
+      "AllowedI2cAddressList": [32, 33, 34, 35, 36, 37, 38, 39],
       "TypeName": "i2c.expander",
       "Version": "000"
     }
   ],
   "I2cRelays": [
     {
-      "RelayName": "BufferTop",
-      "ExpanderIdx": 1,
-      "RegisterIndex": 2,
-      "BitIndex": 1,
+      "RelayName": "Relay17",
+      "ExpanderIdx": 2,
+      "RegisterIndex": 0,
+      "BitIndex": 7,
       "SupportedWiringConfigs": [
-        "NormallyOpen"
+        "DoubleThrow"
       ],
       "TypeName": "i2c.relay.capability",
       "Version": "000"

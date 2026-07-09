@@ -2,11 +2,11 @@
     def check_axiom_1(self) -> "{{ gw1_scada_device_type_gt_000_class_name }}":
         """
         Axiom 1: BusMembership
-        Every I2cBus referenced by an entry in I2cRelays, CtAdc, ThermistorAdcs, or Dacs
-        SHALL appear as a Name in BusList.
+        Every I2cBus referenced by an entry in Expanders, CtAdc, ThermistorAdcs,
+        or Dacs SHALL appear as a Name in BusList.
         """
         bus_names = {bus.name for bus in (self.bus_list or [])}
-        referenced = [relay.i2c_bus for relay in (self.i2c_relays or [])]
+        referenced = [expander.i2c_bus for expander in (self.expanders or [])]
         referenced += [adc.i2c_bus for adc in (self.thermistor_adcs or [])]
         referenced += [dac.i2c_bus for dac in (self.dacs or [])]
         if self.ct_adc is not None:
@@ -16,5 +16,27 @@
             raise ValueError(
                 "Axiom 1 (BusMembership) failed: I2cBus value(s) "
                 f"{missing} are not declared in BusList."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ gw1_scada_device_type_gt_000_class_name }}":
+        """
+        Axiom 2: ExpanderMembership
+        Every ExpanderIdx referenced by an entry in I2cRelays SHALL appear as an
+        ExpanderIdx in Expanders.
+        """
+        expander_idxs = {e.expander_idx for e in (self.expanders or [])}
+        missing = sorted(
+            {
+                relay.expander_idx
+                for relay in (self.i2c_relays or [])
+                if relay.expander_idx not in expander_idxs
+            }
+        )
+        if missing:
+            raise ValueError(
+                "Axiom 2 (ExpanderMembership) failed: ExpanderIdx value(s) "
+                f"{missing} are not declared in Expanders."
             )
         return self

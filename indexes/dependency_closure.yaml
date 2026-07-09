@@ -576,13 +576,13 @@ types:
       - hubitat.gt:000
       - hubitat.poller.component.gt:000
       - hubitat.poller.gt:000
-      - i2c.adc.config:000
-      - i2c.bit.address:000
+      - i2c.adc.capability:000
       - i2c.bus:000
-      - i2c.dac.config:000
+      - i2c.dac.capability:000
+      - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:005
-      - i2c.relay.config:000
-      - i2c.thermistor.interface.config:000
+      - i2c.relay.capability:000
+      - i2c.thermistor.interface.capability:000
       - maker.api.attribute.gt:000
       - pico.btu.meter.component.gt:001
       - pico.flow.module.component.gt:001
@@ -661,14 +661,14 @@ types:
       - gw1.unit.quantity.projection:000
       - gw108.gpio.sensor.component.gt:002
       - gw108.vdc.relay.component.gt:002
-      - i2c.adc.config:000
-      - i2c.bit.address:000
+      - i2c.adc.capability:000
       - i2c.bus:000
-      - i2c.dac.config:000
+      - i2c.dac.capability:000
+      - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:005
-      - i2c.relay.config:000
+      - i2c.relay.capability:000
       - i2c.thermistor.channel.config:002
-      - i2c.thermistor.interface.config:000
+      - i2c.thermistor.interface.capability:000
       - i2c.thermistor.reader.component.gt:002
       - pico.btu.meter.component.gt:001
       - pico.tank.module.component.gt:012
@@ -699,12 +699,12 @@ types:
       - positive.int
       types:
       - gw.native.gpio.pin:000
-      - i2c.adc.config:000
-      - i2c.bit.address:000
+      - i2c.adc.capability:000
       - i2c.bus:000
-      - i2c.dac.config:000
-      - i2c.relay.config:000
-      - i2c.thermistor.interface.config:000
+      - i2c.dac.capability:000
+      - i2c.expander:000
+      - i2c.relay.capability:000
+      - i2c.thermistor.interface.capability:000
       versionless_types: []
   gw1.simple.sim.layout:
     '000':
@@ -881,7 +881,7 @@ types:
       types:
       - maker.api.attribute.gt:000
       versionless_types: []
-  i2c.adc.config:
+  i2c.adc.capability:
     '000':
       enums:
       - i2c.adc.type:000
@@ -906,10 +906,19 @@ types:
       - pascal.case
       types: []
       versionless_types: []
-  i2c.dac.config:
+  i2c.dac.capability:
     '000':
       enums:
       - i2c.dac.type:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.int
+      types: []
+      versionless_types: []
+  i2c.expander:
+    '000':
+      enums: []
       formats:
       - non.negative.int
       - pascal.case
@@ -1005,6 +1014,16 @@ types:
       - non.negative.int
       types: []
       versionless_types: []
+  i2c.relay.capability:
+    '000':
+      enums:
+      - relay.wiring.config:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.int
+      types: []
+      versionless_types: []
   i2c.relay.component.gt:
     '000':
       enums:
@@ -1059,7 +1078,7 @@ types:
       - spaceheat.name
       types: []
       versionless_types: []
-  i2c.thermistor.interface.config:
+  i2c.thermistor.interface.capability:
     '000':
       enums:
       - i2c.adc.type:000

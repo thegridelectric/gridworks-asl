@@ -323,11 +323,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/hubitat.poller.gt/000.yaml
-  i2c.adc.config:
+  i2c.adc.capability:
     latest_version: '000'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/i2c.adc.config/000.yaml
+      '000': definitions/types/i2c.adc.capability/000.yaml
   i2c.bit.address:
     latest_version: '000'
     versioning_strategy: literal
@@ -338,11 +338,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/i2c.bus/000.yaml
-  i2c.dac.config:
+  i2c.dac.capability:
     latest_version: '000'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/i2c.dac.config/000.yaml
+      '000': definitions/types/i2c.dac.capability/000.yaml
+  i2c.expander:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.expander/000.yaml
   i2c.multichannel.dt.relay.component.gt:
     latest_version: '005'
     versioning_strategy: literal
@@ -366,6 +371,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/i2c.reg.address/000.yaml
+  i2c.relay.capability:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.relay.capability/000.yaml
   i2c.relay.component.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -387,11 +397,11 @@ types:
     versions:
       '002': definitions/types/i2c.thermistor.channel.config/002.yaml
       '001': definitions/types/i2c.thermistor.channel.config/001.yaml
-  i2c.thermistor.interface.config:
+  i2c.thermistor.interface.capability:
     latest_version: '000'
     versioning_strategy: literal
     versions:
-      '000': definitions/types/i2c.thermistor.interface.config/000.yaml
+      '000': definitions/types/i2c.thermistor.interface.capability/000.yaml
   i2c.thermistor.reader.component.gt:
     latest_version: '002'
     versioning_strategy: literal

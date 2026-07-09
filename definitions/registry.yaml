@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-08T00:00:00Z"
+  last_updated: "2026-07-09T17:30:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1815,7 +1815,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.layout/000"
-        created: "2026-07-04T14:50:00Z"
+        created: "2026-07-09T17:30:00Z"
         status: "staging"
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). All collections + Hydronic required (mirrors gw.nolan.layout) — a layout is a complete deployable artifact."
         direct_dependencies:
@@ -1882,7 +1882,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.nolan.layout/000"
-        created: "2026-07-04T14:50:00Z"
+        created: "2026-07-09T17:30:00Z"
         status: "staging"
         summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay is gw108.vdc.relay)."
         direct_dependencies:
@@ -1925,21 +1925,22 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Specialized device-type record for a GridWorks SCADA board (gw108 family): the full board descriptor — telemetry names, native GPIO, I²C relays, ADCs and DACs."
+    description: "Device-type record for a GridWorks SCADA board: what the board offers — buses, expanders, relays (named by the device's physical markings), native GPIO, ADCs and DACs."
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
-        created: "2026-06-17T14:20:00Z"
+        created: "2026-07-09T17:30:00Z"
         status: "staging"
-        summary: "Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList, NativeGpio, I2cRelays, CtAdc, ThermistorAdcs, Dacs)."
+        summary: "Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList, NativeGpio, Expanders, I2cRelays, CtAdc, ThermistorAdcs, Dacs). The record describes what is allowed; deployment choices (DIP-selected expander address, chosen wiring) live on the component and layout."
         direct_dependencies:
           structural:
             - "gw.native.gpio.pin:000"
-            - "i2c.adc.config:000"
+            - "i2c.adc.capability:000"
             - "i2c.bus:000"
-            - "i2c.dac.config:000"
-            - "i2c.relay.config:000"
-            - "i2c.thermistor.interface.config:000"
+            - "i2c.dac.capability:000"
+            - "i2c.expander:000"
+            - "i2c.relay.capability:000"
+            - "i2c.thermistor.interface.capability:000"
             - "pascal.case"
             - "positive.int"
             - "spaceheat.telemetry.name:007"
@@ -2273,17 +2274,17 @@ types:
             - "positive.int"
             - "uuid4.str"
 
-  i2c.adc.config:
+  i2c.adc.capability:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Configuration of an analog-to-digital converter on a GridWorks SCADA board."
+    description: "An analog-to-digital converter on a GridWorks SCADA board."
     versions:
       "000":
-        schema_url: "https://schemas.electricity.works/types/i2c.adc.config/000"
-        created: "2026-06-17T14:20:00Z"
+        schema_url: "https://schemas.electricity.works/types/i2c.adc.capability/000"
+        created: "2026-07-09T17:30:00Z"
         status: "staging"
-        summary: "Initial draft (Name, I2cBus, I2cAddress, AdcType, Channels)."
+        summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, Channels); renames i2c.adc.config — the record describes what the board offers, not a chosen configuration."
         direct_dependencies:
           structural:
             - "i2c.adc.type:000"
@@ -2322,20 +2323,37 @@ types:
             - "non.negative.int"
             - "pascal.case"
 
-  i2c.dac.config:
+  i2c.dac.capability:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Configuration of one named digital-to-analog converter on a GridWorks SCADA board."
+    description: "A digital-to-analog converter on a GridWorks SCADA board."
     versions:
       "000":
-        schema_url: "https://schemas.electricity.works/types/i2c.dac.config/000"
-        created: "2026-06-17T14:20:00Z"
+        schema_url: "https://schemas.electricity.works/types/i2c.dac.capability/000"
+        created: "2026-07-09T17:30:00Z"
         status: "staging"
-        summary: "Initial draft (DacName, I2cBus, I2cAddress, DacType, Channels)."
+        summary: "Initial version (DacName, I2cBus, I2cAddress, DacType, Channels); renames i2c.dac.config — the record describes what the board offers, not a chosen configuration."
         direct_dependencies:
           structural:
             - "i2c.dac.type:000"
+            - "non.negative.int"
+            - "pascal.case"
+            - "positive.int"
+
+  i2c.expander:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "One I²C GPIO expander on a GridWorks SCADA board: index within the board, board bus, and fixed (soldered) or field-selectable (DIP switch) addressing."
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/i2c.expander/000"
+        created: "2026-07-09T17:30:00Z"
+        status: "staging"
+        summary: "Initial version (ExpanderIdx, I2cBus, I2cAddress, AllowedI2cAddressList; Axiom 1 AddressSpecification: exactly one of the two address fields)."
+        direct_dependencies:
+          structural:
             - "non.negative.int"
             - "pascal.case"
             - "positive.int"
@@ -2440,6 +2458,24 @@ types:
           structural:
             - "non.negative.int"
 
+  i2c.relay.capability:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "One relay a GridWorks SCADA board offers: board-level name matching the device's physical markings, driving expander + register bit, and supported wiring configurations."
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/i2c.relay.capability/000"
+        created: "2026-07-09T17:30:00Z"
+        status: "staging"
+        summary: "Initial version (RelayName, ExpanderIdx, RegisterIndex, BitIndex, SupportedWiringConfigs, Notes). Replaces i2c.relay.config: 'capability' says what is possible, not a chosen configuration; the expander I²C address moves to the board's i2c.expander entry (fixed or DIP-selectable), the chosen address to the component."
+        direct_dependencies:
+          structural:
+            - "non.negative.int"
+            - "pascal.case"
+            - "positive.int"
+            - "relay.wiring.config:000"
+
   i2c.relay.component.gt:
     latest_version: "000"
     owner: gridworks-energy
@@ -2462,6 +2498,8 @@ types:
   i2c.relay.config:
     latest_version: "000"
     owner: gridworks-energy
+    replaced_by:
+      - i2c.relay.capability
     versioning_strategy: "literal"
     description: "Configuration of one named relay driven through an I²C GPIO expander on a GridWorks SCADA board."
     versions:
@@ -2527,17 +2565,17 @@ types:
             - "spaceheat.name"
             - "spaceheat.unit:001"
 
-  i2c.thermistor.interface.config:
+  i2c.thermistor.interface.capability:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Configuration of a thermistor-reading ADC interface on a GridWorks SCADA board."
+    description: "A thermistor-reading ADC interface on a GridWorks SCADA board."
     versions:
       "000":
-        schema_url: "https://schemas.electricity.works/types/i2c.thermistor.interface.config/000"
-        created: "2026-06-17T14:20:00Z"
+        schema_url: "https://schemas.electricity.works/types/i2c.thermistor.interface.capability/000"
+        created: "2026-07-09T17:30:00Z"
         status: "staging"
-        summary: "Initial draft (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, SeriesResistanceKOhms)."
+        summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, SeriesResistanceKOhms); renames i2c.thermistor.interface.config — the record describes what the board offers, not a chosen configuration."
         direct_dependencies:
           structural:
             - "i2c.adc.type:000"

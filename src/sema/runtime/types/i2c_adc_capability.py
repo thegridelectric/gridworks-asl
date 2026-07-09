@@ -1,18 +1,18 @@
 from typing import Literal
 from sema.runtime.base import SemaType
-from sema.runtime.enums import I2cDacType
+from sema.runtime.enums import I2cAdcType
 from sema.runtime.property_format import NonNegativeInt
 from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import PositiveInt
 
 
-class I2cDacConfig(SemaType):
-    """Sema: https://schemas.electricity.works/types/i2c.dac.config/000"""
+class I2cAdcCapability(SemaType):
+    """Sema: https://schemas.electricity.works/types/i2c.adc.capability/000"""
 
-    dac_name: PascalCase
+    name: PascalCase
     i2c_bus: PascalCase
     i2c_address: NonNegativeInt
-    dac_type: I2cDacType
+    adc_type: I2cAdcType
     channels: PositiveInt
-    type_name: Literal["i2c.dac.config"] = "i2c.dac.config"
+    type_name: Literal["i2c.adc.capability"] = "i2c.adc.capability"
     version: Literal["000"] = "000"

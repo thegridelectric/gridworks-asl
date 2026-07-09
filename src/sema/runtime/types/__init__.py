@@ -58,22 +58,24 @@ from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_gt import HubitatGt
 from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
 from sema.runtime.types.hubitat_poller_gt import HubitatPollerGt
-from sema.runtime.types.i2c_adc_config import I2cAdcConfig
+from sema.runtime.types.i2c_adc_capability import I2cAdcCapability
 from sema.runtime.types.i2c_bit_address import I2cBitAddress
 from sema.runtime.types.i2c_bus import I2cBus
-from sema.runtime.types.i2c_dac_config import I2cDacConfig
+from sema.runtime.types.i2c_dac_capability import I2cDacCapability
+from sema.runtime.types.i2c_expander import I2cExpander
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
 from sema.runtime.types.i2c_read_bit import I2cReadBit
 from sema.runtime.types.i2c_read_reg import I2cReadReg
 from sema.runtime.types.i2c_reg_address import I2cRegAddress
+from sema.runtime.types.i2c_relay_capability import I2cRelayCapability
 from sema.runtime.types.i2c_relay_component_gt import I2cRelayComponentGt
 from sema.runtime.types.i2c_relay_config import I2cRelayConfig
 from sema.runtime.types.i2c_result import I2cResult
 from sema.runtime.types.i2c_thermistor_channel_config import I2cThermistorChannelConfig
-from sema.runtime.types.i2c_thermistor_interface_config import (
-    I2cThermistorInterfaceConfig,
+from sema.runtime.types.i2c_thermistor_interface_capability import (
+    I2cThermistorInterfaceCapability,
 )
 from sema.runtime.types.i2c_thermistor_reader_component_gt import (
     I2cThermistorReaderComponentGt,
@@ -190,19 +192,21 @@ __all__ = [
     "HubitatGt",
     "HubitatPollerComponentGt",
     "HubitatPollerGt",
-    "I2cAdcConfig",
+    "I2cAdcCapability",
     "I2cBitAddress",
     "I2cBus",
-    "I2cDacConfig",
+    "I2cDacCapability",
+    "I2cExpander",
     "I2cMultichannelDtRelayComponentGt",
     "I2cReadBit",
     "I2cReadReg",
     "I2cRegAddress",
+    "I2cRelayCapability",
     "I2cRelayComponentGt",
     "I2cRelayConfig",
     "I2cResult",
     "I2cThermistorChannelConfig",
-    "I2cThermistorInterfaceConfig",
+    "I2cThermistorInterfaceCapability",
     "I2cThermistorReaderComponentGt",
     "I2cWriteBit",
     "I2cWriteReg",

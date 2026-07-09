@@ -20,3 +20,9 @@ def test_axiom_1_catches_bus_not_in_bus_list() -> None:
     payload = json.loads((FIX / "axiom_1.json").read_text())
     with pytest.raises(SemaError, match="BusMembership"):
         default_codec.from_dict(payload)
+
+
+def test_axiom_2_catches_expander_not_in_expanders() -> None:
+    payload = json.loads((FIX / "axiom_2.json").read_text())
+    with pytest.raises(SemaError, match="ExpanderMembership"):
+        default_codec.from_dict(payload)

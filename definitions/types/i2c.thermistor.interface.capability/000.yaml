@@ -1,10 +1,10 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/i2c.thermistor.interface.config/000"
+$id: "https://schemas.electricity.works/types/i2c.thermistor.interface.capability/000"
 
-title: "i2c.thermistor.interface.config"
+title: "i2c.thermistor.interface.capability"
 type: object
 description: >
-  Configuration of a thermistor-reading ADC interface on a GridWorks SCADA board.
+  A thermistor-reading ADC interface on a GridWorks SCADA board.
 
 properties:
 
@@ -40,7 +40,7 @@ properties:
       Series resistance, in kilo-ohms, in the thermistor divider circuit.
 
   TypeName:
-    const: "i2c.thermistor.interface.config"
+    const: "i2c.thermistor.interface.capability"
 
   Version:
     const: "000"
@@ -66,7 +66,7 @@ examples:
       "AdcType": "Ads1115",
       "AdcReferenceVolts": 3.3,
       "SeriesResistanceKOhms": 5.65,
-      "TypeName": "i2c.thermistor.interface.config",
+      "TypeName": "i2c.thermistor.interface.capability",
       "Version": "000"
     }
 

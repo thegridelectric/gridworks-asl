@@ -1,0 +1,16 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ i2c_expander_000_class_name }}":
+        """
+        Axiom 1: AddressSpecification
+        Exactly one of I2cAddress and AllowedI2cAddressList SHALL be present.
+        """
+        has_fixed = self.i2c_address is not None
+        has_allowed = self.allowed_i2c_address_list is not None
+        if has_fixed == has_allowed:
+            raise ValueError(
+                "Axiom 1 (AddressSpecification) failed: exactly one of "
+                "I2cAddress and AllowedI2cAddressList must be present; got "
+                f"I2cAddress={self.i2c_address}, "
+                f"AllowedI2cAddressList={self.allowed_i2c_address_list}."
+            )
+        return self

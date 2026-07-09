@@ -6,8 +6,8 @@ from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import PositiveFloat
 
 
-class I2cThermistorInterfaceConfig(SemaType):
-    """Sema: https://schemas.electricity.works/types/i2c.thermistor.interface.config/000"""
+class I2cThermistorInterfaceCapability(SemaType):
+    """Sema: https://schemas.electricity.works/types/i2c.thermistor.interface.capability/000"""
 
     name: PascalCase
     i2c_bus: PascalCase
@@ -15,7 +15,7 @@ class I2cThermistorInterfaceConfig(SemaType):
     adc_type: I2cAdcType
     adc_reference_volts: PositiveFloat
     series_resistance_k_ohms: PositiveFloat
-    type_name: Literal["i2c.thermistor.interface.config"] = (
-        "i2c.thermistor.interface.config"
+    type_name: Literal["i2c.thermistor.interface.capability"] = (
+        "i2c.thermistor.interface.capability"
     )
     version: Literal["000"] = "000"

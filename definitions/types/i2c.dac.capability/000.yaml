@@ -1,10 +1,10 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/i2c.dac.config/000"
+$id: "https://schemas.electricity.works/types/i2c.dac.capability/000"
 
-title: "i2c.dac.config"
+title: "i2c.dac.capability"
 type: object
 description: >
-  Configuration of one named digital-to-analog converter on a GridWorks SCADA board.
+  A digital-to-analog converter on a GridWorks SCADA board.
 
 properties:
 
@@ -34,7 +34,7 @@ properties:
       The number of channels the DAC provides.
 
   TypeName:
-    const: "i2c.dac.config"
+    const: "i2c.dac.capability"
 
   Version:
     const: "000"
@@ -58,7 +58,7 @@ examples:
       "I2cAddress": 96,
       "DacType": "Mcp4728",
       "Channels": 4,
-      "TypeName": "i2c.dac.config",
+      "TypeName": "i2c.dac.capability",
       "Version": "000"
     }
 

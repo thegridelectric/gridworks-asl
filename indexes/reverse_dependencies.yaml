@@ -220,7 +220,7 @@ types:
     '000':
       used_by:
       - hubitat.poller.component.gt:000
-  i2c.adc.config:
+  i2c.adc.capability:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
@@ -234,7 +234,11 @@ types:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
-  i2c.dac.config:
+  i2c.dac.capability:
+    '000':
+      used_by:
+      - gw1.scada.device.type.gt:000
+  i2c.expander:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
@@ -266,7 +270,7 @@ types:
       used_by:
       - i2c.read.reg:000
       - i2c.write.reg:000
-  i2c.relay.config:
+  i2c.relay.capability:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
@@ -277,7 +281,7 @@ types:
     '002':
       used_by:
       - i2c.thermistor.reader.component.gt:002
-  i2c.thermistor.interface.config:
+  i2c.thermistor.interface.capability:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
@@ -564,12 +568,12 @@ enums:
   i2c.adc.type:
     '000':
       used_by:
-      - i2c.adc.config:000
-      - i2c.thermistor.interface.config:000
+      - i2c.adc.capability:000
+      - i2c.thermistor.interface.capability:000
   i2c.dac.type:
     '000':
       used_by:
-      - i2c.dac.config:000
+      - i2c.dac.capability:000
   i2c.operation:
     '000':
       used_by:
@@ -611,6 +615,7 @@ enums:
   relay.wiring.config:
     '000':
       used_by:
+      - i2c.relay.capability:000
       - i2c.relay.config:000
       - relay.actor.config:002
       - relay.actor.config:003
@@ -774,13 +779,15 @@ formats:
     used_by:
     - gw.house0.hydronic:000
     - gw.native.gpio.pin:000
-    - i2c.adc.config:000
+    - i2c.adc.capability:000
     - i2c.bit.address:000
     - i2c.bus:000
-    - i2c.dac.config:000
+    - i2c.dac.capability:000
+    - i2c.expander:000
     - i2c.reg.address:000
+    - i2c.relay.capability:000
     - i2c.result:000
-    - i2c.thermistor.interface.config:000
+    - i2c.thermistor.interface.capability:000
     - i2c.write.bit:000
     - i2c.write.reg:000
   pascal.case:
@@ -799,13 +806,15 @@ formats:
     - gw108.vdc.relay.component.gt:002
     - hubitat.component.gt:000
     - hubitat.poller.component.gt:000
-    - i2c.adc.config:000
+    - i2c.adc.capability:000
     - i2c.bus:000
-    - i2c.dac.config:000
+    - i2c.dac.capability:000
+    - i2c.expander:000
     - i2c.multichannel.dt.relay.component.gt:005
+    - i2c.relay.capability:000
     - i2c.relay.component.gt:000
     - i2c.relay.config:000
-    - i2c.thermistor.interface.config:000
+    - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:002
     - pico.btu.meter.component.gt:001
     - pico.flow.module.component.gt:001
@@ -816,7 +825,7 @@ formats:
     - web.server.component.gt:002
   positive.float:
     used_by:
-    - i2c.thermistor.interface.config:000
+    - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
     - pico.btu.meter.component.gt:000
@@ -852,9 +861,11 @@ formats:
     - gw108.vdc.relay.component.gt:001
     - gw108.vdc.relay.component.gt:002
     - hubitat.poller.gt:000
-    - i2c.adc.config:000
-    - i2c.dac.config:000
+    - i2c.adc.capability:000
+    - i2c.dac.capability:000
+    - i2c.expander:000
     - i2c.read.reg:000
+    - i2c.relay.capability:000
     - i2c.thermistor.channel.config:001
     - i2c.thermistor.channel.config:002
     - i2c.write.reg:000

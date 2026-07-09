@@ -383,7 +383,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList, NativeGpio, I2cRelays, CtAdc, ThermistorAdcs, Dacs)."
+        summary: "Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList, NativeGpio, Expanders, I2cRelays, CtAdc, ThermistorAdcs, Dacs). The record describes what is allowed; deployment choices (DIP-selected expander address, chosen wiring) live on the component and layout."
 
   gw1.simple.sim.layout:
     latest_version: "000"
@@ -505,12 +505,12 @@ types:
       "000":
         summary: "Initial Sema version (flattened from the scada HubitatPollerGt runtime)."
 
-  i2c.adc.config:
+  i2c.adc.capability:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial draft (Name, I2cBus, I2cAddress, AdcType, Channels)."
+        summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, Channels); renames i2c.adc.config — the record describes what the board offers, not a chosen configuration."
 
   i2c.bit.address:
     latest_version: "000"
@@ -526,12 +526,19 @@ types:
       "000":
         summary: "Initial draft (Name, BusNumber)."
 
-  i2c.dac.config:
+  i2c.dac.capability:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial draft (DacName, I2cBus, I2cAddress, DacType, Channels)."
+        summary: "Initial version (DacName, I2cBus, I2cAddress, DacType, Channels); renames i2c.dac.config — the record describes what the board offers, not a chosen configuration."
+
+  i2c.expander:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version (ExpanderIdx, I2cBus, I2cAddress, AllowedI2cAddressList; Axiom 1 AddressSpecification: exactly one of the two address fields)."
 
   i2c.multichannel.dt.relay.component.gt:
     latest_version: "005"
@@ -567,6 +574,13 @@ types:
       "000":
         summary: "Initial draft (I2cAddress, RegisterIndex)."
 
+  i2c.relay.capability:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version (RelayName, ExpanderIdx, RegisterIndex, BitIndex, SupportedWiringConfigs, Notes). Replaces i2c.relay.config: 'capability' says what is possible, not a chosen configuration; the expander I²C address moves to the board's i2c.expander entry (fixed or DIP-selectable), the chosen address to the component."
+
   i2c.relay.component.gt:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -600,12 +614,12 @@ types:
       "001":
         summary: "Initial Sema version. Starts at 001 to match the only version ever emitted in the field; the never-emitted sema 000 was dropped."
 
-  i2c.thermistor.interface.config:
+  i2c.thermistor.interface.capability:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial draft (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, SeriesResistanceKOhms)."
+        summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, SeriesResistanceKOhms); renames i2c.thermistor.interface.config — the record describes what the board offers, not a chosen configuration."
 
   i2c.thermistor.reader.component.gt:
     latest_version: "002"
