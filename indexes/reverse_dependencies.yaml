@@ -41,6 +41,10 @@ types:
     '000':
       used_by:
       - g.node.forest:000
+  cop.curve:
+    '000':
+      used_by:
+      - gw.house0.operational.params:000
   data.channel.gt:
     '001':
       used_by:
@@ -204,6 +208,10 @@ types:
       - layout.lite:014
       - layout.lite:015
       - scada.params:005
+  heating.curve:
+    '000':
+      used_by:
+      - gw.house0.operational.params:000
   hubitat.component.gt:
     '000':
       used_by:
@@ -523,6 +531,7 @@ enums:
   gw1.seasonal.storage.mode:
     '000':
       used_by:
+      - gw.house0.operational.params:000
       - layout.lite:008
       - layout.lite:009
       - layout.lite:010
@@ -534,6 +543,7 @@ enums:
   gw1.system.mode:
     '000':
       used_by:
+      - gw.house0.operational.params:000
       - layout.lite:008
       - layout.lite:009
       - layout.lite:010
@@ -778,6 +788,7 @@ formats:
   non.negative.int:
     used_by:
     - gw.house0.hydronic:000
+    - gw.house0.operational.params:000
     - gw.native.gpio.pin:000
     - i2c.adc.capability:000
     - i2c.bit.address:000
@@ -825,6 +836,7 @@ formats:
     - web.server.component.gt:002
   positive.float:
     used_by:
+    - heating.curve:000
     - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
@@ -855,11 +867,13 @@ formats:
     - flo.params.house0:005
     - flo.params.house0:006
     - flo.params.house0:007
+    - gw.house0.operational.params:000
     - gw1.scada.device.type.gt:000
     - gw108.gpio.sensor.component.gt:001
     - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:001
     - gw108.vdc.relay.component.gt:002
+    - heating.curve:000
     - hubitat.poller.gt:000
     - i2c.adc.capability:000
     - i2c.dac.capability:000

@@ -1,8 +1,14 @@
 from typing import Literal
-from pydantic import model_validator
+from pydantic import StrictFloat, model_validator
 from sema.runtime.base import SemaType
+from sema.runtime.enums import Gw1SeasonalStorageMode
+from sema.runtime.enums import Gw1SystemMode
+from sema.runtime.property_format import NonNegativeInt
+from sema.runtime.property_format import PositiveInt
 from sema.runtime.types.capture_tuning import CaptureTuning
+from sema.runtime.types.cop_curve import CopCurve
 from sema.runtime.types.g_node_gt import GNodeGt
+from sema.runtime.types.heating_curve import HeatingCurve
 
 
 class GwHouse0OperationalParams(SemaType):
@@ -10,6 +16,17 @@ class GwHouse0OperationalParams(SemaType):
 
     g_nodes: list[GNodeGt]
     capture_tuning_list: list[CaptureTuning]
+    system_mode: Gw1SystemMode
+    seasonal_storage_mode: Gw1SeasonalStorageMode
+    cop_curve: CopCurve
+    heating_curve: HeatingCurve
+    hp_turn_on_minutes: PositiveInt
+    short_cycle_buffer: bool
+    load_overestimation_percent: NonNegativeInt
+    oil_boiler_backup: bool
+    horizon_hours: PositiveInt
+    latitude: StrictFloat
+    longitude: StrictFloat
     type_name: Literal["gw.house0.operational.params"] = "gw.house0.operational.params"
     version: Literal["000"] = "000"
 

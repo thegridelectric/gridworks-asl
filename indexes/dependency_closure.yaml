@@ -130,6 +130,12 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  cop.curve:
+    '000':
+      enums: []
+      formats: []
+      types: []
+      versionless_types: []
   data.channel.gt:
     '001':
       enums:
@@ -598,14 +604,20 @@ types:
       enums:
       - base.g.node.class:000
       - g.node.status:000
+      - gw1.seasonal.storage.mode:000
+      - gw1.system.mode:000
       formats:
       - left.right.dot
+      - non.negative.int
+      - positive.float
       - positive.int
       - spaceheat.name
       - uuid4.str
       types:
       - capture.tuning:000
+      - cop.curve:000
       - g.node.gt:005
+      - heating.curve:000
       versionless_types: []
   gw.native.gpio.pin:
     '000':
@@ -827,6 +839,14 @@ types:
       enums: []
       formats:
       - hex.char
+      types: []
+      versionless_types: []
+  heating.curve:
+    '000':
+      enums: []
+      formats:
+      - positive.float
+      - positive.int
       types: []
       versionless_types: []
   heating.forecast:

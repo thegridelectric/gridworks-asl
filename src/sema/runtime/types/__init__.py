@@ -9,6 +9,7 @@ from sema.runtime.types.channel_readings import ChannelReadings
 from sema.runtime.types.channel_readings_list_item import ChannelReadingsListItem
 from sema.runtime.types.component_attribute_class_gt import ComponentAttributeClassGt
 from sema.runtime.types.connectivity_edge_gt import ConnectivityEdgeGt
+from sema.runtime.types.cop_curve import CopCurve
 from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.derived_channel_gt import DerivedChannelGt
 from sema.runtime.types.dfr_component_gt import DfrComponentGt
@@ -53,6 +54,7 @@ from sema.runtime.types.gw_native_gpio_pin import GwNativeGpioPin
 from sema.runtime.types.gw_nolan_layout import GwNolanLayout
 from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.heartbeat_a import HeartbeatA
+from sema.runtime.types.heating_curve import HeatingCurve
 from sema.runtime.types.heating_forecast import HeatingForecast
 from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_gt import HubitatGt
@@ -145,6 +147,7 @@ __all__ = [
     "ChannelReadingsListItem",
     "ComponentAttributeClassGt",
     "ConnectivityEdgeGt",
+    "CopCurve",
     "DataChannelGt",
     "DerivedChannelGt",
     "DfrComponentGt",
@@ -187,6 +190,7 @@ __all__ = [
     "GwNolanLayout",
     "Ha1Params",
     "HeartbeatA",
+    "HeatingCurve",
     "HeatingForecast",
     "HubitatComponentGt",
     "HubitatGt",

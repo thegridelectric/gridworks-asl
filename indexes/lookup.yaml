@@ -74,6 +74,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/connectivity.edge.gt/000.yaml
+  cop.curve:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/cop.curve/000.yaml
   data.channel.gt:
     latest_version: '003'
     versioning_strategy: literal
@@ -298,6 +303,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/heartbeat.a/000.yaml
+  heating.curve:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/heating.curve/000.yaml
   heating.forecast:
     latest_version: '000'
     versioning_strategy: literal

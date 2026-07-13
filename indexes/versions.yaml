@@ -93,6 +93,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  cop.curve:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version (Intercept, OatCoeff, LwtCoeff, Min, MinOatF) — the COP model migrated out of scada deployment config into operational params."
+
   data.channel.gt:
     latest_version: "003"
     versioning_strategy: "literal"
@@ -355,7 +362,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial Sema version — GNodes home identity (mirrors the layout) + CaptureTuningList (per-channel capture params migrated out of the channel-config family)."
+        summary: "GNodes home identity (mirrors the layout) + CaptureTuningList (per-channel capture params migrated out of the channel-config family) + the control/optimization block migrated out of scada deployment config: SystemMode, SeasonalStorageMode, CopCurve, HeatingCurve, HpTurnOnMinutes, ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup, HorizonHours, Latitude, Longitude (all required — no assumed defaults)."
 
   gw.native.gpio.pin:
     latest_version: "000"
@@ -469,6 +476,13 @@ types:
     versions:
       "000":
         summary: "Initial Sema version."
+
+  heating.curve:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version (AlphaTimes10, BetaTimes100, GammaEx6, IntermediatePowerKw, IntermediateRswtF, DdPowerKw, DdRswtF, DdDeltaTF, MaxEwtF) — the house thermal model migrated out of scada deployment config into operational params."
 
   heating.forecast:
     latest_version: "000"

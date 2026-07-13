@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-09T17:30:00Z"
+  last_updated: "2026-07-13T14:00:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1016,6 +1016,20 @@ types:
             - "g.node.status:000"
             - "uuid4.str"
 
+  cop.curve:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A heat pump's coefficient-of-performance model: COP = Intercept + OatCoeff * OatF + LwtCoeff * LwtF, floored at Min below MinOatF."
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/cop.curve/000"
+        created: "2026-07-09T21:30:00Z"
+        status: "staging"
+        summary: "Initial version (Intercept, OatCoeff, LwtCoeff, Min, MinOatF) — the COP model migrated out of scada deployment config into operational params."
+        direct_dependencies:
+          structural: []
+
   data.channel.gt:
     latest_version: "003"
     owner: gridworks-energy
@@ -1844,18 +1858,24 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Operational/optimization parameters for one House0-fleet home (pass one: per-channel capture tuning)."
+    description: "Operational/optimization parameters for one House0-fleet home: per-channel capture tuning + modes, COP and heating curves, and optimization knobs."
 
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.operational.params/000"
-        created: "2026-07-04T14:50:00Z"
+        created: "2026-07-09T21:30:00Z"
         status: "staging"
-        summary: "Initial Sema version — GNodes home identity (mirrors the layout) + CaptureTuningList (per-channel capture params migrated out of the channel-config family)."
+        summary: "GNodes home identity (mirrors the layout) + CaptureTuningList (per-channel capture params migrated out of the channel-config family) + the control/optimization block migrated out of scada deployment config: SystemMode, SeasonalStorageMode, CopCurve, HeatingCurve, HpTurnOnMinutes, ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup, HorizonHours, Latitude, Longitude (all required — no assumed defaults)."
         direct_dependencies:
           structural:
             - "capture.tuning:000"
+            - "cop.curve:000"
             - "g.node.gt:005"
+            - "gw1.seasonal.storage.mode:000"
+            - "gw1.system.mode:000"
+            - "heating.curve:000"
+            - "non.negative.int"
+            - "positive.int"
 
   gw.native.gpio.pin:
     latest_version: "000"
@@ -2185,6 +2205,22 @@ types:
         direct_dependencies:
           structural:
             - "hex.char"
+
+  heating.curve:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A house's thermal / required-source-water-temperature model: quadratic heat-loss coefficients (scaled integers) + the intermediate and design-day anchor points + the max entering water temperature."
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/heating.curve/000"
+        created: "2026-07-09T21:30:00Z"
+        status: "staging"
+        summary: "Initial version (AlphaTimes10, BetaTimes100, GammaEx6, IntermediatePowerKw, IntermediateRswtF, DdPowerKw, DdRswtF, DdDeltaTF, MaxEwtF) — the house thermal model migrated out of scada deployment config into operational params."
+        direct_dependencies:
+          structural:
+            - "positive.float"
+            - "positive.int"
 
   heating.forecast:
     latest_version: "000"
