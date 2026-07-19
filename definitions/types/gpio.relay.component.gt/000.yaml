@@ -100,3 +100,8 @@ x-gridworks:
     single source of physical truth (its NativeGpioOutputs list holds each pin's BCM number,
     keyed by Name); this component is the thin per-relay device carried by at most one ShNode
     via ComponentId. One relay per component, identified by GPIO name against the board.
+
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.

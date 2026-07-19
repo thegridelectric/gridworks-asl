@@ -66,3 +66,8 @@ additionalProperties: false
 
 x-gridworks:
   owner: "gridworks-energy"
+  extended_description: >
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.

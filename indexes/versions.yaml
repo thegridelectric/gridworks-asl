@@ -491,6 +491,20 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  hp.control.box.device.type.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (retires the HpModel enum-plus-settings pattern; per-family device-type record keyed by DeviceType)."
+
+  hp.device.type.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version (retires the HpModel enum-plus-settings pattern; per-family device-type record keyed by DeviceType; absorbs HpMaxKwEl as MaxKwEl)."
+
   hubitat.component.gt:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -1178,6 +1192,8 @@ enums:
         added_values:
           - "Gw108I2cRelay"
           - "Gw108GpioRelay"
+          - "SamsungAE055FCYDCG"
+          - "SamsungAE055FEYMCG"
       "000": {}
 
   gw1.emission.method:

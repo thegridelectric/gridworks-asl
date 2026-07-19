@@ -781,6 +781,7 @@ formats:
     - latest.price:000
   non.empty.string:
     used_by:
+    - hp.device.type.gt:000
     - relay.actor.config:002
     - relay.actor.config:003
     - relay.actor.config:004
@@ -815,6 +816,8 @@ formats:
     - gw1.scada.device.type.gt:000
     - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:002
+    - hp.control.box.device.type.gt:000
+    - hp.device.type.gt:000
     - hubitat.component.gt:000
     - hubitat.poller.component.gt:000
     - i2c.adc.capability:000
@@ -837,6 +840,8 @@ formats:
   positive.float:
     used_by:
     - heating.curve:000
+    - hp.control.box.device.type.gt:000
+    - hp.device.type.gt:000
     - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
@@ -874,6 +879,7 @@ formats:
     - gw108.vdc.relay.component.gt:001
     - gw108.vdc.relay.component.gt:002
     - heating.curve:000
+    - hp.device.type.gt:000
     - hubitat.poller.gt:000
     - i2c.adc.capability:000
     - i2c.dac.capability:000

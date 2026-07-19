@@ -102,3 +102,8 @@ x-gridworks:
     the thin per-relay device carried by at most one ShNode via ComponentId. It replaces the
     legacy multiplexer model (i2c.multichannel.dt.relay.component.gt + positional relay
     indices) with one relay per component, identified by name against the board.
+
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.

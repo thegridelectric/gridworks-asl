@@ -313,6 +313,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/heating.forecast/000.yaml
+  hp.control.box.device.type.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hp.control.box.device.type.gt/000.yaml
+  hp.device.type.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hp.device.type.gt/000.yaml
   hubitat.component.gt:
     latest_version: '000'
     versioning_strategy: literal

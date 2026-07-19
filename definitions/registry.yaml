@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-13T14:00:00Z"
+  last_updated: "2026-07-19T14:50:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -343,7 +343,7 @@ enums:
         schema_url: "https://schemas.electricity.works/enums/gw1.device.type/001"
         created: "2026-07-03T19:45:00Z"
         status: "staging"
-        added_values: ["Gw108I2cRelay", "Gw108GpioRelay"]
+        added_values: ["Gw108I2cRelay", "Gw108GpioRelay", "SamsungAE055FCYDCG", "SamsungAE055FEYMCG"]
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.device.type/000"
         created: "2026-06-13T21:30:00Z"
@@ -2239,6 +2239,42 @@ types:
             - "left.right.dot"
             - "utc.seconds"
             - "uuid4.str"
+
+  hp.control.box.device.type.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Specialized device-type record for a heat pump control box category (the monobloc's indoor unit: hydraulics, control electronics, local touch-screen, ODU comms — no compressor); keyed by DeviceType; carries the three primary-pump facts."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/hp.control.box.device.type.gt/000"
+        created: "2026-07-19T14:50:00Z"
+        status: "staging"
+        summary: "Initial Sema version (retires the HpModel enum-plus-settings pattern; per-family device-type record keyed by DeviceType)."
+        direct_dependencies:
+          structural:
+            - "pascal.case"
+            - "positive.float"
+
+  hp.device.type.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Specialized device-type record for a compressor-bearing heat pump unit category (monobloc ODUs, hydro-kit ODUs and IDUs); keyed by DeviceType; capacity, electrical limits, and the three primary-pump facts."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/hp.device.type.gt/000"
+        created: "2026-07-19T14:50:00Z"
+        status: "staging"
+        summary: "Initial Sema version (retires the HpModel enum-plus-settings pattern; per-family device-type record keyed by DeviceType; absorbs HpMaxKwEl as MaxKwEl)."
+        direct_dependencies:
+          structural:
+            - "non.empty.string"
+            - "pascal.case"
+            - "positive.float"
+            - "positive.int"
 
   hubitat.component.gt:
     latest_version: "000"

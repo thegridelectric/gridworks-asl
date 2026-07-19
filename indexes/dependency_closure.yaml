@@ -858,6 +858,24 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  hp.control.box.device.type.gt:
+    '000':
+      enums: []
+      formats:
+      - pascal.case
+      - positive.float
+      types: []
+      versionless_types: []
+  hp.device.type.gt:
+    '000':
+      enums: []
+      formats:
+      - non.empty.string
+      - pascal.case
+      - positive.float
+      - positive.int
+      types: []
+      versionless_types: []
   hubitat.component.gt:
     '000':
       enums: []

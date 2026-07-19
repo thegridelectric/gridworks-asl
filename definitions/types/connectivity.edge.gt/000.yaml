@@ -132,3 +132,8 @@ x-gridworks:
     provides a simplified, distribution-level abstraction suitable for
     graph-based modeling and transactive coordination without adopting
     the full CIM equipment hierarchy.
+
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the grid node registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.

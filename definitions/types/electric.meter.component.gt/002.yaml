@@ -88,3 +88,8 @@ x-gridworks:
     DeviceType holds a `gw1.device.type` value: the hardware layout enforces its
     membership in `gw1.device.type` and, for an electric meter, that the matching
     `electric.meter.device.type.gt` record is present.
+
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.

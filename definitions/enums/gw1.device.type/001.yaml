@@ -33,6 +33,8 @@ enum:
 - AbstractWebServer
 - Gw108I2cRelay
 - Gw108GpioRelay
+- SamsungAE055FCYDCG
+- SamsungAE055FEYMCG
 default: EgaugePowerMeter
 x-gridworks:
   owner: gridworks-energy
@@ -68,3 +70,10 @@ x-gridworks:
       A native-GPIO-driven relay resident on a GridWorks SCADA board (e.g. GW108). Board-resident — its BCM
       pin lives in the board's NativeGpioOutputs (gw1.scada.device.type.gt), referenced by GpioName; the
       component carries only identity + control config.
+    SamsungAE055FCYDCG: >
+      Samsung AE055 EHS mono outdoor monobloc unit — compressor-bearing; full nameplate designation
+      verbatim after the make prefix. Category-level data on its hp.device.type.gt record.
+    SamsungAE055FEYMCG: >
+      Samsung AE055 EHS mono indoor control box — water pump + backup heater, control
+      electronics with local touch-screen, ODU comms; no compressor. Category-level data on
+      its hp.control.box.device.type.gt record.

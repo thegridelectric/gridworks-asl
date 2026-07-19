@@ -28,6 +28,8 @@ class Gw1DeviceType(SemaEnum):
     AbstractWebServer = auto()
     Gw108I2cRelay = auto()
     Gw108GpioRelay = auto()
+    SamsungAE055FCYDCG = auto()
+    SamsungAE055FEYMCG = auto()
 
     @classmethod
     def default(cls) -> "Gw1DeviceType":

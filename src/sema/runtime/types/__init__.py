@@ -56,6 +56,8 @@ from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.heartbeat_a import HeartbeatA
 from sema.runtime.types.heating_curve import HeatingCurve
 from sema.runtime.types.heating_forecast import HeatingForecast
+from sema.runtime.types.hp_control_box_device_type_gt import HpControlBoxDeviceTypeGt
+from sema.runtime.types.hp_device_type_gt import HpDeviceTypeGt
 from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_gt import HubitatGt
 from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
@@ -192,6 +194,8 @@ __all__ = [
     "HeartbeatA",
     "HeatingCurve",
     "HeatingForecast",
+    "HpControlBoxDeviceTypeGt",
+    "HpDeviceTypeGt",
     "HubitatComponentGt",
     "HubitatGt",
     "HubitatPollerComponentGt",
