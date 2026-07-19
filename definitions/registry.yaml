@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-19T14:50:00Z"
+  last_updated: "2026-07-19T18:55:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -343,7 +343,7 @@ enums:
         schema_url: "https://schemas.electricity.works/enums/gw1.device.type/001"
         created: "2026-07-03T19:45:00Z"
         status: "staging"
-        added_values: ["Gw108I2cRelay", "Gw108GpioRelay", "SamsungAE055FCYDCG", "SamsungAE055FEYMCG"]
+        added_values: ["Gw108I2cRelay", "Gw108GpioRelay", "SamsungAE055FCYDCG", "SamsungAE055FEYMCG", "Gw108Adc"]
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.device.type/000"
         created: "2026-06-13T21:30:00Z"
@@ -1902,7 +1902,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.nolan.layout/000"
-        created: "2026-07-09T17:30:00Z"
+        created: "2026-07-19T18:55:00Z"
         status: "staging"
         summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay is gw108.vdc.relay)."
         direct_dependencies:
@@ -1917,7 +1917,7 @@ types:
             - "gw108.gpio.sensor.component.gt:002"
             - "gw108.vdc.relay.component.gt:002"
             - "i2c.multichannel.dt.relay.component.gt:005"
-            - "i2c.thermistor.reader.component.gt:002"
+            - "i2c.thermistor.reader.component.gt:003"
             - "pico.btu.meter.component.gt:001"
             - "pico.tank.module.component.gt:012"
             - "sim.pico.tank.module.component.gt:001"
@@ -2656,12 +2656,23 @@ types:
             - "positive.float"
 
   i2c.thermistor.reader.component.gt:
-    latest_version: "002"
+    latest_version: "003"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Configuration for an I2C thermistor reader component that samples one ADC device and publishes one or more thermistor-backed temperature channels."
+    description: "Configuration for an I2C thermistor reader component that samples one board-resident ADC (named by AdcName against the board record) and publishes one or more thermistor-backed temperature channels."
 
     versions:
+      "003":
+        schema_url: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/003"
+        created: "2026-07-19T18:55:00Z"
+        status: "staging"
+        summary: "- Bus, AdcAddress, AdcReferenceVolts, SeriesResistanceKOhms dropped (facts on the board's thermistor-interface capability entry); AdcName added, naming that entry in the board record's ThermistorAdcs; DeviceType value moves from the board's category to the ADC's own (Gw108Adc). Context-dependent: AdcName is derived by matching AdcAddress against the board's ThermistorAdcs, which the standalone component does not carry."
+        direct_dependencies:
+          structural:
+            - "i2c.thermistor.channel.config:002"
+            - "pascal.case"
+            - "temp.calc.method:000"
+            - "uuid4.str"
       "002":
         schema_url: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/002"
         created: "2026-06-26T03:40:00Z"

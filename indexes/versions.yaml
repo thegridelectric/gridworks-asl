@@ -650,9 +650,11 @@ types:
         summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, SeriesResistanceKOhms); renames i2c.thermistor.interface.config — the record describes what the board offers, not a chosen configuration."
 
   i2c.thermistor.reader.component.gt:
-    latest_version: "002"
+    latest_version: "003"
     versioning_strategy: "literal"
     versions:
+      "003":
+        summary: "- Bus, AdcAddress, AdcReferenceVolts, SeriesResistanceKOhms dropped (facts on the board's thermistor-interface capability entry); AdcName added, naming that entry in the board record's ThermistorAdcs; DeviceType value moves from the board's category to the ADC's own (Gw108Adc). Context-dependent: AdcName is derived by matching AdcAddress against the board's ThermistorAdcs, which the standalone component does not carry."
       "002":
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "001":
@@ -1194,6 +1196,7 @@ enums:
           - "Gw108GpioRelay"
           - "SamsungAE055FCYDCG"
           - "SamsungAE055FEYMCG"
+          - "Gw108Adc"
       "000": {}
 
   gw1.emission.method:

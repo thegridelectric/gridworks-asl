@@ -681,7 +681,7 @@ types:
       - i2c.relay.capability:000
       - i2c.thermistor.channel.config:002
       - i2c.thermistor.interface.capability:000
-      - i2c.thermistor.reader.component.gt:002
+      - i2c.thermistor.reader.component.gt:003
       - pico.btu.meter.component.gt:001
       - pico.tank.module.component.gt:012
       - relay.actor.config:004
@@ -1147,6 +1147,18 @@ types:
       formats:
       - pascal.case
       - positive.float
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - i2c.thermistor.channel.config:002
+      versionless_types: []
+    '003':
+      enums:
+      - i2c.adc.channel:000
+      - temp.calc.method:000
+      formats:
+      - pascal.case
       - positive.int
       - spaceheat.name
       - uuid4.str

@@ -5,11 +5,11 @@ from sema.runtime.enums import TempCalcMethod
 from sema.runtime.property_format import PositiveFloat
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.i2c_thermistor_reader_component_gt import (
-    I2cThermistorReaderComponentGt,
-)
 from sema.runtime.types.old_versions.i2c_thermistor_channel_config_001 import (
     I2cThermistorChannelConfig001,
+)
+from sema.runtime.types.old_versions.i2c_thermistor_reader_component_gt_002 import (
+    I2cThermistorReaderComponentGt002,
 )
 
 
@@ -31,13 +31,13 @@ class I2cThermistorReaderComponentGt001(SemaType):
     )
     version: Literal["001"] = "001"
 
-    def upgrade(self) -> I2cThermistorReaderComponentGt:
+    def upgrade(self) -> I2cThermistorReaderComponentGt002:
         """
         - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component.
         """
         raise SemaType.upgrade_requires_context(
             "I2cThermistorReaderComponentGt001 cannot be upgraded to "
-            "I2cThermistorReaderComponentGt without the source layout "
+            "I2cThermistorReaderComponentGt002 without the source layout "
             "context: DeviceType is derived from the cac the component "
             "referenced, which the standalone component does not carry."
         )

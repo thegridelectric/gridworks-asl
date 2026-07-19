@@ -289,12 +289,13 @@ types:
     '002':
       used_by:
       - i2c.thermistor.reader.component.gt:002
+      - i2c.thermistor.reader.component.gt:003
   i2c.thermistor.interface.capability:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
   i2c.thermistor.reader.component.gt:
-    '002':
+    '003':
       used_by:
       - gw.nolan.layout:000
   machine.states:
@@ -674,6 +675,7 @@ enums:
       used_by:
       - i2c.thermistor.reader.component.gt:001
       - i2c.thermistor.reader.component.gt:002
+      - i2c.thermistor.reader.component.gt:003
       - pico.btu.meter.component.gt:000
       - pico.btu.meter.component.gt:001
       - pico.tank.module.component.gt:011
@@ -830,6 +832,7 @@ formats:
     - i2c.relay.config:000
     - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:002
+    - i2c.thermistor.reader.component.gt:003
     - pico.btu.meter.component.gt:001
     - pico.flow.module.component.gt:001
     - pico.tank.module.component.gt:012
@@ -1101,6 +1104,7 @@ formats:
     - i2c.result:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
+    - i2c.thermistor.reader.component.gt:003
     - i2c.write.bit:000
     - i2c.write.reg:000
     - latest.price:000

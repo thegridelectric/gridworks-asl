@@ -60,7 +60,7 @@ properties:
         - $ref: "https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/002"
         - $ref: "https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/002"
         - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/005"
-        - $ref: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/003"
         - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/001"
         - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/012"
         - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"

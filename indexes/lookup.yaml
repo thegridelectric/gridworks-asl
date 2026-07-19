@@ -423,9 +423,10 @@ types:
     versions:
       '000': definitions/types/i2c.thermistor.interface.capability/000.yaml
   i2c.thermistor.reader.component.gt:
-    latest_version: '002'
+    latest_version: '003'
     versioning_strategy: literal
     versions:
+      '003': definitions/types/i2c.thermistor.reader.component.gt/003.yaml
       '002': definitions/types/i2c.thermistor.reader.component.gt/002.yaml
       '001': definitions/types/i2c.thermistor.reader.component.gt/001.yaml
   i2c.write.bit:

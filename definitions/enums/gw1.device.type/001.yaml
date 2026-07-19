@@ -35,6 +35,7 @@ enum:
 - Gw108GpioRelay
 - SamsungAE055FCYDCG
 - SamsungAE055FEYMCG
+- Gw108Adc
 default: EgaugePowerMeter
 x-gridworks:
   owner: gridworks-energy
@@ -77,3 +78,8 @@ x-gridworks:
       Samsung AE055 EHS mono indoor control box — water pump + backup heater, control
       electronics with local touch-screen, ODU comms; no compressor. Category-level data on
       its hp.control.box.device.type.gt record.
+    Gw108Adc: >
+      A thermistor/CT ADC resident on a GridWorks SCADA board (e.g. GW108). Board-resident —
+      its bus, address, reference volts, and series resistance live in the board's
+      thermistor-interface capability entries (gw1.scada.device.type.gt), referenced by
+      AdcName; the reader component carries only identity, channel configs, and calc method.

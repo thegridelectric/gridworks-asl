@@ -1,0 +1,11 @@
+    def upgrade(self) -> {{ i2c_thermistor_reader_component_gt_003_class_name }}:
+        """
+        - Bus, AdcAddress, AdcReferenceVolts, SeriesResistanceKOhms dropped (facts on the board's thermistor-interface capability entry); AdcName added, naming that entry in the board record's ThermistorAdcs; DeviceType value moves from the board's category to the ADC's own (Gw108Adc). Context-dependent: AdcName is derived by matching AdcAddress against the board's ThermistorAdcs, which the standalone component does not carry.
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ i2c_thermistor_reader_component_gt_002_class_name }} cannot be upgraded to "
+            "{{ i2c_thermistor_reader_component_gt_003_class_name }} without the source layout "
+            "context: AdcName is derived by matching AdcAddress against the "
+            "board record's ThermistorAdcs, which the standalone component "
+            "does not carry."
+        )
