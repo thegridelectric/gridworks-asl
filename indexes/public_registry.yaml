@@ -1377,7 +1377,7 @@ types:
       '000':
         schema_url: https://schemas.electricity.works/types/g.node.create.cmd/000
         created: '2026-07-08T17:45:00Z'
-        status: staging
+        status: published
         summary: Initial Sema version
         direct_dependencies:
           structural:

@@ -295,3 +295,5 @@ types:
     '000': sha256:0505741db7f3ba845fe0b7dfb9e5f88eca9f3cc6e9e7510b22f3e73b0103e8fe
   weather.forecast:
     '000': sha256:d5898d35fd8250e8c80811e6df2c90c66cddc316efaf4ca36bc4fdd38c931601
+  g.node.create.cmd:
+    '000': sha256:4d2f0580f36f19c1f2401568c0930e7d3172381265c8b3b6e3d4ef3df886cea6
