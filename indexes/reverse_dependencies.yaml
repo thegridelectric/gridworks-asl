@@ -135,6 +135,7 @@ types:
       - g.node.create.cmd:000
       - g.node.forest:000
       - g.node.reparent.cmd:000
+      - g.node.reparent.cmd:001
       - gw.house0.layout:000
       - gw.house0.operational.params:000
       - gw.nolan.layout:000
@@ -1082,6 +1083,7 @@ formats:
     - g.node.gt:005
     - g.node.instance.gt:000
     - g.node.reparent.cmd:000
+    - g.node.reparent.cmd:001
     - gpio.relay.component.gt:000
     - gridworks.event.problem:001
     - gw108.gpio.sensor.component.gt:001

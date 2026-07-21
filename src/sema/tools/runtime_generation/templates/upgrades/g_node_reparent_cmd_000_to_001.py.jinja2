@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ g_node_reparent_cmd_001_class_name }}:
+        """
+        - Proof: new optional opaque authorization artifact for this re-parent
+        (format is machinery of the authority substrate, mirroring
+        g.node.create.cmd)
+        """
+        data = self.model_dump(exclude_none=True)
+        data["version"] = "001"
+        return {{ g_node_reparent_cmd_001_class_name }}.model_validate(data)

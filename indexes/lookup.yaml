@@ -189,9 +189,10 @@ types:
     versions:
       '000': definitions/types/g.node.instance.gt/000.yaml
   g.node.reparent.cmd:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/g.node.reparent.cmd/001.yaml
       '000': definitions/types/g.node.reparent.cmd/000.yaml
   glitch:
     latest_version: '000'

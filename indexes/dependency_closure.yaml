@@ -487,6 +487,16 @@ types:
       types:
       - g.node.gt:005
       versionless_types: []
+    '001':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types:
+      - g.node.gt:005
+      versionless_types: []
   glitch:
     '000':
       enums:
