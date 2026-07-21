@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-07-21T12:50:00Z'
+  last_updated: '2026-07-21T14:30:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -1366,6 +1366,35 @@ types:
           - fsm.atomic.report:000
           - spaceheat.name
           - uuid4.str
+  g.node.cmd.ack:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'The Grid Node Registry''s direct reply to a write command it applied;
+      success vs refusal is discriminated by TypeName (twin: g.node.cmd.nack).'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/g.node.cmd.ack/000
+        created: '2026-07-21T14:30:00Z'
+        status: published
+        summary: Initial Sema version
+        direct_dependencies:
+          structural: []
+  g.node.cmd.nack:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'The Grid Node Registry''s direct reply to a write command it refused,
+      carrying the verbatim reason; success vs refusal is discriminated by TypeName
+      (twin: g.node.cmd.ack).'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/g.node.cmd.nack/000
+        created: '2026-07-21T14:30:00Z'
+        status: published
+        summary: Initial Sema version
+        direct_dependencies:
+          structural: []
   g.node.create.cmd:
     latest_version: '000'
     owner: gridworks-energy
