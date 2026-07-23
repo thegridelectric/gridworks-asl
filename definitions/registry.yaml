@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-19T18:55:00Z"
+  last_updated: "2026-07-21T14:30:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1593,6 +1593,52 @@ types:
             - "spaceheat.name"
             - "uuid4.str"
 
+  g.node.cmd.ack:
+    latest_version: "000"
+    owner: "gridworks-energy"
+    versioning_strategy: "literal"
+    description: "The Grid Node Registry's direct reply to a write command it applied; success vs refusal is discriminated by TypeName (twin: g.node.cmd.nack)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/g.node.cmd.ack/000"
+        created: "2026-07-21T14:30:00Z"
+        status: "published"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural: []
+
+  g.node.cmd.nack:
+    latest_version: "000"
+    owner: "gridworks-energy"
+    versioning_strategy: "literal"
+    description: "The Grid Node Registry's direct reply to a write command it refused, carrying the verbatim reason; success vs refusal is discriminated by TypeName (twin: g.node.cmd.ack)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/g.node.cmd.nack/000"
+        created: "2026-07-21T14:30:00Z"
+        status: "published"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural: []
+
+  g.node.create.cmd:
+    latest_version: "000"
+    owner: "gridworks-energy"
+    versioning_strategy: "literal"
+    description: "Command to create a single GNode in the Grid Node Registry: the registrar-facing write by which a node enters the registry, one node per command, parents first."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/g.node.create.cmd/000"
+        created: "2026-07-08T17:45:00Z"
+        status: "published"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "g.node.gt:005"
+
   g.node.forest:
     latest_version: "000"
     owner: "gridworks-energy"
@@ -1678,12 +1724,24 @@ types:
             - "uuid4.str"
 
   g.node.reparent.cmd:
-    latest_version: "000"
+    latest_version: "001"
     owner: "gridworks-energy"
     versioning_strategy: "literal"
     description: "Command to re-parent a subtree in the Grid Node Registry: introduce a new node N and re-parent one or more children beneath it."
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/g.node.reparent.cmd/001"
+        created: "2026-07-21T12:50:00Z"
+        status: "published"
+        summary: >-
+          - Proof: new optional opaque authorization artifact for this re-parent
+          (format is machinery of the authority substrate, mirroring
+          g.node.create.cmd)
+        direct_dependencies:
+          structural:
+            - "g.node.gt:005"
+            - "uuid4.str"
       "000":
         schema_url: "https://schemas.electricity.works/types/g.node.reparent.cmd/000"
         created: "2026-07-03T18:55:00Z"

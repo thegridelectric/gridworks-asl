@@ -416,6 +416,29 @@ types:
       types:
       - fsm.atomic.report:001
       versionless_types: []
+  g.node.cmd.ack:
+    '000':
+      enums: []
+      formats: []
+      types: []
+      versionless_types: []
+  g.node.cmd.nack:
+    '000':
+      enums: []
+      formats: []
+      types: []
+      versionless_types: []
+  g.node.create.cmd:
+    '000':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types:
+      - g.node.gt:005
+      versionless_types: []
   g.node.forest:
     '000':
       enums:
@@ -467,6 +490,16 @@ types:
       versionless_types: []
   g.node.reparent.cmd:
     '000':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types:
+      - g.node.gt:005
+      versionless_types: []
+    '001':
       enums:
       - base.g.node.class:000
       - g.node.status:000

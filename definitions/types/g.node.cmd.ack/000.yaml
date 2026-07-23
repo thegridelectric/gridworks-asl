@@ -1,0 +1,45 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/g.node.cmd.ack/000"
+
+title: "g.node.cmd.ack"
+type: object
+description: >
+  The Grid Node Registry's reply to a write command it APPLIED. Sent direct
+  to the command's sender; success or refusal is discriminated by the reply's
+  TypeName (the refusal twin is g.node.cmd.nack), never by inspecting a
+  field. The correlation key is the command's content hash, so a sender with
+  several commands in flight knows exactly which one was answered.
+
+properties:
+
+  CommandHash:
+    type: string
+    description: >
+      The content hash of the applied command, as computed by the registry's
+      append-only command log over the command's serialized bytes. Opaque to
+      this contract (the hashing scheme is registry-internal); a sender
+      correlates by comparing it to the hash of the bytes it published.
+
+  TypeName:
+    const: "g.node.cmd.ack"
+
+  Version:
+    const: "000"
+
+required:
+  - CommandHash
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "CommandHash": "9c4d2f0e6a1b3c5d7e9f0a2b4c6d8e0f1a3b5c7d9e0f2a4b6c8d0e1f3a5b7c9d",
+      "TypeName": "g.node.cmd.ack",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

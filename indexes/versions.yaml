@@ -266,6 +266,27 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  g.node.cmd.ack:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  g.node.cmd.nack:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  g.node.create.cmd:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   g.node.forest:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -297,9 +318,11 @@ types:
         summary: "Initial Sema version"
 
   g.node.reparent.cmd:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: "- Proof: new optional opaque authorization artifact for this re-parent (format is machinery of the authority substrate, mirroring g.node.create.cmd)"
       "000":
         summary: "Initial Sema version"
 
