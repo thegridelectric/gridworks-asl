@@ -56,13 +56,13 @@ types:
       - scada.control.capabilities:001
     '002':
       used_by:
-      - gw.nolan.layout:000
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
     '003':
       used_by:
       - gw.house0.layout:000
+      - gw.nolan.layout:000
       - layout.lite:015
       - scada.control.capabilities:002
   derived.channel.gt:
@@ -422,11 +422,11 @@ types:
       - new.command.tree:001
     '302':
       used_by:
-      - gw.nolan.layout:000
       - layout.lite:014
     '303':
       used_by:
       - gw.house0.layout:000
+      - gw.nolan.layout:000
       - layout.lite:015
       - new.command.tree:002
       - scada.control.capabilities:002

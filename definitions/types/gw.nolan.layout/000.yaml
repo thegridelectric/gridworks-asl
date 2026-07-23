@@ -29,7 +29,7 @@ properties:
   ShNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/303"
     description: >
       List of Spaceheat nodes representing operational roles in the system.
       Keys are SpaceheatName identifiers. Each node corresponds to a functional
@@ -38,7 +38,7 @@ properties:
   DataChannels:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/data.channel.gt/002"
+      $ref: "https://schemas.electricity.works/types/data.channel.gt/003"
     description: >
       List of raw telemetry channels produced by the SCADA system.
       

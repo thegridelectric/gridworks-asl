@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-21T14:30:00Z"
+  last_updated: "2026-07-23T18:50:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1962,11 +1962,11 @@ types:
         schema_url: "https://schemas.electricity.works/types/gw.nolan.layout/000"
         created: "2026-07-19T18:55:00Z"
         status: "staging"
-        summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay is gw108.vdc.relay)."
+        summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay is gw108.vdc.relay). Nodes/channels ride spaceheat.node.gt/303 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
         direct_dependencies:
           structural:
             - "ads111x.based.device.type.gt:000"
-            - "data.channel.gt:002"
+            - "data.channel.gt:003"
             - "derived.channel.gt:002"
             - "electric.meter.component.gt:002"
             - "electric.meter.device.type.gt:000"
@@ -1979,7 +1979,7 @@ types:
             - "pico.btu.meter.component.gt:001"
             - "pico.tank.module.component.gt:012"
             - "sim.pico.tank.module.component.gt:001"
-            - "spaceheat.node.gt:302"
+            - "spaceheat.node.gt:303"
             - "web.server.component.gt:002"
 
   gw1.hvac.zone:

@@ -694,7 +694,7 @@ types:
       - uuid4.str
       types:
       - ads111x.based.device.type.gt:000
-      - data.channel.gt:002
+      - data.channel.gt:003
       - derived.channel.gt:002
       - egauge.register.config:000
       - electric.meter.channel.config:001
@@ -719,7 +719,7 @@ types:
       - pico.tank.module.component.gt:012
       - relay.actor.config:004
       - sim.pico.tank.module.component.gt:001
-      - spaceheat.node.gt:302
+      - spaceheat.node.gt:303
       - spaceheat.telemetry.quantity.projection:000
       - web.server.component.gt:002
       versionless_types: []

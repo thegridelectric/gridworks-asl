@@ -2,6 +2,7 @@ from typing import Any, Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.types.ads111x_based_device_type_gt import Ads111xBasedDeviceTypeGt
+from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.derived_channel_gt import DerivedChannelGt
 from sema.runtime.types.electric_meter_component_gt import ElectricMeterComponentGt
 from sema.runtime.types.electric_meter_device_type_gt import ElectricMeterDeviceTypeGt
@@ -15,13 +16,12 @@ from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
 from sema.runtime.types.i2c_thermistor_reader_component_gt import (
     I2cThermistorReaderComponentGt,
 )
-from sema.runtime.types.old_versions.data_channel_gt_002 import DataChannelGt002
-from sema.runtime.types.old_versions.spaceheat_node_gt_302 import SpaceheatNodeGt302
 from sema.runtime.types.pico_btu_meter_component_gt import PicoBtuMeterComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 from sema.runtime.types.sim_pico_tank_module_component_gt import (
     SimPicoTankModuleComponentGt,
 )
+from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 from sema.runtime.types.web_server_component_gt import WebServerComponentGt
 
 
@@ -29,8 +29,8 @@ class GwNolanLayout(SemaType):
     """Sema: https://schemas.electricity.works/types/gw.nolan.layout/000"""
 
     g_nodes: list[GNodeGt]
-    sh_nodes: list[SpaceheatNodeGt302]
-    data_channels: list[DataChannelGt002]
+    sh_nodes: list[SpaceheatNodeGt]
+    data_channels: list[DataChannelGt]
     derived_channels: list[DerivedChannelGt]
     components: list[
         ElectricMeterComponentGt
