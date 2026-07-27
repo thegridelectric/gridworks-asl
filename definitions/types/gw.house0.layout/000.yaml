@@ -73,7 +73,7 @@ properties:
   DeviceTypes:
     type: array
     description: >
-      The specialized per-family device-type records (`<family>.device.type.gt`) for the
+      The specialized per-family device-type records for the
       device categories present in `Components` that carry category-level data. A component
       joins its record by the shared `DeviceType` value.
     items:

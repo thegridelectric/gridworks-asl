@@ -10,7 +10,7 @@ description: >
 
 extended_description: >
   `DeviceType` and `FlowMeterType` are open `pascal.case` strings. The device-type
-  enum (`gw1.device.type`) whose membership they must satisfy is articulated by any
+  enum (the device-category vocabulary) whose membership they must satisfy is articulated by any
   hardware layout for which this type is a sub-type — the layout enforces it, so this
   component type stays version-stable as device types are added.
 
@@ -28,9 +28,8 @@ properties:
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this component is built on, an open `pascal.case`
-      string (a `gw1.device.type` value). The hardware layout enforces
-      membership in `gw1.device.type`.
+      The device category this component is built on, an open
+      pascal-case string.
 
   Enabled:
     type: boolean
@@ -151,3 +150,6 @@ examples:
     }
 x-gridworks:
   owner: "gridworks-energy"
+
+  extended_description: >
+    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.

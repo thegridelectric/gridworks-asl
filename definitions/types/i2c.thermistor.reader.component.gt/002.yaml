@@ -85,7 +85,6 @@ examples:
         {
           "ChannelName": "scada",
           "AdcChannel": "P0",
-          "SendToDerived": false,
           "ThermistorBeta": 1,
           "TypeName": "i2c.thermistor.channel.config",
           "Version": "002"

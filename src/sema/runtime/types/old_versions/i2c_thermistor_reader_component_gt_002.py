@@ -46,7 +46,7 @@ class I2cThermistorReaderComponentGt002(SemaType):
 
     def upgrade(self) -> I2cThermistorReaderComponentGt:
         """
-        - Bus, AdcAddress, AdcReferenceVolts, SeriesResistanceKOhms dropped (facts on the board's thermistor-interface capability entry); AdcName added, naming that entry in the board record's ThermistorAdcs; DeviceType value moves from the board's category to the ADC's own (Gw108Adc). Context-dependent: AdcName is derived by matching AdcAddress against the board's ThermistorAdcs, which the standalone component does not carry.
+        - Bus, AdcAddress, AdcReferenceVolts, SeriesResistanceKOhms dropped (facts on the board's thermistor-interface capability entry); AdcName added, naming that entry in the board record's ThermistorAdcs; DeviceType dropped (TypeName is the kind; board identity lives on the board component); BoardComponentId added, anchoring the reader to its scada.board.component.gt. Context-dependent: AdcName and BoardComponentId are derived from the source layout, which the standalone component does not carry.
         """
         raise SemaType.upgrade_requires_context(
             "I2cThermistorReaderComponentGt002 cannot be upgraded to "

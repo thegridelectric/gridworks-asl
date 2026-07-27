@@ -11,7 +11,7 @@ class I2cThermistorReaderComponentGt(SemaType):
     """Sema: https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/003"""
 
     component_id: UUID4Str
-    device_type: PascalCase
+    board_component_id: UUID4Str
     config_list: list[I2cThermistorChannelConfig]
     display_name: str | None = None
     hw_uid: str | None = None

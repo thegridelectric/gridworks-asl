@@ -214,6 +214,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gpio.relay.component.gt/000.yaml
+  gpio.sensor.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gpio.sensor.component.gt/000.yaml
   gridworks.ack:
     versioning_strategy: none
     schema: definitions/types/gridworks.ack.yaml
@@ -359,11 +364,6 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/hubitat.poller.gt/000.yaml
-  i2c.adc.capability:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/i2c.adc.capability/000.yaml
   i2c.bit.address:
     latest_version: '000'
     versioning_strategy: literal
@@ -374,6 +374,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/i2c.bus/000.yaml
+  i2c.ct.interface.capability:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.ct.interface.capability/000.yaml
   i2c.dac.capability:
     latest_version: '000'
     versioning_strategy: literal
@@ -563,6 +568,11 @@ types:
     versions:
       '003': definitions/types/report.event/003.yaml
       '002': definitions/types/report.event/002.yaml
+  scada.board.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/scada.board.component.gt/000.yaml
   scada.control.capabilities:
     latest_version: '002'
     versioning_strategy: literal

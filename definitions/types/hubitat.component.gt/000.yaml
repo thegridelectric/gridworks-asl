@@ -18,9 +18,8 @@ properties:
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this component is built on, an open `pascal.case` string
-      (a `gw1.device.type` value, e.g. `HubitatC7Hub`). The hardware layout enforces
-      membership in `gw1.device.type`.
+      The device category this component is built on, an open
+      pascal-case string.
 
   Hubitat:
     $ref: "https://schemas.electricity.works/types/hubitat.gt/000"
@@ -83,3 +82,5 @@ x-gridworks:
     a canonical seed database (here, the terminalasset registry): the table's rows are
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
+
+    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.

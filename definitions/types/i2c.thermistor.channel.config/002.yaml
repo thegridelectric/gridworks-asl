@@ -20,12 +20,6 @@ properties:
     description: >
       ADC input pin used for this thermistor channel.
 
-  SendToDerived:
-    type: boolean
-    description: >
-      Whether this raw thermistor reading should also be provided to derived
-      channel logic.
-
   ThermistorBeta:
     $ref: "https://schemas.electricity.works/formats/positive.int"
     description: >
@@ -41,7 +35,6 @@ properties:
 required:
   - ChannelName
   - AdcChannel
-  - SendToDerived
   - ThermistorBeta
   - TypeName
   - Version
@@ -53,7 +46,6 @@ examples:
     {
       "ChannelName": "scada",
       "AdcChannel": "P0",
-      "SendToDerived": false,
       "ThermistorBeta": 1,
       "TypeName": "i2c.thermistor.channel.config",
       "Version": "002"

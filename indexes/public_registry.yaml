@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-07-23T18:50:00Z'
+  last_updated: '2026-07-27T16:15:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -1548,13 +1548,38 @@ types:
         schema_url: https://schemas.electricity.works/types/gpio.relay.component.gt/000
         created: '2026-07-03T19:45:00Z'
         status: staging
-        summary: '- Initial version. Board-resident per-relay GPIO component: GpioName
-          (-> board NativeGpioOutputs), DeviceType (gw1.device.type value, e.g. Gw108GpioRelay),
-          ConfigList of exactly one relay.control.config.'
+        summary: '- Initial version. Board-resident per-relay GPIO component: required
+          BoardComponentId (-> scada.board.component.gt), GpioName (-> the board record''s
+          NativeGpioOutputs), ConfigList of exactly one relay.control.config; no DeviceType
+          (TypeName is the kind, the board component carries the board identity).'
         direct_dependencies:
           structural:
           - pascal.case
           - relay.control.config:000
+          - uuid4.str
+  gpio.sensor.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A single board-resident digital sensor read on a native GPIO pin,
+      as one Spaceheat component; board-generic, identified by GpioName against the
+      board's NativeGpioInputs.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gpio.sensor.component.gt/000
+        created: '2026-07-27T16:15:00Z'
+        status: staging
+        summary: '- Initial version. Board-resident per-sensor GPIO component, the
+          input sibling of gpio.relay.component.gt: required BoardComponentId (->
+          scada.board.component.gt), GpioName (-> the board record''s NativeGpioInputs),
+          SenseMode; binary 1/0 sense; no DeviceType (TypeName is the kind, the board
+          component carries the board identity); no SendToDerived (derived routing
+          is computed from DerivedChannel InputChannelNames); no ConfigList (channel
+          binds via DataChannel, capture tuning in operational params). Replaces gw108.gpio.sensor.component.gt.'
+        direct_dependencies:
+          structural:
+          - gpio.sense.mode:000
+          - pascal.case
           - uuid4.str
   gridworks.ack:
     owner: smoothstone-computing
@@ -1650,7 +1675,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.house0.layout/000
-        created: '2026-07-09T17:30:00Z'
+        created: '2026-07-27T16:15:00Z'
         status: staging
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new\
           \ DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida\
@@ -1729,15 +1754,16 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.nolan.layout/000
-        created: '2026-07-19T18:55:00Z'
+        created: '2026-07-27T16:15:00Z'
         status: staging
         summary: Un-drafted for hardware-layout-pass-one (full layouts now, axioms
           later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components
           are the cac-free DeviceType versions; DeviceTypes holds the specialized
           <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada),
-          now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay
-          is gw108.vdc.relay). Nodes/channels ride spaceheat.node.gt/303 + data.channel.gt/003
-          (post-InPowerMetering-fold, matching axiom 1).
+          now non-draft; relay and opto components are the board-generic gpio.relay.component.gt
+          / gpio.sensor.component.gt (GpioName against the board's native-pin registry).
+          Nodes/channels ride spaceheat.node.gt/303 + data.channel.gt/003 (post-InPowerMetering-fold,
+          matching axiom 1).
         direct_dependencies:
           structural:
           - ads111x.based.device.type.gt:000
@@ -1746,13 +1772,14 @@ types:
           - electric.meter.component.gt:002
           - electric.meter.device.type.gt:000
           - g.node.gt:005
+          - gpio.relay.component.gt:000
+          - gpio.sensor.component.gt:000
           - gw1.scada.device.type.gt:000
-          - gw108.gpio.sensor.component.gt:002
-          - gw108.vdc.relay.component.gt:002
           - i2c.multichannel.dt.relay.component.gt:005
           - i2c.thermistor.reader.component.gt:003
           - pico.btu.meter.component.gt:001
           - pico.tank.module.component.gt:012
+          - scada.board.component.gt:000
           - sim.pico.tank.module.component.gt:001
           - spaceheat.node.gt:303
           - web.server.component.gt:002
@@ -1783,7 +1810,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw1.scada.device.type.gt/000
-        created: '2026-07-09T17:30:00Z'
+        created: '2026-07-27T16:15:00Z'
         status: staging
         summary: Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList,
           NativeGpio, Expanders, I2cRelays, CtAdc, ThermistorAdcs, Dacs). The record
@@ -1792,8 +1819,8 @@ types:
         direct_dependencies:
           structural:
           - gw.native.gpio.pin:000
-          - i2c.adc.capability:000
           - i2c.bus:000
+          - i2c.ct.interface.capability:000
           - i2c.dac.capability:000
           - i2c.expander:000
           - i2c.relay.capability:000
@@ -1899,7 +1926,10 @@ types:
     owner: gridworks-energy
     versioning_strategy: literal
     description: 'A GW108-board GPIO sensor component instance: a digital sensor on
-      a GPIO pin, read by polling or edge detection.'
+      a GPIO pin, read by polling or edge detection. Superseded by the board-generic
+      gpio.sensor.component.gt (GpioName against the board''s NativeGpioInputs).'
+    replaced_by:
+    - gpio.sensor.component.gt
     versions:
       '002':
         schema_url: https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/002
@@ -1931,7 +1961,11 @@ types:
     owner: gridworks-energy
     versioning_strategy: literal
     description: 'A GW108-board VDC relay component instance: a relay driven from
-      a GPIO pin, configured by one relay.actor.config.'
+      a GPIO pin, configured by one relay.actor.config. Superseded by the board-generic
+      gpio.relay.component.gt (function belongs to the board''s pin registry and the
+      node/channel names, not the word).'
+    replaced_by:
+    - gpio.relay.component.gt
     versions:
       '002':
         schema_url: https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/002
@@ -2150,25 +2184,6 @@ types:
           - maker.api.attribute.gt:000
           - positive.int
           - uuid4.str
-  i2c.adc.capability:
-    latest_version: '000'
-    owner: gridworks-energy
-    versioning_strategy: literal
-    description: An analog-to-digital converter on a GridWorks SCADA board.
-    versions:
-      '000':
-        schema_url: https://schemas.electricity.works/types/i2c.adc.capability/000
-        created: '2026-07-09T17:30:00Z'
-        status: staging
-        summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, Channels); renames\
-          \ i2c.adc.config \u2014 the record describes what the board offers, not\
-          \ a chosen configuration."
-        direct_dependencies:
-          structural:
-          - i2c.adc.type:000
-          - non.negative.int
-          - pascal.case
-          - positive.int
   i2c.bit.address:
     latest_version: '000'
     owner: gridworks-energy
@@ -2200,6 +2215,28 @@ types:
           structural:
           - non.negative.int
           - pascal.case
+  i2c.ct.interface.capability:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'A current-transformer-reading ADC interface on a GridWorks SCADA
+      board: locator plus reference facts; the CT circuit facts (burden, expected
+      CT kind) land as they are extracted from the schematic.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.ct.interface.capability/000
+        created: '2026-07-27T16:15:00Z'
+        status: staging
+        summary: '- Initial version. CT sibling of i2c.thermistor.interface.capability:
+          Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, Channels. Replaces
+          the generic i2c.adc.capability (deleted; staging-only, single referrer).'
+        direct_dependencies:
+          structural:
+          - i2c.adc.type:000
+          - non.negative.int
+          - pascal.case
+          - positive.float
+          - positive.int
   i2c.dac.capability:
     latest_version: '000'
     owner: gridworks-energy
@@ -2208,7 +2245,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/i2c.dac.capability/000
-        created: '2026-07-09T17:30:00Z'
+        created: '2026-07-27T16:15:00Z'
         status: staging
         summary: "Initial version (DacName, I2cBus, I2cAddress, DacType, Channels);\
           \ renames i2c.dac.config \u2014 the record describes what the board offers,\
@@ -2229,7 +2266,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/i2c.expander/000
-        created: '2026-07-09T17:30:00Z'
+        created: '2026-07-27T16:15:00Z'
         status: staging
         summary: 'Initial version (ExpanderIdx, I2cBus, I2cAddress, AllowedI2cAddressList;
           Axiom 1 AddressSpecification: exactly one of the two address fields).'
@@ -2346,7 +2383,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/i2c.relay.capability/000
-        created: '2026-07-09T17:30:00Z'
+        created: '2026-07-27T16:15:00Z'
         status: staging
         summary: "Initial version (RelayName, ExpanderIdx, RegisterIndex, BitIndex,\
           \ SupportedWiringConfigs, Notes). Replaces i2c.relay.config: 'capability'\
@@ -2370,10 +2407,11 @@ types:
         schema_url: https://schemas.electricity.works/types/i2c.relay.component.gt/000
         created: '2026-07-03T19:45:00Z'
         status: staging
-        summary: "- Initial version. Board-resident per-relay I\xB2C component: RelayName\
-          \ (-> board I2cRelays), DeviceType (gw1.device.type value, e.g. Gw108I2cRelay),\
-          \ ConfigList of exactly one relay.control.config. Replaces the legacy multiplexer\
-          \ (i2c.multichannel.dt.relay.component.gt)."
+        summary: '- Initial version. Board-resident per-relay expander component:
+          required BoardComponentId (-> scada.board.component.gt), RelayName (-> the
+          board record''s I2cRelays), ConfigList of exactly one relay.control.config;
+          no DeviceType (TypeName is the kind, the board component carries the board
+          identity).'
         direct_dependencies:
           structural:
           - pascal.case
@@ -2433,7 +2471,8 @@ types:
         summary: '- Unit: drop (redundant; unit and scaling are carried by channel
           identity) - Exponent: drop (redundant; unit and scaling are carried by channel
           identity) - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs:
-          drop (capture/report tuning moved to operational-params capture.tuning)'
+          drop (capture/report tuning moved to operational-params capture.tuning)
+          - SendToDerived: drop (derived routing is computed from DerivedChannel InputChannelNames)'
         direct_dependencies:
           structural:
           - i2c.adc.channel:000
@@ -2459,7 +2498,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/i2c.thermistor.interface.capability/000
-        created: '2026-07-09T17:30:00Z'
+        created: '2026-07-27T16:15:00Z'
         status: staging
         summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts,\
           \ SeriesResistanceKOhms); renames i2c.thermistor.interface.config \u2014\
@@ -2484,10 +2523,11 @@ types:
         status: staging
         summary: '- Bus, AdcAddress, AdcReferenceVolts, SeriesResistanceKOhms dropped
           (facts on the board''s thermistor-interface capability entry); AdcName added,
-          naming that entry in the board record''s ThermistorAdcs; DeviceType value
-          moves from the board''s category to the ADC''s own (Gw108Adc). Context-dependent:
-          AdcName is derived by matching AdcAddress against the board''s ThermistorAdcs,
-          which the standalone component does not carry.'
+          naming that entry in the board record''s ThermistorAdcs; DeviceType dropped
+          (TypeName is the kind; board identity lives on the board component); BoardComponentId
+          added, anchoring the reader to its scada.board.component.gt. Context-dependent:
+          AdcName and BoardComponentId are derived from the source layout, which the
+          standalone component does not carry.'
         direct_dependencies:
           structural:
           - i2c.thermistor.channel.config:002
@@ -3229,6 +3269,26 @@ types:
           - left.right.dot
           - report:002
           - utc.milliseconds
+          - uuid4.str
+  scada.board.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'One physical scada control board in a deployment: the anchor board-resident
+      device components reference via BoardComponentId; DeviceType names the board
+      kind whose gw1.scada.device.type.gt record carries the physical facts.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/scada.board.component.gt/000
+        created: '2026-07-27T16:15:00Z'
+        status: staging
+        summary: '- Initial version. ComponentId, DeviceType (gw1.device.type board
+          kind), optional I2cAddressList (field-chosen addresses, index-aligned with
+          the record''s Expanders), DisplayName, HwUid.'
+        direct_dependencies:
+          structural:
+          - non.negative.int
+          - pascal.case
           - uuid4.str
   scada.control.capabilities:
     latest_version: '002'

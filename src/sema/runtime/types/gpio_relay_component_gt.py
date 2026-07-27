@@ -10,7 +10,7 @@ class GpioRelayComponentGt(SemaType):
     """Sema: https://schemas.electricity.works/types/gpio.relay.component.gt/000"""
 
     component_id: UUID4Str
-    device_type: PascalCase
+    board_component_id: UUID4Str
     gpio_name: PascalCase
     config_list: list[RelayControlConfig]
     display_name: str | None = None

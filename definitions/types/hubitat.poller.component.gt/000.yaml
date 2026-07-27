@@ -6,7 +6,7 @@ type: object
 description: >
   A Hubitat poller component (one polled Hubitat device instance): the poller settings that
   map a Hubitat device's attributes onto SCADA channels. Flat — the shared component fields
-  are spelled out here; Poller references the hubitat.poller.gt word by $ref.
+  are spelled out here; Poller references the poller record word by $ref.
 
 properties:
 
@@ -18,9 +18,8 @@ properties:
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this component is built on, an open `pascal.case` string
-      (a `gw1.device.type` value). The hardware layout enforces membership in
-      `gw1.device.type`.
+      The device category this component is built on, an open
+      pascal-case string.
 
   Poller:
     $ref: "https://schemas.electricity.works/types/hubitat.poller.gt/000"
@@ -92,3 +91,7 @@ x-gridworks:
     a canonical seed database (here, the terminalasset registry): the table's rows are
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
+
+    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.
+
+    The poller record is a `hubitat.poller.gt`.

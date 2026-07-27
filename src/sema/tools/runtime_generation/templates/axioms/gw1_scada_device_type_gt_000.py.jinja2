@@ -40,3 +40,27 @@
                 f"{missing} are not declared in Expanders."
             )
         return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "{{ gw1_scada_device_type_gt_000_class_name }}":
+        """
+        Axiom 3: BoardIdentifierUniqueness
+        The board's silk-screen namespace is one namespace: the union of every
+        RelayName in I2cRelays, the CtAdc Name, every Name in ThermistorAdcs,
+        every DacName in Dacs, and every Name in NativeGpioInputs and
+        NativeGpioOutputs SHALL contain no duplicates within the record.
+        """
+        names = [r.relay_name for r in (self.i2c_relays or [])]
+        if self.ct_adc is not None:
+            names.append(self.ct_adc.name)
+        names += [a.name for a in (self.thermistor_adcs or [])]
+        names += [d.dac_name for d in (self.dacs or [])]
+        names += [p.name for p in (self.native_gpio_inputs or [])]
+        names += [p.name for p in (self.native_gpio_outputs or [])]
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        if dupes:
+            raise ValueError(
+                "Axiom 3 (BoardIdentifierUniqueness) failed: duplicate board "
+                f"identifier name(s) {dupes}."
+            )
+        return self

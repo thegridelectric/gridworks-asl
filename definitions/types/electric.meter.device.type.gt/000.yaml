@@ -5,8 +5,7 @@ title: "electric.meter.device.type.gt"
 type: object
 description: >
   DRAFT. The specialized device-type record for an electric-meter device category
-  — the per-family successor to `electric.meter.cac.gt`. Keyed by `DeviceType` (a
-  `gw1.device.type` value) instead of a make/model + cac UUID, it carries the
+  — the per-family successor to the retired cac record. Keyed by `DeviceType` (a device-category value) instead of a make/model + cac UUID, it carries the
   category-level data an electric-meter component does not: the telemetry names the
   meter type can report, its shortest poll period, and its default serial baud. A
   component joins this record by the shared `DeviceType` value. Flat.
@@ -16,9 +15,8 @@ properties:
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this record describes, an open `pascal.case` string (a
-      `gw1.device.type` value, e.g. `EgaugePowerMeter`). The hardware layout
-      enforces membership in `gw1.device.type`.
+      The device category this component is built on, an open
+      pascal-case string.
 
   DisplayName:
     type: string
@@ -61,3 +59,7 @@ x-gridworks:
     a canonical seed database (here, the terminalasset registry): the table's rows are
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
+
+    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.
+
+    Replaces the retired `electric.meter.cac.gt`.

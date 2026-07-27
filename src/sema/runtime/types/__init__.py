@@ -34,6 +34,7 @@ from sema.runtime.types.g_node_instance_gt import GNodeInstanceGt
 from sema.runtime.types.g_node_reparent_cmd import GNodeReparentCmd
 from sema.runtime.types.glitch import Glitch
 from sema.runtime.types.gpio_relay_component_gt import GpioRelayComponentGt
+from sema.runtime.types.gpio_sensor_component_gt import GpioSensorComponentGt
 from sema.runtime.types.gridworks_ack import GridworksAck
 from sema.runtime.types.gridworks_event_problem import GridworksEventProblem
 from sema.runtime.types.gridworks_header import GridworksHeader
@@ -65,9 +66,9 @@ from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_gt import HubitatGt
 from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
 from sema.runtime.types.hubitat_poller_gt import HubitatPollerGt
-from sema.runtime.types.i2c_adc_capability import I2cAdcCapability
 from sema.runtime.types.i2c_bit_address import I2cBitAddress
 from sema.runtime.types.i2c_bus import I2cBus
+from sema.runtime.types.i2c_ct_interface_capability import I2cCtInterfaceCapability
 from sema.runtime.types.i2c_dac_capability import I2cDacCapability
 from sema.runtime.types.i2c_expander import I2cExpander
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
@@ -109,6 +110,7 @@ from sema.runtime.types.relay_actor_config import RelayActorConfig
 from sema.runtime.types.relay_control_config import RelayControlConfig
 from sema.runtime.types.report import Report
 from sema.runtime.types.report_event import ReportEvent
+from sema.runtime.types.scada_board_component_gt import ScadaBoardComponentGt
 from sema.runtime.types.scada_control_capabilities import ScadaControlCapabilities
 from sema.runtime.types.scada_params import ScadaParams
 from sema.runtime.types.send_control_capabilities import SendControlCapabilities
@@ -177,6 +179,7 @@ __all__ = [
     "GNodeReparentCmd",
     "Glitch",
     "GpioRelayComponentGt",
+    "GpioSensorComponentGt",
     "GridworksAck",
     "GridworksEventProblem",
     "GridworksHeader",
@@ -206,9 +209,9 @@ __all__ = [
     "HubitatGt",
     "HubitatPollerComponentGt",
     "HubitatPollerGt",
-    "I2cAdcCapability",
     "I2cBitAddress",
     "I2cBus",
+    "I2cCtInterfaceCapability",
     "I2cDacCapability",
     "I2cExpander",
     "I2cMultichannelDtRelayComponentGt",
@@ -242,6 +245,7 @@ __all__ = [
     "RelayControlConfig",
     "Report",
     "ReportEvent",
+    "ScadaBoardComponentGt",
     "ScadaControlCapabilities",
     "ScadaParams",
     "SendControlCapabilities",

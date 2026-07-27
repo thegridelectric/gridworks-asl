@@ -32,6 +32,8 @@ class I2cThermistorChannelConfig001(SemaType):
         - Exponent: drop (redundant; unit and scaling are carried by channel identity)
         - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop
           (capture/report tuning moved to operational-params capture.tuning)
+        - SendToDerived: drop (derived routing is computed from DerivedChannel
+          InputChannelNames)
         """
         data = self.model_dump()
         del data["unit"]
@@ -41,6 +43,7 @@ class I2cThermistorChannelConfig001(SemaType):
             "async_capture",
             "async_capture_delta",
             "poll_period_ms",
+            "send_to_derived",
         ):
             data.pop(key, None)
         data["version"] = "002"

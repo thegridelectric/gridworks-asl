@@ -6,13 +6,13 @@ type: object
 description: >
   Control configuration for a relay-backed Spaceheat actor on a board-resident relay.
 
-  A relay.control.config binds one named relay to a controlling actor and declares the
+  A control config binds one named relay to a controlling actor and declares the
   event/state semantics associated with energizing and de-energizing it. The relay it
   controls is identified by name against the board (the containing component's board
   reference), NOT by a positional index — this is the board-resident successor to
-  relay.actor.config, which carried a positional RelayIdx. It carries only the actor-level
+  relay actor config, which carried a positional RelayIdx. It carries only the actor-level
   hardware binding and relay semantics; the physical address lives on the board
-  (gw1.scada.device.type.gt), and capture/report tuning lives in operational-params
+  (the board's device-type record), and capture/report tuning lives in operational-params
   (capture.tuning), not here.
 
 properties:

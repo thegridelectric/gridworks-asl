@@ -70,7 +70,7 @@ properties:
       driven through the board's expanders.
 
   CtAdc:
-    $ref: "https://schemas.electricity.works/types/i2c.adc.capability/000"
+    $ref: "https://schemas.electricity.works/types/i2c.ct.interface.capability/000"
     description: >
       The current-transformer ADC, when present.
 
@@ -179,6 +179,13 @@ x-gridworks:
       statement: >
         Every ExpanderIdx referenced by an entry in I2cRelays SHALL appear as
         an ExpanderIdx in Expanders.
+    - number: 3
+      name: "BoardIdentifierUniqueness"
+      statement: >
+        The board's silk-screen namespace is one namespace: the union of every
+        RelayName in I2cRelays, the CtAdc Name, every Name in ThermistorAdcs,
+        every DacName in Dacs, and every Name in NativeGpioInputs and
+        NativeGpioOutputs SHALL contain no duplicates within the record.
   extended_description: >
     Various hardware layouts enforce membership in `gw1.device.type` for the
     DeviceType (e.g. `GridworksScadaGw108`, `KridaDoubleRelayBoard16`). The
