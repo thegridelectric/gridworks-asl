@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from sema.interfaces.cli import snapshot
-from sema.tools.build_public_registry import build_public_registry, load_registry
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,11 +21,6 @@ def test_strict_lint_build_is_clean(monkeypatch, tmp_path: Path) -> None:
     """
     output_root = tmp_path / "output"
     monkeypatch.setattr(snapshot, "OUTPUT_DIR", output_root)
-    monkeypatch.setattr(
-        snapshot,
-        "build_public_registry_index",
-        lambda: build_public_registry(load_registry()),
-    )
 
     # layout.lite include_all_versions pulls staging versions (013+), so this
     # is a dev snapshot; the lint guard's coverage is what matters here.
