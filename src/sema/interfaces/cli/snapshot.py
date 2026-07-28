@@ -10,7 +10,12 @@ from pathlib import Path
 
 import yaml
 
-from sema.tools.build_public_registry import build as build_public_registry_index
+from sema.tools.build_public_registry import (
+    OUTPUT_PATH as PUBLIC_REGISTRY_PATH,
+)
+from sema.tools.build_public_registry import (
+    build_public_registry,
+)
 from sema.tools.build_seed_dag import build_seed_dag_from_data
 from sema.tools.build_seed_definitions import (
     OUTPUT_DIR,
@@ -42,10 +47,36 @@ _RUNTIME_FILES = (
 _RUNTIME_DIRS = ("enums", "types", "samples", "tests")
 
 
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+
+
+def _ensure_clean_checkout() -> None:
+    """Snapshot commands read committed registry state and write only under
+    output/ — a snapshot must be reproducible from a commit hash, so running
+    over uncommitted edits is refused. Silently skipped when git is
+    unavailable (e.g. an installed package outside a checkout)."""
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(_REPO_ROOT), "status", "--porcelain"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except OSError:
+        return
+    if result.returncode != 0:
+        return
+    if result.stdout.strip():
+        raise SystemExit(
+            "sema checkout has uncommitted changes — snapshot commands run only\n"
+            "from a clean checkout so the result is reproducible from a commit\n"
+            "hash. Commit or stash first.\n"
+            f"{result.stdout.rstrip()}"
+        )
+
+
 def snapshot_root() -> Path:
     return resolve_target_path("snapshot", str(OUTPUT_DIR))
-
-
 
 
 STAGING_README_BANNER = """\
@@ -167,13 +198,26 @@ def _reject_drafts_in_seed_request(seed_request: dict, public_registry: dict) ->
 
 
 def prepare_snapshot(seed_request: Path, *, allow_staged: bool = False) -> Path:
-    # Regenerate indexes/public_registry.yaml first. This validates:
+    # Compute the public registry in memory. This validates:
     #   - status placement (word-level only on versionless / literal /
     #     formats; otherwise version-level)
     #   - published-vs-draft dependency closure (published SHALL NOT depend on
     #     draft, transitively or directly)
     # and raises ValueError if the registry is in an inconsistent state.
-    public_registry = build_public_registry_index()
+    # Nothing is written into the repo tree — indexes/public_registry.yaml is
+    # scripts/build_indexes.sh's to regenerate. Because expand_seed reads the
+    # committed indexes, refuse when they are stale against definitions/.
+    public_registry = build_public_registry(load_registry())
+    committed = (
+        yaml.safe_load(PUBLIC_REGISTRY_PATH.open())
+        if PUBLIC_REGISTRY_PATH.exists()
+        else None
+    )
+    if committed != public_registry:
+        raise ValueError(
+            "indexes/public_registry.yaml is stale against definitions/registry.yaml"
+            " — run scripts/build_indexes.sh, commit, and retry."
+        )
 
     seed_request_path = seed_request.resolve()
     with seed_request_path.open() as handle:
@@ -342,6 +386,7 @@ def build_snapshot_runtime(package_name: str, *, strict_lint: bool = False) -> P
 
 
 def _run_prepare(args: argparse.Namespace) -> None:
+    _ensure_clean_checkout()
     target_root = prepare_snapshot(
         Path(args.seed_request), allow_staged=args.allow_staged
     )
@@ -351,6 +396,7 @@ def _run_prepare(args: argparse.Namespace) -> None:
 
 
 def _run_build(args: argparse.Namespace) -> None:
+    _ensure_clean_checkout()
     target_root = build_snapshot_runtime(
         args.package_name, strict_lint=args.strict_lint
     )

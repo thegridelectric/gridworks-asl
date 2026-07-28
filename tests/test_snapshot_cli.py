@@ -3,34 +3,27 @@ from pathlib import Path
 import pytest
 
 from sema.interfaces.cli import snapshot
-from sema.tools.build_public_registry import build_public_registry, load_registry
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_snapshot_prepare_rejects_staging_by_default(monkeypatch, tmp_path: Path) -> None:
+def test_snapshot_prepare_rejects_staging_by_default(
+    monkeypatch, tmp_path: Path
+) -> None:
     # The template seed pulls layout.lite:013, which is staging — so the
     # published-only default must fail and name the staging offenders.
     monkeypatch.setattr(snapshot, "OUTPUT_DIR", tmp_path / "output")
-    monkeypatch.setattr(
-        snapshot,
-        "build_public_registry_index",
-        lambda: build_public_registry(load_registry()),
-    )
     with pytest.raises(ValueError, match="STAGING") as excinfo:
         snapshot.prepare_snapshot(ROOT / "template_seed_request.yaml")
     assert "layout.lite:013" in str(excinfo.value)
 
 
-def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_path: Path) -> None:
+def test_snapshot_prepare_and_build_write_sema_at_output_root(
+    monkeypatch, tmp_path: Path
+) -> None:
     output_root = tmp_path / "output"
     monkeypatch.setattr(snapshot, "OUTPUT_DIR", output_root)
-    monkeypatch.setattr(
-        snapshot,
-        "build_public_registry_index",
-        lambda: build_public_registry(load_registry()),
-    )
 
     target_root = snapshot.prepare_snapshot(
         ROOT / "template_seed_request.yaml", allow_staged=True
@@ -53,7 +46,9 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
     stale_file.write_text("remove me")
     local_names = target_root / "indexes" / "local_names.yaml"
     local_names.write_text(
-        local_names.read_text().replace("layout.lite: layout.lite", "layout.lite: lite.layout")
+        local_names.read_text().replace(
+            "layout.lite: layout.lite", "layout.lite: lite.layout"
+        )
     )
 
     assert (
@@ -67,7 +62,10 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
     local_names.write_text(
         local_names.read_text()
         .replace("layout.lite: layout.lite", "layout.lite: lite.layout")
-        .replace("gw1.emission.method: gw1.emission.method", "gw1.emission.method: emission.method")
+        .replace(
+            "gw1.emission.method: gw1.emission.method",
+            "gw1.emission.method: emission.method",
+        )
         .replace(
             "gw1.seasonal.storage.mode: gw1.seasonal.storage.mode",
             "gw1.seasonal.storage.mode: seasonal.storage.mode",
@@ -99,9 +97,15 @@ def test_snapshot_prepare_and_build_write_sema_at_output_root(monkeypatch, tmp_p
     assert "class LiteLayout" in lite_layout
     assert "from gjk.sema.logic" not in lite_layout
     assert "def check_axiom_1" in lite_layout
-    assert "from gjk.sema.enums.seasonal_storage_mode import SeasonalStorageMode" in enum_init
+    assert (
+        "from gjk.sema.enums.seasonal_storage_mode import SeasonalStorageMode"
+        in enum_init
+    )
     assert "from gjk.sema.enums import SeasonalStorageMode" in lite_layout
 
     assert snapshot.build_snapshot_runtime("gjk") == target_root
     assert "def check_axiom_1" in (target_root / "types" / "lite_layout.py").read_text()
-    assert "def upgrade" in (target_root / "types" / "old_versions" / "lite_layout_011.py").read_text()
+    assert (
+        "def upgrade"
+        in (target_root / "types" / "old_versions" / "lite_layout_011.py").read_text()
+    )
