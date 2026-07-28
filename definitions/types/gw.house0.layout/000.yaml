@@ -83,7 +83,7 @@ properties:
         - $ref: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
 
   Hydronic:
-    $ref: "https://schemas.electricity.works/types/gw.house0.hydronic/000"
+    $ref: "https://schemas.electricity.works/types/gw.hydronic/000"
 
   TypeName:
     const: "gw.house0.layout"

@@ -238,11 +238,6 @@ types:
   gw:
     versioning_strategy: none
     schema: definitions/types/gw.yaml
-  gw.house0.hydronic:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/gw.house0.hydronic/000.yaml
   gw.house0.layout:
     latest_version: '000'
     versioning_strategy: literal
@@ -253,6 +248,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.house0.operational.params/000.yaml
+  gw.hydronic:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.hydronic/000.yaml
   gw.native.gpio.pin:
     latest_version: '000'
     versioning_strategy: literal

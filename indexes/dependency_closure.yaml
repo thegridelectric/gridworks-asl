@@ -558,16 +558,6 @@ types:
       - left.right.dot
       types: []
       versionless_types: []
-  gw.house0.hydronic:
-    '000':
-      enums:
-      - gw.house0.primary.flow.source:000
-      formats:
-      - non.negative.int
-      - spaceheat.name
-      types:
-      - gw1.hvac.zone:000
-      versionless_types: []
   gw.house0.layout:
     '000':
       enums:
@@ -615,7 +605,7 @@ types:
       - electric.meter.component.gt:002
       - electric.meter.device.type.gt:000
       - g.node.gt:005
-      - gw.house0.hydronic:000
+      - gw.hydronic:000
       - gw.native.gpio.pin:000
       - gw1.hvac.zone:000
       - gw1.scada.device.type.gt:000
@@ -661,6 +651,16 @@ types:
       - g.node.gt:005
       - heating.curve:000
       versionless_types: []
+  gw.hydronic:
+    '000':
+      enums:
+      - gw.house0.primary.flow.source:000
+      formats:
+      - non.negative.int
+      - spaceheat.name
+      types:
+      - gw1.hvac.zone:000
+      versionless_types: []
   gw.native.gpio.pin:
     '000':
       enums: []
@@ -677,6 +677,7 @@ types:
       - g.node.status:000
       - gpio.sense.mode:000
       - gpm.from.hz.method:000
+      - gw.house0.primary.flow.source:000
       - gw1.actor.class:012
       - gw1.emission.method:000
       - gw1.quantity:000
@@ -712,7 +713,9 @@ types:
       - g.node.gt:005
       - gpio.relay.component.gt:000
       - gpio.sensor.component.gt:000
+      - gw.hydronic:000
       - gw.native.gpio.pin:000
+      - gw1.hvac.zone:000
       - gw1.scada.device.type.gt:000
       - gw1.unit.quantity.projection:000
       - i2c.bus:000

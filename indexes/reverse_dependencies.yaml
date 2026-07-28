@@ -147,10 +147,11 @@ types:
     '000':
       used_by:
       - gw.nolan.layout:000
-  gw.house0.hydronic:
+  gw.hydronic:
     '000':
       used_by:
       - gw.house0.layout:000
+      - gw.nolan.layout:000
   gw.native.gpio.pin:
     '000':
       used_by:
@@ -158,7 +159,7 @@ types:
   gw1.hvac.zone:
     '000':
       used_by:
-      - gw.house0.hydronic:000
+      - gw.hydronic:000
   gw1.scada.device.type.gt:
     '000':
       used_by:
@@ -504,7 +505,7 @@ enums:
   gw.house0.primary.flow.source:
     '000':
       used_by:
-      - gw.house0.hydronic:000
+      - gw.hydronic:000
   gw1.actor.class:
     009:
       used_by:
@@ -797,8 +798,8 @@ formats:
     - relay.control.config:000
   non.negative.int:
     used_by:
-    - gw.house0.hydronic:000
     - gw.house0.operational.params:000
+    - gw.hydronic:000
     - gw.native.gpio.pin:000
     - i2c.bit.address:000
     - i2c.bus:000

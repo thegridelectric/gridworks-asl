@@ -6,8 +6,8 @@ from sema.runtime.property_format import NonNegativeInt
 from sema.runtime.types.gw1_hvac_zone import Gw1HvacZone
 
 
-class GwHouse0Hydronic(SemaType):
-    """Sema: https://schemas.electricity.works/types/gw.house0.hydronic/000"""
+class GwHydronic(SemaType):
+    """Sema: https://schemas.electricity.works/types/gw.hydronic/000"""
 
     zones: list[Gw1HvacZone]
     total_store_tanks: NonNegativeInt
@@ -15,7 +15,7 @@ class GwHouse0Hydronic(SemaType):
     sieg_loop_plumbed: bool
     primary_flow_source: GwHouse0PrimaryFlowSource
     strategy: str
-    type_name: Literal["gw.house0.hydronic"] = "gw.house0.hydronic"
+    type_name: Literal["gw.hydronic"] = "gw.hydronic"
     version: Literal["000"] = "000"
 
     @model_validator(mode="after")

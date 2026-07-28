@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-27T16:15:00Z"
+  last_updated: "2026-07-28T11:20:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1878,25 +1878,6 @@ types:
       structural:
         - "gridworks.header:001"
 
-  gw.house0.hydronic:
-    latest_version: "000"
-    owner: gridworks-energy
-    versioning_strategy: "literal"
-    description: "House0-fleet hydronic / flow-topology config: zones, store-tank count, Siegenthaler-loop topology, primary-flow source, strategy."
-
-    versions:
-      "000":
-        schema_url: "https://schemas.electricity.works/types/gw.house0.hydronic/000"
-        created: "2026-06-15T17:30:00Z"
-        status: "staging"
-        summary: >-
-          - Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axiom 1: UseSiegLoop implies SiegLoopPlumbed.
-        direct_dependencies:
-          structural:
-            - "gw.house0.primary.flow.source:000"
-            - "gw1.hvac.zone:000"
-            - "non.negative.int"
-
   gw.house0.layout:
     latest_version: "000"
     owner: gridworks-energy
@@ -1919,7 +1900,7 @@ types:
             - "electric.meter.component.gt:002"
             - "electric.meter.device.type.gt:000"
             - "g.node.gt:005"
-            - "gw.house0.hydronic:000"
+            - "gw.hydronic:000"
             - "gw1.scada.device.type.gt:000"
             - "hubitat.component.gt:000"
             - "hubitat.poller.component.gt:000"
@@ -1953,6 +1934,25 @@ types:
             - "heating.curve:000"
             - "non.negative.int"
             - "positive.int"
+
+  gw.hydronic:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "House0-fleet hydronic / flow-topology config: zones, store-tank count, Siegenthaler-loop topology, primary-flow source, strategy."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.hydronic/000"
+        created: "2026-06-15T17:30:00Z"
+        status: "staging"
+        summary: >-
+          - Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axiom 1: UseSiegLoop implies SiegLoopPlumbed.
+        direct_dependencies:
+          structural:
+            - "gw.house0.primary.flow.source:000"
+            - "gw1.hvac.zone:000"
+            - "non.negative.int"
 
   gw.native.gpio.pin:
     latest_version: "000"
@@ -1992,6 +1992,7 @@ types:
             - "g.node.gt:005"
             - "gpio.relay.component.gt:000"
             - "gpio.sensor.component.gt:000"
+            - "gw.hydronic:000"
             - "gw1.scada.device.type.gt:000"
             - "i2c.multichannel.dt.relay.component.gt:005"
             - "i2c.thermistor.reader.component.gt:003"

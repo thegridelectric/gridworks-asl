@@ -1,4 +1,4 @@
-from typing import Any, Literal
+from typing import Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.types.ads111x_based_device_type_gt import Ads111xBasedDeviceTypeGt
@@ -10,6 +10,7 @@ from sema.runtime.types.g_node_gt import GNodeGt
 from sema.runtime.types.gpio_relay_component_gt import GpioRelayComponentGt
 from sema.runtime.types.gpio_sensor_component_gt import GpioSensorComponentGt
 from sema.runtime.types.gw1_scada_device_type_gt import Gw1ScadaDeviceTypeGt
+from sema.runtime.types.gw_hydronic import GwHydronic
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
@@ -48,7 +49,7 @@ class GwNolanLayout(SemaType):
     device_types: list[
         ElectricMeterDeviceTypeGt | Ads111xBasedDeviceTypeGt | Gw1ScadaDeviceTypeGt
     ]
-    hydronic: dict[str, Any]
+    hydronic: GwHydronic
     type_name: Literal["gw.nolan.layout"] = "gw.nolan.layout"
     version: Literal["000"] = "000"
 
