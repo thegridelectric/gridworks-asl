@@ -5,9 +5,8 @@ title: "ads111x.based.device.type.gt"
 type: object
 description: >
   DRAFT. The specialized device-type record for an ADS111x-based analog temperature
-  sensor device category — the per-family successor to the field `ads111x.based.cac.gt`.
-  This is what beech, oak, maple, fir, and elm use. Keyed by `DeviceType` (a
-  `gw1.device.type` value) instead of a make/model + cac UUID, it carries the
+  sensor device category — the per-family successor to the field the retired cac record.
+  This is what beech, oak, maple, fir, and elm use. Keyed by `DeviceType` (a device-category value) instead of a make/model + cac UUID, it carries the
   category-level data: the ADS111x I2C addresses, the number of terminal blocks, the
   telemetry names it reports, and its shortest poll period. A component joins this
   record by the shared `DeviceType` value. Flat.
@@ -17,9 +16,8 @@ properties:
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this record describes, an open `pascal.case` string (a
-      `gw1.device.type` value). The hardware layout enforces membership in
-      `gw1.device.type`.
+      The device category this component is built on, an open
+      pascal-case string.
 
   DisplayName:
     type: string
@@ -71,3 +69,7 @@ x-gridworks:
     a canonical seed database (here, the terminalasset registry): the table's rows are
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
+
+    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.
+
+    Replaces the retired `ads111x.based.cac.gt`.

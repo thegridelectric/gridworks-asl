@@ -1,23 +1,26 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/002"
+$id: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/003"
 
 title: "i2c.thermistor.reader.component.gt"
 type: object
 description: >
-  Configuration for an I2C thermistor reader component that samples one ADC
-  device and publishes one or more thermistor-backed temperature channels. Flat —
-  the shared component fields are spelled out here.
+  Configuration for an I2C thermistor reader component that samples one board-resident
+  ADC and publishes one or more thermistor-backed temperature channels. Board-generic:
+  the ADC is identified by `AdcName`, resolved against the ThermistorAdcs of the
+  board record reached via BoardComponentId (the scada board component, whose
+  DeviceType names the board's board device-type record carrying the
+  physical facts: bus, address, reference volts, series resistance). The
+  component carries only identity, channel configs, and the temperature calculation
+  method. Flat — the shared component fields are spelled out here.
 
 properties:
   ComponentId:
     $ref: "https://schemas.electricity.works/formats/uuid4.str"
 
-  DeviceType:
-    $ref: "https://schemas.electricity.works/formats/pascal.case"
+  BoardComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
     description: >
-      The device category this component is built on, an open `pascal.case`
-      string (a `gw1.device.type` value). The hardware layout enforces
-      membership in `gw1.device.type`.
+      The component id of the scada board this device is resident on.
 
   ConfigList:
     type: array
@@ -32,26 +35,11 @@ properties:
   HwUid:
     type: string
 
-  Bus:
-    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+  AdcName:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      Logical bus name identifying the I2C bus on which this ADC is attached.
-
-  AdcAddress:
-    type: integer
-    description: >
-      7-bit I2C address of the ADC device.
-
-  AdcReferenceVolts:
-    $ref: "https://schemas.electricity.works/formats/positive.float"
-    description: >
-      Reference voltage used by the ADC when converting measured voltage to a
-      serialized reading.
-
-  SeriesResistanceKOhms:
-    $ref: "https://schemas.electricity.works/formats/positive.float"
-    description: >
-      Series resistance, in kilo-ohms, used in the thermistor divider circuit.
+      The name of the board ADC this reader samples, intended to be uniquely
+      identifiable on the board.
 
   TempCalcMethod:
     $ref: "https://schemas.electricity.works/enums/temp.calc.method/000"
@@ -60,16 +48,13 @@ properties:
     const: "i2c.thermistor.reader.component.gt"
 
   Version:
-    const: "002"
+    const: "003"
 
 required:
   - ComponentId
-  - DeviceType
+  - BoardComponentId
   - ConfigList
-  - Bus
-  - AdcAddress
-  - AdcReferenceVolts
-  - SeriesResistanceKOhms
+  - AdcName
   - TempCalcMethod
   - TypeName
   - Version
@@ -80,7 +65,7 @@ examples:
   - |
     {
       "ComponentId": "8879f861-add7-4b45-a200-1c2e29c49fdf",
-      "DeviceType": "GridworksScadaGw108",
+      "BoardComponentId": "9b1c5e2a-77d4-4f6e-8c3a-5f2e9d101b44",
       "ConfigList": [
         {
           "ChannelName": "scada",
@@ -90,13 +75,10 @@ examples:
           "Version": "002"
         }
       ],
-      "Bus": "scada",
-      "AdcAddress": 0,
-      "AdcReferenceVolts": 1,
-      "SeriesResistanceKOhms": 1,
+      "AdcName": "Thermistors",
       "TempCalcMethod": "SimpleBeta",
       "TypeName": "i2c.thermistor.reader.component.gt",
-      "Version": "002"
+      "Version": "003"
     }
 x-gridworks:
   owner: "gridworks-energy"
@@ -110,3 +92,5 @@ x-gridworks:
     a canonical seed database (here, the terminalasset registry): the table's rows are
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
+
+    The board's physical facts live on its `gw1.scada.device.type.gt` record.

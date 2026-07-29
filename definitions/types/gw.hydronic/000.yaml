@@ -1,10 +1,11 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/gw.house0.hydronic/000"
+$id: "https://schemas.electricity.works/types/gw.hydronic/000"
 
-title: "gw.house0.hydronic"
+title: "gw.hydronic"
 type: object
 description: >
-  The hydronic / flow-topology configuration of a House0-fleet layout: its
+  The hydronic / flow-topology configuration of a hydronic space-heating
+  layout (House0 and Nolan strategies alike): its
   heating zones, store-tank count, Siegenthaler-loop topology (plumbed? actively
   controlled?), how primary-loop flow is obtained, and the control strategy. The
   measured-vs-derived "primary-flow" choice is a physical-topology fact carried
@@ -52,7 +53,7 @@ properties:
       The layout's control strategy label (e.g. "House0").
 
   TypeName:
-    const: "gw.house0.hydronic"
+    const: "gw.hydronic"
 
   Version:
     const: "000"
@@ -81,7 +82,7 @@ examples:
       "SiegLoopPlumbed": true,
       "PrimaryFlowSource": "Measured",
       "Strategy": "House0",
-      "TypeName": "gw.house0.hydronic",
+      "TypeName": "gw.hydronic",
       "Version": "000"
     }
 

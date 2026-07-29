@@ -22,14 +22,14 @@ properties:
       $ref: "https://schemas.electricity.works/types/g.node.gt/005"
     description: >
       List of Grid Node identity objects included in this layout snapshot.
-      Each element is a fully specified g.node.gt instance; the set of
+      Each element is a fully specified Grid Node identity record; the set of
       GNodeClass values that must be present is constrained by
       NolanGNodeSet (axiom 1).
 
   ShNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/303"
     description: >
       List of Spaceheat nodes representing operational roles in the system.
       Keys are SpaceheatName identifiers. Each node corresponds to a functional
@@ -38,7 +38,7 @@ properties:
   DataChannels:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/data.channel.gt/002"
+      $ref: "https://schemas.electricity.works/types/data.channel.gt/003"
     description: >
       List of raw telemetry channels produced by the SCADA system.
       
@@ -57,10 +57,11 @@ properties:
     items:
       oneOf:
         - $ref: "https://schemas.electricity.works/types/electric.meter.component.gt/002"
-        - $ref: "https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/002"
-        - $ref: "https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/gpio.sensor.component.gt/000"
+        - $ref: "https://schemas.electricity.works/types/gpio.relay.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/005"
-        - $ref: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/003"
+        - $ref: "https://schemas.electricity.works/types/scada.board.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/001"
         - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/012"
         - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"
@@ -69,7 +70,7 @@ properties:
   DeviceTypes:
     type: array
     description: >
-      The specialized per-family device-type records (`<family>.device.type.gt`) for the
+      The specialized per-family device-type records for the
       device categories present in `Components` that carry category-level data. A component
       joins its record by the shared `DeviceType` value (see the device-type membership
       axiom). Replaces the former make/model-as-CAC list.
@@ -80,12 +81,7 @@ properties:
         - $ref: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
 
   Hydronic:
-    type: object
-    description: >
-      Hydronic system configuration parameters used to determine required
-      SpaceHeat nodes, including store tank indexing and other topology-driving
-      values.
-    additionalProperties: true
+    $ref: "https://schemas.electricity.works/types/gw.hydronic/000"
 
   TypeName:
     const: "gw.nolan.layout"
@@ -121,5 +117,16 @@ x-gridworks:
         per-node InPowerMetering flag; the NameplatePowerW obligation folds in spaceheat.node.gt's
         retired InPowerMetering-requires-nameplate axiom.)
 
+    - number: 2
+      name: "BoardResolution"
+      statement: >
+        For every board-resident component in Components (gpio.sensor.component.gt,
+        gpio.relay.component.gt, i2c.thermistor.reader.component.gt): its
+        BoardComponentId SHALL equal the ComponentId of a scada.board.component.gt in
+        Components; that board component's DeviceType SHALL match the DeviceType of a
+        gw1.scada.device.type.gt record in DeviceTypes; and the component's board name
+        (GpioName against NativeGpioInputs for sensors, GpioName against
+        NativeGpioOutputs for relays, AdcName against the ThermistorAdcs Names for
+        thermistor readers) SHALL match a Name in that record.
   extended_description: >
     TODO: add Nolan specific information (e.g. radiant floor heating, Gw108).

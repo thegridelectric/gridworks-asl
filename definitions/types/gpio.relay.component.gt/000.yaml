@@ -6,29 +6,28 @@ type: object
 description: >
   A single board-resident relay driven by a native (on-board) GPIO pin, as one Spaceheat
   component. Board-generic: it works on any board that exposes native GPIO outputs (e.g. a
-  GW108), distinguished by its DeviceType value (Gw108GpioRelay, …).
+  GW108), anchored to its board by BoardComponentId.
 
-  It is thin — it names which GPIO output drives it (GpioName, resolved against the board's
-  NativeGpioOutputs list on gw1.scada.device.type.gt, reached from the node's BoardComponentId)
-  and carries one relay.control.config for the actor-level control semantics. It does NOT
+  It is thin — it names its board (BoardComponentId, the scada board component this relay
+  is resident on), which GPIO output drives it (GpioName, resolved against that board's
+  NativeGpioOutputs), and carries one control config for the actor-level control
+  semantics. It does NOT
   restate the physical pin (BCM number) — that is the board's single source of truth.
 
 properties:
   ComponentId:
     $ref: "https://schemas.electricity.works/formats/uuid4.str"
 
-  DeviceType:
-    $ref: "https://schemas.electricity.works/formats/pascal.case"
+  BoardComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
     description: >
-      The device category this component is built on, an open `pascal.case` string (a
-      `gw1.device.type` value, e.g. Gw108GpioRelay). The hardware layout enforces membership
-      in `gw1.device.type`.
+      The component id of the scada board this device is resident on.
 
   GpioName:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The board GPIO output that drives this relay, by name — matches a Name in the board's
-      NativeGpioOutputs list (gw1.scada.device.type.gt), which holds the physical BCM pin.
+      The name of the board GPIO output that drives this relay, intended to be
+      uniquely identifiable on the board.
 
   ConfigList:
     type: array
@@ -52,7 +51,7 @@ properties:
 
 required:
   - ComponentId
-  - DeviceType
+  - BoardComponentId
   - GpioName
   - ConfigList
   - TypeName
@@ -64,7 +63,7 @@ examples:
   - |
     {
       "ComponentId": "1c9f2b7e-4a3d-4e21-9c88-2b1a6f0e3d55",
-      "DeviceType": "Gw108GpioRelay",
+      "BoardComponentId": "9b1c5e2a-77d4-4f6e-8c3a-5f2e9d101b44",
       "GpioName": "OilBoilerRelay",
       "ConfigList": [
         {
@@ -105,3 +104,5 @@ x-gridworks:
     a canonical seed database (here, the terminalasset registry): the table's rows are
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
+
+    The control-config entries are `relay.control.config` records.

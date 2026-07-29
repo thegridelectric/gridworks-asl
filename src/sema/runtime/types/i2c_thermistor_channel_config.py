@@ -10,7 +10,6 @@ class I2cThermistorChannelConfig(SemaType):
 
     channel_name: SpaceheatName
     adc_channel: I2cAdcChannel
-    send_to_derived: bool
     thermistor_beta: PositiveInt
     type_name: Literal["i2c.thermistor.channel.config"] = (
         "i2c.thermistor.channel.config"

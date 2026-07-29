@@ -534,6 +534,15 @@ types:
       types:
       - relay.control.config:000
       versionless_types: []
+  gpio.sensor.component.gt:
+    '000':
+      enums:
+      - gpio.sense.mode:000
+      formats:
+      - pascal.case
+      - uuid4.str
+      types: []
+      versionless_types: []
   gridworks.event.problem:
     '001':
       enums: []
@@ -548,16 +557,6 @@ types:
       formats:
       - left.right.dot
       types: []
-      versionless_types: []
-  gw.house0.hydronic:
-    '000':
-      enums:
-      - gw.house0.primary.flow.source:000
-      formats:
-      - non.negative.int
-      - spaceheat.name
-      types:
-      - gw1.hvac.zone:000
       versionless_types: []
   gw.house0.layout:
     '000':
@@ -606,7 +605,7 @@ types:
       - electric.meter.component.gt:002
       - electric.meter.device.type.gt:000
       - g.node.gt:005
-      - gw.house0.hydronic:000
+      - gw.hydronic:000
       - gw.native.gpio.pin:000
       - gw1.hvac.zone:000
       - gw1.scada.device.type.gt:000
@@ -615,8 +614,8 @@ types:
       - hubitat.gt:000
       - hubitat.poller.component.gt:000
       - hubitat.poller.gt:000
-      - i2c.adc.capability:000
       - i2c.bus:000
+      - i2c.ct.interface.capability:000
       - i2c.dac.capability:000
       - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:005
@@ -652,6 +651,16 @@ types:
       - g.node.gt:005
       - heating.curve:000
       versionless_types: []
+  gw.hydronic:
+    '000':
+      enums:
+      - gw.house0.primary.flow.source:000
+      formats:
+      - non.negative.int
+      - spaceheat.name
+      types:
+      - gw1.hvac.zone:000
+      versionless_types: []
   gw.native.gpio.pin:
     '000':
       enums: []
@@ -668,6 +677,7 @@ types:
       - g.node.status:000
       - gpio.sense.mode:000
       - gpm.from.hz.method:000
+      - gw.house0.primary.flow.source:000
       - gw1.actor.class:012
       - gw1.emission.method:000
       - gw1.quantity:000
@@ -694,32 +704,36 @@ types:
       - uuid4.str
       types:
       - ads111x.based.device.type.gt:000
-      - data.channel.gt:002
+      - data.channel.gt:003
       - derived.channel.gt:002
       - egauge.register.config:000
       - electric.meter.channel.config:001
       - electric.meter.component.gt:002
       - electric.meter.device.type.gt:000
       - g.node.gt:005
+      - gpio.relay.component.gt:000
+      - gpio.sensor.component.gt:000
+      - gw.hydronic:000
       - gw.native.gpio.pin:000
+      - gw1.hvac.zone:000
       - gw1.scada.device.type.gt:000
       - gw1.unit.quantity.projection:000
-      - gw108.gpio.sensor.component.gt:002
-      - gw108.vdc.relay.component.gt:002
-      - i2c.adc.capability:000
       - i2c.bus:000
+      - i2c.ct.interface.capability:000
       - i2c.dac.capability:000
       - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:005
       - i2c.relay.capability:000
       - i2c.thermistor.channel.config:002
       - i2c.thermistor.interface.capability:000
-      - i2c.thermistor.reader.component.gt:002
+      - i2c.thermistor.reader.component.gt:003
       - pico.btu.meter.component.gt:001
       - pico.tank.module.component.gt:012
       - relay.actor.config:004
+      - relay.control.config:000
+      - scada.board.component.gt:000
       - sim.pico.tank.module.component.gt:001
-      - spaceheat.node.gt:302
+      - spaceheat.node.gt:303
       - spaceheat.telemetry.quantity.projection:000
       - web.server.component.gt:002
       versionless_types: []
@@ -744,8 +758,8 @@ types:
       - positive.int
       types:
       - gw.native.gpio.pin:000
-      - i2c.adc.capability:000
       - i2c.bus:000
+      - i2c.ct.interface.capability:000
       - i2c.dac.capability:000
       - i2c.expander:000
       - i2c.relay.capability:000
@@ -952,16 +966,6 @@ types:
       types:
       - maker.api.attribute.gt:000
       versionless_types: []
-  i2c.adc.capability:
-    '000':
-      enums:
-      - i2c.adc.type:000
-      formats:
-      - non.negative.int
-      - pascal.case
-      - positive.int
-      types: []
-      versionless_types: []
   i2c.bit.address:
     '000':
       enums: []
@@ -975,6 +979,17 @@ types:
       formats:
       - non.negative.int
       - pascal.case
+      types: []
+      versionless_types: []
+  i2c.ct.interface.capability:
+    '000':
+      enums:
+      - i2c.adc.type:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.float
+      - positive.int
       types: []
       versionless_types: []
   i2c.dac.capability:
@@ -1180,6 +1195,18 @@ types:
       formats:
       - pascal.case
       - positive.float
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - i2c.thermistor.channel.config:002
+      versionless_types: []
+    '003':
+      enums:
+      - i2c.adc.channel:000
+      - temp.calc.method:000
+      formats:
+      - pascal.case
       - positive.int
       - spaceheat.name
       - uuid4.str
@@ -1900,6 +1927,15 @@ types:
       - fsm.full.report:001
       - machine.states:000
       - report:003
+      versionless_types: []
+  scada.board.component.gt:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      - pascal.case
+      - uuid4.str
+      types: []
       versionless_types: []
   scada.control.capabilities:
     '000':

@@ -18,10 +18,8 @@ properties:
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this component is built on, an open `pascal.case` string
-      (a `gw1.device.type` value, e.g. `GridworksTsnap1ScadaBoard`). The hardware layout
-      enforces membership in `gw1.device.type`, and — for an ADS-based sensor — that the
-      matching `ads111x.based.device.type.gt` record is present.
+      The device category this component is built on, an open
+      pascal-case string.
 
   ConfigList:
     type: array
@@ -99,3 +97,5 @@ x-gridworks:
     a canonical seed database (here, the terminalasset registry): the table's rows are
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
+
+    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.

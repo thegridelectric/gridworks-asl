@@ -22,8 +22,8 @@ properties:
   ExpanderIdx:
     $ref: "https://schemas.electricity.works/formats/positive.int"
     description: >
-      The 1-based index into the board's Expanders list of the I²C GPIO
-      expander that drives this relay.
+      The 1-based index of the I²C GPIO expander that drives this relay,
+      in the board's expander order.
 
   RegisterIndex:
     $ref: "https://schemas.electricity.works/formats/non.negative.int"

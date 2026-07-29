@@ -73,7 +73,7 @@ properties:
   DeviceTypes:
     type: array
     description: >
-      The specialized per-family device-type records (`<family>.device.type.gt`) for the
+      The specialized per-family device-type records for the
       device categories present in `Components` that carry category-level data. A component
       joins its record by the shared `DeviceType` value.
     items:
@@ -83,7 +83,7 @@ properties:
         - $ref: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
 
   Hydronic:
-    $ref: "https://schemas.electricity.works/types/gw.house0.hydronic/000"
+    $ref: "https://schemas.electricity.works/types/gw.hydronic/000"
 
   TypeName:
     const: "gw.house0.layout"

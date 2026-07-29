@@ -10,7 +10,7 @@ from sema.runtime.types.electric_meter_component_gt import ElectricMeterComponen
 from sema.runtime.types.electric_meter_device_type_gt import ElectricMeterDeviceTypeGt
 from sema.runtime.types.g_node_gt import GNodeGt
 from sema.runtime.types.gw1_scada_device_type_gt import Gw1ScadaDeviceTypeGt
-from sema.runtime.types.gw_house0_hydronic import GwHouse0Hydronic
+from sema.runtime.types.gw_hydronic import GwHydronic
 from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
@@ -49,7 +49,7 @@ class GwHouse0Layout(SemaType):
     device_types: list[
         ElectricMeterDeviceTypeGt | Ads111xBasedDeviceTypeGt | Gw1ScadaDeviceTypeGt
     ]
-    hydronic: GwHouse0Hydronic
+    hydronic: GwHydronic
     type_name: Literal["gw.house0.layout"] = "gw.house0.layout"
     version: Literal["000"] = "000"
 

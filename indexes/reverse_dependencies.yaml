@@ -56,13 +56,13 @@ types:
       - scada.control.capabilities:001
     '002':
       used_by:
-      - gw.nolan.layout:000
       - layout.lite:012
       - layout.lite:013
       - layout.lite:014
     '003':
       used_by:
       - gw.house0.layout:000
+      - gw.nolan.layout:000
       - layout.lite:015
       - scada.control.capabilities:002
   derived.channel.gt:
@@ -139,10 +139,19 @@ types:
       - gw.house0.layout:000
       - gw.house0.operational.params:000
       - gw.nolan.layout:000
-  gw.house0.hydronic:
+  gpio.relay.component.gt:
+    '000':
+      used_by:
+      - gw.nolan.layout:000
+  gpio.sensor.component.gt:
+    '000':
+      used_by:
+      - gw.nolan.layout:000
+  gw.hydronic:
     '000':
       used_by:
       - gw.house0.layout:000
+      - gw.nolan.layout:000
   gw.native.gpio.pin:
     '000':
       used_by:
@@ -150,7 +159,7 @@ types:
   gw1.hvac.zone:
     '000':
       used_by:
-      - gw.house0.hydronic:000
+      - gw.hydronic:000
   gw1.scada.device.type.gt:
     '000':
       used_by:
@@ -179,14 +188,6 @@ types:
     '000':
       used_by:
       - derived.channel.gt:002
-  gw108.gpio.sensor.component.gt:
-    '002':
-      used_by:
-      - gw.nolan.layout:000
-  gw108.vdc.relay.component.gt:
-    '002':
-      used_by:
-      - gw.nolan.layout:000
   ha1.params:
     '004':
       used_by:
@@ -230,10 +231,6 @@ types:
     '000':
       used_by:
       - hubitat.poller.component.gt:000
-  i2c.adc.capability:
-    '000':
-      used_by:
-      - gw1.scada.device.type.gt:000
   i2c.bit.address:
     '000':
       used_by:
@@ -241,6 +238,10 @@ types:
       - i2c.relay.config:000
       - i2c.write.bit:000
   i2c.bus:
+    '000':
+      used_by:
+      - gw1.scada.device.type.gt:000
+  i2c.ct.interface.capability:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
@@ -291,12 +292,13 @@ types:
     '002':
       used_by:
       - i2c.thermistor.reader.component.gt:002
+      - i2c.thermistor.reader.component.gt:003
   i2c.thermistor.interface.capability:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
   i2c.thermistor.reader.component.gt:
-    '002':
+    '003':
       used_by:
       - gw.nolan.layout:000
   machine.states:
@@ -375,6 +377,10 @@ types:
     '003':
       used_by:
       - report.event:003
+  scada.board.component.gt:
+    '000':
+      used_by:
+      - gw.nolan.layout:000
   sim.pico.tank.module.component.gt:
     '000':
       used_by:
@@ -421,11 +427,11 @@ types:
       - new.command.tree:001
     '302':
       used_by:
-      - gw.nolan.layout:000
       - layout.lite:014
     '303':
       used_by:
       - gw.house0.layout:000
+      - gw.nolan.layout:000
       - layout.lite:015
       - new.command.tree:002
       - scada.control.capabilities:002
@@ -486,6 +492,7 @@ enums:
   gpio.sense.mode:
     '000':
       used_by:
+      - gpio.sensor.component.gt:000
       - gw108.gpio.sensor.component.gt:001
       - gw108.gpio.sensor.component.gt:002
   gpm.from.hz.method:
@@ -498,7 +505,7 @@ enums:
   gw.house0.primary.flow.source:
     '000':
       used_by:
-      - gw.house0.hydronic:000
+      - gw.hydronic:000
   gw1.actor.class:
     009:
       used_by:
@@ -580,7 +587,7 @@ enums:
   i2c.adc.type:
     '000':
       used_by:
-      - i2c.adc.capability:000
+      - i2c.ct.interface.capability:000
       - i2c.thermistor.interface.capability:000
   i2c.dac.type:
     '000':
@@ -676,6 +683,7 @@ enums:
       used_by:
       - i2c.thermistor.reader.component.gt:001
       - i2c.thermistor.reader.component.gt:002
+      - i2c.thermistor.reader.component.gt:003
       - pico.btu.meter.component.gt:000
       - pico.btu.meter.component.gt:001
       - pico.tank.module.component.gt:011
@@ -790,12 +798,12 @@ formats:
     - relay.control.config:000
   non.negative.int:
     used_by:
-    - gw.house0.hydronic:000
     - gw.house0.operational.params:000
+    - gw.hydronic:000
     - gw.native.gpio.pin:000
-    - i2c.adc.capability:000
     - i2c.bit.address:000
     - i2c.bus:000
+    - i2c.ct.interface.capability:000
     - i2c.dac.capability:000
     - i2c.expander:000
     - i2c.reg.address:000
@@ -804,6 +812,7 @@ formats:
     - i2c.thermistor.interface.capability:000
     - i2c.write.bit:000
     - i2c.write.reg:000
+    - scada.board.component.gt:000
   pascal.case:
     used_by:
     - ads.channel.config:000
@@ -814,6 +823,7 @@ formats:
     - electric.meter.component.gt:002
     - electric.meter.device.type.gt:000
     - gpio.relay.component.gt:000
+    - gpio.sensor.component.gt:000
     - gw.native.gpio.pin:000
     - gw1.scada.device.type.gt:000
     - gw108.gpio.sensor.component.gt:002
@@ -822,8 +832,8 @@ formats:
     - hp.device.type.gt:000
     - hubitat.component.gt:000
     - hubitat.poller.component.gt:000
-    - i2c.adc.capability:000
     - i2c.bus:000
+    - i2c.ct.interface.capability:000
     - i2c.dac.capability:000
     - i2c.expander:000
     - i2c.multichannel.dt.relay.component.gt:005
@@ -832,9 +842,11 @@ formats:
     - i2c.relay.config:000
     - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:002
+    - i2c.thermistor.reader.component.gt:003
     - pico.btu.meter.component.gt:001
     - pico.flow.module.component.gt:001
     - pico.tank.module.component.gt:012
+    - scada.board.component.gt:000
     - sim.pico.tank.module.component.gt:001
     - sim.relay.component.gt:000
     - sim.sensor.component.gt:000
@@ -844,6 +856,7 @@ formats:
     - heating.curve:000
     - hp.control.box.device.type.gt:000
     - hp.device.type.gt:000
+    - i2c.ct.interface.capability:000
     - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
@@ -883,7 +896,7 @@ formats:
     - heating.curve:000
     - hp.device.type.gt:000
     - hubitat.poller.gt:000
-    - i2c.adc.capability:000
+    - i2c.ct.interface.capability:000
     - i2c.dac.capability:000
     - i2c.expander:000
     - i2c.read.reg:000
@@ -1085,6 +1098,7 @@ formats:
     - g.node.reparent.cmd:000
     - g.node.reparent.cmd:001
     - gpio.relay.component.gt:000
+    - gpio.sensor.component.gt:000
     - gridworks.event.problem:001
     - gw108.gpio.sensor.component.gt:001
     - gw108.gpio.sensor.component.gt:002
@@ -1104,6 +1118,7 @@ formats:
     - i2c.result:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
+    - i2c.thermistor.reader.component.gt:003
     - i2c.write.bit:000
     - i2c.write.reg:000
     - latest.price:000
@@ -1128,6 +1143,7 @@ formats:
     - report.event:003
     - report:002
     - report:003
+    - scada.board.component.gt:000
     - scada.params:004
     - scada.params:005
     - sim.pico.tank.module.component.gt:000

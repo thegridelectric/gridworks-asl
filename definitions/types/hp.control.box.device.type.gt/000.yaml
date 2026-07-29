@@ -8,7 +8,7 @@ description: >
   monobloc's indoor unit. No compressor; typically the hydraulic package (water pump,
   optional backup heater stages) together with the unit's control electronics, a
   touch-screen controller for local operation, and the communication link to the
-  outdoor unit. Keyed by `DeviceType` (a `gw1.device.type` value); a component joins
+  outdoor unit. Keyed by `DeviceType` (a device-category value); a component joins
   this record by the shared `DeviceType` value. Carries the three primary-pump facts
   because the unit owning the pump signal varies by architecture. Flat.
 
@@ -17,10 +17,8 @@ properties:
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this record describes, an open `pascal.case` string (a
-      `gw1.device.type` value). The hardware layout enforces membership in
-      `gw1.device.type`. Full nameplate designation verbatim after the make prefix
-      (e.g. SamsungAE055FEYMCG).
+      The device category this component is built on, an open
+      pascal-case string.
 
   DisplayName:
     type: string
@@ -108,3 +106,5 @@ x-gridworks:
     rows are instances of this type. Sema is
     the authority over what a row means; the seed table is the authority over which
     instances are currently asserted.
+
+    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.

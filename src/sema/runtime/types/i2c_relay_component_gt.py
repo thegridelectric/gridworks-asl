@@ -10,7 +10,7 @@ class I2cRelayComponentGt(SemaType):
     """Sema: https://schemas.electricity.works/types/i2c.relay.component.gt/000"""
 
     component_id: UUID4Str
-    device_type: PascalCase
+    board_component_id: UUID4Str
     relay_name: PascalCase
     config_list: list[RelayControlConfig]
     display_name: str | None = None

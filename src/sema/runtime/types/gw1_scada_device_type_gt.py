@@ -5,8 +5,8 @@ from sema.runtime.enums import SpaceheatTelemetryName
 from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.types.gw_native_gpio_pin import GwNativeGpioPin
-from sema.runtime.types.i2c_adc_capability import I2cAdcCapability
 from sema.runtime.types.i2c_bus import I2cBus
+from sema.runtime.types.i2c_ct_interface_capability import I2cCtInterfaceCapability
 from sema.runtime.types.i2c_dac_capability import I2cDacCapability
 from sema.runtime.types.i2c_expander import I2cExpander
 from sema.runtime.types.i2c_relay_capability import I2cRelayCapability
@@ -27,7 +27,7 @@ class Gw1ScadaDeviceTypeGt(SemaType):
     native_gpio_outputs: list[GwNativeGpioPin] | None = None
     expanders: list[I2cExpander] | None = None
     i2c_relays: list[I2cRelayCapability] | None = None
-    ct_adc: I2cAdcCapability | None = None
+    ct_adc: I2cCtInterfaceCapability | None = None
     thermistor_adcs: list[I2cThermistorInterfaceCapability] | None = None
     dacs: list[I2cDacCapability] | None = None
     type_name: Literal["gw1.scada.device.type.gt"] = "gw1.scada.device.type.gt"
@@ -73,5 +73,29 @@ class Gw1ScadaDeviceTypeGt(SemaType):
             raise ValueError(
                 "Axiom 2 (ExpanderMembership) failed: ExpanderIdx value(s) "
                 f"{missing} are not declared in Expanders."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "Gw1ScadaDeviceTypeGt":
+        """
+        Axiom 3: BoardIdentifierUniqueness
+        The board's silk-screen namespace is one namespace: the union of every
+        RelayName in I2cRelays, the CtAdc Name, every Name in ThermistorAdcs,
+        every DacName in Dacs, and every Name in NativeGpioInputs and
+        NativeGpioOutputs SHALL contain no duplicates within the record.
+        """
+        names = [r.relay_name for r in (self.i2c_relays or [])]
+        if self.ct_adc is not None:
+            names.append(self.ct_adc.name)
+        names += [a.name for a in (self.thermistor_adcs or [])]
+        names += [d.dac_name for d in (self.dacs or [])]
+        names += [p.name for p in (self.native_gpio_inputs or [])]
+        names += [p.name for p in (self.native_gpio_outputs or [])]
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        if dupes:
+            raise ValueError(
+                "Axiom 3 (BoardIdentifierUniqueness) failed: duplicate board "
+                f"identifier name(s) {dupes}."
             )
         return self

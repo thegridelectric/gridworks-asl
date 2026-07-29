@@ -338,7 +338,14 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "- Initial version. Board-resident per-relay GPIO component: GpioName (-> board NativeGpioOutputs), DeviceType (gw1.device.type value, e.g. Gw108GpioRelay), ConfigList of exactly one relay.control.config."
+        summary: "- Initial version. Board-resident per-relay GPIO component: required BoardComponentId (-> scada.board.component.gt), GpioName (-> the board record's NativeGpioOutputs), ConfigList of exactly one relay.control.config; no DeviceType (TypeName is the kind, the board component carries the board identity)."
+
+  gpio.sensor.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Initial version. Board-resident per-sensor GPIO component, the input sibling of gpio.relay.component.gt: required BoardComponentId (-> scada.board.component.gt), GpioName (-> the board record's NativeGpioInputs), SenseMode; binary 1/0 sense; no DeviceType (TypeName is the kind, the board component carries the board identity); no SendToDerived (derived routing is computed from DerivedChannel InputChannelNames); no ConfigList (channel binds via DataChannel, capture tuning in operational params). Replaces gw108.gpio.sensor.component.gt."
 
   gridworks.ack:
     versioning_strategy: "none"
@@ -366,13 +373,6 @@ types:
     versioning_strategy: "none"
     summary: "Versionless GridWorks message envelope (gwproto Message wire format)."
 
-  gw.house0.hydronic:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "- Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axiom 1: UseSiegLoop implies SiegLoopPlumbed."
-
   gw.house0.layout:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -387,6 +387,13 @@ types:
       "000":
         summary: "GNodes home identity (mirrors the layout) + CaptureTuningList (per-channel capture params migrated out of the channel-config family) + the control/optimization block migrated out of scada deployment config: SystemMode, SeasonalStorageMode, CopCurve, HeatingCurve, HpTurnOnMinutes, ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup, HorizonHours, Latitude, Longitude (all required — no assumed defaults)."
 
+  gw.hydronic:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axiom 1: UseSiegLoop implies SiegLoopPlumbed."
+
   gw.native.gpio.pin:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -399,7 +406,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; the gw108.gpio.relay placeholder was dropped (the real relay is gw108.vdc.relay)."
+        summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/303 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
 
   gw1.hvac.zone:
     latest_version: "000"
@@ -556,13 +563,6 @@ types:
       "000":
         summary: "Initial Sema version (flattened from the scada HubitatPollerGt runtime)."
 
-  i2c.adc.capability:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, Channels); renames i2c.adc.config — the record describes what the board offers, not a chosen configuration."
-
   i2c.bit.address:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -576,6 +576,13 @@ types:
     versions:
       "000":
         summary: "Initial draft (Name, BusNumber)."
+
+  i2c.ct.interface.capability:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Initial version. CT sibling of i2c.thermistor.interface.capability: Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, Channels. Replaces the generic i2c.adc.capability (deleted; staging-only, single referrer)."
 
   i2c.dac.capability:
     latest_version: "000"
@@ -637,7 +644,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "- Initial version. Board-resident per-relay I²C component: RelayName (-> board I2cRelays), DeviceType (gw1.device.type value, e.g. Gw108I2cRelay), ConfigList of exactly one relay.control.config. Replaces the legacy multiplexer (i2c.multichannel.dt.relay.component.gt)."
+        summary: "- Initial version. Board-resident per-relay expander component: required BoardComponentId (-> scada.board.component.gt), RelayName (-> the board record's I2cRelays), ConfigList of exactly one relay.control.config; no DeviceType (TypeName is the kind, the board component carries the board identity)."
 
   i2c.relay.config:
     latest_version: "000"
@@ -662,6 +669,7 @@ types:
           - Unit: drop (redundant; unit and scaling are carried by channel identity)
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
           - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
+          - SendToDerived: drop (derived routing is computed from DerivedChannel InputChannelNames)
       "001":
         summary: "Initial Sema version. Starts at 001 to match the only version ever emitted in the field; the never-emitted sema 000 was dropped."
 
@@ -673,9 +681,11 @@ types:
         summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts, SeriesResistanceKOhms); renames i2c.thermistor.interface.config — the record describes what the board offers, not a chosen configuration."
 
   i2c.thermistor.reader.component.gt:
-    latest_version: "002"
+    latest_version: "003"
     versioning_strategy: "literal"
     versions:
+      "003":
+        summary: "- Bus, AdcAddress, AdcReferenceVolts, SeriesResistanceKOhms dropped (facts on the board's thermistor-interface capability entry); AdcName added, naming that entry in the board record's ThermistorAdcs; DeviceType dropped (TypeName is the kind; board identity lives on the board component); BoardComponentId added, anchoring the reader to its scada.board.component.gt. Context-dependent: AdcName and BoardComponentId are derived from the source layout, which the standalone component does not carry."
       "002":
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "001":
@@ -883,6 +893,13 @@ types:
           - Axioms: remove former ReportIdentityPropagation and ReportCreatedTimePropagation
       "002":
         summary: "Baseline runtime version (no prior version tracked)."
+
+  scada.board.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "- Initial version. ComponentId, DeviceType (gw1.device.type board kind), optional I2cAddressList (field-chosen addresses, index-aligned with the record's Expanders), DisplayName, HwUid."
 
   scada.control.capabilities:
     latest_version: "002"
@@ -1217,6 +1234,7 @@ enums:
           - "Gw108GpioRelay"
           - "SamsungAE055FCYDCG"
           - "SamsungAE055FEYMCG"
+          - "Gw108Adc"
       "000": {}
 
   gw1.emission.method:

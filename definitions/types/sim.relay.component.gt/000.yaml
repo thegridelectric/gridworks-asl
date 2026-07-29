@@ -6,8 +6,8 @@ type: object
 description: >
   A simulated relay component — the component the scada-side SimRelayActor's relay
   node uses in a simulated hardware layout. Structurally a relay component (id,
-  DeviceType, a ConfigList of relay.actor.config), but a distinct `sim.*` type so a
-  simulated layout is visibly simulated by construction. Parallel to sim.sensor.component.gt.
+  DeviceType, a ConfigList of relay actor config), but a distinct `sim.*` type so a
+  simulated layout is visibly simulated by construction. Parallel to the simulated sensor component.
   Flat — every field spelled out here.
 
 properties:
@@ -18,9 +18,8 @@ properties:
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this component is built on, an open `pascal.case` string
-      (a `gw1.device.type` value, normally `GridworksSimRelayBank`). The hardware layout
-      enforces membership in `gw1.device.type`.
+      The device category this component is built on, an open
+      pascal-case string.
 
   ConfigList:
     type: array
@@ -86,3 +85,7 @@ x-gridworks:
     a canonical seed database (here, the terminalasset registry): the table's rows are
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
+
+    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.
+
+    The config entries are `relay.actor.config` records. Kin: `sim.sensor.component.gt`.

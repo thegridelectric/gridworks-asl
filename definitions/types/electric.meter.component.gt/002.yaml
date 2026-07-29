@@ -19,8 +19,8 @@ properties:
   DeviceType:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      The device category this component is built on, an open `pascal.case` string
-      (e.g. `EgaugePowerMeter` or `EkmFlowMeter`).
+      The device category this component is built on, an open
+      pascal-case string.
 
   ConfigList:
     type: array
