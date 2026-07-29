@@ -451,6 +451,18 @@ types:
       - connectivity.edge.gt:000
       - g.node.gt:005
       versionless_types: []
+    '001':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types:
+      - connectivity.edge.gt:000
+      - g.node.gt:005
+      versionless_types: []
   g.node.forest.request:
     '000':
       enums: []

@@ -178,9 +178,10 @@ types:
     versions:
       '000': definitions/types/g.node.create.cmd/000.yaml
   g.node.forest:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/g.node.forest/001.yaml
       '000': definitions/types/g.node.forest/000.yaml
   g.node.forest.request:
     latest_version: '000'

@@ -41,6 +41,7 @@ types:
     '000':
       used_by:
       - g.node.forest:000
+      - g.node.forest:001
   cop.curve:
     '000':
       used_by:
@@ -134,6 +135,7 @@ types:
       used_by:
       - g.node.create.cmd:000
       - g.node.forest:000
+      - g.node.forest:001
       - g.node.reparent.cmd:000
       - g.node.reparent.cmd:001
       - gw.house0.layout:000
@@ -733,6 +735,7 @@ formats:
     - fsm.event:000
     - g.node.forest.request:000
     - g.node.forest:000
+    - g.node.forest:001
     - g.node.gt:004
     - g.node.gt:005
     - glitch:000
@@ -1010,6 +1013,7 @@ formats:
     - fsm.atomic.report:000
     - fsm.atomic.report:001
     - fsm.event:000
+    - g.node.forest:001
     - g.node.instance.gt:000
     - glitch:000
     - gridworks.event.problem:001

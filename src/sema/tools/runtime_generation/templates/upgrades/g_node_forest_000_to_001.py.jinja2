@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ g_node_forest_001_class_name }}:
+        """
+        - SendTimeMs: new optional sender-clock stamp (epoch ms) at forest
+        assembly; the registry stamps wall-clock — it is never simulated
+        (sender-time standard, first adopter)
+        """
+        data = self.model_dump(exclude_none=True)
+        data["version"] = "001"
+        return {{ g_node_forest_001_class_name }}.model_validate(data)

@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-07-28T11:20:00Z'
+  last_updated: '2026-07-29T15:45:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -1413,13 +1413,26 @@ types:
           structural:
           - g.node.gt:005
   g.node.forest:
-    latest_version: '000'
+    latest_version: '001'
     owner: gridworks-energy
     versioning_strategy: literal
     description: 'A forest of Grid Node subtrees: the subtrees under one or more root
       aliases, carried as their current GNodes plus the connectivity edges wiring
       them together.'
     versions:
+      '001':
+        schema_url: https://schemas.electricity.works/types/g.node.forest/001
+        created: '2026-07-29T14:10:00Z'
+        status: published
+        summary: "- SendTimeMs: new optional sender-clock stamp (epoch ms) at forest\
+          \ assembly; the registry stamps wall-clock \u2014 it is never simulated\
+          \ (sender-time standard, first adopter)"
+        direct_dependencies:
+          structural:
+          - connectivity.edge.gt:000
+          - g.node.gt:005
+          - left.right.dot
+          - utc.milliseconds
       '000':
         schema_url: https://schemas.electricity.works/types/g.node.forest/000
         created: '2026-07-03T18:55:00Z'
