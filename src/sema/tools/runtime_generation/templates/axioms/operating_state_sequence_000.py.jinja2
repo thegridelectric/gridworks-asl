@@ -1,0 +1,11 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ operating_state_sequence_000_class_name }}":
+        """
+        Axiom 1: ListLengthConsistency
+        len(ValueList) SHALL equal len(TimestampList).
+        """
+        if len(self.value_list) != len(self.timestamp_list):
+            raise ValueError(
+                "Axiom 1 failed: value_list and timestamp_list must have equal length."
+            )
+        return self

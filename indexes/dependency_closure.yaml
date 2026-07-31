@@ -917,6 +917,13 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  hourly.electricity.dataset:
+    '000':
+      enums: []
+      formats:
+      - utc.iso8601.seconds
+      types: []
+      versionless_types: []
   hp.control.box.device.type.gt:
     '000':
       enums: []
@@ -1713,6 +1720,14 @@ types:
       types:
       - spaceheat.node.gt:303
       versionless_types: []
+  operating.state.sequence:
+    '000':
+      enums: []
+      formats:
+      - spaceheat.name
+      - utc.iso8601.seconds
+      types: []
+      versionless_types: []
   pico.btu.meter.component.gt:
     '000':
       enums:
@@ -2263,6 +2278,18 @@ types:
       - utc.iso8601.seconds
       types:
       - channel.readings.list.item:000
+      versionless_types: []
+    '003':
+      enums:
+      - gw1.unit:001
+      - spaceheat.telemetry.name:007
+      formats:
+      - left.right.dot
+      - spaceheat.name
+      - utc.iso8601.seconds
+      types:
+      - channel.readings.list.item:000
+      - operating.state.sequence:000
       versionless_types: []
   synth.channel.gt:
     '000':

@@ -42,7 +42,9 @@ def test_valid_object() -> None:
                 unit="Milliseconds",
                 unit_type="gw1.unit",
             ),
-        ]
+        ],
+        late_persistence_time_period_list=[],
+        operating_state_sequence_list=[],
     )
 
 def test_axiom1() -> None:
@@ -53,6 +55,8 @@ def test_axiom1() -> None:
             end_timestamp="2025-02-26T02:00:00Z",
             timestamp_list=[],
             channel_readings_list=[],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
@@ -80,6 +84,8 @@ def test_axiom2() -> None:
                     unit_type="gw1.unit",
                 ),
             ],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
@@ -94,6 +100,8 @@ def test_axiom3() -> None:
             end_timestamp="2025-02-26T00:00:00Z",
             timestamp_list=[],
             channel_readings_list=[],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
@@ -121,6 +129,8 @@ def test_axiom4() -> None:
                     unit_type="gw1.unit",
                 ),
             ],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
@@ -142,6 +152,8 @@ def test_axiom5_invalid_unit_type() -> None:
                     unit_type="something.else",
                 ),
             ],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
@@ -163,6 +175,8 @@ def test_axiom5_invalid_unit() -> None:
                     unit_type="gw1.unit",
                 ),
             ],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:

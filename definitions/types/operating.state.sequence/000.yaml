@@ -1,0 +1,48 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/operating.state.sequence/000"
+
+title: "operating.state.sequence"
+type: object
+description: >
+  Timestamped enum state readings for a SCADA reporting context.
+
+properties:
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  ValueList:
+    type: array
+    items:
+      type:
+        - $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+        - "null"
+    description: "String enum state values aligned with ScadaReadTimeUnixMsList."
+
+  TimestampList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
+    description: "SCADA state times aligned with ValueList."
+
+  TypeName:
+    const: "operating.state.sequence"
+
+  Version:
+    const: "000"
+
+required:
+  - ChannelName
+  - ValueList
+  - TimestampList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ListLengthConsistency"
+      statement: >
+        len(ValueList) SHALL equal len(TimestampList).
