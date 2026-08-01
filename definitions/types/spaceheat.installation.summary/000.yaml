@@ -1,0 +1,112 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/spaceheat.installation.summary/000"
+
+title: "spaceheat.installation.summary"
+type: object
+description: >
+  Summary of a spaceheat installation and its current status:
+  location, latest snapshot time, hardware layout, longest-running heat call, etc.
+
+properties:
+
+  UserRole:
+    type:
+      $ref: "https://schemas.electricity.works/enums/web.user.role/000"
+    description: >
+      Role of the current user for the installation
+
+  GNodeAlias:
+    type:
+      $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the installation
+
+  DisplayName:
+    type:
+      $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Display name of the installation
+
+  StreetAddress:
+    type: object
+    description: >
+      Street address of the installation.
+      For now, the exact format of the address is unspecified.
+
+  SystemMode:
+    type:
+      $ref: "https://schemas.electricity.works/enums/gw1.system.mode/000"
+    description: >
+      The overall operating mode of the heating system.
+
+  MainAutoState:
+    type:
+      $ref: "https://schemas.electricity.works/enums/gw1.main.auto.state/001"
+    description: >
+      Top-level state of a GridWorks spaceheat system.
+
+  LatestSnapshotTime:
+    type:
+      $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
+    description: >
+      The timestamp of the most recent spaceheat.snapshot message received for this installation
+
+  LongestRunningZoneName:
+    type:
+      $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      Name of the zone (if any) that has the longest active heat call
+
+  LongestRunningZoneStartTime:
+    type:
+      $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
+    description: >
+      The time the longest-running zone began its heat call
+
+  SpaceheatParameters:
+    type:
+      $ref: "https://schemas.electricity.works/types/ha1.params/006"
+    description: >
+      The current runtime parameters for the installation
+
+  HardwareLayoutSummary:
+    type: object
+    description: >
+      Summary of the installation's hardware layout.
+      For now, the exact format of the hardware layout summary is unspecified.
+
+  PrimaryContact:
+    type: object
+    description: >
+      Information for the installation's primary contact person.
+      For now, the exact format of the contact info is unspecified.
+
+  SecondaryContact:
+    type: object
+    description: >
+      Information for the installation's primary contact person.
+      For now, the exact format of the contact info is unspecified.
+
+  TypeName:
+    const: "spaceheat.installation.summary"
+
+  Version:
+    const: "000"
+
+required:
+  - UserRole
+  - GNodeAlias
+  - DisplayName
+  - StreetAddress
+  - SystemMode
+  - SpaceheatParameters
+  - HardwareLayoutSummary
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+
+x-gridworks:
+  owner: "joe-strommen"

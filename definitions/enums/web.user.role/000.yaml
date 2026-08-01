@@ -1,0 +1,24 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/web.user.role/000"
+
+title: "web.user.role"
+type: "string"
+description: >
+  Role of a user in a web application.
+
+enum:
+  - "Unassigned"
+  - "Admin"
+  - "Owner"
+  - "Viewer"
+
+default: "Unassigned"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+    "Unassigned": "User has no role assigned"
+    "Admin": "User is an administrator"
+    "Owner": "User is an owner of the resource"
+    "Viewer": "User is only a viewer of the resource"

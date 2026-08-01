@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-31T21:07:41Z"
+  last_updated: "2026-08-01T01:00:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -769,6 +769,18 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/thermistor.data.method/000"
         created: "2026-06-14T12:00:00Z"
+        status: "staging"
+
+  web.user.role:
+    latest_version: "000"
+    owner: joe-strommen
+    enum_type: "versioned"
+    description: "Role of a user in a web application."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/web.user.role/000"
+        created: "2026-08-01T01:00:00Z"
         status: "staging"
 
 
@@ -3921,6 +3933,30 @@ types:
             - "single.reading:000"
             - "utc.milliseconds"
             - "uuid4.str"
+
+  spaceheat.installation.summary:
+    latest_version: "000"
+    owner: joe-strommen
+    versioning_strategy: "literal"
+    description: >
+      Summary of a spaceheat installation and its current status:
+      location, latest snapshot time, hardware layout, longest-running heat call, etc.
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/spaceheat.installation.summary/000"
+        created: "2026-08-01T01:00:00Z"
+        status: "staging"
+        summary: "Baseline runtime version (no prior version tracked)."
+        direct_dependencies:
+          structural:
+            - "gw1.main.auto.state:001"
+            - "gw1.system.mode:000"
+            - "ha1.params:006"
+            - "left.right.dot"
+            - "spaceheat.name"
+            - "utc.iso8601.seconds"
+            - "web.user.role:000"
+
 
   spaceheat.node.gt:
     latest_version: "303"
