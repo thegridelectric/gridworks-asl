@@ -10,8 +10,8 @@ Applied to the *staged* snapshot tree before the atomic swap. Two tiers:
   under ``strict=True`` because the generator currently emits a small set of
   known violations (over-/under-tracked ``typing`` imports; pydantic/enum
   dynamics mypy can't follow) that are a separate cleanup; until that lands,
-  a non-strict build reports them without blocking. See
-  ``wiki/sema/changelog.md`` / the snapshot spec for the tracked follow-up.
+  a non-strict build reports them without blocking. See the snapshot spec
+  (``spec/snapshot.md``) for the tracked follow-up.
 
 Reuses sema's own ruff/mypy (the repo config), invoked via the interpreter
 running the build so the toolchain matches the source repo.
