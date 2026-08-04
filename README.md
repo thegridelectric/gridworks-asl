@@ -154,6 +154,26 @@ To add a type:
    uv run python scripts/regenerate_runtime.py
    ```
 
+## Adding a New Version of a Type
+
+When a versioned type gains a new version, the `<a> -> <b>` change delta is
+recorded in **three coupled places** — touch one, reconcile all three:
+
+- the upgrade template body **and** docstring
+  (`src/sema/tools/runtime_generation/templates/upgrades/<type_snake>_<a>_to_<b>.py.jinja2`)
+- `definitions/registry.yaml` → `types.<type>.versions.<b>.summary` — the
+  prose change-list (kept a mirror copy of the upgrade docstring)
+- `definitions/registry.yaml` → `types.<type>.versions.<b>.direct_dependencies`
+  — the machine change-list
+
+The docstring↔summary mirror is enforced by
+`tests/registry/test_upgrade_summary_matches_template.py`. The rule the
+upgrade body must satisfy: a nested sub-type whose version changes between
+the outer type's `<a>` and `<b>` must be lifted via its own `.upgrade()`
+(see [`spec/authoring/type-semantics.md`](spec/authoring/type-semantics.md)
+"Nested Upgrades") — a dependency delta in the registry with no matching
+lift in the body is the bug class this coupling exists to catch.
+
 ## Vocabulary Snapshots
 
 Instead of distributing a shared runtime package, Sema produces **self-contained vocabulary snapshots**.
@@ -370,6 +390,10 @@ These tools help ensure that Sema vocabulary remains mechanically verifiable and
 ## Contributing
 
 Sema vocabulary is developed in the open registry.
+
+Vocabulary work happens on a topic branch cut from `dev` (one topic per
+branch), returned to `dev` by pull request; nothing is authored on `dev`
+directly.
 
 To propose a new vocabulary word or version:
 
