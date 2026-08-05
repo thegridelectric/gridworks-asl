@@ -7,6 +7,7 @@ from pathlib import Path
 import yaml
 
 from sema.tools.build_public_registry import build as build_public_registry
+from sema.tools.schema_validation import validate_definitions
 from sema.tools.runtime_generation.generate_runtime import generate_runtime_from_dag
 from sema.tools.runtime_generation.scaffold_axiom_template import (
     scaffold_axiom_templates_for_seed,
@@ -35,6 +36,12 @@ def _delete_runtime_generated_artifacts() -> None:
 
 
 def main() -> None:
+    findings = validate_definitions(REPO_ROOT / "definitions")
+    if findings:
+        raise SystemExit(
+            "Refusing to generate: schema files violate the JSON Schema "
+            "2020-12 metaschema:\n" + "\n".join(findings)
+        )
     build_public_registry()
     registry = _load_yaml(REGISTRY_PATH)
     with tempfile.TemporaryDirectory() as tmp_name:

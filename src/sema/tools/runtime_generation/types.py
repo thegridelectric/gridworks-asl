@@ -27,6 +27,15 @@ TEMPLATE_ROOT = Path(__file__).parent / "templates"
 TEMPLATE_VARIABLE_RE = re.compile(r"{{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*}}")
 
 
+class SchemaMappingError(ValueError):
+    """A schema construct the generator cannot faithfully map to Python.
+
+    Raised instead of silently degrading to ``Any`` — a schema that reaches
+    this point is either illegal JSON Schema (should have been caught by the
+    metaschema gate) or references vocabulary missing from the registry.
+    """
+
+
 @dataclass
 class TypeContext:
     import_root: str
@@ -34,6 +43,7 @@ class TypeContext:
     type_registry: dict[str, Any]
     enum_registry: dict[str, Any]
     local_names: dict[LeftRightDot, LeftRightDot] | None = None
+    type_label: str = ""
     imports: set[str] = field(default_factory=set)
     needs_literal: bool = False
     needs_any: bool = False
@@ -89,6 +99,7 @@ def render_type(
         type_registry=registry["types"],
         enum_registry=registry["enums"],
         local_names=local_names,
+        type_label=schema_url,
     )
 
     properties = schema.get("properties", {})
@@ -123,7 +134,11 @@ def render_type(
     upgrade_method = _render_upgrade_method(node, dag, dag_max, registry, ctx)
     import_lines = _render_type_imports(ctx)
 
-    class_lines = [f"class {class_name}(SemaType):", f'    """Sema: {schema_url}"""', ""]
+    class_lines = [
+        f"class {class_name}(SemaType):",
+        f'    """Sema: {schema_url}"""',
+        "",
+    ]
     sections: list[str] = []
     if import_lines:
         sections.append("\n".join(import_lines))
@@ -213,7 +228,7 @@ def _render_projection_artifacts(
             f'    @model_validator(mode="after")\n'
             f'    def check_axiom_{axiom_number}(self) -> "{class_name}":\n'
             f'        """\n'
-            f'        Axiom {axiom_number}: {axiom["name"]}\n'
+            f"        Axiom {axiom_number}: {axiom['name']}\n"
             f"{statement_block}\n"
             f'        """\n'
             f"        expected = self.project(self.{from_snake})\n"
@@ -270,7 +285,7 @@ def _render_type_imports(ctx: TypeContext) -> list[str]:
     if any("Self" in import_line for import_line in ctx.imports):
         typing_names.append("Self")
     if typing_names:
-        lines.append(f'from typing import {", ".join(sorted(set(typing_names)))}')
+        lines.append(f"from typing import {', '.join(sorted(set(typing_names)))}")
 
     if ctx.needs_config_dict:
         pydantic_names.append("ConfigDict")
@@ -285,15 +300,11 @@ def _render_type_imports(ctx: TypeContext) -> list[str]:
     if ctx.needs_strict_int:
         pydantic_names.append("StrictInt")
     if pydantic_names:
-        lines.append(f'from pydantic import {", ".join(sorted(set(pydantic_names)))}')
+        lines.append(f"from pydantic import {', '.join(sorted(set(pydantic_names)))}")
 
     lines.append(f"from {ctx.import_root}.base import SemaType")
     lines.extend(
-        sorted(
-            line
-            for line in ctx.imports
-            if line not in {"Self", "ValidationError"}
-        )
+        sorted(line for line in ctx.imports if line not in {"Self", "ValidationError"})
     )
     return lines
 
@@ -345,8 +356,11 @@ def _annotation_for_schema(
             ctx.enum_registry,
         )
         if node is None:
-            ctx.needs_any = True
-            return "Any"
+            raise SchemaMappingError(
+                f"{ctx.type_label}: property {'.'.join(inline_path or ['?'])}: "
+                f"$ref {prop_schema['$ref']!r} does not resolve to a "
+                "registered format, enum, or type"
+            )
         module_path, symbol_name = import_path_and_symbol_for_node(
             node,
             ctx.dag_max,
@@ -371,6 +385,12 @@ def _annotation_for_schema(
     schema_type = prop_schema.get("type")
     if isinstance(schema_type, list):
         non_null_types = [item for item in schema_type if item != "null"]
+        if not all(isinstance(item, str) for item in non_null_types):
+            raise SchemaMappingError(
+                f"{ctx.type_label}: property {'.'.join(inline_path or ['?'])}: "
+                f"cannot map type list {schema_type!r} — the type keyword only "
+                "accepts primitive type name strings"
+            )
         if len(non_null_types) == 1 and len(non_null_types) != len(schema_type):
             narrowed_schema = dict(prop_schema)
             narrowed_schema["type"] = non_null_types[0]
@@ -378,8 +398,11 @@ def _annotation_for_schema(
                 f"{_annotation_for_schema(narrowed_schema, ctx, inline_path=inline_path, inline_depth=inline_depth)}"
                 " | None"
             )
-        ctx.needs_any = True
-        return "Any"
+        raise SchemaMappingError(
+            f"{ctx.type_label}: property {'.'.join(inline_path or ['?'])}: "
+            f"cannot map type list {schema_type!r} — only a single primitive "
+            'type name plus "null" is supported'
+        )
     if schema_type == "string":
         return "str"
     if schema_type == "integer":
@@ -418,8 +441,10 @@ def _annotation_for_schema(
         ctx.needs_any = True
         return "dict[str, Any]"
 
-    ctx.needs_any = True
-    return "Any"
+    raise SchemaMappingError(
+        f"{ctx.type_label}: property {'.'.join(inline_path or ['?'])}: "
+        f"cannot map schema construct with keys {sorted(prop_schema)!r}"
+    )
 
 
 def _inline_class_name(inline_path: list[str]) -> str:
@@ -460,7 +485,7 @@ def _render_inline_object_class(
     extra = "allow" if prop_schema.get("additionalProperties") is True else "forbid"
     lines = [
         f"class {class_name}(BaseModel):",
-        '    model_config = ConfigDict(',
+        "    model_config = ConfigDict(",
         '        alias_generator=SemaType.model_config.get("alias_generator"),',
         "        populate_by_name=True,",
         f'        extra="{extra}",',
