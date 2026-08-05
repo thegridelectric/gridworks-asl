@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-31T21:07:41Z"
+  last_updated: "2026-08-04T19:45:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -3245,18 +3245,19 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Timestamped enum state readings for a SCADA reporting context."
+    description: "Timestamped enum state values for one state machine, projected into a channel-shaped sequence for a time-series analytics context."
 
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/operating.state.sequence/000"
         created: "2026-07-07T05:06:00Z"
         status: "staging"
-        summary: "Initial Sema version"
+        summary: "Initial version: ChannelName (spaceheat.name), ValueList (pascal.case), TimestampList (utc.iso8601.millis)."
         direct_dependencies:
           structural:
+            - "pascal.case"
             - "spaceheat.name"
-            - "utc.iso8601.seconds"
+            - "utc.iso8601.millis"
 
   pico.btu.meter.component.gt:
     latest_version: "001"

@@ -4,25 +4,27 @@ $id: "https://schemas.electricity.works/types/operating.state.sequence/000"
 title: "operating.state.sequence"
 type: object
 description: >
-  Timestamped enum state readings for a SCADA reporting context.
+  Timestamped enum state values for one state machine, projected into a
+  channel-shaped sequence for a time-series analytics context.
 
 properties:
   ChannelName:
     $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      State-channel identifier — anticipated to name an analytics channel
+      produced by the analytics system (see extended_description).
 
   ValueList:
     type: array
     items:
-      type:
-        - $ref: "https://schemas.electricity.works/formats/spaceheat.name"
-        - "null"
-    description: "String enum state values aligned with ScadaReadTimeUnixMsList."
+      $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: "Enum state values, aligned by index with TimestampList."
 
   TimestampList:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
-    description: "SCADA state times aligned with ValueList."
+      $ref: "https://schemas.electricity.works/formats/utc.iso8601.millis"
+    description: "State transition times, aligned by index with ValueList."
 
   TypeName:
     const: "operating.state.sequence"
@@ -39,6 +41,16 @@ required:
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "ChannelName": "local-control-all-tanks-state",
+      "ValueList": ["HpOffStoreOff", "HpOffStoreDischarge"],
+      "TimestampList": ["2026-02-10T11:58:42.099Z", "2026-02-10T11:59:42.105Z"],
+      "TypeName": "operating.state.sequence",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "gridworks-energy"
   axioms:
@@ -46,3 +58,48 @@ x-gridworks:
       name: "ListLengthConsistency"
       statement: >
         len(ValueList) SHALL equal len(TimestampList).
+    - number: 2
+      name: "StrictlyIncreasingTimestamps"
+      statement: >
+        TimestampList SHALL be strictly increasing.
+
+  extended_description: |
+    `operating.state.sequence` is a projection of SCADA machine-state data
+    (`machine.states`, as carried in `report` messages) into the same
+    channel-shaped form as numeric channel readings. ChannelName is
+    anticipated to name an analytics channel produced by the analytics
+    system, not a channel produced directly by a SCADA.
+
+    The projection drops information the source carries: the StateEnum
+    (the left.right.dot name of the enum vocabulary the values belong to)
+    and the MachineHandle, which encodes the machine's position in the
+    SCADA chain of command for responding to a dispatch signal. When
+    debugging why a state change did not go as planned, look at the
+    `machine.states` entries in the original reports rather than this
+    projection. Consecutive repeated values are permitted (a machine may
+    re-assert its state). Gaps in state knowledge (e.g. a span when the
+    SCADA was not reporting) are expressed by absence: the sequence simply
+    has no entries there. `None` is deliberately not a defined value of
+    this type.
+
+    Example projection, from a field report (beech, 2026-02-10, slot
+    11:55-12:00 UTC). The report's StateList carries:
+
+      {
+        "MachineHandle": "auto.lc.n",
+        "StateEnum": "gw1.local.control.all.tanks.state",
+        "StateList": ["HpOffStoreOff", "HpOffStoreDischarge"],
+        "UnixMsList": [1770724722099, 1770724782105],
+        "TypeName": "machine.states",
+        "Version": "000"
+      }
+
+    projected into:
+
+      {
+        "ChannelName": "local-control-all-tanks-state",
+        "ValueList": ["HpOffStoreOff", "HpOffStoreDischarge"],
+        "TimestampList": ["2026-02-10T11:58:42.099Z", "2026-02-10T11:59:42.105Z"],
+        "TypeName": "operating.state.sequence",
+        "Version": "000"
+      }

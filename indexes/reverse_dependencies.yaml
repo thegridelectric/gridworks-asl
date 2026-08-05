@@ -854,6 +854,7 @@ formats:
     - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:002
     - i2c.thermistor.reader.component.gt:003
+    - operating.state.sequence:000
     - pico.btu.meter.component.gt:001
     - pico.flow.module.component.gt:001
     - pico.tank.module.component.gt:012
@@ -1008,12 +1009,12 @@ formats:
     - ticklist.reed.report:000
   utc.iso8601.millis:
     used_by:
+    - operating.state.sequence:000
     - sim.plant.actuation:000
     - sim.plant.flux:000
   utc.iso8601.seconds:
     used_by:
     - hourly.electricity.dataset:000
-    - operating.state.sequence:000
     - synced.readings.bundle:001
     - synced.readings.bundle:002
     - synced.readings.bundle:003

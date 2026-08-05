@@ -7,12 +7,13 @@ description: >
   Time-aligned sequence of synchronized multi-channel readings with embedded
   channel semantics sufficient for independent interpretation.
 
-  For each channel, values in its associated ValueList are ordered to align
-  by index with TimestampList, such that the value at index i corresponds
-  to TimestampList[i].
+  For each entry in ChannelReadingsList, values in its ValueList are ordered
+  to align by index with TimestampList, such that the value at index i
+  corresponds to TimestampList[i]. Each entry carries the measurement unit
+  required to interpret its values.
 
-  ChannelDefinitions provides the measurement unit required to interpret
-  values for each channel.
+  Entries in OperatingStateSequenceList are not part of that grid: each
+  state sequence carries its own transition timestamps.
 
 properties:
 
@@ -41,11 +42,22 @@ properties:
       type: array
       items:
         $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
-  
+    description: >
+      [PeriodStart, PeriodEnd] windows within the bundle's span whose
+      readings were persisted late — recorded well after the times they
+      describe (e.g. backfilled after an upload delay or comms outage).
+      Consumers MAY treat readings in these windows as provisional or
+      potentially incomplete.
+
   OperatingStateSequenceList:
     type: array
-    items: 
+    items:
       $ref: "https://schemas.electricity.works/types/operating.state.sequence/000"
+    description: >
+      State-channel sequences (projections of machine states) covering the
+      bundle's span. Unlike the bundle's seconds-resolution TimestampList,
+      each sequence's own TimestampList is utc.iso8601.millis: relay state
+      transitions can and do happen within a second.
 
   TypeName:
     const: "synced.readings.bundle"
@@ -113,6 +125,13 @@ examples:
         }
       ],
       "OperatingStateSequenceList": [
+        {
+          "ChannelName": "local-control-all-tanks-state",
+          "ValueList": ["HpOffStoreOff", "HpOffStoreDischarge"],
+          "TimestampList": ["2025-02-26T00:00:42.099Z", "2025-02-26T00:01:42.105Z"],
+          "TypeName": "operating.state.sequence",
+          "Version": "000"
+        }
       ],
       "LatePersistenceTimePeriodList": [
         ["2025-02-26T00:01:15Z", "2025-02-26T00:01:30Z"]
@@ -150,7 +169,7 @@ x-gridworks:
     - number: 5
       name: "UnitTypeAndValueRepresentationConsistency"
       statement: >
-        For each entry in ChannelDefinitions:
+        For each entry in ChannelReadingsList:
 
           - UnitType SHALL equal one of:
               gw1.unit
@@ -161,23 +180,30 @@ x-gridworks:
             gw1.unit → version 001
             spaceheat.telemetry.name → version 007
 
-
+    - number: 6
+      name: "LatePersistencePeriodWellFormedness"
+      statement: >
+        a. Each entry of LatePersistenceTimePeriodList SHALL contain exactly
+           two elements: [PeriodStart, PeriodEnd].
+        b. PeriodStart SHALL be less than PeriodEnd.
+        c. Each period SHALL lie within the bundle's span:
+           StartTimestamp <= PeriodStart and PeriodEnd <= EndTimestamp.
 
   extended_description: >
 
-    `synced.readings.bundle` represents a rectangular, time-aligned dataset
-    across multiple channels.
+    `synced.readings.bundle` combines a rectangular, time-aligned dataset
+    across multiple numeric channels (ChannelReadingsList, aligned by index
+    to TimestampList) with event-form state sequences
+    (OperatingStateSequenceList), which carry their own transition
+    timestamps and are not aligned to the grid.
 
     ChannelName values are identifiers defined within a GridWorks SCADA layout
     context (e.g. layout.lite or gw.nolan.layout). They are not globally
     standardized vocabulary and SHALL be interpreted only within the context
     in which they were produced.
 
-    ChannelDefinitions provides a minimal projection of channel semantics,
-    including `Name`, `Id`, `Unit` and `UnitType`, sufficient to interpret the
-    numeric values in this bundle without requiring access to the full layout.
-
-    The `Id` together with the channel TypeName (e.g. `data.channel.gt` or
-    `derived.channel.gt`) enables resolution of the authoritative channel
-    definition. This bundle is not a source of semantic authority; it
-    provides a convenient projection for transport, indexing, and querying.
+    Each ChannelReadingsList entry provides a minimal projection of channel
+    semantics (`ChannelName`, `Unit`, `UnitType`), sufficient to interpret
+    the numeric values in this bundle without requiring access to the full
+    layout. This bundle is not a source of semantic authority; it provides
+    a convenient projection for transport, indexing, and querying.

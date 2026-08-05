@@ -1724,8 +1724,9 @@ types:
     '000':
       enums: []
       formats:
+      - pascal.case
       - spaceheat.name
-      - utc.iso8601.seconds
+      - utc.iso8601.millis
       types: []
       versionless_types: []
   pico.btu.meter.component.gt:
@@ -2285,7 +2286,9 @@ types:
       - spaceheat.telemetry.name:007
       formats:
       - left.right.dot
+      - pascal.case
       - spaceheat.name
+      - utc.iso8601.millis
       - utc.iso8601.seconds
       types:
       - channel.readings.list.item:000
