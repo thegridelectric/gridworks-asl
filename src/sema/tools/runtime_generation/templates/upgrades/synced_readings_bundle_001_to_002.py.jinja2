@@ -1,5 +1,7 @@
     def upgrade(self) -> {{ synced_readings_bundle_002_class_name }}:
-        """- ChannelReadingsList[]: inline object -> channel.readings.list.item:000"""
+        """
+          - ChannelReadingsList[]: inline object -> channel.readings.list.item:000
+        """
         data = self.model_dump()
         channel_readings_list: list[dict[str, Any]] = []
 

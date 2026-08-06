@@ -1,0 +1,65 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/hourly.electricity.dataset/000"
+
+title: "hourly.electricity.dataset"
+type: object
+description: >
+  Electricity price and usage for a set of hours. Parallel lists contain the hour's start
+  timestamp, the $/kWh price rate in effect, and the energy consumed during that hour.
+
+properties:
+
+  HourList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
+    description: >
+      Start of the hour this record covers, in UTC.
+
+  PriceUsdPerKwhList:
+    type: array
+    items:
+      type: number
+    description: >
+      Electricity price for the hour, in US dollars per kWh.
+
+  UsageKwhList:
+    type: array
+    items:
+      type: number
+    description: >
+      Energy usage for the hour, in kWh.
+
+  TypeName:
+    const: "hourly.electricity.dataset"
+
+  Version:
+    const: "000"
+
+required:
+  - HourList
+  - PriceUsdPerKwhList
+  - UsageKwhList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "HourList": ["2026-07-31T14:00:00Z", "2026-07-31T15:00:00Z"],
+      "PriceUsdPerKwhList": [0.183, 0.224],
+      "UsageKwhList": [1.42, 5.21],
+      "TypeName": "hourly.electricity.dataset",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "joe-strommen"
+  axioms:
+
+    - number: 1
+      name: "ArrayLengthAlignment"
+      statement: >
+        The lengths of HourList, PriceUsdPerKwhList, and UsageKwhList shall be equal.

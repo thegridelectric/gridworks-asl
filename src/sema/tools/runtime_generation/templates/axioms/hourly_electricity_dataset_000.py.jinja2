@@ -1,0 +1,15 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ hourly_electricity_dataset_000_class_name }}":
+        """
+        Axiom 1: ArrayLengthAlignment
+        The lengths of HourList, PriceUsdPerKwhList, and UsageKwhList shall be equal.
+        """
+        if len(self.hour_list) != len(self.price_usd_per_kwh_list):
+            raise ValueError(
+                "Axiom 1 failed: hour_list and price_usd_per_kwh_list must have equal length."
+            )
+        if len(self.hour_list) != len(self.usage_kwh_list):
+            raise ValueError(
+                "Axiom 1 failed: hour_list and usage_kwh_list must have equal length."
+            )
+        return self

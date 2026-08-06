@@ -1,6 +1,6 @@
-import sys
 from pydantic import ValidationError
 
+from sema.runtime.types.operating_state_sequence import OperatingStateSequence
 from sema.runtime.types.synced_readings_bundle import (
     ChannelReadingsListItem,
     SyncedReadingsBundle,
@@ -42,7 +42,9 @@ def test_valid_object() -> None:
                 unit="Milliseconds",
                 unit_type="gw1.unit",
             ),
-        ]
+        ],
+        late_persistence_time_period_list=[],
+        operating_state_sequence_list=[],
     )
 
 def test_axiom1() -> None:
@@ -53,6 +55,8 @@ def test_axiom1() -> None:
             end_timestamp="2025-02-26T02:00:00Z",
             timestamp_list=[],
             channel_readings_list=[],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
@@ -80,6 +84,8 @@ def test_axiom2() -> None:
                     unit_type="gw1.unit",
                 ),
             ],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
@@ -94,6 +100,8 @@ def test_axiom3() -> None:
             end_timestamp="2025-02-26T00:00:00Z",
             timestamp_list=[],
             channel_readings_list=[],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
@@ -121,6 +129,8 @@ def test_axiom4() -> None:
                     unit_type="gw1.unit",
                 ),
             ],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
@@ -142,11 +152,91 @@ def test_axiom5_invalid_unit_type() -> None:
                     unit_type="something.else",
                 ),
             ],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:
         if "UnitTypeAndValueRepresentationConsistency" not in repr(e):
             raise AssertionError("Expected UnitTypeAndValueRepresentationConsistency error, found something else", e)
+
+def test_valid_late_persistence_and_states() -> None:
+    SyncedReadingsBundle(
+        about_g_node_alias="a.b.c.ta",
+        start_timestamp="2025-02-26T00:00:00Z",
+        end_timestamp="2025-02-26T02:00:00Z",
+        timestamp_list=["2025-02-26T00:00:00Z"],
+        channel_readings_list=[
+            ChannelReadingsListItem(
+                channel_name="persistence-delay",
+                value_list=[3650238],
+                unit="Milliseconds",
+                unit_type="gw1.unit",
+            ),
+        ],
+        late_persistence_time_period_list=[
+            ["2025-02-26T00:01:15Z", "2025-02-26T00:01:30Z"],
+        ],
+        operating_state_sequence_list=[
+            OperatingStateSequence(
+                channel_name="pico-cycler-state",
+                value_list=["RelayOpening", "PicosLive"],
+                timestamp_list=["2025-02-26T00:00:00.221Z", "2025-02-26T00:00:14.204Z"],
+            ),
+        ],
+    )
+
+def test_axiom6_a_pair_length() -> None:
+    try:
+        SyncedReadingsBundle(
+            about_g_node_alias="a.b.c.ta",
+            start_timestamp="2025-02-26T00:00:00Z",
+            end_timestamp="2025-02-26T02:00:00Z",
+            timestamp_list=[],
+            channel_readings_list=[],
+            late_persistence_time_period_list=[["2025-02-26T00:01:15Z"]],
+            operating_state_sequence_list=[],
+        )
+        raise AssertionError("Expected validation failure")
+    except ValidationError as e:
+        if "Axiom 6.a" not in repr(e):
+            raise AssertionError("Expected Axiom 6.a error, found something else", e)
+
+def test_axiom6_b_ordering() -> None:
+    try:
+        SyncedReadingsBundle(
+            about_g_node_alias="a.b.c.ta",
+            start_timestamp="2025-02-26T00:00:00Z",
+            end_timestamp="2025-02-26T02:00:00Z",
+            timestamp_list=[],
+            channel_readings_list=[],
+            late_persistence_time_period_list=[
+                ["2025-02-26T00:01:30Z", "2025-02-26T00:01:15Z"],
+            ],
+            operating_state_sequence_list=[],
+        )
+        raise AssertionError("Expected validation failure")
+    except ValidationError as e:
+        if "Axiom 6.b" not in repr(e):
+            raise AssertionError("Expected Axiom 6.b error, found something else", e)
+
+def test_axiom6_c_within_span() -> None:
+    try:
+        SyncedReadingsBundle(
+            about_g_node_alias="a.b.c.ta",
+            start_timestamp="2025-02-26T00:00:00Z",
+            end_timestamp="2025-02-26T02:00:00Z",
+            timestamp_list=[],
+            channel_readings_list=[],
+            late_persistence_time_period_list=[
+                ["2025-02-26T01:59:00Z", "2025-02-26T02:01:00Z"],
+            ],
+            operating_state_sequence_list=[],
+        )
+        raise AssertionError("Expected validation failure")
+    except ValidationError as e:
+        if "Axiom 6.c" not in repr(e):
+            raise AssertionError("Expected Axiom 6.c error, found something else", e)
 
 def test_axiom5_invalid_unit() -> None:
     try:
@@ -163,6 +253,8 @@ def test_axiom5_invalid_unit() -> None:
                     unit_type="gw1.unit",
                 ),
             ],
+            late_persistence_time_period_list=[],
+            operating_state_sequence_list=[],
         )
         raise AssertionError("Expected validation failure")
     except ValidationError as e:

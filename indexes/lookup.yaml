@@ -335,6 +335,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/heating.forecast/000.yaml
+  hourly.electricity.dataset:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/hourly.electricity.dataset/000.yaml
   hp.control.box.device.type.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -512,6 +517,11 @@ types:
       '002': definitions/types/new.command.tree/002.yaml
       '001': definitions/types/new.command.tree/001.yaml
       '000': definitions/types/new.command.tree/000.yaml
+  operating.state.sequence:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/operating.state.sequence/000.yaml
   pico.btu.meter.component.gt:
     latest_version: '001'
     versioning_strategy: literal
@@ -669,9 +679,10 @@ types:
     versions:
       '000': definitions/types/synced.readings/000.yaml
   synced.readings.bundle:
-    latest_version: '002'
+    latest_version: '003'
     versioning_strategy: literal
     versions:
+      '003': definitions/types/synced.readings.bundle/003.yaml
       '002': definitions/types/synced.readings.bundle/002.yaml
       '001': definitions/types/synced.readings.bundle/001.yaml
   synth.channel.gt:

@@ -1,0 +1,26 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ operating_state_sequence_000_class_name }}":
+        """
+        Axiom 1: ListLengthConsistency
+        len(ValueList) SHALL equal len(TimestampList).
+        """
+        if len(self.value_list) != len(self.timestamp_list):
+            raise ValueError(
+                "Axiom 1 failed: value_list and timestamp_list must have equal length."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ operating_state_sequence_000_class_name }}":
+        """
+        Axiom 2: StrictlyIncreasingTimestamps
+        TimestampList SHALL be strictly increasing.
+        """
+        # utc.iso8601.millis is fixed-width UTC, so lexicographic order is
+        # chronological order.
+        for prev, nxt in zip(self.timestamp_list, self.timestamp_list[1:]):
+            if not prev < nxt:
+                raise ValueError(
+                    "Axiom 2 failed: timestamp_list must be strictly increasing."
+                )
+        return self
