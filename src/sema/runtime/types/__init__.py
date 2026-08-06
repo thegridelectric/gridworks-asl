@@ -60,6 +60,7 @@ from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.heartbeat_a import HeartbeatA
 from sema.runtime.types.heating_curve import HeatingCurve
 from sema.runtime.types.heating_forecast import HeatingForecast
+from sema.runtime.types.hourly_electricity_dataset import HourlyElectricityDataset
 from sema.runtime.types.hp_control_box_device_type_gt import HpControlBoxDeviceTypeGt
 from sema.runtime.types.hp_device_type_gt import HpDeviceTypeGt
 from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
@@ -100,6 +101,7 @@ from sema.runtime.types.machine_states import MachineStates
 from sema.runtime.types.maker_api_attribute_gt import MakerApiAttributeGt
 from sema.runtime.types.market_product import MarketProduct
 from sema.runtime.types.new_command_tree import NewCommandTree
+from sema.runtime.types.operating_state_sequence import OperatingStateSequence
 from sema.runtime.types.pico_btu_meter_component_gt import PicoBtuMeterComponentGt
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
@@ -203,6 +205,7 @@ __all__ = [
     "HeartbeatA",
     "HeatingCurve",
     "HeatingForecast",
+    "HourlyElectricityDataset",
     "HpControlBoxDeviceTypeGt",
     "HpDeviceTypeGt",
     "HubitatComponentGt",
@@ -235,6 +238,7 @@ __all__ = [
     "MakerApiAttributeGt",
     "MarketProduct",
     "NewCommandTree",
+    "OperatingStateSequence",
     "PicoBtuMeterComponentGt",
     "PicoFlowModuleComponentGt",
     "PicoTankModuleComponentGt",

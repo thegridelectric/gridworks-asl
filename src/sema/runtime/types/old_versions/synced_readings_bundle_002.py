@@ -6,21 +6,19 @@ from sema.runtime.enums.old_versions.gw1_unit_001 import Gw1Unit001
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UtcIso8601Seconds
 from sema.runtime.types.channel_readings_list_item import ChannelReadingsListItem
-from sema.runtime.types.operating_state_sequence import OperatingStateSequence
+from sema.runtime.types.synced_readings_bundle import SyncedReadingsBundle
 
 
-class SyncedReadingsBundle(SemaType):
-    """Sema: https://schemas.electricity.works/types/synced.readings.bundle/003"""
+class SyncedReadingsBundle002(SemaType):
+    """Sema: https://schemas.electricity.works/types/synced.readings.bundle/002"""
 
     about_g_node_alias: LeftRightDot
     start_timestamp: UtcIso8601Seconds
     end_timestamp: UtcIso8601Seconds
     timestamp_list: list[UtcIso8601Seconds]
     channel_readings_list: list[ChannelReadingsListItem]
-    late_persistence_time_period_list: list[list[UtcIso8601Seconds]]
-    operating_state_sequence_list: list[OperatingStateSequence]
     type_name: Literal["synced.readings.bundle"] = "synced.readings.bundle"
-    version: Literal["003"] = "003"
+    version: Literal["002"] = "002"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> Self:
@@ -91,7 +89,7 @@ class SyncedReadingsBundle(SemaType):
     def check_axiom_5(self) -> Self:
         """
         Axiom 5: UnitTypeAndValueRepresentationConsistency
-        For each entry in ChannelReadingsList: - UnitType SHALL equal one of: gw1.unit
+        For each entry in ChannelDefinitions: - UnitType SHALL equal one of: gw1.unit
         spaceheat.telemetry.name - Unit SHALL be a valid value from the specified UnitType
         version: gw1.unit → version 001 spaceheat.telemetry.name → version 007
         """
@@ -127,32 +125,14 @@ class SyncedReadingsBundle(SemaType):
             )
         return self
 
-    @model_validator(mode="after")
-    def check_axiom_6(self) -> Self:
+    def upgrade(self) -> SyncedReadingsBundle:
         """
-        Axiom 6: LatePersistencePeriodWellFormedness
-        a. Each entry of LatePersistenceTimePeriodList SHALL contain exactly
-           two elements: [PeriodStart, PeriodEnd].
-        b. PeriodStart SHALL be less than PeriodEnd.
-        c. Each period SHALL lie within the bundle's span:
-           StartTimestamp <= PeriodStart and PeriodEnd <= EndTimestamp.
+        - Add LatePersistenceTimePeriodList: array of utc.iso8601.seconds arrays
+        - Add OperatingStateSequenceList: array of operating.state.sequence:000
         """
-        # utc.iso8601.seconds is fixed-width UTC, so lexicographic order is
-        # chronological order.
-        for period in self.late_persistence_time_period_list:
-            if len(period) != 2:
-                raise ValueError(
-                    "Axiom 6.a failed: each late_persistence_time_period_list "
-                    "entry must contain exactly two elements."
-                )
-            period_start, period_end = period
-            if not period_start < period_end:
-                raise ValueError(
-                    "Axiom 6.b failed: PeriodStart must be less than PeriodEnd."
-                )
-            if period_start < self.start_timestamp or period_end > self.end_timestamp:
-                raise ValueError(
-                    "Axiom 6.c failed: each period must lie within "
-                    "[StartTimestamp, EndTimestamp]."
-                )
-        return self
+
+        data = self.model_dump()
+        data["version"] = "003"
+        data["late_persistence_time_period_list"] = []
+        data["operating_state_sequence_list"] = []
+        return SyncedReadingsBundle.model_validate(data)

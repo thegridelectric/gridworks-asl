@@ -4,7 +4,9 @@ from sema.runtime.base import SemaType
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UtcIso8601Seconds
-from sema.runtime.types.synced_readings_bundle import SyncedReadingsBundle
+from sema.runtime.types.old_versions.synced_readings_bundle_002 import (
+    SyncedReadingsBundle002,
+)
 
 
 class ChannelReadingsListItem(BaseModel):
@@ -56,8 +58,10 @@ class SyncedReadingsBundle001(SemaType):
             )
         return self
 
-    def upgrade(self) -> SyncedReadingsBundle:
-        """- ChannelReadingsList[]: inline object -> channel.readings.list.item:000"""
+    def upgrade(self) -> SyncedReadingsBundle002:
+        """
+        - ChannelReadingsList[]: inline object -> channel.readings.list.item:000
+        """
         data = self.model_dump()
         channel_readings_list: list[dict[str, Any]] = []
 
@@ -76,4 +80,4 @@ class SyncedReadingsBundle001(SemaType):
             channel_readings_list.append(item_data)
         data["channel_readings_list"] = channel_readings_list
         data["version"] = "002"
-        return SyncedReadingsBundle.model_validate(data)
+        return SyncedReadingsBundle002.model_validate(data)

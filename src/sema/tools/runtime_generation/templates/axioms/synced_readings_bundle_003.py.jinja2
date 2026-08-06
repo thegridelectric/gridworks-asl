@@ -1,27 +1,3 @@
-from typing import Literal, Self
-from pydantic import model_validator
-from sema.runtime.base import SemaType
-from sema.runtime.enums import SpaceheatTelemetryName
-from sema.runtime.enums.old_versions.gw1_unit_001 import Gw1Unit001
-from sema.runtime.property_format import LeftRightDot
-from sema.runtime.property_format import UtcIso8601Seconds
-from sema.runtime.types.channel_readings_list_item import ChannelReadingsListItem
-from sema.runtime.types.operating_state_sequence import OperatingStateSequence
-
-
-class SyncedReadingsBundle(SemaType):
-    """Sema: https://schemas.electricity.works/types/synced.readings.bundle/003"""
-
-    about_g_node_alias: LeftRightDot
-    start_timestamp: UtcIso8601Seconds
-    end_timestamp: UtcIso8601Seconds
-    timestamp_list: list[UtcIso8601Seconds]
-    channel_readings_list: list[ChannelReadingsListItem]
-    late_persistence_time_period_list: list[list[UtcIso8601Seconds]]
-    operating_state_sequence_list: list[OperatingStateSequence]
-    type_name: Literal["synced.readings.bundle"] = "synced.readings.bundle"
-    version: Literal["003"] = "003"
-
     @model_validator(mode="after")
     def check_axiom_1(self) -> Self:
         """
@@ -50,7 +26,7 @@ class SyncedReadingsBundle(SemaType):
 
         if duplicates:
             raise ValueError(
-                f"ChannelDefinitionBijection: ChannelName values {','.join(sorted(duplicates))} were repeated."
+                f'ChannelDefinitionBijection: ChannelName values {",".join(sorted(duplicates))} were repeated.'
             )
         return self
 
@@ -95,29 +71,25 @@ class SyncedReadingsBundle(SemaType):
         spaceheat.telemetry.name - Unit SHALL be a valid value from the specified UnitType
         version: gw1.unit → version 001 spaceheat.telemetry.name → version 007
         """
-        if Gw1Unit001.enum_version() != "001":
+        if {{ gw1_unit_001_class_name }}.enum_version() != "001":
             raise ValueError(
-                f'UnitTypeAndValueRepresentationConsistency: Gw1Unit version should be "001", is {Gw1Unit001.enum_version()}'
+                f'UnitTypeAndValueRepresentationConsistency: Gw1Unit version should be "001", is { {{ gw1_unit_001_class_name }}.enum_version()}'
             )
 
-        if SpaceheatTelemetryName.enum_version() != "007":
+        if {{ spaceheat_telemetry_name_007_class_name }}.enum_version() != "007":
             raise ValueError(
                 "UnitTypeAndValueRepresentationConsistency: "
-                f'SpaceheatTelemetryName version should be "007", is {SpaceheatTelemetryName.enum_version()}'
+                f'SpaceheatTelemetryName version should be "007", is { {{ spaceheat_telemetry_name_007_class_name }}.enum_version()}'
             )
 
         errors = []
         for crl in self.channel_readings_list:
-            if crl.unit_type == Gw1Unit001.enum_name():
-                if crl.unit not in Gw1Unit001.values():
-                    errors.append(
-                        f"{crl.channel_name}: {crl.unit} not found in {crl.unit_type}"
-                    )
-            elif crl.unit_type == SpaceheatTelemetryName.enum_name():
-                if crl.unit not in SpaceheatTelemetryName.values():
-                    errors.append(
-                        f"{crl.channel_name}: {crl.unit} not found in {crl.unit_type}"
-                    )
+            if crl.unit_type == {{ gw1_unit_001_class_name }}.enum_name():
+                if crl.unit not in {{ gw1_unit_001_class_name }}.values():
+                    errors.append(f"{crl.channel_name}: {crl.unit} not found in {crl.unit_type}")
+            elif crl.unit_type == {{ spaceheat_telemetry_name_007_class_name }}.enum_name():
+                if crl.unit not in {{ spaceheat_telemetry_name_007_class_name }}.values():
+                    errors.append(f"{crl.channel_name}: {crl.unit} not found in {crl.unit_type}")
             else:
                 errors.append(f"{crl.channel_name}: invalid unit type {crl.unit_type}")
 

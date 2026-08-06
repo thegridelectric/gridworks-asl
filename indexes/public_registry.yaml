@@ -2131,6 +2131,22 @@ types:
           - left.right.dot
           - utc.seconds
           - uuid4.str
+  hourly.electricity.dataset:
+    latest_version: '000'
+    owner: joe-strommen
+    versioning_strategy: literal
+    description: 'Hourly electricity price and usage record: hour start timestamp,
+      USD/kWh price rate, and kWh consumed during that hour.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/hourly.electricity.dataset/000
+        created: '2026-07-31T21:07:41Z'
+        status: staging
+        summary: 'Initial version: HourList (utc.iso8601.seconds), PriceUsdPerKwhList,
+          UsageKwhList.'
+        direct_dependencies:
+          structural:
+          - utc.iso8601.seconds
   hp.control.box.device.type.gt:
     latest_version: '000'
     owner: gridworks-energy
@@ -3030,6 +3046,24 @@ types:
           - spaceheat.node.gt:300
           - spaceheat.node.gt:301
           - utc.milliseconds
+  operating.state.sequence:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Timestamped enum state values for one state machine, projected into
+      a channel-shaped sequence for a time-series analytics context.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/operating.state.sequence/000
+        created: '2026-07-07T05:06:00Z'
+        status: staging
+        summary: 'Initial version: ChannelName (spaceheat.name), ValueList (pascal.case),
+          TimestampList (utc.iso8601.millis).'
+        direct_dependencies:
+          structural:
+          - pascal.case
+          - spaceheat.name
+          - utc.iso8601.millis
   pico.btu.meter.component.gt:
     latest_version: '001'
     owner: gridworks-energy
@@ -3759,12 +3793,27 @@ types:
           - spaceheat.name
           - utc.milliseconds
   synced.readings.bundle:
-    latest_version: '002'
+    latest_version: '003'
     owner: joe-strommen
     versioning_strategy: literal
     description: Time-aligned sequence of synchronized multi-channel readings with
       embedded channel semantics sufficient for independent interpretation.
     versions:
+      '003':
+        schema_url: https://schemas.electricity.works/types/synced.readings.bundle/003
+        status: staging
+        created: '2026-07-31T21:07:41Z'
+        summary: '- Add LatePersistenceTimePeriodList: array of utc.iso8601.seconds
+          arrays - Add OperatingStateSequenceList: array of operating.state.sequence:000'
+        direct_dependencies:
+          structural:
+          - channel.readings.list.item:000
+          - left.right.dot
+          - operating.state.sequence:000
+          - utc.iso8601.seconds
+          axiom:
+          - gw1.unit:001
+          - spaceheat.telemetry.name:007
       '002':
         schema_url: https://schemas.electricity.works/types/synced.readings.bundle/002
         created: '2026-05-05T00:00:00Z'

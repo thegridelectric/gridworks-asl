@@ -1,0 +1,11 @@
+    def upgrade(self) -> {{ synced_readings_bundle_003_class_name }}:
+        """
+          - Add LatePersistenceTimePeriodList: array of utc.iso8601.seconds arrays
+          - Add OperatingStateSequenceList: array of operating.state.sequence:000
+        """
+
+        data = self.model_dump()
+        data["version"] = "003"
+        data["late_persistence_time_period_list"] = []
+        data["operating_state_sequence_list"] = []
+        return {{ synced_readings_bundle_003_class_name }}.model_validate(data)

@@ -37,6 +37,7 @@ types:
     '000':
       used_by:
       - synced.readings.bundle:002
+      - synced.readings.bundle:003
   connectivity.edge.gt:
     '000':
       used_by:
@@ -318,6 +319,10 @@ types:
     '000':
       used_by:
       - hubitat.poller.gt:000
+  operating.state.sequence:
+    '000':
+      used_by:
+      - synced.readings.bundle:003
   pico.btu.meter.component.gt:
     '001':
       used_by:
@@ -582,6 +587,7 @@ enums:
       - gw1.unit.quantity.projection:000
       - synced.readings.bundle:001
       - synced.readings.bundle:002
+      - synced.readings.bundle:003
   hz.calc.method:
     '001':
       used_by:
@@ -676,6 +682,7 @@ enums:
       - spaceheat.telemetry.quantity.projection:000
       - synced.readings.bundle:001
       - synced.readings.bundle:002
+      - synced.readings.bundle:003
       - synth.channel.gt:000
   spaceheat.unit:
     '001':
@@ -789,6 +796,7 @@ formats:
     - snapshot.spaceheat:003
     - synced.readings.bundle:001
     - synced.readings.bundle:002
+    - synced.readings.bundle:003
     - synth.channel.gt:000
     - ticklist.hall.report:000
     - ticklist.reed.report:000
@@ -856,6 +864,7 @@ formats:
     - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:002
     - i2c.thermistor.reader.component.gt:003
+    - operating.state.sequence:000
     - pico.btu.meter.component.gt:001
     - pico.flow.module.component.gt:001
     - pico.tank.module.component.gt:012
@@ -982,6 +991,7 @@ formats:
     - i2c.write.bit:000
     - i2c.write.reg:000
     - maker.api.attribute.gt:000
+    - operating.state.sequence:000
     - pico.btu.meter.component.gt:000
     - pico.btu.meter.component.gt:001
     - pico.flow.module.component.gt:000
@@ -1009,12 +1019,15 @@ formats:
     - ticklist.reed.report:000
   utc.iso8601.millis:
     used_by:
+    - operating.state.sequence:000
     - sim.plant.actuation:000
     - sim.plant.flux:000
   utc.iso8601.seconds:
     used_by:
+    - hourly.electricity.dataset:000
     - synced.readings.bundle:001
     - synced.readings.bundle:002
+    - synced.readings.bundle:003
   utc.milliseconds:
     used_by:
     - channel.readings:001
