@@ -7,12 +7,12 @@ from sema.runtime.types.g_node_gt import GNodeGt
 
 
 class GNodeForest(SemaType):
-    """Sema: https://schemas.electricity.works/types/g.node.forest/001"""
+    """Sema: https://schemas.electricity.works/types/g.node.forest/002"""
 
     roots: list[LeftRightDot]
     nodes: list[GNodeGt]
     edges: list[ConnectivityEdgeGt]
-    send_time_ms: UTCMilliseconds | None = None
+    send_time_ms: UTCMilliseconds
     proof: str | None = None
     type_name: Literal["g.node.forest"] = "g.node.forest"
-    version: Literal["001"] = "001"
+    version: Literal["002"] = "002"

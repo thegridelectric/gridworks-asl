@@ -281,16 +281,20 @@ types:
         summary: "Initial Sema version"
 
   g.node.create.cmd:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: "- NewNode rebinds to g.node.gt:006; new axiom 1 LocationlessAtCreation (NewNode.PositionPointId SHALL be null — a location identity is registered after creation)"
       "000":
         summary: "Initial Sema version"
 
   g.node.forest:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- Nodes rebind to g.node.gt:006; SendTimeMs joins required"
       "001":
         summary: "- SendTimeMs: new optional sender-clock stamp (epoch ms) at forest assembly; the registry stamps wall-clock — it is never simulated (sender-time standard, first adopter)"
       "000":
@@ -304,9 +308,11 @@ types:
         summary: "Initial Sema version"
 
   g.node.gt:
-    latest_version: "005"
+    latest_version: "006"
     versioning_strategy: "literal"
     versions:
+      "006":
+        summary: "- Axiom 2 (PhysicalGNodeLocations) becomes activation-conditioned: PositionPointId is mandatory only when Status is Active — a Pending physical GNode may be locationless"
       "005":
         summary: "adds axiom 6 GNodeAliasHasBody; no field changes"
       "004":
@@ -320,9 +326,11 @@ types:
         summary: "Initial Sema version"
 
   g.node.reparent.cmd:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: "- NewNode rebinds to g.node.gt:006"
       "001":
         summary: "- Proof: new optional opaque authorization artifact for this re-parent (format is machinery of the authority substrate, mirroring g.node.create.cmd)"
       "000":

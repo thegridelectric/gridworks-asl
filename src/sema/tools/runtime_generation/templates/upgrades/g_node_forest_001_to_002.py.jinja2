@@ -1,0 +1,15 @@
+    def upgrade(self) -> {{ g_node_forest_002_class_name }}:
+        """
+        - Nodes rebind to g.node.gt:006; SendTimeMs joins required
+        """
+        if self.send_time_ms is None:
+            raise self.upgrade_requires_context(
+                "g.node.forest:001 -> 002 requires SendTimeMs; an instance "
+                "without one cannot be upgraded (a send time is never "
+                "fabricated)"
+            )
+        data = self.model_dump(exclude_none=True)
+        data["version"] = "002"
+        for node in data["nodes"]:
+            node["version"] = "006"
+        return {{ g_node_forest_002_class_name }}.model_validate(data)

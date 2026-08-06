@@ -25,7 +25,7 @@ properties:
   GNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/g.node.gt/005"
+      $ref: "https://schemas.electricity.works/types/g.node.gt/006"
     description: >
       Grid Node identity objects in this layout snapshot (LeafTransactiveNode,
       TerminalAsset, Scada).

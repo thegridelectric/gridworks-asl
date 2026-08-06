@@ -19,7 +19,7 @@ properties:
   GNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/g.node.gt/005"
+      $ref: "https://schemas.electricity.works/types/g.node.gt/006"
     description: >
       List of Grid Node identity objects included in this layout snapshot.
       Each element is a fully specified Grid Node identity record; the set of

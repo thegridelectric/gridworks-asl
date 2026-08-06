@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ g_node_gt_006_class_name }}:
+        """
+        - Axiom 2 (PhysicalGNodeLocations) becomes activation-conditioned:
+        PositionPointId is mandatory only when Status is Active — a Pending
+        physical GNode may be locationless
+        """
+        data = self.model_dump(exclude_none=True)
+        data["version"] = "006"
+        return {{ g_node_gt_006_class_name }}.model_validate(data)

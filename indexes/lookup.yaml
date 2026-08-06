@@ -173,14 +173,16 @@ types:
     versions:
       '000': definitions/types/g.node.cmd.nack/000.yaml
   g.node.create.cmd:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/g.node.create.cmd/000.yaml
-  g.node.forest:
     latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/g.node.create.cmd/001.yaml
+      '000': definitions/types/g.node.create.cmd/000.yaml
+  g.node.forest:
+    latest_version: '002'
+    versioning_strategy: literal
+    versions:
+      '002': definitions/types/g.node.forest/002.yaml
       '001': definitions/types/g.node.forest/001.yaml
       '000': definitions/types/g.node.forest/000.yaml
   g.node.forest.request:
@@ -189,9 +191,10 @@ types:
     versions:
       '000': definitions/types/g.node.forest.request/000.yaml
   g.node.gt:
-    latest_version: '005'
+    latest_version: '006'
     versioning_strategy: literal
     versions:
+      '006': definitions/types/g.node.gt/006.yaml
       '005': definitions/types/g.node.gt/005.yaml
       '004': definitions/types/g.node.gt/004.yaml
   g.node.instance.gt:
@@ -200,9 +203,10 @@ types:
     versions:
       '000': definitions/types/g.node.instance.gt/000.yaml
   g.node.reparent.cmd:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/g.node.reparent.cmd/002.yaml
       '001': definitions/types/g.node.reparent.cmd/001.yaml
       '000': definitions/types/g.node.reparent.cmd/000.yaml
   glitch:

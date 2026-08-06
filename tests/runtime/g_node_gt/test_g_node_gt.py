@@ -13,21 +13,37 @@ def _axiom_match(n: int) -> re.Pattern[str]:
     return re.compile(rf"axiom {n}", re.IGNORECASE)
 
 
-def _load_fixture(name: str) -> dict:
-    fixture = Path(__file__).parent / "fixtures" / "v005" / name
+def _load_fixture(name: str, version_dir: str = "v005") -> dict:
+    fixture = Path(__file__).parent / "fixtures" / version_dir / name
     return json.loads(fixture.read_text())
 
 
-def test_g_node_gt_latest_version_is_005() -> None:
-    assert GNodeGt.version_value() == "005"
+def test_g_node_gt_latest_version_is_006() -> None:
+    assert GNodeGt.version_value() == "006"
 
 
-def test_default_v005_loads_as_g_node_gt() -> None:
+def test_default_v005_upgrades_to_g_node_gt() -> None:
     decoded = default_codec.from_dict(_load_fixture("default.json"))
 
     assert isinstance(decoded, GNodeGt)
     assert decoded.type_name == "g.node.gt"
-    assert decoded.version == "005"
+    assert decoded.version == "006"
+
+
+def test_default_v006_pending_locationless_loads() -> None:
+    decoded = default_codec.from_dict(_load_fixture("default.json", "v006"))
+
+    assert isinstance(decoded, GNodeGt)
+    assert decoded.status.value == "Pending"
+    assert decoded.position_point_id is None
+
+
+def test_v006_axiom_2_active_requires_location() -> None:
+    """
+    If Status is Active and BaseClass != Logical, PositionPointId SHALL NOT be null.
+    """
+    with pytest.raises(SemaError, match=_axiom_match(2)):
+        default_codec.from_dict(_load_fixture("axiom_2.json", "v006"))
 
 
 @pytest.mark.parametrize(

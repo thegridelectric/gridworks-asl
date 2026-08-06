@@ -439,6 +439,16 @@ types:
       types:
       - g.node.gt:005
       versionless_types: []
+    '001':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types:
+      - g.node.gt:006
+      versionless_types: []
   g.node.forest:
     '000':
       enums:
@@ -463,6 +473,18 @@ types:
       - connectivity.edge.gt:000
       - g.node.gt:005
       versionless_types: []
+    '002':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types:
+      - connectivity.edge.gt:000
+      - g.node.gt:006
+      versionless_types: []
   g.node.forest.request:
     '000':
       enums: []
@@ -482,6 +504,15 @@ types:
       types: []
       versionless_types: []
     '005':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types: []
+      versionless_types: []
+    '006':
       enums:
       - base.g.node.class:000
       - g.node.status:000
@@ -520,6 +551,16 @@ types:
       - uuid4.str
       types:
       - g.node.gt:005
+      versionless_types: []
+    '002':
+      enums:
+      - base.g.node.class:000
+      - g.node.status:000
+      formats:
+      - left.right.dot
+      - uuid4.str
+      types:
+      - g.node.gt:006
       versionless_types: []
   glitch:
     '000':
@@ -616,7 +657,7 @@ types:
       - electric.meter.channel.config:001
       - electric.meter.component.gt:002
       - electric.meter.device.type.gt:000
-      - g.node.gt:005
+      - g.node.gt:006
       - gw.hydronic:000
       - gw.native.gpio.pin:000
       - gw1.hvac.zone:000
@@ -660,7 +701,7 @@ types:
       types:
       - capture.tuning:000
       - cop.curve:000
-      - g.node.gt:005
+      - g.node.gt:006
       - heating.curve:000
       versionless_types: []
   gw.hydronic:
@@ -722,7 +763,7 @@ types:
       - electric.meter.channel.config:001
       - electric.meter.component.gt:002
       - electric.meter.device.type.gt:000
-      - g.node.gt:005
+      - g.node.gt:006
       - gpio.relay.component.gt:000
       - gpio.sensor.component.gt:000
       - gw.hydronic:000

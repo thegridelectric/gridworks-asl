@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ g_node_reparent_cmd_002_class_name }}:
+        """
+        - NewNode rebinds to g.node.gt:006
+        """
+        data = self.model_dump(exclude_none=True)
+        data["version"] = "002"
+        data["new_node"]["version"] = "006"
+        return {{ g_node_reparent_cmd_002_class_name }}.model_validate(data)

@@ -8,7 +8,7 @@ from sema.runtime.property_format import UUID4Str
 
 
 class GNodeGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/g.node.gt/005"""
+    """Sema: https://schemas.electricity.works/types/g.node.gt/006"""
 
     g_node_id: UUID4Str
     alias: LeftRightDot
@@ -19,7 +19,7 @@ class GNodeGt(SemaType):
     position_point_id: UUID4Str | None = None
     display_name: str | None = None
     type_name: Literal["g.node.gt"] = "g.node.gt"
-    version: Literal["005"] = "005"
+    version: Literal["006"] = "006"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> Self:
@@ -49,14 +49,18 @@ class GNodeGt(SemaType):
     def check_axiom_2(self) -> Self:
         """
         Axiom 2: PhysicalGNodeLocations
-        If BaseClass != Logical, PositionPointId SHALL NOT be null.
+        If Status is Active and BaseClass != Logical, PositionPointId SHALL NOT be null.
         """
-        if self.base_class != BaseGNodeClass.Logical:
-            if self.position_point_id is None:
-                raise ValueError(
-                    "Axiom 2 failed: Physical GNodes must have a PositionPointId. "
-                    f"BaseClass='{self.base_class.value}' has no location."
-                )
+        if (
+            self.status == GNodeStatus.Active
+            and self.base_class != BaseGNodeClass.Logical
+            and self.position_point_id is None
+        ):
+            raise ValueError(
+                "Axiom 2 failed: An Active physical GNode must have a "
+                f"PositionPointId. BaseClass='{self.base_class.value}' is "
+                "Active with no location."
+            )
         return self
 
     @model_validator(mode="after")

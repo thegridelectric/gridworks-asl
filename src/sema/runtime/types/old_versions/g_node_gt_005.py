@@ -5,11 +5,11 @@ from sema.runtime.enums import BaseGNodeClass
 from sema.runtime.enums import GNodeStatus
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.old_versions.g_node_gt_005 import GNodeGt005
+from sema.runtime.types.g_node_gt import GNodeGt
 
 
-class GNodeGt004(SemaType):
-    """Sema: https://schemas.electricity.works/types/g.node.gt/004"""
+class GNodeGt005(SemaType):
+    """Sema: https://schemas.electricity.works/types/g.node.gt/005"""
 
     g_node_id: UUID4Str
     alias: LeftRightDot
@@ -20,7 +20,7 @@ class GNodeGt004(SemaType):
     position_point_id: UUID4Str | None = None
     display_name: str | None = None
     type_name: Literal["g.node.gt"] = "g.node.gt"
-    version: Literal["004"] = "004"
+    version: Literal["005"] = "005"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> Self:
@@ -106,8 +106,31 @@ class GNodeGt004(SemaType):
             )
         return self
 
-    def upgrade(self) -> GNodeGt005:
-        """adds axiom 6 GNodeAliasHasBody; no field changes"""
-        data = self.model_dump()
-        data["version"] = "005"
-        return GNodeGt005.model_validate(data)
+    @model_validator(mode="after")
+    def check_axiom_6(self) -> Self:
+        """
+        Axiom 6: GNodeAliasHasBody
+        a. Alias SHALL have at least two dotted words (the universe segment is a namespace, not a GNodeAlias, so the shortest valid GNodeAlias is like "d1.isone").
+        b. If PrevAlias is present, it SHALL likewise have at least two dotted words.
+        """
+        if len(self.alias.split(".")) < 2:
+            raise ValueError(
+                "Axiom 6 failed: Alias must have at least two dotted words "
+                "(the universe segment alone is a namespace, not a GNodeAlias)."
+            )
+        if self.prev_alias is not None and len(self.prev_alias.split(".")) < 2:
+            raise ValueError(
+                "Axiom 6 failed: PrevAlias must have at least two dotted words "
+                "(the universe segment alone is a namespace, not a GNodeAlias)."
+            )
+        return self
+
+    def upgrade(self) -> GNodeGt:
+        """
+        - Axiom 2 (PhysicalGNodeLocations) becomes activation-conditioned:
+        PositionPointId is mandatory only when Status is Active — a Pending
+        physical GNode may be locationless
+        """
+        data = self.model_dump(exclude_none=True)
+        data["version"] = "006"
+        return GNodeGt.model_validate(data)

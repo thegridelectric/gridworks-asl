@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-07-29T15:45:00Z"
+  last_updated: "2026-08-06T14:35:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1624,12 +1624,23 @@ types:
           structural: []
 
   g.node.create.cmd:
-    latest_version: "000"
+    latest_version: "001"
     owner: "gridworks-energy"
     versioning_strategy: "literal"
     description: "Command to create a single GNode in the Grid Node Registry: the registrar-facing write by which a node enters the registry, one node per command, parents first."
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/g.node.create.cmd/001"
+        created: "2026-08-06T13:25:00Z"
+        status: "published"
+        summary: >-
+          - NewNode rebinds to g.node.gt:006; new axiom 1
+          LocationlessAtCreation (NewNode.PositionPointId SHALL be null —
+          a location identity is registered after creation)
+        direct_dependencies:
+          structural:
+            - "g.node.gt:006"
       "000":
         schema_url: "https://schemas.electricity.works/types/g.node.create.cmd/000"
         created: "2026-07-08T17:45:00Z"
@@ -1640,12 +1651,24 @@ types:
             - "g.node.gt:005"
 
   g.node.forest:
-    latest_version: "001"
+    latest_version: "002"
     owner: "gridworks-energy"
     versioning_strategy: "literal"
     description: "A forest of Grid Node subtrees: the subtrees under one or more root aliases, carried as their current GNodes plus the connectivity edges wiring them together."
 
     versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/g.node.forest/002"
+        created: "2026-08-06T13:25:00Z"
+        status: "published"
+        summary: >-
+          - Nodes rebind to g.node.gt:006; SendTimeMs joins required
+        direct_dependencies:
+          structural:
+            - "connectivity.edge.gt:000"
+            - "g.node.gt:006"
+            - "left.right.dot"
+            - "utc.milliseconds"
       "001":
         schema_url: "https://schemas.electricity.works/types/g.node.forest/001"
         created: "2026-07-29T14:10:00Z"
@@ -1690,12 +1713,26 @@ types:
             - "uuid4.str"
 
   g.node.gt:
-    latest_version: "005"
+    latest_version: "006"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Fundamental identity object representing physical and logical grid nodes"
 
     versions:
+      "006":
+        schema_url: "https://schemas.electricity.works/types/g.node.gt/006"
+        created: "2026-08-06T13:25:00Z"
+        status: "published"
+        summary: >-
+          - Axiom 2 (PhysicalGNodeLocations) becomes activation-conditioned:
+          PositionPointId is mandatory only when Status is Active — a Pending
+          physical GNode may be locationless
+        direct_dependencies:
+          structural:
+            - "base.g.node.class:000"
+            - "g.node.status:000"
+            - "left.right.dot"
+            - "uuid4.str"
       "005":
         schema_url: "https://schemas.electricity.works/types/g.node.gt/005"
         created: "2026-07-03T18:55:00Z"
@@ -1739,12 +1776,22 @@ types:
             - "uuid4.str"
 
   g.node.reparent.cmd:
-    latest_version: "001"
+    latest_version: "002"
     owner: "gridworks-energy"
     versioning_strategy: "literal"
     description: "Command to re-parent a subtree in the Grid Node Registry: introduce a new node N and re-parent one or more children beneath it."
 
     versions:
+      "002":
+        schema_url: "https://schemas.electricity.works/types/g.node.reparent.cmd/002"
+        created: "2026-08-06T13:25:00Z"
+        status: "published"
+        summary: >-
+          - NewNode rebinds to g.node.gt:006
+        direct_dependencies:
+          structural:
+            - "g.node.gt:006"
+            - "uuid4.str"
       "001":
         schema_url: "https://schemas.electricity.works/types/g.node.reparent.cmd/001"
         created: "2026-07-21T12:50:00Z"
@@ -1902,7 +1949,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.layout/000"
-        created: "2026-07-27T16:15:00Z"
+        created: "2026-08-06T13:25:00Z"
         status: "staging"
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). All collections + Hydronic required (mirrors gw.nolan.layout) — a layout is a complete deployable artifact."
         direct_dependencies:
@@ -1914,7 +1961,7 @@ types:
             - "dfr.component.gt:000"
             - "electric.meter.component.gt:002"
             - "electric.meter.device.type.gt:000"
-            - "g.node.gt:005"
+            - "g.node.gt:006"
             - "gw.hydronic:000"
             - "gw1.scada.device.type.gt:000"
             - "hubitat.component.gt:000"
@@ -1936,14 +1983,14 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.operational.params/000"
-        created: "2026-07-09T21:30:00Z"
+        created: "2026-08-06T13:25:00Z"
         status: "staging"
         summary: "GNodes home identity (mirrors the layout) + CaptureTuningList (per-channel capture params migrated out of the channel-config family) + the control/optimization block migrated out of scada deployment config: SystemMode, SeasonalStorageMode, CopCurve, HeatingCurve, HpTurnOnMinutes, ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup, HorizonHours, Latitude, Longitude (all required — no assumed defaults)."
         direct_dependencies:
           structural:
             - "capture.tuning:000"
             - "cop.curve:000"
-            - "g.node.gt:005"
+            - "g.node.gt:006"
             - "gw1.seasonal.storage.mode:000"
             - "gw1.system.mode:000"
             - "heating.curve:000"
@@ -1994,7 +2041,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.nolan.layout/000"
-        created: "2026-07-27T16:15:00Z"
+        created: "2026-08-06T13:25:00Z"
         status: "staging"
         summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/303 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
         direct_dependencies:
@@ -2004,7 +2051,7 @@ types:
             - "derived.channel.gt:002"
             - "electric.meter.component.gt:002"
             - "electric.meter.device.type.gt:000"
-            - "g.node.gt:005"
+            - "g.node.gt:006"
             - "gpio.relay.component.gt:000"
             - "gpio.sensor.component.gt:000"
             - "gw.hydronic:000"

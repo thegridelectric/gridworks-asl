@@ -1,0 +1,16 @@
+    def upgrade(self) -> {{ g_node_create_cmd_001_class_name }}:
+        """
+        - NewNode rebinds to g.node.gt:006; new axiom 1 LocationlessAtCreation
+        (NewNode.PositionPointId SHALL be null — a location identity is
+        registered after creation)
+        """
+        if self.new_node.position_point_id is not None:
+            raise self.upgrade_requires_context(
+                "g.node.create.cmd:000 -> 001 forbids NewNode.PositionPointId; "
+                "an instance carrying one cannot be upgraded without dropping "
+                "data"
+            )
+        data = self.model_dump(exclude_none=True)
+        data["version"] = "001"
+        data["new_node"]["version"] = "006"
+        return {{ g_node_create_cmd_001_class_name }}.model_validate(data)

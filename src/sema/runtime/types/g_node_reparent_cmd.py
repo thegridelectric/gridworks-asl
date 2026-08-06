@@ -5,10 +5,10 @@ from sema.runtime.types.g_node_gt import GNodeGt
 
 
 class GNodeReparentCmd(SemaType):
-    """Sema: https://schemas.electricity.works/types/g.node.reparent.cmd/001"""
+    """Sema: https://schemas.electricity.works/types/g.node.reparent.cmd/002"""
 
     new_node: GNodeGt
     moved_child_g_node_ids: list[UUID4Str]
     proof: str | None = None
     type_name: Literal["g.node.reparent.cmd"] = "g.node.reparent.cmd"
-    version: Literal["001"] = "001"
+    version: Literal["002"] = "002"

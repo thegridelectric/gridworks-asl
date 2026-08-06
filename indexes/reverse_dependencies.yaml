@@ -42,6 +42,7 @@ types:
       used_by:
       - g.node.forest:000
       - g.node.forest:001
+      - g.node.forest:002
   cop.curve:
     '000':
       used_by:
@@ -138,6 +139,11 @@ types:
       - g.node.forest:001
       - g.node.reparent.cmd:000
       - g.node.reparent.cmd:001
+    '006':
+      used_by:
+      - g.node.create.cmd:001
+      - g.node.forest:002
+      - g.node.reparent.cmd:002
       - gw.house0.layout:000
       - gw.house0.operational.params:000
       - gw.nolan.layout:000
@@ -461,6 +467,7 @@ enums:
       used_by:
       - g.node.gt:004
       - g.node.gt:005
+      - g.node.gt:006
   change.relay.pin:
     '000':
       used_by:
@@ -491,6 +498,7 @@ enums:
       - connectivity.edge.gt:000
       - g.node.gt:004
       - g.node.gt:005
+      - g.node.gt:006
   gpio.sense.mode:
     '000':
       used_by:
@@ -736,8 +744,10 @@ formats:
     - g.node.forest.request:000
     - g.node.forest:000
     - g.node.forest:001
+    - g.node.forest:002
     - g.node.gt:004
     - g.node.gt:005
+    - g.node.gt:006
     - glitch:000
     - gridworks.header:001
     - heating.forecast:000
@@ -1014,6 +1024,7 @@ formats:
     - fsm.atomic.report:001
     - fsm.event:000
     - g.node.forest:001
+    - g.node.forest:002
     - g.node.instance.gt:000
     - glitch:000
     - gridworks.event.problem:001
@@ -1098,9 +1109,11 @@ formats:
     - g.node.forest.request:000
     - g.node.gt:004
     - g.node.gt:005
+    - g.node.gt:006
     - g.node.instance.gt:000
     - g.node.reparent.cmd:000
     - g.node.reparent.cmd:001
+    - g.node.reparent.cmd:002
     - gpio.relay.component.gt:000
     - gpio.sensor.component.gt:000
     - gridworks.event.problem:001
