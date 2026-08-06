@@ -1,0 +1,76 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.experiment.run/000"
+
+title: "gw.experiment.run"
+type: object
+description: >
+  The metadata every experiment result carries: which experiment produced
+  it, on what host, over what wall-clock window, and optionally what code
+  ran. One gw.experiment.run is embedded in each result instance so the
+  result is self-describing without its folder context.
+
+properties:
+  ExperimentSlug:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      The experiment KIND slug, exactly as it appears in the logbook
+      (e.g. "ads-noise"). The experiment folder is <date>-<slug>; the
+      folder README is the canonical narrative behind the result.
+
+  HostGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The GNode alias of the host the measurement ran on (e.g. the
+      scada GNode from the box's hardware layout).
+
+  StartUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Wall-clock start of the measurement window.
+
+  EndUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Wall-clock end of the measurement window.
+
+  CodeRef:
+    $ref: "https://schemas.electricity.works/formats/non.empty.string"
+    description: >
+      Optional pointer to the code that ran, e.g. a script name plus a
+      commit hash once the experiments folder is a git repo.
+
+  TypeName:
+    const: "gw.experiment.run"
+
+  Version:
+    const: "000"
+
+required:
+  - ExperimentSlug
+  - HostGNodeAlias
+  - StartUnixMs
+  - EndUnixMs
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ExperimentSlug": "ads-noise",
+      "HostGNodeAlias": "hw1.isone.me.versant.keene.spruce.scada",
+      "StartUnixMs": 1786375784000,
+      "EndUnixMs": 1786376145000,
+      "TypeName": "gw.experiment.run",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "TimeOrder"
+      statement: >
+        EndUnixMs SHALL be greater than StartUnixMs.

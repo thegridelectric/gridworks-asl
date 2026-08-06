@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-06T14:35:00Z"
+  last_updated: "2026-08-06T19:40:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1939,6 +1939,46 @@ types:
     direct_dependencies:
       structural:
         - "gridworks.header:001"
+
+  gw.channel.jump.stats:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Jump/spike statistics for one fleet telemetry channel over one archive window, in the channel's own serialized units — the element of the canary view of board electrical health."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.channel.jump.stats/000"
+        created: "2026-08-06T19:40:00Z"
+        status: "staging"
+        summary: "Initial version, from the semafy-experiments pilot (ads-noise at spruce). Travels with the channel's own sema object (ChannelTypeName/ChannelVersion); values in the channel's serialized units."
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "non.negative.int"
+            - "positive.float"
+            - "positive.int"
+            - "spaceheat.name"
+            - "utc.milliseconds"
+
+  gw.experiment.run:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "The metadata every experiment result carries: kind slug, host GNode alias, wall-clock measurement window, optional code pointer."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.experiment.run/000"
+        created: "2026-08-06T19:40:00Z"
+        status: "staging"
+        summary: "Initial version, from the semafy-experiments pilot (ads-noise at spruce)."
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "non.empty.string"
+            - "spaceheat.name"
+            - "utc.milliseconds"
 
   gw.house0.layout:
     latest_version: "000"

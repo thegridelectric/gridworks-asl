@@ -383,6 +383,20 @@ types:
     versioning_strategy: "none"
     summary: "Versionless GridWorks message envelope (gwproto Message wire format)."
 
+  gw.channel.jump.stats:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version, from the semafy-experiments pilot (ads-noise at spruce). Travels with the channel's own sema object (ChannelTypeName/ChannelVersion); values in the channel's serialized units."
+
+  gw.experiment.run:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version, from the semafy-experiments pilot (ads-noise at spruce)."
+
   gw.house0.layout:
     latest_version: "000"
     versioning_strategy: "literal"

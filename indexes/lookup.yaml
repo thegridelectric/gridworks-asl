@@ -243,6 +243,16 @@ types:
   gw:
     versioning_strategy: none
     schema: definitions/types/gw.yaml
+  gw.channel.jump.stats:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.channel.jump.stats/000.yaml
+  gw.experiment.run:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.experiment.run/000.yaml
   gw.house0.layout:
     latest_version: '000'
     versioning_strategy: literal

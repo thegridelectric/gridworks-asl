@@ -1,0 +1,12 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw_experiment_run_000_class_name }}":
+        """
+        Axiom 1: TimeOrder
+        EndUnixMs SHALL be greater than StartUnixMs.
+        """
+        if not self.end_unix_ms > self.start_unix_ms:
+            raise ValueError(
+                "Axiom 1 (TimeOrder) failed: EndUnixMs must be greater than "
+                "StartUnixMs."
+            )
+        return self

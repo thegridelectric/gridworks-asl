@@ -611,6 +611,28 @@ types:
       - left.right.dot
       types: []
       versionless_types: []
+  gw.channel.jump.stats:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - non.negative.int
+      - positive.float
+      - positive.int
+      - spaceheat.name
+      - utc.milliseconds
+      types: []
+      versionless_types: []
+  gw.experiment.run:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - spaceheat.name
+      - utc.milliseconds
+      types: []
+      versionless_types: []
   gw.house0.layout:
     '000':
       enums:

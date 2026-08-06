@@ -1,0 +1,133 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.channel.jump.stats/000"
+
+title: "gw.channel.jump.stats"
+type: object
+description: >
+  Jump statistics for one fleet telemetry channel over one archive
+  window: how many consecutive-reading jumps exceeded a threshold within
+  a bounded gap, and how large the jumps ran. Computed from
+  already-archived readings, so it needs no new instrumentation. This
+  type travels with the corresponding channel sema object —
+  ChannelTypeName/ChannelVersion name the word that declares the
+  channel's semantics (e.g. data.channel.gt, whose TelemetryName implies
+  the wire unit, or derived.channel.gt, whose OutputUnit declares it) —
+  and every numeric field is in that channel's own serialized units,
+  never a restated unit of its own. The element of the canary view:
+  per-channel daily spike counts as an early-warning signal for board
+  electrical health.
+
+properties:
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  ChannelTypeName:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The Sema word declaring this channel's semantics, resolved via the
+      layout the channel was declared in.
+
+  ChannelVersion:
+    type: string
+    description: >
+      The three-digit version of ChannelTypeName the channel was
+      declared under.
+
+  WindowStartUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  WindowEndUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  NumReadings:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      Archived readings in the window.
+
+  JumpThreshold:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+    description: >
+      A consecutive-reading change with magnitude above this counts as a
+      spike, in the channel's serialized units. Chosen far above any
+      physically plausible change for the quantity (no real zone
+      temperature moves 50 mV between readings).
+
+  MaxGapS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Consecutive readings further apart than this many seconds are not
+      compared — a jump across a reporting gap is a gap artifact, not a
+      spike.
+
+  SpikeCount:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+
+  MaxAbsJump:
+    type: number
+    description: >
+      The largest consecutive-reading change magnitude in the window,
+      spike or not, in the channel's serialized units. Zero when the
+      window has fewer than two comparable readings.
+
+  MedianAbsJump:
+    type: number
+    description: >
+      The median consecutive-reading change magnitude, in the channel's
+      serialized units — the channel's ordinary step size, for scale
+      against the spikes. Zero when the window has fewer than two
+      comparable readings.
+
+  TypeName:
+    const: "gw.channel.jump.stats"
+
+  Version:
+    const: "000"
+
+required:
+  - ChannelName
+  - ChannelTypeName
+  - ChannelVersion
+  - WindowStartUnixMs
+  - WindowEndUnixMs
+  - NumReadings
+  - JumpThreshold
+  - MaxGapS
+  - SpikeCount
+  - MaxAbsJump
+  - MedianAbsJump
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ChannelName": "zone1-bedrooms-gw-microvolts",
+      "ChannelTypeName": "data.channel.gt",
+      "ChannelVersion": "002",
+      "WindowStartUnixMs": 1784779200000,
+      "WindowEndUnixMs": 1784865600000,
+      "NumReadings": 1440,
+      "JumpThreshold": 50000,
+      "MaxGapS": 300,
+      "SpikeCount": 0,
+      "MaxAbsJump": 5000,
+      "MedianAbsJump": 1250,
+      "TypeName": "gw.channel.jump.stats",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "WindowOrder"
+      statement: >
+        WindowEndUnixMs SHALL be greater than WindowStartUnixMs.
+    - number: 2
+      name: "NonNegativeMagnitudes"
+      statement: >
+        MaxAbsJump and MedianAbsJump SHALL each be greater than or equal
+        to zero.

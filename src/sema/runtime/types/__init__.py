@@ -51,6 +51,8 @@ from sema.runtime.types.gw1_telemetry_name_quantity_projection import (
     Gw1TelemetryNameQuantityProjection,
 )
 from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProjection
+from sema.runtime.types.gw_channel_jump_stats import GwChannelJumpStats
+from sema.runtime.types.gw_experiment_run import GwExperimentRun
 from sema.runtime.types.gw_house0_layout import GwHouse0Layout
 from sema.runtime.types.gw_house0_operational_params import GwHouse0OperationalParams
 from sema.runtime.types.gw_hydronic import GwHydronic
@@ -196,6 +198,8 @@ __all__ = [
     "Gw1TankTempCalibrationMap",
     "Gw1TelemetryNameQuantityProjection",
     "Gw1UnitQuantityProjection",
+    "GwChannelJumpStats",
+    "GwExperimentRun",
     "GwHouse0Layout",
     "GwHouse0OperationalParams",
     "GwHydronic",
