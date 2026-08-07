@@ -1229,6 +1229,15 @@ types:
       types: []
       versionless_types: []
   i2c.thermistor.channel.config:
+    '000':
+      enums:
+      - i2c.adc.channel:000
+      - spaceheat.unit:001
+      formats:
+      - positive.int
+      - spaceheat.name
+      types: []
+      versionless_types: []
     '001':
       enums:
       - i2c.adc.channel:000
@@ -1257,6 +1266,19 @@ types:
       types: []
       versionless_types: []
   i2c.thermistor.reader.component.gt:
+    '000':
+      enums:
+      - i2c.adc.channel:000
+      - spaceheat.unit:001
+      - temp.calc.method:000
+      formats:
+      - positive.float
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - i2c.thermistor.channel.config:000
+      versionless_types: []
     '001':
       enums:
       - i2c.adc.channel:000

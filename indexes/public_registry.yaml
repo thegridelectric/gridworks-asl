@@ -2597,8 +2597,20 @@ types:
         schema_url: https://schemas.electricity.works/types/i2c.thermistor.channel.config/001
         created: '2026-03-30T16:07:00Z'
         status: staging
-        summary: Initial Sema version. Starts at 001 to match the only version ever
-          emitted in the field; the never-emitted sema 000 was dropped.
+        summary: Structural-only restamp of the field-emitted shape (see 000).
+        direct_dependencies:
+          structural:
+          - i2c.adc.channel:000
+          - positive.int
+          - spaceheat.name
+          - spaceheat.unit:001
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.thermistor.channel.config/000
+        created: '2026-03-30T16:00:00Z'
+        status: staging
+        summary: "Reinstated 2026-08-06 from wire evidence: deployed layouts emit\
+          \ Version 000 records (the lineage was begun at 001 in the belief 000 was\
+          \ never emitted). Field-identical to 001 \u2014 upgrade is a version restamp."
         direct_dependencies:
           structural:
           - i2c.adc.channel:000
@@ -2668,12 +2680,26 @@ types:
         schema_url: https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/001
         created: '2026-03-30T16:07:00Z'
         status: staging
-        summary: Initial Sema version. Starts at 001 to match the only field-emitted
-          version; the never-emitted sema 000 was dropped. Structural-only (gwsproto
+        summary: Structural-only restamp of the field-emitted shape (see 000; gwsproto
           ConfigUniqueness/AddressValidity axioms deferred).
         direct_dependencies:
           structural:
           - i2c.thermistor.channel.config:001
+          - positive.float
+          - spaceheat.name
+          - temp.calc.method:000
+          - uuid4.str
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/000
+        created: '2026-03-30T16:00:00Z'
+        status: staging
+        summary: "Reinstated 2026-08-06 from wire evidence: deployed layouts (spruce,\
+          \ July deploy) emit Version 000 records (the lineage was begun at 001 in\
+          \ the belief 000 was never emitted). Field-identical to 001 with 000-stamped\
+          \ ConfigList children \u2014 upgrade is a recursive version restamp."
+        direct_dependencies:
+          structural:
+          - i2c.thermistor.channel.config:000
           - positive.float
           - spaceheat.name
           - temp.calc.method:000

@@ -702,7 +702,9 @@ types:
           - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
           - SendToDerived: drop (derived routing is computed from DerivedChannel InputChannelNames)
       "001":
-        summary: "Initial Sema version. Starts at 001 to match the only version ever emitted in the field; the never-emitted sema 000 was dropped."
+        summary: "Structural-only restamp of the field-emitted shape (see 000)."
+      "000":
+        summary: "Reinstated 2026-08-06 from wire evidence: deployed layouts emit Version 000 records (the lineage was begun at 001 in the belief 000 was never emitted). Field-identical to 001 — upgrade is a version restamp."
 
   i2c.thermistor.interface.capability:
     latest_version: "000"
@@ -720,7 +722,9 @@ types:
       "002":
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "001":
-        summary: "Initial Sema version. Starts at 001 to match the only field-emitted version; the never-emitted sema 000 was dropped. Structural-only (gwsproto ConfigUniqueness/AddressValidity axioms deferred)."
+        summary: "Structural-only restamp of the field-emitted shape (see 000; gwsproto ConfigUniqueness/AddressValidity axioms deferred)."
+      "000":
+        summary: "Reinstated 2026-08-06 from wire evidence: deployed layouts (spruce, July deploy) emit Version 000 records (the lineage was begun at 001 in the belief 000 was never emitted). Field-identical to 001 with 000-stamped ConfigList children — upgrade is a recursive version restamp."
 
   i2c.write.bit:
     latest_version: "000"

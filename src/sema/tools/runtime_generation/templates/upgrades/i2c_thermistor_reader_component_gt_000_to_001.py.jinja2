@@ -1,0 +1,11 @@
+    def upgrade(self) -> {{ i2c_thermistor_reader_component_gt_001_class_name }}:
+        """
+        Structural-only restamp of the field-emitted shape (see 000;
+        gwsproto ConfigUniqueness/AddressValidity axioms deferred).
+        """
+        data = self.model_dump()
+        data["version"] = "001"
+        data["config_list"] = [
+            c.upgrade().model_dump() for c in self.config_list
+        ]
+        return {{ i2c_thermistor_reader_component_gt_001_class_name }}.model_validate(data)

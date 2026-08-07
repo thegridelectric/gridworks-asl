@@ -295,6 +295,9 @@ types:
       used_by:
       - gw1.scada.device.type.gt:000
   i2c.thermistor.channel.config:
+    '000':
+      used_by:
+      - i2c.thermistor.reader.component.gt:000
     '001':
       used_by:
       - i2c.thermistor.reader.component.gt:001
@@ -598,6 +601,7 @@ enums:
   i2c.adc.channel:
     '000':
       used_by:
+      - i2c.thermistor.channel.config:000
       - i2c.thermistor.channel.config:001
       - i2c.thermistor.channel.config:002
   i2c.adc.type:
@@ -691,6 +695,7 @@ enums:
       - channel.config:000
       - dfr.config:000
       - electric.meter.channel.config:000
+      - i2c.thermistor.channel.config:000
       - i2c.thermistor.channel.config:001
       - maker.api.attribute.gt:000
       - relay.actor.config:002
@@ -698,6 +703,7 @@ enums:
   temp.calc.method:
     '000':
       used_by:
+      - i2c.thermistor.reader.component.gt:000
       - i2c.thermistor.reader.component.gt:001
       - i2c.thermistor.reader.component.gt:002
       - i2c.thermistor.reader.component.gt:003
@@ -885,6 +891,7 @@ formats:
     - hp.device.type.gt:000
     - i2c.ct.interface.capability:000
     - i2c.thermistor.interface.capability:000
+    - i2c.thermistor.reader.component.gt:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
     - pico.btu.meter.component.gt:000
@@ -929,6 +936,7 @@ formats:
     - i2c.expander:000
     - i2c.read.reg:000
     - i2c.relay.capability:000
+    - i2c.thermistor.channel.config:000
     - i2c.thermistor.channel.config:001
     - i2c.thermistor.channel.config:002
     - i2c.write.reg:000
@@ -992,8 +1000,10 @@ formats:
     - i2c.read.bit:000
     - i2c.read.reg:000
     - i2c.result:000
+    - i2c.thermistor.channel.config:000
     - i2c.thermistor.channel.config:001
     - i2c.thermistor.channel.config:002
+    - i2c.thermistor.reader.component.gt:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
     - i2c.write.bit:000
@@ -1156,6 +1166,7 @@ formats:
     - i2c.read.reg:000
     - i2c.relay.component.gt:000
     - i2c.result:000
+    - i2c.thermistor.reader.component.gt:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
     - i2c.thermistor.reader.component.gt:003

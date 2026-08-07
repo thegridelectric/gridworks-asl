@@ -458,6 +458,7 @@ types:
     versions:
       '002': definitions/types/i2c.thermistor.channel.config/002.yaml
       '001': definitions/types/i2c.thermistor.channel.config/001.yaml
+      '000': definitions/types/i2c.thermistor.channel.config/000.yaml
   i2c.thermistor.interface.capability:
     latest_version: '000'
     versioning_strategy: literal
@@ -470,6 +471,7 @@ types:
       '003': definitions/types/i2c.thermistor.reader.component.gt/003.yaml
       '002': definitions/types/i2c.thermistor.reader.component.gt/002.yaml
       '001': definitions/types/i2c.thermistor.reader.component.gt/001.yaml
+      '000': definitions/types/i2c.thermistor.reader.component.gt/000.yaml
   i2c.write.bit:
     latest_version: '000'
     versioning_strategy: literal
