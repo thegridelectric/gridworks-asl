@@ -1,0 +1,117 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.channel.noise.stats/000"
+
+title: "gw.channel.noise.stats"
+type: object
+description: >
+  Noise statistics for one fleet telemetry channel over one measurement
+  window: sample count, mean, standard deviation, and peak-to-peak
+  spread. Like gw.channel.jump.stats, this type travels with the
+  corresponding channel sema object — ChannelTypeName/ChannelVersion
+  name the word declaring the channel's semantics — and every numeric
+  field is in that channel's own serialized units, never a restated
+  unit of its own. ConditionLabel optionally ties the statistics to a
+  kind-specific measurement condition (a bench read mode, a filter
+  setting); the label's meaning lives in the experiment's README, not
+  in vocabulary.
+
+properties:
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  ChannelTypeName:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The Sema word declaring this channel's semantics, resolved via the
+      layout the channel was declared in.
+
+  ChannelVersion:
+    type: string
+    description: >
+      The three-digit version of ChannelTypeName the channel was
+      declared under.
+
+  ConditionLabel:
+    $ref: "https://schemas.electricity.works/formats/non.empty.string"
+    description: >
+      Optional label for the measurement condition the statistics were
+      taken under, e.g. a bench read mode like "base-128sps-1hz".
+
+  WindowStartUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  WindowEndUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  NumSamples:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Samples in the statistics, after any filter warmup discard.
+
+  Mean:
+    type: number
+    description: >
+      Mean of the samples, in the channel's serialized units.
+
+  Sd:
+    type: number
+    description: >
+      Sample standard deviation, in the channel's serialized units. For
+      a filtered condition this is the sd of the filter output.
+
+  P2p:
+    type: number
+    description: >
+      Peak-to-peak spread (max minus min) over the window, in the
+      channel's serialized units.
+
+  TypeName:
+    const: "gw.channel.noise.stats"
+
+  Version:
+    const: "000"
+
+required:
+  - ChannelName
+  - ChannelTypeName
+  - ChannelVersion
+  - WindowStartUnixMs
+  - WindowEndUnixMs
+  - NumSamples
+  - Mean
+  - Sd
+  - P2p
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ChannelName": "zone1-bedrooms-gw-microvolts",
+      "ChannelTypeName": "data.channel.gt",
+      "ChannelVersion": "002",
+      "ConditionLabel": "base-128sps-1hz",
+      "WindowStartUnixMs": 1786030185144,
+      "WindowEndUnixMs": 1786030544848,
+      "NumSamples": 120,
+      "Mean": 2226162,
+      "Sd": 869.3,
+      "P2p": 3750,
+      "TypeName": "gw.channel.noise.stats",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "WindowOrder"
+      statement: >
+        WindowEndUnixMs SHALL be greater than WindowStartUnixMs.
+    - number: 2
+      name: "NonNegativeSpread"
+      statement: >
+        Sd and P2p SHALL each be greater than or equal to zero.

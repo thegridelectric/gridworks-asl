@@ -764,6 +764,7 @@ formats:
     - glitch:000
     - gridworks.header:001
     - gw.channel.jump.stats:000
+    - gw.channel.noise.stats:000
     - gw.experiment.run:000
     - heating.forecast:000
     - keyparam.change.log:000
@@ -820,6 +821,7 @@ formats:
     - latest.price:000
   non.empty.string:
     used_by:
+    - gw.channel.noise.stats:000
     - gw.experiment.run:000
     - hp.device.type.gt:000
     - relay.actor.config:002
@@ -922,6 +924,7 @@ formats:
     - flo.params.house0:006
     - flo.params.house0:007
     - gw.channel.jump.stats:000
+    - gw.channel.noise.stats:000
     - gw.house0.operational.params:000
     - gw1.scada.device.type.gt:000
     - gw108.gpio.sensor.component.gt:001
@@ -992,6 +995,7 @@ formats:
     - fsm.full.report:001
     - glitch:000
     - gw.channel.jump.stats:000
+    - gw.channel.noise.stats:000
     - gw.experiment.run:000
     - gw1.hvac.zone:000
     - i2c.multichannel.dt.relay.component.gt:003
@@ -1060,6 +1064,7 @@ formats:
     - glitch:000
     - gridworks.event.problem:001
     - gw.channel.jump.stats:000
+    - gw.channel.noise.stats:000
     - gw.experiment.run:000
     - i2c.result:000
     - layout.lite:007

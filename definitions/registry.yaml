@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-06T19:40:00Z"
+  last_updated: "2026-08-07T12:15:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1957,6 +1957,26 @@ types:
             - "left.right.dot"
             - "non.negative.int"
             - "positive.float"
+            - "positive.int"
+            - "spaceheat.name"
+            - "utc.milliseconds"
+
+  gw.channel.noise.stats:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Noise statistics (n, mean, sd, p2p) for one fleet telemetry channel over one measurement window, in the channel's own serialized units — the bench-stats sibling of gw.channel.jump.stats."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.channel.noise.stats/000"
+        created: "2026-08-07T12:15:00Z"
+        status: "staging"
+        summary: "Initial version, from the semafy-experiments pilot. Travels with the channel's own sema object (ChannelTypeName/ChannelVersion); optional ConditionLabel ties stats to a kind-specific condition described in the experiment README."
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "non.empty.string"
             - "positive.int"
             - "spaceheat.name"
             - "utc.milliseconds"

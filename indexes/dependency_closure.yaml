@@ -623,6 +623,17 @@ types:
       - utc.milliseconds
       types: []
       versionless_types: []
+  gw.channel.noise.stats:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - positive.int
+      - spaceheat.name
+      - utc.milliseconds
+      types: []
+      versionless_types: []
   gw.experiment.run:
     '000':
       enums: []

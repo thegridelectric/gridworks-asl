@@ -1,0 +1,25 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw_channel_noise_stats_000_class_name }}":
+        """
+        Axiom 1: WindowOrder
+        WindowEndUnixMs SHALL be greater than WindowStartUnixMs.
+        """
+        if not self.window_end_unix_ms > self.window_start_unix_ms:
+            raise ValueError(
+                "Axiom 1 (WindowOrder) failed: WindowEndUnixMs must be greater "
+                "than WindowStartUnixMs."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ gw_channel_noise_stats_000_class_name }}":
+        """
+        Axiom 2: NonNegativeSpread
+        Sd and P2p SHALL each be greater than or equal to zero.
+        """
+        if self.sd < 0 or self.p2p < 0:
+            raise ValueError(
+                "Axiom 2 (NonNegativeSpread) failed: Sd and P2p must each "
+                "be >= 0."
+            )
+        return self
