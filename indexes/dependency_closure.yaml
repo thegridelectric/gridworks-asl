@@ -823,6 +823,28 @@ types:
       - spaceheat.telemetry.quantity.projection:000
       - web.server.component.gt:002
       versionless_types: []
+  gw.readings:
+    '000':
+      enums:
+      - gw1.emission.method:000
+      - gw1.quantity:000
+      - gw1.quantity:001
+      - gw1.unit:001
+      - spaceheat.telemetry.name:007
+      formats:
+      - left.right.dot
+      - positive.int
+      - spaceheat.name
+      - utc.milliseconds
+      - utc.seconds
+      - uuid4.str
+      types:
+      - channel.readings:002
+      - data.channel.gt:003
+      - derived.channel.gt:002
+      - gw1.unit.quantity.projection:000
+      - spaceheat.telemetry.quantity.projection:000
+      versionless_types: []
   gw1.hvac.zone:
     '000':
       enums: []

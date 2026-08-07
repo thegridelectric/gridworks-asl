@@ -388,21 +388,21 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial version, from the semafy-experiments pilot (ads-noise at spruce). Travels with the channel's own sema object (ChannelTypeName/ChannelVersion); values in the channel's serialized units."
+        summary: "Initial version."
 
   gw.channel.noise.stats:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial version, from the semafy-experiments pilot. Travels with the channel's own sema object (ChannelTypeName/ChannelVersion); optional ConditionLabel ties stats to a kind-specific condition described in the experiment README."
+        summary: "Initial version."
 
   gw.experiment.run:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial version, from the semafy-experiments pilot (ads-noise at spruce)."
+        summary: "Initial version."
 
   gw.house0.layout:
     latest_version: "000"
@@ -438,6 +438,13 @@ types:
     versions:
       "000":
         summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/303 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
+
+  gw.readings:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version."
 
   gw1.hvac.zone:
     latest_version: "000"

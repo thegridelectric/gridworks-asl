@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-08-07T12:15:00Z'
+  last_updated: '2026-08-07T13:20:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -1715,9 +1715,7 @@ types:
         schema_url: https://schemas.electricity.works/types/gw.channel.jump.stats/000
         created: '2026-08-06T19:40:00Z'
         status: staging
-        summary: Initial version, from the semafy-experiments pilot (ads-noise at
-          spruce). Travels with the channel's own sema object (ChannelTypeName/ChannelVersion);
-          values in the channel's serialized units.
+        summary: Initial version.
         direct_dependencies:
           structural:
           - left.right.dot
@@ -1738,10 +1736,7 @@ types:
         schema_url: https://schemas.electricity.works/types/gw.channel.noise.stats/000
         created: '2026-08-07T12:15:00Z'
         status: staging
-        summary: Initial version, from the semafy-experiments pilot. Travels with
-          the channel's own sema object (ChannelTypeName/ChannelVersion); optional
-          ConditionLabel ties stats to a kind-specific condition described in the
-          experiment README.
+        summary: Initial version.
         direct_dependencies:
           structural:
           - left.right.dot
@@ -1760,8 +1755,7 @@ types:
         schema_url: https://schemas.electricity.works/types/gw.experiment.run/000
         created: '2026-08-06T19:40:00Z'
         status: staging
-        summary: Initial version, from the semafy-experiments pilot (ads-noise at
-          spruce).
+        summary: Initial version.
         direct_dependencies:
           structural:
           - left.right.dot
@@ -1905,6 +1899,25 @@ types:
           - sim.pico.tank.module.component.gt:001
           - spaceheat.node.gt:303
           - web.server.component.gt:002
+  gw.readings:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A terminal asset's channel words together with their timestamped
+      readings over a window.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.readings/000
+        created: '2026-08-07T13:20:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - channel.readings:002
+          - data.channel.gt:003
+          - derived.channel.gt:002
+          - left.right.dot
+          - utc.milliseconds
   gw1.hvac.zone:
     latest_version: '000'
     owner: gridworks-energy

@@ -1,0 +1,68 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.readings/000"
+
+title: "gw.readings"
+type: object
+description: >
+  Timestamped readings for a set of a terminal asset's channels over a
+  window, together with the channel words that give them meaning. Units
+  and semantics come from the embedded channel objects (a data
+  channel's TelemetryName, a derived channel's OutputUnit). Useful for
+  running experiments and analyses on GridWorks scada data.
+
+properties:
+  TaAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the terminal asset the channels belong to.
+
+  StartUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  EndUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  Channels:
+    type: array
+    items:
+      oneOf:
+        - $ref: "https://schemas.electricity.works/types/data.channel.gt/003"
+        - $ref: "https://schemas.electricity.works/types/derived.channel.gt/002"
+    description: >
+      The channel words themselves, one per pulled channel.
+
+  ChannelReadingsList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.readings/002"
+
+  TypeName:
+    const: "gw.readings"
+
+  Version:
+    const: "000"
+
+required:
+  - TaAlias
+  - StartUnixMs
+  - EndUnixMs
+  - Channels
+  - ChannelReadingsList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "WindowOrder"
+      statement: >
+        EndUnixMs SHALL be greater than StartUnixMs.
+    - number: 2
+      name: "ReadingsChannelCoverage"
+      statement: >
+        Each ChannelReadingsList entry's ChannelName SHALL equal the
+        Name of exactly one entry in Channels.

@@ -1,0 +1,38 @@
+{
+ "TaAlias": "hw1.isone.me.versant.keene.spruce.ta",
+ "StartUnixMs": 1786099200000,
+ "EndUnixMs": 1786102800000,
+ "Channels": [
+  {
+   "Name": "vdc-relay",
+   "DisplayName": "5V DC Bus Relay State",
+   "AboutNodeName": "vdc-relay-gpio-23",
+   "CapturedByNodeName": "vdc-relay-gpio-23",
+   "TelemetryName": "RelayState",
+   "Quantity": "Unitless",
+   "TerminalAssetAlias": "hw1.isone.me.versant.keene.spruce.ta",
+   "Id": "57d123f9-8bc5-4667-9668-4529235b224c",
+   "TypeName": "data.channel.gt",
+   "Version": "003"
+  }
+ ],
+ "ChannelReadingsList": [
+  {
+   "ChannelName": "hp-lwt",
+   "ValueList": [
+    1,
+    0,
+    1
+   ],
+   "ScadaReadTimeUnixMsList": [
+    1786100000000,
+    1786100060000,
+    1786100120000
+   ],
+   "TypeName": "channel.readings",
+   "Version": "002"
+  }
+ ],
+ "TypeName": "gw.readings",
+ "Version": "000"
+}

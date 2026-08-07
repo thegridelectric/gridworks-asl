@@ -59,6 +59,7 @@ from sema.runtime.types.gw_house0_operational_params import GwHouse0OperationalP
 from sema.runtime.types.gw_hydronic import GwHydronic
 from sema.runtime.types.gw_native_gpio_pin import GwNativeGpioPin
 from sema.runtime.types.gw_nolan_layout import GwNolanLayout
+from sema.runtime.types.gw_readings import GwReadings
 from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.heartbeat_a import HeartbeatA
 from sema.runtime.types.heating_curve import HeatingCurve
@@ -207,6 +208,7 @@ __all__ = [
     "GwHydronic",
     "GwNativeGpioPin",
     "GwNolanLayout",
+    "GwReadings",
     "Ha1Params",
     "HeartbeatA",
     "HeatingCurve",

@@ -283,6 +283,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.nolan.layout/000.yaml
+  gw.readings:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.readings/000.yaml
   gw1.hvac.zone:
     latest_version: '000'
     versioning_strategy: literal

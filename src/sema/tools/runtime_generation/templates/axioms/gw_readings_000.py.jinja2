@@ -1,0 +1,29 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw_readings_000_class_name }}":
+        """
+        Axiom 1: WindowOrder
+        EndUnixMs SHALL be greater than StartUnixMs.
+        """
+        if not self.end_unix_ms > self.start_unix_ms:
+            raise ValueError(
+                "Axiom 1 (WindowOrder) failed: EndUnixMs must be greater "
+                "than StartUnixMs."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ gw_readings_000_class_name }}":
+        """
+        Axiom 2: ReadingsChannelCoverage
+        Each ChannelReadingsList entry's ChannelName SHALL equal the Name
+        of exactly one entry in Channels.
+        """
+        channel_names = [c.name for c in self.channels]
+        for cr in self.channel_readings_list:
+            if channel_names.count(cr.channel_name) != 1:
+                raise ValueError(
+                    "Axiom 2 (ReadingsChannelCoverage) failed: "
+                    f"ChannelReadingsList entry {cr.channel_name!r} must "
+                    "match exactly one Channels entry by Name."
+                )
+        return self

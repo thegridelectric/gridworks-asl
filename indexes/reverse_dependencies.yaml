@@ -31,6 +31,7 @@ types:
   channel.readings:
     '002':
       used_by:
+      - gw.readings:000
       - report:002
       - report:003
   channel.readings.list.item:
@@ -66,6 +67,7 @@ types:
       used_by:
       - gw.house0.layout:000
       - gw.nolan.layout:000
+      - gw.readings:000
       - layout.lite:015
       - scada.control.capabilities:002
   derived.channel.gt:
@@ -87,6 +89,7 @@ types:
       used_by:
       - gw.house0.layout:000
       - gw.nolan.layout:000
+      - gw.readings:000
   dfr.component.gt:
     '000':
       used_by:
@@ -766,6 +769,7 @@ formats:
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
+    - gw.readings:000
     - heating.forecast:000
     - keyparam.change.log:000
     - latest.price:000
@@ -1066,6 +1070,7 @@ formats:
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
+    - gw.readings:000
     - i2c.result:000
     - layout.lite:007
     - layout.lite:008
