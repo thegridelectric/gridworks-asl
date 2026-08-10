@@ -3,7 +3,7 @@ import logging
 from importlib import import_module
 from collections import defaultdict
 from pathlib import Path
-from typing import Literal
+from typing import Literal, TypeVar, overload
 
 
 from {{ import_root }}.base import (
@@ -16,6 +16,8 @@ from {{ import_root }}.base import (
 
 logger = logging.getLogger(__name__)
 
+T = TypeVar("T", bound=SemaType)
+
 
 class SemaCodec:
 
@@ -27,7 +29,71 @@ class SemaCodec:
     # Decode
     # ------------------------------------------------------------------------
 
+    @overload
     def from_dict(
+        self,
+        data: dict,
+        mode: Literal["strict", "degraded"] = "strict",
+        auto_upgrade: bool = True,
+        *,
+        expect: type[T],
+    ) -> T: ...
+
+    @overload
+    def from_dict(
+        self,
+        data: dict,
+        mode: Literal["strict", "degraded"] = "strict",
+        auto_upgrade: bool = True,
+        expect: None = None,
+    ) -> SemaType | DegradedSemaType: ...
+
+    def from_dict(
+        self,
+        data: dict,
+        mode: Literal["strict", "degraded"] = "strict",
+        auto_upgrade: bool = True,
+        expect: type[T] | None = None,
+    ) -> SemaType | DegradedSemaType:
+        decoded = self._decode(data, mode, auto_upgrade)
+        if expect is not None and not isinstance(decoded, expect):
+            raise ValueError(
+                f"decoded {type(decoded).__name__}, expected {expect.__name__}"
+            )
+        return decoded
+
+    @overload
+    def from_file(
+        self,
+        path: str | Path,
+        mode: Literal["strict", "degraded"] = "strict",
+        auto_upgrade: bool = True,
+        *,
+        expect: type[T],
+    ) -> T: ...
+
+    @overload
+    def from_file(
+        self,
+        path: str | Path,
+        mode: Literal["strict", "degraded"] = "strict",
+        auto_upgrade: bool = True,
+        expect: None = None,
+    ) -> SemaType | DegradedSemaType: ...
+
+    def from_file(
+        self,
+        path: str | Path,
+        mode: Literal["strict", "degraded"] = "strict",
+        auto_upgrade: bool = True,
+        expect: type[T] | None = None,
+    ) -> SemaType | DegradedSemaType:
+        with open(path) as f:
+            return self.from_dict(
+                json.load(f), mode, auto_upgrade, expect=expect
+            )
+
+    def _decode(
         self,
         data: dict,
         mode: Literal["strict", "degraded"] = "strict",
