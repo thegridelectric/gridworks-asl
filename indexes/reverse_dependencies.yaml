@@ -766,6 +766,7 @@ formats:
     - g.node.gt:006
     - glitch:000
     - gridworks.header:001
+    - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
@@ -834,6 +835,7 @@ formats:
     - relay.control.config:000
   non.negative.int:
     used_by:
+    - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.house0.operational.params:000
     - gw.hydronic:000
@@ -891,6 +893,7 @@ formats:
     - web.server.component.gt:002
   positive.float:
     used_by:
+    - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - heating.curve:000
     - hp.control.box.device.type.gt:000
@@ -927,6 +930,7 @@ formats:
     - flo.params.house0:005
     - flo.params.house0:006
     - flo.params.house0:007
+    - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.house0.operational.params:000
@@ -998,6 +1002,7 @@ formats:
     - fsm.full.report:000
     - fsm.full.report:001
     - glitch:000
+    - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
@@ -1067,6 +1072,7 @@ formats:
     - g.node.instance.gt:000
     - glitch:000
     - gridworks.event.problem:001
+    - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.experiment.run:000

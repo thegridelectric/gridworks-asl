@@ -51,6 +51,7 @@ from sema.runtime.types.gw1_telemetry_name_quantity_projection import (
     Gw1TelemetryNameQuantityProjection,
 )
 from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProjection
+from sema.runtime.types.gw_channel_gap_stats import GwChannelGapStats
 from sema.runtime.types.gw_channel_jump_stats import GwChannelJumpStats
 from sema.runtime.types.gw_channel_noise_stats import GwChannelNoiseStats
 from sema.runtime.types.gw_experiment_run import GwExperimentRun
@@ -200,6 +201,7 @@ __all__ = [
     "Gw1TankTempCalibrationMap",
     "Gw1TelemetryNameQuantityProjection",
     "Gw1UnitQuantityProjection",
+    "GwChannelGapStats",
     "GwChannelJumpStats",
     "GwChannelNoiseStats",
     "GwExperimentRun",

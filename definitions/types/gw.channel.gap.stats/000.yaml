@@ -1,0 +1,154 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.channel.gap.stats/000"
+
+title: "gw.channel.gap.stats"
+type: object
+description: >
+  Reporting-gap statistics for one fleet telemetry channel over one
+  archive window: how often the channel fell silent past its gap
+  threshold, and for how long. A channel's normal cadence is its median
+  inter-report interval; a gap is an inter-report interval exceeding
+  max(AbsGapS, MedianMult x MedianCadenceS). Gaps spent in whole-house
+  silence (every channel of the terminal asset quiet together — a
+  house, scada, or pipeline outage rather than a sensing-path problem)
+  are excluded from GapCount and counted in ExcludedGapCount. Computed
+  from already-archived readings, so it needs no new instrumentation.
+  This type travels with the corresponding channel sema object —
+  ChannelTypeName/ChannelVersion name the word that declares the
+  channel's semantics — and all its durations are seconds, independent
+  of the channel's own units. The element of the dropout canary view:
+  per-channel daily gap counts as an early-warning signal for
+  reporting-path health.
+
+properties:
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+
+  ChannelTypeName:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The Sema word declaring this channel's semantics, resolved via the
+      layout the channel was declared in.
+
+  ChannelVersion:
+    type: string
+    description: >
+      The three-digit version of ChannelTypeName the channel was
+      declared under.
+
+  WindowStartUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  WindowEndUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  NumReadings:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      Archived readings in the window.
+
+  AbsGapS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The absolute silence floor in seconds: no interval at or below
+      this counts as a gap, however fast the channel's cadence.
+
+  MedianMult:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+    description: >
+      The cadence multiplier: the gap threshold is
+      max(AbsGapS, MedianMult x MedianCadenceS), so slow channels are
+      not charged with gaps for their ordinary spacing.
+
+  MedianCadenceS:
+    type: number
+    description: >
+      The channel's median inter-report interval in seconds over the
+      window — its normal cadence. Zero when the window has fewer than
+      two readings.
+
+  GapCount:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      Gaps in the window after whole-house-silence exclusion.
+
+  ExcludedGapCount:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      Gaps excluded because the whole terminal asset was silent for
+      most of their span.
+
+  GappedSeconds:
+    type: number
+    description: >
+      Total seconds of silence across the counted gaps.
+
+  MaxGapDurS:
+    type: number
+    description: >
+      The longest counted gap in seconds. Zero when GapCount is zero.
+
+  TypeName:
+    const: "gw.channel.gap.stats"
+
+  Version:
+    const: "000"
+
+required:
+  - ChannelName
+  - ChannelTypeName
+  - ChannelVersion
+  - WindowStartUnixMs
+  - WindowEndUnixMs
+  - NumReadings
+  - AbsGapS
+  - MedianMult
+  - MedianCadenceS
+  - GapCount
+  - ExcludedGapCount
+  - GappedSeconds
+  - MaxGapDurS
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ChannelName": "secondary-flow",
+      "ChannelTypeName": "data.channel.gt",
+      "ChannelVersion": "002",
+      "WindowStartUnixMs": 1785556800000,
+      "WindowEndUnixMs": 1785971700000,
+      "NumReadings": 1651,
+      "AbsGapS": 600,
+      "MedianMult": 3.0,
+      "MedianCadenceS": 236.0,
+      "GapCount": 101,
+      "ExcludedGapCount": 0,
+      "GappedSeconds": 121590.0,
+      "MaxGapDurS": 17112.0,
+      "TypeName": "gw.channel.gap.stats",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "WindowOrder"
+      statement: >
+        WindowEndUnixMs SHALL be greater than WindowStartUnixMs.
+    - number: 2
+      name: "NonNegativeDurations"
+      statement: >
+        MedianCadenceS, GappedSeconds, and MaxGapDurS SHALL each be
+        greater than or equal to zero.
+    - number: 3
+      name: "GapAccounting"
+      statement: >
+        a. If GapCount is zero, GappedSeconds and MaxGapDurS SHALL be
+        zero. b. If GapCount is greater than zero, GappedSeconds SHALL
+        be greater than or equal to MaxGapDurS.

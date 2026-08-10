@@ -383,6 +383,13 @@ types:
     versioning_strategy: "none"
     summary: "Versionless GridWorks message envelope (gwproto Message wire format)."
 
+  gw.channel.gap.stats:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version."
+
   gw.channel.jump.stats:
     latest_version: "000"
     versioning_strategy: "literal"

@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-08-07T13:20:00Z'
+  last_updated: '2026-08-10T19:10:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -1703,6 +1703,28 @@ types:
     direct_dependencies:
       structural:
       - gridworks.header:001
+  gw.channel.gap.stats:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "Reporting-gap statistics for one fleet telemetry channel over one\
+      \ archive window \u2014 silence counts and durations against a cadence-aware\
+      \ threshold, whole-house outages excluded \u2014 the element of the dropout\
+      \ canary view of reporting-path health."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.channel.gap.stats/000
+        created: '2026-08-10T19:05:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - non.negative.int
+          - positive.float
+          - positive.int
+          - spaceheat.name
+          - utc.milliseconds
   gw.channel.jump.stats:
     latest_version: '000'
     owner: gridworks-energy

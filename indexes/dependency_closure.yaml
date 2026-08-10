@@ -611,6 +611,18 @@ types:
       - left.right.dot
       types: []
       versionless_types: []
+  gw.channel.gap.stats:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - non.negative.int
+      - positive.float
+      - positive.int
+      - spaceheat.name
+      - utc.milliseconds
+      types: []
+      versionless_types: []
   gw.channel.jump.stats:
     '000':
       enums: []
