@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ i2c_dac_capability_000_class_name }}":
+        """
+        Axiom 1: MuxPairing
+        MuxName and MuxChannel SHALL be both present or both absent.
+        """
+        if (self.mux_name is None) != (self.mux_channel is None):
+            raise ValueError(
+                "Axiom 1 (MuxPairing) failed: MuxName and MuxChannel must be "
+                f"both present or both absent; got MuxName={self.mux_name!r}, "
+                f"MuxChannel={self.mux_channel!r}."
+            )
+        return self

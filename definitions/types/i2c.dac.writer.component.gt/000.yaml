@@ -1,0 +1,94 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/i2c.dac.writer.component.gt/000"
+
+title: "i2c.dac.writer.component.gt"
+type: object
+description: >
+  Configuration for an I2C DAC writer component that drives one
+  board-resident DAC. Board-generic: the DAC is identified by DacName,
+  resolved against the Dacs of the board record reached via
+  BoardComponentId (the scada board component, whose DeviceType names the
+  board's board device-type record carrying the physical facts: bus,
+  address, mux placement, channel count). The component carries identity
+  and the per-channel EEPROM power-on defaults. Flat — the shared
+  component fields are spelled out here.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  BoardComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      The component id of the scada board this device is resident on.
+
+  DacName:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The name of the board DAC this writer drives, intended to be uniquely
+      identifiable on the board.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.dac.channel.config/000"
+    description: >
+      EEPROM power-on defaults for the DAC's channels.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "i2c.dac.writer.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - BoardComponentId
+  - DacName
+  - ConfigList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ComponentId": "3f6d8a34-5f1e-4c9b-9a37-2e8d41f7c655",
+      "BoardComponentId": "9b1c5e2a-77d4-4f6e-8c3a-5f2e9d101b44",
+      "DacName": "Zones456",
+      "ConfigList": [
+        {
+          "DacChannel": "C",
+          "PowerOnRawValue": 3020,
+          "PowerOnVref": "Internal",
+          "PowerOnGain": 1,
+          "TypeName": "i2c.dac.channel.config",
+          "Version": "000"
+        }
+      ],
+      "TypeName": "i2c.dac.writer.component.gt",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "DacChannelUniqueness"
+      statement: >
+        DacChannel values SHALL be unique across the ConfigList.
+  extended_description: >
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.
+
+    The board's physical facts live on its `gw1.scada.device.type.gt` record.

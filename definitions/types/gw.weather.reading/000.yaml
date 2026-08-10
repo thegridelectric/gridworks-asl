@@ -1,0 +1,47 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.weather.reading/000"
+
+title: "gw.weather.reading"
+type: object
+description: >
+  One reading within a gw.weather.observation message: the value of one
+  observed weather channel at the message's ObservationTime. The value
+  is an integer scaled per the channel record's Unit.
+
+properties:
+  ChannelName:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The gw.weather.channel.gt Name this value belongs to.
+
+  Value:
+    type: integer
+    description: >
+      The observed value, integer-scaled per the channel record's Unit
+      (e.g. FahrenheitX100).
+
+  TypeName:
+    const: "gw.weather.reading"
+
+  Version:
+    const: "000"
+
+required:
+  - ChannelName
+  - Value
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ChannelName": "us.me.millinocket.temperature",
+      "Value": 5180,
+      "TypeName": "gw.weather.reading",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

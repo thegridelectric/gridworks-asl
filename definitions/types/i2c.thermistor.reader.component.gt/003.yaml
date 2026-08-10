@@ -41,6 +41,12 @@ properties:
       The name of the board ADC this reader samples, intended to be uniquely
       identifiable on the board.
 
+  DataRateSps:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The single-shot conversion data rate, in samples per second, the
+      reader writes in the ADC's config word on every conversion.
+
   TempCalcMethod:
     $ref: "https://schemas.electricity.works/enums/temp.calc.method/000"
 
@@ -55,6 +61,7 @@ required:
   - BoardComponentId
   - ConfigList
   - AdcName
+  - DataRateSps
   - TempCalcMethod
   - TypeName
   - Version
@@ -76,6 +83,7 @@ examples:
         }
       ],
       "AdcName": "Thermistors",
+      "DataRateSps": 16,
       "TempCalcMethod": "SimpleBeta",
       "TypeName": "i2c.thermistor.reader.component.gt",
       "Version": "003"

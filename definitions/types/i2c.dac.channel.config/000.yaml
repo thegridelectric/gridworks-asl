@@ -1,0 +1,67 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/i2c.dac.channel.config/000"
+
+title: "i2c.dac.channel.config"
+type: object
+description: >
+  EEPROM power-on defaults for one output channel of a board DAC: the
+  output code and reference/gain configuration the channel loads into its
+  output at power-up.
+
+properties:
+
+  DacChannel:
+    $ref: "https://schemas.electricity.works/enums/i2c.dac.channel/000"
+    description: >
+      The DAC output channel this config applies to.
+
+  PowerOnRawValue:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      The raw output code the channel drives at power-up.
+
+  PowerOnVref:
+    $ref: "https://schemas.electricity.works/enums/i2c.dac.vref/000"
+    description: >
+      The voltage reference the channel converts against at power-up.
+
+  PowerOnGain:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The output gain the channel applies at power-up.
+
+  TypeName:
+    const: "i2c.dac.channel.config"
+
+  Version:
+    const: "000"
+
+required:
+  - DacChannel
+  - PowerOnRawValue
+  - PowerOnVref
+  - PowerOnGain
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "DacChannel": "C",
+      "PowerOnRawValue": 3020,
+      "PowerOnVref": "Internal",
+      "PowerOnGain": 1,
+      "TypeName": "i2c.dac.channel.config",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "EepromRanges"
+      statement: >
+        a. PowerOnRawValue SHALL be less than 4096.
+        b. PowerOnGain SHALL be 1 or 2.

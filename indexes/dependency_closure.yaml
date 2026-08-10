@@ -672,6 +672,7 @@ types:
       - hz.calc.method:001
       - i2c.adc.type:000
       - i2c.dac.type:000
+      - i2c.mux.type:000
       - relay.closed.or.open:000
       - relay.wiring.config:000
       - spaceheat.telemetry.name:007
@@ -717,6 +718,7 @@ types:
       - i2c.dac.capability:000
       - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:005
+      - i2c.mux:000
       - i2c.relay.capability:000
       - i2c.thermistor.interface.capability:000
       - maker.api.attribute.gt:000
@@ -785,6 +787,7 @@ types:
       - i2c.adc.channel:000
       - i2c.adc.type:000
       - i2c.dac.type:000
+      - i2c.mux.type:000
       - relay.closed.or.open:000
       - relay.wiring.config:000
       - spaceheat.telemetry.name:007
@@ -821,6 +824,7 @@ types:
       - i2c.dac.capability:000
       - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:005
+      - i2c.mux:000
       - i2c.relay.capability:000
       - i2c.thermistor.channel.config:002
       - i2c.thermistor.interface.capability:000
@@ -857,6 +861,75 @@ types:
       - gw1.unit.quantity.projection:000
       - spaceheat.telemetry.quantity.projection:000
       versionless_types: []
+  gw.weather.channel.gt:
+    '000':
+      enums:
+      - gw1.quantity:002
+      - gw1.unit:002
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - non.negative.int
+      - positive.int
+      - utc.iso8601.seconds
+      - uuid4.str
+      types: []
+      versionless_types: []
+  gw.weather.forecast:
+    '000':
+      enums:
+      - gw.weather.forecast.fidelity:000
+      formats:
+      - left.right.dot
+      - utc.iso8601.seconds
+      types:
+      - gw.weather.forecast.entry:000
+      versionless_types: []
+  gw.weather.forecast.channel.gt:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - non.negative.int
+      - positive.int
+      - utc.iso8601.seconds
+      - uuid4.str
+      types: []
+      versionless_types: []
+  gw.weather.forecast.entry:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.iso8601.seconds
+      types: []
+      versionless_types: []
+  gw.weather.location.gt:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - uuid4.str
+      types: []
+      versionless_types: []
+  gw.weather.observation:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.iso8601.seconds
+      types:
+      - gw.weather.reading:000
+      versionless_types: []
+  gw.weather.reading:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      types: []
+      versionless_types: []
   gw1.hvac.zone:
     '000':
       enums: []
@@ -869,6 +942,7 @@ types:
       enums:
       - i2c.adc.type:000
       - i2c.dac.type:000
+      - i2c.mux.type:000
       - relay.wiring.config:000
       - spaceheat.telemetry.name:007
       formats:
@@ -882,6 +956,7 @@ types:
       - i2c.ct.interface.capability:000
       - i2c.dac.capability:000
       - i2c.expander:000
+      - i2c.mux:000
       - i2c.relay.capability:000
       - i2c.thermistor.interface.capability:000
       versionless_types: []
@@ -1129,6 +1204,29 @@ types:
       - positive.int
       types: []
       versionless_types: []
+  i2c.dac.channel.config:
+    '000':
+      enums:
+      - i2c.dac.channel:000
+      - i2c.dac.vref:000
+      formats:
+      - non.negative.int
+      - positive.int
+      types: []
+      versionless_types: []
+  i2c.dac.writer.component.gt:
+    '000':
+      enums:
+      - i2c.dac.channel:000
+      - i2c.dac.vref:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.int
+      - uuid4.str
+      types:
+      - i2c.dac.channel.config:000
+      versionless_types: []
   i2c.expander:
     '000':
       enums: []
@@ -1198,6 +1296,16 @@ types:
       - uuid4.str
       types:
       - relay.actor.config:004
+      versionless_types: []
+  i2c.mux:
+    '000':
+      enums:
+      - i2c.mux.type:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.int
+      types: []
       versionless_types: []
   i2c.read.bit:
     '000':
@@ -1308,6 +1416,7 @@ types:
       - non.negative.int
       - pascal.case
       - positive.float
+      - positive.int
       types: []
       versionless_types: []
   i2c.thermistor.reader.component.gt:

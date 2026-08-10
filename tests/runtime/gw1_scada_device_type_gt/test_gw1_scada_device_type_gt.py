@@ -26,3 +26,21 @@ def test_axiom_2_catches_expander_not_in_expanders() -> None:
     payload = json.loads((FIX / "axiom_2.json").read_text())
     with pytest.raises(SemaError, match="ExpanderMembership"):
         default_codec.from_dict(payload)
+
+
+def test_axiom_4_a_catches_mux_not_in_muxes() -> None:
+    payload = json.loads((FIX / "axiom_4_a.json").read_text())
+    with pytest.raises(SemaError, match="MuxConsistency"):
+        default_codec.from_dict(payload)
+
+
+def test_axiom_4_b_catches_mux_channel_out_of_bounds() -> None:
+    payload = json.loads((FIX / "axiom_4_b.json").read_text())
+    with pytest.raises(SemaError, match="MuxConsistency"):
+        default_codec.from_dict(payload)
+
+
+def test_axiom_4_c_catches_dac_bus_mux_bus_mismatch() -> None:
+    payload = json.loads((FIX / "axiom_4_c.json").read_text())
+    with pytest.raises(SemaError, match="MuxConsistency"):
+        default_codec.from_dict(payload)

@@ -23,6 +23,17 @@ properties:
     description: >
       The I²C bus address of the DAC.
 
+  MuxName:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The name of the board mux this DAC sits behind, when it does not sit
+      directly on its bus.
+
+  MuxChannel:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      The downstream channel of that mux the DAC is reached through.
+
   DacType:
     $ref: "https://schemas.electricity.works/enums/i2c.dac.type/000"
     description: >
@@ -61,6 +72,23 @@ examples:
       "TypeName": "i2c.dac.capability",
       "Version": "000"
     }
+  - |
+    {
+      "DacName": "Zones456",
+      "I2cBus": "DefaultBus",
+      "I2cAddress": 96,
+      "MuxName": "DacMux",
+      "MuxChannel": 2,
+      "DacType": "Mcp4728",
+      "Channels": 4,
+      "TypeName": "i2c.dac.capability",
+      "Version": "000"
+    }
 
 x-gridworks:
   owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "MuxPairing"
+      statement: >
+        MuxName and MuxChannel SHALL be both present or both absent.

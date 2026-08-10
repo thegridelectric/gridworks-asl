@@ -9,6 +9,7 @@ from sema.runtime.types.i2c_bus import I2cBus
 from sema.runtime.types.i2c_ct_interface_capability import I2cCtInterfaceCapability
 from sema.runtime.types.i2c_dac_capability import I2cDacCapability
 from sema.runtime.types.i2c_expander import I2cExpander
+from sema.runtime.types.i2c_mux import I2cMux
 from sema.runtime.types.i2c_relay_capability import I2cRelayCapability
 from sema.runtime.types.i2c_thermistor_interface_capability import (
     I2cThermistorInterfaceCapability,
@@ -26,6 +27,7 @@ class Gw1ScadaDeviceTypeGt(SemaType):
     native_gpio_inputs: list[GwNativeGpioPin] | None = None
     native_gpio_outputs: list[GwNativeGpioPin] | None = None
     expanders: list[I2cExpander] | None = None
+    muxes: list[I2cMux] | None = None
     i2c_relays: list[I2cRelayCapability] | None = None
     ct_adc: I2cCtInterfaceCapability | None = None
     thermistor_adcs: list[I2cThermistorInterfaceCapability] | None = None
@@ -37,11 +39,12 @@ class Gw1ScadaDeviceTypeGt(SemaType):
     def check_axiom_1(self) -> "Gw1ScadaDeviceTypeGt":
         """
         Axiom 1: BusMembership
-        Every I2cBus referenced by an entry in Expanders, CtAdc, ThermistorAdcs,
-        or Dacs SHALL appear as a Name in BusList.
+        Every I2cBus referenced by an entry in Expanders, Muxes, CtAdc,
+        ThermistorAdcs, or Dacs SHALL appear as a Name in BusList.
         """
         bus_names = {bus.name for bus in (self.bus_list or [])}
         referenced = [expander.i2c_bus for expander in (self.expanders or [])]
+        referenced += [mux.i2c_bus for mux in (self.muxes or [])]
         referenced += [adc.i2c_bus for adc in (self.thermistor_adcs or [])]
         referenced += [dac.i2c_bus for dac in (self.dacs or [])]
         if self.ct_adc is not None:
@@ -82,14 +85,16 @@ class Gw1ScadaDeviceTypeGt(SemaType):
         Axiom 3: BoardIdentifierUniqueness
         The board's silk-screen namespace is one namespace: the union of every
         RelayName in I2cRelays, the CtAdc Name, every Name in ThermistorAdcs,
-        every DacName in Dacs, and every Name in NativeGpioInputs and
-        NativeGpioOutputs SHALL contain no duplicates within the record.
+        every DacName in Dacs, every MuxName in Muxes, and every Name in
+        NativeGpioInputs and NativeGpioOutputs SHALL contain no duplicates
+        within the record.
         """
         names = [r.relay_name for r in (self.i2c_relays or [])]
         if self.ct_adc is not None:
             names.append(self.ct_adc.name)
         names += [a.name for a in (self.thermistor_adcs or [])]
         names += [d.dac_name for d in (self.dacs or [])]
+        names += [m.mux_name for m in (self.muxes or [])]
         names += [p.name for p in (self.native_gpio_inputs or [])]
         names += [p.name for p in (self.native_gpio_outputs or [])]
         dupes = sorted({n for n in names if names.count(n) > 1})
@@ -98,4 +103,40 @@ class Gw1ScadaDeviceTypeGt(SemaType):
                 "Axiom 3 (BoardIdentifierUniqueness) failed: duplicate board "
                 f"identifier name(s) {dupes}."
             )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_4(self) -> "Gw1ScadaDeviceTypeGt":
+        """
+        Axiom 4: MuxConsistency
+        a. Every MuxName referenced by an entry in Dacs SHALL appear as a
+        MuxName in Muxes. b. Every Dacs entry carrying MuxChannel SHALL satisfy
+        MuxChannel less than the Channels of the mux named by its MuxName.
+        c. Every Dacs entry carrying MuxName SHALL have an I2cBus equal to
+        that mux's I2cBus.
+        """
+        muxes = {m.mux_name: m for m in (self.muxes or [])}
+        for dac in self.dacs or []:
+            if dac.mux_name is None:
+                continue
+            mux = muxes.get(dac.mux_name)
+            if mux is None:
+                raise ValueError(
+                    "Axiom 4 (MuxConsistency) failed: Dacs entry "
+                    f"{dac.dac_name} references MuxName {dac.mux_name}, "
+                    "which is not declared in Muxes."
+                )
+            if dac.mux_channel is not None and dac.mux_channel >= mux.channels:
+                raise ValueError(
+                    "Axiom 4 (MuxConsistency) failed: Dacs entry "
+                    f"{dac.dac_name} has MuxChannel {dac.mux_channel}, not "
+                    f"less than the {mux.channels} Channels of mux "
+                    f"{dac.mux_name}."
+                )
+            if dac.i2c_bus != mux.i2c_bus:
+                raise ValueError(
+                    "Axiom 4 (MuxConsistency) failed: Dacs entry "
+                    f"{dac.dac_name} has I2cBus {dac.i2c_bus} but its mux "
+                    f"{dac.mux_name} is on {mux.i2c_bus}."
+                )
         return self

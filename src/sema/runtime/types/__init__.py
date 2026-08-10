@@ -61,6 +61,13 @@ from sema.runtime.types.gw_hydronic import GwHydronic
 from sema.runtime.types.gw_native_gpio_pin import GwNativeGpioPin
 from sema.runtime.types.gw_nolan_layout import GwNolanLayout
 from sema.runtime.types.gw_readings import GwReadings
+from sema.runtime.types.gw_weather_channel_gt import GwWeatherChannelGt
+from sema.runtime.types.gw_weather_forecast import GwWeatherForecast
+from sema.runtime.types.gw_weather_forecast_channel_gt import GwWeatherForecastChannelGt
+from sema.runtime.types.gw_weather_forecast_entry import GwWeatherForecastEntry
+from sema.runtime.types.gw_weather_location_gt import GwWeatherLocationGt
+from sema.runtime.types.gw_weather_observation import GwWeatherObservation
+from sema.runtime.types.gw_weather_reading import GwWeatherReading
 from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.heartbeat_a import HeartbeatA
 from sema.runtime.types.heating_curve import HeatingCurve
@@ -76,10 +83,13 @@ from sema.runtime.types.i2c_bit_address import I2cBitAddress
 from sema.runtime.types.i2c_bus import I2cBus
 from sema.runtime.types.i2c_ct_interface_capability import I2cCtInterfaceCapability
 from sema.runtime.types.i2c_dac_capability import I2cDacCapability
+from sema.runtime.types.i2c_dac_channel_config import I2cDacChannelConfig
+from sema.runtime.types.i2c_dac_writer_component_gt import I2cDacWriterComponentGt
 from sema.runtime.types.i2c_expander import I2cExpander
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
+from sema.runtime.types.i2c_mux import I2cMux
 from sema.runtime.types.i2c_read_bit import I2cReadBit
 from sema.runtime.types.i2c_read_reg import I2cReadReg
 from sema.runtime.types.i2c_reg_address import I2cRegAddress
@@ -211,6 +221,13 @@ __all__ = [
     "GwNativeGpioPin",
     "GwNolanLayout",
     "GwReadings",
+    "GwWeatherChannelGt",
+    "GwWeatherForecast",
+    "GwWeatherForecastChannelGt",
+    "GwWeatherForecastEntry",
+    "GwWeatherLocationGt",
+    "GwWeatherObservation",
+    "GwWeatherReading",
     "Ha1Params",
     "HeartbeatA",
     "HeatingCurve",
@@ -226,8 +243,11 @@ __all__ = [
     "I2cBus",
     "I2cCtInterfaceCapability",
     "I2cDacCapability",
+    "I2cDacChannelConfig",
+    "I2cDacWriterComponentGt",
     "I2cExpander",
     "I2cMultichannelDtRelayComponentGt",
+    "I2cMux",
     "I2cReadBit",
     "I2cReadReg",
     "I2cRegAddress",

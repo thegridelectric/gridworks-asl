@@ -293,6 +293,41 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.readings/000.yaml
+  gw.weather.channel.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.channel.gt/000.yaml
+  gw.weather.forecast:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.forecast/000.yaml
+  gw.weather.forecast.channel.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.forecast.channel.gt/000.yaml
+  gw.weather.forecast.entry:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.forecast.entry/000.yaml
+  gw.weather.location.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.location.gt/000.yaml
+  gw.weather.observation:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.observation/000.yaml
+  gw.weather.reading:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.reading/000.yaml
   gw1.hvac.zone:
     latest_version: '000'
     versioning_strategy: literal
@@ -419,6 +454,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/i2c.dac.capability/000.yaml
+  i2c.dac.channel.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.dac.channel.config/000.yaml
+  i2c.dac.writer.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.dac.writer.component.gt/000.yaml
   i2c.expander:
     latest_version: '000'
     versioning_strategy: literal
@@ -432,6 +477,11 @@ types:
       '004': definitions/types/i2c.multichannel.dt.relay.component.gt/004.yaml
       '003': definitions/types/i2c.multichannel.dt.relay.component.gt/003.yaml
       '002': definitions/types/i2c.multichannel.dt.relay.component.gt/002.yaml
+  i2c.mux:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.mux/000.yaml
   i2c.read.bit:
     latest_version: '000'
     versioning_strategy: literal
@@ -818,6 +868,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/gw.market.product.name/000.yaml
+  gw.weather.forecast.fidelity:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gw.weather.forecast.fidelity/000.yaml
   gw1.actor.class:
     enum_type: versioned
     latest_version: '012'
@@ -879,8 +934,9 @@ enums:
       '001': definitions/enums/gw1.main.auto.state/001.yaml
   gw1.quantity:
     enum_type: versioned
-    latest_version: '001'
+    latest_version: '002'
     versions:
+      '002': definitions/enums/gw1.quantity/002.yaml
       '001': definitions/enums/gw1.quantity/001.yaml
       '000': definitions/enums/gw1.quantity/000.yaml
   gw1.seasonal.storage.mode:
@@ -916,11 +972,26 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/i2c.adc.type/000.yaml
+  i2c.dac.channel:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.dac.channel/000.yaml
   i2c.dac.type:
     enum_type: versioned
     latest_version: '000'
     versions:
       '000': definitions/enums/i2c.dac.type/000.yaml
+  i2c.dac.vref:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.dac.vref/000.yaml
+  i2c.mux.type:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.mux.type/000.yaml
   i2c.operation:
     enum_type: versioned
     latest_version: '000'

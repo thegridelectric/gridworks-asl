@@ -307,3 +307,13 @@ types:
     '000': sha256:9767fb1d5f5626d5cd584491ae5472ca0c29ad5c0a0f8371d00da389661444bd
   g.node.cmd.nack:
     '000': sha256:c75163d75cc34187b140395d8aceabbb7522b7757ea21c919a35bcddbcd332c1
+  gw.experiment.run:
+    '000': sha256:99b1fec0f628c5d7289908af7714cdf85d441ae5efc03f6acfa411262f983d52
+  gw.channel.gap.stats:
+    '000': sha256:87dd64d79061813560f3becced73d908f0d6066c21d805edb36d88434452670a
+  gw.channel.jump.stats:
+    '000': sha256:13163f1f30e486ac8746a662036386dcd05559d68d7aea681fd0014e5ba9b6ac
+  gw.channel.noise.stats:
+    '000': sha256:d8842c26a3659fc118b007cead6fc275c24c63e0b04684b6d4fab9d057c71e20
+  gw.readings:
+    '000': sha256:94e9b445987d890c91fcaa10f94fa3af3c130b96794c86e7ec78f52d36aeca1e

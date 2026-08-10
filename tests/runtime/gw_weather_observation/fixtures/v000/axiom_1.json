@@ -1,0 +1,7 @@
+{
+  "ObservationTime": "2026-08-11T14:00:00Z",
+  "Interpolated": false,
+  "Readings": [],
+  "TypeName": "gw.weather.observation",
+  "Version": "000"
+}

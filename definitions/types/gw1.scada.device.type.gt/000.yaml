@@ -61,6 +61,13 @@ properties:
       The I²C GPIO expanders on the board, each with fixed or field-selectable
       addressing.
 
+  Muxes:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.mux/000"
+    description: >
+      The I²C bus multiplexers on the board.
+
   I2cRelays:
     type: array
     items:
@@ -172,7 +179,7 @@ x-gridworks:
     - number: 1
       name: "BusMembership"
       statement: >
-        Every I2cBus referenced by an entry in Expanders, CtAdc,
+        Every I2cBus referenced by an entry in Expanders, Muxes, CtAdc,
         ThermistorAdcs, or Dacs SHALL appear as a Name in BusList.
     - number: 2
       name: "ExpanderMembership"
@@ -184,8 +191,18 @@ x-gridworks:
       statement: >
         The board's silk-screen namespace is one namespace: the union of every
         RelayName in I2cRelays, the CtAdc Name, every Name in ThermistorAdcs,
-        every DacName in Dacs, and every Name in NativeGpioInputs and
-        NativeGpioOutputs SHALL contain no duplicates within the record.
+        every DacName in Dacs, every MuxName in Muxes, and every Name in
+        NativeGpioInputs and NativeGpioOutputs SHALL contain no duplicates
+        within the record.
+    - number: 4
+      name: "MuxConsistency"
+      statement: >
+        a. Every MuxName referenced by an entry in Dacs SHALL appear as a
+        MuxName in Muxes.
+        b. Every Dacs entry carrying MuxChannel SHALL satisfy MuxChannel less
+        than the Channels of the mux named by its MuxName.
+        c. Every Dacs entry carrying MuxName SHALL have an I2cBus equal to
+        that mux's I2cBus.
   extended_description: >
     Various hardware layouts enforce membership in `gw1.device.type` for the
     DeviceType (e.g. `GridworksScadaGw108`, `KridaDoubleRelayBoard16`). The

@@ -1,0 +1,18 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw_weather_location_gt_000_class_name }}":
+        """
+        Axiom 1: CoordinateBounds
+        a. The absolute value of LatitudeMicrodegrees SHALL be at most 90000000.
+        b. The absolute value of LongitudeMicrodegrees SHALL be at most 180000000.
+        """
+        if abs(self.latitude_microdegrees) > 90_000_000:
+            raise ValueError(
+                "Axiom 1 (CoordinateBounds) failed: a. |LatitudeMicrodegrees| "
+                f"must be at most 90000000; got {self.latitude_microdegrees}."
+            )
+        if abs(self.longitude_microdegrees) > 180_000_000:
+            raise ValueError(
+                "Axiom 1 (CoordinateBounds) failed: b. |LongitudeMicrodegrees| "
+                f"must be at most 180000000; got {self.longitude_microdegrees}."
+            )
+        return self

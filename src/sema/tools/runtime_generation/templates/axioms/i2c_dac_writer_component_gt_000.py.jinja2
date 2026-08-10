@@ -1,0 +1,14 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ i2c_dac_writer_component_gt_000_class_name }}":
+        """
+        Axiom 1: DacChannelUniqueness
+        DacChannel values SHALL be unique across the ConfigList.
+        """
+        channels = [cfg.dac_channel for cfg in self.config_list]
+        dupes = sorted({str(c) for c in channels if channels.count(c) > 1})
+        if dupes:
+            raise ValueError(
+                "Axiom 1 (DacChannelUniqueness) failed: duplicate DacChannel "
+                f"value(s) {dupes} in ConfigList."
+            )
+        return self

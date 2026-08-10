@@ -168,6 +168,14 @@ types:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
+  gw.weather.forecast.entry:
+    '000':
+      used_by:
+      - gw.weather.forecast:000
+  gw.weather.reading:
+    '000':
+      used_by:
+      - gw.weather.observation:000
   gw1.hvac.zone:
     '000':
       used_by:
@@ -261,6 +269,10 @@ types:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
+  i2c.dac.channel.config:
+    '000':
+      used_by:
+      - i2c.dac.writer.component.gt:000
   i2c.expander:
     '000':
       used_by:
@@ -288,6 +300,10 @@ types:
       - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:015
+  i2c.mux:
+    '000':
+      used_by:
+      - gw1.scada.device.type.gt:000
   i2c.reg.address:
     '000':
       used_by:
@@ -527,6 +543,10 @@ enums:
     '000':
       used_by:
       - gw.hydronic:000
+  gw.weather.forecast.fidelity:
+    '000':
+      used_by:
+      - gw.weather.forecast:000
   gw1.actor.class:
     009:
       used_by:
@@ -558,6 +578,9 @@ enums:
       used_by:
       - derived.channel.gt:002
       - gw1.unit.quantity.projection:000
+    '002':
+      used_by:
+      - gw.weather.channel.gt:000
   gw1.seasonal.storage.mode:
     '000':
       used_by:
@@ -594,6 +617,9 @@ enums:
       - synced.readings.bundle:001
       - synced.readings.bundle:002
       - synced.readings.bundle:003
+    '002':
+      used_by:
+      - gw.weather.channel.gt:000
   hz.calc.method:
     '001':
       used_by:
@@ -612,10 +638,22 @@ enums:
       used_by:
       - i2c.ct.interface.capability:000
       - i2c.thermistor.interface.capability:000
+  i2c.dac.channel:
+    '000':
+      used_by:
+      - i2c.dac.channel.config:000
   i2c.dac.type:
     '000':
       used_by:
       - i2c.dac.capability:000
+  i2c.dac.vref:
+    '000':
+      used_by:
+      - i2c.dac.channel.config:000
+  i2c.mux.type:
+    '000':
+      used_by:
+      - i2c.mux:000
   i2c.operation:
     '000':
       used_by:
@@ -771,6 +809,11 @@ formats:
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
     - gw.readings:000
+    - gw.weather.channel.gt:000
+    - gw.weather.forecast.channel.gt:000
+    - gw.weather.forecast.entry:000
+    - gw.weather.location.gt:000
+    - gw.weather.reading:000
     - heating.forecast:000
     - keyparam.change.log:000
     - latest.price:000
@@ -828,6 +871,9 @@ formats:
     used_by:
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
+    - gw.weather.channel.gt:000
+    - gw.weather.forecast.channel.gt:000
+    - gw.weather.location.gt:000
     - hp.device.type.gt:000
     - relay.actor.config:002
     - relay.actor.config:003
@@ -840,11 +886,15 @@ formats:
     - gw.house0.operational.params:000
     - gw.hydronic:000
     - gw.native.gpio.pin:000
+    - gw.weather.channel.gt:000
+    - gw.weather.forecast.channel.gt:000
     - i2c.bit.address:000
     - i2c.bus:000
     - i2c.ct.interface.capability:000
     - i2c.dac.capability:000
+    - i2c.dac.channel.config:000
     - i2c.expander:000
+    - i2c.mux:000
     - i2c.reg.address:000
     - i2c.relay.capability:000
     - i2c.result:000
@@ -874,8 +924,10 @@ formats:
     - i2c.bus:000
     - i2c.ct.interface.capability:000
     - i2c.dac.capability:000
+    - i2c.dac.writer.component.gt:000
     - i2c.expander:000
     - i2c.multichannel.dt.relay.component.gt:005
+    - i2c.mux:000
     - i2c.relay.capability:000
     - i2c.relay.component.gt:000
     - i2c.relay.config:000
@@ -934,6 +986,8 @@ formats:
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.house0.operational.params:000
+    - gw.weather.channel.gt:000
+    - gw.weather.forecast.channel.gt:000
     - gw1.scada.device.type.gt:000
     - gw108.gpio.sensor.component.gt:001
     - gw108.gpio.sensor.component.gt:002
@@ -944,12 +998,16 @@ formats:
     - hubitat.poller.gt:000
     - i2c.ct.interface.capability:000
     - i2c.dac.capability:000
+    - i2c.dac.channel.config:000
     - i2c.expander:000
+    - i2c.mux:000
     - i2c.read.reg:000
     - i2c.relay.capability:000
     - i2c.thermistor.channel.config:000
     - i2c.thermistor.channel.config:001
     - i2c.thermistor.channel.config:002
+    - i2c.thermistor.interface.capability:000
+    - i2c.thermistor.reader.component.gt:003
     - i2c.write.reg:000
     - layout.lite:007
     - layout.lite:008
@@ -1055,6 +1113,11 @@ formats:
     - sim.plant.flux:000
   utc.iso8601.seconds:
     used_by:
+    - gw.weather.channel.gt:000
+    - gw.weather.forecast.channel.gt:000
+    - gw.weather.forecast.entry:000
+    - gw.weather.forecast:000
+    - gw.weather.observation:000
     - hourly.electricity.dataset:000
     - synced.readings.bundle:001
     - synced.readings.bundle:002
@@ -1166,6 +1229,9 @@ formats:
     - gpio.relay.component.gt:000
     - gpio.sensor.component.gt:000
     - gridworks.event.problem:001
+    - gw.weather.channel.gt:000
+    - gw.weather.forecast.channel.gt:000
+    - gw.weather.location.gt:000
     - gw108.gpio.sensor.component.gt:001
     - gw108.gpio.sensor.component.gt:002
     - gw108.vdc.relay.component.gt:001
@@ -1174,6 +1240,7 @@ formats:
     - hubitat.component.gt:000
     - hubitat.poller.component.gt:000
     - hubitat.poller.gt:000
+    - i2c.dac.writer.component.gt:000
     - i2c.multichannel.dt.relay.component.gt:002
     - i2c.multichannel.dt.relay.component.gt:003
     - i2c.multichannel.dt.relay.component.gt:004

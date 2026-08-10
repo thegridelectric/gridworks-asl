@@ -1,0 +1,43 @@
+{
+  "DeviceType": "GridworksScadaGw108",
+  "BusList": [
+    {
+      "Name": "DefaultBus",
+      "BusNumber": 1,
+      "TypeName": "i2c.bus",
+      "Version": "000"
+    },
+    {
+      "Name": "SecondBus",
+      "BusNumber": 2,
+      "TypeName": "i2c.bus",
+      "Version": "000"
+    }
+  ],
+  "Muxes": [
+    {
+      "MuxName": "DacMux",
+      "I2cBus": "DefaultBus",
+      "I2cAddress": 112,
+      "MuxType": "Tca9548a",
+      "Channels": 8,
+      "TypeName": "i2c.mux",
+      "Version": "000"
+    }
+  ],
+  "Dacs": [
+    {
+      "DacName": "Zones456",
+      "I2cBus": "SecondBus",
+      "I2cAddress": 96,
+      "MuxName": "DacMux",
+      "MuxChannel": 2,
+      "DacType": "Mcp4728",
+      "Channels": 4,
+      "TypeName": "i2c.dac.capability",
+      "Version": "000"
+    }
+  ],
+  "TypeName": "gw1.scada.device.type.gt",
+  "Version": "000"
+}

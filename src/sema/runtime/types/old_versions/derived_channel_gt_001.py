@@ -2,7 +2,7 @@ from typing import Any, Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import Gw1EmissionMethod
-from sema.runtime.enums import Gw1Quantity
+from sema.runtime.enums.old_versions.gw1_quantity_001 import Gw1Quantity001
 from sema.runtime.enums.old_versions.gw1_unit_000 import Gw1Unit000
 from sema.runtime.enums.old_versions.gw1_unit_001 import Gw1Unit001
 from sema.runtime.property_format import LeftRightDot
@@ -71,7 +71,7 @@ class DerivedChannelGt001(SemaType):
 
         if self.output_unit is None:
             data["output_unit"] = "Unknown"
-            data["output_quantity"] = Gw1Quantity.Unknown
+            data["output_quantity"] = Gw1Quantity001.Unknown
         else:
             data["output_unit"] = self.output_unit.value
             data["output_quantity"] = Gw1UnitQuantityProjection.project(

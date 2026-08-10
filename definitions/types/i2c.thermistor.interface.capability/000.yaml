@@ -28,6 +28,13 @@ properties:
     description: >
       The ADC model.
 
+  SupportedDataRatesSps:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The conversion data rates, in samples per second, this ADC supports.
+
   AdcReferenceVolts:
     $ref: "https://schemas.electricity.works/formats/positive.float"
     description: >
@@ -50,6 +57,7 @@ required:
   - I2cBus
   - I2cAddress
   - AdcType
+  - SupportedDataRatesSps
   - AdcReferenceVolts
   - SeriesResistanceKOhms
   - TypeName
@@ -64,6 +72,7 @@ examples:
       "I2cBus": "DefaultBus",
       "I2cAddress": 73,
       "AdcType": "Ads1115",
+      "SupportedDataRatesSps": [8, 16, 32, 64, 128, 250, 475, 860],
       "AdcReferenceVolts": 3.3,
       "SeriesResistanceKOhms": 5.65,
       "TypeName": "i2c.thermistor.interface.capability",

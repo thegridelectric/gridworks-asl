@@ -1,0 +1,23 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/i2c.dac.vref/000"
+
+title: "i2c.dac.vref"
+type: "string"
+description: >
+  The voltage reference a DAC channel converts against.
+
+enum:
+  - "Internal"
+  - "Vdd"
+
+default: "Internal"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+    "Internal": >
+      The chip's internal band-gap reference (2.048 V on the MCP4728),
+      independent of supply voltage.
+    "Vdd": >
+      The chip's supply rail; full-scale output tracks the supply.

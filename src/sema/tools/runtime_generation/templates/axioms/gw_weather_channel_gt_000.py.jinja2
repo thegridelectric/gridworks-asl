@@ -1,0 +1,30 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw_weather_channel_gt_000_class_name }}":
+        """
+        Axiom 1: NameDerivation
+        Name SHALL equal LocationAlias + "." + the lowercased Quantity value, optionally
+        followed by "." and one or more further segments (a variant suffix for a
+        semantically different series, never acquisition detail).
+        """
+        derived = f"{self.location_alias}.{self.quantity.value.lower()}"
+        if not (self.name == derived or self.name.startswith(derived + ".")):
+            raise ValueError(
+                "Axiom 1 (NameDerivation) failed: Name must equal "
+                f"LocationAlias + '.' + lowercased Quantity ('{derived}'), "
+                f"optionally followed by a variant suffix; got '{self.name}'."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ gw_weather_channel_gt_000_class_name }}":
+        """
+        Axiom 2: EmitOffsetBound
+        EmitOffsetS SHALL be strictly less than EmitPeriodS.
+        """
+        if not self.emit_offset_s < self.emit_period_s:
+            raise ValueError(
+                "Axiom 2 (EmitOffsetBound) failed: EmitOffsetS "
+                f"({self.emit_offset_s}) must be strictly less than "
+                f"EmitPeriodS ({self.emit_period_s})."
+            )
+        return self

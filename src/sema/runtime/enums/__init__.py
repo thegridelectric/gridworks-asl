@@ -35,11 +35,15 @@ from sema.runtime.enums.gw1_unit import Gw1Unit
 from sema.runtime.enums.gw_g_node_class import GwGNodeClass
 from sema.runtime.enums.gw_house0_primary_flow_source import GwHouse0PrimaryFlowSource
 from sema.runtime.enums.gw_market_product_name import GwMarketProductName
+from sema.runtime.enums.gw_weather_forecast_fidelity import GwWeatherForecastFidelity
 from sema.runtime.enums.heatcall_source import HeatcallSource
 from sema.runtime.enums.hz_calc_method import HzCalcMethod
 from sema.runtime.enums.i2c_adc_channel import I2cAdcChannel
 from sema.runtime.enums.i2c_adc_type import I2cAdcType
+from sema.runtime.enums.i2c_dac_channel import I2cDacChannel
 from sema.runtime.enums.i2c_dac_type import I2cDacType
+from sema.runtime.enums.i2c_dac_vref import I2cDacVref
+from sema.runtime.enums.i2c_mux_type import I2cMuxType
 from sema.runtime.enums.i2c_operation import I2cOperation
 from sema.runtime.enums.log_level import LogLevel
 from sema.runtime.enums.market_price_unit import MarketPriceUnit
@@ -85,11 +89,15 @@ __all__ = [
     "GwGNodeClass",
     "GwHouse0PrimaryFlowSource",
     "GwMarketProductName",
+    "GwWeatherForecastFidelity",
     "HeatcallSource",
     "HzCalcMethod",
     "I2cAdcChannel",
     "I2cAdcType",
+    "I2cDacChannel",
     "I2cDacType",
+    "I2cDacVref",
+    "I2cMuxType",
     "I2cOperation",
     "LogLevel",
     "MarketPriceUnit",

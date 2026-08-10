@@ -1,0 +1,8 @@
+{
+  "DacChannel": "C",
+  "PowerOnRawValue": 3020,
+  "PowerOnVref": "Internal",
+  "PowerOnGain": 3,
+  "TypeName": "i2c.dac.channel.config",
+  "Version": "000"
+}

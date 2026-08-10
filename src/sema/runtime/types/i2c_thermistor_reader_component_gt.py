@@ -3,6 +3,7 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import TempCalcMethod
 from sema.runtime.property_format import PascalCase
+from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.i2c_thermistor_channel_config import I2cThermistorChannelConfig
 
@@ -16,6 +17,7 @@ class I2cThermistorReaderComponentGt(SemaType):
     display_name: str | None = None
     hw_uid: str | None = None
     adc_name: PascalCase
+    data_rate_sps: PositiveInt
     temp_calc_method: TempCalcMethod
     type_name: Literal["i2c.thermistor.reader.component.gt"] = (
         "i2c.thermistor.reader.component.gt"

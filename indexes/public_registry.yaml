@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-08-10T19:10:00Z'
+  last_updated: '2026-08-11T14:25:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -257,6 +257,17 @@ enums:
         schema_url: https://schemas.electricity.works/enums/gw.market.product.name/000
         created: '2026-06-08T00:00:00Z'
         status: published
+  gw.weather.forecast.fidelity:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: 'Degradation rung of a weather forecast emission: live product, stored-horizon
+      drawdown, or seasonal-template fill.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/gw.weather.forecast.fidelity/000
+        created: '2026-08-11T14:20:00Z'
+        status: staging
   gw1.actor.class:
     latest_version: '012'
     owner: gridworks-energy
@@ -407,12 +418,18 @@ enums:
         created: '2026-05-08T19:57:00Z'
         status: published
   gw1.quantity:
-    latest_version: '001'
+    latest_version: '002'
     owner: gridworks-energy
     enum_type: versioned
     description: High-level physical or semantic quantity classification for telemetry
       values.
     versions:
+      '002':
+        schema_url: https://schemas.electricity.works/enums/gw1.quantity/002
+        created: '2026-08-11T14:20:00Z'
+        status: staging
+        added_values:
+        - WindSpeed
       '001':
         schema_url: https://schemas.electricity.works/enums/gw1.quantity/001
         created: '2026-03-04T19:00:00Z'
@@ -504,6 +521,16 @@ enums:
         schema_url: https://schemas.electricity.works/enums/i2c.adc.type/000
         created: '2026-06-17T14:20:00Z'
         status: staging
+  i2c.dac.channel:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: DAC output channel identifier for I2C DAC devices.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/i2c.dac.channel/000
+        created: '2026-08-10T20:40:00Z'
+        status: staging
   i2c.dac.type:
     latest_version: '000'
     owner: gridworks-energy
@@ -514,6 +541,27 @@ enums:
       '000':
         schema_url: https://schemas.electricity.works/enums/i2c.dac.type/000
         created: '2026-06-17T14:20:00Z'
+        status: staging
+  i2c.dac.vref:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: The voltage reference a DAC channel converts against.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/i2c.dac.vref/000
+        created: '2026-08-10T20:40:00Z'
+        status: staging
+  i2c.mux.type:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: "The model of the I\xB2C bus multiplexer chipset used by a GridWorks\
+      \ SCADA board."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/i2c.mux.type/000
+        created: '2026-08-10T20:40:00Z'
         status: staging
   i2c.operation:
     latest_version: '000'
@@ -1715,7 +1763,7 @@ types:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.channel.gap.stats/000
         created: '2026-08-10T19:05:00Z'
-        status: staging
+        status: published
         summary: Initial version.
         direct_dependencies:
           structural:
@@ -1736,7 +1784,7 @@ types:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.channel.jump.stats/000
         created: '2026-08-06T19:40:00Z'
-        status: staging
+        status: published
         summary: Initial version.
         direct_dependencies:
           structural:
@@ -1757,7 +1805,7 @@ types:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.channel.noise.stats/000
         created: '2026-08-07T12:15:00Z'
-        status: staging
+        status: published
         summary: Initial version.
         direct_dependencies:
           structural:
@@ -1776,7 +1824,7 @@ types:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.experiment.run/000
         created: '2026-08-06T19:40:00Z'
-        status: staging
+        status: published
         summary: Initial version.
         direct_dependencies:
           structural:
@@ -1792,7 +1840,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.house0.layout/000
-        created: '2026-08-06T13:25:00Z'
+        created: '2026-08-10T20:40:00Z'
         status: staging
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new\
           \ DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida\
@@ -1891,7 +1939,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.nolan.layout/000
-        created: '2026-08-06T13:25:00Z'
+        created: '2026-08-10T20:40:00Z'
         status: staging
         summary: Un-drafted for hardware-layout-pass-one (full layouts now, axioms
           later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components
@@ -1931,7 +1979,7 @@ types:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.readings/000
         created: '2026-08-07T13:20:00Z'
-        status: staging
+        status: published
         summary: Initial version.
         direct_dependencies:
           structural:
@@ -1940,6 +1988,129 @@ types:
           - derived.channel.gt:002
           - left.right.dot
           - utc.milliseconds
+  gw.weather.channel.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'An observed weather series: one quantity at one place, the ground-truth
+      series forecasters are scored against.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.channel.gt/000
+        created: '2026-08-11T14:20:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - gw1.quantity:002
+          - gw1.unit:002
+          - left.right.dot
+          - non.empty.string
+          - non.negative.int
+          - positive.int
+          - utc.iso8601.seconds
+          - uuid4.str
+  gw.weather.forecast:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'One forecast emission: per-channel slice values; (forecast channel,
+      ForecastCreated) is the revision key.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.forecast/000
+        created: '2026-08-11T14:20:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - gw.weather.forecast.entry:000
+          - gw.weather.forecast.fidelity:000
+          - utc.iso8601.seconds
+  gw.weather.forecast.channel.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A named predictor of one observed weather series; slice structure
+      declared on the record, not the wire.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.forecast.channel.gt/000
+        created: '2026-08-11T14:20:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - non.empty.string
+          - non.negative.int
+          - positive.int
+          - utc.iso8601.seconds
+          - uuid4.str
+  gw.weather.forecast.entry:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: One channel's slice values within a gw.weather.forecast emission;
+      slice times derive from the channel record.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.forecast.entry/000
+        created: '2026-08-11T14:20:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - utc.iso8601.seconds
+  gw.weather.location.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'The place anchor for weather channels: provider-neutral coordinates,
+      timezone, and station identifiers.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.location.gt/000
+        created: '2026-08-11T14:20:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - non.empty.string
+          - uuid4.str
+  gw.weather.observation:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'One station observation: values of one or more observed weather
+      channels at ObservationTime; Interpolated marks gap-recovery fill.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.observation/000
+        created: '2026-08-11T14:20:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - gw.weather.reading:000
+          - utc.iso8601.seconds
+  gw.weather.reading:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'One reading within a gw.weather.observation: one observed channel''s
+      integer-scaled value.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.reading/000
+        created: '2026-08-11T14:20:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - left.right.dot
   gw1.hvac.zone:
     latest_version: '000'
     owner: gridworks-energy
@@ -1967,12 +2138,13 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw1.scada.device.type.gt/000
-        created: '2026-07-27T16:15:00Z'
+        created: '2026-08-10T20:40:00Z'
         status: staging
         summary: Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList,
-          NativeGpio, Expanders, I2cRelays, CtAdc, ThermistorAdcs, Dacs). The record
-          describes what is allowed; deployment choices (DIP-selected expander address,
-          chosen wiring) live on the component and layout.
+          NativeGpio, Expanders, Muxes, I2cRelays, CtAdc, ThermistorAdcs, Dacs; MuxConsistency
+          axiom joins BusMembership / ExpanderMembership / BoardIdentifierUniqueness).
+          The record describes what is allowed; deployment choices (DIP-selected expander
+          address, chosen wiring) live on the component and layout.
         direct_dependencies:
           structural:
           - gw.native.gpio.pin:000
@@ -1980,6 +2152,7 @@ types:
           - i2c.ct.interface.capability:000
           - i2c.dac.capability:000
           - i2c.expander:000
+          - i2c.mux:000
           - i2c.relay.capability:000
           - i2c.thermistor.interface.capability:000
           - pascal.case
@@ -2420,15 +2593,55 @@ types:
         schema_url: https://schemas.electricity.works/types/i2c.dac.capability/000
         created: '2026-07-27T16:15:00Z'
         status: staging
-        summary: "Initial version (DacName, I2cBus, I2cAddress, DacType, Channels);\
-          \ renames i2c.dac.config \u2014 the record describes what the board offers,\
-          \ not a chosen configuration."
+        summary: "Initial version (DacName, I2cBus, I2cAddress, optional MuxName/MuxChannel\
+          \ naming the board mux the DAC sits behind, DacType, Channels; MuxPairing\
+          \ axiom); renames i2c.dac.config \u2014 the record describes what the board\
+          \ offers, not a chosen configuration."
         direct_dependencies:
           structural:
           - i2c.dac.type:000
           - non.negative.int
           - pascal.case
           - positive.int
+  i2c.dac.channel.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: EEPROM power-on defaults for one output channel of a board DAC.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.dac.channel.config/000
+        created: '2026-08-10T20:40:00Z'
+        status: staging
+        summary: Initial version (DacChannel, PowerOnRawValue, PowerOnVref, PowerOnGain;
+          EepromRanges axiom).
+        direct_dependencies:
+          structural:
+          - i2c.dac.channel:000
+          - i2c.dac.vref:000
+          - non.negative.int
+          - positive.int
+  i2c.dac.writer.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: Configuration for an I2C DAC writer component that drives one board-resident
+      DAC (named by DacName against the board record) and carries its per-channel
+      EEPROM power-on defaults.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.dac.writer.component.gt/000
+        created: '2026-08-10T20:40:00Z'
+        status: staging
+        summary: 'Initial version (ComponentId, BoardComponentId, DacName, ConfigList
+          of i2c.dac.channel.config, DisplayName, HwUid; DacChannelUniqueness axiom).
+          Context-dependent identity mirrors the thermistor reader: DacName and BoardComponentId
+          resolve against the source layout.'
+        direct_dependencies:
+          structural:
+          - i2c.dac.channel.config:000
+          - pascal.case
+          - uuid4.str
   i2c.expander:
     latest_version: '000'
     owner: gridworks-energy
@@ -2496,6 +2709,23 @@ types:
           structural:
           - relay.actor.config:002
           - uuid4.str
+  i2c.mux:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "An I\xB2C bus multiplexer on a GridWorks SCADA board."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.mux/000
+        created: '2026-08-10T20:40:00Z'
+        status: staging
+        summary: Initial version (MuxName, I2cBus, I2cAddress, MuxType, Channels).
+        direct_dependencies:
+          structural:
+          - i2c.mux.type:000
+          - non.negative.int
+          - pascal.case
+          - positive.int
   i2c.read.bit:
     latest_version: '000'
     owner: gridworks-energy
@@ -2683,17 +2913,19 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/i2c.thermistor.interface.capability/000
-        created: '2026-07-27T16:15:00Z'
+        created: '2026-08-10T20:40:00Z'
         status: staging
-        summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, AdcReferenceVolts,\
-          \ SeriesResistanceKOhms); renames i2c.thermistor.interface.config \u2014\
-          \ the record describes what the board offers, not a chosen configuration."
+        summary: "Initial version (Name, I2cBus, I2cAddress, AdcType, SupportedDataRatesSps\
+          \ \u2014 the conversion-rate menu the reader's DataRateSps must come from,\
+          \ AdcReferenceVolts, SeriesResistanceKOhms); renames i2c.thermistor.interface.config\
+          \ \u2014 the record describes what the board offers, not a chosen configuration."
         direct_dependencies:
           structural:
           - i2c.adc.type:000
           - non.negative.int
           - pascal.case
           - positive.float
+          - positive.int
   i2c.thermistor.reader.component.gt:
     latest_version: '003'
     owner: gridworks-energy
@@ -2704,19 +2936,22 @@ types:
     versions:
       '003':
         schema_url: https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/003
-        created: '2026-07-19T18:55:00Z'
+        created: '2026-08-10T20:40:00Z'
         status: staging
-        summary: '- Bus, AdcAddress, AdcReferenceVolts, SeriesResistanceKOhms dropped
-          (facts on the board''s thermistor-interface capability entry); AdcName added,
-          naming that entry in the board record''s ThermistorAdcs; DeviceType dropped
-          (TypeName is the kind; board identity lives on the board component); BoardComponentId
-          added, anchoring the reader to its scada.board.component.gt. Context-dependent:
-          AdcName and BoardComponentId are derived from the source layout, which the
-          standalone component does not carry.'
+        summary: "- Bus, AdcAddress, AdcReferenceVolts, SeriesResistanceKOhms dropped\
+          \ (facts on the board's thermistor-interface capability entry); AdcName\
+          \ added, naming that entry in the board record's ThermistorAdcs; DataRateSps\
+          \ added (the per-conversion data rate the reader writes in the ADC config\
+          \ word \u2014 a member of the board ADC's SupportedDataRatesSps); DeviceType\
+          \ dropped (TypeName is the kind; board identity lives on the board component);\
+          \ BoardComponentId added, anchoring the reader to its scada.board.component.gt.\
+          \ Context-dependent: AdcName and BoardComponentId are derived from the source\
+          \ layout, which the standalone component does not carry."
         direct_dependencies:
           structural:
           - i2c.thermistor.channel.config:002
           - pascal.case
+          - positive.int
           - temp.calc.method:000
           - uuid4.str
       '002':

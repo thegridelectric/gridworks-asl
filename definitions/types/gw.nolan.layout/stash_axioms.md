@@ -600,4 +600,23 @@ when porting, don't re-enable the stale forms verbatim:
         version-stable while making the layout self-validating; enforcing on the
         device-type itself would version-couple it to the mapping and ripple on
         every device-type addition.
+    - number:
+      name: "ThermistorReaderMenuMembership"
+      statement: >
+        For every i2c.thermistor.reader.component.gt in Components, DataRateSps
+        SHALL equal one of the SupportedDataRatesSps of the ThermistorAdcs entry
+        named by its AdcName on the board record reached via its
+        BoardComponentId.
+    - number:
+      name: "ThermistorSweepFitsPoll"
+      statement: >
+        For every i2c.thermistor.reader.component.gt in Components, let N be the
+        count of distinct AdcChannel values in its ConfigList, and let P be the
+        minimum PollPeriodMs across the channel configs of the DataChannels its
+        ConfigList names. Then N * (1000 / DataRateSps + 10) SHALL be less than
+        or equal to 0.6 * P. (A chip's channels share its input mux, so a sweep
+        serializes: one gated single-shot read costs the conversion time
+        1000/DataRateSps plus ~10 ms measured overhead; the 0.6 bound keeps the
+        sweep within a slack fraction of the poll period, leaving bus headroom
+        for other device traffic.)
 ```
