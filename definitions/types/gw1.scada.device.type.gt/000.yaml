@@ -76,6 +76,12 @@ properties:
       The relays the board offers, named by the device's physical markings and
       driven through the board's expanders.
 
+  SupportsPinReadback:
+    type: boolean
+    description: >
+      True if the board's relay outputs can be read back at the pins; false
+      if relay state is known only by command.
+
   CtAdc:
     $ref: "https://schemas.electricity.works/types/i2c.ct.interface.capability/000"
     description: >
@@ -103,6 +109,7 @@ properties:
 
 required:
   - DeviceType
+  - SupportsPinReadback
   - TypeName
   - Version
 
@@ -114,6 +121,7 @@ examples:
       "DeviceType": "KridaDoubleRelayBoard16",
       "DisplayName": "GridWorks relay panel: two 16-channel Krida boards, markings Relay1-Relay32",
       "MinPollPeriodMs": 200,
+      "SupportsPinReadback": false,
       "TelemetryNameList": [
         "RelayState"
       ],

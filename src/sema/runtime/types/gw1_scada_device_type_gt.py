@@ -29,6 +29,7 @@ class Gw1ScadaDeviceTypeGt(SemaType):
     expanders: list[I2cExpander] | None = None
     muxes: list[I2cMux] | None = None
     i2c_relays: list[I2cRelayCapability] | None = None
+    supports_pin_readback: bool
     ct_adc: I2cCtInterfaceCapability | None = None
     thermistor_adcs: list[I2cThermistorInterfaceCapability] | None = None
     dacs: list[I2cDacCapability] | None = None

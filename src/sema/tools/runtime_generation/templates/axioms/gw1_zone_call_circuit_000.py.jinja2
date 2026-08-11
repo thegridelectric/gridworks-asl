@@ -1,0 +1,32 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw1_zone_call_circuit_000_class_name }}":
+        """
+        Axiom 1: FloorLoopsCannotCool
+        If ActuatorKind is FloorLoop, CanCool SHALL be false.
+        """
+        if self.actuator_kind == ZoneActuatorKind.FloorLoop and self.can_cool:
+            raise ValueError(
+                "Axiom 1 (FloorLoopsCannotCool) failed: ActuatorKind is "
+                "FloorLoop, so CanCool SHALL be false."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ gw1_zone_call_circuit_000_class_name }}":
+        """
+        Axiom 2: ReadSetpointNeedsCommsStat
+        If SetpointSource is FromThermostat, Thermostat.Kind SHALL NOT be MechanicalDial.
+        """
+        # Method-local: ThermostatKind is not a field enum of this type, so the
+        # generator does not emit a module-level import for it.
+        from sema.runtime.enums import ThermostatKind
+
+        if (
+            self.setpoint_source == ZoneSetpointSource.FromThermostat
+            and self.thermostat.kind == ThermostatKind.MechanicalDial
+        ):
+            raise ValueError(
+                "Axiom 2 (ReadSetpointNeedsCommsStat) failed: SetpointSource is "
+                "FromThermostat, so Thermostat.Kind SHALL NOT be MechanicalDial."
+            )
+        return self

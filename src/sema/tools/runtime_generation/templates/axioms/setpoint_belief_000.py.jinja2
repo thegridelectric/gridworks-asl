@@ -1,0 +1,18 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ setpoint_belief_000_class_name }}":
+        """
+        Axiom 1: UnknownIsValueless
+        a. If Phase is Unknown, ValueF SHALL be absent. b. If Phase is not Unknown, ValueF
+        SHALL be present.
+        """
+        if self.phase == SetpointPhase.Unknown and self.value_f is not None:
+            raise ValueError(
+                "Axiom 1 (UnknownIsValueless) failed: Phase is Unknown, "
+                f"so ValueF SHALL be absent; got {self.value_f}."
+            )
+        if self.phase != SetpointPhase.Unknown and self.value_f is None:
+            raise ValueError(
+                "Axiom 1 (UnknownIsValueless) failed: Phase is "
+                f"{self.phase.value}, so ValueF SHALL be present."
+            )
+        return self

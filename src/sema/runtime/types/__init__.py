@@ -51,6 +51,8 @@ from sema.runtime.types.gw1_telemetry_name_quantity_projection import (
     Gw1TelemetryNameQuantityProjection,
 )
 from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProjection
+from sema.runtime.types.gw1_zone_call_circuit import Gw1ZoneCallCircuit
+from sema.runtime.types.gw1_zone_thermostat import Gw1ZoneThermostat
 from sema.runtime.types.gw_channel_gap_stats import GwChannelGapStats
 from sema.runtime.types.gw_channel_jump_stats import GwChannelJumpStats
 from sema.runtime.types.gw_channel_noise_stats import GwChannelNoiseStats
@@ -132,6 +134,7 @@ from sema.runtime.types.scada_control_capabilities import ScadaControlCapabiliti
 from sema.runtime.types.scada_params import ScadaParams
 from sema.runtime.types.send_control_capabilities import SendControlCapabilities
 from sema.runtime.types.send_layout import SendLayout
+from sema.runtime.types.setpoint_belief import SetpointBelief
 from sema.runtime.types.sim_pico_tank_module_component_gt import (
     SimPicoTankModuleComponentGt,
 )
@@ -158,6 +161,7 @@ from sema.runtime.types.ticklist_reed_report import TicklistReedReport
 from sema.runtime.types.weather import Weather
 from sema.runtime.types.weather_forecast import WeatherForecast
 from sema.runtime.types.web_server_component_gt import WebServerComponentGt
+from sema.runtime.types.zone_circuit_governance_cmd import ZoneCircuitGovernanceCmd
 
 __all__ = [
     "Ads111xBasedComponentGt",
@@ -211,6 +215,8 @@ __all__ = [
     "Gw1TankTempCalibrationMap",
     "Gw1TelemetryNameQuantityProjection",
     "Gw1UnitQuantityProjection",
+    "Gw1ZoneCallCircuit",
+    "Gw1ZoneThermostat",
     "GwChannelGapStats",
     "GwChannelJumpStats",
     "GwChannelNoiseStats",
@@ -284,6 +290,7 @@ __all__ = [
     "ScadaParams",
     "SendControlCapabilities",
     "SendLayout",
+    "SetpointBelief",
     "SimPicoTankModuleComponentGt",
     "SimPlantActuation",
     "SimPlantFlux",
@@ -306,4 +313,5 @@ __all__ = [
     "Weather",
     "WeatherForecast",
     "WebServerComponentGt",
+    "ZoneCircuitGovernanceCmd",
 ]

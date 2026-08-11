@@ -365,6 +365,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw1.unit.quantity.projection/000.yaml
+  gw1.zone.call.circuit:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw1.zone.call.circuit/000.yaml
+  gw1.zone.thermostat:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw1.zone.thermostat/000.yaml
   gw108.gpio.sensor.component.gt:
     latest_version: '002'
     versioning_strategy: literal
@@ -689,6 +699,11 @@ types:
     versions:
       '001': definitions/types/send.layout/001.yaml
       '000': definitions/types/send.layout/000.yaml
+  setpoint.belief:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/setpoint.belief/000.yaml
   sim.pico.tank.module.component.gt:
     latest_version: '001'
     versioning_strategy: literal
@@ -807,6 +822,11 @@ types:
     versions:
       '002': definitions/types/web.server.component.gt/002.yaml
       '001': definitions/types/web.server.component.gt/001.yaml
+  zone.circuit.governance.cmd:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/zone.circuit.governance.cmd/000.yaml
 enums:
   base.g.node.class:
     enum_type: versioned
@@ -1029,6 +1049,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/relay.wiring.config/000.yaml
+  setpoint.phase:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/setpoint.phase/000.yaml
   spaceheat.make.model:
     enum_type: versioned
     latest_version: 008
@@ -1057,6 +1082,49 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/thermistor.data.method/000.yaml
+  thermostat.kind:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/thermostat.kind/000.yaml
+  zone.actuator.kind:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/zone.actuator.kind/000.yaml
+  zone.call.circuit.event:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/zone.call.circuit.event/000.yaml
+  zone.call.circuit.state:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/zone.call.circuit.state/000.yaml
+  zone.call.source:
+    enum_type: literal
+    schema: definitions/enums/zone.call.source/000.yaml
+  zone.circuit.governance.event:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/zone.circuit.governance.event/000.yaml
+  zone.circuit.governance.state:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/zone.circuit.governance.state/000.yaml
+  zone.circuit.role:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/zone.circuit.role/000.yaml
+  zone.setpoint.source:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/zone.setpoint.source/000.yaml
 formats:
   handle.name: definitions/formats/handle.name.yaml
   hex.char: definitions/formats/hex.char.yaml

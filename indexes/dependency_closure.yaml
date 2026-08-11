@@ -1008,6 +1008,28 @@ types:
       formats: []
       types: []
       versionless_types: []
+  gw1.zone.call.circuit:
+    '000':
+      enums:
+      - thermostat.kind:000
+      - zone.actuator.kind:000
+      - zone.circuit.role:000
+      - zone.setpoint.source:000
+      formats:
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - gw1.zone.thermostat:000
+      versionless_types: []
+  gw1.zone.thermostat:
+    '000':
+      enums:
+      - thermostat.kind:000
+      formats:
+      - uuid4.str
+      types: []
+      versionless_types: []
   gw108.gpio.sensor.component.gt:
     '001':
       enums:
@@ -2316,6 +2338,13 @@ types:
       - utc.milliseconds
       types: []
       versionless_types: []
+  setpoint.belief:
+    '000':
+      enums:
+      - setpoint.phase:000
+      formats: []
+      types: []
+      versionless_types: []
   sim.pico.tank.module.component.gt:
     '000':
       enums:
@@ -2608,6 +2637,16 @@ types:
       enums: []
       formats:
       - pascal.case
+      - uuid4.str
+      types: []
+      versionless_types: []
+  zone.circuit.governance.cmd:
+    '000':
+      enums:
+      - zone.circuit.governance.event:000
+      formats:
+      - handle.name
+      - utc.milliseconds
       - uuid4.str
       types: []
       versionless_types: []

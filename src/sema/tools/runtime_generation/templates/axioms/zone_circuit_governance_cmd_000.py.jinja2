@@ -1,0 +1,24 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ zone_circuit_governance_cmd_000_class_name }}":
+        """
+        Axiom 1: SetpointIffThermostatic
+        a. If Event is SwitchToThermostatic, SetpointF SHALL be present. b. If Event is not
+        SwitchToThermostatic, SetpointF SHALL be absent.
+        """
+        if (
+            self.event == ZoneCircuitGovernanceEvent.SwitchToThermostatic
+            and self.setpoint_f is None
+        ):
+            raise ValueError(
+                "Axiom 1 (SetpointIffThermostatic) failed: Event is "
+                "SwitchToThermostatic, so SetpointF SHALL be present."
+            )
+        if (
+            self.event != ZoneCircuitGovernanceEvent.SwitchToThermostatic
+            and self.setpoint_f is not None
+        ):
+            raise ValueError(
+                "Axiom 1 (SetpointIffThermostatic) failed: Event is "
+                f"{self.event.value}, so SetpointF SHALL be absent."
+            )
+        return self

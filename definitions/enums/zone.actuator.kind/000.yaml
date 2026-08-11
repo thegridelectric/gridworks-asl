@@ -1,0 +1,23 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/zone.actuator.kind/000"
+
+title: "zone.actuator.kind"
+type: "string"
+description: >
+  Kind of emitter a zone-call circuit actuates.
+
+enum:
+  - "FloorLoop"
+  - "Fancoil"
+
+default: "FloorLoop"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+    "FloorLoop": >
+      A radiant floor loop. Heats only.
+
+    "Fancoil": >
+      A fan coil unit. Heats and cools.

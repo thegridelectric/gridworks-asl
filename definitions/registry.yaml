@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-11T14:25:00Z"
+  last_updated: "2026-08-11T15:55:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -736,6 +736,19 @@ enums:
         status: "published"
 
 
+  setpoint.phase:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Epistemic phase of a learned setpoint belief: how the current belief about a thermostat's setpoint was obtained and how much to trust it."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/setpoint.phase/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+
+
   spaceheat.make.model:
     latest_version: "008"
     owner: gridworks-energy
@@ -823,6 +836,119 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/thermistor.data.method/000"
         created: "2026-06-14T12:00:00Z"
+        status: "staging"
+
+
+  thermostat.kind:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Kind of wall thermostat driving a zone-call circuit."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/thermostat.kind/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+
+
+  zone.actuator.kind:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Kind of emitter a zone-call circuit actuates."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/zone.actuator.kind/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+
+
+  zone.call.circuit.event:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Events for a zone-call-circuit actor's posture machine, which owns the circuit's failsafe and ops relay pair."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/zone.call.circuit.event/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+
+
+  zone.call.circuit.state:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "States of a zone-call-circuit actor's posture machine; Released is the hardware failsafe posture."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/zone.call.circuit.state/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+
+
+  zone.call.source:
+    owner: gridworks-energy
+    enum_type: "literal"
+    description: "Authority currently issuing a zone-call circuit's call signal: the wall thermostat or the scada."
+    schema_url: "https://schemas.electricity.works/enums/zone.call.source/000"
+    created: "2026-08-11T15:55:00Z"
+    status: "staging"
+
+
+  zone.circuit.governance.event:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Events for a zone-call-circuit actor's governance machine, selecting which authority rules the circuit."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/zone.circuit.governance.event/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+
+
+  zone.circuit.governance.state:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "States of a zone-call-circuit actor's governance machine: which authority rules the circuit."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/zone.circuit.governance.state/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+
+
+  zone.circuit.role:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Thermal role a zone-call circuit plays for the zone it serves."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/zone.circuit.role/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+
+
+  zone.setpoint.source:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "How the scada knows a zone-call circuit's setpoint: read from a comms-capable thermostat or learned from call behavior."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/zone.setpoint.source/000"
+        created: "2026-08-11T15:55:00Z"
         status: "staging"
 
 
@@ -2354,7 +2480,7 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "One heating zone of a hydronic layout (label, critical flag, kWh-per-degF weight); shared across House0 and Nolan."
+    description: "One thermal zone: label, critical flag, kWh-per-degF thermal weight, and air-temperature channel."
 
     versions:
       "000":
@@ -2362,7 +2488,7 @@ types:
         created: "2026-06-15T17:30:00Z"
         status: "staging"
         summary: >-
-          - New shared zone type (Name, Critical, KwhPerDegF) replacing the former parallel ZoneList / CriticalZoneList / ZoneKwhPerDegFList in the hydronic block.
+          - New shared zone type (Name, Critical, KwhPerDegF, optional TempChannelName) replacing the former parallel ZoneList / CriticalZoneList / ZoneKwhPerDegFList in the hydronic block.
         direct_dependencies:
           structural:
             - "spaceheat.name"
@@ -2377,7 +2503,7 @@ types:
         schema_url: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
         created: "2026-08-10T20:40:00Z"
         status: "staging"
-        summary: "Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList, NativeGpio, Expanders, Muxes, I2cRelays, CtAdc, ThermistorAdcs, Dacs; MuxConsistency axiom joins BusMembership / ExpanderMembership / BoardIdentifierUniqueness). The record describes what is allowed; deployment choices (DIP-selected expander address, chosen wiring) live on the component and layout."
+        summary: "Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList, NativeGpio, Expanders, Muxes, I2cRelays, SupportsPinReadback, CtAdc, ThermistorAdcs, Dacs; MuxConsistency axiom joins BusMembership / ExpanderMembership / BoardIdentifierUniqueness). The record describes what is allowed; deployment choices (DIP-selected expander address, chosen wiring) live on the component and layout."
         direct_dependencies:
           structural:
             - "gw.native.gpio.pin:000"
@@ -2491,6 +2617,46 @@ types:
           structural:
             - "gw1.quantity:001"
             - "gw1.unit:001"
+
+  gw1.zone.call.circuit:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "One zone-call circuit: the chain from wall thermostat through call wire and relay pair to an actuator, serving one zone."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw1.zone.call.circuit/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+        summary: "Circuit record (CircuitPosition, ServesZone, ActuatorKind, Role, CanCool, SetpointSource, Thermostat, WhitewireChannelName, FailsafeRelayNode, OpsRelayNode); FloorLoopsCannotCool and ReadSetpointNeedsCommsStat axioms."
+        direct_dependencies:
+          structural:
+            - "gw1.zone.thermostat:000"
+            - "positive.int"
+            - "spaceheat.name"
+            - "zone.actuator.kind:000"
+            - "zone.circuit.role:000"
+            - "zone.setpoint.source:000"
+          axiom:
+            - "thermostat.kind:000"
+
+  gw1.zone.thermostat:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A wall thermostat: its kind, and for a comms-capable kind, the component it is read through."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw1.zone.thermostat/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+        summary: "Thermostat record (Kind, optional ComponentId); NoComponentOnDumbStat axiom."
+        direct_dependencies:
+          structural:
+            - "thermostat.kind:000"
+            - "uuid4.str"
 
   gw108.gpio.relay.component.gt:
     latest_version: "002"
@@ -4138,6 +4304,22 @@ types:
             - "left.right.dot"
             - "spaceheat.name"
 
+  setpoint.belief:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A belief about a thermostat's setpoint: an epistemic phase and a value in degrees Fahrenheit."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/setpoint.belief/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+        summary: "Belief pair (Phase, optional ValueF); UnknownIsValueless axiom ties value presence to phase."
+        direct_dependencies:
+          structural:
+            - "setpoint.phase:000"
+
   sim.pico.tank.module.component.gt:
     latest_version: "001"
     owner: gridworks-energy
@@ -4640,3 +4822,22 @@ types:
           structural:
             - "channel.config:000"
             - "uuid4.str"
+
+  zone.circuit.governance.cmd:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Command from a boss to a zone-call-circuit actor's governance machine, setting which authority rules the circuit."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/zone.circuit.governance.cmd/000"
+        created: "2026-08-11T15:55:00Z"
+        status: "staging"
+        summary: "Governance command (FromHandle, ToHandle, Event, optional SetpointF, TriggerId, SendTimeUnixMs); SetpointIffThermostatic axiom."
+        direct_dependencies:
+          structural:
+            - "handle.name"
+            - "utc.milliseconds"
+            - "uuid4.str"
+            - "zone.circuit.governance.event:000"

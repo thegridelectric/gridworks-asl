@@ -53,11 +53,21 @@ from sema.runtime.enums.relay_closed_or_open import RelayClosedOrOpen
 from sema.runtime.enums.relay_energization_state import RelayEnergizationState
 from sema.runtime.enums.relay_open_or_closed import RelayOpenOrClosed
 from sema.runtime.enums.relay_wiring_config import RelayWiringConfig
+from sema.runtime.enums.setpoint_phase import SetpointPhase
 from sema.runtime.enums.spaceheat_make_model import SpaceheatMakeModel
 from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
 from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
 from sema.runtime.enums.temp_calc_method import TempCalcMethod
 from sema.runtime.enums.thermistor_data_method import ThermistorDataMethod
+from sema.runtime.enums.thermostat_kind import ThermostatKind
+from sema.runtime.enums.zone_actuator_kind import ZoneActuatorKind
+from sema.runtime.enums.zone_call_circuit_event import ZoneCallCircuitEvent
+from sema.runtime.enums.zone_call_circuit_state import ZoneCallCircuitState
+from sema.runtime.enums.zone_call_source import ZoneCallSource
+from sema.runtime.enums.zone_circuit_governance_event import ZoneCircuitGovernanceEvent
+from sema.runtime.enums.zone_circuit_governance_state import ZoneCircuitGovernanceState
+from sema.runtime.enums.zone_circuit_role import ZoneCircuitRole
+from sema.runtime.enums.zone_setpoint_source import ZoneSetpointSource
 
 __all__ = [
     "BaseGNodeClass",
@@ -107,9 +117,19 @@ __all__ = [
     "RelayEnergizationState",
     "RelayOpenOrClosed",
     "RelayWiringConfig",
+    "SetpointPhase",
     "SpaceheatMakeModel",
     "SpaceheatTelemetryName",
     "SpaceheatUnit",
     "TempCalcMethod",
     "ThermistorDataMethod",
+    "ThermostatKind",
+    "ZoneActuatorKind",
+    "ZoneCallCircuitEvent",
+    "ZoneCallCircuitState",
+    "ZoneCallSource",
+    "ZoneCircuitGovernanceEvent",
+    "ZoneCircuitGovernanceState",
+    "ZoneCircuitRole",
+    "ZoneSetpointSource",
 ]

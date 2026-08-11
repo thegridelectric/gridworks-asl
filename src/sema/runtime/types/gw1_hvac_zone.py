@@ -10,5 +10,6 @@ class Gw1HvacZone(SemaType):
     name: SpaceheatName
     critical: bool
     kwh_per_deg_f: StrictFloat
+    temp_channel_name: SpaceheatName | None = None
     type_name: Literal["gw1.hvac.zone"] = "gw1.hvac.zone"
     version: Literal["000"] = "000"

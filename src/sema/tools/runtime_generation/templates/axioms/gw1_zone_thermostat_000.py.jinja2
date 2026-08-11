@@ -1,0 +1,12 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw1_zone_thermostat_000_class_name }}":
+        """
+        Axiom 1: NoComponentOnDumbStat
+        If Kind is MechanicalDial, ComponentId SHALL be absent.
+        """
+        if self.kind == ThermostatKind.MechanicalDial and self.component_id is not None:
+            raise ValueError(
+                "Axiom 1 (NoComponentOnDumbStat) failed: Kind is MechanicalDial, "
+                f"so ComponentId SHALL be absent; got {self.component_id}."
+            )
+        return self

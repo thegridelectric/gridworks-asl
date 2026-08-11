@@ -1,0 +1,25 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/zone.circuit.role/000"
+
+title: "zone.circuit.role"
+type: "string"
+description: >
+  Thermal role a zone-call circuit plays for the zone it serves. A zone
+  may be served by more than one circuit, each in a different role.
+
+enum:
+  - "Baseload"
+  - "RapidResponse"
+
+default: "Baseload"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+  value_descriptions:
+    "Baseload": >
+      Carries the zone's steady thermal load on a slow-responding
+      emitter.
+
+    "RapidResponse": >
+      Trims the zone quickly on a fast-responding emitter.
