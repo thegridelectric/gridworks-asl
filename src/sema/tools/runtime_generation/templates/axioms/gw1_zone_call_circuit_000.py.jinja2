@@ -17,13 +17,12 @@
         Axiom 2: ReadSetpointNeedsCommsStat
         If SetpointSource is FromThermostat, Thermostat.Kind SHALL NOT be MechanicalDial.
         """
-        # Method-local: ThermostatKind is not a field enum of this type, so the
-        # generator does not emit a module-level import for it.
-        from sema.runtime.enums import ThermostatKind
-
+        # String comparison, not an enum import: ThermostatKind is not a field
+        # enum of this type, and an absolute sema.runtime import would break
+        # inside a restricted snapshot package.
         if (
             self.setpoint_source == ZoneSetpointSource.FromThermostat
-            and self.thermostat.kind == ThermostatKind.MechanicalDial
+            and self.thermostat.kind == "MechanicalDial"
         ):
             raise ValueError(
                 "Axiom 2 (ReadSetpointNeedsCommsStat) failed: SetpointSource is "

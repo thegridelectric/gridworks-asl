@@ -83,15 +83,14 @@ class GwHydronic(SemaType):
         For every circuit whose SetpointSource is Learned, the zone named
         by its ServesZone SHALL carry a TempChannelName.
         """
-        # Method-local: ZoneSetpointSource is not a field enum of this type,
-        # so the generator does not emit a module-level import for it.
-        from sema.runtime.enums import ZoneSetpointSource
-
+        # String comparison, not an enum import: ZoneSetpointSource is not a
+        # field enum of this type, and an absolute sema.runtime import would
+        # break inside a restricted snapshot package.
         zones_by_name = {z.name: z for z in self.zones}
         for c in self.zone_call_circuits or []:
             zone = zones_by_name.get(c.serves_zone)
             if (
-                c.setpoint_source == ZoneSetpointSource.Learned
+                c.setpoint_source == "Learned"
                 and zone is not None
                 and zone.temp_channel_name is None
             ):
