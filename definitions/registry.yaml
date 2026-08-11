@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-11T15:55:00Z"
+  last_updated: "2026-08-11T17:15:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -167,6 +167,14 @@ enums:
     schema_url: "https://schemas.electricity.works/enums/change.relay.state/000"
     created: "2024-09-17T20:17:00Z"
     status: "published"
+
+  change.zone.call.source:
+    owner: gridworks-energy
+    enum_type: "literal"
+    description: "Events for switching a zone-call circuit's call authority between wall thermostat and scada, actuated by the circuit's failsafe relay."
+    schema_url: "https://schemas.electricity.works/enums/change.zone.call.source/000"
+    created: "2026-08-11T17:15:00Z"
+    status: "staging"
 
   fis.authorization.decision:
     latest_version: "000"
@@ -2210,7 +2218,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.layout/000"
-        created: "2026-08-10T20:40:00Z"
+        created: "2026-08-11T17:15:00Z"
         status: "staging"
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). All collections + Hydronic required (mirrors gw.nolan.layout) — a layout is a complete deployable artifact."
         direct_dependencies:
@@ -2267,14 +2275,15 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.hydronic/000"
-        created: "2026-06-15T17:30:00Z"
+        created: "2026-08-11T17:15:00Z"
         status: "staging"
         summary: >-
-          - Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axiom 1: UseSiegLoop implies SiegLoopPlumbed.
+          - Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), optional ZoneCallCircuits (gw1.zone.call.circuit list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axioms: SiegLoopControlImpliesPlumbed, Cardinality, CircuitResolution, LearnedNeedsTempChannel.
         direct_dependencies:
           structural:
             - "gw.house0.primary.flow.source:000"
             - "gw1.hvac.zone:000"
+            - "gw1.zone.call.circuit:000"
             - "non.negative.int"
 
   gw.native.gpio.pin:
@@ -2302,7 +2311,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.nolan.layout/000"
-        created: "2026-08-10T20:40:00Z"
+        created: "2026-08-11T17:15:00Z"
         status: "staging"
         summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/303 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
         direct_dependencies:
@@ -2317,7 +2326,9 @@ types:
             - "gpio.sensor.component.gt:000"
             - "gw.hydronic:000"
             - "gw1.scada.device.type.gt:000"
+            - "i2c.dac.writer.component.gt:000"
             - "i2c.multichannel.dt.relay.component.gt:005"
+            - "i2c.relay.component.gt:000"
             - "i2c.thermistor.reader.component.gt:003"
             - "pico.btu.meter.component.gt:001"
             - "pico.tank.module.component.gt:012"

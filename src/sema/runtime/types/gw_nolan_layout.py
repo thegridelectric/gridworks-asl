@@ -11,9 +11,11 @@ from sema.runtime.types.gpio_relay_component_gt import GpioRelayComponentGt
 from sema.runtime.types.gpio_sensor_component_gt import GpioSensorComponentGt
 from sema.runtime.types.gw1_scada_device_type_gt import Gw1ScadaDeviceTypeGt
 from sema.runtime.types.gw_hydronic import GwHydronic
+from sema.runtime.types.i2c_dac_writer_component_gt import I2cDacWriterComponentGt
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
+from sema.runtime.types.i2c_relay_component_gt import I2cRelayComponentGt
 from sema.runtime.types.i2c_thermistor_reader_component_gt import (
     I2cThermistorReaderComponentGt,
 )
@@ -38,7 +40,9 @@ class GwNolanLayout(SemaType):
         ElectricMeterComponentGt
         | GpioSensorComponentGt
         | GpioRelayComponentGt
+        | I2cDacWriterComponentGt
         | I2cMultichannelDtRelayComponentGt
+        | I2cRelayComponentGt
         | I2cThermistorReaderComponentGt
         | ScadaBoardComponentGt
         | PicoBtuMeterComponentGt

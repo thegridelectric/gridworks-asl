@@ -3,6 +3,7 @@ from sema.runtime.enums.buffer_regulation_mode import BufferRegulationMode
 from sema.runtime.enums.change_heatcall_source import ChangeHeatcallSource
 from sema.runtime.enums.change_relay_pin import ChangeRelayPin
 from sema.runtime.enums.change_relay_state import ChangeRelayState
+from sema.runtime.enums.change_zone_call_source import ChangeZoneCallSource
 from sema.runtime.enums.fsm_report_type import FsmReportType
 from sema.runtime.enums.g_node_instance_status import GNodeInstanceStatus
 from sema.runtime.enums.g_node_instance_transport import GNodeInstanceTransport
@@ -75,6 +76,7 @@ __all__ = [
     "ChangeHeatcallSource",
     "ChangeRelayPin",
     "ChangeRelayState",
+    "ChangeZoneCallSource",
     "FsmReportType",
     "GNodeInstanceStatus",
     "GNodeInstanceTransport",

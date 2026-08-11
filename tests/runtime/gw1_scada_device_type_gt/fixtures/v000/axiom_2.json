@@ -1,6 +1,6 @@
 {
   "DeviceType": "KridaDoubleRelayBoard16",
-  "SupportsPinReadback": true,
+  "SupportsPinReadback": false,
   "BusList": [
     {
       "Name": "DefaultBus",

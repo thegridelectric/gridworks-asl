@@ -4,12 +4,14 @@ from sema.runtime.base import SemaType
 from sema.runtime.enums import GwHouse0PrimaryFlowSource
 from sema.runtime.property_format import NonNegativeInt
 from sema.runtime.types.gw1_hvac_zone import Gw1HvacZone
+from sema.runtime.types.gw1_zone_call_circuit import Gw1ZoneCallCircuit
 
 
 class GwHydronic(SemaType):
     """Sema: https://schemas.electricity.works/types/gw.hydronic/000"""
 
     zones: list[Gw1HvacZone]
+    zone_call_circuits: list[Gw1ZoneCallCircuit] | None = None
     total_store_tanks: NonNegativeInt
     use_sieg_loop: bool
     sieg_loop_plumbed: bool
@@ -49,4 +51,53 @@ class GwHydronic(SemaType):
                 "Axiom 2 (Cardinality) failed: number of Zones "
                 f"({len(self.zones)}) must be between 1 and 6 inclusive."
             )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> Self:
+        """
+        Axiom 3: CircuitResolution
+        a. Every circuit's ServesZone SHALL equal the Name of a zone in
+        Zones. b. No two circuits SHALL share a CircuitPosition.
+        """
+        circuits = self.zone_call_circuits or []
+        zone_names = {z.name for z in self.zones}
+        for c in circuits:
+            if c.serves_zone not in zone_names:
+                raise ValueError(
+                    "Axiom 3 (CircuitResolution) failed: ServesZone "
+                    f"{c.serves_zone!r} does not name a zone in Zones."
+                )
+        positions = [c.circuit_position for c in circuits]
+        if len(positions) != len(set(positions)):
+            raise ValueError(
+                "Axiom 3 (CircuitResolution) failed: CircuitPosition values "
+                f"{positions} are not distinct."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_4(self) -> Self:
+        """
+        Axiom 4: LearnedNeedsTempChannel
+        For every circuit whose SetpointSource is Learned, the zone named
+        by its ServesZone SHALL carry a TempChannelName.
+        """
+        # Method-local: ZoneSetpointSource is not a field enum of this type,
+        # so the generator does not emit a module-level import for it.
+        from sema.runtime.enums import ZoneSetpointSource
+
+        zones_by_name = {z.name: z for z in self.zones}
+        for c in self.zone_call_circuits or []:
+            zone = zones_by_name.get(c.serves_zone)
+            if (
+                c.setpoint_source == ZoneSetpointSource.Learned
+                and zone is not None
+                and zone.temp_channel_name is None
+            ):
+                raise ValueError(
+                    "Axiom 4 (LearnedNeedsTempChannel) failed: circuit at "
+                    f"position {c.circuit_position} is Learned but zone "
+                    f"{c.serves_zone!r} has no TempChannelName."
+                )
         return self

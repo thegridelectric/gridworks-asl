@@ -430,7 +430,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "- Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axiom 1: UseSiegLoop implies SiegLoopPlumbed."
+        summary: "- Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), optional ZoneCallCircuits (gw1.zone.call.circuit list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axioms: SiegLoopControlImpliesPlumbed, Cardinality, CircuitResolution, LearnedNeedsTempChannel."
 
   gw.native.gpio.pin:
     latest_version: "000"
@@ -1312,6 +1312,12 @@ enums:
       "000": {}
 
   change.relay.state:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
+
+  change.zone.call.source:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
     versions:

@@ -679,6 +679,10 @@ types:
       - spaceheat.unit:001
       - temp.calc.method:000
       - thermistor.data.method:000
+      - thermostat.kind:000
+      - zone.actuator.kind:000
+      - zone.circuit.role:000
+      - zone.setpoint.source:000
       formats:
       - handle.name
       - left.right.dot
@@ -709,6 +713,8 @@ types:
       - gw1.hvac.zone:000
       - gw1.scada.device.type.gt:000
       - gw1.unit.quantity.projection:000
+      - gw1.zone.call.circuit:000
+      - gw1.zone.thermostat:000
       - hubitat.component.gt:000
       - hubitat.gt:000
       - hubitat.poller.component.gt:000
@@ -755,11 +761,19 @@ types:
     '000':
       enums:
       - gw.house0.primary.flow.source:000
+      - thermostat.kind:000
+      - zone.actuator.kind:000
+      - zone.circuit.role:000
+      - zone.setpoint.source:000
       formats:
       - non.negative.int
+      - positive.int
       - spaceheat.name
+      - uuid4.str
       types:
       - gw1.hvac.zone:000
+      - gw1.zone.call.circuit:000
+      - gw1.zone.thermostat:000
       versionless_types: []
   gw.native.gpio.pin:
     '000':
@@ -786,12 +800,18 @@ types:
       - hz.calc.method:001
       - i2c.adc.channel:000
       - i2c.adc.type:000
+      - i2c.dac.channel:000
       - i2c.dac.type:000
+      - i2c.dac.vref:000
       - i2c.mux.type:000
       - relay.closed.or.open:000
       - relay.wiring.config:000
       - spaceheat.telemetry.name:007
       - temp.calc.method:000
+      - thermostat.kind:000
+      - zone.actuator.kind:000
+      - zone.circuit.role:000
+      - zone.setpoint.source:000
       formats:
       - handle.name
       - left.right.dot
@@ -819,13 +839,18 @@ types:
       - gw1.hvac.zone:000
       - gw1.scada.device.type.gt:000
       - gw1.unit.quantity.projection:000
+      - gw1.zone.call.circuit:000
+      - gw1.zone.thermostat:000
       - i2c.bus:000
       - i2c.ct.interface.capability:000
       - i2c.dac.capability:000
+      - i2c.dac.channel.config:000
+      - i2c.dac.writer.component.gt:000
       - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:005
       - i2c.mux:000
       - i2c.relay.capability:000
+      - i2c.relay.component.gt:000
       - i2c.thermistor.channel.config:002
       - i2c.thermistor.interface.capability:000
       - i2c.thermistor.reader.component.gt:003

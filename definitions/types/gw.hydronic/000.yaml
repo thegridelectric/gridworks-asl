@@ -5,8 +5,8 @@ title: "gw.hydronic"
 type: object
 description: >
   The hydronic / flow-topology configuration of a hydronic space-heating
-  layout (House0 and Nolan strategies alike): its
-  heating zones, store-tank count, Siegenthaler-loop topology (plumbed? actively
+  layout (House0 and Nolan strategies alike): its zones, zone-call
+  circuits, store-tank count, Siegenthaler-loop topology (plumbed? actively
   controlled?), how primary-loop flow is obtained, and the control strategy. The
   measured-vs-derived "primary-flow" choice is a physical-topology fact carried
   here so the layout states it rather than it being inferred from channel
@@ -22,6 +22,16 @@ properties:
       index. Replaces the former parallel ZoneList / CriticalZoneList /
       ZoneKwhPerDegFList (their subset / equal-length invariants are now
       structural).
+
+  ZoneCallCircuits:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/gw1.zone.call.circuit/000"
+    description: >
+      The zone-call circuits, each binding a wall thermostat, call wire,
+      relay pair, and actuator to the zone it serves. A zone may be served
+      by more than one circuit. Absent when the layout does not yet declare
+      its circuits.
 
   TotalStoreTanks:
     $ref: "https://schemas.electricity.works/formats/non.negative.int"
@@ -99,3 +109,13 @@ x-gridworks:
       statement: >
         a. TotalStoreTanks SHALL be between 1 and 6 inclusive.
         b. The number of Zones SHALL be between 1 and 6 inclusive.
+    - number: 3
+      name: "CircuitResolution"
+      statement: >
+        a. Every circuit's ServesZone SHALL equal the Name of a zone in
+        Zones. b. No two circuits SHALL share a CircuitPosition.
+    - number: 4
+      name: "LearnedNeedsTempChannel"
+      statement: >
+        For every circuit whose SetpointSource is Learned, the zone named
+        by its ServesZone SHALL carry a TempChannelName.
