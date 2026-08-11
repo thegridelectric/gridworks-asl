@@ -845,6 +845,9 @@ enums:
   change.relay.state:
     enum_type: literal
     schema: definitions/enums/change.relay.state/000.yaml
+  change.valve.state:
+    enum_type: literal
+    schema: definitions/enums/change.valve.state/000.yaml
   change.zone.call.source:
     enum_type: literal
     schema: definitions/enums/change.zone.call.source/000.yaml
@@ -1090,6 +1093,9 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/thermostat.kind/000.yaml
+  valve.open.or.closed:
+    enum_type: literal
+    schema: definitions/enums/valve.open.or.closed/000.yaml
   zone.actuator.kind:
     enum_type: versioned
     latest_version: '000'

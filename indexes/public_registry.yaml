@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-08-11T17:15:00Z'
+  last_updated: '2026-08-11T21:05:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -166,6 +166,14 @@ enums:
     schema_url: https://schemas.electricity.works/enums/change.relay.state/000
     created: '2024-09-17T20:17:00Z'
     status: published
+  change.valve.state:
+    owner: gridworks-energy
+    enum_type: literal
+    description: FSM events for transitioning a two-position valve between open and
+      closed.
+    schema_url: https://schemas.electricity.works/enums/change.valve.state/000
+    created: '2026-08-11T21:05:00Z'
+    status: staging
   change.zone.call.source:
     owner: gridworks-energy
     enum_type: literal
@@ -757,6 +765,14 @@ enums:
         schema_url: https://schemas.electricity.works/enums/thermostat.kind/000
         created: '2026-08-11T15:55:00Z'
         status: staging
+  valve.open.or.closed:
+    owner: gridworks-energy
+    enum_type: literal
+    description: 'Binary position of a two-position valve: open (flow permitted) or
+      closed (flow blocked).'
+    schema_url: https://schemas.electricity.works/enums/valve.open.or.closed/000
+    created: '2026-08-11T21:05:00Z'
+    status: staging
   zone.actuator.kind:
     latest_version: '000'
     owner: gridworks-energy

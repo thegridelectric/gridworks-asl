@@ -1317,6 +1317,12 @@ enums:
     versions:
       "000": {}
 
+  change.valve.state:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
+
   change.zone.call.source:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
@@ -1662,6 +1668,12 @@ enums:
   thermostat.kind:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  valve.open.or.closed:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
     versions:
       "000": {}
 

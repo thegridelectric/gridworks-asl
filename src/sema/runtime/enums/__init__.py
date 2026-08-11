@@ -3,6 +3,7 @@ from sema.runtime.enums.buffer_regulation_mode import BufferRegulationMode
 from sema.runtime.enums.change_heatcall_source import ChangeHeatcallSource
 from sema.runtime.enums.change_relay_pin import ChangeRelayPin
 from sema.runtime.enums.change_relay_state import ChangeRelayState
+from sema.runtime.enums.change_valve_state import ChangeValveState
 from sema.runtime.enums.change_zone_call_source import ChangeZoneCallSource
 from sema.runtime.enums.fsm_report_type import FsmReportType
 from sema.runtime.enums.g_node_instance_status import GNodeInstanceStatus
@@ -61,6 +62,7 @@ from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
 from sema.runtime.enums.temp_calc_method import TempCalcMethod
 from sema.runtime.enums.thermistor_data_method import ThermistorDataMethod
 from sema.runtime.enums.thermostat_kind import ThermostatKind
+from sema.runtime.enums.valve_open_or_closed import ValveOpenOrClosed
 from sema.runtime.enums.zone_actuator_kind import ZoneActuatorKind
 from sema.runtime.enums.zone_call_circuit_event import ZoneCallCircuitEvent
 from sema.runtime.enums.zone_call_circuit_state import ZoneCallCircuitState
@@ -76,6 +78,7 @@ __all__ = [
     "ChangeHeatcallSource",
     "ChangeRelayPin",
     "ChangeRelayState",
+    "ChangeValveState",
     "ChangeZoneCallSource",
     "FsmReportType",
     "GNodeInstanceStatus",
@@ -126,6 +129,7 @@ __all__ = [
     "TempCalcMethod",
     "ThermistorDataMethod",
     "ThermostatKind",
+    "ValveOpenOrClosed",
     "ZoneActuatorKind",
     "ZoneCallCircuitEvent",
     "ZoneCallCircuitState",
