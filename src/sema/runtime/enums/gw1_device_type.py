@@ -31,6 +31,7 @@ class Gw1DeviceType(SemaEnum):
     SamsungAE055FCYDCG = auto()
     SamsungAE055FEYMCG = auto()
     Gw108Adc = auto()
+    GridworksSimGw108 = auto()
 
     @classmethod
     def default(cls) -> "Gw1DeviceType":

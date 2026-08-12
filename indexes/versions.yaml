@@ -1411,6 +1411,7 @@ enums:
           - "SamsungAE055FCYDCG"
           - "SamsungAE055FEYMCG"
           - "Gw108Adc"
+          - "GridworksSimGw108"
       "000": {}
 
   gw1.emission.method:

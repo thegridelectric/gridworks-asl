@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-12T15:15:00Z"
+  last_updated: "2026-08-12T16:25:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -371,7 +371,7 @@ enums:
         schema_url: "https://schemas.electricity.works/enums/gw1.device.type/001"
         created: "2026-07-03T19:45:00Z"
         status: "staging"
-        added_values: ["Gw108I2cRelay", "Gw108GpioRelay", "SamsungAE055FCYDCG", "SamsungAE055FEYMCG", "Gw108Adc"]
+        added_values: ["Gw108I2cRelay", "Gw108GpioRelay", "SamsungAE055FCYDCG", "SamsungAE055FEYMCG", "Gw108Adc", "GridworksSimGw108"]
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.device.type/000"
         created: "2026-06-13T21:30:00Z"

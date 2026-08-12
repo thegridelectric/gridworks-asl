@@ -39,3 +39,7 @@ default: "NoActor"
 x-gridworks:
   owner: "gridworks-energy"
   version: "012"
+  value_descriptions:
+    "I2cRelayBoard": >
+      Defunct; never realized by an actor. Retained under additive-only
+      enum evolution.

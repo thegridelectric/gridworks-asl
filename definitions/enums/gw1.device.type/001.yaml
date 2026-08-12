@@ -36,6 +36,7 @@ enum:
 - SamsungAE055FCYDCG
 - SamsungAE055FEYMCG
 - Gw108Adc
+- GridworksSimGw108
 default: EgaugePowerMeter
 x-gridworks:
   owner: gridworks-energy
@@ -83,3 +84,7 @@ x-gridworks:
       its bus, address, reference volts, and series resistance live in the board's
       thermistor-interface capability entries (gw1.scada.device.type.gt), referenced by
       AdcName; the reader component carries only identity, channel configs, and calc method.
+    GridworksSimGw108: >
+      GridWorks simulated GW108 board — the register-level simulation twin of
+      GridworksScadaGw108. Carries the same board record shape (gw1.scada.device.type.gt),
+      so chip and relay address resolution runs unchanged against simulated registers.
