@@ -907,8 +907,24 @@ types:
       formats:
       - left.right.dot
       - utc.iso8601.seconds
+      - utc.milliseconds
+      types: []
+      versionless_types: []
+  gw.weather.forecast.bundle.gt:
+    '000':
+      enums:
+      - gw1.quantity:002
+      - gw1.unit:002
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - non.negative.int
+      - positive.int
+      - utc.iso8601.seconds
+      - uuid4.str
       types:
-      - gw.weather.forecast.entry:000
+      - gw.weather.channel.gt:000
+      - gw.weather.forecast.channel.gt:000
       versionless_types: []
   gw.weather.forecast.channel.gt:
     '000':
@@ -920,14 +936,6 @@ types:
       - positive.int
       - utc.iso8601.seconds
       - uuid4.str
-      types: []
-      versionless_types: []
-  gw.weather.forecast.entry:
-    '000':
-      enums: []
-      formats:
-      - left.right.dot
-      - utc.iso8601.seconds
       types: []
       versionless_types: []
   gw.weather.location.gt:
@@ -945,14 +953,6 @@ types:
       formats:
       - left.right.dot
       - utc.iso8601.seconds
-      types:
-      - gw.weather.reading:000
-      versionless_types: []
-  gw.weather.reading:
-    '000':
-      enums: []
-      formats:
-      - left.right.dot
       types: []
       versionless_types: []
   gw1.hvac.zone:

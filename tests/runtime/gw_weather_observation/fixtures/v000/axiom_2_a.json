@@ -2,9 +2,9 @@
   "LocationAlias": "us.me.millinocket",
   "ObservationTime": "2026-08-12T13:35:00Z",
   "Interpolated": false,
-  "TempChannelName": "us.me.millinocket.temperature",
+  "TempChannelName": "us.vt.burlington.temperature",
   "TempValue": 7268,
-  "WindSpeedChannelName": "us.me.millinocket.temperature",
+  "WindSpeedChannelName": "us.me.millinocket.windspeed",
   "WindSpeedValue": 4500,
   "TypeName": "gw.weather.observation",
   "Version": "000"

@@ -4,10 +4,16 @@
   "MessageCreatedMs": 1786280700033,
   "Fidelity": "Live",
   "FirstSliceStart": "2026-08-12T14:00:00Z",
-  "TempChannelName": "us.me.millinocket.temperature.forecast.nws.hourly",
-  "TempValues": [],
+  "TempChannelName": "us.me.millinocket.temperature",
+  "TempValues": [
+    7000,
+    7012
+  ],
   "WindSpeedChannelName": "us.me.millinocket.windspeed.forecast.nws.hourly",
-  "WindSpeedValues": [],
+  "WindSpeedValues": [
+    4000,
+    5000
+  ],
   "TypeName": "gw.weather.forecast",
   "Version": "000"
 }

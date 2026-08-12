@@ -168,14 +168,14 @@ types:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
-  gw.weather.forecast.entry:
+  gw.weather.channel.gt:
     '000':
       used_by:
-      - gw.weather.forecast:000
-  gw.weather.reading:
+      - gw.weather.forecast.bundle.gt:000
+  gw.weather.forecast.channel.gt:
     '000':
       used_by:
-      - gw.weather.observation:000
+      - gw.weather.forecast.bundle.gt:000
   gw1.hvac.zone:
     '000':
       used_by:
@@ -597,6 +597,7 @@ enums:
     '002':
       used_by:
       - gw.weather.channel.gt:000
+      - gw.weather.forecast.bundle.gt:000
   gw1.seasonal.storage.mode:
     '000':
       used_by:
@@ -852,10 +853,11 @@ formats:
     - gw.experiment.run:000
     - gw.readings:000
     - gw.weather.channel.gt:000
+    - gw.weather.forecast.bundle.gt:000
     - gw.weather.forecast.channel.gt:000
-    - gw.weather.forecast.entry:000
+    - gw.weather.forecast:000
     - gw.weather.location.gt:000
-    - gw.weather.reading:000
+    - gw.weather.observation:000
     - heating.forecast:000
     - keyparam.change.log:000
     - latest.price:000
@@ -914,6 +916,7 @@ formats:
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
     - gw.weather.channel.gt:000
+    - gw.weather.forecast.bundle.gt:000
     - gw.weather.forecast.channel.gt:000
     - gw.weather.location.gt:000
     - hp.device.type.gt:000
@@ -1158,8 +1161,8 @@ formats:
   utc.iso8601.seconds:
     used_by:
     - gw.weather.channel.gt:000
+    - gw.weather.forecast.bundle.gt:000
     - gw.weather.forecast.channel.gt:000
-    - gw.weather.forecast.entry:000
     - gw.weather.forecast:000
     - gw.weather.observation:000
     - hourly.electricity.dataset:000
@@ -1184,6 +1187,7 @@ formats:
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
     - gw.readings:000
+    - gw.weather.forecast:000
     - i2c.result:000
     - layout.lite:007
     - layout.lite:008
@@ -1275,6 +1279,7 @@ formats:
     - gpio.sensor.component.gt:000
     - gridworks.event.problem:001
     - gw.weather.channel.gt:000
+    - gw.weather.forecast.bundle.gt:000
     - gw.weather.forecast.channel.gt:000
     - gw.weather.location.gt:000
     - gw1.zone.thermostat:000

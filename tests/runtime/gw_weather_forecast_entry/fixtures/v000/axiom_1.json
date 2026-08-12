@@ -1,7 +1,0 @@
-{
-  "ChannelName": "us.me.millinocket.temperature.forecast.nws",
-  "FirstSliceStart": "2026-08-11T15:00:00Z",
-  "Values": [],
-  "TypeName": "gw.weather.forecast.entry",
-  "Version": "000"
-}

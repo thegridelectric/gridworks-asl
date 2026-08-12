@@ -1,22 +1,13 @@
 {
-  "ForecastCreated": "2026-08-11T14:00:00Z",
+  "BundleName": "us.me.millinocket.forecast.nws.hourly",
+  "SourceUpdatedTime": "2026-08-12T09:09:03Z",
+  "MessageCreatedMs": 1786280700033,
   "Fidelity": "Live",
-  "Forecasts": [
-    {
-      "ChannelName": "us.me.millinocket.temperature.forecast.nws",
-      "FirstSliceStart": "2026-08-11T15:00:00Z",
-      "Values": [5150, 5080],
-      "TypeName": "gw.weather.forecast.entry",
-      "Version": "000"
-    },
-    {
-      "ChannelName": "us.me.millinocket.temperature.forecast.nws",
-      "FirstSliceStart": "2026-08-11T15:00:00Z",
-      "Values": [5100, 5060],
-      "TypeName": "gw.weather.forecast.entry",
-      "Version": "000"
-    }
-  ],
+  "FirstSliceStart": "2026-08-12T14:00:00Z",
+  "TempChannelName": "us.me.millinocket.temperature.forecast.nws.hourly",
+  "TempValues": [7000, 7012],
+  "WindSpeedChannelName": "us.me.millinocket.windspeed.forecast.nws.hourly",
+  "WindSpeedValues": [4000],
   "TypeName": "gw.weather.forecast",
   "Version": "000"
 }
