@@ -303,16 +303,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.weather.forecast/000.yaml
+  gw.weather.forecast.bundle.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.forecast.bundle.gt/000.yaml
   gw.weather.forecast.channel.gt:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.weather.forecast.channel.gt/000.yaml
-  gw.weather.forecast.entry:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/gw.weather.forecast.entry/000.yaml
   gw.weather.location.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -323,11 +323,6 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.weather.observation/000.yaml
-  gw.weather.reading:
-    latest_version: '000'
-    versioning_strategy: literal
-    versions:
-      '000': definitions/types/gw.weather.reading/000.yaml
   gw1.hvac.zone:
     latest_version: '000'
     versioning_strategy: literal

@@ -1,26 +1,31 @@
     @model_validator(mode="after")
     def check_axiom_1(self) -> "{{ gw_weather_observation_000_class_name }}":
         """
-        Axiom 1: NonEmptyReadings
-        Readings SHALL be non-empty.
+        Axiom 1: DistinctChannels
+        TempChannelName SHALL differ from WindSpeedChannelName.
         """
-        if len(self.readings) == 0:
+        if self.temp_channel_name == self.wind_speed_channel_name:
             raise ValueError(
-                "Axiom 1 (NonEmptyReadings) failed: Readings must be non-empty."
+                "Axiom 1 (DistinctChannels) failed: TempChannelName and "
+                f"WindSpeedChannelName are both {self.temp_channel_name!r}."
             )
         return self
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "{{ gw_weather_observation_000_class_name }}":
         """
-        Axiom 2: ChannelUniqueness
-        No two elements of Readings SHALL share a ChannelName.
+        Axiom 2: LocationNaming
+        a. TempChannelName SHALL begin with LocationAlias followed by ".".
+        b. WindSpeedChannelName SHALL begin with LocationAlias followed by ".".
         """
-        names = [r.channel_name for r in self.readings]
-        if len(set(names)) != len(names):
-            dupes = sorted({n for n in names if names.count(n) > 1})
-            raise ValueError(
-                "Axiom 2 (ChannelUniqueness) failed: Readings must not share "
-                f"a ChannelName; duplicated: {dupes}."
-            )
+        prefix = f"{self.location_alias}."
+        for label, value in (
+            ("a", self.temp_channel_name),
+            ("b", self.wind_speed_channel_name),
+        ):
+            if not value.startswith(prefix):
+                raise ValueError(
+                    f"Axiom 2 (LocationNaming, clause {label}) failed: "
+                    f"{value!r} must begin with {prefix!r}."
+                )
         return self

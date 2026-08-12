@@ -63,11 +63,10 @@ from sema.runtime.types.gw_nolan_layout import GwNolanLayout
 from sema.runtime.types.gw_readings import GwReadings
 from sema.runtime.types.gw_weather_channel_gt import GwWeatherChannelGt
 from sema.runtime.types.gw_weather_forecast import GwWeatherForecast
+from sema.runtime.types.gw_weather_forecast_bundle_gt import GwWeatherForecastBundleGt
 from sema.runtime.types.gw_weather_forecast_channel_gt import GwWeatherForecastChannelGt
-from sema.runtime.types.gw_weather_forecast_entry import GwWeatherForecastEntry
 from sema.runtime.types.gw_weather_location_gt import GwWeatherLocationGt
 from sema.runtime.types.gw_weather_observation import GwWeatherObservation
-from sema.runtime.types.gw_weather_reading import GwWeatherReading
 from sema.runtime.types.ha1_params import Ha1Params
 from sema.runtime.types.heartbeat_a import HeartbeatA
 from sema.runtime.types.heating_curve import HeatingCurve
@@ -223,11 +222,10 @@ __all__ = [
     "GwReadings",
     "GwWeatherChannelGt",
     "GwWeatherForecast",
+    "GwWeatherForecastBundleGt",
     "GwWeatherForecastChannelGt",
-    "GwWeatherForecastEntry",
     "GwWeatherLocationGt",
     "GwWeatherObservation",
-    "GwWeatherReading",
     "Ha1Params",
     "HeartbeatA",
     "HeatingCurve",

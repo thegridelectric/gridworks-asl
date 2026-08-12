@@ -467,14 +467,14 @@ types:
       "000":
         summary: "Initial version."
 
-  gw.weather.forecast.channel.gt:
+  gw.weather.forecast.bundle.gt:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
         summary: "Initial version."
 
-  gw.weather.forecast.entry:
+  gw.weather.forecast.channel.gt:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
@@ -489,13 +489,6 @@ types:
         summary: "Initial version."
 
   gw.weather.observation:
-    latest_version: "000"
-    versioning_strategy: "literal"
-    versions:
-      "000":
-        summary: "Initial version."
-
-  gw.weather.reading:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:

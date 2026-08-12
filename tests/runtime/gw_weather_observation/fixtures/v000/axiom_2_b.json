@@ -4,7 +4,7 @@
   "Interpolated": false,
   "TempChannelName": "us.me.millinocket.temperature",
   "TempValue": 7268,
-  "WindSpeedChannelName": "us.me.millinocket.temperature",
+  "WindSpeedChannelName": "us.vt.burlington.windspeed",
   "WindSpeedValue": 4500,
   "TypeName": "gw.weather.observation",
   "Version": "000"
