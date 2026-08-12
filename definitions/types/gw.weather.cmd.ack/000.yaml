@@ -1,0 +1,46 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.weather.cmd.ack/000"
+
+title: "gw.weather.cmd.ack"
+type: object
+description: >
+  The weather service's reply to a write command it APPLIED. Sent direct
+  to the command's sender; success or refusal is discriminated by the
+  reply's TypeName (the refusal twin is gw.weather.cmd.nack), never by
+  inspecting a field. The correlation key is the command's content hash,
+  so a sender with several commands in flight knows exactly which one
+  was answered.
+
+properties:
+
+  CommandHash:
+    type: string
+    description: >
+      The content hash of the applied command, computed by the weather
+      service over the command's serialized bytes. Opaque to this
+      contract (the hashing scheme is service-internal); a sender
+      correlates by comparing it to the hash of the bytes it published.
+
+  TypeName:
+    const: "gw.weather.cmd.ack"
+
+  Version:
+    const: "000"
+
+required:
+  - CommandHash
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "CommandHash": "3e7b1c9a5d2f4e6b8a0c2d4e6f8a1b3c5d7e9f0a2b4c6d8e0f1a3b5c7d9e1f2a",
+      "TypeName": "gw.weather.cmd.ack",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

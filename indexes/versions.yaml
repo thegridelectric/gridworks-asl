@@ -460,6 +460,27 @@ types:
       "000":
         summary: "Initial version."
 
+  gw.weather.cmd.ack:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version."
+
+  gw.weather.cmd.nack:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version."
+
+  gw.weather.create.cmd:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version."
+
   gw.weather.forecast:
     latest_version: "000"
     versioning_strategy: "literal"

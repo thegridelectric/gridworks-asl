@@ -1,0 +1,56 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.weather.cmd.nack/000"
+
+title: "gw.weather.cmd.nack"
+type: object
+description: >
+  The weather service's reply to a write command it REFUSED, carrying
+  the reason. Sent direct to the command's sender; success or refusal is
+  discriminated by the reply's TypeName (the success twin is
+  gw.weather.cmd.ack), never by inspecting a field. Because the reply
+  rides the bus, the ear's capture makes every refusal a first-class
+  audit record with its reason attached.
+
+properties:
+
+  CommandHash:
+    type: string
+    description: >
+      The content hash of the refused command, computed by the weather
+      service over the command's serialized bytes. Opaque to this
+      contract (the hashing scheme is service-internal); a sender
+      correlates by comparing it to the hash of the bytes it published.
+
+  Reason:
+    type: string
+    description: >
+      The service's human-readable refusal reason, verbatim from the
+      refusing check (e.g. "location 'us.me.millinocket' of
+      'us.me.millinocket.temperature' not found — create the location
+      first").
+
+  TypeName:
+    const: "gw.weather.cmd.nack"
+
+  Version:
+    const: "000"
+
+required:
+  - CommandHash
+  - Reason
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "CommandHash": "3e7b1c9a5d2f4e6b8a0c2d4e6f8a1b3c5d7e9f0a2b4c6d8e0f1a3b5c7d9e1f2a",
+      "Reason": "location 'us.me.millinocket' of 'us.me.millinocket.temperature' not found — create the location first",
+      "TypeName": "gw.weather.cmd.nack",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"

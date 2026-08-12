@@ -171,11 +171,21 @@ types:
   gw.weather.channel.gt:
     '000':
       used_by:
+      - gw.weather.create.cmd:000
       - gw.weather.forecast.bundle.gt:000
+  gw.weather.forecast.bundle.gt:
+    '000':
+      used_by:
+      - gw.weather.create.cmd:000
   gw.weather.forecast.channel.gt:
     '000':
       used_by:
+      - gw.weather.create.cmd:000
       - gw.weather.forecast.bundle.gt:000
+  gw.weather.location.gt:
+    '000':
+      used_by:
+      - gw.weather.create.cmd:000
   gw1.hvac.zone:
     '000':
       used_by:

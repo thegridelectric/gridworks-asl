@@ -298,6 +298,21 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.weather.channel.gt/000.yaml
+  gw.weather.cmd.ack:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.cmd.ack/000.yaml
+  gw.weather.cmd.nack:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.cmd.nack/000.yaml
+  gw.weather.create.cmd:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.weather.create.cmd/000.yaml
   gw.weather.forecast:
     latest_version: '000'
     versioning_strategy: literal

@@ -1,0 +1,75 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.weather.create.cmd/000"
+
+title: "gw.weather.create.cmd"
+type: object
+description: >
+  Command to create a single weather record — the human minting act by
+  which a location, observed channel, forecast channel, or forecast
+  bundle enters the weather service. One record per command, references
+  first: a record's references must already be active when the command
+  arrives (location before its channels, channels before the bundle
+  that embeds them). The service validates the record, inserts it
+  (insert-only — records are durable identities, never upserted),
+  broadcasts it once, and replies direct to the sender.
+
+properties:
+
+  Record:
+    description: >
+      The record entering the service — one of the four weather record
+      words, discriminated by its own TypeName.
+    oneOf:
+      - $ref: "https://schemas.electricity.works/types/gw.weather.channel.gt/000"
+      - $ref: "https://schemas.electricity.works/types/gw.weather.forecast.bundle.gt/000"
+      - $ref: "https://schemas.electricity.works/types/gw.weather.forecast.channel.gt/000"
+      - $ref: "https://schemas.electricity.works/types/gw.weather.location.gt/000"
+
+  Proof:
+    type: string
+    description: >
+      Optional placeholder for a verifiable authorization artifact for
+      this create. Its format is machinery of the authority substrate and
+      is deliberately not fixed by this word; absent while write
+      authority is the authenticated connection.
+
+  TypeName:
+    const: "gw.weather.create.cmd"
+
+  Version:
+    const: "000"
+
+required:
+  - Record
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Record": {
+        "Alias": "us.me.millinocket",
+        "LatitudeMicrodegrees": 45647800,
+        "LongitudeMicrodegrees": -68685800,
+        "Timezone": "America/New_York",
+        "IcaoId": "KMLT",
+        "Id": "8f4a2b6e-3c9d-4e1f-a7b5-2d8c6e4f9a1b",
+        "TypeName": "gw.weather.location.gt",
+        "Version": "000"
+      },
+      "TypeName": "gw.weather.create.cmd",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  extended_description: >
+    The command, the reply, and the record broadcast all ride the bus,
+    so the ear's capture holds the full provenance of every record's
+    existence: who asked, the service's verdict, and the record itself.
+    One command word covers all four record kinds because the act is
+    the same — create a record; a future record kind extends the Record
+    slot in a new version rather than coining another command word.

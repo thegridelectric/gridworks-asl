@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-08-12T16:50:00Z'
+  last_updated: '2026-08-12T17:05:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -2156,6 +2156,53 @@ types:
           - positive.int
           - utc.iso8601.seconds
           - uuid4.str
+  gw.weather.cmd.ack:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: The weather service's reply to a write command it applied; correlated
+      by the command's content hash.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.cmd.ack/000
+        created: '2026-08-12T17:05:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural: []
+  gw.weather.cmd.nack:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: The weather service's reply to a write command it refused, carrying
+      the reason; correlated by the command's content hash.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.cmd.nack/000
+        created: '2026-08-12T17:05:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural: []
+  gw.weather.create.cmd:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "Command to create one weather record (location, observed channel,\
+      \ forecast channel, or bundle) \u2014 the human minting act; the service inserts,\
+      \ broadcasts once, and replies ack or nack."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.weather.create.cmd/000
+        created: '2026-08-12T17:05:00Z'
+        status: staging
+        summary: Initial version.
+        direct_dependencies:
+          structural:
+          - gw.weather.channel.gt:000
+          - gw.weather.forecast.bundle.gt:000
+          - gw.weather.forecast.channel.gt:000
+          - gw.weather.location.gt:000
   gw.weather.forecast:
     latest_version: '000'
     owner: gridworks-energy

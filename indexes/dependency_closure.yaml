@@ -900,6 +900,36 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  gw.weather.cmd.ack:
+    '000':
+      enums: []
+      formats: []
+      types: []
+      versionless_types: []
+  gw.weather.cmd.nack:
+    '000':
+      enums: []
+      formats: []
+      types: []
+      versionless_types: []
+  gw.weather.create.cmd:
+    '000':
+      enums:
+      - gw1.quantity:002
+      - gw1.unit:002
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - non.negative.int
+      - positive.int
+      - utc.iso8601.seconds
+      - uuid4.str
+      types:
+      - gw.weather.channel.gt:000
+      - gw.weather.forecast.bundle.gt:000
+      - gw.weather.forecast.channel.gt:000
+      - gw.weather.location.gt:000
+      versionless_types: []
   gw.weather.forecast:
     '000':
       enums:

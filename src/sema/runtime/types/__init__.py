@@ -64,6 +64,9 @@ from sema.runtime.types.gw_native_gpio_pin import GwNativeGpioPin
 from sema.runtime.types.gw_nolan_layout import GwNolanLayout
 from sema.runtime.types.gw_readings import GwReadings
 from sema.runtime.types.gw_weather_channel_gt import GwWeatherChannelGt
+from sema.runtime.types.gw_weather_cmd_ack import GwWeatherCmdAck
+from sema.runtime.types.gw_weather_cmd_nack import GwWeatherCmdNack
+from sema.runtime.types.gw_weather_create_cmd import GwWeatherCreateCmd
 from sema.runtime.types.gw_weather_forecast import GwWeatherForecast
 from sema.runtime.types.gw_weather_forecast_bundle_gt import GwWeatherForecastBundleGt
 from sema.runtime.types.gw_weather_forecast_channel_gt import GwWeatherForecastChannelGt
@@ -229,6 +232,9 @@ __all__ = [
     "GwNolanLayout",
     "GwReadings",
     "GwWeatherChannelGt",
+    "GwWeatherCmdAck",
+    "GwWeatherCmdNack",
+    "GwWeatherCreateCmd",
     "GwWeatherForecast",
     "GwWeatherForecastBundleGt",
     "GwWeatherForecastChannelGt",
