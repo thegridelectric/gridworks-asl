@@ -19,20 +19,14 @@
     @model_validator(mode="after")
     def check_axiom_2(self) -> "{{ gw_weather_forecast_bundle_gt_000_class_name }}":
         """
-        Axiom 2: SharedEmissionSchedule
-        TempForecastChannel and WindSpeedForecastChannel SHALL declare
-        identical EmitPeriodS and identical EmitOffsetS.
+        Axiom 2: EmitOffsetBound
+        EmitOffsetS SHALL be strictly less than EmitPeriodS.
         """
-        if (
-            self.temp_forecast_channel.emit_period_s
-            != self.wind_speed_forecast_channel.emit_period_s
-            or self.temp_forecast_channel.emit_offset_s
-            != self.wind_speed_forecast_channel.emit_offset_s
-        ):
+        if not self.emit_offset_s < self.emit_period_s:
             raise ValueError(
-                "Axiom 2 (SharedEmissionSchedule) failed: TempForecastChannel "
-                "and WindSpeedForecastChannel must declare identical "
-                "EmitPeriodS and EmitOffsetS."
+                "Axiom 2 (EmitOffsetBound) failed: EmitOffsetS "
+                f"({self.emit_offset_s}) must be strictly less than "
+                f"EmitPeriodS ({self.emit_period_s})."
             )
         return self
 

@@ -73,18 +73,6 @@ properties:
       Declared total horizon in minutes; equals the sum of
       SliceDurationSList over 60 (Axiom 2).
 
-  EmitPeriodS:
-    $ref: "https://schemas.electricity.works/formats/positive.int"
-    description: >
-      Seconds between scheduled forecast emissions. The service always
-      emits on schedule; a missing message means a drop.
-
-  EmitOffsetS:
-    $ref: "https://schemas.electricity.works/formats/non.negative.int"
-    description: >
-      Offset into the emission period of each scheduled emission
-      (1800 with EmitPeriodS 3600 is the half-hour broadcast).
-
   Start:
     $ref: "https://schemas.electricity.works/formats/utc.iso8601.seconds"
     description: >
@@ -111,8 +99,6 @@ required:
   - TotalSlices
   - SliceDurationSList
   - ForecastDurationMinutes
-  - EmitPeriodS
-  - EmitOffsetS
   - Start
   - Id
   - TypeName
@@ -131,8 +117,6 @@ examples:
       "TotalSlices": 2,
       "SliceDurationSList": [3600, 3600],
       "ForecastDurationMinutes": 120,
-      "EmitPeriodS": 3600,
-      "EmitOffsetS": 1800,
       "Start": "2026-08-11T00:00:00Z",
       "Id": "9b3e5d7a-2f8c-4c6b-8e1d-4a7f9c2b6e8d",
       "TypeName": "gw.weather.forecast.channel.gt",
@@ -163,7 +147,3 @@ x-gridworks:
       statement: >
         Name SHALL equal TargetChannelName + ".forecast." followed by
         one or more further segments.
-    - number: 5
-      name: "EmitOffsetBound"
-      statement: >
-        EmitOffsetS SHALL be strictly less than EmitPeriodS.

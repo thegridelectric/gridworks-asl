@@ -28,7 +28,7 @@ def test_axiom_1_catches_mismatched_slice_grids() -> None:
     _rejects("axiom_1.json", "1")
 
 
-def test_axiom_2_catches_mismatched_emission_schedule() -> None:
+def test_axiom_2_catches_offset_not_below_period() -> None:
     _rejects("axiom_2.json", "2")
 
 

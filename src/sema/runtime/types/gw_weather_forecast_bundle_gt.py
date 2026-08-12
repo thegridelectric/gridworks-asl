@@ -3,6 +3,8 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import NonEmptyString
+from sema.runtime.property_format import NonNegativeInt
+from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UUID4Str
 from sema.runtime.property_format import UtcIso8601Seconds
 from sema.runtime.types.gw_weather_channel_gt import GwWeatherChannelGt
@@ -19,6 +21,8 @@ class GwWeatherForecastBundleGt(SemaType):
     temp_observation_channel: GwWeatherChannelGt
     wind_speed_forecast_channel: GwWeatherForecastChannelGt
     wind_speed_observation_channel: GwWeatherChannelGt
+    emit_period_s: PositiveInt
+    emit_offset_s: NonNegativeInt
     start: UtcIso8601Seconds
     id: UUID4Str
     type_name: Literal["gw.weather.forecast.bundle.gt"] = (
@@ -47,20 +51,14 @@ class GwWeatherForecastBundleGt(SemaType):
     @model_validator(mode="after")
     def check_axiom_2(self) -> "GwWeatherForecastBundleGt":
         """
-        Axiom 2: SharedEmissionSchedule
-        TempForecastChannel and WindSpeedForecastChannel SHALL declare
-        identical EmitPeriodS and identical EmitOffsetS.
+        Axiom 2: EmitOffsetBound
+        EmitOffsetS SHALL be strictly less than EmitPeriodS.
         """
-        if (
-            self.temp_forecast_channel.emit_period_s
-            != self.wind_speed_forecast_channel.emit_period_s
-            or self.temp_forecast_channel.emit_offset_s
-            != self.wind_speed_forecast_channel.emit_offset_s
-        ):
+        if not self.emit_offset_s < self.emit_period_s:
             raise ValueError(
-                "Axiom 2 (SharedEmissionSchedule) failed: TempForecastChannel "
-                "and WindSpeedForecastChannel must declare identical "
-                "EmitPeriodS and EmitOffsetS."
+                "Axiom 2 (EmitOffsetBound) failed: EmitOffsetS "
+                f"({self.emit_offset_s}) must be strictly less than "
+                f"EmitPeriodS ({self.emit_period_s})."
             )
         return self
 

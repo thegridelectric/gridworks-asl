@@ -39,9 +39,3 @@ def test_axiom_4_catches_name_without_forecast_infix() -> None:
     payload = json.loads((FIX / "axiom_4.json").read_text())
     with pytest.raises(SemaError, match="(?i)axiom 4"):
         default_codec.from_dict(payload)
-
-
-def test_axiom_5_catches_offset_not_below_period() -> None:
-    payload = json.loads((FIX / "axiom_5.json").read_text())
-    with pytest.raises(SemaError, match="(?i)axiom 5"):
-        default_codec.from_dict(payload)

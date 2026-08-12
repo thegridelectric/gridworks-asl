@@ -932,7 +932,7 @@ formats:
     - gw.hydronic:000
     - gw.native.gpio.pin:000
     - gw.weather.channel.gt:000
-    - gw.weather.forecast.channel.gt:000
+    - gw.weather.forecast.bundle.gt:000
     - i2c.bit.address:000
     - i2c.bus:000
     - i2c.ct.interface.capability:000
@@ -1032,6 +1032,7 @@ formats:
     - gw.channel.noise.stats:000
     - gw.house0.operational.params:000
     - gw.weather.channel.gt:000
+    - gw.weather.forecast.bundle.gt:000
     - gw.weather.forecast.channel.gt:000
     - gw1.scada.device.type.gt:000
     - gw1.zone.call.circuit:000

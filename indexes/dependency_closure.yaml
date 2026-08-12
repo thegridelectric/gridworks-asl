@@ -932,7 +932,6 @@ types:
       formats:
       - left.right.dot
       - non.empty.string
-      - non.negative.int
       - positive.int
       - utc.iso8601.seconds
       - uuid4.str

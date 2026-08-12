@@ -2434,6 +2434,8 @@ types:
             - "gw.weather.forecast.channel.gt:000"
             - "left.right.dot"
             - "non.empty.string"
+            - "non.negative.int"
+            - "positive.int"
             - "utc.iso8601.seconds"
             - "uuid4.str"
           axiom:
@@ -2455,7 +2457,6 @@ types:
           structural:
             - "left.right.dot"
             - "non.empty.string"
-            - "non.negative.int"
             - "positive.int"
             - "utc.iso8601.seconds"
             - "uuid4.str"

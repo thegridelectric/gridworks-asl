@@ -57,17 +57,3 @@
                 f"'{self.name}' for target '{self.target_channel_name}'."
             )
         return self
-
-    @model_validator(mode="after")
-    def check_axiom_5(self) -> "{{ gw_weather_forecast_channel_gt_000_class_name }}":
-        """
-        Axiom 5: EmitOffsetBound
-        EmitOffsetS SHALL be strictly less than EmitPeriodS.
-        """
-        if not self.emit_offset_s < self.emit_period_s:
-            raise ValueError(
-                "Axiom 5 (EmitOffsetBound) failed: EmitOffsetS "
-                f"({self.emit_offset_s}) must be strictly less than "
-                f"EmitPeriodS ({self.emit_period_s})."
-            )
-        return self

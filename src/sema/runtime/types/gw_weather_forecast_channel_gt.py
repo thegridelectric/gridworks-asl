@@ -3,7 +3,6 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import NonEmptyString
-from sema.runtime.property_format import NonNegativeInt
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UUID4Str
 from sema.runtime.property_format import UtcIso8601Seconds
@@ -20,8 +19,6 @@ class GwWeatherForecastChannelGt(SemaType):
     total_slices: PositiveInt
     slice_duration_s_list: list[PositiveInt]
     forecast_duration_minutes: PositiveInt
-    emit_period_s: PositiveInt
-    emit_offset_s: NonNegativeInt
     start: UtcIso8601Seconds
     id: UUID4Str
     type_name: Literal["gw.weather.forecast.channel.gt"] = (
@@ -86,19 +83,5 @@ class GwWeatherForecastChannelGt(SemaType):
                 "Axiom 4 (NameShape) failed: Name must equal "
                 f"TargetChannelName + '.forecast.' + a forecaster slug; got "
                 f"'{self.name}' for target '{self.target_channel_name}'."
-            )
-        return self
-
-    @model_validator(mode="after")
-    def check_axiom_5(self) -> "GwWeatherForecastChannelGt":
-        """
-        Axiom 5: EmitOffsetBound
-        EmitOffsetS SHALL be strictly less than EmitPeriodS.
-        """
-        if not self.emit_offset_s < self.emit_period_s:
-            raise ValueError(
-                "Axiom 5 (EmitOffsetBound) failed: EmitOffsetS "
-                f"({self.emit_offset_s}) must be strictly less than "
-                f"EmitPeriodS ({self.emit_period_s})."
             )
         return self
