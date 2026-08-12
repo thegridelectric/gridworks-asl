@@ -664,7 +664,7 @@ types:
       - g.node.status:000
       - gpm.from.hz.method:000
       - gw.house0.primary.flow.source:000
-      - gw1.actor.class:012
+      - gw1.actor.class:013
       - gw1.emission.method:000
       - gw1.quantity:000
       - gw1.quantity:001
@@ -792,7 +792,7 @@ types:
       - gpio.sense.mode:000
       - gpm.from.hz.method:000
       - gw.house0.primary.flow.source:000
-      - gw1.actor.class:012
+      - gw1.actor.class:013
       - gw1.emission.method:000
       - gw1.quantity:000
       - gw1.quantity:001
@@ -1946,7 +1946,7 @@ types:
       enums:
       - change.relay.state:000
       - gpm.from.hz.method:000
-      - gw1.actor.class:012
+      - gw1.actor.class:013
       - gw1.emission.method:000
       - gw1.quantity:000
       - gw1.seasonal.storage.mode:000
@@ -2053,7 +2053,7 @@ types:
       versionless_types: []
     '002':
       enums:
-      - gw1.actor.class:012
+      - gw1.actor.class:013
       formats:
       - handle.name
       - left.right.dot
@@ -2355,6 +2355,7 @@ types:
       enums:
       - change.relay.state:000
       - gw1.actor.class:012
+      - gw1.actor.class:013
       - gw1.quantity:000
       - relay.closed.or.open:000
       - relay.wiring.config:000
@@ -2585,7 +2586,7 @@ types:
       versionless_types: []
     '303':
       enums:
-      - gw1.actor.class:012
+      - gw1.actor.class:013
       formats:
       - handle.name
       - positive.int

@@ -1213,6 +1213,7 @@ types:
         summary: >
           - InPowerMetering: drop (routing is owned by the consuming transactive declaration, not the node)
           - InPowerMeteringRequiresNameplate axiom: drop
+          - ActorClass: gw1.actor.class:012 -> 013 (in-place while staging)
       "302":
         summary: "- ActorClass: gw1.actor.class:011 -> 012"
       "301":

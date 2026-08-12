@@ -92,6 +92,7 @@ class SpaceheatNodeGt302(SemaType):
         """
         - InPowerMetering: drop (routing is owned by the consuming transactive declaration, not the node)
         - InPowerMeteringRequiresNameplate axiom: drop
+        - ActorClass: gw1.actor.class:012 -> 013 (in-place while staging)
         """
         data = self.model_dump()
         data.pop("in_power_metering", None)

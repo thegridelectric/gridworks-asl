@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-08-12T17:05:00Z'
+  last_updated: '2026-08-12T18:30:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -1982,7 +1982,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.house0.layout/000
-        created: '2026-08-11T17:15:00Z'
+        created: '2026-08-12T18:25:00Z'
         status: staging
         summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new\
           \ DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida\
@@ -2083,7 +2083,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.nolan.layout/000
-        created: '2026-08-11T17:15:00Z'
+        created: '2026-08-12T18:25:00Z'
         status: staging
         summary: Un-drafted for hardware-layout-pass-one (full layouts now, axioms
           later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components
@@ -3353,7 +3353,7 @@ types:
     versions:
       '015':
         schema_url: https://schemas.electricity.works/types/layout.lite/015
-        created: '2026-06-26T03:40:00Z'
+        created: '2026-08-12T18:25:00Z'
         status: staging
         summary: '- TankModuleComponents / FlowModuleComponents / I2cRelayComponent:
           cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module
@@ -3652,8 +3652,8 @@ types:
     versions:
       '002':
         schema_url: https://schemas.electricity.works/types/new.command.tree/002
-        created: '2026-06-26T03:40:00Z'
-        status: published
+        created: '2026-08-12T18:25:00Z'
+        status: staging
         summary: '- ShNodes: spaceheat.node.gt:301 -> 303'
         direct_dependencies:
           structural:
@@ -4028,8 +4028,8 @@ types:
     versions:
       '002':
         schema_url: https://schemas.electricity.works/types/scada.control.capabilities/002
-        created: '2026-06-26T03:40:00Z'
-        status: published
+        created: '2026-08-12T18:25:00Z'
+        status: staging
         summary: '- RelayNodes[]: spaceheat.node.gt:300 -> 303 - DacNodes[]: spaceheat.node.gt:300
           -> 303 - ControlChannels[]: data.channel.gt:001 -> 003'
         direct_dependencies:
@@ -4356,13 +4356,14 @@ types:
     versions:
       '303':
         schema_url: https://schemas.electricity.works/types/spaceheat.node.gt/303
-        created: '2026-06-26T03:40:00Z'
-        status: published
+        created: '2026-08-12T18:25:00Z'
+        status: staging
         summary: '- InPowerMetering: drop (routing is owned by the consuming transactive
-          declaration, not the node) - InPowerMeteringRequiresNameplate axiom: drop'
+          declaration, not the node) - InPowerMeteringRequiresNameplate axiom: drop
+          - ActorClass: gw1.actor.class:012 -> 013 (in-place while staging)'
         direct_dependencies:
           structural:
-          - gw1.actor.class:012
+          - gw1.actor.class:013
           - handle.name
           - positive.int
           - spaceheat.name
@@ -4370,7 +4371,7 @@ types:
       '302':
         schema_url: https://schemas.electricity.works/types/spaceheat.node.gt/302
         created: '2026-06-12T00:00:00Z'
-        status: published
+        status: staging
         summary: '- ActorClass: gw1.actor.class:011 -> 012'
         direct_dependencies:
           structural:

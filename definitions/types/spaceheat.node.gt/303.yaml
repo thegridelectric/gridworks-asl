@@ -28,7 +28,7 @@ properties:
       the addressable identity of the node within the actor messaging layer.
 
   ActorClass:
-    $ref: "https://schemas.electricity.works/enums/gw1.actor.class/012"
+    $ref: "https://schemas.electricity.works/enums/gw1.actor.class/013"
     description: >
       Class of the software actor associated with this node. This determines
       the behavior, capabilities, and runtime role of the node within the SCADA.

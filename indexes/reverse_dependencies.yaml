@@ -587,6 +587,8 @@ enums:
       used_by:
       - scada.control.capabilities:002
       - spaceheat.node.gt:302
+    '013':
+      used_by:
       - spaceheat.node.gt:303
   gw1.emission.method:
     '000':
