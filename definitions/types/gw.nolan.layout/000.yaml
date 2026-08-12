@@ -130,5 +130,14 @@ x-gridworks:
         (GpioName against NativeGpioInputs for sensors, GpioName against
         NativeGpioOutputs for relays, AdcName against the ThermistorAdcs Names for
         thermistor readers) SHALL match a Name in that record.
+
+    - number: 3
+      name: "LocalControlPlant"
+      statement: >
+        a. ShNodes SHALL include nodes named "iso-valve-relay", "secondary-pump-relay",
+        and "hp-scada-ops-relay", each with ActorClass "Relay".
+        b. Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
+        FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes with
+        ActorClass "Relay".
   extended_description: >
     TODO: add Nolan specific information (e.g. radiant floor heating, Gw108).

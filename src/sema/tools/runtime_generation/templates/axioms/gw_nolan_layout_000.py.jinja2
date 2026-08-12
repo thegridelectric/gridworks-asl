@@ -97,3 +97,43 @@
                     f"board record's {list_name}."
                 )
         return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "{{ gw_nolan_layout_000_class_name }}":
+        """
+        Axiom 3: LocalControlPlant
+        a. ShNodes SHALL include nodes named "iso-valve-relay",
+        "secondary-pump-relay", and "hp-scada-ops-relay", each with
+        ActorClass "Relay".
+        b. Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
+        FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes
+        with ActorClass "Relay".
+        """
+        actor_class_by_name = {
+            n.name: n.actor_class for n in (self.sh_nodes or [])
+        }
+        def relay_or_raise(node_name: str, role: str) -> None:
+            actor_class = actor_class_by_name.get(node_name)
+            if actor_class is None:
+                raise ValueError(
+                    f"Axiom 3 (LocalControlPlant) failed: no ShNode named {node_name} ({role})."
+                )
+            if actor_class != "Relay":
+                raise ValueError(
+                    f"Axiom 3 (LocalControlPlant) failed: {node_name} ({role}) has ActorClass {actor_class}, not Relay."
+                )
+        for required in (
+            "iso-valve-relay",
+            "secondary-pump-relay",
+            "hp-scada-ops-relay",
+        ):
+            relay_or_raise(required, "plant relay")
+        circuits = self.hydronic.zone_call_circuits or []
+        if not circuits:
+            raise ValueError(
+                "Axiom 3 (LocalControlPlant) failed: Hydronic.ZoneCallCircuits is empty."
+            )
+        for circuit in circuits:
+            relay_or_raise(circuit.failsafe_relay_node, "circuit failsafe relay")
+            relay_or_raise(circuit.ops_relay_node, "circuit ops relay")
+        return self
