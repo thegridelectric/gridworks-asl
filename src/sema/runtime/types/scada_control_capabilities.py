@@ -1,7 +1,7 @@
 from typing import Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
-from sema.runtime.enums import Gw1ActorClass
+from sema.runtime.enums.old_versions.gw1_actor_class_012 import Gw1ActorClass012
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.types.data_channel_gt import DataChannelGt
@@ -31,12 +31,12 @@ class ScadaControlCapabilities(SemaType):
         b. All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.
         """
         for node in self.relay_nodes:
-            if node.actor_class != Gw1ActorClass.Relay:
+            if node.actor_class != Gw1ActorClass012.Relay:
                 raise ValueError(
                     "Axiom 1 failed: every relay_nodes actor_class must be Relay."
                 )
         for node in self.dac_nodes:
-            if node.actor_class != Gw1ActorClass.ZeroTenOutputer:
+            if node.actor_class != Gw1ActorClass012.ZeroTenOutputer:
                 raise ValueError(
                     "Axiom 1 failed: every dac_nodes actor_class must be ZeroTenOutputer."
                 )

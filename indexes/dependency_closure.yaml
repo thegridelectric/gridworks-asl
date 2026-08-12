@@ -1363,6 +1363,16 @@ types:
       types:
       - i2c.bit.address:000
       versionless_types: []
+  i2c.read.bytes:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types: []
+      versionless_types: []
   i2c.read.reg:
     '000':
       enums: []
@@ -1420,6 +1430,16 @@ types:
     '000':
       enums:
       - i2c.operation:000
+      formats:
+      - non.negative.int
+      - spaceheat.name
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
+    '001':
+      enums:
+      - i2c.operation:001
       formats:
       - non.negative.int
       - spaceheat.name
@@ -1526,6 +1546,15 @@ types:
       - uuid4.str
       types:
       - i2c.bit.address:000
+      versionless_types: []
+  i2c.write.byte:
+    '000':
+      enums: []
+      formats:
+      - non.negative.int
+      - spaceheat.name
+      - uuid4.str
+      types: []
       versionless_types: []
   i2c.write.reg:
     '000':

@@ -1,0 +1,50 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/gw1.actor.class/013"
+
+title: "gw1.actor.class"
+type: "string"
+description: >
+  Classification of actors in the GridWorks SCADA system.
+
+enum:
+  - "NoActor"
+  - "PrimaryScada"
+  - "SecondaryScada"
+  - "PowerMeter"
+  - "LocalControl"
+  - "LeafAlly"
+  - "DerivedGenerator"
+  - "PicoCycler"
+  - "HpBoss"
+  - "I2cRelayMultiplexer"
+  - "I2cZeroTenMultiplexer"
+  - "Hubitat"
+  - "Relay"
+  - "MultipurposeSensor"
+  - "HoneywellThermostat"
+  - "ApiTankModule"
+  - "ApiFlowModule"
+  - "ZeroTenOutputer"
+  - "ApiBtuMeter"
+  - "SiegLoop"
+  - "GpioSensor"
+  - "I2cBus"
+  - "I2cRelayBoard"
+  - "I2cThermistorReader"
+  - "SimSensorActor"
+  - "SimRelayActor"
+  - "I2cDacWriter"
+
+default: "NoActor"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "013"
+  value_descriptions:
+    "I2cRelayBoard": >
+      Defunct; never realized by an actor. Retained under additive-only
+      enum evolution.
+    "I2cDacWriter": >
+      Drives one or more DAC channels on a board-resident DAC (e.g. the
+      gw108 MCP4728s behind the DAC mux), routing every bus operation
+      through the I2cBus actor.

@@ -92,6 +92,7 @@ from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
 )
 from sema.runtime.types.i2c_mux import I2cMux
 from sema.runtime.types.i2c_read_bit import I2cReadBit
+from sema.runtime.types.i2c_read_bytes import I2cReadBytes
 from sema.runtime.types.i2c_read_reg import I2cReadReg
 from sema.runtime.types.i2c_reg_address import I2cRegAddress
 from sema.runtime.types.i2c_relay_capability import I2cRelayCapability
@@ -106,6 +107,7 @@ from sema.runtime.types.i2c_thermistor_reader_component_gt import (
     I2cThermistorReaderComponentGt,
 )
 from sema.runtime.types.i2c_write_bit import I2cWriteBit
+from sema.runtime.types.i2c_write_byte import I2cWriteByte
 from sema.runtime.types.i2c_write_reg import I2cWriteReg
 from sema.runtime.types.keyparam_change_log import KeyparamChangeLog
 from sema.runtime.types.latest_price import LatestPrice
@@ -253,6 +255,7 @@ __all__ = [
     "I2cMultichannelDtRelayComponentGt",
     "I2cMux",
     "I2cReadBit",
+    "I2cReadBytes",
     "I2cReadReg",
     "I2cRegAddress",
     "I2cRelayCapability",
@@ -263,6 +266,7 @@ __all__ = [
     "I2cThermistorInterfaceCapability",
     "I2cThermistorReaderComponentGt",
     "I2cWriteBit",
+    "I2cWriteByte",
     "I2cWriteReg",
     "KeyparamChangeLog",
     "LatestPrice",

@@ -1,0 +1,6 @@
+    def upgrade(self) -> {{ i2c_result_001_class_name }}:
+        """Operation ref moves to i2c.operation/001; optional Bytes list for
+        multi-byte (ReadBytes) results."""
+        data = self.model_dump()
+        data["version"] = "001"
+        return {{ i2c_result_001_class_name }}.model_validate(data)

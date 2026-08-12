@@ -675,6 +675,9 @@ enums:
     '000':
       used_by:
       - i2c.result:000
+    '001':
+      used_by:
+      - i2c.result:001
   log.level:
     '000':
       used_by:
@@ -940,11 +943,14 @@ formats:
     - i2c.dac.channel.config:000
     - i2c.expander:000
     - i2c.mux:000
+    - i2c.read.bytes:000
     - i2c.reg.address:000
     - i2c.relay.capability:000
     - i2c.result:000
+    - i2c.result:001
     - i2c.thermistor.interface.capability:000
     - i2c.write.bit:000
+    - i2c.write.byte:000
     - i2c.write.reg:000
     - scada.board.component.gt:000
   pascal.case:
@@ -1048,6 +1054,7 @@ formats:
     - i2c.dac.channel.config:000
     - i2c.expander:000
     - i2c.mux:000
+    - i2c.read.bytes:000
     - i2c.read.reg:000
     - i2c.relay.capability:000
     - i2c.thermistor.channel.config:000
@@ -1117,8 +1124,10 @@ formats:
     - i2c.multichannel.dt.relay.component.gt:004
     - i2c.multichannel.dt.relay.component.gt:005
     - i2c.read.bit:000
+    - i2c.read.bytes:000
     - i2c.read.reg:000
     - i2c.result:000
+    - i2c.result:001
     - i2c.thermistor.channel.config:000
     - i2c.thermistor.channel.config:001
     - i2c.thermistor.channel.config:002
@@ -1126,6 +1135,7 @@ formats:
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
     - i2c.write.bit:000
+    - i2c.write.byte:000
     - i2c.write.reg:000
     - maker.api.attribute.gt:000
     - operating.state.sequence:000
@@ -1190,6 +1200,7 @@ formats:
     - gw.readings:000
     - gw.weather.forecast:000
     - i2c.result:000
+    - i2c.result:001
     - layout.lite:007
     - layout.lite:008
     - layout.lite:009
@@ -1298,14 +1309,17 @@ formats:
     - i2c.multichannel.dt.relay.component.gt:004
     - i2c.multichannel.dt.relay.component.gt:005
     - i2c.read.bit:000
+    - i2c.read.bytes:000
     - i2c.read.reg:000
     - i2c.relay.component.gt:000
     - i2c.result:000
+    - i2c.result:001
     - i2c.thermistor.reader.component.gt:000
     - i2c.thermistor.reader.component.gt:001
     - i2c.thermistor.reader.component.gt:002
     - i2c.thermistor.reader.component.gt:003
     - i2c.write.bit:000
+    - i2c.write.byte:000
     - i2c.write.reg:000
     - latest.price:000
     - layout.lite:007

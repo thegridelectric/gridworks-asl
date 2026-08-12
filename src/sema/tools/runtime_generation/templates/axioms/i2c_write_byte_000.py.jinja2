@@ -1,0 +1,11 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ i2c_write_byte_000_class_name }}":
+        """
+        Axiom 1: ByteValueRange
+        Value SHALL be less than 256.
+        """
+        if self.value >= 256:
+            raise ValueError(
+                f"Axiom 1 (ByteValueRange) failed: Value {self.value} is not less than 256."
+            )
+        return self

@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-12T16:25:00Z"
+  last_updated: "2026-08-12T16:50:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -328,12 +328,18 @@ enums:
         status: "published"
 
   gw1.actor.class:
-    latest_version: "012"
+    latest_version: "013"
     owner: gridworks-energy
     enum_type: "versioned"
     description: "Classification of actors in the GridWorks SCADA system."
 
     versions:
+      "013":
+        schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/013"
+        created: "2026-08-12T16:50:00Z"
+        status: "staging"
+        added_values:
+          - "I2cDacWriter"
       "012":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/012"
         created: "2026-06-12T00:00:00Z"
@@ -654,12 +660,19 @@ enums:
         status: "staging"
 
   i2c.operation:
-    latest_version: "000"
+    latest_version: "001"
     owner: gridworks-energy
     enum_type: "versioned"
     description: "The kind of I²C bus operation an i2c.result reports."
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/enums/i2c.operation/001"
+        created: "2026-08-12T16:50:00Z"
+        status: "staging"
+        added_values:
+          - "WriteByte"
+          - "ReadBytes"
       "000":
         schema_url: "https://schemas.electricity.works/enums/i2c.operation/000"
         created: "2026-06-22T16:35:00Z"
@@ -3186,6 +3199,24 @@ types:
             - "spaceheat.name"
             - "uuid4.str"
 
+  i2c.read.bytes:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A request to receive a run of bytes from a device on a named I²C bus with no register addressing (a bare sequential read)."
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/i2c.read.bytes/000"
+        created: "2026-08-12T16:50:00Z"
+        status: "staging"
+        summary: "Initial version (Bus, I2cAddress, NumBytes, TriggerId)."
+        direct_dependencies:
+          structural:
+            - "non.negative.int"
+            - "positive.int"
+            - "spaceheat.name"
+            - "uuid4.str"
+
   i2c.read.reg:
     latest_version: "000"
     owner: gridworks-energy
@@ -3276,11 +3307,23 @@ types:
             - "relay.wiring.config:000"
 
   i2c.result:
-    latest_version: "000"
+    latest_version: "001"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "The result of an I²C bus operation, correlated to its request by TriggerId."
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/i2c.result/001"
+        created: "2026-08-12T16:50:00Z"
+        status: "staging"
+        summary: "Operation ref moves to i2c.operation/001; optional Bytes list for multi-byte (ReadBytes) results."
+        direct_dependencies:
+          structural:
+            - "i2c.operation:001"
+            - "non.negative.int"
+            - "spaceheat.name"
+            - "utc.milliseconds"
+            - "uuid4.str"
       "000":
         schema_url: "https://schemas.electricity.works/types/i2c.result/000"
         created: "2026-06-22T16:35:00Z"
@@ -3428,6 +3471,23 @@ types:
         direct_dependencies:
           structural:
             - "i2c.bit.address:000"
+            - "non.negative.int"
+            - "spaceheat.name"
+            - "uuid4.str"
+
+  i2c.write.byte:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A request to write a single byte to a device on a named I²C bus with no register addressing (e.g. a bus-multiplexer channel select)."
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/i2c.write.byte/000"
+        created: "2026-08-12T16:50:00Z"
+        status: "staging"
+        summary: "Initial version (Bus, I2cAddress, Value, TriggerId)."
+        direct_dependencies:
+          structural:
             - "non.negative.int"
             - "spaceheat.name"
             - "uuid4.str"

@@ -492,6 +492,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/i2c.read.bit/000.yaml
+  i2c.read.bytes:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.read.bytes/000.yaml
   i2c.read.reg:
     latest_version: '000'
     versioning_strategy: literal
@@ -518,9 +523,10 @@ types:
     versions:
       '000': definitions/types/i2c.relay.config/000.yaml
   i2c.result:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/i2c.result/001.yaml
       '000': definitions/types/i2c.result/000.yaml
   i2c.thermistor.channel.config:
     latest_version: '002'
@@ -547,6 +553,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/i2c.write.bit/000.yaml
+  i2c.write.byte:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.write.byte/000.yaml
   i2c.write.reg:
     latest_version: '000'
     versioning_strategy: literal
@@ -896,8 +907,9 @@ enums:
       '000': definitions/enums/gw.weather.forecast.fidelity/000.yaml
   gw1.actor.class:
     enum_type: versioned
-    latest_version: '012'
+    latest_version: '013'
     versions:
+      '013': definitions/enums/gw1.actor.class/013.yaml
       '012': definitions/enums/gw1.actor.class/012.yaml
       '011': definitions/enums/gw1.actor.class/011.yaml
       '010': definitions/enums/gw1.actor.class/010.yaml
@@ -1015,8 +1027,9 @@ enums:
       '000': definitions/enums/i2c.mux.type/000.yaml
   i2c.operation:
     enum_type: versioned
-    latest_version: '000'
+    latest_version: '001'
     versions:
+      '001': definitions/enums/i2c.operation/001.yaml
       '000': definitions/enums/i2c.operation/000.yaml
   log.level:
     enum_type: literal

@@ -3,18 +3,16 @@ from enum import auto
 from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
-class I2cOperation(SemaEnum):
-    """Sema: https://schemas.electricity.works/enums/i2c.operation/001"""
+class I2cOperation000(SemaEnum):
+    """Sema: https://schemas.electricity.works/enums/i2c.operation/000"""
 
     ReadBit = auto()
     WriteBit = auto()
     ReadReg = auto()
     WriteReg = auto()
-    WriteByte = auto()
-    ReadBytes = auto()
 
     @classmethod
-    def default(cls) -> "I2cOperation":
+    def default(cls) -> "I2cOperation000":
         return cls.ReadBit
 
     @classmethod
@@ -27,4 +25,4 @@ class I2cOperation(SemaEnum):
 
     @classmethod
     def enum_version(cls) -> str:
-        return "001"
+        return "000"

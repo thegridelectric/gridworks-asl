@@ -747,6 +747,13 @@ types:
       "000":
         summary: "Initial draft (Bus, Address, TriggerId)."
 
+  i2c.read.bytes:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version (Bus, I2cAddress, NumBytes, TriggerId)."
+
   i2c.read.reg:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -783,9 +790,11 @@ types:
         summary: "Initial draft (RelayName, I2cBus, Address, SupportedWiringConfigs, Notes)."
 
   i2c.result:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: "Operation ref moves to i2c.operation/001; optional Bytes list for multi-byte (ReadBytes) results."
       "000":
         summary: "Initial draft (Bus, Operation, Value, Success, Error, UnixTimeMs, TriggerId)."
 
@@ -830,6 +839,13 @@ types:
     versions:
       "000":
         summary: "Initial draft (Bus, Address, Value, TriggerId)."
+
+  i2c.write.byte:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version (Bus, I2cAddress, Value, TriggerId)."
 
   i2c.write.reg:
     latest_version: "000"
@@ -1386,6 +1402,9 @@ enums:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
+      "013":
+        added_values:
+          - "I2cDacWriter"
       "012":
         added_values:
           - "SimSensorActor"
@@ -1559,6 +1578,10 @@ enums:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
+      "001":
+        added_values:
+          - "WriteByte"
+          - "ReadBytes"
       "000": {}
 
   log.level:
