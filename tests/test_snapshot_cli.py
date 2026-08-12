@@ -19,6 +19,26 @@ def test_snapshot_prepare_rejects_staging_by_default(
     assert "layout.lite:013" in str(excinfo.value)
 
 
+def test_refused_prepare_leaves_previous_output_intact(
+    monkeypatch, tmp_path: Path
+) -> None:
+    # A refusal must fire BEFORE output/ is cleared: a cleared-then-refused
+    # output/ silently guts whatever a consumer mirrors next (rsync --delete).
+    output_root = tmp_path / "output"
+    monkeypatch.setattr(snapshot, "OUTPUT_DIR", output_root)
+    target_root = snapshot.prepare_snapshot(
+        ROOT / "template_seed_request.yaml", allow_staged=True
+    )
+    before = sorted(p.relative_to(target_root) for p in target_root.rglob("*"))
+    assert before
+
+    with pytest.raises(ValueError, match="STAGING"):
+        snapshot.prepare_snapshot(ROOT / "template_seed_request.yaml")
+
+    after = sorted(p.relative_to(target_root) for p in target_root.rglob("*"))
+    assert after == before
+
+
 def test_snapshot_prepare_and_build_write_sema_at_output_root(
     monkeypatch, tmp_path: Path
 ) -> None:

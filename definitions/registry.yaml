@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-12T17:05:00Z"
+  last_updated: "2026-08-12T20:25:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -2420,7 +2420,7 @@ types:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.weather.cmd.ack/000"
         created: "2026-08-12T17:05:00Z"
-        status: "staging"
+        status: "published"
         summary: "Initial version."
         direct_dependencies:
           structural: []
@@ -2435,7 +2435,7 @@ types:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.weather.cmd.nack/000"
         created: "2026-08-12T17:05:00Z"
-        status: "staging"
+        status: "published"
         summary: "Initial version."
         direct_dependencies:
           structural: []
@@ -2450,7 +2450,7 @@ types:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.weather.create.cmd/000"
         created: "2026-08-12T17:05:00Z"
-        status: "staging"
+        status: "published"
         summary: "Initial version."
         direct_dependencies:
           structural:

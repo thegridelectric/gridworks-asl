@@ -126,24 +126,29 @@ def _collect_staging_words(seed: dict, public_registry: dict) -> list[str]:
     return sorted(staging)
 
 
-def _apply_staging_gate(
-    target_root: Path, seed: dict, public_registry: dict, *, allow_staged: bool
-) -> None:
-    """Published-only is the default: a staging closure fails the build.
-
-    With ``--allow-staged`` the snapshot is built anyway and marked twice —
-    machine-readably (``indexes/staging.yaml``) and for humans (a README
-    banner at the snapshot root).
-    """
+def _validate_staging_closure(
+    seed: dict, public_registry: dict, *, allow_staged: bool
+) -> list[str]:
+    """Published-only is the default: a staging closure refuses the
+    prepare — BEFORE ``output/`` is touched, so a refusal leaves the
+    previous snapshot intact. Returns the staging words for the marker
+    write."""
     staging = _collect_staging_words(seed, public_registry)
-    if not staging:
-        return
-    if not allow_staged:
+    if staging and not allow_staged:
         raise ValueError(
             "Snapshot closure contains STAGING words (published-only is the "
             "default; pass --allow-staged to build a dev-only snapshot):\n  "
             + "\n  ".join(staging)
         )
+    return staging
+
+
+def _write_staging_markers(target_root: Path, staging: list[str]) -> None:
+    """A staged snapshot is marked twice — machine-readably
+    (``indexes/staging.yaml``) and for humans (a README banner at the
+    snapshot root)."""
+    if not staging:
+        return
     with (target_root / "indexes" / "staging.yaml").open("w") as handle:
         yaml.safe_dump({"staging": True, "staging_words": staging}, handle)
     (target_root / "README.md").write_text(
@@ -224,21 +229,31 @@ def prepare_snapshot(seed_request: Path, *, allow_staged: bool = False) -> Path:
         seed_request_data = yaml.safe_load(handle)
     _reject_drafts_in_seed_request(seed_request_data, public_registry)
 
-    ensure_clean_dir(OUTPUT_DIR)
-    target_root = snapshot_root()
-    indexes_root = target_root / "indexes"
-    expanded_seed = indexes_root / "seed_expanded.yaml"
-    local_names = indexes_root / "local_names.yaml"
+    # Expand and validate BEFORE touching output/: a refused prepare must
+    # leave the previous snapshot intact — a cleared-then-refused output/
+    # silently guts whatever a consumer mirrors next (rsync --delete).
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        expanded_tmp = Path(tmp_dir) / "seed_expanded.yaml"
+        expand_seed(seed_request_path, expanded_tmp)
+        seed = load_seed(expanded_tmp)
+        staging = _validate_staging_closure(
+            seed, public_registry, allow_staged=allow_staged
+        )
 
-    expand_seed(seed_request_path, expanded_seed)
+        ensure_clean_dir(OUTPUT_DIR)
+        target_root = snapshot_root()
+        indexes_root = target_root / "indexes"
+        expanded_seed = indexes_root / "seed_expanded.yaml"
+        local_names = indexes_root / "local_names.yaml"
+        indexes_root.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(expanded_tmp, expanded_seed)
 
     # Record the original seed request alongside the expansion so the snapshot is
     # self-describing and exactly replicable. (Previously only the expanded seed
     # was kept, so the request that built a snapshot had to be reconstructed.)
     shutil.copyfile(seed_request_path, indexes_root / "seed_request.yaml")
 
-    seed = load_seed(expanded_seed)
-    _apply_staging_gate(target_root, seed, public_registry, allow_staged=allow_staged)
+    _write_staging_markers(target_root, staging)
 
     registry = load_registry()
     copy_seed_definitions(target_root, seed)
