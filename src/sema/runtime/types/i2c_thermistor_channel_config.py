@@ -6,7 +6,7 @@ from sema.runtime.property_format import SpaceheatName
 
 
 class I2cThermistorChannelConfig(SemaType):
-    """Sema: https://schemas.electricity.works/types/i2c.thermistor.channel.config/002"""
+    """Sema: https://schemas.electricity.works/types/i2c.thermistor.channel.config/000"""
 
     channel_name: SpaceheatName
     adc_channel: I2cAdcChannel
@@ -14,4 +14,4 @@ class I2cThermistorChannelConfig(SemaType):
     type_name: Literal["i2c.thermistor.channel.config"] = (
         "i2c.thermistor.channel.config"
     )
-    version: Literal["002"] = "002"
+    version: Literal["000"] = "000"

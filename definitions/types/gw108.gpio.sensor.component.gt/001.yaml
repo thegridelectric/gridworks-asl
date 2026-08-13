@@ -13,15 +13,12 @@ properties:
   ComponentId:
     $ref: "https://schemas.electricity.works/formats/uuid4.str"
 
-  ComponentAttributeClassId:
-    $ref: "https://schemas.electricity.works/formats/uuid4.str"
-
-  ConfigList:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/types/channel.config/000"
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      Channel configuration(s) for this sensor (one per the device).
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
 
   GpioPin:
     $ref: "https://schemas.electricity.works/formats/positive.int"
@@ -52,8 +49,7 @@ properties:
 
 required:
   - ComponentId
-  - ComponentAttributeClassId
-  - ConfigList
+  - DeviceType
   - GpioPin
   - SenseMode
   - SendToDerived
@@ -65,28 +61,18 @@ additionalProperties: false
 examples:
   - |
     {
-      "ComponentAttributeClassId": "8ad2f6fe-e834-4334-80c8-4a0d4ef4b04f",
-      "ComponentId": "9fa9c10a-30c7-414e-a9cb-65a47150b755",
-      "GpioPin": 17,
+      "ComponentId": "f49e721c-b510-418e-a6af-843de90b3032",
+      "DeviceType": "GridworksScadaGw108",
+      "GpioPin": 1,
       "SenseMode": "Polling",
-      "SendToDerived": true,
-      "ConfigList": [
-        {
-          "ChannelName": "zone1-bedrooms-opto-input",
-          "PollPeriodMs": 1000,
-          "CapturePeriodS": 300,
-          "AsyncCapture": true,
-          "AsyncCaptureDelta": 1,
-          "Exponent": 0,
-          "Unit": "Unitless",
-          "TypeName": "channel.config",
-          "Version": "000"
-        }
-      ],
-      "DisplayName": "Zone 1 Bedrooms Optocouple Input (0 means 24V)",
+      "SendToDerived": false,
       "TypeName": "gw108.gpio.sensor.component.gt",
       "Version": "001"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
+  extended_description: >
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.

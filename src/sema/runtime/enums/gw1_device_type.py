@@ -4,7 +4,7 @@ from sema.runtime.enums.gw_str_enum import SemaEnum
 
 
 class Gw1DeviceType(SemaEnum):
-    """Sema: https://schemas.electricity.works/enums/gw1.device.type/001"""
+    """Sema: https://schemas.electricity.works/enums/gw1.device.type/000"""
 
     EgaugePowerMeter = auto()
     GridworksTsnap1ScadaBoard = auto()
@@ -47,4 +47,4 @@ class Gw1DeviceType(SemaEnum):
 
     @classmethod
     def enum_version(cls) -> str:
-        return "001"
+        return "000"

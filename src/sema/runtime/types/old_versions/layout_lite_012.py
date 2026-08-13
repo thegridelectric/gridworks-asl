@@ -8,6 +8,7 @@ from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.ha1_params import Ha1Params
+from sema.runtime.types.layout_lite import LayoutLite
 from sema.runtime.types.old_versions.data_channel_gt_002 import DataChannelGt002
 from sema.runtime.types.old_versions.derived_channel_gt_001 import DerivedChannelGt001
 from sema.runtime.types.old_versions.gw1_tank_temp_calibration_map_000 import (
@@ -16,10 +17,6 @@ from sema.runtime.types.old_versions.gw1_tank_temp_calibration_map_000 import (
 from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_003 import (
     I2cMultichannelDtRelayComponentGt003,
 )
-from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_004 import (
-    I2cMultichannelDtRelayComponentGt004,
-)
-from sema.runtime.types.old_versions.layout_lite_013 import LayoutLite013
 from sema.runtime.types.old_versions.pico_flow_module_component_gt_000 import (
     PicoFlowModuleComponentGt000,
 )
@@ -131,15 +128,16 @@ class LayoutLite012(SemaType):
                 )
         return self
 
-    def upgrade(self) -> LayoutLite013:
-        """- I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:003 -> 004"""
-        data = self.model_dump()
-        if self.i2c_relay_component is not None:
-            upgraded_component = self.i2c_relay_component.upgrade()
-            if not isinstance(upgraded_component, I2cMultichannelDtRelayComponentGt004):
-                raise TypeError(
-                    "Expected I2cRelayComponent upgrade to produce I2cMultichannelDtRelayComponentGt004"
-                )
-            data["i2c_relay_component"] = upgraded_component
-        data["version"] = "013"
-        return LayoutLite013.model_validate(data)
+    def upgrade(self) -> "LayoutLite":
+        """
+        - ShNodes: spaceheat.node.gt:301 -> 302
+        - DataChannels: data.channel.gt:002 -> 003
+        - TankModuleComponents / FlowModuleComponents / I2cRelayComponent: cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module 011->012, sim.pico.tank.module 000->001, pico.flow.module 000->001, i2c.multichannel.dt.relay 003->004). Context-dependent: the embedded components' DeviceType lives on their cac, not the component.
+        - SystemMode -> ActuationAuthority x ServiceMode split (Heating -> Active/Heating, Standby -> Standby/Heating, MonitorOnly -> MonitorOnly/Heating; mechanical, not the blocking reason for context).
+        """
+        raise SemaType.upgrade_requires_context(
+            "LayoutLite012 cannot be upgraded to "
+            "LayoutLite without the source layout context: the embedded "
+            "components migrate cac_id -> DeviceType, which is derived from the cac the "
+            "components referenced, not carried on the standalone projection."
+        )

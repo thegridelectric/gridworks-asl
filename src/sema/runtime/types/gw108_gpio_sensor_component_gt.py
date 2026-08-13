@@ -7,7 +7,7 @@ from sema.runtime.property_format import UUID4Str
 
 
 class Gw108GpioSensorComponentGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/002"""
+    """Sema: https://schemas.electricity.works/types/gw108.gpio.sensor.component.gt/001"""
 
     component_id: UUID4Str
     device_type: PascalCase
@@ -19,4 +19,4 @@ class Gw108GpioSensorComponentGt(SemaType):
     type_name: Literal["gw108.gpio.sensor.component.gt"] = (
         "gw108.gpio.sensor.component.gt"
     )
-    version: Literal["002"] = "002"
+    version: Literal["001"] = "001"

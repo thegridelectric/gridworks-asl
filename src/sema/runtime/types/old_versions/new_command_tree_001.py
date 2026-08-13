@@ -43,7 +43,7 @@ class NewCommandTree001(SemaType):
         return self
 
     def upgrade(self) -> NewCommandTree:
-        """- ShNodes: spaceheat.node.gt:301 -> 303"""
+        """- ShNodes: spaceheat.node.gt:301 -> 302"""
         data = self.model_dump()
         lifted: list[SpaceheatNodeGt] = []
         for node in self.sh_nodes:

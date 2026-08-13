@@ -24,7 +24,7 @@ properties:
   ConfigList:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/ads.channel.config/001"
+      $ref: "https://schemas.electricity.works/types/ads.channel.config/000"
     description: >
       Per-channel thermistor configurations read through the ADS terminal blocks.
 
@@ -70,7 +70,7 @@ examples:
           "TerminalBlockIdx": 1,
           "ThermistorDeviceType": "MakeModel",
           "TypeName": "ads.channel.config",
-          "Version": "001"
+          "Version": "000"
         }
       ],
       "OpenVoltageByAds": [

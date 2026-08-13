@@ -6,7 +6,9 @@ from sema.runtime.enums import Gw1ServiceMode
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.types.capture_tuning import CaptureTuning
+from sema.runtime.types.cop_curve import CopCurve
 from sema.runtime.types.gw_tou_window import GwTouWindow
+from sema.runtime.types.heating_curve import HeatingCurve
 
 
 class GwNolanOperationalParams(SemaType):
@@ -16,6 +18,8 @@ class GwNolanOperationalParams(SemaType):
     capture_tuning_list: list[CaptureTuning]
     actuation_authority: Gw1ActuationAuthority
     service_mode: Gw1ServiceMode
+    cop_curve: CopCurve
+    heating_curve: HeatingCurve
     on_peak_windows: list[GwTouWindow]
     held_circuit_positions: list[PositiveInt]
     type_name: Literal["gw.nolan.operational.params"] = "gw.nolan.operational.params"

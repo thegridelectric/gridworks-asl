@@ -1,7 +1,10 @@
     def upgrade(self) -> {{ spaceheat_node_gt_302_class_name }}:
         """
-        - ActorClass: gw1.actor.class:011 -> 012
+        - ActorClass: gw1.actor.class:011 -> 013 (in-place while staging)
+        - InPowerMetering: drop (routing is owned by the consuming transactive declaration, not the node)
+        - InPowerMeteringRequiresNameplate axiom: drop
         """
         data = self.model_dump()
+        data.pop("in_power_metering", None)
         data["version"] = "302"
         return {{ spaceheat_node_gt_302_class_name }}.model_validate(data)

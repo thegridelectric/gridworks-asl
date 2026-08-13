@@ -26,7 +26,7 @@ properties:
   ShNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/303"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
     description: >
       The complete set of SpaceheatNodes that make up the command tree. The
       handle of each node encodes its position in the hierarchy: a node's

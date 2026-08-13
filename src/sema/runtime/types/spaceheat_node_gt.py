@@ -9,7 +9,7 @@ from sema.runtime.property_format import UUID4Str
 
 
 class SpaceheatNodeGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/spaceheat.node.gt/303"""
+    """Sema: https://schemas.electricity.works/types/spaceheat.node.gt/302"""
 
     name: SpaceheatName
     actor_hierarchy_name: HandleName | None = None
@@ -21,7 +21,7 @@ class SpaceheatNodeGt(SemaType):
     nameplate_power_w: PositiveInt | None = None
     sh_node_id: UUID4Str
     type_name: Literal["spaceheat.node.gt"] = "spaceheat.node.gt"
-    version: Literal["303"] = "303"
+    version: Literal["302"] = "302"
 
     model_config = ConfigDict(**(SemaType.model_config | {"extra": "allow"}))
 

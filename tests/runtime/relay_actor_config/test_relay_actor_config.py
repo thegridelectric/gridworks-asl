@@ -6,7 +6,7 @@ from sema.runtime.types.relay_actor_config import RelayActorConfig
 
 
 def test_relay_actor_config_latest_version_is_003() -> None:
-    assert RelayActorConfig.version_value() == "004"
+    assert RelayActorConfig.version_value() == "003"
 
 
 def test_real_beech_v002_upgrades_to_latest() -> None:
@@ -17,7 +17,7 @@ def test_real_beech_v002_upgrades_to_latest() -> None:
 
     assert isinstance(decoded, RelayActorConfig)
     assert decoded.type_name == "relay.actor.config"
-    assert decoded.version == "004"
+    assert decoded.version == "003"
 
 
 def test_default_v003_loads_as_relay_actor_config() -> None:
@@ -28,4 +28,4 @@ def test_default_v003_loads_as_relay_actor_config() -> None:
 
     assert isinstance(decoded, RelayActorConfig)
     assert decoded.type_name == "relay.actor.config"
-    assert decoded.version == "004"
+    assert decoded.version == "003"

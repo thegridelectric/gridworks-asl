@@ -23,7 +23,7 @@ properties:
   ConfigList:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/dfr.config/001"
+      $ref: "https://schemas.electricity.works/types/dfr.config/000"
     description: >
       Per-output configurations for this component's analog outputs.
 
@@ -69,7 +69,7 @@ examples:
           "OutputIdx": 1,
           "InitialVoltsTimes100": 0,
           "TypeName": "dfr.config",
-          "Version": "001"
+          "Version": "000"
         }
       ],
       "I2cAddressList": [

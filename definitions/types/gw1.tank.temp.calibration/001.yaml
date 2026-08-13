@@ -11,7 +11,7 @@ description: >
   derived channel's OutputUnit scaling domain (FahrenheitX100): `M` is
   dimensionless and `B` is an integer offset in the same scaling as the output
   (e.g. `B = -430` is a -4.30 F offset). This mirrors
-  `linear.one.dimensional.calibration/001`.
+  `linear.one.dimensional.calibration/000`.
 
 properties:
   Depth1M:

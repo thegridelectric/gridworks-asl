@@ -6,12 +6,12 @@
         b. All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.
         """
         for node in self.relay_nodes:
-            if node.actor_class != {{ gw1_actor_class_009_class_name }}.Relay:
+            if node.actor_class != {{ gw1_actor_class_012_class_name }}.Relay:
                 raise ValueError(
                     "Axiom 1 failed: every relay_nodes actor_class must be Relay."
                 )
         for node in self.dac_nodes:
-            if node.actor_class != {{ gw1_actor_class_009_class_name }}.ZeroTenOutputer:
+            if node.actor_class != {{ gw1_actor_class_012_class_name }}.ZeroTenOutputer:
                 raise ValueError(
                     "Axiom 1 failed: every dac_nodes actor_class must be ZeroTenOutputer."
                 )

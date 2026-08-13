@@ -22,17 +22,17 @@ class Gw1ScadaDeviceTypeGt(SemaType):
     device_type: PascalCase
     display_name: str | None = None
     min_poll_period_ms: PositiveInt | None = None
-    bus_list: list[I2cBus] | None = None
-    telemetry_name_list: list[SpaceheatTelemetryName] | None = None
-    native_gpio_inputs: list[GwNativeGpioPin] | None = None
-    native_gpio_outputs: list[GwNativeGpioPin] | None = None
-    expanders: list[I2cExpander] | None = None
-    muxes: list[I2cMux] | None = None
-    i2c_relays: list[I2cRelayCapability] | None = None
+    bus_list: list[I2cBus]
+    telemetry_name_list: list[SpaceheatTelemetryName]
+    native_gpio_inputs: list[GwNativeGpioPin]
+    native_gpio_outputs: list[GwNativeGpioPin]
+    expanders: list[I2cExpander]
+    muxes: list[I2cMux]
+    i2c_relays: list[I2cRelayCapability]
     supports_pin_readback: bool
     ct_adc: I2cCtInterfaceCapability | None = None
-    thermistor_adcs: list[I2cThermistorInterfaceCapability] | None = None
-    dacs: list[I2cDacCapability] | None = None
+    thermistor_adcs: list[I2cThermistorInterfaceCapability]
+    dacs: list[I2cDacCapability]
     type_name: Literal["gw1.scada.device.type.gt"] = "gw1.scada.device.type.gt"
     version: Literal["000"] = "000"
 

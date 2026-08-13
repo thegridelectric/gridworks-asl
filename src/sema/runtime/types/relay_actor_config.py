@@ -11,7 +11,7 @@ from sema.runtime.property_format import SpaceheatName
 
 
 class RelayActorConfig(SemaType):
-    """Sema: https://schemas.electricity.works/types/relay.actor.config/004"""
+    """Sema: https://schemas.electricity.works/types/relay.actor.config/003"""
 
     channel_name: SpaceheatName
     relay_idx: PositiveInt
@@ -24,7 +24,7 @@ class RelayActorConfig(SemaType):
     de_energized_state: NonEmptyString
     energized_state: NonEmptyString
     type_name: Literal["relay.actor.config"] = "relay.actor.config"
-    version: Literal["004"] = "004"
+    version: Literal["003"] = "003"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "RelayActorConfig":

@@ -25,7 +25,7 @@ properties:
   ConfigList:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/relay.actor.config/004"
+      $ref: "https://schemas.electricity.works/types/relay.actor.config/003"
 
   GpioPin:
     $ref: "https://schemas.electricity.works/formats/positive.int"

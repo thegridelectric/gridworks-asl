@@ -5,23 +5,23 @@ from sema.runtime.enums.old_versions.gw1_actor_class_012 import Gw1ActorClass012
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.types.data_channel_gt import DataChannelGt
-from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_002 import (
-    I2cMultichannelDtRelayComponentGt002,
+from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
+    I2cMultichannelDtRelayComponentGt,
 )
 from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 
 
 class ScadaControlCapabilities(SemaType):
-    """Sema: https://schemas.electricity.works/types/scada.control.capabilities/002"""
+    """Sema: https://schemas.electricity.works/types/scada.control.capabilities/001"""
 
     from_g_node_alias: LeftRightDot
     message_created_ms: UTCMilliseconds
     relay_nodes: list[SpaceheatNodeGt]
     dac_nodes: list[SpaceheatNodeGt]
     control_channels: list[DataChannelGt]
-    i2c_relay_component: I2cMultichannelDtRelayComponentGt002
+    i2c_relay_component: I2cMultichannelDtRelayComponentGt
     type_name: Literal["scada.control.capabilities"] = "scada.control.capabilities"
-    version: Literal["002"] = "002"
+    version: Literal["001"] = "001"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "ScadaControlCapabilities":

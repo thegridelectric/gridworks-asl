@@ -8,7 +8,7 @@ from sema.runtime.types.relay_actor_config import RelayActorConfig
 
 
 class Gw108VdcRelayComponentGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/002"""
+    """Sema: https://schemas.electricity.works/types/gw108.vdc.relay.component.gt/001"""
 
     component_id: UUID4Str
     device_type: PascalCase
@@ -17,7 +17,7 @@ class Gw108VdcRelayComponentGt(SemaType):
     display_name: str | None = None
     hw_uid: str | None = None
     type_name: Literal["gw108.vdc.relay.component.gt"] = "gw108.vdc.relay.component.gt"
-    version: Literal["002"] = "002"
+    version: Literal["001"] = "001"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "Gw108VdcRelayComponentGt":

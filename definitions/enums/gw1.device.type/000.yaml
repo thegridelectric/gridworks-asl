@@ -31,6 +31,12 @@ enum:
 - GridworksSimSensor
 - GridworksSimRelayBank
 - AbstractWebServer
+- Gw108I2cRelay
+- Gw108GpioRelay
+- SamsungAE055FCYDCG
+- SamsungAE055FEYMCG
+- Gw108Adc
+- GridworksSimGw108
 default: EgaugePowerMeter
 x-gridworks:
   owner: gridworks-energy
@@ -58,3 +64,27 @@ x-gridworks:
     GridworksSimRelayBank: GridWorks simulated relay bank — the SimRelayActor's device type.
     AbstractWebServer: An abstract (generic) web server — a service component, not a hardware make/model;
       defined by its component config. Replaces the UNKNOWNMAKE web-server hack.
+    Gw108I2cRelay: >
+      An I²C-driven relay resident on a GridWorks SCADA board (e.g. GW108). Board-resident — its physical
+      address lives in the board's I2cRelays map (gw1.scada.device.type.gt), referenced by RelayName; the
+      component carries only identity + control config.
+    Gw108GpioRelay: >
+      A native-GPIO-driven relay resident on a GridWorks SCADA board (e.g. GW108). Board-resident — its BCM
+      pin lives in the board's NativeGpioOutputs (gw1.scada.device.type.gt), referenced by GpioName; the
+      component carries only identity + control config.
+    SamsungAE055FCYDCG: >
+      Samsung AE055 EHS mono outdoor monobloc unit — compressor-bearing; full nameplate designation
+      verbatim after the make prefix. Category-level data on its hp.device.type.gt record.
+    SamsungAE055FEYMCG: >
+      Samsung AE055 EHS mono indoor control box — water pump + backup heater, control
+      electronics with local touch-screen, ODU comms; no compressor. Category-level data on
+      its hp.control.box.device.type.gt record.
+    Gw108Adc: >
+      A thermistor/CT ADC resident on a GridWorks SCADA board (e.g. GW108). Board-resident —
+      its bus, address, reference volts, and series resistance live in the board's
+      thermistor-interface capability entries (gw1.scada.device.type.gt), referenced by
+      AdcName; the reader component carries only identity, channel configs, and calc method.
+    GridworksSimGw108: >
+      GridWorks simulated GW108 board — the register-level simulation twin of
+      GridworksScadaGw108. Carries the same board record shape (gw1.scada.device.type.gt),
+      so chip and relay address resolution runs unchanged against simulated registers.

@@ -13,8 +13,12 @@ properties:
   ComponentId:
     $ref: "https://schemas.electricity.works/formats/uuid4.str"
 
-  ComponentAttributeClassId:
-    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open `pascal.case`
+      string (a `gw1.device.type` value). The hardware layout enforces
+      membership in `gw1.device.type`.
 
   ConfigList:
     type: array
@@ -42,7 +46,7 @@ properties:
 
 required:
   - ComponentId
-  - ComponentAttributeClassId
+  - DeviceType
   - ConfigList
   - GpioPin
   - TypeName
@@ -53,35 +57,37 @@ additionalProperties: false
 examples:
   - |
     {
-      "ComponentAttributeClassId": "8ad2f6fe-e834-4334-80c8-4a0d4ef4b04f",
-      "ComponentId": "c8baa219-8dec-4fcb-8d05-2c3ce6d8e2af",
-      "GpioPin": 23,
+      "ComponentId": "4020eda2-c40b-48e3-81df-f7c76d40bc4c",
+      "DeviceType": "GridworksScadaGw108",
       "ConfigList": [
         {
-          "ActorName": "vdc-relay-gpio-23",
-          "AsyncCapture": true,
-          "CapturePeriodS": 300,
-          "ChannelName": "vdc-relay",
-          "DeEnergizedState": "RelayClosed",
-          "DeEnergizingEvent": "CloseRelay",
-          "EnergizedState": "RelayOpen",
-          "EnergizingEvent": "OpenRelay",
-          "EventType": "change.relay.state",
-          "Exponent": 0,
-          "PollPeriodMs": 200,
+          "ChannelName": "scada",
           "RelayIdx": 1,
-          "StateType": "relay.closed.or.open",
-          "TypeName": "relay.actor.config",
-          "Unit": "Unitless",
-          "Version": "003",
+          "ActorName": "scada",
           "WiringConfig": "NormallyClosed",
-          "AsyncCaptureDelta": 1
+          "EventType": "beech.1",
+          "DeEnergizingEvent": "a",
+          "EnergizingEvent": "a",
+          "StateType": "beech.1",
+          "DeEnergizedState": "a",
+          "EnergizedState": "a",
+          "TypeName": "relay.actor.config",
+          "Version": "003"
         }
       ],
-      "DisplayName": "VDC GPIO Relay",
+      "GpioPin": 1,
       "TypeName": "gw108.vdc.relay.component.gt",
       "Version": "001"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.
+  extended_description: >
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.

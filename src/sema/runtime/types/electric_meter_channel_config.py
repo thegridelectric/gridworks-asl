@@ -5,11 +5,11 @@ from sema.runtime.types.egauge_register_config import EgaugeRegisterConfig
 
 
 class ElectricMeterChannelConfig(SemaType):
-    """Sema: https://schemas.electricity.works/types/electric.meter.channel.config/001"""
+    """Sema: https://schemas.electricity.works/types/electric.meter.channel.config/000"""
 
     channel_name: SpaceheatName
     egauge_register_config: EgaugeRegisterConfig | None = None
     type_name: Literal["electric.meter.channel.config"] = (
         "electric.meter.channel.config"
     )
-    version: Literal["001"] = "001"
+    version: Literal["000"] = "000"

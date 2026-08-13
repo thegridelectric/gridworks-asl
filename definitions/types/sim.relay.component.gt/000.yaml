@@ -24,7 +24,7 @@ properties:
   ConfigList:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/relay.actor.config/004"
+      $ref: "https://schemas.electricity.works/types/relay.actor.config/003"
     description: >
       Relay actor configurations the simulated relay bank manages.
 
@@ -67,7 +67,7 @@ examples:
           "DeEnergizedState": "a",
           "EnergizedState": "a",
           "TypeName": "relay.actor.config",
-          "Version": "004"
+          "Version": "003"
         }
       ],
       "TypeName": "sim.relay.component.gt",

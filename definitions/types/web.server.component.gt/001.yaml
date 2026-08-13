@@ -13,16 +13,11 @@ properties:
   ComponentId:
     $ref: "https://schemas.electricity.works/formats/uuid4.str"
 
-  ComponentAttributeClassId:
-    $ref: "https://schemas.electricity.works/formats/uuid4.str"
-
-  ConfigList:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/types/channel.config/000"
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      Channel configurations attached to this component (often empty for a web
-      server).
+      The device category this component is built on, an open
+      pascal-case string.
 
   WebServer:
     type: object
@@ -63,8 +58,7 @@ properties:
 
 required:
   - ComponentId
-  - ComponentAttributeClassId
-  - ConfigList
+  - DeviceType
   - WebServer
   - TypeName
   - Version
@@ -74,20 +68,31 @@ additionalProperties: false
 examples:
   - |
     {
-      "ComponentAttributeClassId": "6e966031-d074-4a0f-8aa0-18baee37ff29",
-      "ComponentId": "a3f92c10-de37-4df7-8b4d-ec0cfaed46c2",
-      "ConfigList": [],
-      "DisplayName": "Web Server default",
-      "TypeName": "web.server.component.gt",
-      "Version": "001",
+      "ComponentId": "f7dca1af-d89d-463d-b3ab-a1c1a4fec75b",
+      "DeviceType": "AbstractWebServer",
       "WebServer": {
-        "Enabled": true,
-        "Host": "0.0.0.0",
-        "Kwargs": {},
-        "Name": "default",
-        "Port": 8080
-      }
+        "Enabled": false,
+        "Host": "example",
+        "Name": "example",
+        "Port": 0,
+        "Kwargs": {}
+      },
+      "TypeName": "web.server.component.gt",
+      "Version": "001"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
+
+  extended_description: >
+    This is a bit of a dangler: a web server is a software service, not telemetry
+    or actuation hardware, so it produces no channels. It rides the component
+    shape only because the layout references it by ComponentId. A cleaner model
+    would move the local-server settings out of the component vocabulary — revisit
+    when the component model is next reworked.
+
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.
+
+    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.

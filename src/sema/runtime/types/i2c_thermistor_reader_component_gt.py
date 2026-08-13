@@ -9,7 +9,7 @@ from sema.runtime.types.i2c_thermistor_channel_config import I2cThermistorChanne
 
 
 class I2cThermistorReaderComponentGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/003"""
+    """Sema: https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/000"""
 
     component_id: UUID4Str
     board_component_id: UUID4Str
@@ -22,7 +22,7 @@ class I2cThermistorReaderComponentGt(SemaType):
     type_name: Literal["i2c.thermistor.reader.component.gt"] = (
         "i2c.thermistor.reader.component.gt"
     )
-    version: Literal["003"] = "003"
+    version: Literal["000"] = "000"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> "I2cThermistorReaderComponentGt":

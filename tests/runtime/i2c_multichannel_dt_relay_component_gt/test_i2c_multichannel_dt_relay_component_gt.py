@@ -10,12 +10,12 @@ from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
 )
 
 
-def test_i2c_multichannel_dt_relay_component_gt_latest_version_is_005() -> None:
-    assert I2cMultichannelDtRelayComponentGt.version_value() == "005"
+def test_i2c_multichannel_dt_relay_component_gt_latest_version_is_004() -> None:
+    assert I2cMultichannelDtRelayComponentGt.version_value() == "004"
 
 
 def test_default_v002_decode_requires_context() -> None:
-    # 004 -> 005 (cac_id -> DeviceType) is a context-dependent upgrade: a standalone
+    # 003 -> 004 (cac_id -> DeviceType) is a context-dependent upgrade: a standalone
     # old-version message cannot climb to latest without the source layout, which is
     # where DeviceType is carried. The codec surfaces this as UpgradeRequiresContext.
     fixture = Path(__file__).parent / "fixtures" / "v002" / "default.json"

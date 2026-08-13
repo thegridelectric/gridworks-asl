@@ -20,7 +20,7 @@ class WebServer(BaseModel):
 
 
 class WebServerComponentGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/web.server.component.gt/002"""
+    """Sema: https://schemas.electricity.works/types/web.server.component.gt/001"""
 
     component_id: UUID4Str
     device_type: PascalCase
@@ -28,4 +28,4 @@ class WebServerComponentGt(SemaType):
     display_name: str | None = None
     hw_uid: str | None = None
     type_name: Literal["web.server.component.gt"] = "web.server.component.gt"
-    version: Literal["002"] = "002"
+    version: Literal["001"] = "001"

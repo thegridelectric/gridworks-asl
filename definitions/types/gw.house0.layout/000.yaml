@@ -33,7 +33,7 @@ properties:
   ShNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/303"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
     description: >
       Spaceheat nodes — the operational roles (scada, ltn, leaf-ally,
       local-control, derived-generator, power-meter, pumps, pipes, relays, tank
@@ -58,17 +58,17 @@ properties:
     description: "Hardware components present in the House0 system."
     items:
       oneOf:
-        - $ref: "https://schemas.electricity.works/types/electric.meter.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/electric.meter.component.gt/001"
         - $ref: "https://schemas.electricity.works/types/ads111x.based.component.gt/000"
-        - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/005"
+        - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004"
         - $ref: "https://schemas.electricity.works/types/dfr.component.gt/000"
-        - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/pico.flow.module.component.gt/001"
         - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/012"
         - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"
         - $ref: "https://schemas.electricity.works/types/hubitat.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/hubitat.poller.component.gt/000"
-        - $ref: "https://schemas.electricity.works/types/web.server.component.gt/002"
+        - $ref: "https://schemas.electricity.works/types/web.server.component.gt/001"
 
   DeviceTypes:
     type: array

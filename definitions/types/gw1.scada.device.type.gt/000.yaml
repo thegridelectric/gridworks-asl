@@ -109,7 +109,16 @@ properties:
 
 required:
   - DeviceType
+  - BusList
+  - TelemetryNameList
+  - NativeGpioInputs
+  - NativeGpioOutputs
+  - Expanders
+  - Muxes
+  - I2cRelays
   - SupportsPinReadback
+  - ThermistorAdcs
+  - Dacs
   - TypeName
   - Version
 
@@ -177,6 +186,11 @@ examples:
           "Version": "000"
         }
       ],
+      "NativeGpioInputs": [],
+      "NativeGpioOutputs": [],
+      "Muxes": [],
+      "ThermistorAdcs": [],
+      "Dacs": [],
       "TypeName": "gw1.scada.device.type.gt",
       "Version": "000"
     }

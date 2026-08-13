@@ -1,12 +1,14 @@
     def upgrade(self) -> {{ relay_actor_config_003_class_name }}:
-        """- AsyncCaptureDelta: require when AsyncCapture is true"""
+        """
+        - Unit: drop (redundant; unit and scaling are carried by channel identity)
+        - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+        - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop
+          (capture/report tuning moved to operational-params capture.tuning)
+        """
         data = self.model_dump()
-
-        if self.async_capture:
-            if not self.async_capture_delta:
-                data["async_capture_delta"] = 1
-
-        # Update version
+        del data["unit"]
+        del data["exponent"]
+        for key in ("capture_period_s", "async_capture", "async_capture_delta", "poll_period_ms"):
+            data.pop(key, None)
         data["version"] = "003"
-
         return {{ relay_actor_config_003_class_name }}.model_validate(data)

@@ -16,10 +16,11 @@ properties:
     description: >
       Globally unique identifier for this installed component instance.
 
-  ComponentAttributeClassId:
-    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
-      Identifier of this component's device type (its electric.meter.cac.gt).
+      The device category this component is built on, an open
+      pascal-case string.
 
   ConfigList:
     type: array
@@ -54,7 +55,7 @@ properties:
 
 required:
   - ComponentId
-  - ComponentAttributeClassId
+  - DeviceType
   - ConfigList
   - TypeName
   - Version
@@ -64,13 +65,10 @@ additionalProperties: false
 examples:
   - |
     {
-      "ComponentId": "9633adef-2373-422d-8a0e-dfbd16ae081c",
-      "ComponentAttributeClassId": "739a6e32-bb9c-43bc-a28d-fb61be665522",
+      "ComponentId": "6f74e8b9-4fc9-4b95-bd6f-2c150662b40e",
+      "DeviceType": "EgaugePowerMeter",
       "ConfigList": [
         {
-          "AsyncCapture": true,
-          "AsyncCaptureDelta": 300,
-          "CapturePeriodS": 300,
           "ChannelName": "hp-odu-pwr",
           "EgaugeRegisterConfig": {
             "Address": 9006,
@@ -82,10 +80,7 @@ examples:
             "Unit": "W",
             "Version": "000"
           },
-          "Exponent": 0,
-          "PollPeriodMs": 1000,
           "TypeName": "electric.meter.channel.config",
-          "Unit": "W",
           "Version": "000"
         }
       ],
@@ -96,6 +91,19 @@ examples:
       "TypeName": "electric.meter.component.gt",
       "Version": "001"
     }
-
 x-gridworks:
   owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "ChannelNameUniqueness"
+      statement: >
+        Channel names SHALL be unique across the ConfigList.
+  extended_description: >
+    DeviceType holds a `gw1.device.type` value: the hardware layout enforces its
+    membership in `gw1.device.type` and, for an electric meter, that the matching
+    `electric.meter.device.type.gt` record is present.
+
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.

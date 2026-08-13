@@ -11,7 +11,7 @@ from sema.runtime.property_format import UUID4Str
 
 
 class PicoBtuMeterComponentGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/pico.btu.meter.component.gt/001"""
+    """Sema: https://schemas.electricity.works/types/pico.btu.meter.component.gt/000"""
 
     component_id: UUID4Str
     device_type: PascalCase
@@ -35,4 +35,4 @@ class PicoBtuMeterComponentGt(SemaType):
     display_name: str | None = None
     hw_uid: str | None = None
     type_name: Literal["pico.btu.meter.component.gt"] = "pico.btu.meter.component.gt"
-    version: Literal["001"] = "001"
+    version: Literal["000"] = "000"

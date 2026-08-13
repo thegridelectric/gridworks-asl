@@ -9,7 +9,7 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import NonEmptyString
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.property_format import SpaceheatName
-from sema.runtime.types.old_versions.relay_actor_config_003 import RelayActorConfig003
+from sema.runtime.types.relay_actor_config import RelayActorConfig
 
 
 class RelayActorConfig002(SemaType):
@@ -123,15 +123,22 @@ class RelayActorConfig002(SemaType):
             )
         return self
 
-    def upgrade(self) -> RelayActorConfig003:
-        """- AsyncCaptureDelta: require when AsyncCapture is true"""
+    def upgrade(self) -> RelayActorConfig:
+        """
+        - Unit: drop (redundant; unit and scaling are carried by channel identity)
+        - Exponent: drop (redundant; unit and scaling are carried by channel identity)
+        - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop
+          (capture/report tuning moved to operational-params capture.tuning)
+        """
         data = self.model_dump()
-
-        if self.async_capture:
-            if not self.async_capture_delta:
-                data["async_capture_delta"] = 1
-
-        # Update version
+        del data["unit"]
+        del data["exponent"]
+        for key in (
+            "capture_period_s",
+            "async_capture",
+            "async_capture_delta",
+            "poll_period_ms",
+        ):
+            data.pop(key, None)
         data["version"] = "003"
-
-        return RelayActorConfig003.model_validate(data)
+        return RelayActorConfig.model_validate(data)

@@ -3,8 +3,8 @@ from pydantic import ConfigDict, StrictInt, model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import SpaceheatName
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.types.old_versions.i2c_multichannel_dt_relay_component_gt_004 import (
-    I2cMultichannelDtRelayComponentGt004,
+from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
+    I2cMultichannelDtRelayComponentGt,
 )
 from sema.runtime.types.old_versions.relay_actor_config_002 import RelayActorConfig002
 
@@ -44,18 +44,16 @@ class I2cMultichannelDtRelayComponentGt003(SemaType):
             )
         return self
 
-    def upgrade(self) -> I2cMultichannelDtRelayComponentGt004:
-        """- ConfigList[]: relay.actor.config:002 -> 003"""
-        data = self.model_dump()
-
-        upgraded_configs = []
-        for cfg in self.config_list:
-            if isinstance(cfg, RelayActorConfig002):
-                upgraded_configs.append(cfg.upgrade())
-            else:
-                upgraded_configs.append(cfg)
-
-        data["config_list"] = upgraded_configs
-        data["version"] = "004"
-
-        return I2cMultichannelDtRelayComponentGt004.model_validate(data)
+    def upgrade(self) -> I2cMultichannelDtRelayComponentGt:
+        """
+        - AsyncCaptureDelta: ConfigList[0] example now sets it explicitly (the
+          relay.actor.config dependency itself is unchanged from 003: :002)
+        - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case).
+          Context-dependent: the device type lived on the referenced cac, not the component.
+        """
+        raise SemaType.upgrade_requires_context(
+            "I2cMultichannelDtRelayComponentGt003 cannot be upgraded to "
+            "I2cMultichannelDtRelayComponentGt without the source layout "
+            "context: DeviceType is derived from the cac the component "
+            "referenced, which the standalone component does not carry."
+        )

@@ -19,7 +19,7 @@ class Gw1TankTempCalibration000(SemaType):
     def upgrade(self) -> Gw1TankTempCalibration:
         """
         - Depth{1,2,3}B: number -> integer (offset in the OutputUnit/FahrenheitX100 scaling
-          domain, mirroring linear.one.dimensional.calibration/001)
+          domain, mirroring linear.one.dimensional.calibration/000)
         """
         data = self.model_dump()
         data["depth1_b"] = round(self.depth1_b * 100)

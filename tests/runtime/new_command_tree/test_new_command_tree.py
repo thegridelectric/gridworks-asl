@@ -18,5 +18,5 @@ def test_real_maple_v000_upgrades_to_latest() -> None:
     assert isinstance(decoded, NewCommandTree)
     assert decoded.type_name == "new.command.tree"
     assert decoded.version == "002"
-    # the 000->002 upgrade lifted every ShNode to spaceheat.node.gt/303
-    assert all(node.version == "303" for node in decoded.sh_nodes)
+    # the 000->002 upgrade lifted every ShNode to spaceheat.node.gt/302
+    assert all(node.version == "302" for node in decoded.sh_nodes)

@@ -1,7 +1,0 @@
-    def upgrade(self) -> {{ i2c_thermistor_channel_config_001_class_name }}:
-        """
-        Structural-only restamp of the field-emitted shape (see 000).
-        """
-        data = self.model_dump()
-        data["version"] = "001"
-        return {{ i2c_thermistor_channel_config_001_class_name }}.model_validate(data)

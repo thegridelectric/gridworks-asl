@@ -11,9 +11,10 @@ description: >
 
   Carries the per-channel capture/report tuning, the actuation authority and
   service mode (authority dominates: ServiceMode is inert unless
-  ActuationAuthority is Active), and the cooling-season time-of-use schedule:
-  the on-peak windows during which the heat pump is held off, and the
-  zone-call circuits held to SCADA while the schedule runs.
+  ActuationAuthority is Active), the heat pump's COP and heating curves, and
+  the cooling-season time-of-use schedule: the on-peak windows during which
+  the heat pump is held off, and the zone-call circuits held to SCADA while
+  the schedule runs.
 
 properties:
   ScadaAlias:
@@ -43,6 +44,16 @@ properties:
       The thermal service provided while ActuationAuthority is Active;
       inert otherwise.
 
+  CopCurve:
+    $ref: "https://schemas.electricity.works/types/cop.curve/000"
+    description: >
+      The heat pump's coefficient-of-performance model.
+
+  HeatingCurve:
+    $ref: "https://schemas.electricity.works/types/heating.curve/000"
+    description: >
+      The house's thermal / required-source-water-temperature model.
+
   OnPeakWindows:
     type: array
     items:
@@ -71,6 +82,8 @@ required:
   - CaptureTuningList
   - ActuationAuthority
   - ServiceMode
+  - CopCurve
+  - HeatingCurve
   - OnPeakWindows
   - HeldCircuitPositions
   - TypeName
@@ -94,6 +107,28 @@ examples:
       ],
       "ActuationAuthority": "Active",
       "ServiceMode": "Cooling",
+      "CopCurve": {
+        "Intercept": 1.02,
+        "OatCoeff": 0.0257,
+        "LwtCoeff": 0,
+        "Min": 1.4,
+        "MinOatF": 15,
+        "TypeName": "cop.curve",
+        "Version": "000"
+      },
+      "HeatingCurve": {
+        "AlphaTimes10": 55,
+        "BetaTimes100": -10,
+        "GammaEx6": 0,
+        "IntermediatePowerKw": 1.5,
+        "IntermediateRswtF": 100,
+        "DdPowerKw": 5.5,
+        "DdRswtF": 150,
+        "DdDeltaTF": 20,
+        "MaxEwtF": 170,
+        "TypeName": "heating.curve",
+        "Version": "000"
+      },
       "OnPeakWindows": [
         {
           "Start": "07:00",
@@ -138,6 +173,6 @@ x-gridworks:
     not belong in the static hardware layout or deployment config: what an
     operator adjusts while the hardware stays put. The assembly step merges
     this artifact with the static layout to build the runtime layout the
-    device actors read. The Nolan word starts from what Nolan control
-    actually consumes; store knobs and the COP/heating curves join when
-    Nolan heating-season control needs them, not before.
+    device actors read. Store knobs (SeasonalStorageMode and its
+    fleet-scale siblings) stay off the Nolan word — Nolan has no thermal
+    store to season — joining only if Nolan control ever needs them.

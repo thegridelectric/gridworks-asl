@@ -22,6 +22,13 @@
       "Version": "000"
     }
   ],
+  "TelemetryNameList": [],
+  "NativeGpioInputs": [],
+  "NativeGpioOutputs": [],
+  "Expanders": [],
+  "Muxes": [],
+  "I2cRelays": [],
+  "ThermistorAdcs": [],
   "TypeName": "gw1.scada.device.type.gt",
   "Version": "000"
 }
