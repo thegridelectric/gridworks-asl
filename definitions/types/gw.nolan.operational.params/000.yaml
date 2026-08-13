@@ -1,0 +1,143 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.nolan.operational.params/000"
+
+title: "gw.nolan.operational.params"
+type: object
+description: >
+  Operational parameters for one Nolan-family (gw108) home — the tunable
+  state that changes without rewiring hardware. Pairs with a gw.nolan.layout
+  artifact; the consumer resolves and decodes the ops artifact through the
+  layout's family, so a mismatched pair fails at decode.
+
+  Carries the per-channel capture/report tuning, the actuation authority and
+  service mode (authority dominates: ServiceMode is inert unless
+  ActuationAuthority is Active), and the cooling-season time-of-use schedule:
+  the on-peak windows during which the heat pump is held off, and the
+  zone-call circuits held to SCADA while the schedule runs.
+
+properties:
+  ScadaAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The alias of the Scada GNode that applies these params, making a stored
+      or emitted instance self-identifying. The layout is the registry of
+      record for the full GNode; the consumer checks this alias names the
+      paired layout's Scada.
+
+  CaptureTuningList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/capture.tuning/000"
+    description: >
+      Per-channel capture/report tuning, one entry per captured channel.
+
+  ActuationAuthority:
+    $ref: "https://schemas.electricity.works/enums/gw1.actuation.authority/000"
+    description: >
+      The degree of physical actuation authority SCADA exercises. Authority
+      dominates: ServiceMode is inert unless ActuationAuthority is Active.
+
+  ServiceMode:
+    $ref: "https://schemas.electricity.works/enums/gw1.service.mode/000"
+    description: >
+      The thermal service provided while ActuationAuthority is Active;
+      inert otherwise.
+
+  OnPeakWindows:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/gw.tou.window/000"
+    description: >
+      The recurring on-peak windows during which the heat pump is held off.
+      Each window names the days it binds; a day no window names runs
+      unconstrained.
+
+  HeldCircuitPositions:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The zone-call circuit positions held to SCADA as call source while the
+      time-of-use schedule runs.
+
+  TypeName:
+    const: "gw.nolan.operational.params"
+
+  Version:
+    const: "000"
+
+required:
+  - ScadaAlias
+  - CaptureTuningList
+  - ActuationAuthority
+  - ServiceMode
+  - OnPeakWindows
+  - HeldCircuitPositions
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ScadaAlias": "d1.bench.honeysuckle.scada",
+      "CaptureTuningList": [
+        {
+          "ChannelName": "hp-odu-pwr",
+          "CapturePeriodS": 300,
+          "AsyncCapture": true,
+          "AsyncCaptureDelta": 200,
+          "TypeName": "capture.tuning",
+          "Version": "000"
+        }
+      ],
+      "ActuationAuthority": "Active",
+      "ServiceMode": "Cooling",
+      "OnPeakWindows": [
+        {
+          "Start": "07:00",
+          "End": "12:00",
+          "Days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "TypeName": "gw.tou.window",
+          "Version": "000"
+        },
+        {
+          "Start": "16:00",
+          "End": "20:00",
+          "Days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "TypeName": "gw.tou.window",
+          "Version": "000"
+        }
+      ],
+      "HeldCircuitPositions": [1, 2, 4],
+      "TypeName": "gw.nolan.operational.params",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "CaptureTuningChannelUniqueness"
+      statement: >
+        ChannelName SHALL be unique across CaptureTuningList.
+    - number: 2
+      name: "PerDayWindowNonOverlap"
+      statement: >
+        For each day of the week, the windows in OnPeakWindows whose Days
+        include that day SHALL NOT overlap one another.
+    - number: 3
+      name: "HeldCircuitPositionUniqueness"
+      statement: >
+        HeldCircuitPositions SHALL NOT contain duplicate values.
+
+  extended_description: >
+    operational-params is the authored home for the tunable state that does
+    not belong in the static hardware layout or deployment config: what an
+    operator adjusts while the hardware stays put. The assembly step merges
+    this artifact with the static layout to build the runtime layout the
+    device actors read. The Nolan word starts from what Nolan control
+    actually consumes; store knobs and the COP/heating curves join when
+    Nolan heating-season control needs them, not before.

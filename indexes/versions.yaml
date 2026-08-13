@@ -423,7 +423,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "GNodes home identity (mirrors the layout) + CaptureTuningList (per-channel capture params migrated out of the channel-config family) + the control/optimization block migrated out of scada deployment config: SystemMode, SeasonalStorageMode, CopCurve, HeatingCurve, HpTurnOnMinutes, ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup, HorizonHours, Latitude, Longitude (all required — no assumed defaults)."
+        summary: "ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify; the layout holds the full GNodes) + CaptureTuningList (per-channel capture params migrated out of the channel-config family) + the control/optimization block migrated out of scada deployment config: ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active), SeasonalStorageMode, CopCurve, HeatingCurve, HpTurnOnMinutes, ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup, HorizonHours (all required — no assumed defaults). Pairs with its layout by family."
 
   gw.hydronic:
     latest_version: "000"
@@ -446,12 +446,26 @@ types:
       "000":
         summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/303 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
 
+  gw.nolan.operational.params:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version: ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify) + CaptureTuningList + ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active) + OnPeakWindows (gw.tou.window with explicit Days) + HeldCircuitPositions. Starts from what Nolan control consumes; store knobs and COP/heating curves join when Nolan heating-season control needs them."
+
   gw.readings:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
       "000":
         summary: "Initial version."
+
+  gw.tou.window:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version: Start (inclusive) and End (exclusive) hh.mm plus Days (day.of.week list). Axioms: Start strictly before End (no midnight wrap); Days non-empty and duplicate-free."
 
   gw.weather.channel.gt:
     latest_version: "000"
@@ -1360,6 +1374,12 @@ enums:
     versions:
       "000": {}
 
+  day.of.week:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
+
   fsm.report.type:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
@@ -1440,6 +1460,12 @@ enums:
           - "I2cBus"
           - "I2cRelayBoard"
       "009": {}
+
+  gw1.actuation.authority:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
 
   gw1.device.type:
     enum_type: "versioned"
@@ -1522,6 +1548,12 @@ enums:
       "000": {}
 
   gw1.seasonal.storage.mode:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  gw1.service.mode:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

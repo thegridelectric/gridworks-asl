@@ -5,6 +5,7 @@ from sema.runtime.enums.change_relay_pin import ChangeRelayPin
 from sema.runtime.enums.change_relay_state import ChangeRelayState
 from sema.runtime.enums.change_valve_state import ChangeValveState
 from sema.runtime.enums.change_zone_call_source import ChangeZoneCallSource
+from sema.runtime.enums.day_of_week import DayOfWeek
 from sema.runtime.enums.fsm_report_type import FsmReportType
 from sema.runtime.enums.g_node_instance_status import GNodeInstanceStatus
 from sema.runtime.enums.g_node_instance_transport import GNodeInstanceTransport
@@ -12,6 +13,7 @@ from sema.runtime.enums.g_node_status import GNodeStatus
 from sema.runtime.enums.gpio_sense_mode import GpioSenseMode
 from sema.runtime.enums.gpm_from_hz_method import GpmFromHzMethod
 from sema.runtime.enums.gw1_actor_class import Gw1ActorClass
+from sema.runtime.enums.gw1_actuation_authority import Gw1ActuationAuthority
 from sema.runtime.enums.gw1_device_type import Gw1DeviceType
 from sema.runtime.enums.gw1_emission_method import Gw1EmissionMethod
 from sema.runtime.enums.gw1_heat_call_interpretation import Gw1HeatCallInterpretation
@@ -32,6 +34,7 @@ from sema.runtime.enums.gw1_local_control_standby_top_state import (
 from sema.runtime.enums.gw1_main_auto_state import Gw1MainAutoState
 from sema.runtime.enums.gw1_quantity import Gw1Quantity
 from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode
+from sema.runtime.enums.gw1_service_mode import Gw1ServiceMode
 from sema.runtime.enums.gw1_system_mode import Gw1SystemMode
 from sema.runtime.enums.gw1_unit import Gw1Unit
 from sema.runtime.enums.gw_g_node_class import GwGNodeClass
@@ -80,6 +83,7 @@ __all__ = [
     "ChangeRelayState",
     "ChangeValveState",
     "ChangeZoneCallSource",
+    "DayOfWeek",
     "FsmReportType",
     "GNodeInstanceStatus",
     "GNodeInstanceTransport",
@@ -87,6 +91,7 @@ __all__ = [
     "GpioSenseMode",
     "GpmFromHzMethod",
     "Gw1ActorClass",
+    "Gw1ActuationAuthority",
     "Gw1DeviceType",
     "Gw1EmissionMethod",
     "Gw1HeatCallInterpretation",
@@ -99,6 +104,7 @@ __all__ = [
     "Gw1MainAutoState",
     "Gw1Quantity",
     "Gw1SeasonalStorageMode",
+    "Gw1ServiceMode",
     "Gw1SystemMode",
     "Gw1Unit",
     "GwGNodeClass",

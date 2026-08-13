@@ -13,6 +13,8 @@ HANDLE_NAME_PATTERN = re.compile(
 
 HEX_CHAR_PATTERN = re.compile(r"^[0-9a-fA-F]$")
 
+HH_MM_PATTERN = re.compile(r"^([01][0-9]|2[0-3]):[0-5][0-9]$")
+
 LEFT_RIGHT_DOT_PATTERN = re.compile(r"^[a-z][a-z0-9]*(\.[a-z0-9]+)*$")
 
 MAC_ADDRESS_PATTERN = re.compile(r"^([0-9a-f]{2}:){5}[0-9a-f]{2}$")
@@ -57,6 +59,16 @@ def is_hex_char(v: str) -> str:
 
     if not HEX_CHAR_PATTERN.fullmatch(v):
         raise ValueError(f"<{v}>: Fails hex.char format.")
+
+    return v
+
+
+def is_hh_mm(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: hh.mm must be a string.")
+
+    if not HH_MM_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails hh.mm format.")
 
     return v
 
@@ -226,6 +238,11 @@ HandleName = Annotated[
 HexChar = Annotated[
     str,
     BeforeValidator(is_hex_char),
+]
+
+HhMm = Annotated[
+    str,
+    BeforeValidator(is_hh_mm),
 ]
 
 LeftRightDot = Annotated[

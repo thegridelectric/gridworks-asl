@@ -288,11 +288,21 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.nolan.layout/000.yaml
+  gw.nolan.operational.params:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.nolan.operational.params/000.yaml
   gw.readings:
     latest_version: '000'
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.readings/000.yaml
+  gw.tou.window:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.tou.window/000.yaml
   gw.weather.channel.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -872,6 +882,9 @@ enums:
   change.zone.call.source:
     enum_type: literal
     schema: definitions/enums/change.zone.call.source/000.yaml
+  day.of.week:
+    enum_type: literal
+    schema: definitions/enums/day.of.week/000.yaml
   fsm.report.type:
     enum_type: literal
     schema: definitions/enums/fsm.report.type/000.yaml
@@ -929,6 +942,11 @@ enums:
       '011': definitions/enums/gw1.actor.class/011.yaml
       '010': definitions/enums/gw1.actor.class/010.yaml
       009: definitions/enums/gw1.actor.class/009.yaml
+  gw1.actuation.authority:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gw1.actuation.authority/000.yaml
   gw1.device.type:
     enum_type: versioned
     latest_version: '001'
@@ -992,6 +1010,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/gw1.seasonal.storage.mode/000.yaml
+  gw1.service.mode:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gw1.service.mode/000.yaml
   gw1.system.mode:
     enum_type: versioned
     latest_version: '000'
@@ -1160,6 +1183,7 @@ enums:
 formats:
   handle.name: definitions/formats/handle.name.yaml
   hex.char: definitions/formats/hex.char.yaml
+  hh.mm: definitions/formats/hh.mm.yaml
   left.right.dot: definitions/formats/left.right.dot.yaml
   mac.address: definitions/formats/mac.address.yaml
   market.slot.name: definitions/formats/market.slot.name.yaml

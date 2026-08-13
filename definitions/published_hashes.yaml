@@ -7,6 +7,7 @@
 formats:
   handle.name: sha256:8766362cd0940fa5451273dc0866f11f4a09e3496fe502e82ea448ffaab75c4f
   hex.char: sha256:855097c34bc9ac8bddbfe7cf1934f666e18229ce564e5f9575fa0577aaff1ef1
+  hh.mm: sha256:ffb589d03b164cc0a3b6e19cffd8ad75f6121cf98325eb0a938816d559dc151d
   left.right.dot: sha256:095da668f40e14bd806ae04c56eed0ebbb2f71c8ccfb2d82488226e73d901acf
   mac.address: sha256:dfa51f397bc5fd0487d187b1f0a58b63e0ba22357874d46dd7e5caabf39daef7
   market.slot.name: sha256:75c347c8cfa8e3b50decc66d724ee2012798994b84a2e2841868530aa04ecca8
@@ -193,6 +194,12 @@ types:
     '000': sha256:94e9b445987d890c91fcaa10f94fa3af3c130b96794c86e7ec78f52d36aeca1e
   gw.weather.channel.gt:
     '000': sha256:9aa447f00597c9696d4c3cea92cf27066d486a545248f7ccbe5ed92cc0f02209
+  gw.weather.cmd.ack:
+    '000': sha256:646e00a97962e5691db5a2622f152c71cc1eb93e6781c9e7a618735063fe91c3
+  gw.weather.cmd.nack:
+    '000': sha256:708a67856802ac6b1cfcb06ed0171d0a3ca14511d54639b22610807678713f24
+  gw.weather.create.cmd:
+    '000': sha256:ebd24bf738d3f8552544f35a2a6b18e1908f0491e70879793174589e37fd5ebb
   gw.weather.forecast:
     '000': sha256:e598746ccb2e3a028d6de46e407f88dac42a83ebbeefe4f8596a01adfd77a2c2
   gw.weather.forecast.bundle.gt:
@@ -328,9 +335,3 @@ types:
     '000': sha256:0505741db7f3ba845fe0b7dfb9e5f88eca9f3cc6e9e7510b22f3e73b0103e8fe
   weather.forecast:
     '000': sha256:d5898d35fd8250e8c80811e6df2c90c66cddc316efaf4ca36bc4fdd38c931601
-  gw.weather.create.cmd:
-    '000': sha256:ebd24bf738d3f8552544f35a2a6b18e1908f0491e70879793174589e37fd5ebb
-  gw.weather.cmd.ack:
-    '000': sha256:646e00a97962e5691db5a2622f152c71cc1eb93e6781c9e7a618735063fe91c3
-  gw.weather.cmd.nack:
-    '000': sha256:708a67856802ac6b1cfcb06ed0171d0a3ca14511d54639b22610807678713f24

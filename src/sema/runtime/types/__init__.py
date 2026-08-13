@@ -62,7 +62,9 @@ from sema.runtime.types.gw_house0_operational_params import GwHouse0OperationalP
 from sema.runtime.types.gw_hydronic import GwHydronic
 from sema.runtime.types.gw_native_gpio_pin import GwNativeGpioPin
 from sema.runtime.types.gw_nolan_layout import GwNolanLayout
+from sema.runtime.types.gw_nolan_operational_params import GwNolanOperationalParams
 from sema.runtime.types.gw_readings import GwReadings
+from sema.runtime.types.gw_tou_window import GwTouWindow
 from sema.runtime.types.gw_weather_channel_gt import GwWeatherChannelGt
 from sema.runtime.types.gw_weather_cmd_ack import GwWeatherCmdAck
 from sema.runtime.types.gw_weather_cmd_nack import GwWeatherCmdNack
@@ -230,7 +232,9 @@ __all__ = [
     "GwHydronic",
     "GwNativeGpioPin",
     "GwNolanLayout",
+    "GwNolanOperationalParams",
     "GwReadings",
+    "GwTouWindow",
     "GwWeatherChannelGt",
     "GwWeatherCmdAck",
     "GwWeatherCmdNack",

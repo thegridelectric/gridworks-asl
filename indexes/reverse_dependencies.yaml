@@ -19,6 +19,7 @@ types:
     '000':
       used_by:
       - gw.house0.operational.params:000
+      - gw.nolan.operational.params:000
   channel.config:
     '000':
       used_by:
@@ -149,7 +150,6 @@ types:
       - g.node.forest:002
       - g.node.reparent.cmd:002
       - gw.house0.layout:000
-      - gw.house0.operational.params:000
       - gw.nolan.layout:000
   gpio.relay.component.gt:
     '000':
@@ -168,6 +168,10 @@ types:
     '000':
       used_by:
       - gw1.scada.device.type.gt:000
+  gw.tou.window:
+    '000':
+      used_by:
+      - gw.nolan.operational.params:000
   gw.weather.channel.gt:
     '000':
       used_by:
@@ -532,6 +536,10 @@ enums:
       - relay.actor.config:003
       - relay.actor.config:004
       - relay.control.config:000
+  day.of.week:
+    '000':
+      used_by:
+      - gw.tou.window:000
   fsm.report.type:
     '000':
       used_by:
@@ -590,6 +598,11 @@ enums:
     '013':
       used_by:
       - spaceheat.node.gt:303
+  gw1.actuation.authority:
+    '000':
+      used_by:
+      - gw.house0.operational.params:000
+      - gw.nolan.operational.params:000
   gw1.emission.method:
     '000':
       used_by:
@@ -622,10 +635,14 @@ enums:
       - layout.lite:013
       - layout.lite:014
       - layout.lite:015
-  gw1.system.mode:
+  gw1.service.mode:
     '000':
       used_by:
       - gw.house0.operational.params:000
+      - gw.nolan.operational.params:000
+  gw1.system.mode:
+    '000':
+      used_by:
       - layout.lite:008
       - layout.lite:009
       - layout.lite:010
@@ -833,6 +850,9 @@ formats:
   hex.char:
     used_by:
     - heartbeat.a:000
+  hh.mm:
+    used_by:
+    - gw.tou.window:000
   left.right.dot:
     used_by:
     - atn.bid:002
@@ -866,6 +886,8 @@ formats:
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
+    - gw.house0.operational.params:000
+    - gw.nolan.operational.params:000
     - gw.readings:000
     - gw.weather.channel.gt:000
     - gw.weather.forecast.bundle.gt:000
@@ -1049,6 +1071,7 @@ formats:
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.house0.operational.params:000
+    - gw.nolan.operational.params:000
     - gw.weather.channel.gt:000
     - gw.weather.forecast.bundle.gt:000
     - gw.weather.forecast.channel.gt:000

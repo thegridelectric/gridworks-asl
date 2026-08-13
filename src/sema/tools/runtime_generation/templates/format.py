@@ -117,6 +117,27 @@ HexChar = Annotated[
 """,
     },
 
+    "hh.mm": {
+        "class_name": "HhMm",
+        "pattern": r"^([01][0-9]|2[0-3]):[0-5][0-9]$",
+        "methods": """
+def is_hh_mm(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: hh.mm must be a string.")
+
+    if not HH_MM_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails hh.mm format.")
+
+    return v
+""",
+        "annotated_type": """
+HhMm = Annotated[
+    str,
+    BeforeValidator(is_hh_mm),
+]
+""",
+    },
+
     "market.slot.name": {
         "class_name": "MarketSlotName",
         # Self-contained leaf (no enum, no other-format calls):

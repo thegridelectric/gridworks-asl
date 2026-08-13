@@ -1,0 +1,48 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw_nolan_operational_params_000_class_name }}":
+        """
+        Axiom 1: CaptureTuningChannelUniqueness
+        ChannelName SHALL be unique across CaptureTuningList.
+        """
+        names = [ct.channel_name for ct in self.capture_tuning_list]
+        if len(names) != len(set(names)):
+            raise ValueError(
+                "Axiom 1 (CaptureTuningChannelUniqueness) failed: ChannelName "
+                "must be unique across CaptureTuningList."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ gw_nolan_operational_params_000_class_name }}":
+        """
+        Axiom 2: PerDayWindowNonOverlap
+        For each day of the week, the windows in OnPeakWindows whose Days include that day
+        SHALL NOT overlap one another.
+        """
+        days = {day for w in self.on_peak_windows for day in w.days}
+        for day in days:
+            todays = sorted(
+                (w for w in self.on_peak_windows if day in w.days),
+                key=lambda w: w.start,
+            )
+            for earlier, later in zip(todays, todays[1:]):
+                if later.start < earlier.end:
+                    raise ValueError(
+                        "Axiom 2 (PerDayWindowNonOverlap) failed: on "
+                        f"{day} window {later.start}-{later.end} overlaps "
+                        f"{earlier.start}-{earlier.end}."
+                    )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "{{ gw_nolan_operational_params_000_class_name }}":
+        """
+        Axiom 3: HeldCircuitPositionUniqueness
+        HeldCircuitPositions SHALL NOT contain duplicate values.
+        """
+        if len(self.held_circuit_positions) != len(set(self.held_circuit_positions)):
+            raise ValueError(
+                "Axiom 3 (HeldCircuitPositionUniqueness) failed: "
+                "HeldCircuitPositions must not contain duplicate values."
+            )
+        return self

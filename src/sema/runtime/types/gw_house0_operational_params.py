@@ -1,22 +1,24 @@
 from typing import Literal
-from pydantic import StrictFloat, model_validator
+from pydantic import model_validator
 from sema.runtime.base import SemaType
+from sema.runtime.enums import Gw1ActuationAuthority
 from sema.runtime.enums import Gw1SeasonalStorageMode
-from sema.runtime.enums import Gw1SystemMode
+from sema.runtime.enums import Gw1ServiceMode
+from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import NonNegativeInt
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.types.capture_tuning import CaptureTuning
 from sema.runtime.types.cop_curve import CopCurve
-from sema.runtime.types.g_node_gt import GNodeGt
 from sema.runtime.types.heating_curve import HeatingCurve
 
 
 class GwHouse0OperationalParams(SemaType):
     """Sema: https://schemas.electricity.works/types/gw.house0.operational.params/000"""
 
-    g_nodes: list[GNodeGt]
+    scada_alias: LeftRightDot
     capture_tuning_list: list[CaptureTuning]
-    system_mode: Gw1SystemMode
+    actuation_authority: Gw1ActuationAuthority
+    service_mode: Gw1ServiceMode
     seasonal_storage_mode: Gw1SeasonalStorageMode
     cop_curve: CopCurve
     heating_curve: HeatingCurve
@@ -25,8 +27,6 @@ class GwHouse0OperationalParams(SemaType):
     load_overestimation_percent: NonNegativeInt
     oil_boiler_backup: bool
     horizon_hours: PositiveInt
-    latitude: StrictFloat
-    longitude: StrictFloat
     type_name: Literal["gw.house0.operational.params"] = "gw.house0.operational.params"
     version: Literal["000"] = "000"
 

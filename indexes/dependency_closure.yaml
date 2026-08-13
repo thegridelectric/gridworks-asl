@@ -740,21 +740,18 @@ types:
   gw.house0.operational.params:
     '000':
       enums:
-      - base.g.node.class:000
-      - g.node.status:000
+      - gw1.actuation.authority:000
       - gw1.seasonal.storage.mode:000
-      - gw1.system.mode:000
+      - gw1.service.mode:000
       formats:
       - left.right.dot
       - non.negative.int
       - positive.float
       - positive.int
       - spaceheat.name
-      - uuid4.str
       types:
       - capture.tuning:000
       - cop.curve:000
-      - g.node.gt:006
       - heating.curve:000
       versionless_types: []
   gw.hydronic:
@@ -864,6 +861,21 @@ types:
       - spaceheat.telemetry.quantity.projection:000
       - web.server.component.gt:002
       versionless_types: []
+  gw.nolan.operational.params:
+    '000':
+      enums:
+      - day.of.week:000
+      - gw1.actuation.authority:000
+      - gw1.service.mode:000
+      formats:
+      - hh.mm
+      - left.right.dot
+      - positive.int
+      - spaceheat.name
+      types:
+      - capture.tuning:000
+      - gw.tou.window:000
+      versionless_types: []
   gw.readings:
     '000':
       enums:
@@ -885,6 +897,14 @@ types:
       - derived.channel.gt:002
       - gw1.unit.quantity.projection:000
       - spaceheat.telemetry.quantity.projection:000
+      versionless_types: []
+  gw.tou.window:
+    '000':
+      enums:
+      - day.of.week:000
+      formats:
+      - hh.mm
+      types: []
       versionless_types: []
   gw.weather.channel.gt:
     '000':

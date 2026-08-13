@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-12T20:25:00Z"
+  last_updated: "2026-08-13T11:55:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -17,6 +17,13 @@ formats:
     created: "2026-05-08T16:34:06Z"
     status: "published"
     description: "Single hexadecimal character, restricted to 0-9, a-f, or A-F"
+
+  hh.mm:
+    owner: gridworks-energy
+    schema_url: "https://schemas.electricity.works/formats/hh.mm"
+    created: "2026-08-12T22:15:00Z"
+    status: "published"
+    description: "Wall-clock time of day at minute resolution, 24-hour zero-padded HH:MM (00:00 through 23:59); timezone-free"
 
   left.right.dot:
     owner: gridworks-energy
@@ -182,6 +189,14 @@ enums:
     description: "Events for switching a zone-call circuit's call authority between wall thermostat and scada, actuated by the circuit's failsafe relay."
     schema_url: "https://schemas.electricity.works/enums/change.zone.call.source/000"
     created: "2026-08-11T17:15:00Z"
+    status: "staging"
+
+  day.of.week:
+    owner: gridworks-energy
+    enum_type: "literal"
+    description: "Day of the civil week, for schedules that bind behavior to particular days (e.g. time-of-use windows)."
+    schema_url: "https://schemas.electricity.works/enums/day.of.week/000"
+    created: "2026-08-12T22:15:00Z"
     status: "staging"
 
   fis.authorization.decision:
@@ -366,6 +381,18 @@ enums:
         created: "2026-01-15T18:00:00Z"
         status: "published"
 
+  gw1.actuation.authority:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Degree of physical actuation authority SCADA exercises: Active / Standby / MonitorOnly. Dominates gw1.service.mode; default MonitorOnly so an unrecognized value degrades to non-actuation."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.actuation.authority/000"
+        created: "2026-08-13T11:55:00Z"
+        status: "staging"
+
   gw1.device.type:
     latest_version: "001"
     owner: gridworks-energy
@@ -530,11 +557,26 @@ enums:
         status: "published"
 
 
+  gw1.service.mode:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Thermal service the system provides while actuation authority is Active: Heating / Cooling. Inert outside Active — gw1.actuation.authority dominates."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.service.mode/000"
+        created: "2026-08-13T11:55:00Z"
+        status: "staging"
+
   gw1.system.mode:
     latest_version: "000"
     owner: gridworks-energy
     enum_type: "versioned"
-    description: "System operational mode for HVAC control."
+    description: "System operational mode for HVAC control. Conflated actuation authority with the thermal service (Heating doubled as full authority)."
+    replaced_by:
+      - gw1.actuation.authority
+      - gw1.service.mode
 
     versions:
       "000":
@@ -2282,17 +2324,18 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.operational.params/000"
-        created: "2026-08-06T13:25:00Z"
+        created: "2026-08-13T11:55:00Z"
         status: "staging"
-        summary: "GNodes home identity (mirrors the layout) + CaptureTuningList (per-channel capture params migrated out of the channel-config family) + the control/optimization block migrated out of scada deployment config: SystemMode, SeasonalStorageMode, CopCurve, HeatingCurve, HpTurnOnMinutes, ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup, HorizonHours, Latitude, Longitude (all required — no assumed defaults)."
+        summary: "ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify; the layout holds the full GNodes) + CaptureTuningList (per-channel capture params migrated out of the channel-config family) + the control/optimization block migrated out of scada deployment config: ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active), SeasonalStorageMode, CopCurve, HeatingCurve, HpTurnOnMinutes, ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup, HorizonHours (all required — no assumed defaults). Pairs with its layout by family."
         direct_dependencies:
           structural:
             - "capture.tuning:000"
             - "cop.curve:000"
-            - "g.node.gt:006"
+            - "gw1.actuation.authority:000"
             - "gw1.seasonal.storage.mode:000"
-            - "gw1.system.mode:000"
+            - "gw1.service.mode:000"
             - "heating.curve:000"
+            - "left.right.dot"
             - "non.negative.int"
             - "positive.int"
 
@@ -2367,6 +2410,27 @@ types:
             - "spaceheat.node.gt:303"
             - "web.server.component.gt:002"
 
+  gw.nolan.operational.params:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Operational parameters for one Nolan-family (gw108) home: per-channel capture tuning, system mode, and the cooling-season TOU schedule (on-peak windows + held zone-call circuits)."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.nolan.operational.params/000"
+        created: "2026-08-13T11:55:00Z"
+        status: "staging"
+        summary: "Initial version: ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify) + CaptureTuningList + ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active) + OnPeakWindows (gw.tou.window with explicit Days) + HeldCircuitPositions. Starts from what Nolan control consumes; store knobs and COP/heating curves join when Nolan heating-season control needs them."
+        direct_dependencies:
+          structural:
+            - "capture.tuning:000"
+            - "gw.tou.window:000"
+            - "gw1.actuation.authority:000"
+            - "gw1.service.mode:000"
+            - "left.right.dot"
+            - "positive.int"
+
   gw.readings:
     latest_version: "000"
     owner: gridworks-energy
@@ -2386,6 +2450,23 @@ types:
             - "derived.channel.gt:002"
             - "left.right.dot"
             - "utc.milliseconds"
+
+  gw.tou.window:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "One recurring time-of-use window: a same-day wall-clock interval (hh.mm Start/End) bound to an explicit set of weekdays."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.tou.window/000"
+        created: "2026-08-12T22:15:00Z"
+        status: "staging"
+        summary: "Initial version: Start (inclusive) and End (exclusive) hh.mm plus Days (day.of.week list). Axioms: Start strictly before End (no midnight wrap); Days non-empty and duplicate-free."
+        direct_dependencies:
+          structural:
+            - "day.of.week:000"
+            - "hh.mm"
 
   gw.weather.channel.gt:
     latest_version: "000"

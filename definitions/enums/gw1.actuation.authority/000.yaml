@@ -1,0 +1,50 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/enums/gw1.actuation.authority/000"
+
+title: "gw1.actuation.authority"
+type: "string"
+
+description: >
+  The degree of physical actuation authority SCADA exercises over connected
+  hardware: full authority, inhibit-only, or none. Communicated to other
+  actors (e.g. LTN, admin tools, analytics) to establish shared expectations
+  about whether physical control actions may occur. Authority dominates the
+  companion gw1.service.mode: the service mode is inert unless authority is
+  Active. The default is MonitorOnly so an unrecognized value degrades to
+  non-actuation.
+
+enum:
+  - "Active"
+  - "Standby"
+  - "MonitorOnly"
+
+default: "MonitorOnly"
+
+x-gridworks:
+  owner: "gridworks-energy"
+  version: "000"
+
+  value_descriptions:
+    "Active": >
+      Full actuation authority.
+      SCADA may actively energize and de-energize actuators in order to
+      provide the declared service (see gw1.service.mode), subject to local
+      safety constraints and configuration. In this mode, SCADA may accept
+      and execute Dispatch Contracts originating from the Leaf Transactive
+      Node (LTN).
+
+    "Standby": >
+      Intentional idle mode with active inhibition.
+      SCADA retains control authority over actuators but uses it only to prevent
+      heating or cooling from occurring. This mode is typically used when the
+      system is intentionally paused (e.g. seasonal shutdown, manual override,
+      or safety condition) while still ensuring that uncontrolled equipment
+      such as boilers or heat pumps do not engage.
+
+    "MonitorOnly": >
+      Absolute non-actuation mode.
+      SCADA MUST NOT issue any physical control actions, including relay changes
+      or analog output updates. Telemetry collection, reporting, forecasting,
+      and contract accounting may continue, but all actuators are left untouched.
+      This mode provides a strong guarantee that no physical intervention will
+      be performed by SCADA.
