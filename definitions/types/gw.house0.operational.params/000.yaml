@@ -64,6 +64,11 @@ properties:
     description: >
       Minutes the heat pump takes to reach steady output after turn-on.
 
+  HpMaxKwEl:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+    description: >
+      The heat pump's maximum electrical draw, in kW.
+
   ShortCycleBuffer:
     type: boolean
     description: >
@@ -85,6 +90,15 @@ properties:
     description: >
       The FLO optimization horizon, in hours.
 
+  OnPeakWindows:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/gw.tou.window/000"
+    description: >
+      The recurring on-peak windows during which the heat pump is held off.
+      Each window names the days it binds; a day no window names runs
+      unconstrained.
+
   TypeName:
     const: "gw.house0.operational.params"
 
@@ -100,10 +114,12 @@ required:
   - CopCurve
   - HeatingCurve
   - HpTurnOnMinutes
+  - HpMaxKwEl
   - ShortCycleBuffer
   - LoadOverestimationPercent
   - OilBoilerBackup
   - HorizonHours
+  - OnPeakWindows
   - TypeName
   - Version
 
@@ -149,10 +165,20 @@ examples:
         "Version": "000"
       },
       "HpTurnOnMinutes": 12,
+      "HpMaxKwEl": 9.66,
       "ShortCycleBuffer": false,
       "LoadOverestimationPercent": 0,
       "OilBoilerBackup": true,
       "HorizonHours": 48,
+      "OnPeakWindows": [
+        {
+          "Start": "07:00",
+          "End": "12:00",
+          "Days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "TypeName": "gw.tou.window",
+          "Version": "000"
+        }
+      ],
       "TypeName": "gw.house0.operational.params",
       "Version": "000"
     }
@@ -165,6 +191,12 @@ x-gridworks:
       name: "CaptureTuningChannelUniqueness"
       statement: >
         ChannelName SHALL be unique across CaptureTuningList.
+
+    - number: 2
+      name: "PerDayWindowNonOverlap"
+      statement: >
+        For each day of the week, the windows in OnPeakWindows whose Days
+        include that day SHALL NOT overlap one another.
 
   extended_description: >
     operational-params is the authored home for the tunable state that left the static

@@ -2,8 +2,11 @@ from typing import Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import Gw1ActuationAuthority
+from sema.runtime.enums import Gw1SeasonalStorageMode
 from sema.runtime.enums import Gw1ServiceMode
 from sema.runtime.property_format import LeftRightDot
+from sema.runtime.property_format import NonNegativeInt
+from sema.runtime.property_format import PositiveFloat
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.types.capture_tuning import CaptureTuning
 from sema.runtime.types.cop_curve import CopCurve
@@ -21,7 +24,13 @@ class GwNolanOperationalParams(SemaType):
     cop_curve: CopCurve
     heating_curve: HeatingCurve
     on_peak_windows: list[GwTouWindow]
-    held_circuit_positions: list[PositiveInt]
+    seasonal_storage_mode: Gw1SeasonalStorageMode
+    hp_turn_on_minutes: PositiveInt
+    hp_max_kw_el: PositiveFloat
+    short_cycle_buffer: bool
+    load_overestimation_percent: NonNegativeInt
+    oil_boiler_backup: bool
+    horizon_hours: PositiveInt
     type_name: Literal["gw.nolan.operational.params"] = "gw.nolan.operational.params"
     version: Literal["000"] = "000"
 
@@ -59,17 +68,4 @@ class GwNolanOperationalParams(SemaType):
                         f"{day} window {later.start}-{later.end} overlaps "
                         f"{earlier.start}-{earlier.end}."
                     )
-        return self
-
-    @model_validator(mode="after")
-    def check_axiom_3(self) -> "GwNolanOperationalParams":
-        """
-        Axiom 3: HeldCircuitPositionUniqueness
-        HeldCircuitPositions SHALL NOT contain duplicate values.
-        """
-        if len(self.held_circuit_positions) != len(set(self.held_circuit_positions)):
-            raise ValueError(
-                "Axiom 3 (HeldCircuitPositionUniqueness) failed: "
-                "HeldCircuitPositions must not contain duplicate values."
-            )
         return self

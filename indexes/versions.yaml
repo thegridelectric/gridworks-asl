@@ -406,7 +406,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify; the layout holds the full GNodes) + CaptureTuningList (per-channel capture params migrated out of the channel-config family) + the control/optimization block migrated out of scada deployment config: ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active), SeasonalStorageMode, CopCurve, HeatingCurve, HpTurnOnMinutes, ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup, HorizonHours (all required — no assumed defaults). Pairs with its layout by family."
+        summary: "ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify; the layout holds the full GNodes) + CaptureTuningList + ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active) + SeasonalStorageMode + CopCurve + HeatingCurve + HpTurnOnMinutes + HpMaxKwEl + ShortCycleBuffer + LoadOverestimationPercent + OilBoilerBackup + HorizonHours + OnPeakWindows (gw.tou.window with explicit Days). All required — no assumed defaults. Pairs with its layout by family. HpMaxKwEl moved in from scada deployment config; OnPeakWindows added so this word and gw.nolan.operational.params carry identical field sets."
 
   gw.hydronic:
     latest_version: "000"
@@ -434,7 +434,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify) + CaptureTuningList + ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active) + CopCurve + HeatingCurve + OnPeakWindows (gw.tou.window with explicit Days) + HeldCircuitPositions. Store knobs (SeasonalStorageMode and siblings) stay off the word — Nolan has no thermal store."
+        summary: "ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify; the layout holds the full GNodes) + CaptureTuningList + ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active) + SeasonalStorageMode + CopCurve + HeatingCurve + HpTurnOnMinutes + HpMaxKwEl + ShortCycleBuffer + LoadOverestimationPercent + OilBoilerBackup + HorizonHours + OnPeakWindows (gw.tou.window with explicit Days). All required — no assumed defaults. Pairs with its layout by family. HeldCircuitPositions dropped. The store/optimization knobs are carried so this word and gw.house0.operational.params have identical field sets — Nolan has no thermal store to season, and they come back out as the functional code that still reads them (LeafAlly selection, layout.lite) is moved off them."
 
   gw.readings:
     latest_version: "000"

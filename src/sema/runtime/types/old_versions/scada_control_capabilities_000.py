@@ -63,6 +63,8 @@ class ScadaControlCapabilities000(SemaType):
         - RelayNodes[]: inline object -> spaceheat.node.gt:302
         - DacNodes[]: inline object -> spaceheat.node.gt:302
         - ControlChannels[]: inline object -> data.channel.gt:003
+        - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> :004
+          (cac UUID -> DeviceType, adds I2cBus)
         - Axioms: add control surface consistency checks
         """
         raise SemaType.upgrade_requires_context(

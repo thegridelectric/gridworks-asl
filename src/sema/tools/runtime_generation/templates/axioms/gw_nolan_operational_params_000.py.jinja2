@@ -33,16 +33,3 @@
                         f"{earlier.start}-{earlier.end}."
                     )
         return self
-
-    @model_validator(mode="after")
-    def check_axiom_3(self) -> "{{ gw_nolan_operational_params_000_class_name }}":
-        """
-        Axiom 3: HeldCircuitPositionUniqueness
-        HeldCircuitPositions SHALL NOT contain duplicate values.
-        """
-        if len(self.held_circuit_positions) != len(set(self.held_circuit_positions)):
-            raise ValueError(
-                "Axiom 3 (HeldCircuitPositionUniqueness) failed: "
-                "HeldCircuitPositions must not contain duplicate values."
-            )
-        return self

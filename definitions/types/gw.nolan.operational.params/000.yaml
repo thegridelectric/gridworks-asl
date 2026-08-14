@@ -63,13 +63,41 @@ properties:
       Each window names the days it binds; a day no window names runs
       unconstrained.
 
-  HeldCircuitPositions:
-    type: array
-    items:
-      $ref: "https://schemas.electricity.works/formats/positive.int"
+  SeasonalStorageMode:
+    $ref: "https://schemas.electricity.works/enums/gw1.seasonal.storage.mode/000"
     description: >
-      The zone-call circuit positions held to SCADA as call source while the
-      time-of-use schedule runs.
+      Which thermal stores participate in the current season's operation.
+
+  HpTurnOnMinutes:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Minutes the heat pump takes to reach steady output after turn-on.
+
+  HpMaxKwEl:
+    $ref: "https://schemas.electricity.works/formats/positive.float"
+    description: >
+      The heat pump's maximum electrical draw, in kW.
+
+  ShortCycleBuffer:
+    type: boolean
+    description: >
+      Whether to protect the heat pump from short cycling by buffering
+      turn-off decisions.
+
+  LoadOverestimationPercent:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      Percentage by which forecast heat load is deliberately overestimated.
+
+  OilBoilerBackup:
+    type: boolean
+    description: >
+      Whether the home has an oil boiler available as backup heat.
+
+  HorizonHours:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The FLO optimization horizon, in hours.
 
   TypeName:
     const: "gw.nolan.operational.params"
@@ -82,10 +110,16 @@ required:
   - CaptureTuningList
   - ActuationAuthority
   - ServiceMode
+  - SeasonalStorageMode
   - CopCurve
   - HeatingCurve
+  - HpTurnOnMinutes
+  - HpMaxKwEl
+  - ShortCycleBuffer
+  - LoadOverestimationPercent
+  - OilBoilerBackup
+  - HorizonHours
   - OnPeakWindows
-  - HeldCircuitPositions
   - TypeName
   - Version
 
@@ -107,6 +141,7 @@ examples:
       ],
       "ActuationAuthority": "Active",
       "ServiceMode": "Cooling",
+      "SeasonalStorageMode": "AllTanks",
       "CopCurve": {
         "Intercept": 1.02,
         "OatCoeff": 0.0257,
@@ -145,7 +180,12 @@ examples:
           "Version": "000"
         }
       ],
-      "HeldCircuitPositions": [1, 2, 4],
+      "HpTurnOnMinutes": 12,
+      "HpMaxKwEl": 9.66,
+      "ShortCycleBuffer": false,
+      "LoadOverestimationPercent": 0,
+      "OilBoilerBackup": false,
+      "HorizonHours": 48,
       "TypeName": "gw.nolan.operational.params",
       "Version": "000"
     }
@@ -163,16 +203,19 @@ x-gridworks:
       statement: >
         For each day of the week, the windows in OnPeakWindows whose Days
         include that day SHALL NOT overlap one another.
-    - number: 3
-      name: "HeldCircuitPositionUniqueness"
-      statement: >
-        HeldCircuitPositions SHALL NOT contain duplicate values.
 
   extended_description: >
     operational-params is the authored home for the tunable state that does
     not belong in the static hardware layout or deployment config: what an
     operator adjusts while the hardware stays put. The assembly step merges
     this artifact with the static layout to build the runtime layout the
-    device actors read. Store knobs (SeasonalStorageMode and its
-    fleet-scale siblings) stay off the Nolan word — Nolan has no thermal
-    store to season — joining only if Nolan control ever needs them.
+    device actors read.
+
+    The store and optimization knobs (SeasonalStorageMode, HpTurnOnMinutes,
+    ShortCycleBuffer, LoadOverestimationPercent, OilBoilerBackup,
+    HorizonHours) are carried here so this word and gw.house0.operational.params
+    have identical field sets. Nolan has no thermal store to season, so they
+    are not Nolan concepts; they are here because surfaces that still run for
+    every family read them — the LeafAlly strategy selection and layout.lite,
+    which requires them. They come back out as that functional code is moved
+    off them.

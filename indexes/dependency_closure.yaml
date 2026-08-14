@@ -702,10 +702,12 @@ types:
   gw.house0.operational.params:
     '000':
       enums:
+      - day.of.week:000
       - gw1.actuation.authority:000
       - gw1.seasonal.storage.mode:000
       - gw1.service.mode:000
       formats:
+      - hh.mm
       - left.right.dot
       - non.negative.int
       - positive.float
@@ -714,6 +716,7 @@ types:
       types:
       - capture.tuning:000
       - cop.curve:000
+      - gw.tou.window:000
       - heating.curve:000
       versionless_types: []
   gw.hydronic:
@@ -828,10 +831,12 @@ types:
       enums:
       - day.of.week:000
       - gw1.actuation.authority:000
+      - gw1.seasonal.storage.mode:000
       - gw1.service.mode:000
       formats:
       - hh.mm
       - left.right.dot
+      - non.negative.int
       - positive.float
       - positive.int
       - spaceheat.name

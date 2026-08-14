@@ -160,6 +160,7 @@ types:
   gw.tou.window:
     '000':
       used_by:
+      - gw.house0.operational.params:000
       - gw.nolan.operational.params:000
   gw.weather.channel.gt:
     '000':
@@ -582,6 +583,7 @@ enums:
     '000':
       used_by:
       - gw.house0.operational.params:000
+      - gw.nolan.operational.params:000
       - layout.lite:008
       - layout.lite:009
       - layout.lite:010
@@ -896,6 +898,7 @@ formats:
     - gw.house0.operational.params:000
     - gw.hydronic:000
     - gw.native.gpio.pin:000
+    - gw.nolan.operational.params:000
     - gw.weather.channel.gt:000
     - gw.weather.forecast.bundle.gt:000
     - i2c.bit.address:000
@@ -958,6 +961,8 @@ formats:
     used_by:
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
+    - gw.house0.operational.params:000
+    - gw.nolan.operational.params:000
     - heating.curve:000
     - hp.control.box.device.type.gt:000
     - hp.device.type.gt:000
