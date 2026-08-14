@@ -180,6 +180,14 @@ types:
     '000':
       used_by:
       - gw.weather.create.cmd:000
+  gw0.required.energy.layered:
+    '000':
+      used_by:
+      - gw.house0.layout:000
+  gw0.usable.energy.layered:
+    '000':
+      used_by:
+      - gw.house0.layout:000
   gw1.hvac.zone:
     '000':
       used_by:

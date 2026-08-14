@@ -692,6 +692,8 @@ types:
       - g.node.gt:006
       - gw.hydronic:000
       - gw.native.gpio.pin:000
+      - gw0.required.energy.layered:000
+      - gw0.usable.energy.layered:000
       - gw1.hvac.zone:000
       - gw1.scada.device.type.gt:000
       - gw1.unit.quantity.projection:000
@@ -992,6 +994,18 @@ types:
       formats:
       - left.right.dot
       - utc.iso8601.seconds
+      types: []
+      versionless_types: []
+  gw0.required.energy.layered:
+    '000':
+      enums: []
+      formats: []
+      types: []
+      versionless_types: []
+  gw0.usable.energy.layered:
+    '000':
+      enums: []
+      formats: []
       types: []
       versionless_types: []
   gw1.hvac.zone:

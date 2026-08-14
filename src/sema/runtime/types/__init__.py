@@ -41,6 +41,8 @@ from sema.runtime.types.gridworks_event_problem import GridworksEventProblem
 from sema.runtime.types.gridworks_header import GridworksHeader
 from sema.runtime.types.gridworks_ping import GridworksPing
 from sema.runtime.types.gw import Gw
+from sema.runtime.types.gw0_required_energy_layered import Gw0RequiredEnergyLayered
+from sema.runtime.types.gw0_usable_energy_layered import Gw0UsableEnergyLayered
 from sema.runtime.types.gw108_gpio_sensor_component_gt import Gw108GpioSensorComponentGt
 from sema.runtime.types.gw108_vdc_relay_component_gt import Gw108VdcRelayComponentGt
 from sema.runtime.types.gw1_hvac_zone import Gw1HvacZone
@@ -214,6 +216,8 @@ __all__ = [
     "GridworksHeader",
     "GridworksPing",
     "Gw",
+    "Gw0RequiredEnergyLayered",
+    "Gw0UsableEnergyLayered",
     "Gw108GpioSensorComponentGt",
     "Gw108VdcRelayComponentGt",
     "Gw1HvacZone",

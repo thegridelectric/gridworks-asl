@@ -17,8 +17,7 @@ description: >
   semantically consistent, deployable artifact.
 
   All collections plus the Hydronic block are required — a layout is a complete,
-  deployable artifact, never a partial one (mirrors gw.nolan.layout). Mutable in
-  place while unpublished.
+  deployable artifact, never a partial one.
 
 properties:
 
@@ -144,3 +143,23 @@ x-gridworks:
         SHALL carry a NameplatePowerW. (The metered set is declared once here, replacing the former
         per-node InPowerMetering flag; the NameplatePowerW obligation folds in spaceheat.node.gt's
         retired InPowerMetering-requires-nameplate axiom.)
+    - number: 6
+      name: "SiegManifoldChannels"
+      statement: >
+        If Hydronic.SiegLoopPlumbed is true, DataChannels SHALL include channels named
+        "hp-loop-on-off-relay" and "hp-loop-keep-send-relay" — the scada cannot observe the
+        Siegenthaler valve it drives without them.
+    - number: 7
+      name: "SiegActorConsistency"
+      statement: >
+        a. If Hydronic.UseSiegLoop is true, ShNodes SHALL include a node named "sieg-loop" with
+        ActorClass "SiegLoop" and a node named "hp-boss" with ActorClass "HpBoss".
+        b. If Hydronic.UseSiegLoop is false, ShNodes SHALL NOT include a node named "sieg-loop".
+    - number: 8
+      name: "SystemModelEnergyChannels"
+      statement: >
+        DerivedChannels SHALL include channels named "usable-energy" and "required-energy". Each
+        SHALL have CreatedByNodeName "derived-generator" and Strategy "system-model", and SHALL
+        carry Parameters.EnergyModel.TypeName. Across the two channels those TypeNames SHALL be
+        exactly gw0.usable.energy.layered and gw0.required.energy.layered — one of each, so the
+        layout states which model produces each figure.

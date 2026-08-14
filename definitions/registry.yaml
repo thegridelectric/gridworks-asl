@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-14T20:10:00Z"
+  last_updated: "2026-08-14T21:05:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -2281,9 +2281,9 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.layout/000"
-        created: "2026-08-13T16:34:00Z"
+        created: "2026-08-14T21:00:00Z"
         status: "staging"
-        summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). All collections + Hydronic required (mirrors gw.nolan.layout) — a layout is a complete deployable artifact."
+        summary: "The complete deployable artifact for a House0-fleet home: every collection and Hydronic required, never a partial layout. Component set is eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server over the DeviceType record model. Axioms cover id uniqueness, essential nodes, per-zone heat-call channels, primary-flow source agreement, the transactive-power boundary, the Siegenthaler loop's channels and actors, and the system-model energy channels and the models that produce them."
         direct_dependencies:
           structural:
             - "ads111x.based.component.gt:000"
@@ -2305,6 +2305,9 @@ types:
             - "sim.pico.tank.module.component.gt:001"
             - "spaceheat.node.gt:302"
             - "web.server.component.gt:001"
+          axiom:
+            - "gw0.required.energy.layered:000"
+            - "gw0.usable.energy.layered:000"
 
   gw.house0.operational.params:
     latest_version: "000"
@@ -2636,6 +2639,36 @@ types:
           structural:
             - "left.right.dot"
             - "utc.iso8601.seconds"
+
+  gw0.required.energy.layered:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Identifies the layered-storage model for required thermal energy: the minimum that must be in storage to carry the house through the coming on-peak period."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw0.required.energy.layered/000"
+        created: "2026-08-14T21:00:00Z"
+        status: "published"
+        summary: "Initial version. A parameterless marker: the word names the computation, so a consumer states which model produced a value rather than agreeing on one out of band."
+        direct_dependencies:
+          structural: []
+
+  gw0.usable.energy.layered:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Identifies the layered-storage model for usable thermal energy: the energy currently in storage that can still be delivered to the house."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw0.usable.energy.layered/000"
+        created: "2026-08-14T21:00:00Z"
+        status: "published"
+        summary: "Initial version. A parameterless marker: the word names the computation, so a consumer states which model produced a value rather than agreeing on one out of band."
+        direct_dependencies:
+          structural: []
 
   gw1.hvac.zone:
     latest_version: "000"

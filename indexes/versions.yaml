@@ -408,7 +408,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "House0-fleet layout shape laid out (mirrors gw.nolan.layout, new DeviceType model, House0 component set: eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server). All collections + Hydronic required (mirrors gw.nolan.layout) — a layout is a complete deployable artifact."
+        summary: "The complete deployable artifact for a House0-fleet home: every collection and Hydronic required, never a partial layout. Component set is eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server over the DeviceType record model. Axioms cover id uniqueness, essential nodes, per-zone heat-call channels, primary-flow source agreement, the transactive-power boundary, the Siegenthaler loop's channels and actors, and the system-model energy channels and the models that produce them."
 
   gw.house0.operational.params:
     latest_version: "000"
@@ -521,6 +521,20 @@ types:
     versions:
       "000":
         summary: "Initial version."
+
+  gw0.required.energy.layered:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version. A parameterless marker: the word names the computation, so a consumer states which model produced a value rather than agreeing on one out of band."
+
+  gw0.usable.energy.layered:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version. A parameterless marker: the word names the computation, so a consumer states which model produced a value rather than agreeing on one out of band."
 
   gw1.hvac.zone:
     latest_version: "000"

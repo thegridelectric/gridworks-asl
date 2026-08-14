@@ -211,6 +211,10 @@ types:
     '000': sha256:2b8d9bc2c4227f63bf5d75b843d14edaaee1d9177c5c4f28812b94e535562d95
   gw.weather.observation:
     '000': sha256:fc01375d1c4175dde196dd50ca5e36a7bd45824398fbfd97079c25ff0ebe275c
+  gw0.required.energy.layered:
+    '000': sha256:5b91598780765c52c427380282941c4bc778a98aa46ed0e54f1abfe770504718
+  gw0.usable.energy.layered:
+    '000': sha256:67e5ec8cc98696b08280f1514458c1054775c06774f37dece9f24426b665061a
   gw1.tank.temp.calibration:
     '000': sha256:d08ceb4454acf350886a795fc372f39961eb52ffcac3ea7746f65cf467f3f769
   gw1.tank.temp.calibration.map:
