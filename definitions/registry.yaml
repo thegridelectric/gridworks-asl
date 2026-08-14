@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-08-14T19:30:00Z"
+  last_updated: "2026-08-14T20:10:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1994,12 +1994,26 @@ types:
             - "uuid4.str"
 
   g.node.instance.gt:
-    latest_version: "000"
+    latest_version: "001"
     owner: "gridworks-energy"
     versioning_strategy: "literal"
-    description: "Runtime execution instance of a GNode identity"
+    description: "Runtime execution instance of a GNode identity on one run"
 
     versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/g.node.instance.gt/001"
+        created: "2026-08-14T20:10:00Z"
+        status: "staging"
+        summary: >-
+          - Run: add
+        direct_dependencies:
+          structural:
+            - "g.node.instance.status:000"
+            - "g.node.instance.transport:000"
+            - "universe.run"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
       "000":
         schema_url: "https://schemas.electricity.works/types/g.node.instance.gt/000"
         created: "2026-03-04T17:00:00Z"

@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ g_node_instance_gt_001_class_name }}:
+        """
+        - Run: add
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ g_node_instance_gt_000_class_name }} cannot be upgraded to "
+            "{{ g_node_instance_gt_001_class_name }} without the fabric context "
+            "needed to supply Run."
+        )

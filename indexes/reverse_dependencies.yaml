@@ -508,10 +508,12 @@ enums:
     '000':
       used_by:
       - g.node.instance.gt:000
+      - g.node.instance.gt:001
   g.node.instance.transport:
     '000':
       used_by:
       - g.node.instance.gt:000
+      - g.node.instance.gt:001
   g.node.status:
     '000':
       used_by:
@@ -1107,6 +1109,7 @@ formats:
   universe.run:
     used_by:
     - fis.connect.claims:000
+    - g.node.instance.gt:001
   utc.iso8601.millis:
     used_by:
     - operating.state.sequence:000
@@ -1134,6 +1137,7 @@ formats:
     - g.node.forest:001
     - g.node.forest:002
     - g.node.instance.gt:000
+    - g.node.instance.gt:001
     - glitch:000
     - gridworks.event.problem:001
     - gw.channel.gap.stats:000
@@ -1224,6 +1228,7 @@ formats:
     - g.node.gt:005
     - g.node.gt:006
     - g.node.instance.gt:000
+    - g.node.instance.gt:001
     - g.node.reparent.cmd:000
     - g.node.reparent.cmd:001
     - g.node.reparent.cmd:002

@@ -5,15 +5,14 @@ from sema.runtime.enums import GNodeInstanceStatus
 from sema.runtime.enums import GNodeInstanceTransport
 from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.property_format import UUID4Str
-from sema.runtime.property_format import UniverseRun
+from sema.runtime.types.g_node_instance_gt import GNodeInstanceGt
 
 
-class GNodeInstanceGt(SemaType):
-    """Sema: https://schemas.electricity.works/types/g.node.instance.gt/001"""
+class GNodeInstanceGt000(SemaType):
+    """Sema: https://schemas.electricity.works/types/g.node.instance.gt/000"""
 
     g_node_id: UUID4Str
     g_node_instance_id: UUID4Str
-    run: UniverseRun
     status: GNodeInstanceStatus
     transport: GNodeInstanceTransport
     connected_at_unix_ms: UTCMilliseconds
@@ -21,7 +20,7 @@ class GNodeInstanceGt(SemaType):
     connection_handle: str | None = None
     observed_peer_address: str | None = None
     type_name: Literal["g.node.instance.gt"] = "g.node.instance.gt"
-    version: Literal["001"] = "001"
+    version: Literal["000"] = "000"
 
     @model_validator(mode="after")
     def check_axiom_1(self) -> Self:
@@ -48,3 +47,13 @@ class GNodeInstanceGt(SemaType):
                 )
 
         return self
+
+    def upgrade(self) -> GNodeInstanceGt:
+        """
+        - Run: add
+        """
+        raise SemaType.upgrade_requires_context(
+            "GNodeInstanceGt000 cannot be upgraded to "
+            "GNodeInstanceGt without the fabric context "
+            "needed to supply Run."
+        )

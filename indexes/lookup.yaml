@@ -199,9 +199,10 @@ types:
       '005': definitions/types/g.node.gt/005.yaml
       '004': definitions/types/g.node.gt/004.yaml
   g.node.instance.gt:
-    latest_version: '000'
+    latest_version: '001'
     versioning_strategy: literal
     versions:
+      '001': definitions/types/g.node.instance.gt/001.yaml
       '000': definitions/types/g.node.instance.gt/000.yaml
   g.node.reparent.cmd:
     latest_version: '002'

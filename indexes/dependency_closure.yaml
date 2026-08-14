@@ -503,6 +503,16 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+    '001':
+      enums:
+      - g.node.instance.status:000
+      - g.node.instance.transport:000
+      formats:
+      - universe.run
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
   g.node.reparent.cmd:
     '000':
       enums:

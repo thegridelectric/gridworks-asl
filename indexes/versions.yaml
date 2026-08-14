@@ -309,9 +309,11 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   g.node.instance.gt:
-    latest_version: "000"
+    latest_version: "001"
     versioning_strategy: "literal"
     versions:
+      "001":
+        summary: "- Run: add"
       "000":
         summary: "Initial Sema version"
 
