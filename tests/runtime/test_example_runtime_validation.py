@@ -57,6 +57,23 @@ CASES = _example_bearing_schemas()
 def test_example_decodes_against_runtime(schema_path: Path) -> None:
     schema = yaml.safe_load(schema_path.read_text())
     for i, ex in enumerate(schema["examples"]):
+        # Caught before the decode so the YAML-mapping mistake reports as
+        # itself: json.loads on a dict raises a bare TypeError that says
+        # nothing about the rule it broke.
+        if not isinstance(ex, str):
+            raise AssertionError(
+                f"{schema_path.relative_to(REPO_ROOT)} examples[{i}] is a "
+                f"{type(ex).__name__}, not a JSON string. \"Examples SHALL be "
+                "serialized JSON documents, not YAML object representations\" "
+                "(spec/authoring/types.md \"Examples\"). Write it as a block "
+                "scalar:\n"
+                "    examples:\n"
+                "      - |\n"
+                "        {\n"
+                '          "TypeName": "your.type.name",\n'
+                '          "Version": "000"\n'
+                "        }"
+            )
         try:
             default_codec.from_dict(json.loads(ex), auto_upgrade=False)
         except Exception as exc:  # noqa: BLE001 - surface the decode failure verbatim
