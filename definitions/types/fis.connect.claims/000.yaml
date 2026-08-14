@@ -1,0 +1,76 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/fis.connect.claims/000"
+
+title: "fis.connect.claims"
+type: object
+description: >
+  Connect-time claims a principal presents at the broker gate. Identity
+  is proven separately by the connection's client certificate; these are
+  the runtime assertions the Fleet Index Service (FIS) verifies against
+  the registry and its lease state before admitting the connection.
+
+properties:
+
+  Alias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The principal's current alias, as the connecting process believes
+      it to be. FIS denies on mismatch with the registry's current
+      alias — the rename-convergence backstop.
+
+  InstanceId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Identifier of this runtime process instance, fresh at every boot.
+      For a GNode principal this becomes the GNodeInstanceId of its
+      lease; the general name serves service principals too.
+
+  Run:
+    $ref: "https://schemas.electricity.works/formats/universe.run"
+    description: >
+      The universe run this connection is joining. FIS scopes its
+      single-writer lease to (identity, run) and denies when the claim
+      does not match the vhost actually being accessed.
+
+  GNodeClass:
+    $ref: "https://schemas.electricity.works/formats/non.empty.string"
+    description: >
+      Present iff the principal is a GNode: its class, verified against
+      the registry. Absence marks a service principal.
+
+  TypeName:
+    const: "fis.connect.claims"
+
+  Version:
+    const: "000"
+
+required:
+  - Alias
+  - InstanceId
+  - Run
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "Alias": "hw1.ear",
+      "InstanceId": "0f6a2f7e-6f2d-4a8b-9c3e-2d1b4a5c6e7f",
+      "Run": "hw1__1",
+      "TypeName": "fis.connect.claims",
+      "Version": "000"
+    }
+  - |
+    {
+      "Alias": "hw1.isone.weather",
+      "InstanceId": "8c1d3e5f-2a4b-4c6d-8e0f-1a2b3c4d5e6f",
+      "Run": "hw1__1",
+      "GNodeClass": "WeatherForecastService",
+      "TypeName": "fis.connect.claims",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "jessica-millar"

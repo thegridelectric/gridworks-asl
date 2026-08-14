@@ -269,6 +269,16 @@ types:
       - utc.seconds
       types: []
       versionless_types: []
+  fis.connect.claims:
+    '000':
+      enums: []
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - universe.run
+      - uuid4.str
+      types: []
+      versionless_types: []
   flo.params.house0:
     '003':
       enums:

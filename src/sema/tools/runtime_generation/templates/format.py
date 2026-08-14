@@ -300,6 +300,27 @@ PositiveFloat = Annotated[
 """,
     },
 
+    "universe.run": {
+        "class_name": "UniverseRun",
+        "pattern": r"^[a-z][a-z0-9]*__[1-9][0-9]*$",
+        "methods": """
+def is_universe_run(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: UniverseRun must be a string.")
+
+    if not UNIVERSE_RUN_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails UniverseRun format.")
+
+    return v
+""",
+        "annotated_type": """
+UniverseRun = Annotated[
+    str,
+    BeforeValidator(is_universe_run),
+]
+""",
+    },
+
     "utc.iso8601.millis": {
         "class_name": "UtcIso8601Millis",
         "pattern": r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$",

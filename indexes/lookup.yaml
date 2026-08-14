@@ -132,6 +132,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/energy.instruction/000.yaml
+  fis.connect.claims:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/fis.connect.claims/000.yaml
   flo.params.house0:
     latest_version: '007'
     versioning_strategy: literal
@@ -1173,6 +1178,7 @@ formats:
   positive.int: definitions/formats/positive.int.yaml
   positive.int.as.str: definitions/formats/positive.int.as.str.yaml
   spaceheat.name: definitions/formats/spaceheat.name.yaml
+  universe.run: definitions/formats/universe.run.yaml
   utc.iso8601.millis: definitions/formats/utc.iso8601.millis.yaml
   utc.iso8601.seconds: definitions/formats/utc.iso8601.seconds.yaml
   utc.milliseconds: definitions/formats/utc.milliseconds.yaml

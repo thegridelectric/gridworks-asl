@@ -800,6 +800,7 @@ formats:
     - derived.channel.gt:001
     - derived.channel.gt:002
     - energy.instruction:000
+    - fis.connect.claims:000
     - flo.params.house0:003
     - flo.params.house0:004
     - flo.params.house0:005
@@ -881,6 +882,7 @@ formats:
     - latest.price:000
   non.empty.string:
     used_by:
+    - fis.connect.claims:000
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
     - gw.weather.channel.gt:000
@@ -1102,6 +1104,9 @@ formats:
     - synth.channel.gt:000
     - ticklist.hall.report:000
     - ticklist.reed.report:000
+  universe.run:
+    used_by:
+    - fis.connect.claims:000
   utc.iso8601.millis:
     used_by:
     - operating.state.sequence:000
@@ -1203,6 +1208,7 @@ formats:
     - dfr.component.gt:000
     - electric.meter.cac.gt:001
     - electric.meter.component.gt:001
+    - fis.connect.claims:000
     - flo.params.house0:003
     - flo.params.house0:004
     - flo.params.house0:005

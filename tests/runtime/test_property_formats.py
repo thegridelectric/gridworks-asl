@@ -23,6 +23,7 @@ RUNTIME_FORMAT_TYPES: dict[str, Any] = {
     "positive.int": property_format.PositiveInt,
     "positive.int.as.str": property_format.PositiveIntAsStr,
     "spaceheat.name": property_format.SpaceheatName,
+    "universe.run": property_format.UniverseRun,
     "utc.iso8601.millis": property_format.UtcIso8601Millis,
     "utc.iso8601.seconds": property_format.UtcIso8601Seconds,
     "utc.milliseconds": property_format.UTCMilliseconds,

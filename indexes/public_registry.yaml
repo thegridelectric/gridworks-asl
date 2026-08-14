@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-08-13T18:37:00Z'
+  last_updated: '2026-08-14T19:30:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -98,6 +98,13 @@ formats:
     status: published
     description: Single-segment lowercase identifier with optional internal hyphen-separated
       words
+  universe.run:
+    owner: gridworks-energy
+    schema_url: https://schemas.electricity.works/formats/universe.run
+    created: '2026-08-14T19:30:00Z'
+    status: published
+    description: 'Broker-vhost form <universe>__<run>: the universe token, a double
+      underscore, and the run number'
   utc.iso8601.millis:
     owner: gridworks-energy
     schema_url: https://schemas.electricity.works/formats/utc.iso8601.millis
@@ -1392,6 +1399,25 @@ types:
           - positive.int
           - utc.milliseconds
           - utc.seconds
+  fis.connect.claims:
+    latest_version: '000'
+    owner: jessica-millar
+    versioning_strategy: literal
+    description: 'Connect-time claims a principal presents at the broker gate for
+      FIS authorization: current alias, runtime instance id, the run being joined,
+      and GNodeClass iff the principal is a GNode.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/fis.connect.claims/000
+        created: '2026-08-14T19:30:00Z'
+        summary: Initial Sema version
+        status: staging
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - non.empty.string
+          - universe.run
+          - uuid4.str
   flo.params.house0:
     latest_version: '007'
     owner: gridworks-energy

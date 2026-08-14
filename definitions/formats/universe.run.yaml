@@ -1,0 +1,28 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/formats/universe.run"
+
+title: "universe.run"
+description: |
+  Broker-vhost form naming one run of a universe: the universe token
+  (the first dotted segment of every GNodeAlias in that universe), a
+  double underscore, and the run number — a positive integer with no
+  leading zeros. A universe names a durable set of GNodes; a run is
+  one execution of time against it, with its own message fabric and
+  lease state.
+
+type: string
+pattern: "^[a-z][a-z0-9]*__[1-9][0-9]*$"
+
+examples:
+  - "hw1__1"
+  - "d1__2"
+  - "w__1"
+
+counterexamples:
+  - "hw1"      # universe alone; no run
+  - "hw1_1"    # single underscore
+  - "hw1__01"  # leading zero in run number
+  - "HW1__1"   # uppercase not allowed
+
+x-gridworks:
+  owner: "gridworks-energy"

@@ -18,6 +18,7 @@ formats:
   positive.int: sha256:28e862c6f1e82d88e8d7e814dee3f92375ac38ea4ceb89b26229854638eb52fc
   positive.int.as.str: sha256:b5f860c7166b0512f9942460b706fddf638598aebb4f9a96561f0bc623fa9f55
   spaceheat.name: sha256:6bf5f0d31a42aaf65cf36deab91dd5d44b3a4c977d2f05739dd8e96c948c5ced
+  universe.run: sha256:ab603e0a6421d37b956cb23f26909899add998021fbcdbf8feaa3cdfce9599e1
   utc.iso8601.millis: sha256:65f6a012ba134884db2b5881414d90fa1488f16da7346a0b784775ee8cf0bb52
   utc.iso8601.seconds: sha256:f5eed6b7848f73fbe765c2ed4d5f9fae35e5afe6b286dfcca27f592f55c799b2
   utc.milliseconds: sha256:f3aef103ef8ef1ab7f616a280f144d6421a6d7509f5c683531e85912c56d3c1d

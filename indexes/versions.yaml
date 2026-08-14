@@ -186,6 +186,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  fis.connect.claims:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   flo.params.house0:
     latest_version: "007"
     versioning_strategy: "literal"

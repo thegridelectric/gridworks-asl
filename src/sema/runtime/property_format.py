@@ -29,6 +29,8 @@ POSITIVE_INT_AS_STR_PATTERN = re.compile(r"^[1-9][0-9]*$")
 
 SPACEHEAT_NAME_PATTERN = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 
+UNIVERSE_RUN_PATTERN = re.compile(r"^[a-z][a-z0-9]*__[1-9][0-9]*$")
+
 UTC_ISO8601_MILLIS_PATTERN = re.compile(
     r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$"
 )
@@ -155,6 +157,16 @@ def is_spaceheat_name(v: str) -> str:
 
     if not SPACEHEAT_NAME_PATTERN.fullmatch(v):
         raise ValueError(f"<{v}>: Fails SpaceheatName format.")
+
+    return v
+
+
+def is_universe_run(v: str) -> str:
+    if not isinstance(v, str):
+        raise ValueError(f"<{v}>: UniverseRun must be a string.")
+
+    if not UNIVERSE_RUN_PATTERN.fullmatch(v):
+        raise ValueError(f"<{v}>: Fails UniverseRun format.")
 
     return v
 
@@ -293,6 +305,11 @@ PositiveIntAsStr = Annotated[
 SpaceheatName = Annotated[
     str,
     BeforeValidator(is_spaceheat_name),
+]
+
+UniverseRun = Annotated[
+    str,
+    BeforeValidator(is_universe_run),
 ]
 
 UtcIso8601Millis = Annotated[
