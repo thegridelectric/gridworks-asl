@@ -9,19 +9,30 @@ from sema.runtime.types.dfr_component_gt import DfrComponentGt
 from sema.runtime.types.electric_meter_component_gt import ElectricMeterComponentGt
 from sema.runtime.types.electric_meter_device_type_gt import ElectricMeterDeviceTypeGt
 from sema.runtime.types.g_node_gt import GNodeGt
+from sema.runtime.types.gpio_relay_component_gt import GpioRelayComponentGt
+from sema.runtime.types.gpio_sensor_component_gt import GpioSensorComponentGt
 from sema.runtime.types.gw1_scada_device_type_gt import Gw1ScadaDeviceTypeGt
 from sema.runtime.types.gw_hydronic import GwHydronic
 from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
+from sema.runtime.types.i2c_dac_writer_component_gt import I2cDacWriterComponentGt
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
+)
+from sema.runtime.types.i2c_relay_component_gt import I2cRelayComponentGt
+from sema.runtime.types.i2c_thermistor_reader_component_gt import (
+    I2cThermistorReaderComponentGt,
 )
 from sema.runtime.types.pico_btu_meter_component_gt import PicoBtuMeterComponentGt
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
+from sema.runtime.types.scada_board_component_gt import ScadaBoardComponentGt
+from sema.runtime.types.sim_dac_writer_component_gt import SimDacWriterComponentGt
 from sema.runtime.types.sim_pico_tank_module_component_gt import (
     SimPicoTankModuleComponentGt,
 )
+from sema.runtime.types.sim_relay_component_gt import SimRelayComponentGt
+from sema.runtime.types.sim_sensor_component_gt import SimSensorComponentGt
 from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 from sema.runtime.types.web_server_component_gt import WebServerComponentGt
 
@@ -36,12 +47,21 @@ class GwHouse0Layout(SemaType):
     components: list[
         ElectricMeterComponentGt
         | Ads111xBasedComponentGt
+        | GpioRelayComponentGt
+        | GpioSensorComponentGt
+        | I2cDacWriterComponentGt
         | I2cMultichannelDtRelayComponentGt
+        | I2cRelayComponentGt
+        | I2cThermistorReaderComponentGt
         | DfrComponentGt
         | PicoBtuMeterComponentGt
         | PicoFlowModuleComponentGt
         | PicoTankModuleComponentGt
+        | ScadaBoardComponentGt
+        | SimDacWriterComponentGt
         | SimPicoTankModuleComponentGt
+        | SimRelayComponentGt
+        | SimSensorComponentGt
         | HubitatComponentGt
         | HubitatPollerComponentGt
         | WebServerComponentGt

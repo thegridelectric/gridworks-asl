@@ -733,6 +733,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/setpoint.belief/000.yaml
+  sim.dac.writer.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/sim.dac.writer.component.gt/000.yaml
   sim.pico.tank.module.component.gt:
     latest_version: '001'
     versioning_strategy: literal

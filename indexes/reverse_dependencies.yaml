@@ -143,10 +143,12 @@ types:
   gpio.relay.component.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   gpio.sensor.component.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   gw.hydronic:
     '000':
@@ -290,9 +292,11 @@ types:
     '000':
       used_by:
       - i2c.dac.writer.component.gt:000
+      - sim.dac.writer.component.gt:000
   i2c.dac.writer.component.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   i2c.expander:
     '000':
@@ -332,6 +336,7 @@ types:
   i2c.relay.component.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   i2c.thermistor.channel.config:
     '000':
@@ -344,6 +349,7 @@ types:
   i2c.thermistor.reader.component.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   machine.states:
     '000':
@@ -420,6 +426,12 @@ types:
   scada.board.component.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
+      - gw.nolan.layout:000
+  sim.dac.writer.component.gt:
+    '000':
+      used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   sim.pico.tank.module.component.gt:
     '000':
@@ -434,6 +446,16 @@ types:
       - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:013
+  sim.relay.component.gt:
+    '000':
+      used_by:
+      - gw.house0.layout:000
+      - gw.nolan.layout:000
+  sim.sensor.component.gt:
+    '000':
+      used_by:
+      - gw.house0.layout:000
+      - gw.nolan.layout:000
   single.machine.state:
     '000':
       used_by:
@@ -965,6 +987,7 @@ formats:
     - pico.flow.module.component.gt:001
     - pico.tank.module.component.gt:012
     - scada.board.component.gt:000
+    - sim.dac.writer.component.gt:000
     - sim.pico.tank.module.component.gt:001
     - sim.relay.component.gt:000
     - sim.sensor.component.gt:000
@@ -1290,6 +1313,7 @@ formats:
     - scada.board.component.gt:000
     - scada.params:004
     - scada.params:005
+    - sim.dac.writer.component.gt:000
     - sim.pico.tank.module.component.gt:000
     - sim.pico.tank.module.component.gt:001
     - sim.ready:000

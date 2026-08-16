@@ -1,0 +1,88 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/sim.dac.writer.component.gt/000"
+
+title: "sim.dac.writer.component.gt"
+type: object
+description: >
+  A simulated DAC-writer component — the component a simulated DAC node uses in a
+  simulated hardware layout. Structurally a DAC writer (id, DeviceType, a
+  ConfigList of per-channel EEPROM power-on defaults), but a distinct `sim.*`
+  type so a simulated layout is visibly simulated by construction. Parallel to
+  the simulated sensor and relay components: a layer-1 sim device that runs
+  standalone (self-driven, no board), not board-resident like
+  i2c.dac.writer.component.gt. Flat — every field spelled out here.
+
+properties:
+
+  ComponentId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  DeviceType:
+    $ref: "https://schemas.electricity.works/formats/pascal.case"
+    description: >
+      The device category this component is built on, an open
+      pascal-case string.
+
+  ConfigList:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/i2c.dac.channel.config/000"
+    description: >
+      EEPROM power-on defaults for the simulated DAC's channels.
+
+  DisplayName:
+    type: string
+
+  HwUid:
+    type: string
+
+  TypeName:
+    const: "sim.dac.writer.component.gt"
+
+  Version:
+    const: "000"
+
+required:
+  - ComponentId
+  - DeviceType
+  - ConfigList
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "ComponentId": "6b2e9f10-1c47-4d2a-9f88-3a1e7c5d904b",
+      "DeviceType": "GridworksSimDac",
+      "ConfigList": [
+        {
+          "DacChannel": "C",
+          "PowerOnRawValue": 3020,
+          "PowerOnVref": "Internal",
+          "PowerOnGain": 1,
+          "TypeName": "i2c.dac.channel.config",
+          "Version": "000"
+        }
+      ],
+      "TypeName": "sim.dac.writer.component.gt",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  axioms:
+    - number: 1
+      name: "DacChannelUniqueness"
+      statement: >
+        DacChannel values SHALL be unique across the ConfigList.
+  extended_description: >
+    The `.gt` suffix declares that this type is coupled bijectively with a table in
+    a canonical seed database (here, the terminalasset registry): the table's rows are
+    instances of this type. Sema is the authority over what a row means; the seed
+    table is the authority over which instances are currently asserted.
+
+    A simulated DAC is the sim.* counterpart of i2c.dac.writer.component.gt. It carries
+    no BoardComponentId/DacName: a layer-1 sim device is not board-resident — it runs
+    standalone (self-driven, later over MQTT), so there is no board record to resolve.

@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ sim_dac_writer_component_gt_000_class_name }}":
+        """
+        Axiom 1: DacChannelUniqueness
+        DacChannel values SHALL be unique across the ConfigList.
+        """
+        dac_channels = [config.dac_channel for config in self.config_list]
+        if len(dac_channels) != len(set(dac_channels)):
+            raise ValueError(
+                "Axiom 1 (DacChannelUniqueness) failed: DacChannel values must be "
+                "unique across the ConfigList."
+            )
+        return self

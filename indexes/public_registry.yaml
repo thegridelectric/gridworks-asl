@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-08-14T21:05:00Z'
+  last_updated: '2026-08-16T16:30:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -2008,7 +2008,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.house0.layout/000
-        created: '2026-08-14T21:00:00Z'
+        created: '2026-08-16T16:30:00Z'
         status: staging
         summary: 'The complete deployable artifact for a House0-fleet home: every
           collection and Hydronic required, never a partial layout. Component set
@@ -2028,15 +2028,24 @@ types:
           - electric.meter.component.gt:001
           - electric.meter.device.type.gt:000
           - g.node.gt:006
+          - gpio.relay.component.gt:000
+          - gpio.sensor.component.gt:000
           - gw.hydronic:000
           - gw1.scada.device.type.gt:000
           - hubitat.component.gt:000
           - hubitat.poller.component.gt:000
+          - i2c.dac.writer.component.gt:000
           - i2c.multichannel.dt.relay.component.gt:004
+          - i2c.relay.component.gt:000
+          - i2c.thermistor.reader.component.gt:000
           - pico.btu.meter.component.gt:000
           - pico.flow.module.component.gt:001
           - pico.tank.module.component.gt:012
+          - scada.board.component.gt:000
+          - sim.dac.writer.component.gt:000
           - sim.pico.tank.module.component.gt:001
+          - sim.relay.component.gt:000
+          - sim.sensor.component.gt:000
           - spaceheat.node.gt:302
           - web.server.component.gt:001
           axiom:
@@ -2121,7 +2130,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.nolan.layout/000
-        created: '2026-08-13T16:34:00Z'
+        created: '2026-08-16T16:30:00Z'
         status: staging
         summary: Un-drafted for hardware-layout-pass-one (full layouts now, axioms
           later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components
@@ -2150,7 +2159,10 @@ types:
           - pico.btu.meter.component.gt:000
           - pico.tank.module.component.gt:012
           - scada.board.component.gt:000
+          - sim.dac.writer.component.gt:000
           - sim.pico.tank.module.component.gt:001
+          - sim.relay.component.gt:000
+          - sim.sensor.component.gt:000
           - spaceheat.node.gt:302
           - web.server.component.gt:001
   gw.nolan.operational.params:
@@ -2402,7 +2414,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw0.required.energy.layered/000
-        created: '2026-08-14T21:00:00Z'
+        created: '2026-08-16T16:30:00Z'
         status: published
         summary: 'Initial version. A parameterless marker: the word names the computation,
           so a consumer states which model produced a value rather than agreeing on
@@ -2418,7 +2430,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw0.usable.energy.layered/000
-        created: '2026-08-14T21:00:00Z'
+        created: '2026-08-16T16:30:00Z'
         status: published
         summary: 'Initial version. A parameterless marker: the word names the computation,
           so a consumer states which model produced a value rather than agreeing on
@@ -3385,7 +3397,7 @@ types:
     versions:
       '013':
         schema_url: https://schemas.electricity.works/types/layout.lite/013
-        created: '2026-08-13T16:34:00Z'
+        created: '2026-08-16T16:30:00Z'
         status: staging
         summary: '- ShNodes: spaceheat.node.gt:301 -> 302 - DataChannels: data.channel.gt:002
           -> 003 - TankModuleComponents / FlowModuleComponents / I2cRelayComponent:
@@ -4099,6 +4111,25 @@ types:
         direct_dependencies:
           structural:
           - setpoint.phase:000
+  sim.dac.writer.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "A simulated DAC-writer component \u2014 the sim.* counterpart of\
+      \ i2c.dac.writer.component.gt, for a layer-1 standalone (non-board-resident)\
+      \ simulated DAC in a simulated layout."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/sim.dac.writer.component.gt/000
+        created: '2026-08-16T16:30:00Z'
+        status: staging
+        summary: Initial Sema version (sim-marker DAC-writer component for simulated
+          layouts; structurally i2c.dac.writer.component.gt minus board residency).
+        direct_dependencies:
+          structural:
+          - i2c.dac.channel.config:000
+          - pascal.case
+          - uuid4.str
   sim.pico.tank.module.component.gt:
     latest_version: '001'
     owner: gridworks-energy

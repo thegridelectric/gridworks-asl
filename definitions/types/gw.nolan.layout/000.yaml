@@ -66,7 +66,10 @@ properties:
         - $ref: "https://schemas.electricity.works/types/scada.board.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/012"
+        - $ref: "https://schemas.electricity.works/types/sim.dac.writer.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/sim.relay.component.gt/000"
+        - $ref: "https://schemas.electricity.works/types/sim.sensor.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/web.server.component.gt/001"
 
   DeviceTypes:

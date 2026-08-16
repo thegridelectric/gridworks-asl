@@ -644,6 +644,7 @@ types:
       - base.g.node.class:000
       - change.relay.state:000
       - g.node.status:000
+      - gpio.sense.mode:000
       - gpm.from.hz.method:000
       - gw.house0.primary.flow.source:000
       - gw1.actor.class:013
@@ -652,8 +653,11 @@ types:
       - gw1.quantity:001
       - gw1.unit:001
       - hz.calc.method:001
+      - i2c.adc.channel:000
       - i2c.adc.type:000
+      - i2c.dac.channel:000
       - i2c.dac.type:000
+      - i2c.dac.vref:000
       - i2c.mux.type:000
       - relay.closed.or.open:000
       - relay.wiring.config:000
@@ -690,6 +694,8 @@ types:
       - electric.meter.component.gt:001
       - electric.meter.device.type.gt:000
       - g.node.gt:006
+      - gpio.relay.component.gt:000
+      - gpio.sensor.component.gt:000
       - gw.hydronic:000
       - gw.native.gpio.pin:000
       - gw0.required.energy.layered:000
@@ -706,17 +712,27 @@ types:
       - i2c.bus:000
       - i2c.ct.interface.capability:000
       - i2c.dac.capability:000
+      - i2c.dac.channel.config:000
+      - i2c.dac.writer.component.gt:000
       - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:004
       - i2c.mux:000
       - i2c.relay.capability:000
+      - i2c.relay.component.gt:000
+      - i2c.thermistor.channel.config:000
       - i2c.thermistor.interface.capability:000
+      - i2c.thermistor.reader.component.gt:000
       - maker.api.attribute.gt:000
       - pico.btu.meter.component.gt:000
       - pico.flow.module.component.gt:001
       - pico.tank.module.component.gt:012
       - relay.actor.config:003
+      - relay.control.config:000
+      - scada.board.component.gt:000
+      - sim.dac.writer.component.gt:000
       - sim.pico.tank.module.component.gt:001
+      - sim.relay.component.gt:000
+      - sim.sensor.component.gt:000
       - spaceheat.node.gt:302
       - spaceheat.telemetry.quantity.projection:000
       - web.server.component.gt:001
@@ -843,7 +859,10 @@ types:
       - relay.actor.config:003
       - relay.control.config:000
       - scada.board.component.gt:000
+      - sim.dac.writer.component.gt:000
       - sim.pico.tank.module.component.gt:001
+      - sim.relay.component.gt:000
+      - sim.sensor.component.gt:000
       - spaceheat.node.gt:302
       - spaceheat.telemetry.quantity.projection:000
       - web.server.component.gt:001
@@ -2215,6 +2234,19 @@ types:
       - setpoint.phase:000
       formats: []
       types: []
+      versionless_types: []
+  sim.dac.writer.component.gt:
+    '000':
+      enums:
+      - i2c.dac.channel:000
+      - i2c.dac.vref:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.int
+      - uuid4.str
+      types:
+      - i2c.dac.channel.config:000
       versionless_types: []
   sim.pico.tank.module.component.gt:
     '000':

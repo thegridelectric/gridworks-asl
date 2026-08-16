@@ -22,9 +22,12 @@ from sema.runtime.types.i2c_thermistor_reader_component_gt import (
 from sema.runtime.types.pico_btu_meter_component_gt import PicoBtuMeterComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 from sema.runtime.types.scada_board_component_gt import ScadaBoardComponentGt
+from sema.runtime.types.sim_dac_writer_component_gt import SimDacWriterComponentGt
 from sema.runtime.types.sim_pico_tank_module_component_gt import (
     SimPicoTankModuleComponentGt,
 )
+from sema.runtime.types.sim_relay_component_gt import SimRelayComponentGt
+from sema.runtime.types.sim_sensor_component_gt import SimSensorComponentGt
 from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 from sema.runtime.types.web_server_component_gt import WebServerComponentGt
 
@@ -47,7 +50,10 @@ class GwNolanLayout(SemaType):
         | ScadaBoardComponentGt
         | PicoBtuMeterComponentGt
         | PicoTankModuleComponentGt
+        | SimDacWriterComponentGt
         | SimPicoTankModuleComponentGt
+        | SimRelayComponentGt
+        | SimSensorComponentGt
         | WebServerComponentGt
     ]
     device_types: list[

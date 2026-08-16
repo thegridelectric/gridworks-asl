@@ -144,6 +144,7 @@ from sema.runtime.types.scada_params import ScadaParams
 from sema.runtime.types.send_control_capabilities import SendControlCapabilities
 from sema.runtime.types.send_layout import SendLayout
 from sema.runtime.types.setpoint_belief import SetpointBelief
+from sema.runtime.types.sim_dac_writer_component_gt import SimDacWriterComponentGt
 from sema.runtime.types.sim_pico_tank_module_component_gt import (
     SimPicoTankModuleComponentGt,
 )
@@ -309,6 +310,7 @@ __all__ = [
     "SendControlCapabilities",
     "SendLayout",
     "SetpointBelief",
+    "SimDacWriterComponentGt",
     "SimPicoTankModuleComponentGt",
     "SimPlantActuation",
     "SimPlantFlux",
