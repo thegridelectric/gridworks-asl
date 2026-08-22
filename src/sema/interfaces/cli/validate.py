@@ -34,7 +34,8 @@ def run(args: argparse.Namespace) -> None:
     text = open(args.file).read() if args.file else sys.stdin.read()
     result = validate(text, expected_type=args.expected_type)
     if result.ok:
-        print(f"OK: {result.type_name} (version {result.version})")
+        suffix = f" — {result.note}" if result.note else ""
+        print(f"OK: {result.type_name} (version {result.version}){suffix}")
         return
     label = result.type_name or "<unknown>"
     print(f"INVALID ({label}): {result.error}", file=sys.stderr)

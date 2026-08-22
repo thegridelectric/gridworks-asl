@@ -79,8 +79,41 @@ def snapshot_root() -> Path:
     return resolve_target_path("snapshot", str(OUTPUT_DIR))
 
 
-STAGING_README_BANNER = """\
-# STAGING SNAPSHOT — PLEASE ONLY USE IN DEV
+SNAPSHOT_README = """\
+# Sema vocabulary snapshot (GENERATED)
+{staging_section}
+This directory is a **vendored Sema snapshot**: a self-contained, generated
+subset of the Sema vocabulary. **Never hand-edit it.** To change it, edit the
+seed (`../sema_seed_request.yaml`) or the definitions in the sema repo, then
+re-run the repo's `scripts/regen_sema_snapshot.sh`.
+
+## What Sema is
+
+Sema is a vocabulary registry for structured messages exchanged between
+independent systems. It defines versioned types, enums, and formats
+expressed as JSON Schema; these act as boundary contracts, making the
+structure and semantics of serialized messages explicit and mechanically
+verifiable. Sema applies only at system boundaries — it governs the JSON
+exchanged between applications, not runtime architecture, database design,
+or internal object models. Every schema `$id` lives under the
+`https://schemas.electricity.works` namespace; the canonical registry and
+spec live in the sema repo (https://github.com/thegridelectric/sema — start
+at `spec/primary.md`).
+
+## Working with Sema-typed data (rules that fight default idiom)
+
+- Construct and decode instances through the generated classes in this
+  snapshot — never hand-built dicts.
+- Dict/JSON keys are the PascalCase wire form; produce and consume them via
+  `to_dict()` / `from_dict()`, never by spelling keys inline.
+- Dispatch on decoded messages with `isinstance`, never `hasattr`.
+- Narrow every codec decode (`expect=` or `assert isinstance`).
+- Where a value is vocabulary-shaped, use its property format type, never
+  bare `str`.
+"""
+
+STAGING_SECTION = """
+## ⚠ STAGING SNAPSHOT — PLEASE ONLY USE IN DEV
 
 This snapshot contains STAGING vocabulary: mutable words that run on dev
 brokers only. It MUST NOT be used against hybrid or production brokers.
@@ -90,7 +123,7 @@ Staging words in this snapshot:
 {words}
 
 When these words promote to published, rebuild without `--allow-staged` to
-get a publication-grade snapshot (and this file disappears).
+get a publication-grade snapshot (and this section disappears).
 """
 
 
@@ -143,18 +176,25 @@ def _validate_staging_closure(
     return staging
 
 
-def _write_staging_markers(target_root: Path, staging: list[str]) -> None:
-    """A staged snapshot is marked twice — machine-readably
-    (``indexes/staging.yaml``) and for humans (a README banner at the
-    snapshot root)."""
-    if not staging:
-        return
-    with (target_root / "indexes" / "staging.yaml").open("w") as handle:
-        yaml.safe_dump({"staging": True, "staging_words": staging}, handle)
+def _write_snapshot_readme(target_root: Path, staging: list[str]) -> None:
+    """Every snapshot gets a README naming what the tree is (generated, never
+    hand-edit), what Sema is, and the working rules. A staged snapshot is
+    additionally marked twice — machine-readably (``indexes/staging.yaml``)
+    and with a warning section at the top of the README."""
+    staging_section = ""
+    if staging:
+        with (target_root / "indexes" / "staging.yaml").open("w") as handle:
+            yaml.safe_dump({"staging": True, "staging_words": staging}, handle)
+        staging_section = STAGING_SECTION.format(
+            words="\n".join(f"- {word}" for word in staging)
+        )
     (target_root / "README.md").write_text(
-        STAGING_README_BANNER.format(words="\n".join(f"- {word}" for word in staging))
+        SNAPSHOT_README.format(staging_section=staging_section)
     )
-    print(f"STAGING snapshot ({len(staging)} staging words) — PLEASE ONLY USE IN DEV")
+    if staging:
+        print(
+            f"STAGING snapshot ({len(staging)} staging words) — PLEASE ONLY USE IN DEV"
+        )
 
 
 def _reject_drafts_in_seed_request(seed_request: dict, public_registry: dict) -> None:
@@ -253,7 +293,7 @@ def prepare_snapshot(seed_request: Path, *, allow_staged: bool = False) -> Path:
     # was kept, so the request that built a snapshot had to be reconstructed.)
     shutil.copyfile(seed_request_path, indexes_root / "seed_request.yaml")
 
-    _write_staging_markers(target_root, staging)
+    _write_snapshot_readme(target_root, staging)
 
     registry = load_registry()
     copy_seed_definitions(target_root, seed)

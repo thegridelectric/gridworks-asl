@@ -46,3 +46,26 @@ def test_validate_expected_type_mismatch() -> None:
 
 def test_validate_non_object() -> None:
     assert not validate("[]").ok
+
+
+def test_validate_ok_at_own_version_when_upgrade_requires_context() -> None:
+    # layout.lite:006 -> 007 is a context-dependent upgrade (007's
+    # DerivedChannels cannot be fabricated from a 006 message). The refusal is
+    # an expected outcome: the payload is valid at its own version.
+    import json
+    from pathlib import Path
+
+    import yaml
+
+    schema = yaml.safe_load(
+        (
+            Path(__file__).parent.parent.parent
+            / "definitions/types/layout.lite/006.yaml"
+        ).read_text()
+    )
+    payload = json.loads(schema["examples"][0])
+    r = validate(payload)
+    assert r.ok
+    assert r.type_name == "layout.lite"
+    assert r.version == "006"
+    assert r.note is not None and "own version" in r.note

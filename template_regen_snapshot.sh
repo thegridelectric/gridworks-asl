@@ -4,6 +4,12 @@
 # scripts/regen_sema_snapshot.sh and fill in the three CHANGEME facts.
 # Companion to template_seed_request.yaml (the seed it consumes).
 #
+# SCOPE: this regenerates a CONSUMER repo's vendored snapshot (src/<pkg>/sema)
+# via `sema snapshot prepare|build`. It does NOT touch sema's own runtime:
+# after editing definitions/, regenerate src/sema/runtime/ (what
+# `sema validate` and the codec load) with scripts/regenerate_runtime.py.
+# The two regens are parallel mechanisms; neither invokes the other.
+#
 # Regenerates the repo's vendored Sema snapshot from the canonical sema
 # repo. The vendored tree is GENERATED — never hand-edit it; edit the seed
 # (or the sema definitions) and re-run.
