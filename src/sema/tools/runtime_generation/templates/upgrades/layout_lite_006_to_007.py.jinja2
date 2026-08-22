@@ -1,0 +1,16 @@
+    def upgrade(self) -> "{{ layout_lite_007_class_name }}":
+        """
+        Replace SynthChannels with DerivedChannels; add optional TMap.
+        """
+        # Context-dependent: the 006->007 transition redesigned the derived
+        # layer — most 007 DerivedChannels are new channels (fresh Ids,
+        # Names/DisplayNames assigned by the derived-generator), not renamed
+        # SynthChannels. Only the source layout knows which derived channels a
+        # deployment defines; they cannot be fabricated from the 006 message.
+        raise SemaType.upgrade_requires_context(
+            "{{ layout_lite_006_class_name }} cannot be upgraded to "
+            "{{ layout_lite_007_class_name }} without the source layout "
+            "context needed to supply DerivedChannels (the 006->007 "
+            "transition redesigned the derived layer; DerivedChannel Ids, "
+            "Names, and DisplayNames are not derivable from SynthChannels)."
+        )

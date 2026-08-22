@@ -768,7 +768,7 @@ enums:
     versions:
       '007':
         schema_url: https://schemas.electricity.works/enums/spaceheat.telemetry.name/007
-        created: '2026-03-30T17:12:00Z'
+        created: '2025-12-08T00:00:00Z'
         status: published
         added_values:
         - BinaryState
@@ -3555,7 +3555,7 @@ types:
         schema_url: https://schemas.electricity.works/types/layout.lite/007
         created: '2026-01-14T14:08:00Z'
         status: published
-        summary: Baseline runtime version (no prior version tracked).
+        summary: Replace SynthChannels with DerivedChannels; add optional TMap.
         direct_dependencies:
           structural:
           - data.channel.gt:001
@@ -3568,6 +3568,24 @@ types:
           - pico.tank.module.component.gt:011
           - positive.int
           - spaceheat.node.gt:200
+          - utc.milliseconds
+          - uuid4.str
+      '006':
+        schema_url: https://schemas.electricity.works/types/layout.lite/006
+        created: '2025-12-10T00:00:00Z'
+        status: published
+        summary: SynthChannels-based runtime layout (no DerivedChannels or TMap).
+        direct_dependencies:
+          structural:
+          - data.channel.gt:001
+          - ha1.params:004
+          - i2c.multichannel.dt.relay.component.gt:002
+          - left.right.dot
+          - pico.flow.module.component.gt:000
+          - pico.tank.module.component.gt:011
+          - positive.int
+          - spaceheat.node.gt:200
+          - synth.channel.gt:000
           - utc.milliseconds
           - uuid4.str
   linear.one.dimensional.calibration:
@@ -4367,7 +4385,7 @@ types:
           - uuid4.str
       '200':
         schema_url: https://schemas.electricity.works/types/spaceheat.node.gt/200
-        created: '2026-01-14T14:08:00Z'
+        created: '2025-12-09T00:00:00Z'
         status: published
         summary: Baseline runtime version (no prior version tracked).
         direct_dependencies:
@@ -4464,7 +4482,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/synth.channel.gt/000
-        created: '2026-05-13T00:00:00Z'
+        created: '2025-12-09T00:00:00Z'
         status: published
         summary: Initial Sema version
         direct_dependencies:

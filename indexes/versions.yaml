@@ -930,7 +930,9 @@ types:
           - TankModuleComponents[]: pico.tank.module.component.gt only -> pico.tank.module.component.gt | sim.pico.tank.module.component.gt
           - DerivedNodeConsistency axiom: add
       "007":
-        summary: "Baseline runtime version (no prior version tracked)."
+        summary: "Replace SynthChannels with DerivedChannels; add optional TMap."
+      "006":
+        summary: "SynthChannels-based runtime layout (no DerivedChannels or TMap)."
 
   linear.one.dimensional.calibration:
     latest_version: "000"

@@ -51,6 +51,7 @@ types:
   data.channel.gt:
     '001':
       used_by:
+      - layout.lite:006
       - layout.lite:007
       - layout.lite:008
       - layout.lite:009
@@ -231,6 +232,7 @@ types:
   ha1.params:
     '004':
       used_by:
+      - layout.lite:006
       - layout.lite:007
       - layout.lite:008
       - layout.lite:009
@@ -305,6 +307,7 @@ types:
   i2c.multichannel.dt.relay.component.gt:
     '002':
       used_by:
+      - layout.lite:006
       - layout.lite:007
       - layout.lite:008
       - layout.lite:009
@@ -372,6 +375,7 @@ types:
   pico.flow.module.component.gt:
     '000':
       used_by:
+      - layout.lite:006
       - layout.lite:007
       - layout.lite:008
       - layout.lite:009
@@ -385,6 +389,7 @@ types:
   pico.tank.module.component.gt:
     '011':
       used_by:
+      - layout.lite:006
       - layout.lite:007
       - layout.lite:008
       - layout.lite:009
@@ -467,6 +472,7 @@ types:
   spaceheat.node.gt:
     '200':
       used_by:
+      - layout.lite:006
       - layout.lite:007
       - new.command.tree:000
     '300':
@@ -495,6 +501,10 @@ types:
       used_by:
       - data.channel.gt:002
       - data.channel.gt:003
+  synth.channel.gt:
+    '000':
+      used_by:
+      - layout.lite:006
   ticklist.hall:
     '101':
       used_by:
@@ -866,6 +876,7 @@ formats:
     - heating.forecast:000
     - keyparam.change.log:000
     - latest.price:000
+    - layout.lite:006
     - layout.lite:007
     - layout.lite:008
     - layout.lite:009
@@ -1052,6 +1063,7 @@ formats:
     - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:000
     - i2c.write.reg:000
+    - layout.lite:006
     - layout.lite:007
     - layout.lite:008
     - layout.lite:009
@@ -1179,6 +1191,7 @@ formats:
     - gw.weather.forecast:000
     - i2c.result:000
     - i2c.result:001
+    - layout.lite:006
     - layout.lite:007
     - layout.lite:008
     - layout.lite:009
@@ -1292,6 +1305,7 @@ formats:
     - i2c.write.byte:000
     - i2c.write.reg:000
     - latest.price:000
+    - layout.lite:006
     - layout.lite:007
     - layout.lite:008
     - layout.lite:009

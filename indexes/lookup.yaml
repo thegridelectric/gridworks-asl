@@ -613,6 +613,7 @@ types:
       009: definitions/types/layout.lite/009.yaml
       008: definitions/types/layout.lite/008.yaml
       '007': definitions/types/layout.lite/007.yaml
+      '006': definitions/types/layout.lite/006.yaml
   linear.one.dimensional.calibration:
     latest_version: '000'
     versioning_strategy: literal
