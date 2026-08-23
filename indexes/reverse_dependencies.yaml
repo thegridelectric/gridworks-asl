@@ -51,6 +51,7 @@ types:
   data.channel.gt:
     '001':
       used_by:
+      - layout.lite:005
       - layout.lite:006
       - layout.lite:007
       - layout.lite:008
@@ -232,6 +233,7 @@ types:
   ha1.params:
     '004':
       used_by:
+      - layout.lite:005
       - layout.lite:006
       - layout.lite:007
       - layout.lite:008
@@ -307,6 +309,7 @@ types:
   i2c.multichannel.dt.relay.component.gt:
     '002':
       used_by:
+      - layout.lite:005
       - layout.lite:006
       - layout.lite:007
       - layout.lite:008
@@ -375,6 +378,7 @@ types:
   pico.flow.module.component.gt:
     '000':
       used_by:
+      - layout.lite:005
       - layout.lite:006
       - layout.lite:007
       - layout.lite:008
@@ -389,6 +393,7 @@ types:
   pico.tank.module.component.gt:
     '011':
       used_by:
+      - layout.lite:005
       - layout.lite:006
       - layout.lite:007
       - layout.lite:008
@@ -402,8 +407,12 @@ types:
       - gw.nolan.layout:000
       - layout.lite:013
   price.quantity.unitless:
+    '000':
+      used_by:
+      - atn.bid:001
     '001':
       used_by:
+      - atn.bid:001
       - atn.bid:002
       - bid:000
   relay.actor.config:
@@ -472,6 +481,7 @@ types:
   spaceheat.node.gt:
     '200':
       used_by:
+      - layout.lite:005
       - layout.lite:006
       - layout.lite:007
       - new.command.tree:000
@@ -504,6 +514,7 @@ types:
   synth.channel.gt:
     '000':
       used_by:
+      - layout.lite:005
       - layout.lite:006
   ticklist.hall:
     '101':
@@ -706,6 +717,7 @@ enums:
   market.price.unit:
     '000':
       used_by:
+      - atn.bid:001
       - atn.bid:002
       - bid:000
       - flo.params.house0:003
@@ -717,6 +729,7 @@ enums:
   market.quantity.unit:
     '000':
       used_by:
+      - atn.bid:001
       - atn.bid:002
       - bid:000
       - market.product:000
@@ -832,6 +845,7 @@ formats:
     - gw.tou.window:000
   left.right.dot:
     used_by:
+    - atn.bid:001
     - atn.bid:002
     - bid:000
     - channel.readings.list.item:000
@@ -876,6 +890,7 @@ formats:
     - heating.forecast:000
     - keyparam.change.log:000
     - latest.price:000
+    - layout.lite:005
     - layout.lite:006
     - layout.lite:007
     - layout.lite:008
@@ -920,6 +935,7 @@ formats:
     - hubitat.gt:000
   market.slot.name:
     used_by:
+    - atn.bid:001
     - atn.bid:002
     - bid:000
     - latest.price:000
@@ -1063,6 +1079,7 @@ formats:
     - i2c.thermistor.interface.capability:000
     - i2c.thermistor.reader.component.gt:000
     - i2c.write.reg:000
+    - layout.lite:005
     - layout.lite:006
     - layout.lite:007
     - layout.lite:008
@@ -1191,6 +1208,7 @@ formats:
     - gw.weather.forecast:000
     - i2c.result:000
     - i2c.result:001
+    - layout.lite:005
     - layout.lite:006
     - layout.lite:007
     - layout.lite:008
@@ -1305,6 +1323,7 @@ formats:
     - i2c.write.byte:000
     - i2c.write.reg:000
     - latest.price:000
+    - layout.lite:005
     - layout.lite:006
     - layout.lite:007
     - layout.lite:008

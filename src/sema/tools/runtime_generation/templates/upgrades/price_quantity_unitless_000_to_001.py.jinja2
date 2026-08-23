@@ -1,0 +1,9 @@
+    def upgrade(self) -> "{{ price_quantity_unitless_001_class_name }}":
+        """
+        Rename PriceTimes1000/QuantityTimes1000 to PriceX1000/QuantityX1000.
+        """
+        data = self.model_dump()
+        data["price_x1000"] = data.pop("price_times1000")
+        data["quantity_x1000"] = data.pop("quantity_times1000")
+        data["version"] = "001"
+        return {{ price_quantity_unitless_001_class_name }}.model_validate(data)

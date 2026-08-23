@@ -29,7 +29,9 @@ types:
     versioning_strategy: "literal"
     versions:
       "002":
-        summary: "Initial Sema version"
+        summary: "Fix PqPairs sub-type to price.quantity.unitless:001."
+      "001":
+        summary: "Legacy AtomicTNode bid, pre-ltn rename; PqPairs accept price.quantity.unitless 000 or 001."
 
   bid:
     latest_version: "000"
@@ -932,7 +934,9 @@ types:
       "007":
         summary: "Replace SynthChannels with DerivedChannels; add optional TMap."
       "006":
-        summary: "SynthChannels-based runtime layout (no DerivedChannels or TMap)."
+        summary: "Drop FromGNodeInstanceId; add CriticalZoneList."
+      "005":
+        summary: "Runtime layout carrying FromGNodeInstanceId; no CriticalZoneList (added in 006)."
 
   linear.one.dimensional.calibration:
     latest_version: "000"
@@ -1026,7 +1030,9 @@ types:
     versioning_strategy: "literal"
     versions:
       "001":
-        summary: "Baseline runtime version (no prior version tracked)."
+        summary: "Rename PriceTimes1000/QuantityTimes1000 to PriceX1000/QuantityX1000."
+      "000":
+        summary: "Integer price/quantity pair, values x1000 (PriceTimes1000/QuantityTimes1000)."
 
   relay.actor.config:
     latest_version: "003"

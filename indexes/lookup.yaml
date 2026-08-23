@@ -36,6 +36,7 @@ types:
     versioning_strategy: literal
     versions:
       '002': definitions/types/atn.bid/002.yaml
+      '001': definitions/types/atn.bid/001.yaml
   bid:
     latest_version: '000'
     versioning_strategy: literal
@@ -614,6 +615,7 @@ types:
       008: definitions/types/layout.lite/008.yaml
       '007': definitions/types/layout.lite/007.yaml
       '006': definitions/types/layout.lite/006.yaml
+      '005': definitions/types/layout.lite/005.yaml
   linear.one.dimensional.calibration:
     latest_version: '000'
     versioning_strategy: literal
@@ -678,6 +680,7 @@ types:
     versioning_strategy: literal
     versions:
       '001': definitions/types/price.quantity.unitless/001.yaml
+      '000': definitions/types/price.quantity.unitless/000.yaml
   relay.actor.config:
     latest_version: '003'
     versioning_strategy: literal

@@ -34,6 +34,17 @@ types:
       types: []
       versionless_types: []
   atn.bid:
+    '001':
+      enums:
+      - market.price.unit:000
+      - market.quantity.unit:000
+      formats:
+      - left.right.dot
+      - market.slot.name
+      types:
+      - price.quantity.unitless:000
+      - price.quantity.unitless:001
+      versionless_types: []
     '002':
       enums:
       - market.price.unit:000
@@ -1560,6 +1571,38 @@ types:
       types: []
       versionless_types: []
   layout.lite:
+    '005':
+      enums:
+      - change.relay.state:000
+      - gpm.from.hz.method:000
+      - hz.calc.method:001
+      - relay.closed.or.open:000
+      - relay.wiring.config:000
+      - spaceheat.make.model:003
+      - spaceheat.telemetry.name:006
+      - spaceheat.telemetry.name:007
+      - spaceheat.unit:001
+      - temp.calc.method:000
+      formats:
+      - handle.name
+      - left.right.dot
+      - non.empty.string
+      - positive.int
+      - spaceheat.name
+      - utc.milliseconds
+      - utc.seconds
+      - uuid4.str
+      types:
+      - channel.config:000
+      - data.channel.gt:001
+      - ha1.params:004
+      - i2c.multichannel.dt.relay.component.gt:002
+      - pico.flow.module.component.gt:000
+      - pico.tank.module.component.gt:011
+      - relay.actor.config:002
+      - spaceheat.node.gt:200
+      - synth.channel.gt:000
+      versionless_types: []
     '006':
       enums:
       - change.relay.state:000
@@ -2034,6 +2077,11 @@ types:
       types: []
       versionless_types: []
   price.quantity.unitless:
+    '000':
+      enums: []
+      formats: []
+      types: []
+      versionless_types: []
     '001':
       enums: []
       formats: []

@@ -1,0 +1,9 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ atn_bid_001_class_name }}":
+        """
+        Axiom 1: PqPairsPriceMaxMatchesMarketType
+        The first price in PqPairs SHALL equal the PriceMax defined by the MarketType
+        associated with MarketSlotName.
+        """
+        # Validation requires access to the MarketType registry; deferred to application logic.
+        return self

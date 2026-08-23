@@ -1,0 +1,15 @@
+    def upgrade(self) -> "{{ atn_bid_002_class_name }}":
+        """
+        Fix PqPairs sub-type to price.quantity.unitless:001.
+        """
+        data = self.model_dump()
+        # 001 accepts price.quantity.unitless 000 or 001; 002 pins 001. Upgrade
+        # any 000 pairs (nested-upgrade discipline) so the result validates.
+        pairs = []
+        for pair in self.pq_pairs:
+            if pair.version == "000":
+                pair = pair.upgrade()
+            pairs.append(pair.model_dump())
+        data["pq_pairs"] = pairs
+        data["version"] = "002"
+        return {{ atn_bid_002_class_name }}.model_validate(data)

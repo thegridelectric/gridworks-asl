@@ -1,0 +1,15 @@
+    def upgrade(self) -> "{{ layout_lite_006_class_name }}":
+        """
+        Drop FromGNodeInstanceId; add CriticalZoneList.
+        """
+        # Context-dependent: 006 requires CriticalZoneList (a subset of
+        # ZoneList naming the deployment's critical zones). Which zones are
+        # critical is a semantic fact the 005 message does not carry and that
+        # cannot be derived from it. Only the source layout knows; it cannot be
+        # fabricated (an empty list would be a guess, not a derivation).
+        raise SemaType.upgrade_requires_context(
+            "{{ layout_lite_005_class_name }} cannot be upgraded to "
+            "{{ layout_lite_006_class_name }} without the source layout "
+            "context needed to supply CriticalZoneList (which zones are "
+            "critical is not carried by or derivable from the 005 message)."
+        )

@@ -982,13 +982,27 @@ types:
         schema_url: https://schemas.electricity.works/types/atn.bid/002
         created: '2026-05-13T00:00:00Z'
         status: published
-        summary: Initial Sema version
+        summary: Fix PqPairs sub-type to price.quantity.unitless:001.
         direct_dependencies:
           structural:
           - left.right.dot
           - market.price.unit:000
           - market.quantity.unit:000
           - market.slot.name
+          - price.quantity.unitless:001
+      '001':
+        schema_url: https://schemas.electricity.works/types/atn.bid/001
+        created: '2025-11-01T00:00:00Z'
+        status: published
+        summary: Legacy AtomicTNode bid, pre-ltn rename; PqPairs accept price.quantity.unitless
+          000 or 001.
+        direct_dependencies:
+          structural:
+          - left.right.dot
+          - market.price.unit:000
+          - market.quantity.unit:000
+          - market.slot.name
+          - price.quantity.unitless:000
           - price.quantity.unitless:001
   bid:
     latest_version: '000'
@@ -3574,7 +3588,26 @@ types:
         schema_url: https://schemas.electricity.works/types/layout.lite/006
         created: '2025-12-10T00:00:00Z'
         status: published
-        summary: SynthChannels-based runtime layout (no DerivedChannels or TMap).
+        summary: Drop FromGNodeInstanceId; add CriticalZoneList.
+        direct_dependencies:
+          structural:
+          - data.channel.gt:001
+          - ha1.params:004
+          - i2c.multichannel.dt.relay.component.gt:002
+          - left.right.dot
+          - pico.flow.module.component.gt:000
+          - pico.tank.module.component.gt:011
+          - positive.int
+          - spaceheat.node.gt:200
+          - synth.channel.gt:000
+          - utc.milliseconds
+          - uuid4.str
+      '005':
+        schema_url: https://schemas.electricity.works/types/layout.lite/005
+        created: '2025-12-09T12:00:00Z'
+        status: published
+        summary: Runtime layout carrying FromGNodeInstanceId; no CriticalZoneList
+          (added in 006).
         direct_dependencies:
           structural:
           - data.channel.gt:001
@@ -3846,7 +3879,14 @@ types:
         schema_url: https://schemas.electricity.works/types/price.quantity.unitless/001
         created: '2025-10-30T17:29:00Z'
         status: published
-        summary: Baseline runtime version (no prior version tracked).
+        summary: Rename PriceTimes1000/QuantityTimes1000 to PriceX1000/QuantityX1000.
+        direct_dependencies:
+          structural: []
+      '000':
+        schema_url: https://schemas.electricity.works/types/price.quantity.unitless/000
+        created: '2024-12-05T19:25:00Z'
+        status: published
+        summary: Integer price/quantity pair, values x1000 (PriceTimes1000/QuantityTimes1000).
         direct_dependencies:
           structural: []
   relay.actor.config:
