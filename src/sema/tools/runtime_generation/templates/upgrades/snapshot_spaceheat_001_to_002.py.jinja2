@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ snapshot_spaceheat_002_class_name }}:
+        """- LatestStateList: add (machine.states:000, parallel StateList / UnixMsList arrays per machine)"""
+        raise SemaType.upgrade_requires_context(
+            "snapshot.spaceheat:001 cannot be upgraded to snapshot.spaceheat:002 "
+            "without context: v002 adds the required LatestStateList, absent "
+            "from a v001 message and which SHALL NOT be fabricated. "
+            "JournalKeeper retains v001 messages at their own version."
+        )

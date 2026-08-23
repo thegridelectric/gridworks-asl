@@ -1,0 +1,6 @@
+    def upgrade(self) -> {{ ha1_params_004_class_name }}:
+        """Baseline runtime version (no prior version tracked)."""
+        data = self.model_dump()
+        data.pop("strat_boss_dist010", None)
+        data["version"] = "004"
+        return {{ ha1_params_004_class_name }}.model_validate(data)

@@ -1,0 +1,190 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/layout.lite/002"
+
+title: "layout.lite"
+type: object
+description: >
+  Runtime projection of the active SCADA context needed to interpret telemetry
+  and snapshot messages for a running Spaceheat deployment.
+
+  `layout.lite` is emitted by SCADA on request. It is not intended to be a
+  lossless copy of the source layout artifact on disk. Some fields are projected
+  directly from the loaded hardware layout, while others reflect active runtime
+  settings.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the SCADA actor publishing this runtime context.
+
+  FromGNodeInstanceId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      GNode instance id of the SCADA actor publishing this runtime context.
+
+  MessageCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Timestamp at which this layout projection was created.
+
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier for this emitted layout projection.
+
+  Strategy:
+    type: string
+    description: >
+      Strategy / manifold variant name used by the running SCADA deployment.
+
+  ZoneList:
+    type: array
+    items:
+      type: string
+    description: >
+      Ordered list of zones known to the running deployment.
+
+  TotalStoreTanks:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Number of store tanks configured for this deployment.
+
+  ShNodes:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/200"
+    description: >
+      Spaceheat nodes available in the running SCADA context.
+
+  DataChannels:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/data.channel.gt/001"
+    description: >
+      Raw telemetry channel definitions used to interpret channel names appearing
+      in reports and snapshots.
+
+  SynthChannels:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/synth.channel.gt/000"
+    description: >
+      Synthetic telemetry channel definitions used to interpret synthetic channel
+      names appearing in reports and snapshots. Optional: the earliest version
+      002 traffic (before ~2024-12-05) omits it; the field was added within
+      v002's life without a version bump.
+
+  TankModuleComponents:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/000"
+    description: >
+      Tank module components present in the running deployment. Version 003
+      traffic carried only the dual-Pico v000 (the later v010 first appears
+      under version 004).
+
+  FlowModuleComponents:
+    type: array
+    items:
+      $ref: "https://schemas.electricity.works/types/pico.flow.module.component.gt/000"
+    description: >
+      Flow module components present in the running deployment.
+
+  Ha1Params:
+    $ref: "https://schemas.electricity.works/types/ha1.params/001"
+    description: >
+      Active HA1 parameter set used by the running deployment. Version 002
+      traffic carried only the original ha1.params:001 (the
+      LoadOverestimationPercent-bearing v002 first appears under layout.lite
+      version 003).
+
+  I2cRelayComponent:
+    oneOf:
+      - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/001"
+      - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/002"
+    description: >
+      Relay component configuration used by the running deployment. During
+      version 002's lifetime houses ran two i2c versions concurrently (deploy
+      lag): v001 (relay.actor.config:001) and v002 (relay.actor.config:002,
+      adding DeEnergizedState/EnergizedState).
+
+  TypeName:
+    const: "layout.lite"
+
+  Version:
+    const: "002"
+
+required:
+  - FromGNodeAlias
+  - FromGNodeInstanceId
+  - MessageCreatedMs
+  - MessageId
+  - Strategy
+  - ZoneList
+  - TotalStoreTanks
+  - ShNodes
+  - DataChannels
+  - TankModuleComponents
+  - FlowModuleComponents
+  - Ha1Params
+  - I2cRelayComponent
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "FromGNodeAlias": "d1.isone.me.versant.keene.beech.scada",
+      "FromGNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+      "MessageCreatedMs": 1704067200000,
+      "MessageId": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+      "Strategy": "House0Sieg",
+      "ZoneList": [],
+      "TotalStoreTanks": 3,
+      "ShNodes": [
+        {"Name": "s", "ActorClass": "PrimaryScada", "ShNodeId": "da9a0427-d6c0-44c0-b51c-492c1e580dc5", "TypeName": "spaceheat.node.gt", "Version": "200"}
+      ],
+      "DataChannels": [],
+      "SynthChannels": [],
+      "TankModuleComponents": [],
+      "FlowModuleComponents": [],
+      "Ha1Params": {"AlphaTimes10": 98, "BetaTimes100": -18, "GammaEx6": 5000, "IntermediatePowerKw": 1.5, "IntermediateRswtF": 110, "DdPowerKw": 9.8, "DdRswtF": 160, "DdDeltaTF": 20, "HpMaxKwTh": 14.0, "MaxEwtF": 166, "TypeName": "ha1.params", "Version": "001"},
+      "I2cRelayComponent": {"ComponentId": "25f344ee-39ea-4904-bff9-54f2022337af", "ComponentAttributeClassId": "29eab8b1-100f-4230-bb44-3a2fcba33cc3", "ConfigList": [{"ActorName": "relay1", "AsyncCapture": true, "AsyncCaptureDelta": null, "CapturePeriodS": 300, "ChannelName": "vdc-relay1", "DeEnergizedState": "RelayClosed", "DeEnergizingEvent": "CloseRelay", "EnergizedState": "RelayOpen", "EnergizingEvent": "OpenRelay", "EventType": "change.relay.state", "Exponent": 0, "PollPeriodMs": 200, "RelayIdx": 1, "StateType": "relay.closed.or.open", "TypeName": "relay.actor.config", "Unit": "Unitless", "Version": "002", "WiringConfig": "NormallyClosed"}], "DisplayName": "I2C Relay Board", "HwUid": "i2c.krida.double.emr16.v1.29eab8", "I2cAddressList": [32, 33], "TypeName": "i2c.multichannel.dt.relay.component.gt", "Version": "002"},
+      "TypeName": "layout.lite",
+      "Version": "002"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "DcNodeConsistency"
+      statement: >
+        Every DataChannels.AboutNodeName and DataChannels.CapturedByNodeName
+        SHALL reference an existing ShNodes.Name, and every captured-by node
+        SHALL have an active ActorClass.
+
+    - number: 2
+      name: "NodeHandleHierarchyConsistency"
+      statement: >
+        Every ShNode with a dotted handle SHALL have its immediate boss present
+        as another ShNode in the same payload.
+
+  extended_description: >
+    `layout.lite` is the SCADA-emitted semantic context for a running
+    deployment. It exists so consumers can interpret compact runtime payloads
+    that reference channels and nodes by name rather than embedding full
+    definitions in every message.
+
+    In particular, `report.event` and `snapshot.spaceheat` rely on
+    `layout.lite` for channel interpretation. `ChannelName` references inside
+    those messages SHALL be resolved against `DataChannels` and
+    `SynthChannels` in the relevant `layout.lite` context.
+
+    `layout.lite` also carries selected runtime settings whose values affect
+    the interpretation of the running system, including active HA1 parameters.

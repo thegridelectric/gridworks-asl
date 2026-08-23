@@ -1,0 +1,133 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/scada.params/002"
+
+title: "scada.params"
+type: object
+description: >
+  Message used to read or change the HA1 control parameters held by a SCADA
+  node, exchanged between a LeafTransactiveNode and a SCADA node. A request
+  carries the proposed NewParams; the SCADA node's reply echoes the same
+  MessageId and reports the parameters in effect before and after the change.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the node that sent this message.
+
+  FromName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      SpaceheatNode name of the sending actor within its GNode.
+
+  ToName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      SpaceheatNode name of the intended recipient actor.
+
+  UnixTimeMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Time at which this message was created.
+
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Identifier correlating a request with its reply. The SCADA node's
+      response carries the MessageId of the request it answers.
+
+  NewParams:
+    oneOf:
+      - $ref: "https://schemas.electricity.works/types/ha1.params/001"
+      - $ref: "https://schemas.electricity.works/types/ha1.params/002"
+      - $ref: "https://schemas.electricity.works/types/ha1.params/003"
+    description: >
+      HA1 parameters being proposed or, in a reply, the parameters now in
+      effect on the SCADA node. A scada.params version 002 message carries an
+      ha1.params version 001, 002, or 003 object.
+
+  OldParams:
+    oneOf:
+      - $ref: "https://schemas.electricity.works/types/ha1.params/001"
+      - $ref: "https://schemas.electricity.works/types/ha1.params/002"
+      - $ref: "https://schemas.electricity.works/types/ha1.params/003"
+    description: >
+      HA1 parameters that were in effect on the SCADA node before this
+      exchange. Populated by the SCADA node in its reply. A scada.params
+      version 002 message carries an ha1.params version 001, 002, or 003
+      object.
+
+  TypeName:
+    const: "scada.params"
+
+  Version:
+    const: "002"
+
+required:
+  - FromGNodeAlias
+  - FromName
+  - ToName
+  - UnixTimeMs
+  - MessageId
+  - TypeName
+  - Version
+
+additionalProperties: true
+
+examples:
+  - |
+    {
+      "FromGNodeAlias": "hw1.isone.me.versant.keene.elm",
+      "FromName": "a",
+      "ToName": "h",
+      "UnixTimeMs": 1745850860132,
+      "MessageId": "0da324a0-2f91-46ca-9f3c-7388173fd44e",
+      "NewParams": {
+        "AlphaTimes10": 70,
+        "BetaTimes100": -13,
+        "GammaEx6": 2000,
+        "IntermediatePowerKw": 1.5,
+        "IntermediateRswtF": 130,
+        "DdPowerKw": 12.0,
+        "DdRswtF": 180,
+        "DdDeltaTF": 20,
+        "HpMaxKwTh": 14.0,
+        "MaxEwtF": 170,
+        "LoadOverestimationPercent": 0,
+        "StratBossDist010": 50,
+        "TypeName": "ha1.params",
+        "Version": "003"
+      },
+      "OldParams": null,
+      "TypeName": "scada.params",
+      "Version": "002"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  extended_description: >
+    HA1 is the home-heating control algorithm run by a GridWorks SCADA node.
+    scada.params is the boundary message for inspecting and updating the
+    algorithm's tuning parameters without redeploying the SCADA node.
+
+    The exchange is request/reply. A LeafTransactiveNode sends a scada.params
+    with NewParams set to the parameters it wants applied. The SCADA node
+    adopts them, then replies with a scada.params that echoes the request's
+    MessageId, sets OldParams to the values it had been running, and sets
+    NewParams to the values now in effect. A request with NewParams absent
+    reads the current parameters without changing them. NewParams and
+    OldParams are optional because not every message in the exchange carries
+    both.
+
+    The SCADA codebase held scada.params at version 002 across the ha1.params
+    001 -> 002 -> 003 evolution, so version 002 messages were emitted carrying
+    an ha1.params version 001, 002, or 003 object (deploy lag meant houses ran
+    different ha1.params versions concurrently). NewParams and OldParams
+    therefore accept all three, expressed as a oneOf of those ha1.params
+    versions; the ha1.params Version field discriminates which one a given
+    message carries.
+
+    NOTE -- this version's oneOf over multiple versions of the same type is an
+    early lenience accommodating back-dated production traffic as sema came
+    online, not a pattern to copy. Newer versions carry a single type version.

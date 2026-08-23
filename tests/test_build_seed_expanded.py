@@ -54,8 +54,8 @@ initial_targets:
 """,
     )
 
-    assert expanded["initial_targets"] == ["report.event:002", "report.event:003"]
-    assert set(expanded["worklist"]["types"]["report.event"]) == {"002", "003"}
+    assert expanded["initial_targets"] == ["report.event:000", "report.event:002", "report.event:003"]
+    assert set(expanded["worklist"]["types"]["report.event"]) == {"000", "002", "003"}
     assert "004" not in expanded["worklist"]["types"]["report.event"]
 
 

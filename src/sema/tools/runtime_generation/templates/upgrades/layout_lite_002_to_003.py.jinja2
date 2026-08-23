@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ layout_lite_003_class_name }}:
+        """Historical back-fill from S3 wire evidence. As v004 but the deploy-lag unions sit one window earlier: Ha1Params oneOf[001, 002]; TankModuleComponents single pico.tank 000 (v010 first appears in v004)."""
+        raise SemaType.upgrade_requires_context(
+            "layout.lite:002 cannot be upgraded to layout.lite:003 without context: "
+            "003 pins I2cRelayComponent at i2c:002, but a v002 message may carry "
+            "i2c:001 (whose 001->002 upgrade requires context -- it adds the required "
+            "DeEnergizedState/EnergizedState under relay.actor.config). JournalKeeper "
+            "retains v002 messages at their own version."
+        )

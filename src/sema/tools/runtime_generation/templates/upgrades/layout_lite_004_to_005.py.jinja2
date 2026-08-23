@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ layout_lite_005_class_name }}:
+        """Runtime layout carrying FromGNodeInstanceId; no CriticalZoneList (added in 006)."""
+        raise SemaType.upgrade_requires_context(
+            "layout.lite:004 cannot be upgraded to layout.lite:005 without context: "
+            "005 pins ha1.params:004 and pico.tank.module.component.gt:011, but a v004 "
+            "message may carry ha1.params:002 (whose 002->003 upgrade requires context) "
+            "and tank components at v000/v010. JournalKeeper retains v004 messages at "
+            "their own version."
+        )

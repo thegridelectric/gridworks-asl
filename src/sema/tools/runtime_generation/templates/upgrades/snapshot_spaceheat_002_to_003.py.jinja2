@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ snapshot_spaceheat_003_class_name }}:
+        """LatestStateList element: machine.states -> single.machine.state (one state per entry, adds Cause; drops the parallel StateList/UnixMsList arrays). Type moved from gwproto to scada."""
+        raise SemaType.upgrade_requires_context(
+            "snapshot.spaceheat:002 cannot be upgraded to snapshot.spaceheat:003 "
+            "without context: v003 replaces each machine.states (parallel "
+            "StateList/UnixMsList arrays) with per-state single.machine.state "
+            "entries carrying a Cause field absent from v002, which SHALL NOT be "
+            "fabricated. JournalKeeper retains v002 messages at their own version."
+        )

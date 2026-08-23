@@ -1,0 +1,102 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/report.event/000"
+
+title: "report.event"
+type: object
+description: >
+  Event wrapper for a report payload with message tracking metadata.
+
+properties:
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  TimeCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+
+  Src:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+
+  Report:
+    $ref: "https://schemas.electricity.works/types/report/001"
+
+  TypeName:
+    const: "report.event"
+
+  Version:
+    type: string
+    default: "000"
+
+
+required:
+  - MessageId
+  - TimeCreatedMs
+  - Src
+  - Report
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "MessageId": "f4a13cb8-b3e9-4558-a584-2caea59bccd8",
+      "TimeCreatedMs": 1730073900043,
+      "Src": "hw1.isone.me.versant.keene.beech.scada",
+      "TypeName": "report.event",
+      "Report": {
+        "FromGNodeAlias": "hw1.isone.me.versant.keene.beech.scada",
+        "FromGNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+        "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
+        "SlotStartUnixS": 1730073600,
+        "SlotDurationS": 300,
+        "ChannelReadingList": [
+          {
+            "ChannelName": "hp-odu-pwr",
+            "ValueList": [
+              208
+            ],
+            "ScadaReadTimeUnixMsList": [
+              1730073619651
+            ],
+            "TypeName": "channel.readings",
+            "Version": "002"
+          },
+          {
+            "ChannelName": "hp-idu-pwr",
+            "ValueList": [
+              12
+            ],
+            "ScadaReadTimeUnixMsList": [
+              1730073605647
+            ],
+            "TypeName": "channel.readings",
+            "Version": "002"
+          }
+        ],
+        "FsmActionList": [],
+        "FsmReportList": [],
+        "MessageCreatedMs": 1730073900043,
+        "Id": "f4a13cb8-b3e9-4558-a584-2caea59bccd8",
+        "TypeName": "report",
+        "Version": "001"
+      },
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "ReportIdentityPropagation"
+      statement: >
+        MessageId SHALL equal Report.Id.
+    - number: 2
+      name: "ReportCreatedTimePropagation"
+      statement: >
+        TimeCreatedMs SHALL equal Report.MessageCreatedMs.
+    - number: 3
+      name: "ReportSourcePropagation"
+      statement: >
+        Src SHALL equal Report.FromGNodeAlias.

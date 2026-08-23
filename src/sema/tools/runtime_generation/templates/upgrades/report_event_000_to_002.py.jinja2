@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ report_event_002_class_name }}:
+        """- Report: report:001 -> 002"""
+        raise SemaType.upgrade_requires_context(
+            "report.event:000 cannot be upgraded to report.event:002 without "
+            "context: the nested Report is report:001, whose upgrade to "
+            "report:002 requires context. JournalKeeper retains v000 messages "
+            "at their own version."
+        )

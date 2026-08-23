@@ -41,7 +41,7 @@ properties:
     $ref: "https://schemas.electricity.works/formats/spaceheat.name"
 
   FlowMeterType:
-    $ref: "https://schemas.electricity.works/enums/spaceheat.make.model/003"
+    $ref: "https://schemas.electricity.works/enums/spaceheat.make.model/007"
     description: >
       Make/model of the configured flow meter.
 

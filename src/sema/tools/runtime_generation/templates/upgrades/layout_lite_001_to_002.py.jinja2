@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ layout_lite_002_class_name }}:
+        """Historical back-fill from S3 wire evidence. As v003 but one window earlier: Ha1Params single ha1.params:001 (v002 first appears in v003), and I2cRelayComponent oneOf[i2c 001, 002] (deploy-lag union; i2c/relay.actor.config bumped to 002 on 2024-12-31)."""
+        raise SemaType.upgrade_requires_context(
+            "layout.lite:001 cannot be upgraded to layout.lite:002 without "
+            "context: v002 adds the required I2cRelayComponent and upgrades "
+            "Ha1Params ha1.params 000 -> 001 (adding the required MaxEwtF), "
+            "neither derivable from a v001 message. JournalKeeper retains v001 "
+            "messages at their own version."
+        )

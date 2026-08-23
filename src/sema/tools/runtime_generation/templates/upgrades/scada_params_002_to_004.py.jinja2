@@ -1,0 +1,18 @@
+    def upgrade(self) -> {{ scada_params_004_class_name }}:
+        """
+        - NewParams: ha1.params:001 | ha1.params:002 | ha1.params:003 -> ha1.params:004
+        - OldParams: ha1.params:001 | ha1.params:002 | ha1.params:003 -> ha1.params:004
+        """
+        data = self.model_dump()
+        if self.new_params is not None:
+            new_params: SemaType = self.new_params
+            while new_params.version != "004":
+                new_params = new_params.upgrade()
+            data["new_params"] = new_params
+        if self.old_params is not None:
+            old_params: SemaType = self.old_params
+            while old_params.version != "004":
+                old_params = old_params.upgrade()
+            data["old_params"] = old_params
+        data["version"] = "004"
+        return {{ scada_params_004_class_name }}.model_validate(data)

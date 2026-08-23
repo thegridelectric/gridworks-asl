@@ -1,0 +1,5 @@
+    def upgrade(self) -> {{ pico_tank_module_component_gt_011_class_name }}:
+        """Baseline runtime version (no prior version tracked)."""
+        data = self.model_dump()
+        data["version"] = "011"
+        return {{ pico_tank_module_component_gt_011_class_name }}.model_validate(data)

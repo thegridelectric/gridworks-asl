@@ -229,7 +229,24 @@ types:
           - FloGitCommit: remove
           - ConstantDeltaT: optional -> required
       "003":
-        summary: "Initial Sema version"
+        summary: >
+          - InitialThermocline -> InitialThermocline1 + InitialThermocline2
+          - InitialMiddleTempF: add
+      "002":
+        summary: >
+          - FloAlias: add
+          - FloGitCommit: add
+          - BufferAvailableKwh: optional -> required
+          - HouseAvailableKwh: optional -> required
+          - InitialBottomTempF: optional -> required
+      "001":
+        summary: >
+          - CopMin: add
+          - CopMinOatF: add
+          - HpIsOff: add
+          - HpTurnOnMinutes: add
+      "000":
+        summary: "Earliest wire shape (single shape, seen 2025-01-04 to 2025-01-06), back-filled from S3 evidence. As v001 but without CopMin, CopMinOatF, HpIsOff, HpTurnOnMinutes and the v001-era optional fields (BufferAvailableKwh, HouseAvailableKwh, InitialBottomTempF, DischargingDdDeltaTF)."
 
   fsm.atomic.report:
     latest_version: "001"
@@ -639,6 +656,14 @@ types:
           - CopMinOatF: add as optional
       "004":
         summary: "Baseline runtime version (no prior version tracked)."
+      "003":
+        summary: "- StratBossDist010: add"
+      "002":
+        summary: "- LoadOverestimationPercent: add"
+      "001":
+        summary: "- MaxEwtF: add"
+      "000":
+        summary: "Earliest wire shape, back-filled from S3 evidence. The nine coefficient/operating fields, before MaxEwtF (v001), LoadOverestimationPercent (v002) and StratBossDist010 (v003)."
 
   heartbeat.a:
     latest_version: "000"
@@ -772,7 +797,9 @@ types:
       "003":
         summary: "- Add I2cBus"
       "002":
-        summary: "Baseline runtime version (no prior version tracked)."
+        summary: "- ConfigList element: relay.actor.config 001 -> 002"
+      "001":
+        summary: "Earliest wire shape, back-filled from S3 evidence. As v002 but its ConfigList element is relay.actor.config:001 (pre-DeEnergizedState / EnergizedState)."
 
   i2c.mux:
     latest_version: "000"
@@ -937,6 +964,14 @@ types:
         summary: "Drop FromGNodeInstanceId; add CriticalZoneList."
       "005":
         summary: "Runtime layout carrying FromGNodeInstanceId; no CriticalZoneList (added in 006)."
+      "004":
+        summary: "Historical back-fill from S3 wire evidence. As v005 but Ha1Params and TankModuleComponents are deploy-lag unions: Ha1Params oneOf[002, 003]; TankModuleComponents.items oneOf[pico.tank 000, 010]."
+      "003":
+        summary: "Historical back-fill from S3 wire evidence. As v004 but the deploy-lag unions sit one window earlier: Ha1Params oneOf[001, 002]; TankModuleComponents single pico.tank 000 (v010 first appears in v004)."
+      "002":
+        summary: "Historical back-fill from S3 wire evidence. As v003 but one window earlier: Ha1Params single ha1.params:001 (v002 first appears in v003), and I2cRelayComponent oneOf[i2c 001, 002] (deploy-lag union; i2c/relay.actor.config bumped to 002 on 2024-12-31)."
+      "001":
+        summary: "Historical back-fill from S3 wire evidence. As v002 but without I2cRelayComponent and SynthChannels, and Ha1Params is the nine-field ha1.params:000 (before MaxEwtF)."
 
   linear.one.dimensional.calibration:
     latest_version: "000"
@@ -1010,6 +1045,12 @@ types:
         summary: "- ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case). Context-dependent: the device type lived on the referenced cac, not the component."
       "011":
         summary: "Baseline runtime version (no prior version tracked)."
+      "010":
+        summary: >
+          - SensorOrder: add as optional
+          - PicoKOhms: required -> optional
+      "000":
+        summary: "Historical version back-filled from S3 wire evidence; lowest tracked version. Dual-Pico hardware identity (PicoAHwUid + PicoBHwUid) with PicoKOhms and SimpleBetaForPico temp calc; no SensorOrder."
 
   position.point.gt:
     latest_version: "000"
@@ -1044,7 +1085,12 @@ types:
           - Exponent: drop (redundant; unit and scaling are carried by channel identity)
           - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
       "002":
-        summary: "Baseline runtime version (no prior version tracked)."
+        summary: >
+          - StateType: add
+          - DeEnergizedState: add
+          - EnergizedState: add
+      "001":
+        summary: "Earliest wire shape, back-filled from S3 evidence. As v002 but without StateType, DeEnergizedState or EnergizedState (added 2024-12-31 with the state-consistency axioms); v001 carries only axiom 1."
 
   relay.control.config:
     latest_version: "000"
@@ -1060,7 +1106,12 @@ types:
       "003":
         summary: "- FsmReportList[]: fsm.full.report:000 -> 001"
       "002":
-        summary: "Baseline runtime version (no prior version tracked)."
+        summary: >
+          - StateList: add (machine.states:000)
+          - FsmActionList: remove
+          - FsmReportList[]: fsm.full.report:000 -> oneOf[000, 001]
+      "001":
+        summary: "Historical back-fill from S3 wire evidence (gwproto era). As v002 but FsmActionList (fsm.atomic.report:000) in place of StateList, and FsmReportList is fsm.full.report:000 only."
 
   report.event:
     latest_version: "003"
@@ -1071,7 +1122,9 @@ types:
           - Report: report:002 -> 003
           - Axioms: remove former ReportIdentityPropagation and ReportCreatedTimePropagation
       "002":
-        summary: "Baseline runtime version (no prior version tracked)."
+        summary: "- Report: report:001 -> 002"
+      "000":
+        summary: "Historical back-fill from S3 wire evidence (gwproto era). As v002 but Report is report:001; same three propagation axioms."
 
   scada.board.component.gt:
     latest_version: "000"
@@ -1104,7 +1157,15 @@ types:
           - NewParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
           - OldParams: ha1.params:004 | ha1.params:005 -> ha1.params:006
       "004":
-        summary: "Initial Sema version"
+        summary: >
+          - NewParams: ha1.params:001 | ha1.params:002 | ha1.params:003 -> ha1.params:004
+          - OldParams: ha1.params:001 | ha1.params:002 | ha1.params:003 -> ha1.params:004
+      "002":
+        summary: "- NewParams/OldParams element: ha1.params 000 -> 001/002/003"
+      "001":
+        summary: "Earliest params-bearing scada.params, back-filled from S3 evidence. NewParams/OldParams carry an ha1.params:000 object (nine-field shape)."
+      "000":
+        summary: "Earliest wire shape, back-filled from S3 evidence. A free-form param-setter envelope with no NewParams/OldParams; individual params (e.g. Gamma, BufferEmpty, DdRswt) ride additionalProperties."
 
   send.control.capabilities:
     latest_version: "000"
@@ -1209,7 +1270,13 @@ types:
     versioning_strategy: "literal"
     versions:
       "003":
-        summary: "Baseline runtime version (no prior version tracked)."
+        summary: "LatestStateList element: machine.states -> single.machine.state (one state per entry, adds Cause; drops the parallel StateList/UnixMsList arrays). Type moved from gwproto to scada."
+      "002":
+        summary: >
+          - LatestStateList: add (machine.states:000, parallel StateList / UnixMsList
+            arrays per machine)
+      "001":
+        summary: "Historical back-fill from S3 wire evidence (gwproto era). As v002 but without LatestStateList (readings only). Authored as the shape carried from 2024-03-06 on; the earlier nested-Snapshot shape under the same version label predates the S3 archive."
 
   spaceheat.node.gt:
     latest_version: "302"

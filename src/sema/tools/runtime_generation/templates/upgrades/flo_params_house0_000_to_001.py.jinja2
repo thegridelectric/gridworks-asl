@@ -1,0 +1,13 @@
+    def upgrade(self) -> {{ flo_params_house0_001_class_name }}:
+        """
+        - CopMin: add
+        - CopMinOatF: add
+        - HpIsOff: add
+        - HpTurnOnMinutes: add
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ flo_params_house0_000_class_name }} cannot be upgraded to "
+            "{{ flo_params_house0_001_class_name }} without context: v001 adds "
+            "the required CopMin, CopMinOatF, HpIsOff and HpTurnOnMinutes, absent "
+            "from a v000 message and which SHALL NOT be fabricated."
+        )

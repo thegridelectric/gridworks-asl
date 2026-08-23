@@ -1,0 +1,15 @@
+    def upgrade(self) -> {{ flo_params_house0_002_class_name }}:
+        """
+        - FloAlias: add
+        - FloGitCommit: add
+        - BufferAvailableKwh: optional -> required
+        - HouseAvailableKwh: optional -> required
+        - InitialBottomTempF: optional -> required
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ flo_params_house0_001_class_name }} cannot be upgraded to "
+            "{{ flo_params_house0_002_class_name }} without context: v002 makes "
+            "BufferAvailableKwh, HouseAvailableKwh and InitialBottomTempF "
+            "required, but the earliest v001 wire shapes omit them, and they "
+            "SHALL NOT be fabricated."
+        )

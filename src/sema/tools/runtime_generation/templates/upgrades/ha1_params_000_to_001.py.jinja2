@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ ha1_params_001_class_name }}:
+        """- MaxEwtF: add"""
+        raise SemaType.upgrade_requires_context(
+            "{{ ha1_params_000_class_name }} cannot be upgraded to "
+            "{{ ha1_params_001_class_name }} without context: v001 adds the "
+            "required MaxEwtF, absent from a v000 message and which SHALL NOT be "
+            "fabricated."
+        )

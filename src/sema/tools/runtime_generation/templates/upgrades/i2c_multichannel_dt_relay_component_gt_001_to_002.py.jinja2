@@ -1,0 +1,11 @@
+    def upgrade(self) -> {{ i2c_multichannel_dt_relay_component_gt_002_class_name }}:
+        """
+        - ConfigList element: relay.actor.config 001 -> 002
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ i2c_multichannel_dt_relay_component_gt_001_class_name }} cannot be "
+            "upgraded to {{ i2c_multichannel_dt_relay_component_gt_002_class_name }} "
+            "without context: its ConfigList elements upgrade relay.actor.config "
+            "001 -> 002, which adds the required DeEnergizedState / EnergizedState "
+            "that SHALL NOT be fabricated."
+        )

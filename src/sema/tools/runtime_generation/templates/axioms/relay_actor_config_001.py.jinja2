@@ -1,0 +1,14 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ relay_actor_config_001_class_name }}":
+        """
+        Axiom 1: EventEnumConsistency
+        If EventType names a known enum, then DeEnergizingEvent and EnergizingEvent SHALL both
+        be valid values of that enum.
+        """
+        if self.event_type == "change.relay.state":
+            valid = set({{ change_relay_state_000_class_name }}.values())
+            if self.de_energizing_event not in valid or self.energizing_event not in valid:
+                raise ValueError(
+                    "Axiom 1 failed: relay state events must be valid change.relay.state values."
+                )
+        return self

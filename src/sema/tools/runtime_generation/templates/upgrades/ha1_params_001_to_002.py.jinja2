@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ ha1_params_002_class_name }}:
+        """- LoadOverestimationPercent: add"""
+        raise SemaType.upgrade_requires_context(
+            "{{ ha1_params_001_class_name }} cannot be upgraded to "
+            "{{ ha1_params_002_class_name }} without context: v002 adds the "
+            "required LoadOverestimationPercent field, absent from a v001 "
+            "message (which predates the field) and which SHALL NOT be fabricated."
+        )

@@ -1,0 +1,13 @@
+    def upgrade(self) -> {{ flo_params_house0_003_class_name }}:
+        """
+        - InitialThermocline -> InitialThermocline1 + InitialThermocline2
+        - InitialMiddleTempF: add
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ flo_params_house0_002_class_name }} cannot be upgraded to "
+            "{{ flo_params_house0_003_class_name }} without context: v003 splits "
+            "the single InitialThermocline into InitialThermocline1 and "
+            "InitialThermocline2 and adds the required InitialMiddleTempF, none "
+            "of which can be derived from a v002 message and which SHALL NOT be "
+            "fabricated."
+        )

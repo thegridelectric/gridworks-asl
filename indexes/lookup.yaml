@@ -147,6 +147,9 @@ types:
       '005': definitions/types/flo.params.house0/005.yaml
       '004': definitions/types/flo.params.house0/004.yaml
       '003': definitions/types/flo.params.house0/003.yaml
+      '002': definitions/types/flo.params.house0/002.yaml
+      '001': definitions/types/flo.params.house0/001.yaml
+      '000': definitions/types/flo.params.house0/000.yaml
   fsm.atomic.report:
     latest_version: '001'
     versioning_strategy: literal
@@ -425,6 +428,10 @@ types:
       '006': definitions/types/ha1.params/006.yaml
       '005': definitions/types/ha1.params/005.yaml
       '004': definitions/types/ha1.params/004.yaml
+      '003': definitions/types/ha1.params/003.yaml
+      '002': definitions/types/ha1.params/002.yaml
+      '001': definitions/types/ha1.params/001.yaml
+      '000': definitions/types/ha1.params/000.yaml
   heartbeat.a:
     latest_version: '000'
     versioning_strategy: literal
@@ -517,6 +524,7 @@ types:
       '004': definitions/types/i2c.multichannel.dt.relay.component.gt/004.yaml
       '003': definitions/types/i2c.multichannel.dt.relay.component.gt/003.yaml
       '002': definitions/types/i2c.multichannel.dt.relay.component.gt/002.yaml
+      '001': definitions/types/i2c.multichannel.dt.relay.component.gt/001.yaml
   i2c.mux:
     latest_version: '000'
     versioning_strategy: literal
@@ -616,6 +624,10 @@ types:
       '007': definitions/types/layout.lite/007.yaml
       '006': definitions/types/layout.lite/006.yaml
       '005': definitions/types/layout.lite/005.yaml
+      '004': definitions/types/layout.lite/004.yaml
+      '003': definitions/types/layout.lite/003.yaml
+      '002': definitions/types/layout.lite/002.yaml
+      '001': definitions/types/layout.lite/001.yaml
   linear.one.dimensional.calibration:
     latest_version: '000'
     versioning_strategy: literal
@@ -665,6 +677,8 @@ types:
     versions:
       '012': definitions/types/pico.tank.module.component.gt/012.yaml
       '011': definitions/types/pico.tank.module.component.gt/011.yaml
+      '010': definitions/types/pico.tank.module.component.gt/010.yaml
+      '000': definitions/types/pico.tank.module.component.gt/000.yaml
   position.point.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -687,6 +701,7 @@ types:
     versions:
       '003': definitions/types/relay.actor.config/003.yaml
       '002': definitions/types/relay.actor.config/002.yaml
+      '001': definitions/types/relay.actor.config/001.yaml
   relay.control.config:
     latest_version: '000'
     versioning_strategy: literal
@@ -698,12 +713,14 @@ types:
     versions:
       '003': definitions/types/report/003.yaml
       '002': definitions/types/report/002.yaml
+      '001': definitions/types/report/001.yaml
   report.event:
     latest_version: '003'
     versioning_strategy: literal
     versions:
       '003': definitions/types/report.event/003.yaml
       '002': definitions/types/report.event/002.yaml
+      '000': definitions/types/report.event/000.yaml
   scada.board.component.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -721,6 +738,9 @@ types:
     versions:
       '005': definitions/types/scada.params/005.yaml
       '004': definitions/types/scada.params/004.yaml
+      '002': definitions/types/scada.params/002.yaml
+      '001': definitions/types/scada.params/001.yaml
+      '000': definitions/types/scada.params/000.yaml
   send.control.capabilities:
     latest_version: '000'
     versioning_strategy: literal
@@ -793,6 +813,8 @@ types:
     versioning_strategy: literal
     versions:
       '003': definitions/types/snapshot.spaceheat/003.yaml
+      '002': definitions/types/snapshot.spaceheat/002.yaml
+      '001': definitions/types/snapshot.spaceheat/001.yaml
   spaceheat.node.gt:
     latest_version: '302'
     versioning_strategy: literal

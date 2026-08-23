@@ -1,0 +1,10 @@
+    def upgrade(self) -> {{ report_002_class_name }}:
+        """- StateList: add (machine.states:000)
+- FsmActionList: remove
+- FsmReportList[]: fsm.full.report:000 -> oneOf[000, 001]"""
+        raise SemaType.upgrade_requires_context(
+            "report:001 cannot be upgraded to report:002 without context: v002 "
+            "replaces FsmActionList with the required StateList (machine.states), "
+            "not derivable from a v001 message. JournalKeeper retains v001 "
+            "messages at their own version."
+        )

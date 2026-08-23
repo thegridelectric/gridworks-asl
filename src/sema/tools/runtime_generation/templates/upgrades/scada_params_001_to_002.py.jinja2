@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ scada_params_002_class_name }}:
+        """
+        - NewParams/OldParams element: ha1.params 000 -> 001/002/003
+        """
+        raise SemaType.upgrade_requires_context(
+            "scada.params:001 cannot be upgraded to scada.params:002 without "
+            "context: its NewParams/OldParams upgrade ha1.params 000 -> 001, "
+            "which adds the required MaxEwtF that SHALL NOT be fabricated."
+        )

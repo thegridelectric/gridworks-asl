@@ -1,0 +1,8 @@
+    def upgrade(self) -> {{ ha1_params_003_class_name }}:
+        """- StratBossDist010: add"""
+        raise SemaType.upgrade_requires_context(
+            "{{ ha1_params_002_class_name }} cannot be upgraded to "
+            "{{ ha1_params_003_class_name }} without context: v003 adds the "
+            "required StratBossDist010 StratBoss parameter, absent from a v002 "
+            "message (which predates the field) and which SHALL NOT be fabricated."
+        )

@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ scada_params_001_class_name }}:
+        """Earliest params-bearing scada.params, back-filled from S3 evidence. NewParams/OldParams carry an ha1.params:000 object (nine-field shape)."""
+        raise SemaType.upgrade_requires_context(
+            "scada.params:000 cannot be upgraded to scada.params:001 without "
+            "context: v000 is a free-form param-setter whose ad-hoc fields do "
+            "not map deterministically to v001's structured NewParams/OldParams "
+            "ha1.params objects. JournalKeeper retains v000 messages at their "
+            "own version."
+        )

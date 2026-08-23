@@ -1,0 +1,450 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/flo.params.house0/002"
+
+title: "flo.params.house0"
+type: object
+description: >
+  Complete input parameter set for one run of the Forward Looking Optimization
+  (FLO) algorithm against a House0 thermal model. It captures the optimization
+  horizon, the modeled equipment, the initial state of thermal storage, the
+  price and weather forecasts, and the house thermal-response coefficients
+  needed to plan heat pump operation and produce a market bid.
+
+properties:
+
+  GNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the home (SCADA) whose thermal system is being optimized.
+
+  FloParamsUid:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier for this parameter set, used to tie a FLO run and its
+      resulting bid back to the exact inputs that produced them.
+
+  TimezoneStr:
+    type: string
+    description: >
+      IANA timezone name for the home, used to align the optimization horizon
+      and forecasts with local time.
+
+  StartUnixS:
+    $ref: "https://schemas.electricity.works/formats/utc.seconds"
+    description: >
+      Start of the optimization horizon, in Unix seconds.
+
+  NumLayers:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Number of stacked thermal layers used to model the storage tanks in the
+      House0 model. More layers give finer resolution of the temperature
+      profile and thermocline position.
+
+  HorizonHours:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Length of the optimization horizon in hours. The forecast arrays are
+      consumed over this horizon.
+
+  StorageVolumeGallons:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Total volume of thermal storage available to the model, in gallons.
+
+  StorageLossesPercent:
+    type: number
+    description: >
+      Standing thermal loss of the storage, expressed as a percentage, used to
+      model heat lost from storage over the horizon.
+
+  HpMinElecKw:
+    type: number
+    description: >
+      Minimum electrical power the heat pump may draw while running, in kW. May
+      be negative to represent metered offsets at the lower operating bound.
+
+  HpMaxElecKw:
+    type: number
+    description: >
+      Maximum electrical power the heat pump may draw, in kW.
+
+  BufferAvailableKwh:
+    type: number
+    description: >
+      Thermal energy currently available from the buffer tank at the start of
+      the horizon, in kWh.
+
+  HouseAvailableKwh:
+    type: number
+    description: >
+      Thermal energy currently stored in the house mass and available to the
+      model at the start of the horizon, in kWh.
+
+  CopIntercept:
+    type: number
+    description: >
+      Intercept term of the linear model giving heat pump coefficient of
+      performance as a function of outside air temperature.
+
+  CopOatCoeff:
+    type: number
+    description: >
+      Slope term of the heat pump COP model with respect to outside air
+      temperature in degrees Fahrenheit.
+
+  CopMin:
+    type: number
+    description: >
+      Floor applied to the modeled COP when the outside air temperature is at
+      or below CopMinOatF.
+
+  CopMinOatF:
+    type: number
+    description: >
+      Outside air temperature in degrees Fahrenheit at or below which the
+      modeled COP is held at CopMin.
+
+  CopLwtCoeff:
+    type: number
+    description: >
+      Coefficient adjusting the modeled COP for the heat pump leaving water
+      temperature.
+
+  InitialTopTempF:
+    type: integer
+    description: >
+      Measured temperature, in degrees Fahrenheit, of the top of thermal
+      storage at the start of the horizon.
+
+  InitialBottomTempF:
+    type: integer
+    description: >
+      Measured temperature, in degrees Fahrenheit, of the bottom of thermal
+      storage at the start of the horizon.
+
+  InitialThermocline:
+    type: integer
+    description: >
+      Layer index of the thermocline in storage at the start of the horizon,
+      marking the boundary between the hot upper band and the cold lower band.
+      This two-band model was replaced in version 003 by a three-cluster model
+      with two thermoclines.
+
+  HpIsOff:
+    type: boolean
+    description: >
+      Whether the heat pump is off at the start of the horizon.
+
+  HpTurnOnMinutes:
+    type: integer
+    description: >
+      Minutes the heat pump takes to reach steady operation after being turned
+      on, used to model the cost of starting it.
+
+  LmpForecast:
+    type: array
+    items:
+      type: number
+    description: >
+      Hourly forecast of the locational marginal (energy) price over the
+      horizon, in PriceUnit.
+
+  DistPriceForecast:
+    type: array
+    items:
+      type: number
+    description: >
+      Hourly forecast of the distribution price component over the horizon, in
+      PriceUnit.
+
+  RegPriceForecast:
+    type: array
+    items:
+      type: number
+    description: >
+      Hourly forecast of the regulation price component over the horizon, in
+      PriceUnit.
+
+  PriceForecastUid:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier of the price forecast (LMP, distribution, and
+      regulation components) used for this run.
+
+  OatForecastF:
+    type: array
+    items:
+      type: number
+    description: >
+      Hourly forecast of outside air temperature over the horizon, in degrees
+      Fahrenheit.
+
+  WindSpeedForecastMph:
+    type: array
+    items:
+      type: number
+    description: >
+      Hourly forecast of wind speed over the horizon, in miles per hour, used
+      in modeling house heat loss.
+
+  WeatherUid:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier of the weather forecast (outside air temperature and
+      wind speed) used for this run.
+
+  AlphaTimes10:
+    type: integer
+    description: >
+      House thermal-response coefficient alpha, scaled by 10. Integer scaling
+      avoids floating point representation at the serialization boundary.
+
+  BetaTimes100:
+    type: integer
+    description: >
+      House thermal-response coefficient beta, scaled by 100.
+
+  GammaEx6:
+    type: integer
+    description: >
+      House thermal-response coefficient gamma, scaled by one million.
+
+  IntermediatePowerKw:
+    type: number
+    description: >
+      Thermal power, in kW, at the intermediate operating point of the house
+      heating curve.
+
+  IntermediateRswtF:
+    type: integer
+    description: >
+      Required source water temperature, in degrees Fahrenheit, at the
+      intermediate operating point.
+
+  DdPowerKw:
+    type: number
+    description: >
+      Thermal power, in kW, required at the design-day (coldest expected)
+      operating point.
+
+  DdRswtF:
+    type: integer
+    description: >
+      Required source water temperature, in degrees Fahrenheit, at the
+      design-day operating point.
+
+  DdDeltaTF:
+    type: integer
+    description: >
+      Temperature drop, in degrees Fahrenheit, across the house heat emitters
+      at the design-day operating point.
+
+  MaxEwtF:
+    type: integer
+    description: >
+      Maximum entering water temperature, in degrees Fahrenheit, that the
+      house distribution system will accept.
+
+  DischargingDdDeltaTF:
+    type: integer
+    description: >
+      Temperature drop, in degrees Fahrenheit, across the house heat emitters
+      at the design-day operating point while discharging thermal storage.
+      Optional: emitted only by the mid-life shape of version 002 (and by the
+      Hinge-era version 001 traffic); absent both before it was introduced and
+      after the Hinge model was removed. See extended_description.
+
+  PriceUnit:
+    $ref: "https://schemas.electricity.works/enums/market.price.unit/000"
+    description: >
+      Unit in which the LMP, distribution, and regulation price forecasts are
+      expressed.
+
+  ParamsGeneratedS:
+    $ref: "https://schemas.electricity.works/formats/utc.seconds"
+    description: >
+      Time, in Unix seconds, at which this parameter set was generated.
+
+  FloAlias:
+    type: string
+    description: >
+      Name identifying the FLO algorithm variant these parameters are intended
+      for. Optional: present only in the late shape of version 002 (from
+      2025-03-25); absent from the earlier emitted shapes. See
+      extended_description.
+
+  FloGitCommit:
+    type: string
+    description: >
+      Git commit of the FLO implementation, recorded so a run can be
+      reproduced and audited against a specific version of the algorithm.
+      Optional: introduced alongside FloAlias in the late shape of version 002.
+
+  TypeName:
+    const: "flo.params.house0"
+
+  Version:
+    const: "002"
+
+required:
+  - GNodeAlias
+  - FloParamsUid
+  - TimezoneStr
+  - StartUnixS
+  - NumLayers
+  - HorizonHours
+  - StorageVolumeGallons
+  - StorageLossesPercent
+  - HpMinElecKw
+  - HpMaxElecKw
+  - BufferAvailableKwh
+  - HouseAvailableKwh
+  - CopIntercept
+  - CopOatCoeff
+  - CopMin
+  - CopMinOatF
+  - CopLwtCoeff
+  - InitialTopTempF
+  - InitialBottomTempF
+  - InitialThermocline
+  - HpIsOff
+  - HpTurnOnMinutes
+  - PriceForecastUid
+  - WeatherUid
+  - AlphaTimes10
+  - BetaTimes100
+  - GammaEx6
+  - IntermediatePowerKw
+  - IntermediateRswtF
+  - DdPowerKw
+  - DdRswtF
+  - DdDeltaTF
+  - MaxEwtF
+  - PriceUnit
+  - ParamsGeneratedS
+  - TypeName
+  - Version
+
+additionalProperties: true
+
+examples:
+  - |
+    {
+      "GNodeAlias": "d1.isone.me.versant.keene.beech.scada",
+      "FloParamsUid": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+      "TimezoneStr": "America/New_York",
+      "StartUnixS": 1704067200,
+      "NumLayers": 24,
+      "HorizonHours": 48,
+      "StorageVolumeGallons": 360,
+      "StorageLossesPercent": 0.5,
+      "HpMinElecKw": -0.5,
+      "HpMaxElecKw": 11.0,
+      "BufferAvailableKwh": 0.0,
+      "HouseAvailableKwh": 0.0,
+      "CopIntercept": 1.02,
+      "CopOatCoeff": 0.0257,
+      "CopMin": 1.4,
+      "CopMinOatF": 15.0,
+      "CopLwtCoeff": 0.0,
+      "InitialTopTempF": 140,
+      "InitialBottomTempF": 120,
+      "InitialThermocline": 12,
+      "HpIsOff": true,
+      "HpTurnOnMinutes": 10,
+      "PriceForecastUid": "8d2a4c1e-0b3f-4a6d-9c7e-1f2a3b4c5d6e",
+      "WeatherUid": "7a1b2c3d-4e5f-4061-8273-849506a7b8c9",
+      "AlphaTimes10": 120,
+      "BetaTimes100": -22,
+      "GammaEx6": 0,
+      "IntermediatePowerKw": 1.5,
+      "IntermediateRswtF": 110,
+      "DdPowerKw": 5.0,
+      "DdRswtF": 150,
+      "DdDeltaTF": 20,
+      "MaxEwtF": 170,
+      "PriceUnit": "USDPerMWh",
+      "ParamsGeneratedS": 1704067200,
+      "FloAlias": "Winter.Oak",
+      "FloGitCommit": "76e267b",
+      "TypeName": "flo.params.house0",
+      "Version": "002"
+    }
+  - |
+    {
+      "GNodeAlias": "d1.isone.me.versant.keene.beech.scada",
+      "FloParamsUid": "9cff2689-eadc-4577-94ea-6d86d0d23e9e",
+      "TimezoneStr": "America/New_York",
+      "StartUnixS": 1704067200,
+      "NumLayers": 24,
+      "HorizonHours": 48,
+      "StorageVolumeGallons": 360,
+      "StorageLossesPercent": 0.5,
+      "HpMinElecKw": -0.5,
+      "HpMaxElecKw": 11.0,
+      "BufferAvailableKwh": 0.0,
+      "HouseAvailableKwh": 0.0,
+      "CopIntercept": 1.02,
+      "CopOatCoeff": 0.0257,
+      "CopMin": 1.4,
+      "CopMinOatF": 15.0,
+      "CopLwtCoeff": 0.0,
+      "InitialTopTempF": 140,
+      "InitialBottomTempF": 120,
+      "InitialThermocline": 12,
+      "HpIsOff": true,
+      "HpTurnOnMinutes": 10,
+      "PriceForecastUid": "8d2a4c1e-0b3f-4a6d-9c7e-1f2a3b4c5d6e",
+      "WeatherUid": "7a1b2c3d-4e5f-4061-8273-849506a7b8c9",
+      "AlphaTimes10": 120,
+      "BetaTimes100": -22,
+      "GammaEx6": 0,
+      "IntermediatePowerKw": 1.5,
+      "IntermediateRswtF": 110,
+      "DdPowerKw": 5.0,
+      "DdRswtF": 150,
+      "DdDeltaTF": 20,
+      "MaxEwtF": 170,
+      "DischargingDdDeltaTF": 45,
+      "PriceUnit": "USDPerMWh",
+      "ParamsGeneratedS": 1704067200,
+      "TypeName": "flo.params.house0",
+      "Version": "002"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  extended_description: >
+    A LeafTransactiveNode builds a flo.params.house0 each market slot to drive
+    its Forward Looking Optimization. FLO models the home's heat pump and
+    thermal storage over HorizonHours, searches for the lowest-cost operating
+    plan against the price and weather forecasts, and from that plan derives
+    the price-quantity curve the node submits as its market bid.
+
+    The parameters fall into groups: identity and timing (GNodeAlias,
+    FloParamsUid, TimezoneStr, StartUnixS, ParamsGeneratedS, FloAlias,
+    FloGitCommit); horizon and storage geometry (HorizonHours, NumLayers,
+    StorageVolumeGallons, StorageLossesPercent); heat pump characteristics
+    (HpMinElecKw, HpMaxElecKw, HpTurnOnMinutes, HpIsOff, and the Cop terms);
+    the initial thermal state (InitialTopTempF, InitialBottomTempF,
+    InitialThermocline, BufferAvailableKwh, HouseAvailableKwh); the forecasts
+    and their provenance ids; and the House0 thermal-response coefficients and
+    operating points (Alpha/Beta/Gamma, the Intermediate and Dd fields,
+    MaxEwtF). Several coefficients are carried as scaled integers to keep the
+    serialized contract free of floating point representation.
+
+    Version 002 models thermal storage as two temperature bands split by a
+    single InitialThermocline. Version 003 replaced this with a three-cluster
+    model (InitialTopTempF, InitialMiddleTempF, InitialBottomTempF and two
+    thermoclines).
+
+    Version 002 was emitted in three shapes over its wire life, because the
+    scada model changed shape without a version bump (a deploy-lag union):
+    (A) with DischargingDdDeltaTF and without FloAlias/FloGitCommit (the
+    "Hinge" model, seen late Feb 2025); (B) a brief transition carrying all
+    three (25–26 Mar 2025); (C) with FloAlias/FloGitCommit and without
+    DischargingDdDeltaTF (the "Winter.Oak" FLO variant, from 25 Mar 2025
+    onward, after the Hinge model was removed). All three share a common base
+    of the remaining fields, so DischargingDdDeltaTF, FloAlias and FloGitCommit
+    are each optional and the base fields stay required.

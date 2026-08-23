@@ -1,0 +1,9 @@
+    def upgrade(self) -> {{ layout_lite_004_class_name }}:
+        """Historical back-fill from S3 wire evidence. As v005 but Ha1Params and TankModuleComponents are deploy-lag unions: Ha1Params oneOf[002, 003]; TankModuleComponents.items oneOf[pico.tank 000, 010]."""
+        raise SemaType.upgrade_requires_context(
+            "layout.lite:003 cannot be upgraded to layout.lite:004 without context: "
+            "004 accepts ha1.params 002|003, but a v003 message may carry "
+            "ha1.params:001 (whose 001->002 upgrade requires context -- it adds the "
+            "required LoadOverestimationPercent). JournalKeeper retains v003 messages "
+            "at their own version."
+        )

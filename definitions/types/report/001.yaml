@@ -1,0 +1,157 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/report/001"
+
+title: "report"
+type: object
+description: >
+  Primary telemetry and state reporting message produced by a SCADA node
+  for a specific reporting slot. A report contains all meaningful channel
+  readings, state transitions, and FSM outputs observed during the slot
+  period.
+
+properties:
+
+  FromGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the entity sending this report.
+
+  FromGNodeInstanceId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier of the specific runtime instance producing this report.
+
+  AboutGNodeAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the entity about which this report is describing telemetry.
+
+  SlotStartUnixS:
+    $ref: "https://schemas.electricity.works/formats/utc.seconds"
+    description: >
+      Start time of the reporting period in Unix seconds.
+
+  SlotDurationS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Duration of the reporting slot in seconds.
+
+  ChannelReadingList:
+    type: array
+    description: >
+      Telemetry readings observed during this reporting slot.
+    items:
+      $ref: "https://schemas.electricity.works/types/channel.readings/002"
+
+  FsmActionList:
+    type: array
+    description: >
+      Atomic finite state machine actions observed during this reporting slot.
+    items:
+      $ref: "https://schemas.electricity.works/types/fsm.atomic.report/000"
+
+  FsmReportList:
+    type: array
+    description: >
+      Finite state machine reports generated during this slot.
+    items:
+      $ref: "https://schemas.electricity.works/types/fsm.full.report/000"
+
+  MessageCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Timestamp at which this report was created by the reporting node.
+
+  Id:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Globally unique identifier for this report message.
+
+  TypeName:
+    const: "report"
+
+  Version:
+    type: string
+    default: "001"
+
+required:
+  - FromGNodeAlias
+  - FromGNodeInstanceId
+  - AboutGNodeAlias
+  - SlotStartUnixS
+  - SlotDurationS
+  - ChannelReadingList
+  - FsmActionList
+  - FsmReportList
+  - MessageCreatedMs
+  - Id
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "FromGNodeAlias": "hw1.isone.me.versant.keene.beech.scada",
+      "FromGNodeInstanceId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+      "AboutGNodeAlias": "hw1.isone.me.versant.keene.beech.ta",
+      "SlotStartUnixS": 1730073600,
+      "SlotDurationS": 300,
+      "ChannelReadingList": [
+        {
+          "ChannelName": "hp-odu-pwr",
+          "ValueList": [
+            208
+          ],
+          "ScadaReadTimeUnixMsList": [
+            1730073619651
+          ],
+          "TypeName": "channel.readings",
+          "Version": "002"
+        },
+        {
+          "ChannelName": "hp-idu-pwr",
+          "ValueList": [
+            12
+          ],
+          "ScadaReadTimeUnixMsList": [
+            1730073605647
+          ],
+          "TypeName": "channel.readings",
+          "Version": "002"
+        }
+      ],
+      "FsmActionList": [],
+      "FsmReportList": [],
+      "MessageCreatedMs": 1730073900043,
+      "Id": "f4a13cb8-b3e9-4558-a584-2caea59bccd8",
+      "TypeName": "report",
+      "Version": "001"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  extended_description: >
+    Reports are sent at fixed slot intervals (typically 5 minutes) and
+    provide a durable historical record of telemetry and state changes
+    observed during that period.
+
+    GridWorks SCADA devices emit most channel readings asynchronously
+    when values change beyond configured thresholds. Each reading is
+    timestamped at the moment of observation by the SCADA device.
+    Reports preserve these original timestamps without resampling
+    or aggregation.
+
+    As a result, a report represents a batched event log for the slot
+    period rather than a sampled snapshot. Consumers can reconstruct
+    the precise timing of state transitions (e.g., relay changes)
+    and value updates within the slot window.
+
+    This differs from snapshot messages, which represent the most recent
+    value of each channel at a single point in time and are optimized
+    for near-real-time visualization rather than historical accuracy.
+
+    NOTE -- this version's oneOf over multiple versions of the same type is an
+    early lenience accommodating back-dated production traffic as sema came
+    online, not a pattern to copy. Newer versions carry a single type version.

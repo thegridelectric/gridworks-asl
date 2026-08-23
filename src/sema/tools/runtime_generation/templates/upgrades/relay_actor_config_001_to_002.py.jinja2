@@ -1,0 +1,12 @@
+    def upgrade(self) -> {{ relay_actor_config_002_class_name }}:
+        """
+        - StateType: add
+        - DeEnergizedState: add
+        - EnergizedState: add
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ relay_actor_config_001_class_name }} cannot be upgraded to "
+            "{{ relay_actor_config_002_class_name }} without context: v002 adds the "
+            "required StateType, DeEnergizedState and EnergizedState, absent from a "
+            "v001 message and which SHALL NOT be fabricated."
+        )
