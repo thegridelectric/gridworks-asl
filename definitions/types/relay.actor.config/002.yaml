@@ -85,7 +85,10 @@ properties:
   StateType:
     $ref: "https://schemas.electricity.works/formats/left.right.dot"
     description: >
-      Semantic state category controlled by this relay.
+      Semantic state category controlled by this relay. Optional: the first
+      days of version 002 on the wire (2024-12-31 to 2025-01-01) carried
+      DeEnergizedState and EnergizedState without StateType; the state axioms
+      apply only when StateType is present.
 
   DeEnergizedState:
     $ref: "https://schemas.electricity.works/formats/non.empty.string"
@@ -115,7 +118,6 @@ required:
   - EventType
   - DeEnergizingEvent
   - EnergizingEvent
-  - StateType
   - DeEnergizedState
   - EnergizedState
   - TypeName

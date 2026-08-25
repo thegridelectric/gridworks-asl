@@ -1086,7 +1086,7 @@ types:
           - CapturePeriodS / AsyncCapture / AsyncCaptureDelta / PollPeriodMs: drop (capture/report tuning moved to operational-params capture.tuning)
       "002":
         summary: >
-          - StateType: add
+          - StateType: add (optional on the wire for the version's first two days, 2024-12-31 to 2025-01-01)
           - DeEnergizedState: add
           - EnergizedState: add
       "001":

@@ -53,6 +53,13 @@ properties:
     description: >
       Maximum heat-pump thermal output in kW.
 
+  MaxEwtF:
+    type: integer
+    description: >
+      Maximum entering-water temperature in degrees Fahrenheit.
+      Optional in version 000: the SCADA began emitting MaxEwtF on 2024-12-03
+      before the version label was bumped to 001 (where it is required).
+
   TypeName:
     const: "ha1.params"
 

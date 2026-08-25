@@ -50,7 +50,8 @@ class RelayActorConfig001(SemaType):
 
     def upgrade(self) -> RelayActorConfig002:
         """
-        - StateType: add
+        - StateType: add (optional on the wire for the version's first two
+        days, 2024-12-31 to 2025-01-01)
         - DeEnergizedState: add
         - EnergizedState: add
         """

@@ -16,6 +16,7 @@ class Ha1Params000(SemaType):
     dd_rswt_f: StrictInt
     dd_delta_t_f: StrictInt
     hp_max_kw_th: StrictFloat
+    max_ewt_f: StrictInt | None = None
     type_name: Literal["ha1.params"] = "ha1.params"
     version: Literal["000"] = "000"
 
