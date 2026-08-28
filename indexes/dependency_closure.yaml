@@ -619,10 +619,64 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  gridworks.event.comm.mqtt.connect:
+    '001':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
+  gridworks.event.comm.mqtt.disconnect:
+    '001':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
+  gridworks.event.comm.mqtt.fully.subscribed:
+    '001':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
+  gridworks.event.comm.peer.active:
+    '001':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
+  gridworks.event.comm.response.timeout:
+    '001':
+      enums: []
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
   gridworks.event.problem:
     '001':
       enums: []
       formats:
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
+  gridworks.event.shutdown:
+    '001':
+      enums: []
+      formats:
+      - left.right.dot
       - utc.milliseconds
       - uuid4.str
       types: []
@@ -2927,6 +2981,14 @@ versionless_types:
   gridworks.ack:
     enums: []
     formats:
+    - uuid4.str
+    types: []
+    versionless_types: []
+  gridworks.event.startup:
+    enums: []
+    formats:
+    - left.right.dot
+    - utc.milliseconds
     - uuid4.str
     types: []
     versionless_types: []

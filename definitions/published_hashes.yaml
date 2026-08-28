@@ -181,8 +181,21 @@ types:
   glitch:
     '000': sha256:b7f1edde383c035e9cc2ea16fe30d91652e2de28ecc7f94c25b62a1aa045477a
   gridworks.ack: sha256:75ef891128872befe952aa946f7c7833715b7174fdd9a05346209c6fdf03fa9b
+  gridworks.event.comm.mqtt.connect:
+    '001': sha256:6aac6fddae31daf14b1720adb614bf8f135f32e3cedde212106750160a34dc89
+  gridworks.event.comm.mqtt.disconnect:
+    '001': sha256:11a18bb3e37395a2b015bf77f4f00d3fbf079706ff84e50c863062f2a095fd5a
+  gridworks.event.comm.mqtt.fully.subscribed:
+    '001': sha256:7d8054f409d3d0077bd8cfa8ba7ca028cf3653558329aeb542eb72ee53154590
+  gridworks.event.comm.peer.active:
+    '001': sha256:90bda087c728b4554ffbac94c9ef1760f8a1668e28ca5db52535584971454b4f
+  gridworks.event.comm.response.timeout:
+    '001': sha256:eca19c89cc214fa5118fe7615efb424bd5b625d90a94b695f39b655f8d1a42a5
   gridworks.event.problem:
     '001': sha256:fe425cf781adeed4506c2b22d42945ee16693f23250d58624aa09c56731fa26d
+  gridworks.event.shutdown:
+    '001': sha256:5ae2933435f7a1e271d3b017b6e8f53b0bf2799cdcd50769c58e6715bdfee9a5
+  gridworks.event.startup: sha256:2623b9e0c19e01128e267e44fa5d0dc18d2be18c5812cca9cf2c43e1f8abb7b8
   gridworks.header:
     '001': sha256:f346bf8e152bca26c9a3edf7c54c7a47883929cd2c8deae63dc4f2e81e9e6f73
   gridworks.ping: sha256:2d9b1cbcc31974562514f23fc41ffc3b69de136642788ba0a0c0d413ab5c3c87

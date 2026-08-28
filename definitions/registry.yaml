@@ -2199,6 +2199,96 @@ types:
       structural:
         - "uuid4.str"
 
+  gridworks.event.comm.mqtt.connect:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Event message reporting that a GridWorks node has established an MQTT connection to a named peer broker."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gridworks.event.comm.mqtt.connect/001"
+        created: "2024-09-02T15:00:00Z"
+        status: "published"
+        summary: "Initial Sema version, mirroring the wire Version string"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
+  gridworks.event.comm.mqtt.disconnect:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Event message reporting that a GridWorks node's MQTT connection to a named peer broker was lost or closed."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gridworks.event.comm.mqtt.disconnect/001"
+        created: "2024-09-02T15:00:00Z"
+        status: "published"
+        summary: "Initial Sema version, mirroring the wire Version string"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
+  gridworks.event.comm.mqtt.fully.subscribed:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Event message reporting that a GridWorks node has completed every subscription it expects on a named peer broker."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gridworks.event.comm.mqtt.fully.subscribed/001"
+        created: "2024-09-02T15:00:00Z"
+        status: "published"
+        summary: "Initial Sema version, mirroring the wire Version string"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
+  gridworks.event.comm.peer.active:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Event message reporting that a GridWorks node now considers a named peer active: the link is up and the peer has responded."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gridworks.event.comm.peer.active/001"
+        created: "2024-09-02T15:00:00Z"
+        status: "published"
+        summary: "Initial Sema version, mirroring the wire Version string"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
+  gridworks.event.comm.response.timeout:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Event message reporting that a GridWorks node timed out waiting for a response from a named peer."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gridworks.event.comm.response.timeout/001"
+        created: "2024-09-02T15:00:00Z"
+        status: "published"
+        summary: "Initial Sema version, mirroring the wire Version string"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
   gridworks.event.problem:
     latest_version: "001"
     owner: gridworks-energy
@@ -2215,6 +2305,38 @@ types:
           structural:
             - "utc.milliseconds"
             - "uuid4.str"
+
+  gridworks.event.shutdown:
+    latest_version: "001"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Event message reporting that a GridWorks node is shutting down, with the reason."
+
+    versions:
+      "001":
+        schema_url: "https://schemas.electricity.works/types/gridworks.event.shutdown/001"
+        created: "2025-04-15T23:05:00Z"
+        status: "published"
+        summary: "Initial Sema version, mirroring the wire Version string"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
+  gridworks.event.startup:
+    owner: gridworks-energy
+    versioning_strategy: "none"
+    description: "Event message reporting that a GridWorks node has started."
+    schema_url: "https://schemas.electricity.works/types/gridworks.event.startup"
+    created: "2024-09-02T15:00:00Z"
+    status: "published"
+    summary: "Event message reporting that a node has started."
+    direct_dependencies:
+      structural:
+        - "left.right.dot"
+        - "utc.milliseconds"
+        - "uuid4.str"
 
   gridworks.header:
     latest_version: "001"

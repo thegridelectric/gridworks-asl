@@ -1,0 +1,64 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gridworks.event.comm.mqtt.connect/001"
+
+title: "gridworks.event.comm.mqtt.connect"
+type: object
+description: >
+  Event message reporting that a GridWorks node has established an MQTT connection to a named peer broker.
+
+properties:
+
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier for this event message.
+
+  TimeCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Time the event was created by the reporting node.
+
+  Src:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the node reporting the event.
+
+  PeerName:
+    type: string
+    description: >
+      The node's local name for the MQTT peer it connected to.
+
+  TypeName:
+    const: "gridworks.event.comm.mqtt.connect"
+
+  Version:
+    const: "001"
+
+required:
+  - MessageId
+  - TimeCreatedMs
+  - Src
+  - PeerName
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "MessageId": "5f20bee1-b4e7-492f-92b0-2516842162ba",
+      "TimeCreatedMs": 1784940530104,
+      "Src": "hw1.isone.me.versant.keene.beech.scada.s2",
+      "PeerName": "local_mqtt",
+      "TypeName": "gridworks.event.comm.mqtt.connect",
+      "Version": "001"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+  extended_description: >
+    One of the gwproactor framework's node-lifecycle events, emitted on the
+    proactor event stream alongside gridworks.event.problem. The framework
+    models these events as subclasses of a shared EventBase; in Sema each is
+    a flat word with the shared fields spelled out.

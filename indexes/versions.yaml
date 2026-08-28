@@ -372,12 +372,58 @@ types:
     versioning_strategy: "none"
     summary: "Versionless acknowledgement message."
 
+  gridworks.event.comm.mqtt.connect:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version, mirroring the wire Version string"
+
+  gridworks.event.comm.mqtt.disconnect:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version, mirroring the wire Version string"
+
+  gridworks.event.comm.mqtt.fully.subscribed:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version, mirroring the wire Version string"
+
+  gridworks.event.comm.peer.active:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version, mirroring the wire Version string"
+
+  gridworks.event.comm.response.timeout:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version, mirroring the wire Version string"
+
   gridworks.event.problem:
     latest_version: "001"
     versioning_strategy: "literal"
     versions:
       "001":
         summary: "Initial Sema version"
+
+  gridworks.event.shutdown:
+    latest_version: "001"
+    versioning_strategy: "literal"
+    versions:
+      "001":
+        summary: "Initial Sema version, mirroring the wire Version string"
+
+  gridworks.event.startup:
+    versioning_strategy: "none"
+    summary: "Event message reporting that a node has started."
 
   gridworks.header:
     latest_version: "001"

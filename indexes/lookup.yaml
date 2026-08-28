@@ -233,11 +233,44 @@ types:
   gridworks.ack:
     versioning_strategy: none
     schema: definitions/types/gridworks.ack.yaml
+  gridworks.event.comm.mqtt.connect:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gridworks.event.comm.mqtt.connect/001.yaml
+  gridworks.event.comm.mqtt.disconnect:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gridworks.event.comm.mqtt.disconnect/001.yaml
+  gridworks.event.comm.mqtt.fully.subscribed:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gridworks.event.comm.mqtt.fully.subscribed/001.yaml
+  gridworks.event.comm.peer.active:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gridworks.event.comm.peer.active/001.yaml
+  gridworks.event.comm.response.timeout:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gridworks.event.comm.response.timeout/001.yaml
   gridworks.event.problem:
     latest_version: '001'
     versioning_strategy: literal
     versions:
       '001': definitions/types/gridworks.event.problem/001.yaml
+  gridworks.event.shutdown:
+    latest_version: '001'
+    versioning_strategy: literal
+    versions:
+      '001': definitions/types/gridworks.event.shutdown/001.yaml
+  gridworks.event.startup:
+    versioning_strategy: none
+    schema: definitions/types/gridworks.event.startup.yaml
   gridworks.header:
     latest_version: '001'
     versioning_strategy: literal

@@ -944,6 +944,12 @@ formats:
     - g.node.gt:005
     - g.node.gt:006
     - glitch:000
+    - gridworks.event.comm.mqtt.connect:001
+    - gridworks.event.comm.mqtt.disconnect:001
+    - gridworks.event.comm.mqtt.fully.subscribed:001
+    - gridworks.event.comm.peer.active:001
+    - gridworks.event.comm.response.timeout:001
+    - gridworks.event.shutdown:001
     - gridworks.header:001
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
@@ -1298,7 +1304,13 @@ formats:
     - g.node.instance.gt:000
     - g.node.instance.gt:001
     - glitch:000
+    - gridworks.event.comm.mqtt.connect:001
+    - gridworks.event.comm.mqtt.disconnect:001
+    - gridworks.event.comm.mqtt.fully.subscribed:001
+    - gridworks.event.comm.peer.active:001
+    - gridworks.event.comm.response.timeout:001
     - gridworks.event.problem:001
+    - gridworks.event.shutdown:001
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
@@ -1413,7 +1425,13 @@ formats:
     - g.node.reparent.cmd:002
     - gpio.relay.component.gt:000
     - gpio.sensor.component.gt:000
+    - gridworks.event.comm.mqtt.connect:001
+    - gridworks.event.comm.mqtt.disconnect:001
+    - gridworks.event.comm.mqtt.fully.subscribed:001
+    - gridworks.event.comm.peer.active:001
+    - gridworks.event.comm.response.timeout:001
     - gridworks.event.problem:001
+    - gridworks.event.shutdown:001
     - gw.weather.channel.gt:000
     - gw.weather.forecast.bundle.gt:000
     - gw.weather.forecast.channel.gt:000
