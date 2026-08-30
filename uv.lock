@@ -176,19 +176,6 @@ wheels = [
 ]
 
 [[package]]
-name = "gridworks"
-version = "1.4.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pydantic" },
-    { name = "python-dotenv" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/e4/33/11be206496cc8b624029dd304646863921af2813e5c32368f18cdb1cd6ea/gridworks-1.4.2.tar.gz", hash = "sha256:2719db79d00aa45be88e29ca14dd9c49ed98bf95624d9bcd32400e82c9d44df7", size = 16879, upload-time = "2025-01-18T20:44:28.06Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/99/85/cc94bf1117317e4a0f34b48446e4b73537b2ed3203c553b1c3955f32d2c7/gridworks-1.4.2-py3-none-any.whl", hash = "sha256:7e63f94af6352555fd5f2421832e0c25ceaa63c138f95748a7094e373c4c26f5", size = 22731, upload-time = "2025-01-18T20:44:26.981Z" },
-]
-
-[[package]]
 name = "h11"
 version = "0.16.0"
 source = { registry = "https://pypi.org/simple" }
@@ -675,15 +662,6 @@ wheels = [
 ]
 
 [[package]]
-name = "python-dotenv"
-version = "1.1.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/88/2c/7bb1416c5620485aa793f2de31d3df393d3686aa8a8506d11e10e13c5baf/python_dotenv-1.1.0.tar.gz", hash = "sha256:41f90bc6f5f177fb41f53e87666db362025010eb28f60a01c9143bfa33a2b2d5", size = 39920, upload-time = "2025-03-25T10:14:56.835Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/18/98a99ad95133c6a6e2005fe89faedf294a748bd5dc803008059409ac9b1e/python_dotenv-1.1.0-py3-none-any.whl", hash = "sha256:d7c01d9e2293916c18baf562d95698754b0dbbb5e74d457c45d4f6561fb9d55d", size = 20256, upload-time = "2025-03-25T10:14:55.034Z" },
-]
-
-[[package]]
 name = "pyyaml"
 version = "6.0.2"
 source = { registry = "https://pypi.org/simple" }
@@ -877,7 +855,6 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
-    { name = "gridworks" },
     { name = "jinja2" },
     { name = "jsonschema" },
     { name = "pydantic" },
@@ -898,7 +875,6 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115.13" },
-    { name = "gridworks", specifier = ">=1.4.2" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "jsonschema", specifier = ">=4.26.0" },
     { name = "pydantic", specifier = ">=2.11.7" },
