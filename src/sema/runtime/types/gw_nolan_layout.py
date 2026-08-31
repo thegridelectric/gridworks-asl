@@ -4,6 +4,7 @@ from sema.runtime.base import SemaType
 from sema.runtime.types.ads111x_based_device_type_gt import Ads111xBasedDeviceTypeGt
 from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.derived_channel_gt import DerivedChannelGt
+from sema.runtime.types.device_component_gt import DeviceComponentGt
 from sema.runtime.types.electric_meter_component_gt import ElectricMeterComponentGt
 from sema.runtime.types.electric_meter_device_type_gt import ElectricMeterDeviceTypeGt
 from sema.runtime.types.g_node_gt import GNodeGt
@@ -11,6 +12,8 @@ from sema.runtime.types.gpio_relay_component_gt import GpioRelayComponentGt
 from sema.runtime.types.gpio_sensor_component_gt import GpioSensorComponentGt
 from sema.runtime.types.gw1_scada_device_type_gt import Gw1ScadaDeviceTypeGt
 from sema.runtime.types.gw_hydronic import GwHydronic
+from sema.runtime.types.hp_control_box_device_type_gt import HpControlBoxDeviceTypeGt
+from sema.runtime.types.hp_device_type_gt import HpDeviceTypeGt
 from sema.runtime.types.i2c_dac_writer_component_gt import I2cDacWriterComponentGt
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
@@ -40,7 +43,8 @@ class GwNolanLayout(SemaType):
     data_channels: list[DataChannelGt]
     derived_channels: list[DerivedChannelGt]
     components: list[
-        ElectricMeterComponentGt
+        DeviceComponentGt
+        | ElectricMeterComponentGt
         | GpioSensorComponentGt
         | GpioRelayComponentGt
         | I2cDacWriterComponentGt
@@ -57,7 +61,11 @@ class GwNolanLayout(SemaType):
         | WebServerComponentGt
     ]
     device_types: list[
-        ElectricMeterDeviceTypeGt | Ads111xBasedDeviceTypeGt | Gw1ScadaDeviceTypeGt
+        ElectricMeterDeviceTypeGt
+        | Ads111xBasedDeviceTypeGt
+        | Gw1ScadaDeviceTypeGt
+        | HpDeviceTypeGt
+        | HpControlBoxDeviceTypeGt
     ]
     hydronic: GwHydronic
     type_name: Literal["gw.nolan.layout"] = "gw.nolan.layout"
@@ -167,9 +175,11 @@ class GwNolanLayout(SemaType):
     @model_validator(mode="after")
     def check_axiom_3(self) -> "GwNolanLayout":
         """
-        Axiom 3: LocalControlPlant
+        Axiom 3: RequiredRelays
         a. ShNodes SHALL include nodes named "iso-valve-relay",
-        "secondary-pump-relay", and "hp-scada-ops-relay", each with
+        "secondary-pump-relay", "hp-scada-ops-relay", "charge-valve-relay",
+        "store-pump-relay", "buffer-top-elt-relay", "buffer-bottom-elt-relay",
+        "store-top-elt-relay", and "store-bottom-elt-relay", each with
         ActorClass "Relay".
         b. Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
         FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes
@@ -181,15 +191,21 @@ class GwNolanLayout(SemaType):
             actor_class = actor_class_by_name.get(node_name)
             if actor_class is None:
                 raise ValueError(
-                    f"Axiom 3 (LocalControlPlant) failed: no ShNode named {node_name} ({role})."
+                    f"Axiom 3 (RequiredRelays) failed: no ShNode named {node_name} ({role})."
                 )
             if actor_class != "Relay":
                 raise ValueError(
-                    f"Axiom 3 (LocalControlPlant) failed: {node_name} ({role}) has ActorClass {actor_class}, not Relay."
+                    f"Axiom 3 (RequiredRelays) failed: {node_name} ({role}) has ActorClass {actor_class}, not Relay."
                 )
 
         for required in (
             "iso-valve-relay",
+            "charge-valve-relay",
+            "store-pump-relay",
+            "buffer-top-elt-relay",
+            "buffer-bottom-elt-relay",
+            "store-top-elt-relay",
+            "store-bottom-elt-relay",
             "secondary-pump-relay",
             "hp-scada-ops-relay",
         ):
@@ -197,9 +213,152 @@ class GwNolanLayout(SemaType):
         circuits = self.hydronic.zone_call_circuits or []
         if not circuits:
             raise ValueError(
-                "Axiom 3 (LocalControlPlant) failed: Hydronic.ZoneCallCircuits is empty."
+                "Axiom 3 (RequiredRelays) failed: Hydronic.ZoneCallCircuits is empty."
             )
         for circuit in circuits:
             relay_or_raise(circuit.failsafe_relay_node, "circuit failsafe relay")
             relay_or_raise(circuit.ops_relay_node, "circuit ops relay")
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_4(self) -> "GwNolanLayout":
+        """
+        Axiom 4: RequiredActors
+        ShNodes SHALL include nodes with these Name / ActorClass pairs: "s"
+        PrimaryScada, "s2" SecondaryScada, "lc" LocalControl, "la" LeafAlly,
+        "pico-cycler" PicoCycler, "derived-generator" DerivedGenerator, and
+        "power-meter" PowerMeter.
+        """
+        actor_class_by_name = {n.name: n.actor_class for n in (self.sh_nodes or [])}
+        for name, actor_class in (
+            ("s", "PrimaryScada"),
+            ("s2", "SecondaryScada"),
+            ("lc", "LocalControl"),
+            ("la", "LeafAlly"),
+            ("pico-cycler", "PicoCycler"),
+            ("derived-generator", "DerivedGenerator"),
+            ("power-meter", "PowerMeter"),
+        ):
+            got = actor_class_by_name.get(name)
+            if got != actor_class:
+                raise ValueError(
+                    f"Axiom 4 (RequiredActors) failed: expected ShNode {name!r} "
+                    f"with ActorClass {actor_class}, got {got!r}."
+                )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_5(self) -> "GwNolanLayout":
+        """
+        Axiom 5: RequiredCommandNodes
+        ShNodes SHALL include nodes named "admin", "auto", "n", "ltn",
+        "hp-odu", and "hp-ctrl-box", each with ActorClass "NoActor". The
+        effective handle (Handle if present, otherwise Name) of "admin" SHALL
+        be "admin", of "auto" SHALL be "auto", and of "n" SHALL be
+        "auto.lc.n".
+        """
+        nodes = {n.name: n for n in (self.sh_nodes or [])}
+        for name, handle in (
+            ("admin", "admin"),
+            ("auto", "auto"),
+            ("n", "auto.lc.n"),
+            ("ltn", None),
+            ("hp-odu", None),
+            ("hp-ctrl-box", None),
+        ):
+            node = nodes.get(name)
+            if node is None or node.actor_class != "NoActor":
+                raise ValueError(
+                    f"Axiom 5 (RequiredCommandNodes) failed: expected ShNode "
+                    f"{name!r} with ActorClass NoActor."
+                )
+            if handle is not None:
+                effective = node.handle if node.handle is not None else node.name
+                if effective != handle:
+                    raise ValueError(
+                        f"Axiom 5 (RequiredCommandNodes) failed: {name!r} effective "
+                        f"handle is {effective!r}, expected {handle!r}."
+                    )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_6(self) -> "GwNolanLayout":
+        """
+        Axiom 6: RequiredBoardActors
+        ShNodes SHALL include exactly one node with ActorClass "I2cBus", exactly
+        one with ActorClass "I2cThermistorReader", and exactly one with
+        ActorClass "I2cDacWriter".
+        """
+        for actor_class in ("I2cBus", "I2cThermistorReader", "I2cDacWriter"):
+            count = sum(
+                1 for n in (self.sh_nodes or []) if n.actor_class == actor_class
+            )
+            if count != 1:
+                raise ValueError(
+                    f"Axiom 6 (RequiredBoardActors) failed: expected exactly one "
+                    f"ShNode with ActorClass {actor_class}, found {count}."
+                )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_7(self) -> "GwNolanLayout":
+        """
+        Axiom 7: RequiredSensing
+        For each of the names "hp-lwt", "hp-ewt", "dist-swt", "dist-rwt",
+        "store-hot-pipe", "store-cold-pipe", "secondary-lwt", "secondary-ewt",
+        "dist-flow", "primary-flow", "store-flow", "secondary-flow",
+        "buffer-depth1-device", "buffer-depth2-device", "buffer-depth3-device",
+        "tank1-depth1-device", "tank1-depth2-device", "tank1-depth3-device",
+        "hp-odu-pwr", and "hp-ctrl-box-pwr": a channel with that Name SHALL
+        exist in DataChannels or in DerivedChannels. (Kind-agnostic by design:
+        a name may migrate from raw DataChannel to same-name DerivedChannel —
+        as tank temperatures did — without touching this contract.)
+        """
+        channel_names = {c.name for c in (self.data_channels or [])} | {
+            c.name for c in (self.derived_channels or [])
+        }
+        missing = [
+            name
+            for name in (
+                "hp-lwt",
+                "hp-ewt",
+                "dist-swt",
+                "dist-rwt",
+                "store-hot-pipe",
+                "store-cold-pipe",
+                "secondary-lwt",
+                "secondary-ewt",
+                "dist-flow",
+                "primary-flow",
+                "store-flow",
+                "secondary-flow",
+                "buffer-depth1-device",
+                "buffer-depth2-device",
+                "buffer-depth3-device",
+                "tank1-depth1-device",
+                "tank1-depth2-device",
+                "tank1-depth3-device",
+                "hp-odu-pwr",
+                "hp-ctrl-box-pwr",
+            )
+            if name not in channel_names
+        ]
+        if missing:
+            raise ValueError(
+                f"Axiom 7 (RequiredSensing) failed: missing DataChannels {missing}."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_8(self) -> "GwNolanLayout":
+        """
+        Axiom 8: SingleStoreTank
+        Hydronic.TotalStoreTanks SHALL equal 1 — the Nolan plant carries exactly
+        one store tank.
+        """
+        if self.hydronic.total_store_tanks != 1:
+            raise ValueError(
+                f"Axiom 8 (SingleStoreTank) failed: TotalStoreTanks is "
+                f"{self.hydronic.total_store_tanks}, expected 1."
+            )
         return self

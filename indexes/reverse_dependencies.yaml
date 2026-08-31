@@ -93,6 +93,10 @@ types:
       - gw.house0.layout:000
       - gw.nolan.layout:000
       - gw.readings:000
+  device.component.gt:
+    '000':
+      used_by:
+      - gw.nolan.layout:000
   dfr.component.gt:
     '000':
       used_by:
@@ -285,6 +289,14 @@ types:
       used_by:
       - gw.house0.operational.params:000
       - gw.nolan.operational.params:000
+  hp.control.box.device.type.gt:
+    '000':
+      used_by:
+      - gw.nolan.layout:000
+  hp.device.type.gt:
+    '000':
+      used_by:
+      - gw.nolan.layout:000
   hubitat.component.gt:
     '000':
       used_by:
@@ -1074,6 +1086,7 @@ formats:
     - ads.channel.config:000
     - ads111x.based.component.gt:000
     - ads111x.based.device.type.gt:000
+    - device.component.gt:000
     - dfr.component.gt:000
     - electric.meter.component.gt:001
     - electric.meter.device.type.gt:000
@@ -1397,6 +1410,7 @@ formats:
     - derived.channel.gt:000
     - derived.channel.gt:001
     - derived.channel.gt:002
+    - device.component.gt:000
     - dfr.component.gt:000
     - electric.meter.cac.gt:001
     - electric.meter.component.gt:001

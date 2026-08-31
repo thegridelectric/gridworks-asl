@@ -132,6 +132,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  device.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial: ComponentId + DeviceType (pascal.case) + optional DisplayName / HwUid / Description."
+
   dfr.component.gt:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -501,7 +508,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/302 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
+        summary: "Axioms 3-8 pin the required Nolan surface: RequiredRelays (full plant relay set + circuit relay binding), RequiredActors, RequiredCommandNodes (incl. hp-odu / hp-ctrl-box — a Nolan home is a monobloc), RequiredBoardActors, RequiredSensing (kind-agnostic names incl. HP power channels), SingleStoreTank. Components union gains device.component.gt (HP parts tracked with make/model/serial); DeviceTypes gains the hp records. Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/302 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
 
   gw.nolan.operational.params:
     latest_version: "000"

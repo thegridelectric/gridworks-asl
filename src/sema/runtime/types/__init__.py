@@ -12,6 +12,7 @@ from sema.runtime.types.connectivity_edge_gt import ConnectivityEdgeGt
 from sema.runtime.types.cop_curve import CopCurve
 from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.derived_channel_gt import DerivedChannelGt
+from sema.runtime.types.device_component_gt import DeviceComponentGt
 from sema.runtime.types.dfr_component_gt import DfrComponentGt
 from sema.runtime.types.dfr_config import DfrConfig
 from sema.runtime.types.egauge_register_config import EgaugeRegisterConfig
@@ -205,6 +206,7 @@ __all__ = [
     "CopCurve",
     "DataChannelGt",
     "DerivedChannelGt",
+    "DeviceComponentGt",
     "DfrComponentGt",
     "DfrConfig",
     "EgaugeRegisterConfig",

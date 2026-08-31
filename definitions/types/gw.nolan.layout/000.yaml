@@ -56,6 +56,7 @@ properties:
       List of hardware components present in the system.
     items:
       oneOf:
+        - $ref: "https://schemas.electricity.works/types/device.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/electric.meter.component.gt/001"
         - $ref: "https://schemas.electricity.works/types/gpio.sensor.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/gpio.relay.component.gt/000"
@@ -84,6 +85,8 @@ properties:
         - $ref: "https://schemas.electricity.works/types/electric.meter.device.type.gt/000"
         - $ref: "https://schemas.electricity.works/types/ads111x.based.device.type.gt/000"
         - $ref: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
+        - $ref: "https://schemas.electricity.works/types/hp.device.type.gt/000"
+        - $ref: "https://schemas.electricity.works/types/hp.control.box.device.type.gt/000"
 
   Hydronic:
     $ref: "https://schemas.electricity.works/types/gw.hydronic/000"
@@ -135,12 +138,58 @@ x-gridworks:
         thermistor readers) SHALL match a Name in that record.
 
     - number: 3
-      name: "LocalControlPlant"
+      name: "RequiredRelays"
       statement: >
         a. ShNodes SHALL include nodes named "iso-valve-relay", "secondary-pump-relay",
-        and "hp-scada-ops-relay", each with ActorClass "Relay".
+        "hp-scada-ops-relay", "charge-valve-relay", "store-pump-relay",
+        "buffer-top-elt-relay", "buffer-bottom-elt-relay", "store-top-elt-relay",
+        and "store-bottom-elt-relay", each with ActorClass "Relay".
         b. Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
         FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes with
         ActorClass "Relay".
+
+    - number: 4
+      name: "RequiredActors"
+      statement: >
+        ShNodes SHALL include nodes with these Name / ActorClass pairs: "s"
+        PrimaryScada, "s2" SecondaryScada, "lc" LocalControl, "la" LeafAlly,
+        "pico-cycler" PicoCycler, "derived-generator" DerivedGenerator, and
+        "power-meter" PowerMeter.
+
+    - number: 5
+      name: "RequiredCommandNodes"
+      statement: >
+        ShNodes SHALL include nodes named "admin", "auto", "n", "ltn",
+        "hp-odu", and "hp-ctrl-box", each with ActorClass "NoActor". The
+        effective handle (Handle if present, otherwise Name) of "admin" SHALL
+        be "admin", of "auto" SHALL be "auto", and of "n" SHALL be
+        "auto.lc.n".
+
+    - number: 6
+      name: "RequiredBoardActors"
+      statement: >
+        ShNodes SHALL include exactly one node with ActorClass "I2cBus", exactly
+        one with ActorClass "I2cThermistorReader", and exactly one with
+        ActorClass "I2cDacWriter".
+
+    - number: 7
+      name: "RequiredSensing"
+      statement: >
+        For each of the names "hp-lwt", "hp-ewt", "dist-swt", "dist-rwt",
+        "store-hot-pipe", "store-cold-pipe", "secondary-lwt", "secondary-ewt",
+        "dist-flow", "primary-flow", "store-flow", "secondary-flow",
+        "buffer-depth1-device", "buffer-depth2-device", "buffer-depth3-device",
+        "tank1-depth1-device", "tank1-depth2-device", "tank1-depth3-device",
+        "hp-odu-pwr", and "hp-ctrl-box-pwr": a channel with that Name SHALL
+        exist in DataChannels or in DerivedChannels. (Kind-agnostic by design:
+        a name may migrate from raw DataChannel to same-name DerivedChannel —
+        as tank temperatures did — without touching this contract.)
+
+    - number: 8
+      name: "SingleStoreTank"
+      statement: >
+        Hydronic.TotalStoreTanks SHALL equal 1 — the Nolan plant carries exactly
+        one store tank.
+
   extended_description: >
     TODO: add Nolan specific information (e.g. radiant floor heating, Gw108).

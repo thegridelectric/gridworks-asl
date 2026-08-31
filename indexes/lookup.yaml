@@ -93,6 +93,11 @@ types:
       '002': definitions/types/derived.channel.gt/002.yaml
       '001': definitions/types/derived.channel.gt/001.yaml
       '000': definitions/types/derived.channel.gt/000.yaml
+  device.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/device.component.gt/000.yaml
   dfr.component.gt:
     latest_version: '000'
     versioning_strategy: literal

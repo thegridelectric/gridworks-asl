@@ -206,6 +206,14 @@ types:
       types:
       - gw1.unit.quantity.projection:000
       versionless_types: []
+  device.component.gt:
+    '000':
+      enums: []
+      formats:
+      - pascal.case
+      - uuid4.str
+      types: []
+      versionless_types: []
   dfr.component.gt:
     '000':
       enums: []
@@ -922,6 +930,7 @@ types:
       - ads111x.based.device.type.gt:000
       - data.channel.gt:003
       - derived.channel.gt:002
+      - device.component.gt:000
       - egauge.register.config:000
       - electric.meter.channel.config:000
       - electric.meter.component.gt:001
@@ -936,6 +945,8 @@ types:
       - gw1.unit.quantity.projection:000
       - gw1.zone.call.circuit:000
       - gw1.zone.thermostat:000
+      - hp.control.box.device.type.gt:000
+      - hp.device.type.gt:000
       - i2c.bus:000
       - i2c.ct.interface.capability:000
       - i2c.dac.capability:000
