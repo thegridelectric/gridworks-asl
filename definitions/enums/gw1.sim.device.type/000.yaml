@@ -16,6 +16,7 @@ enum:
   - "SimGw108"
   - "SimSamsungAE055FEYMCG"
   - "SimHpOdu"
+  - "SimHpIdu"
 default: "SimSensor"
 x-gridworks:
   owner: "gridworks-energy"
@@ -42,3 +43,6 @@ x-gridworks:
     "SimHpOdu": >
       A non-descript simulated heat-pump outdoor unit: inventory only, nothing talks to
       it.
+    "SimHpIdu": >
+      A non-descript simulated heat-pump indoor unit (the refrigerant-to-water exchanger
+      of a split system): inventory only, nothing talks to it.

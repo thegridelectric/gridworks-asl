@@ -12,6 +12,7 @@ class Gw1SimDeviceType(SemaEnum):
     SimGw108 = auto()
     SimSamsungAE055FEYMCG = auto()
     SimHpOdu = auto()
+    SimHpIdu = auto()
 
     @classmethod
     def default(cls) -> "Gw1SimDeviceType":
