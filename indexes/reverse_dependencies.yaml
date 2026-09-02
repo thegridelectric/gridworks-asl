@@ -51,6 +51,10 @@ types:
       used_by:
       - gw.house0.operational.params:000
       - gw.nolan.operational.params:000
+  dac.output.config:
+    '000':
+      used_by:
+      - i2c.dac.output.component.gt:000
   data.channel.gt:
     '001':
       used_by:
@@ -336,6 +340,11 @@ types:
       used_by:
       - i2c.dac.writer.component.gt:000
       - sim.dac.writer.component.gt:000
+  i2c.dac.output.component.gt:
+    '000':
+      used_by:
+      - gw.house0.layout:000
+      - gw.nolan.layout:000
   i2c.dac.writer.component.gt:
     '000':
       used_by:
@@ -765,6 +774,7 @@ enums:
   i2c.dac.channel:
     '000':
       used_by:
+      - dac.output.config:000
       - i2c.dac.channel.config:000
   i2c.dac.type:
     '000':
@@ -773,6 +783,7 @@ enums:
   i2c.dac.vref:
     '000':
       used_by:
+      - dac.output.config:000
       - i2c.dac.channel.config:000
   i2c.mux.type:
     '000':
@@ -1056,6 +1067,7 @@ formats:
     - relay.control.config:000
   non.negative.int:
     used_by:
+    - dac.output.config:000
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.house0.operational.params:000
@@ -1103,6 +1115,7 @@ formats:
     - i2c.bus:000
     - i2c.ct.interface.capability:000
     - i2c.dac.capability:000
+    - i2c.dac.output.component.gt:000
     - i2c.dac.writer.component.gt:000
     - i2c.expander:000
     - i2c.multichannel.dt.relay.component.gt:004
@@ -1142,6 +1155,7 @@ formats:
     - channel.config:000
     - channel.config:001
     - component.attribute.class.gt:001
+    - dac.output.config:000
     - derived.channel.gt:001
     - derived.channel.gt:002
     - dfr.component.gt:000
@@ -1228,6 +1242,7 @@ formats:
     - channel.readings.list.item:000
     - channel.readings:001
     - channel.readings:002
+    - dac.output.config:000
     - data.channel.gt:001
     - data.channel.gt:002
     - data.channel.gt:003
@@ -1457,6 +1472,7 @@ formats:
     - hubitat.component.gt:000
     - hubitat.poller.component.gt:000
     - hubitat.poller.gt:000
+    - i2c.dac.output.component.gt:000
     - i2c.dac.writer.component.gt:000
     - i2c.multichannel.dt.relay.component.gt:001
     - i2c.multichannel.dt.relay.component.gt:002

@@ -45,7 +45,7 @@ examples:
   - |
     {
       "ComponentId": "933106d7-d6d0-4044-8766-627fd8ecb71b",
-      "DeviceType": "GridworksSimSensor",
+      "DeviceType": "SimSensor",
       "TypeName": "sim.sensor.component.gt",
       "Version": "000"
     }
@@ -57,4 +57,4 @@ x-gridworks:
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
 
-    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.
+    DeviceType values come from the `gw1.sim.device.type` vocabulary; the hardware layout enforces membership.

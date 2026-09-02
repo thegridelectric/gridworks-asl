@@ -7,13 +7,12 @@ description: 'The kind of device a component is built on — a device *category*
   the granularity GridWorks cares to distinguish, NOT a strict manufacturer make+model (several eGauge
   models, say, map to one EgaugePowerMeter). Components carry their `DeviceType` as an open `pascal.case`
   string (so component types stay version-stable); the hardware layout enforces that the value is a member
-  of this enum. Device types that carry category-level data beyond the name open a specialized `<family>.device.type.gt`
+  of this enum or of gw1.sim.device.type, the disjoint vocabulary of simulated devices. Device types that carry category-level data beyond the name open a specialized `<family>.device.type.gt`
   (e.g. `gw1.scada.device.type.gt` for Gw108RevB). Migrated from `spaceheat.make.model` (now
   frozen) — each value notes its old MakeModel.'
 enum:
 - EgaugePowerMeter
 - GridworksTsnap1ScadaBoard
-- GridworksSimPowerMeter
 - HubitatC7Hub
 - Amphenol10kThermistor
 - OmegaFtb8010FlowMeter
@@ -28,15 +27,16 @@ enum:
 - GridworksTankModule3
 - Gw101
 - Gw108RevB
-- GridworksSimSensor
-- GridworksSimRelayBank
 - AbstractWebServer
 - Gw108I2cRelay
 - Gw108GpioRelay
 - SamsungAE055FCYDCG
 - SamsungAE055FEYMCG
 - Gw108Adc
-- GridworksSimGw108
+- MitsubishiWUZSA48NMZ
+- MitsubishiERSFNM6E
+- LGARUM048GSS5
+- LGARNH423K3A4
 default: EgaugePowerMeter
 x-gridworks:
   owner: gridworks-energy
@@ -44,7 +44,6 @@ x-gridworks:
   value_descriptions:
     EgaugePowerMeter: eGauge 4030 power meter. (was MakeModel EGAUGE__4030)
     GridworksTsnap1ScadaBoard: GridWorks TSnap1 SCADA hardware. (was MakeModel GRIDWORKS__TSNAP1)
-    GridworksSimPowerMeter: GridWorks simulated power meter. (was MakeModel GRIDWORKS__SIMPM1)
     HubitatC7Hub: Hubitat C7 LAN integration. (was MakeModel HUBITAT__C7__LAN1)
     Amphenol10kThermistor: Amphenol 10K NTC thermistor. (was MakeModel AMPHENOL__NTC_10K_THERMISTOR_MA100GG103BN)
     OmegaFtb8010FlowMeter: Omega FTB8010HW-PT flow meter. (was MakeModel OMEGA__FTB8010HWPT)
@@ -59,9 +58,6 @@ x-gridworks:
     GridworksTankModule3: GridWorks Tank Module 3. (was MakeModel GRIDWORKS__TANKMODULE3)
     Gw101: GridWorks GW101 device. (was MakeModel GRIDWORKS__GW101)
     Gw108RevB: GridWorks SCADA GW108 board, rev B. (was GridworksScadaGw108; originally MakeModel GRIDWORKS__SCADA_GW108)
-    GridworksSimSensor: GridWorks simulated sensor — the SimSensorActor's device type; fully configured
-      from its Component ConfigList.
-    GridworksSimRelayBank: GridWorks simulated relay bank — the SimRelayActor's device type.
     AbstractWebServer: An abstract (generic) web server — a service component, not a hardware make/model;
       defined by its component config. Replaces the UNKNOWNMAKE web-server hack.
     Gw108I2cRelay: >
@@ -84,7 +80,16 @@ x-gridworks:
       its bus, address, reference volts, and series resistance live in the board's
       thermistor-interface capability entries (gw1.scada.device.type.gt), referenced by
       AdcName; the reader component carries only identity, channel configs, and calc method.
-    GridworksSimGw108: >
-      GridWorks simulated GW108 board — the register-level simulation twin of
-      Gw108RevB. Carries the same board record shape (gw1.scada.device.type.gt),
-      so chip and relay address resolution runs unchanged against simulated registers.
+    MitsubishiWUZSA48NMZ: >
+      Mitsubishi Ecodan WUZ-SA48NMZ outdoor unit — compressor-bearing, refrigerant out to
+      the hydrobox; full nameplate designation verbatim after the make prefix. Maple.
+    MitsubishiERSFNM6E: >
+      Mitsubishi Ecodan ERSF-NM6E hydrobox — the indoor unit that does the
+      refrigerant-to-water exchange, so the house loop never leaves the building (no glycol,
+      no plate exchanger). Maple.
+    LGARUM048GSS5: >
+      LG Multi V ARUM048GSS5 outdoor unit — compressor-bearing VRF unit, refrigerant out to
+      the hydro kit. Beech and oak.
+    LGARNH423K3A4: >
+      LG Hydro Kit High Temperature ARNH423K3A4 — the indoor unit that does the
+      refrigerant-to-water exchange (no glycol, no plate exchanger). Beech and oak.

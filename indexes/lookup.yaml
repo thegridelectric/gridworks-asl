@@ -79,6 +79,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/cop.curve/000.yaml
+  dac.output.config:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/dac.output.config/000.yaml
   data.channel.gt:
     latest_version: '003'
     versioning_strategy: literal
@@ -545,6 +550,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/i2c.dac.channel.config/000.yaml
+  i2c.dac.output.component.gt:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/i2c.dac.output.component.gt/000.yaml
   i2c.dac.writer.component.gt:
     latest_version: '000'
     versioning_strategy: literal
@@ -1079,6 +1089,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/gw1.service.mode/000.yaml
+  gw1.sim.device.type:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gw1.sim.device.type/000.yaml
   gw1.system.mode:
     enum_type: versioned
     latest_version: '000'

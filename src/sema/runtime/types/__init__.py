@@ -10,6 +10,7 @@ from sema.runtime.types.channel_readings_list_item import ChannelReadingsListIte
 from sema.runtime.types.component_attribute_class_gt import ComponentAttributeClassGt
 from sema.runtime.types.connectivity_edge_gt import ConnectivityEdgeGt
 from sema.runtime.types.cop_curve import CopCurve
+from sema.runtime.types.dac_output_config import DacOutputConfig
 from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.derived_channel_gt import DerivedChannelGt
 from sema.runtime.types.device_component_gt import DeviceComponentGt
@@ -111,6 +112,7 @@ from sema.runtime.types.i2c_bus import I2cBus
 from sema.runtime.types.i2c_ct_interface_capability import I2cCtInterfaceCapability
 from sema.runtime.types.i2c_dac_capability import I2cDacCapability
 from sema.runtime.types.i2c_dac_channel_config import I2cDacChannelConfig
+from sema.runtime.types.i2c_dac_output_component_gt import I2cDacOutputComponentGt
 from sema.runtime.types.i2c_dac_writer_component_gt import I2cDacWriterComponentGt
 from sema.runtime.types.i2c_expander import I2cExpander
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
@@ -204,6 +206,7 @@ __all__ = [
     "ComponentAttributeClassGt",
     "ConnectivityEdgeGt",
     "CopCurve",
+    "DacOutputConfig",
     "DataChannelGt",
     "DerivedChannelGt",
     "DeviceComponentGt",
@@ -293,6 +296,7 @@ __all__ = [
     "I2cCtInterfaceCapability",
     "I2cDacCapability",
     "I2cDacChannelConfig",
+    "I2cDacOutputComponentGt",
     "I2cDacWriterComponentGt",
     "I2cExpander",
     "I2cMultichannelDtRelayComponentGt",

@@ -8,7 +8,6 @@ class Gw1DeviceType(SemaEnum):
 
     EgaugePowerMeter = auto()
     GridworksTsnap1ScadaBoard = auto()
-    GridworksSimPowerMeter = auto()
     HubitatC7Hub = auto()
     Amphenol10kThermistor = auto()
     OmegaFtb8010FlowMeter = auto()
@@ -23,15 +22,16 @@ class Gw1DeviceType(SemaEnum):
     GridworksTankModule3 = auto()
     Gw101 = auto()
     Gw108RevB = auto()
-    GridworksSimSensor = auto()
-    GridworksSimRelayBank = auto()
     AbstractWebServer = auto()
     Gw108I2cRelay = auto()
     Gw108GpioRelay = auto()
     SamsungAE055FCYDCG = auto()
     SamsungAE055FEYMCG = auto()
     Gw108Adc = auto()
-    GridworksSimGw108 = auto()
+    MitsubishiWUZSA48NMZ = auto()
+    MitsubishiERSFNM6E = auto()
+    LGARUM048GSS5 = auto()
+    LGARNH423K3A4 = auto()
 
     @classmethod
     def default(cls) -> "Gw1DeviceType":

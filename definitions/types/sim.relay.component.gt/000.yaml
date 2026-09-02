@@ -53,7 +53,7 @@ examples:
   - |
     {
       "ComponentId": "d6c555ab-d5c7-4aa1-8f02-eaf5f7598f10",
-      "DeviceType": "GridworksSimRelayBank",
+      "DeviceType": "SimRelayBank",
       "ConfigList": [
         {
           "ChannelName": "scada",
@@ -86,6 +86,6 @@ x-gridworks:
     instances of this type. Sema is the authority over what a row means; the seed
     table is the authority over which instances are currently asserted.
 
-    DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.
+    DeviceType values come from the `gw1.sim.device.type` vocabulary; the hardware layout enforces membership.
 
     The config entries are `relay.actor.config` records. Kin: `sim.sensor.component.gt`.

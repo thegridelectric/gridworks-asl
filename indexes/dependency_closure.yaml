@@ -137,6 +137,17 @@ types:
       formats: []
       types: []
       versionless_types: []
+  dac.output.config:
+    '000':
+      enums:
+      - i2c.dac.channel:000
+      - i2c.dac.vref:000
+      formats:
+      - non.negative.int
+      - positive.int
+      - spaceheat.name
+      types: []
+      versionless_types: []
   data.channel.gt:
     '001':
       enums:
@@ -788,6 +799,7 @@ types:
       - ads.channel.config:000
       - ads111x.based.component.gt:000
       - ads111x.based.device.type.gt:000
+      - dac.output.config:000
       - data.channel.gt:003
       - derived.channel.gt:002
       - dfr.component.gt:000
@@ -816,6 +828,7 @@ types:
       - i2c.ct.interface.capability:000
       - i2c.dac.capability:000
       - i2c.dac.channel.config:000
+      - i2c.dac.output.component.gt:000
       - i2c.dac.writer.component.gt:000
       - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:004
@@ -928,6 +941,7 @@ types:
       - uuid4.str
       types:
       - ads111x.based.device.type.gt:000
+      - dac.output.config:000
       - data.channel.gt:003
       - derived.channel.gt:002
       - device.component.gt:000
@@ -951,6 +965,7 @@ types:
       - i2c.ct.interface.capability:000
       - i2c.dac.capability:000
       - i2c.dac.channel.config:000
+      - i2c.dac.output.component.gt:000
       - i2c.dac.writer.component.gt:000
       - i2c.expander:000
       - i2c.multichannel.dt.relay.component.gt:004
@@ -1432,6 +1447,20 @@ types:
       - non.negative.int
       - positive.int
       types: []
+      versionless_types: []
+  i2c.dac.output.component.gt:
+    '000':
+      enums:
+      - i2c.dac.channel:000
+      - i2c.dac.vref:000
+      formats:
+      - non.negative.int
+      - pascal.case
+      - positive.int
+      - spaceheat.name
+      - uuid4.str
+      types:
+      - dac.output.config:000
       versionless_types: []
   i2c.dac.writer.component.gt:
     '000':

@@ -97,6 +97,13 @@ types:
       "000":
         summary: "Initial version (Intercept, OatCoeff, LwtCoeff, Min, MinOatF) — the COP model migrated out of scada deployment config into operational params."
 
+  dac.output.config:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version (ChannelName, ActorName, DacChannel, PowerOnRawValue, PowerOnVref, PowerOnGain; EepromRanges axiom)."
+
   data.channel.gt:
     latest_version: "003"
     versioning_strategy: "literal"
@@ -822,6 +829,13 @@ types:
     versions:
       "000":
         summary: "Initial version (DacChannel, PowerOnRawValue, PowerOnVref, PowerOnGain; EepromRanges axiom)."
+
+  i2c.dac.output.component.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version. Per-output component on the i2c.relay.component.gt pattern: BoardComponentId (-> scada.board.component.gt), DacName (-> the board record's DAC list), ConfigList of exactly one dac.output.config. Replaces the chip-level i2c.dac.writer.component.gt."
 
   i2c.dac.writer.component.gt:
     latest_version: "000"
@@ -1655,6 +1669,12 @@ enums:
       "000": {}
 
   gw1.service.mode:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  gw1.sim.device.type:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

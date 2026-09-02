@@ -35,6 +35,7 @@ from sema.runtime.enums.gw1_main_auto_state import Gw1MainAutoState
 from sema.runtime.enums.gw1_quantity import Gw1Quantity
 from sema.runtime.enums.gw1_seasonal_storage_mode import Gw1SeasonalStorageMode
 from sema.runtime.enums.gw1_service_mode import Gw1ServiceMode
+from sema.runtime.enums.gw1_sim_device_type import Gw1SimDeviceType
 from sema.runtime.enums.gw1_system_mode import Gw1SystemMode
 from sema.runtime.enums.gw1_unit import Gw1Unit
 from sema.runtime.enums.gw_g_node_class import GwGNodeClass
@@ -105,6 +106,7 @@ __all__ = [
     "Gw1Quantity",
     "Gw1SeasonalStorageMode",
     "Gw1ServiceMode",
+    "Gw1SimDeviceType",
     "Gw1SystemMode",
     "Gw1Unit",
     "GwGNodeClass",

@@ -1,0 +1,10 @@
+{
+  "ChannelName": "secondary-010v",
+  "ActorName": "secondary-010v",
+  "DacChannel": "C",
+  "PowerOnRawValue": 4096,
+  "PowerOnVref": "Internal",
+  "PowerOnGain": 1,
+  "TypeName": "dac.output.config",
+  "Version": "000"
+}

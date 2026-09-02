@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-09-01T21:40:00Z"
+  last_updated: "2026-09-02T21:15:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -570,6 +570,18 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw1.service.mode/000"
         created: "2026-08-13T11:55:00Z"
+        status: "staging"
+
+  gw1.sim.device.type:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "Simulated-device categories for components in simulated layouts; disjoint from gw1.device.type so a consumer tells simulated from real by vocabulary membership, not by name."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/gw1.sim.device.type/000"
+        created: "2026-09-02T21:15:00Z"
         status: "staging"
 
   gw1.system.mode:
@@ -1290,6 +1302,25 @@ types:
         summary: "Initial version (Intercept, OatCoeff, LwtCoeff, Min, MinOatF) — the COP model migrated out of scada deployment config into operational params."
         direct_dependencies:
           structural: []
+
+  dac.output.config:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "Control config for one 0-10V output: reporting channel, commanding actor, DAC channel, and EEPROM power-on defaults — the relay.control.config analog for an analog actuator."
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/dac.output.config/000"
+        created: "2026-09-02T21:15:00Z"
+        status: "staging"
+        summary: "Initial version (ChannelName, ActorName, DacChannel, PowerOnRawValue, PowerOnVref, PowerOnGain; EepromRanges axiom)."
+        direct_dependencies:
+          structural:
+            - "i2c.dac.channel:000"
+            - "i2c.dac.vref:000"
+            - "non.negative.int"
+            - "positive.int"
+            - "spaceheat.name"
 
   data.channel.gt:
     latest_version: "003"
@@ -2485,7 +2516,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.house0.layout/000"
-        created: "2026-08-16T16:30:00Z"
+        created: "2026-09-02T21:15:00Z"
         status: "staging"
         summary: "The complete deployable artifact for a House0-fleet home: every collection and Hydronic required, never a partial layout. The word MEANS has-a-siegenthaler-loop (beech, maple); sieg-less homes are the coming gw.house0.no.sieg. Component set is eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server over the DeviceType record model. Axioms cover id uniqueness, the core and command-node Name/ActorClass contracts (sieg-loop and hp-boss unconditional command nodes, dormant when unused), per-zone heat-call channels, primary-flow source agreement, the transactive-power boundary, required flow sensing, the unconditional sieg manifold surface, and the system-model energy channels and the models that produce them."
         direct_dependencies:
@@ -2504,6 +2535,7 @@ types:
             - "gw1.scada.device.type.gt:000"
             - "hubitat.component.gt:000"
             - "hubitat.poller.component.gt:000"
+            - "i2c.dac.output.component.gt:000"
             - "i2c.dac.writer.component.gt:000"
             - "i2c.multichannel.dt.relay.component.gt:004"
             - "i2c.relay.component.gt:000"
@@ -2593,7 +2625,7 @@ types:
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.nolan.layout/000"
-        created: "2026-08-31T22:45:00Z"
+        created: "2026-09-02T21:15:00Z"
         status: "staging"
         summary: "Axioms 3-7 pin the required Nolan surface: RequiredRelays (full plant relay set + circuit relay binding), RequiredActors, RequiredCommandNodes (incl. hp-odu / hp-ctrl-box — a Nolan home is a monobloc), RequiredSensing (kind-agnostic names incl. HP and resistive-element power channels), SingleStoreTank. RequiredBoardActors dropped: layouts do not determine sensing/actuation hardware — the component-conditional bus-actor axiom lands with the board actor wiring. Components union gains device.component.gt (HP parts tracked with make/model/serial); DeviceTypes gains the hp records. Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/302 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
         direct_dependencies:
@@ -2611,6 +2643,7 @@ types:
             - "gw1.scada.device.type.gt:000"
             - "hp.control.box.device.type.gt:000"
             - "hp.device.type.gt:000"
+            - "i2c.dac.output.component.gt:000"
             - "i2c.dac.writer.component.gt:000"
             - "i2c.multichannel.dt.relay.component.gt:004"
             - "i2c.relay.component.gt:000"
@@ -3458,6 +3491,8 @@ types:
   i2c.dac.channel.config:
     latest_version: "000"
     owner: gridworks-energy
+    replaced_by:
+      - dac.output.config
     versioning_strategy: "literal"
     description: "EEPROM power-on defaults for one output channel of a board DAC."
     versions:
@@ -3473,9 +3508,28 @@ types:
             - "non.negative.int"
             - "positive.int"
 
+  i2c.dac.output.component.gt:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A single board-resident 0-10V output (one channel of a board DAC) as one Spaceheat component, driven as an actuator; board-generic, identified by DacName against the board record."
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/i2c.dac.output.component.gt/000"
+        created: "2026-09-02T21:15:00Z"
+        status: "staging"
+        summary: "Initial version. Per-output component on the i2c.relay.component.gt pattern: BoardComponentId (-> scada.board.component.gt), DacName (-> the board record's DAC list), ConfigList of exactly one dac.output.config. Replaces the chip-level i2c.dac.writer.component.gt."
+        direct_dependencies:
+          structural:
+            - "dac.output.config:000"
+            - "pascal.case"
+            - "uuid4.str"
+
   i2c.dac.writer.component.gt:
     latest_version: "000"
     owner: gridworks-energy
+    replaced_by:
+      - i2c.dac.output.component.gt
     versioning_strategy: "literal"
     description: "Configuration for an I2C DAC writer component that drives one board-resident DAC (named by DacName against the board record) and carries its per-channel EEPROM power-on defaults."
     versions:
@@ -4917,6 +4971,8 @@ types:
   sim.dac.writer.component.gt:
     latest_version: "000"
     owner: gridworks-energy
+    replaced_by:
+      - i2c.dac.output.component.gt
     versioning_strategy: "literal"
     description: "A simulated DAC-writer component — the sim.* counterpart of i2c.dac.writer.component.gt, for a layer-1 standalone (non-board-resident) simulated DAC in a simulated layout."
 

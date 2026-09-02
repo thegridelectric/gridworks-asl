@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-09-01T21:40:00Z'
+  last_updated: '2026-09-02T21:15:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -509,6 +509,18 @@ enums:
       '000':
         schema_url: https://schemas.electricity.works/enums/gw1.service.mode/000
         created: '2026-08-13T11:55:00Z'
+        status: staging
+  gw1.sim.device.type:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Simulated-device categories for components in simulated layouts;
+      disjoint from gw1.device.type so a consumer tells simulated from real by vocabulary
+      membership, not by name.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/gw1.sim.device.type/000
+        created: '2026-09-02T21:15:00Z'
         status: staging
   gw1.system.mode:
     latest_version: '000'
@@ -1164,6 +1176,27 @@ types:
           \ params."
         direct_dependencies:
           structural: []
+  dac.output.config:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: "Control config for one 0-10V output: reporting channel, commanding\
+      \ actor, DAC channel, and EEPROM power-on defaults \u2014 the relay.control.config\
+      \ analog for an analog actuator."
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/dac.output.config/000
+        created: '2026-09-02T21:15:00Z'
+        status: staging
+        summary: Initial version (ChannelName, ActorName, DacChannel, PowerOnRawValue,
+          PowerOnVref, PowerOnGain; EepromRanges axiom).
+        direct_dependencies:
+          structural:
+          - i2c.dac.channel:000
+          - i2c.dac.vref:000
+          - non.negative.int
+          - positive.int
+          - spaceheat.name
   data.channel.gt:
     latest_version: '003'
     owner: gridworks-energy
@@ -2199,7 +2232,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.house0.layout/000
-        created: '2026-08-16T16:30:00Z'
+        created: '2026-09-02T21:15:00Z'
         status: staging
         summary: 'The complete deployable artifact for a House0-fleet home: every
           collection and Hydronic required, never a partial layout. The word MEANS
@@ -2228,6 +2261,7 @@ types:
           - gw1.scada.device.type.gt:000
           - hubitat.component.gt:000
           - hubitat.poller.component.gt:000
+          - i2c.dac.output.component.gt:000
           - i2c.dac.writer.component.gt:000
           - i2c.multichannel.dt.relay.component.gt:004
           - i2c.relay.component.gt:000
@@ -2324,7 +2358,7 @@ types:
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.nolan.layout/000
-        created: '2026-08-31T22:45:00Z'
+        created: '2026-09-02T21:15:00Z'
         status: staging
         summary: "Axioms 3-7 pin the required Nolan surface: RequiredRelays (full\
           \ plant relay set + circuit relay binding), RequiredActors, RequiredCommandNodes\
@@ -2357,6 +2391,7 @@ types:
           - gw1.scada.device.type.gt:000
           - hp.control.box.device.type.gt:000
           - hp.device.type.gt:000
+          - i2c.dac.output.component.gt:000
           - i2c.dac.writer.component.gt:000
           - i2c.multichannel.dt.relay.component.gt:004
           - i2c.relay.component.gt:000
@@ -3187,6 +3222,8 @@ types:
   i2c.dac.channel.config:
     latest_version: '000'
     owner: gridworks-energy
+    replaced_by:
+    - dac.output.config
     versioning_strategy: literal
     description: EEPROM power-on defaults for one output channel of a board DAC.
     versions:
@@ -3202,9 +3239,32 @@ types:
           - i2c.dac.vref:000
           - non.negative.int
           - positive.int
+  i2c.dac.output.component.gt:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A single board-resident 0-10V output (one channel of a board DAC)
+      as one Spaceheat component, driven as an actuator; board-generic, identified
+      by DacName against the board record.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/i2c.dac.output.component.gt/000
+        created: '2026-09-02T21:15:00Z'
+        status: staging
+        summary: 'Initial version. Per-output component on the i2c.relay.component.gt
+          pattern: BoardComponentId (-> scada.board.component.gt), DacName (-> the
+          board record''s DAC list), ConfigList of exactly one dac.output.config.
+          Replaces the chip-level i2c.dac.writer.component.gt.'
+        direct_dependencies:
+          structural:
+          - dac.output.config:000
+          - pascal.case
+          - uuid4.str
   i2c.dac.writer.component.gt:
     latest_version: '000'
     owner: gridworks-energy
+    replaced_by:
+    - i2c.dac.output.component.gt
     versioning_strategy: literal
     description: Configuration for an I2C DAC writer component that drives one board-resident
       DAC (named by DacName against the board record) and carries its per-channel
@@ -4601,6 +4661,8 @@ types:
   sim.dac.writer.component.gt:
     latest_version: '000'
     owner: gridworks-energy
+    replaced_by:
+    - i2c.dac.output.component.gt
     versioning_strategy: literal
     description: "A simulated DAC-writer component \u2014 the sim.* counterpart of\
       \ i2c.dac.writer.component.gt, for a layer-1 standalone (non-board-resident)\

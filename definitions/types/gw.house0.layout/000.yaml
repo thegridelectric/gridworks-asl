@@ -61,6 +61,7 @@ properties:
         - $ref: "https://schemas.electricity.works/types/ads111x.based.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/gpio.relay.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/gpio.sensor.component.gt/000"
+        - $ref: "https://schemas.electricity.works/types/i2c.dac.output.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/i2c.dac.writer.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004"
         - $ref: "https://schemas.electricity.works/types/i2c.relay.component.gt/000"
