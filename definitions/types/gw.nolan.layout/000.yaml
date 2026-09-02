@@ -24,7 +24,7 @@ properties:
       List of Grid Node identity objects included in this layout snapshot.
       Each element is a fully specified Grid Node identity record; the set of
       GNodeClass values that must be present is constrained by
-      NolanGNodeSet (axiom 1).
+      TransactivePowerChannel (axiom 1).
 
   ShNodes:
     type: array
@@ -139,7 +139,36 @@ x-gridworks:
         thermistor readers) SHALL match a Name in that record.
 
     - number: 3
-      name: "RequiredRelays"
+      name: "CoreShNodesExistenceAndActorClass"
+      statement: >
+        ShNodes SHALL contain a node with each of the following Name / ActorClass pairs, and no
+        additional ShNode with any of these Names SHALL exist:
+          "s"                 → ActorClass "PrimaryScada"
+          "s2"                → ActorClass "SecondaryScada"
+          "power-meter"       → ActorClass "PowerMeter"
+          "ltn"               → ActorClass "NoActor"
+          "admin"             → ActorClass "NoActor"
+          "auto"              → ActorClass "NoActor"
+          "la"                → ActorClass "LeafAlly"
+          "lc"                → ActorClass "LocalControl"
+          "derived-generator" → ActorClass "DerivedGenerator"
+        The effective handle (Handle if present, otherwise Name) of "admin" SHALL be "admin" and
+        of "auto" SHALL be "auto".
+
+    - number: 4
+      name: "CommandNodesExistenceAndActorClass"
+      statement: >
+        ShNodes SHALL contain a node with each of the following Name / ActorClass pairs, and no
+        additional ShNode with any of these Names SHALL exist:
+          "n"           → ActorClass "NoActor"
+          "pico-cycler" → ActorClass "PicoCycler"
+          "hp-boss"     → ActorClass "HpBoss"
+        The effective handle of "n" SHALL be "auto.lc.n". (hp-boss is a command node in every
+        layout: hp-scada-ops-relay reports to it in all states, dormant when no heat pump is
+        commandable.)
+
+    - number: 5
+      name: "RequiredActuators"
       statement: >
         a. ShNodes SHALL include nodes named
           "iso-valve-relay",
@@ -149,41 +178,29 @@ x-gridworks:
           "store-pump-relay",
           "buffer-top-elt-relay",
           "buffer-bottom-elt-relay",
-          "store-top-elt-relay",
-          and "store-bottom-elt-relay",
+          "tank1-top-elt-relay",
+          and "tank1-bottom-elt-relay",
         each with ActorClass "Relay".
         b. Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
         FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes with
         ActorClass "Relay".
 
-    - number: 4
-      name: "RequiredActors"
-      statement: >
-        ShNodes SHALL include nodes with these Name / ActorClass pairs:
-          "s"                 → ActorClass "PrimaryScada"
-          "s2"                → ActorClass "SecondaryScada"
-          "lc"                → ActorClass "LocalControl"
-          "la"                → ActorClass "LeafAlly"
-          "derived-generator" → ActorClass "DerivedGenerator"
-          "power-meter"       → ActorClass "PowerMeter"
-
-    - number: 5
-      name: "RequiredCommandNodes"
-      statement: >
-        ShNodes SHALL include nodes with these Name / ActorClass pairs:
-          "admin"       → ActorClass "NoActor"
-          "auto"        → ActorClass "NoActor"
-          "n"           → ActorClass "NoActor"
-          "ltn"         → ActorClass "NoActor"
-          "hp-odu"      → ActorClass "NoActor"
-          "hp-ctrl-box" → ActorClass "NoActor"
-          "pico-cycler" → ActorClass "PicoCycler"
-          "hp-boss"     → ActorClass "HpBoss"
-        The effective handle (Handle if present, otherwise Name) of "admin" SHALL
-        be "admin", of "auto" SHALL be "auto", and of "n" SHALL be
-        "auto.lc.n".
-
     - number: 6
+      name: "RequiredHeatpumpEquipment"
+      statement: >
+        ShNodes SHALL include nodes named "hp-odu" and "hp-ctrl-box" (a Nolan home is a
+        monobloc), each with a ComponentId equal to the ComponentId of a Component in
+        Components, and each with ActorClass "NoActor".
+
+    - number: 7
+      name: "ComponentBinding"
+      statement: >
+        Every Component in Components SHALL have its ComponentId referenced by exactly one
+        ShNode in ShNodes. The node's Name is the component's identity within the house;
+        the ComponentId is the replaceable instance under it (a swapped part keeps the
+        name and gets a fresh id).
+
+    - number: 8
       name: "RequiredSensing"
       statement: >
         For each of the names
@@ -207,17 +224,16 @@ x-gridworks:
           "tank1-depth3-device",
           "hp-odu-pwr",
           "hp-ctrl-box-pwr",
-          "elt-buffer-top-pwr",
-          "elt-buffer-bottom-pwr",
-          "elt-store-top-pwr",
-          and "elt-store-bottom-pwr":
+          "buffer-top-elt-pwr",
+          "buffer-bottom-elt-pwr",
+          "tank1-top-elt-pwr",
+          and "tank1-bottom-elt-pwr":
         a channel with that Name SHALL exist in
         DataChannels or in DerivedChannels. (Kind-agnostic by design: a name
         may migrate from raw DataChannel to same-name DerivedChannel — as tank
-        temperatures did — without touching this contract. The four
-        resistive-element power names rename with the tank1-elt wave.)
+        temperatures did — without touching this contract.)
 
-    - number: 7
+    - number: 9
       name: "SingleStoreTank"
       statement: >
         Hydronic.TotalStoreTanks SHALL equal 1 — the Nolan plant carries exactly

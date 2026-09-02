@@ -689,6 +689,7 @@ enums:
       - scada.control.capabilities:001
     '013':
       used_by:
+      - gw.nolan.layout:000
       - spaceheat.node.gt:302
   gw1.actuation.authority:
     '000':

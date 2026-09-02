@@ -78,13 +78,13 @@ class GwNolanLayout(SemaType):
         """
         Axiom 1: TransactivePowerChannel
         DerivedChannels SHALL contain exactly one channel whose Strategy is
-        "transactive-power" — the metered transactive boundary, computed by the power-meter
-        actor (not the derived-generator). Each name in that channel's InputChannelNames
-        SHALL resolve to an existing DataChannel with TelemetryName "PowerW", and the
-        AboutNode of each such DataChannel SHALL carry a NameplatePowerW. (The metered set
-        is declared once here, replacing the former per-node InPowerMetering flag; the
-        NameplatePowerW obligation folds in spaceheat.node.gt's retired
-        InPowerMetering-requires-nameplate axiom.)
+        "transactive-power" — the metered transactive boundary, computed by the
+        power-meter actor (not the derived-generator). Each name in that channel's
+        InputChannelNames SHALL resolve to an existing DataChannel with TelemetryName
+        "PowerW", and the AboutNode of each such DataChannel SHALL carry a
+        NameplatePowerW. (The metered set is declared once here, replacing the former
+        per-node InPowerMetering flag; the NameplatePowerW obligation folds in
+        spaceheat.node.gt's retired InPowerMetering-requires-nameplate axiom.)
         """
         transactive = [
             d
@@ -177,45 +177,128 @@ class GwNolanLayout(SemaType):
     @model_validator(mode="after")
     def check_axiom_3(self) -> "GwNolanLayout":
         """
-        Axiom 3: RequiredRelays
-        a. ShNodes SHALL include nodes named "iso-valve-relay",
-        "secondary-pump-relay", "hp-scada-ops-relay", "charge-valve-relay",
-        "store-pump-relay", "buffer-top-elt-relay", "buffer-bottom-elt-relay",
-        "store-top-elt-relay", and "store-bottom-elt-relay", each with
-        ActorClass "Relay".
-        b. Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
-        FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes
-        with ActorClass "Relay".
+        Axiom 3: CoreShNodesExistenceAndActorClass
+        ShNodes SHALL contain a node with each of the following Name / ActorClass pairs,
+        and no additional ShNode with any of these Names SHALL exist: "s" → ActorClass
+        "PrimaryScada" "s2" → ActorClass "SecondaryScada" "power-meter" → ActorClass
+        "PowerMeter" "ltn" → ActorClass "NoActor" "admin" → ActorClass "NoActor" "auto"
+        → ActorClass "NoActor" "la" → ActorClass "LeafAlly" "lc" → ActorClass
+        "LocalControl" "derived-generator" → ActorClass "DerivedGenerator" The effective
+        handle (Handle if present, otherwise Name) of "admin" SHALL be "admin" and of
+        "auto" SHALL be "auto".
         """
-        actor_class_by_name = {n.name: n.actor_class for n in (self.sh_nodes or [])}
+        pairs = (
+            ("s", "PrimaryScada"),
+            ("s2", "SecondaryScada"),
+            ("power-meter", "PowerMeter"),
+            ("ltn", "NoActor"),
+            ("admin", "NoActor"),
+            ("auto", "NoActor"),
+            ("la", "LeafAlly"),
+            ("lc", "LocalControl"),
+            ("derived-generator", "DerivedGenerator"),
+        )
+        nodes = [n for n in (self.sh_nodes or [])]
+        for name, actor_class in pairs:
+            matches = [n for n in nodes if n.name == name]
+            if len(matches) != 1:
+                raise ValueError(
+                    "Axiom 3 (CoreShNodesExistenceAndActorClass) failed: expected exactly "
+                    f"one ShNode named {name!r}, found {len(matches)}."
+                )
+            if str(matches[0].actor_class) != actor_class:
+                raise ValueError(
+                    "Axiom 3 (CoreShNodesExistenceAndActorClass) failed: ShNode "
+                    f"{name!r} has ActorClass {matches[0].actor_class}, expected {actor_class}."
+                )
+        for name, handle in (("admin", "admin"), ("auto", "auto")):
+            node = next(n for n in nodes if n.name == name)
+            effective = node.handle if node.handle is not None else node.name
+            if effective != handle:
+                raise ValueError(
+                    "Axiom 3 (CoreShNodesExistenceAndActorClass) failed: "
+                    f"{name!r} effective handle is {effective!r}, expected {handle!r}."
+                )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_4(self) -> "GwNolanLayout":
+        """
+        Axiom 4: CommandNodesExistenceAndActorClass
+        ShNodes SHALL contain a node with each of the following Name / ActorClass pairs,
+        and no additional ShNode with any of these Names SHALL exist: "n" → ActorClass
+        "NoActor" "pico-cycler" → ActorClass "PicoCycler" "hp-boss" → ActorClass
+        "HpBoss" The effective handle of "n" SHALL be "auto.lc.n". (hp-boss is a command
+        node in every layout: hp-scada-ops-relay reports to it in all states, dormant
+        when no heat pump is commandable.)
+        """
+        pairs = (("n", "NoActor"), ("pico-cycler", "PicoCycler"), ("hp-boss", "HpBoss"))
+        nodes = [n for n in (self.sh_nodes or [])]
+        for name, actor_class in pairs:
+            matches = [n for n in nodes if n.name == name]
+            if len(matches) != 1:
+                raise ValueError(
+                    "Axiom 4 (CommandNodesExistenceAndActorClass) failed: expected exactly "
+                    f"one ShNode named {name!r}, found {len(matches)}."
+                )
+            if str(matches[0].actor_class) != actor_class:
+                raise ValueError(
+                    "Axiom 4 (CommandNodesExistenceAndActorClass) failed: ShNode "
+                    f"{name!r} has ActorClass {matches[0].actor_class}, expected {actor_class}."
+                )
+        node = next(n for n in nodes if n.name == "n")
+        effective = node.handle if node.handle is not None else node.name
+        if effective != "auto.lc.n":
+            raise ValueError(
+                "Axiom 4 (CommandNodesExistenceAndActorClass) failed: 'n' effective "
+                f"handle is {effective!r}, expected 'auto.lc.n'."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_5(self) -> "GwNolanLayout":
+        """
+        Axiom 5: RequiredActuators
+        a. ShNodes SHALL include nodes named "iso-valve-relay", "secondary-pump-relay",
+        "hp-scada-ops-relay", "charge-valve-relay", "store-pump-relay",
+        "buffer-top-elt-relay", "buffer-bottom-elt-relay", "tank1-top-elt-relay", and
+        "tank1-bottom-elt-relay", each with ActorClass "Relay". b.
+        Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
+        FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes with
+        ActorClass "Relay".
+        """
+        actor_class_by_name = {
+            n.name: str(n.actor_class) for n in (self.sh_nodes or [])
+        }
 
         def relay_or_raise(node_name: str, role: str) -> None:
             actor_class = actor_class_by_name.get(node_name)
             if actor_class is None:
                 raise ValueError(
-                    f"Axiom 3 (RequiredRelays) failed: no ShNode named {node_name} ({role})."
+                    f"Axiom 5 (RequiredActuators) failed: no ShNode named {node_name} ({role})."
                 )
             if actor_class != "Relay":
                 raise ValueError(
-                    f"Axiom 3 (RequiredRelays) failed: {node_name} ({role}) has ActorClass {actor_class}, not Relay."
+                    f"Axiom 5 (RequiredActuators) failed: {node_name} ({role}) has "
+                    f"ActorClass {actor_class}, not Relay."
                 )
 
         for required in (
             "iso-valve-relay",
+            "secondary-pump-relay",
+            "hp-scada-ops-relay",
             "charge-valve-relay",
             "store-pump-relay",
             "buffer-top-elt-relay",
             "buffer-bottom-elt-relay",
-            "store-top-elt-relay",
-            "store-bottom-elt-relay",
-            "secondary-pump-relay",
-            "hp-scada-ops-relay",
+            "tank1-top-elt-relay",
+            "tank1-bottom-elt-relay",
         ):
             relay_or_raise(required, "plant relay")
         circuits = self.hydronic.zone_call_circuits or []
         if not circuits:
             raise ValueError(
-                "Axiom 3 (RequiredRelays) failed: Hydronic.ZoneCallCircuits is empty."
+                "Axiom 5 (RequiredActuators) failed: Hydronic.ZoneCallCircuits is empty."
             )
         for circuit in circuits:
             relay_or_raise(circuit.failsafe_relay_node, "circuit failsafe relay")
@@ -223,95 +306,72 @@ class GwNolanLayout(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_4(self) -> "GwNolanLayout":
-        """
-        Axiom 4: RequiredActors
-        ShNodes SHALL include nodes with these Name / ActorClass pairs:
-          "s"                 → ActorClass "PrimaryScada"
-          "s2"                → ActorClass "SecondaryScada"
-          "lc"                → ActorClass "LocalControl"
-          "la"                → ActorClass "LeafAlly"
-          "derived-generator" → ActorClass "DerivedGenerator"
-          "power-meter"       → ActorClass "PowerMeter"
-        """
-        actor_class_by_name = {n.name: n.actor_class for n in (self.sh_nodes or [])}
-        for name, actor_class in (
-            ("s", "PrimaryScada"),
-            ("s2", "SecondaryScada"),
-            ("lc", "LocalControl"),
-            ("la", "LeafAlly"),
-            ("derived-generator", "DerivedGenerator"),
-            ("power-meter", "PowerMeter"),
-        ):
-            got = actor_class_by_name.get(name)
-            if got != actor_class:
-                raise ValueError(
-                    f"Axiom 4 (RequiredActors) failed: expected ShNode {name!r} "
-                    f"with ActorClass {actor_class}, got {got!r}."
-                )
-        return self
-
-    @model_validator(mode="after")
-    def check_axiom_5(self) -> "GwNolanLayout":
-        """
-        Axiom 5: RequiredCommandNodes
-        ShNodes SHALL include nodes with these Name / ActorClass pairs:
-          "admin"       → ActorClass "NoActor"
-          "auto"        → ActorClass "NoActor"
-          "n"           → ActorClass "NoActor"
-          "ltn"         → ActorClass "NoActor"
-          "hp-odu"      → ActorClass "NoActor"
-          "hp-ctrl-box" → ActorClass "NoActor"
-          "pico-cycler" → ActorClass "PicoCycler"
-          "hp-boss"     → ActorClass "HpBoss"
-        The effective handle (Handle if present, otherwise Name) of "admin" SHALL
-        be "admin", of "auto" SHALL be "auto", and of "n" SHALL be
-        "auto.lc.n".
-        """
-        nodes = {n.name: n for n in (self.sh_nodes or [])}
-        pairs = (
-            ("admin", "NoActor"),
-            ("auto", "NoActor"),
-            ("n", "NoActor"),
-            ("ltn", "NoActor"),
-            ("hp-odu", "NoActor"),
-            ("hp-ctrl-box", "NoActor"),
-            ("pico-cycler", "PicoCycler"),
-            ("hp-boss", "HpBoss"),
-        )
-        for name, actor_class in pairs:
-            node = nodes.get(name)
-            if node is None or node.actor_class != actor_class:
-                raise ValueError(
-                    f"Axiom 5 (RequiredCommandNodes) failed: expected ShNode "
-                    f"{name!r} with ActorClass {actor_class}."
-                )
-        for name, handle in (("admin", "admin"), ("auto", "auto"), ("n", "auto.lc.n")):
-            node = nodes[name]
-            effective = node.handle if node.handle is not None else node.name
-            if effective != handle:
-                raise ValueError(
-                    f"Axiom 5 (RequiredCommandNodes) failed: {name!r} "
-                    f"effective handle is {effective!r}, expected {handle!r}."
-                )
-        return self
-
-    @model_validator(mode="after")
     def check_axiom_6(self) -> "GwNolanLayout":
         """
-        Axiom 6: RequiredSensing
+        Axiom 6: RequiredHeatpumpEquipment
+        ShNodes SHALL include nodes named "hp-odu" and "hp-ctrl-box" (a Nolan home is a
+        monobloc), each with a ComponentId equal to the ComponentId of a Component in
+        Components, and each with ActorClass "NoActor".
+        """
+        component_ids = {c.component_id for c in (self.components or [])}
+        nodes = {n.name: n for n in (self.sh_nodes or [])}
+        for name in ("hp-odu", "hp-ctrl-box"):
+            node = nodes.get(name)
+            if node is None:
+                raise ValueError(
+                    f"Axiom 6 (RequiredHeatpumpEquipment) failed: no ShNode named {name!r}."
+                )
+            if node.component_id is None or node.component_id not in component_ids:
+                raise ValueError(
+                    f"Axiom 6 (RequiredHeatpumpEquipment) failed: {name!r} has no "
+                    "ComponentId resolving to a Component."
+                )
+            if str(node.actor_class) != "NoActor":
+                raise ValueError(
+                    f"Axiom 6 (RequiredHeatpumpEquipment) failed: {name!r} has ActorClass "
+                    f"{node.actor_class}, expected NoActor."
+                )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_7(self) -> "GwNolanLayout":
+        """
+        Axiom 7: ComponentBinding
+        Every Component in Components SHALL have its ComponentId referenced by exactly
+        one ShNode in ShNodes. The node's Name is the component's identity within the
+        house; the ComponentId is the replaceable instance under it (a swapped part
+        keeps the name and gets a fresh id).
+        """
+        refs: dict[str, int] = {}
+        for n in self.sh_nodes or []:
+            if n.component_id is not None:
+                refs[n.component_id] = refs.get(n.component_id, 0) + 1
+        violations = {
+            c.component_id: refs.get(c.component_id, 0)
+            for c in (self.components or [])
+            if refs.get(c.component_id, 0) != 1
+        }
+        if violations:
+            raise ValueError(
+                "Axiom 7 (ComponentBinding) failed: components not referenced by exactly "
+                f"one ShNode (id: reference count) {violations}."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_8(self) -> "GwNolanLayout":
+        """
+        Axiom 8: RequiredSensing
         For each of the names "hp-lwt", "hp-ewt", "dist-swt", "dist-rwt",
         "store-hot-pipe", "store-cold-pipe", "secondary-lwt", "secondary-ewt",
         "dist-flow", "primary-flow", "store-flow", "secondary-flow",
         "buffer-depth1-device", "buffer-depth2-device", "buffer-depth3-device",
         "tank1-depth1-device", "tank1-depth2-device", "tank1-depth3-device",
-        "hp-odu-pwr", "hp-ctrl-box-pwr", "elt-buffer-top-pwr",
-        "elt-buffer-bottom-pwr", "elt-store-top-pwr", and
-        "elt-store-bottom-pwr": a channel with that Name SHALL exist in
-        DataChannels or in DerivedChannels. (Kind-agnostic by design: a name
+        "hp-odu-pwr", "hp-ctrl-box-pwr", "buffer-top-elt-pwr", "buffer-bottom-elt-pwr",
+        "tank1-top-elt-pwr", and "tank1-bottom-elt-pwr": a channel with that Name SHALL
+        exist in DataChannels or in DerivedChannels. (Kind-agnostic by design: a name
         may migrate from raw DataChannel to same-name DerivedChannel — as tank
-        temperatures did — without touching this contract. The four
-        resistive-element power names rename with the tank1-elt wave.)
+        temperatures did — without touching this contract.)
         """
         channel_names = {c.name for c in (self.data_channels or [])} | {
             c.name for c in (self.derived_channels or [])
@@ -339,29 +399,29 @@ class GwNolanLayout(SemaType):
                 "tank1-depth3-device",
                 "hp-odu-pwr",
                 "hp-ctrl-box-pwr",
-                "elt-buffer-top-pwr",
-                "elt-buffer-bottom-pwr",
-                "elt-store-top-pwr",
-                "elt-store-bottom-pwr",
+                "buffer-top-elt-pwr",
+                "buffer-bottom-elt-pwr",
+                "tank1-top-elt-pwr",
+                "tank1-bottom-elt-pwr",
             )
             if name not in channel_names
         ]
         if missing:
             raise ValueError(
-                f"Axiom 6 (RequiredSensing) failed: missing DataChannels {missing}."
+                f"Axiom 8 (RequiredSensing) failed: missing channels {missing}."
             )
         return self
 
     @model_validator(mode="after")
-    def check_axiom_7(self) -> "GwNolanLayout":
+    def check_axiom_9(self) -> "GwNolanLayout":
         """
-        Axiom 7: SingleStoreTank
-        Hydronic.TotalStoreTanks SHALL equal 1 — the Nolan plant carries exactly
-        one store tank.
+        Axiom 9: SingleStoreTank
+        Hydronic.TotalStoreTanks SHALL equal 1 — the Nolan plant carries exactly one
+        store tank.
         """
         if self.hydronic.total_store_tanks != 1:
             raise ValueError(
-                f"Axiom 7 (SingleStoreTank) failed: TotalStoreTanks is "
+                "Axiom 9 (SingleStoreTank) failed: TotalStoreTanks is "
                 f"{self.hydronic.total_store_tanks}, expected 1."
             )
         return self

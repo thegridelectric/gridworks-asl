@@ -2360,22 +2360,17 @@ types:
         schema_url: https://schemas.electricity.works/types/gw.nolan.layout/000
         created: '2026-09-02T21:15:00Z'
         status: staging
-        summary: "Axioms 3-7 pin the required Nolan surface: RequiredRelays (full\
-          \ plant relay set + circuit relay binding), RequiredActors, RequiredCommandNodes\
-          \ (incl. hp-odu / hp-ctrl-box \u2014 a Nolan home is a monobloc), RequiredSensing\
-          \ (kind-agnostic names incl. HP and resistive-element power channels), SingleStoreTank.\
-          \ RequiredBoardActors dropped: layouts do not determine sensing/actuation\
-          \ hardware \u2014 the component-conditional bus-actor axiom lands with the\
-          \ board actor wiring. Components union gains device.component.gt (HP parts\
-          \ tracked with make/model/serial); DeviceTypes gains the hp records. Un-drafted\
-          \ for hardware-layout-pass-one (full layouts now, axioms later). Axioms\
-          \ stashed to stash_axioms.md and stripped from 000.yaml; Components are\
-          \ the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt\
-          \ records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay\
-          \ and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt\
-          \ (GpioName against the board's native-pin registry). Nodes/channels ride\
-          \ spaceheat.node.gt/302 + data.channel.gt/003 (post-InPowerMetering-fold,\
-          \ matching axiom 1)."
+        summary: 'Axioms mirror the names tiers: 1 TransactivePowerChannel, 2 BoardResolution,
+          3 CoreShNodesExistenceAndActorClass (identical wording across layout words),
+          4 CommandNodesExistenceAndActorClass (n, pico-cycler, hp-boss), 5 RequiredActuators
+          (plant relays incl. the per-tank tank1 element relays + circuit relay binding),
+          6 RequiredHeatpumpEquipment (hp-odu, hp-ctrl-box with components; a Nolan
+          home is a monobloc), 7 ComponentBinding (every component referenced by exactly
+          one node), 8 RequiredSensing (kind-agnostic names incl. HP and resistive-element
+          power channels), 9 SingleStoreTank. Components are the cac-free DeviceType
+          versions; DeviceTypes holds the specialized <family>.device.type.gt records;
+          relay and opto components are board-generic; nodes/channels ride spaceheat.node.gt/302
+          + data.channel.gt/003.'
         direct_dependencies:
           structural:
           - ads111x.based.device.type.gt:000
@@ -2405,6 +2400,8 @@ types:
           - sim.sensor.component.gt:000
           - spaceheat.node.gt:302
           - web.server.component.gt:001
+          axiom:
+          - gw1.actor.class:013
   gw.nolan.operational.params:
     latest_version: '000'
     owner: gridworks-energy
