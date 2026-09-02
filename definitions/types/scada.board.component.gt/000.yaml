@@ -54,7 +54,7 @@ examples:
   - |
     {
       "ComponentId": "9b1c5e2a-77d4-4f6e-8c3a-5f2e9d101b44",
-      "DeviceType": "GridworksScadaGw108",
+      "DeviceType": "Gw108RevB",
       "DisplayName": "Spruce GW108 board",
       "TypeName": "scada.board.component.gt",
       "Version": "000"

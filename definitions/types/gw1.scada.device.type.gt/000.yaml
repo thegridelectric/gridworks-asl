@@ -227,7 +227,7 @@ x-gridworks:
         that mux's I2cBus.
   extended_description: >
     Various hardware layouts enforce membership in `gw1.device.type` for the
-    DeviceType (e.g. `GridworksScadaGw108`, `KridaDoubleRelayBoard16`). The
+    DeviceType (e.g. `Gw108RevB`, `KridaDoubleRelayBoard16`). The
     record describes what is ALLOWED; per-deployment choices live outside it —
     a DIP-selected expander address on the component's I2cAddressList
     (index-aligned with Expanders), a relay's chosen wiring in the layout's

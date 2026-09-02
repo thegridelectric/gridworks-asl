@@ -117,7 +117,7 @@ examples:
   - |
     {
       "ComponentId": "7fc24a16-37e6-442b-83cb-9b5be5a3cce9",
-      "DeviceType": "GridworksGw101",
+      "DeviceType": "Gw101",
       "Enabled": false,
       "SerialNumber": "example",
       "FlowChannelName": "scada",

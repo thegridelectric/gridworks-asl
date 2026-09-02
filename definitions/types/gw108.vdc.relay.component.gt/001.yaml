@@ -58,7 +58,7 @@ examples:
   - |
     {
       "ComponentId": "4020eda2-c40b-48e3-81df-f7c76d40bc4c",
-      "DeviceType": "GridworksScadaGw108",
+      "DeviceType": "Gw108RevB",
       "ConfigList": [
         {
           "ChannelName": "scada",
