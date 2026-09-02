@@ -121,11 +121,36 @@ x-gridworks:
         ShNode.ShNodeId, Component.ComponentId, DataChannel.Id, DerivedChannel.Id and GNode.GNodeId
         SHALL each be globally unique; no id value SHALL appear in more than one of these sets.
     - number: 2
-      name: "EssentialNodesExistence"
+      name: "CoreShNodesExistenceAndActorClass"
       statement: >
-        ShNodes SHALL include the primary-scada (s), ltn, leaf-ally (la), local-control (lc) and
-        derived-generator nodes.
+        ShNodes SHALL contain a node with each of the following Name / ActorClass pairs, and no
+        additional ShNode with any of these Names SHALL exist:
+          "s"                 → ActorClass "PrimaryScada"
+          "s2"                → ActorClass "SecondaryScada"
+          "power-meter"       → ActorClass "PowerMeter"
+          "ltn"               → ActorClass "NoActor"
+          "admin"             → ActorClass "NoActor"
+          "auto"              → ActorClass "NoActor"
+          "la"                → ActorClass "LeafAlly"
+          "lc"                → ActorClass "LocalControl"
+          "derived-generator" → ActorClass "DerivedGenerator"
+        The effective handle (Handle if present, otherwise Name) of "admin" SHALL be "admin" and
+        of "auto" SHALL be "auto".
     - number: 3
+      name: "CommandNodesExistenceAndActorClass"
+      statement: >
+        ShNodes SHALL contain a node with each of the following Name / ActorClass pairs, and no
+        additional ShNode with any of these Names SHALL exist:
+          "n"           → ActorClass "NoActor"
+          "backup"      → ActorClass "NoActor"
+          "scada-blind" → ActorClass "NoActor"
+          "pico-cycler" → ActorClass "PicoCycler"
+          "hp-boss"     → ActorClass "HpBoss"
+          "sieg-loop"   → ActorClass "SiegLoop"
+        The effective handle of "n" SHALL be "auto.lc.n". (A gw.house0.layout plant has a
+        siegenthaler loop; whether the loop is USED is operational, so sieg-loop and hp-boss are
+        unconditional command nodes, dormant when unused.)
+    - number: 4
       name: "ZoneHeatCallChannel"
       statement: >
         For each zone at 1-based index i in Hydronic.Zones, a DerivedChannel named
@@ -134,7 +159,7 @@ x-gridworks:
         (power-sourced, e.g. an eGauge whitewire reading) or "zone{i}-{Zone.Name}-opto-input"
         (opto-sourced, e.g. a gw108 reading the thermostat opto-coupler). The choice of source is
         per-zone.
-    - number: 4
+    - number: 5
       name: "PrimaryFlowSourceChannelAgreement"
       statement: >
         The "primary-flow" channel SHALL agree with Hydronic.PrimaryFlowSource. If
@@ -142,7 +167,7 @@ x-gridworks:
         DerivedChannel named "primary-flow" SHALL exist. If PrimaryFlowSource is "DerivedSiegSum",
         a DerivedChannel named "primary-flow" with Strategy "sum" SHALL exist and no DataChannel
         named "primary-flow" SHALL exist.
-    - number: 5
+    - number: 6
       name: "TransactivePowerChannel"
       statement: >
         DerivedChannels SHALL contain exactly one channel whose Strategy is "transactive-power" —
@@ -152,19 +177,29 @@ x-gridworks:
         SHALL carry a NameplatePowerW. (The metered set is declared once here, replacing the former
         per-node InPowerMetering flag; the NameplatePowerW obligation folds in spaceheat.node.gt's
         retired InPowerMetering-requires-nameplate axiom.)
-    - number: 6
+    - number: 7
+      name: "RequiredSensing"
+      statement: >
+        For each of the names
+          "dist-flow"
+          and "store-flow":
+        a channel with that Name SHALL exist
+        in DataChannels or in DerivedChannels. (Kind-agnostic by design — a name may migrate from
+        raw DataChannel to same-name DerivedChannel without touching this contract. This list
+        grows with the fixture surface.)
+    - number: 8
       name: "SiegManifoldChannels"
       statement: >
-        If Hydronic.SiegLoopPlumbed is true, DataChannels SHALL include channels named
-        "hp-loop-on-off-relay" and "hp-loop-keep-send-relay" — the scada cannot observe the
-        Siegenthaler valve it drives without them.
-    - number: 7
-      name: "SiegActorConsistency"
-      statement: >
-        a. If Hydronic.UseSiegLoop is true, ShNodes SHALL include a node named "sieg-loop" with
-        ActorClass "SiegLoop" and a node named "hp-boss" with ActorClass "HpBoss".
-        b. If Hydronic.UseSiegLoop is false, ShNodes SHALL NOT include a node named "sieg-loop".
-    - number: 8
+        For each of the names
+          "sieg-cold",
+          "sieg-flow",
+          "sieg-flow-hz",
+          "hp-loop-on-off-relay",
+          and "hp-loop-keep-send-relay":
+        a channel with that Name SHALL exist in DataChannels or in
+        DerivedChannels — the siegenthaler loop cannot be controlled or observed without its
+        sensing and valve-observation channels.
+    - number: 9
       name: "SystemModelEnergyChannels"
       statement: >
         DerivedChannels SHALL include channels named "usable-energy" and "required-energy". Each

@@ -33,6 +33,7 @@ class Gw1ActorClass(SemaEnum):
     SimSensorActor = auto()
     SimRelayActor = auto()
     I2cDacWriter = auto()
+    HpTwin = auto()
 
     @classmethod
     def default(cls) -> "Gw1ActorClass":

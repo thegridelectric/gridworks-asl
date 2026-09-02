@@ -34,6 +34,7 @@ enum:
   - "SimSensorActor"
   - "SimRelayActor"
   - "I2cDacWriter"
+  - "HpTwin"
 
 default: "NoActor"
 
@@ -48,3 +49,9 @@ x-gridworks:
       Drives one or more DAC channels on a board-resident DAC (e.g. the
       gw108 MCP4728s behind the DAC mux), routing every bus operation
       through the I2cBus actor.
+    "HpTwin": >
+      The digital twin of a commandable heat pump's comms-receiving
+      device: sema command events in, the device's wire protocol out.
+      At most one node per layout carries it — the node the layout's
+      HpCommandNodeName declares — reporting to hp-boss. Which wire it
+      speaks comes from the component's DeviceType record.

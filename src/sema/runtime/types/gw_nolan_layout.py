@@ -224,10 +224,13 @@ class GwNolanLayout(SemaType):
     def check_axiom_4(self) -> "GwNolanLayout":
         """
         Axiom 4: RequiredActors
-        ShNodes SHALL include nodes with these Name / ActorClass pairs: "s"
-        PrimaryScada, "s2" SecondaryScada, "lc" LocalControl, "la" LeafAlly,
-        "pico-cycler" PicoCycler, "derived-generator" DerivedGenerator, and
-        "power-meter" PowerMeter.
+        ShNodes SHALL include nodes with these Name / ActorClass pairs:
+          "s"                 → ActorClass "PrimaryScada"
+          "s2"                → ActorClass "SecondaryScada"
+          "lc"                → ActorClass "LocalControl"
+          "la"                → ActorClass "LeafAlly"
+          "derived-generator" → ActorClass "DerivedGenerator"
+          "power-meter"       → ActorClass "PowerMeter"
         """
         actor_class_by_name = {n.name: n.actor_class for n in (self.sh_nodes or [])}
         for name, actor_class in (
@@ -235,7 +238,6 @@ class GwNolanLayout(SemaType):
             ("s2", "SecondaryScada"),
             ("lc", "LocalControl"),
             ("la", "LeafAlly"),
-            ("pico-cycler", "PicoCycler"),
             ("derived-generator", "DerivedGenerator"),
             ("power-meter", "PowerMeter"),
         ):
@@ -251,68 +253,63 @@ class GwNolanLayout(SemaType):
     def check_axiom_5(self) -> "GwNolanLayout":
         """
         Axiom 5: RequiredCommandNodes
-        ShNodes SHALL include nodes named "admin", "auto", "n", "ltn",
-        "hp-odu", and "hp-ctrl-box", each with ActorClass "NoActor". The
-        effective handle (Handle if present, otherwise Name) of "admin" SHALL
+        ShNodes SHALL include nodes with these Name / ActorClass pairs:
+          "admin"       → ActorClass "NoActor"
+          "auto"        → ActorClass "NoActor"
+          "n"           → ActorClass "NoActor"
+          "ltn"         → ActorClass "NoActor"
+          "hp-odu"      → ActorClass "NoActor"
+          "hp-ctrl-box" → ActorClass "NoActor"
+          "pico-cycler" → ActorClass "PicoCycler"
+          "hp-boss"     → ActorClass "HpBoss"
+        The effective handle (Handle if present, otherwise Name) of "admin" SHALL
         be "admin", of "auto" SHALL be "auto", and of "n" SHALL be
         "auto.lc.n".
         """
         nodes = {n.name: n for n in (self.sh_nodes or [])}
-        for name, handle in (
-            ("admin", "admin"),
-            ("auto", "auto"),
-            ("n", "auto.lc.n"),
-            ("ltn", None),
-            ("hp-odu", None),
-            ("hp-ctrl-box", None),
-        ):
+        pairs = (
+            ("admin", "NoActor"),
+            ("auto", "NoActor"),
+            ("n", "NoActor"),
+            ("ltn", "NoActor"),
+            ("hp-odu", "NoActor"),
+            ("hp-ctrl-box", "NoActor"),
+            ("pico-cycler", "PicoCycler"),
+            ("hp-boss", "HpBoss"),
+        )
+        for name, actor_class in pairs:
             node = nodes.get(name)
-            if node is None or node.actor_class != "NoActor":
+            if node is None or node.actor_class != actor_class:
                 raise ValueError(
                     f"Axiom 5 (RequiredCommandNodes) failed: expected ShNode "
-                    f"{name!r} with ActorClass NoActor."
+                    f"{name!r} with ActorClass {actor_class}."
                 )
-            if handle is not None:
-                effective = node.handle if node.handle is not None else node.name
-                if effective != handle:
-                    raise ValueError(
-                        f"Axiom 5 (RequiredCommandNodes) failed: {name!r} effective "
-                        f"handle is {effective!r}, expected {handle!r}."
-                    )
+        for name, handle in (("admin", "admin"), ("auto", "auto"), ("n", "auto.lc.n")):
+            node = nodes[name]
+            effective = node.handle if node.handle is not None else node.name
+            if effective != handle:
+                raise ValueError(
+                    f"Axiom 5 (RequiredCommandNodes) failed: {name!r} "
+                    f"effective handle is {effective!r}, expected {handle!r}."
+                )
         return self
 
     @model_validator(mode="after")
     def check_axiom_6(self) -> "GwNolanLayout":
         """
-        Axiom 6: RequiredBoardActors
-        ShNodes SHALL include exactly one node with ActorClass "I2cBus", exactly
-        one with ActorClass "I2cThermistorReader", and exactly one with
-        ActorClass "I2cDacWriter".
-        """
-        for actor_class in ("I2cBus", "I2cThermistorReader", "I2cDacWriter"):
-            count = sum(
-                1 for n in (self.sh_nodes or []) if n.actor_class == actor_class
-            )
-            if count != 1:
-                raise ValueError(
-                    f"Axiom 6 (RequiredBoardActors) failed: expected exactly one "
-                    f"ShNode with ActorClass {actor_class}, found {count}."
-                )
-        return self
-
-    @model_validator(mode="after")
-    def check_axiom_7(self) -> "GwNolanLayout":
-        """
-        Axiom 7: RequiredSensing
+        Axiom 6: RequiredSensing
         For each of the names "hp-lwt", "hp-ewt", "dist-swt", "dist-rwt",
         "store-hot-pipe", "store-cold-pipe", "secondary-lwt", "secondary-ewt",
         "dist-flow", "primary-flow", "store-flow", "secondary-flow",
         "buffer-depth1-device", "buffer-depth2-device", "buffer-depth3-device",
         "tank1-depth1-device", "tank1-depth2-device", "tank1-depth3-device",
-        "hp-odu-pwr", and "hp-ctrl-box-pwr": a channel with that Name SHALL
-        exist in DataChannels or in DerivedChannels. (Kind-agnostic by design:
-        a name may migrate from raw DataChannel to same-name DerivedChannel —
-        as tank temperatures did — without touching this contract.)
+        "hp-odu-pwr", "hp-ctrl-box-pwr", "elt-buffer-top-pwr",
+        "elt-buffer-bottom-pwr", "elt-store-top-pwr", and
+        "elt-store-bottom-pwr": a channel with that Name SHALL exist in
+        DataChannels or in DerivedChannels. (Kind-agnostic by design: a name
+        may migrate from raw DataChannel to same-name DerivedChannel — as tank
+        temperatures did — without touching this contract. The four
+        resistive-element power names rename with the tank1-elt wave.)
         """
         channel_names = {c.name for c in (self.data_channels or [])} | {
             c.name for c in (self.derived_channels or [])
@@ -340,25 +337,29 @@ class GwNolanLayout(SemaType):
                 "tank1-depth3-device",
                 "hp-odu-pwr",
                 "hp-ctrl-box-pwr",
+                "elt-buffer-top-pwr",
+                "elt-buffer-bottom-pwr",
+                "elt-store-top-pwr",
+                "elt-store-bottom-pwr",
             )
             if name not in channel_names
         ]
         if missing:
             raise ValueError(
-                f"Axiom 7 (RequiredSensing) failed: missing DataChannels {missing}."
+                f"Axiom 6 (RequiredSensing) failed: missing DataChannels {missing}."
             )
         return self
 
     @model_validator(mode="after")
-    def check_axiom_8(self) -> "GwNolanLayout":
+    def check_axiom_7(self) -> "GwNolanLayout":
         """
-        Axiom 8: SingleStoreTank
+        Axiom 7: SingleStoreTank
         Hydronic.TotalStoreTanks SHALL equal 1 — the Nolan plant carries exactly
         one store tank.
         """
         if self.hydronic.total_store_tanks != 1:
             raise ValueError(
-                f"Axiom 8 (SingleStoreTank) failed: TotalStoreTanks is "
+                f"Axiom 7 (SingleStoreTank) failed: TotalStoreTanks is "
                 f"{self.hydronic.total_store_tanks}, expected 1."
             )
         return self

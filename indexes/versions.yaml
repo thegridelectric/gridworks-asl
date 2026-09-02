@@ -480,7 +480,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "The complete deployable artifact for a House0-fleet home: every collection and Hydronic required, never a partial layout. Component set is eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server over the DeviceType record model. Axioms cover id uniqueness, essential nodes, per-zone heat-call channels, primary-flow source agreement, the transactive-power boundary, the Siegenthaler loop's channels and actors, and the system-model energy channels and the models that produce them."
+        summary: "The complete deployable artifact for a House0-fleet home: every collection and Hydronic required, never a partial layout. The word MEANS has-a-siegenthaler-loop (beech, maple); sieg-less homes are the coming gw.house0.no.sieg. Component set is eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server over the DeviceType record model. Axioms cover id uniqueness, the core and command-node Name/ActorClass contracts (sieg-loop and hp-boss unconditional command nodes, dormant when unused), per-zone heat-call channels, primary-flow source agreement, the transactive-power boundary, required flow sensing, the unconditional sieg manifold surface, and the system-model energy channels and the models that produce them."
 
   gw.house0.operational.params:
     latest_version: "000"
@@ -508,7 +508,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Axioms 3-8 pin the required Nolan surface: RequiredRelays (full plant relay set + circuit relay binding), RequiredActors, RequiredCommandNodes (incl. hp-odu / hp-ctrl-box — a Nolan home is a monobloc), RequiredBoardActors, RequiredSensing (kind-agnostic names incl. HP power channels), SingleStoreTank. Components union gains device.component.gt (HP parts tracked with make/model/serial); DeviceTypes gains the hp records. Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/302 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
+        summary: "Axioms 3-7 pin the required Nolan surface: RequiredRelays (full plant relay set + circuit relay binding), RequiredActors, RequiredCommandNodes (incl. hp-odu / hp-ctrl-box — a Nolan home is a monobloc), RequiredSensing (kind-agnostic names incl. HP and resistive-element power channels), SingleStoreTank. RequiredBoardActors dropped: layouts do not determine sensing/actuation hardware — the component-conditional bus-actor axiom lands with the board actor wiring. Components union gains device.component.gt (HP parts tracked with make/model/serial); DeviceTypes gains the hp records. Un-drafted for hardware-layout-pass-one (full layouts now, axioms later). Axioms stashed to stash_axioms.md and stripped from 000.yaml; Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records (electric.meter / ads111x.based / gw1.scada), now non-draft; relay and opto components are the board-generic gpio.relay.component.gt / gpio.sensor.component.gt (GpioName against the board's native-pin registry). Nodes/channels ride spaceheat.node.gt/302 + data.channel.gt/003 (post-InPowerMetering-fold, matching axiom 1)."
 
   gw.nolan.operational.params:
     latest_version: "000"
@@ -1555,6 +1555,7 @@ enums:
       "013":
         added_values:
           - "I2cDacWriter"
+          - "HpTwin"
       "012":
         added_values:
           - "SimSensorActor"
