@@ -802,6 +802,7 @@ types:
       - dac.output.config:000
       - data.channel.gt:003
       - derived.channel.gt:002
+      - device.component.gt:000
       - dfr.component.gt:000
       - dfr.config:000
       - egauge.register.config:000
@@ -820,6 +821,7 @@ types:
       - gw1.unit.quantity.projection:000
       - gw1.zone.call.circuit:000
       - gw1.zone.thermostat:000
+      - hp.device.type.gt:000
       - hubitat.component.gt:000
       - hubitat.gt:000
       - hubitat.poller.component.gt:000

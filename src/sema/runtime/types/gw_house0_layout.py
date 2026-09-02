@@ -5,6 +5,7 @@ from sema.runtime.types.ads111x_based_component_gt import Ads111xBasedComponentG
 from sema.runtime.types.ads111x_based_device_type_gt import Ads111xBasedDeviceTypeGt
 from sema.runtime.types.data_channel_gt import DataChannelGt
 from sema.runtime.types.derived_channel_gt import DerivedChannelGt
+from sema.runtime.types.device_component_gt import DeviceComponentGt
 from sema.runtime.types.dfr_component_gt import DfrComponentGt
 from sema.runtime.types.electric_meter_component_gt import ElectricMeterComponentGt
 from sema.runtime.types.electric_meter_device_type_gt import ElectricMeterDeviceTypeGt
@@ -13,6 +14,7 @@ from sema.runtime.types.gpio_relay_component_gt import GpioRelayComponentGt
 from sema.runtime.types.gpio_sensor_component_gt import GpioSensorComponentGt
 from sema.runtime.types.gw1_scada_device_type_gt import Gw1ScadaDeviceTypeGt
 from sema.runtime.types.gw_hydronic import GwHydronic
+from sema.runtime.types.hp_device_type_gt import HpDeviceTypeGt
 from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
 from sema.runtime.types.i2c_dac_output_component_gt import I2cDacOutputComponentGt
@@ -47,6 +49,7 @@ class GwHouse0Layout(SemaType):
     derived_channels: list[DerivedChannelGt]
     components: list[
         ElectricMeterComponentGt
+        | DeviceComponentGt
         | Ads111xBasedComponentGt
         | GpioRelayComponentGt
         | GpioSensorComponentGt
@@ -69,7 +72,10 @@ class GwHouse0Layout(SemaType):
         | WebServerComponentGt
     ]
     device_types: list[
-        ElectricMeterDeviceTypeGt | Ads111xBasedDeviceTypeGt | Gw1ScadaDeviceTypeGt
+        ElectricMeterDeviceTypeGt
+        | Ads111xBasedDeviceTypeGt
+        | Gw1ScadaDeviceTypeGt
+        | HpDeviceTypeGt
     ]
     hydronic: GwHydronic
     type_name: Literal["gw.house0.layout"] = "gw.house0.layout"
@@ -419,4 +425,91 @@ class GwHouse0Layout(SemaType):
                 "Axiom 9 (SystemModelEnergyChannels) failed: the two channels must "
                 f"name one of each model; got {sorted(seen)}."
             )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_10(self) -> Self:
+        """
+        Axiom 10: RequiredActuators
+        a. ShNodes SHALL include nodes named "vdc-relay", "tstat-common-relay",
+        "charge-discharge-relay", "hp-failsafe-relay", "hp-scada-ops-relay",
+        "aquastat-ctrl-relay", "store-pump-relay", "primary-pump-failsafe-relay",
+        "primary-pump-scada-ops-relay", "hp-loop-on-off-relay", and
+        "hp-loop-keep-send-relay", each with ActorClass "Relay", and nodes named
+        "dist-010v", "primary-010v", and "store-010v", each with ActorClass
+        "ZeroTenOutputer". b. Hydronic.ZoneCallCircuits SHALL be non-empty, and each
+        circuit's FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes with
+        ActorClass "Relay".
+        """
+        actor_class_by_name = {
+            n.name: str(n.actor_class) for n in (self.sh_nodes or [])
+        }
+
+        def class_or_raise(node_name: str, expected: str, role: str) -> None:
+            actor_class = actor_class_by_name.get(node_name)
+            if actor_class is None:
+                raise ValueError(
+                    f"Axiom 10 (RequiredActuators) failed: no ShNode named {node_name} ({role})."
+                )
+            if actor_class != expected:
+                raise ValueError(
+                    f"Axiom 10 (RequiredActuators) failed: {node_name} ({role}) has "
+                    f"ActorClass {actor_class}, not {expected}."
+                )
+
+        for required in (
+            "vdc-relay",
+            "tstat-common-relay",
+            "charge-discharge-relay",
+            "hp-failsafe-relay",
+            "hp-scada-ops-relay",
+            "aquastat-ctrl-relay",
+            "store-pump-relay",
+            "primary-pump-failsafe-relay",
+            "primary-pump-scada-ops-relay",
+            "hp-loop-on-off-relay",
+            "hp-loop-keep-send-relay",
+        ):
+            class_or_raise(required, "Relay", "plant relay")
+        for required in ("dist-010v", "primary-010v", "store-010v"):
+            class_or_raise(required, "ZeroTenOutputer", "0-10V output")
+        circuits = self.hydronic.zone_call_circuits or []
+        if not circuits:
+            raise ValueError(
+                "Axiom 10 (RequiredActuators) failed: Hydronic.ZoneCallCircuits is empty."
+            )
+        for circuit in circuits:
+            class_or_raise(
+                circuit.failsafe_relay_node, "Relay", "circuit failsafe relay"
+            )
+            class_or_raise(circuit.ops_relay_node, "Relay", "circuit ops relay")
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_11(self) -> Self:
+        """
+        Axiom 11: RequiredHeatpumpEquipment
+        ShNodes SHALL include nodes named "hp-odu" and "hp-idu" (a House0 home is a split
+        system: the indoor unit does the refrigerant-to-water exchange), each with a
+        ComponentId equal to the ComponentId of a Component in Components, and each with
+        ActorClass "NoActor".
+        """
+        component_ids = {c.component_id for c in (self.components or [])}
+        nodes = {n.name: n for n in (self.sh_nodes or [])}
+        for name in ("hp-odu", "hp-idu"):
+            node = nodes.get(name)
+            if node is None:
+                raise ValueError(
+                    f"Axiom 11 (RequiredHeatpumpEquipment) failed: no ShNode named {name!r}."
+                )
+            if node.component_id is None or node.component_id not in component_ids:
+                raise ValueError(
+                    f"Axiom 11 (RequiredHeatpumpEquipment) failed: {name!r} has no "
+                    "ComponentId resolving to a Component."
+                )
+            if str(node.actor_class) != "NoActor":
+                raise ValueError(
+                    f"Axiom 11 (RequiredHeatpumpEquipment) failed: {name!r} has ActorClass "
+                    f"{node.actor_class}, expected NoActor."
+                )
         return self

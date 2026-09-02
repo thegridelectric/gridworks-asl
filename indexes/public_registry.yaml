@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-09-02T21:15:00Z'
+  last_updated: '2026-09-02T22:00:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -2243,14 +2243,17 @@ types:
           contracts (sieg-loop and hp-boss unconditional command nodes, dormant when
           unused), per-zone heat-call channels, primary-flow source agreement, the
           transactive-power boundary, required flow sensing, the unconditional sieg
-          manifold surface, and the system-model energy channels and the models that
-          produce them.'
+          manifold surface, the system-model energy channels and the models that produce
+          them, the unconditional actuators (plant relays, 0-10V outputs, zone-circuit
+          relay pairs), and the split-system heat-pump parts (hp-odu, hp-idu) with
+          their components.'
         direct_dependencies:
           structural:
           - ads111x.based.component.gt:000
           - ads111x.based.device.type.gt:000
           - data.channel.gt:003
           - derived.channel.gt:002
+          - device.component.gt:000
           - dfr.component.gt:000
           - electric.meter.component.gt:001
           - electric.meter.device.type.gt:000
@@ -2259,6 +2262,7 @@ types:
           - gpio.sensor.component.gt:000
           - gw.hydronic:000
           - gw1.scada.device.type.gt:000
+          - hp.device.type.gt:000
           - hubitat.component.gt:000
           - hubitat.poller.component.gt:000
           - i2c.dac.output.component.gt:000
@@ -2279,6 +2283,7 @@ types:
           axiom:
           - gw0.required.energy.layered:000
           - gw0.usable.energy.layered:000
+          - gw1.actor.class:013
   gw.house0.operational.params:
     latest_version: '000'
     owner: gridworks-energy

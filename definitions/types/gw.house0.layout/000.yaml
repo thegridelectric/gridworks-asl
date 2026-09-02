@@ -58,6 +58,7 @@ properties:
     items:
       oneOf:
         - $ref: "https://schemas.electricity.works/types/electric.meter.component.gt/001"
+        - $ref: "https://schemas.electricity.works/types/device.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/ads111x.based.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/gpio.relay.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/gpio.sensor.component.gt/000"
@@ -90,6 +91,7 @@ properties:
         - $ref: "https://schemas.electricity.works/types/electric.meter.device.type.gt/000"
         - $ref: "https://schemas.electricity.works/types/ads111x.based.device.type.gt/000"
         - $ref: "https://schemas.electricity.works/types/gw1.scada.device.type.gt/000"
+        - $ref: "https://schemas.electricity.works/types/hp.device.type.gt/000"
 
   Hydronic:
     $ref: "https://schemas.electricity.works/types/gw.hydronic/000"
@@ -208,3 +210,33 @@ x-gridworks:
         carry Parameters.EnergyModel.TypeName. Across the two channels those TypeNames SHALL be
         exactly gw0.usable.energy.layered and gw0.required.energy.layered — one of each, so the
         layout states which model produces each figure.
+    - number: 10
+      name: "RequiredActuators"
+      statement: >
+        a. ShNodes SHALL include nodes named
+          "vdc-relay",
+          "tstat-common-relay",
+          "charge-discharge-relay",
+          "hp-failsafe-relay",
+          "hp-scada-ops-relay",
+          "aquastat-ctrl-relay",
+          "store-pump-relay",
+          "primary-pump-failsafe-relay",
+          "primary-pump-scada-ops-relay",
+          "hp-loop-on-off-relay",
+          and "hp-loop-keep-send-relay",
+        each with ActorClass "Relay", and nodes named
+          "dist-010v",
+          "primary-010v",
+          and "store-010v",
+        each with ActorClass "ZeroTenOutputer".
+        b. Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
+        FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes with
+        ActorClass "Relay".
+    - number: 11
+      name: "RequiredHeatpumpEquipment"
+      statement: >
+        ShNodes SHALL include nodes named "hp-odu" and "hp-idu" (a House0 home is a split
+        system: the indoor unit does the refrigerant-to-water exchange), each with a
+        ComponentId equal to the ComponentId of a Component in Components, and each with
+        ActorClass "NoActor".

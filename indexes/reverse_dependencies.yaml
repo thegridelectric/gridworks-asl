@@ -100,6 +100,7 @@ types:
   device.component.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   dfr.component.gt:
     '000':
@@ -300,6 +301,7 @@ types:
   hp.device.type.gt:
     '000':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
   hubitat.component.gt:
     '000':
@@ -689,6 +691,7 @@ enums:
       - scada.control.capabilities:001
     '013':
       used_by:
+      - gw.house0.layout:000
       - gw.nolan.layout:000
       - spaceheat.node.gt:302
   gw1.actuation.authority:
