@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-09-03T15:40:00Z'
+  last_updated: '2026-09-03T18:10:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -2249,7 +2249,9 @@ types:
           \ parts (hp-odu, hp-idu) with their components. 12 CommandableHeatPump (biconditional:\
           \ Hydronic.HpCommandNodeName \u21D2 hp-odu/hp-idu/hp-ctrl-box with ComponentId,\
           \ ActorClass HpTwin, handle under hp-boss; every HpTwin node is the declared\
-          \ one); 11's NoActor clause defers to it."
+          \ one); 11's NoActor clause defers to it. 13 PrefixClosedHandles + 14 ActuatorLeaves:\
+          \ the layout's authored handles are the initial command tree, so the tree\
+          \ word's two axioms hold here too (identical wording)."
         direct_dependencies:
           structural:
           - ads111x.based.component.gt:000
@@ -2389,7 +2391,9 @@ types:
           \ spaceheat.node.gt/302 + data.channel.gt/003. 10 CommandableHeatPump (biconditional:\
           \ Hydronic.HpCommandNodeName \u21D2 hp-odu/hp-idu/hp-ctrl-box with ComponentId,\
           \ ActorClass HpTwin, handle under hp-boss; every HpTwin node is the declared\
-          \ one); 6's NoActor clause defers to it."
+          \ one); 6's NoActor clause defers to it. 11 PrefixClosedHandles + 12 ActuatorLeaves:\
+          \ the layout's authored handles are the initial command tree, so the tree\
+          \ word's two axioms hold here too (identical wording)."
         direct_dependencies:
           structural:
           - ads111x.based.device.type.gt:000

@@ -75,6 +75,7 @@ x-gridworks:
         ActorClass "LocalControl".
         a. Every actuator SHALL have a dotted effective handle and SHALL be a leaf.
         b. Every leaf SHALL be an actuator or a command node.
+
   extended_description: >
     Handle encodes the live command-authority chain. For an ShNode whose Handle
     is "admin.hp-boss.relay6", the prefixes "admin.hp-boss" and "admin" name

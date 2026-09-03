@@ -250,5 +250,25 @@ x-gridworks:
         ShNode named "hp-boss" as its parent prefix.
         b. Every ShNode with ActorClass "HpTwin" SHALL be the node Hydronic.HpCommandNodeName
         names; when HpCommandNodeName is absent no ShNode SHALL have ActorClass "HpTwin".
+    - number: 11
+      name: "PrefixClosedHandles"
+      statement: >
+        Let the effective handle of an ShNode be its Handle if present,
+        otherwise its Name. The set of effective handles SHALL be prefix-closed:
+        for every ShNode in ShNodes, each dot-separated prefix of its effective
+        handle SHALL also be the effective handle of some ShNode in ShNodes.
+    - number: 12
+      name: "ActuatorLeaves"
+      statement: >
+        Let the effective handle of an ShNode be its Handle if present, otherwise
+        its Name. A leaf is an ShNode whose effective handle contains a dot and is
+        the parent prefix of no other effective handle. An actuator is an ShNode
+        whose ActorClass is "Relay", "ZeroTenOutputer" or "HpTwin". A command node
+        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "PicoCycler",
+        "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
+        effective handle's parent prefix is the effective handle of an ShNode with
+        ActorClass "LocalControl".
+        a. Every actuator SHALL have a dotted effective handle and SHALL be a leaf.
+        b. Every leaf SHALL be an actuator or a command node.
   extended_description: >
     TODO: add Nolan specific information (e.g. radiant floor heating, Gw108).
