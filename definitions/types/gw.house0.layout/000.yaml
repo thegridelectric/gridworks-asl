@@ -239,4 +239,15 @@ x-gridworks:
         ShNodes SHALL include nodes named "hp-odu" and "hp-idu" (a House0 home is a split
         system: the indoor unit does the refrigerant-to-water exchange), each with a
         ComponentId equal to the ComponentId of a Component in Components, and each with
-        ActorClass "NoActor".
+        ActorClass "NoActor" unless it is the node Hydronic.HpCommandNodeName names, whose
+        ActorClass CommandableHeatPump governs.
+    - number: 12
+      name: "CommandableHeatPump"
+      statement: >
+        a. If Hydronic.HpCommandNodeName is present, it SHALL equal the Name of a ShNode in
+        ShNodes named "hp-odu", "hp-idu" or "hp-ctrl-box", whose ComponentId equals the
+        ComponentId of a Component in Components, whose ActorClass is "HpTwin", and whose
+        effective handle (Handle if present, otherwise Name) has the effective handle of the
+        ShNode named "hp-boss" as its parent prefix.
+        b. Every ShNode with ActorClass "HpTwin" SHALL be the node Hydronic.HpCommandNodeName
+        names; when HpCommandNodeName is absent no ShNode SHALL have ActorClass "HpTwin".

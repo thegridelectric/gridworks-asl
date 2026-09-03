@@ -43,7 +43,10 @@ class NewCommandTree001(SemaType):
         return self
 
     def upgrade(self) -> NewCommandTree:
-        """- ShNodes: spaceheat.node.gt:301 -> 302"""
+        """
+        - ShNodes: spaceheat.node.gt:301 -> 302
+        - Axiom 2 ActuatorLeaves: every actuator (Relay / ZeroTenOutputer / HpTwin) is a dotted-handle leaf; every dotted-handle leaf is an actuator or a command node (LocalControl / LeafAlly / PicoCycler / HpBoss / SiegLoop, or a NoActor child of the LocalControl node). gw1.actor.class:013 joins the axiom dependencies.
+        """
         data = self.model_dump()
         lifted: list[SpaceheatNodeGt] = []
         for node in self.sh_nodes:

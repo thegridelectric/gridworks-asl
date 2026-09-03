@@ -404,7 +404,8 @@
         ShNodes SHALL include nodes named "hp-odu" and "hp-idu" (a House0 home is a split
         system: the indoor unit does the refrigerant-to-water exchange), each with a
         ComponentId equal to the ComponentId of a Component in Components, and each with
-        ActorClass "NoActor".
+        ActorClass "NoActor" unless it is the node Hydronic.HpCommandNodeName names, whose
+        ActorClass CommandableHeatPump governs.
         """
         component_ids = {c.component_id for c in (self.components or [])}
         nodes = {n.name: n for n in (self.sh_nodes or [])}
@@ -419,9 +420,59 @@
                     f"Axiom 11 (RequiredHeatpumpEquipment) failed: {name!r} has no "
                     "ComponentId resolving to a Component."
                 )
+            if name == self.hydronic.hp_command_node_name:
+                continue  # ActorClass governed by CommandableHeatPump
             if str(node.actor_class) != "NoActor":
                 raise ValueError(
                     f"Axiom 11 (RequiredHeatpumpEquipment) failed: {name!r} has ActorClass "
                     f"{node.actor_class}, expected NoActor."
+                )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_12(self) -> Self:
+        """
+        Axiom 12: CommandableHeatPump
+        a. If Hydronic.HpCommandNodeName is present, it SHALL equal the Name of a ShNode in
+        ShNodes named "hp-odu", "hp-idu" or "hp-ctrl-box", whose ComponentId equals the
+        ComponentId of a Component in Components, whose ActorClass is "HpTwin", and whose
+        effective handle (Handle if present, otherwise Name) has the effective handle of the
+        ShNode named "hp-boss" as its parent prefix.
+        b. Every ShNode with ActorClass "HpTwin" SHALL be the node Hydronic.HpCommandNodeName
+        names; when HpCommandNodeName is absent no ShNode SHALL have ActorClass "HpTwin".
+        """
+        declared = self.hydronic.hp_command_node_name
+        nodes = {n.name: n for n in (self.sh_nodes or [])}
+        if declared is not None:
+            node = nodes.get(declared)
+            if node is None or declared not in ("hp-odu", "hp-idu", "hp-ctrl-box"):
+                raise ValueError(
+                    f"Axiom 12 (CommandableHeatPump) failed: HpCommandNodeName {declared!r} "
+                    "is not an ShNode named hp-odu, hp-idu or hp-ctrl-box."
+                )
+            component_ids = {c.component_id for c in (self.components or [])}
+            if node.component_id is None or node.component_id not in component_ids:
+                raise ValueError(
+                    f"Axiom 12 (CommandableHeatPump) failed: {declared!r} has no "
+                    "ComponentId resolving to a Component."
+                )
+            if str(node.actor_class) != "HpTwin":
+                raise ValueError(
+                    f"Axiom 12 (CommandableHeatPump) failed: {declared!r} has ActorClass "
+                    f"{node.actor_class}, expected HpTwin."
+                )
+            hp_boss = nodes.get("hp-boss")
+            boss_handle = (hp_boss.handle or hp_boss.name) if hp_boss is not None else None
+            handle = node.handle or node.name
+            if boss_handle is None or handle.rsplit(".", 1)[0] != boss_handle or "." not in handle:
+                raise ValueError(
+                    f"Axiom 12 (CommandableHeatPump) failed: {declared!r} handle {handle!r} "
+                    f"is not directly under hp-boss ({boss_handle!r})."
+                )
+        for n in nodes.values():
+            if str(n.actor_class) == "HpTwin" and n.name != declared:
+                raise ValueError(
+                    f"Axiom 12 (CommandableHeatPump) failed: {n.name!r} has ActorClass HpTwin "
+                    f"but HpCommandNodeName is {declared!r}."
                 )
         return self

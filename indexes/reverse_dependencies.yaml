@@ -693,6 +693,7 @@ enums:
       used_by:
       - gw.house0.layout:000
       - gw.nolan.layout:000
+      - new.command.tree:002
       - spaceheat.node.gt:302
   gw1.actuation.authority:
     '000':
@@ -1262,6 +1263,7 @@ formats:
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
     - gw.experiment.run:000
+    - gw.hydronic:000
     - gw1.hvac.zone:000
     - gw1.zone.call.circuit:000
     - i2c.multichannel.dt.relay.component.gt:003

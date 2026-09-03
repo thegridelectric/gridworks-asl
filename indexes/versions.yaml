@@ -487,7 +487,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "The complete deployable artifact for a House0-fleet home: every collection and Hydronic required, never a partial layout. The word MEANS has-a-siegenthaler-loop (beech, maple); sieg-less homes are the coming gw.house0.no.sieg. Component set is eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server over the DeviceType record model. Axioms cover id uniqueness, the core and command-node Name/ActorClass contracts (sieg-loop and hp-boss unconditional command nodes, dormant when unused), per-zone heat-call channels, primary-flow source agreement, the transactive-power boundary, required flow sensing, the unconditional sieg manifold surface, the system-model energy channels and the models that produce them, the unconditional actuators (plant relays, 0-10V outputs, zone-circuit relay pairs), and the split-system heat-pump parts (hp-odu, hp-idu) with their components."
+        summary: "The complete deployable artifact for a House0-fleet home: every collection and Hydronic required, never a partial layout. The word MEANS has-a-siegenthaler-loop (beech, maple); sieg-less homes are the coming gw.house0.no.sieg. Component set is eGauge / ADS111x TSnap / Krida / DFRobot / pico flow / tank + sim-tank / Hubitat + poller / web-server over the DeviceType record model. Axioms cover id uniqueness, the core and command-node Name/ActorClass contracts (sieg-loop and hp-boss unconditional command nodes, dormant when unused), per-zone heat-call channels, primary-flow source agreement, the transactive-power boundary, required flow sensing, the unconditional sieg manifold surface, the system-model energy channels and the models that produce them, the unconditional actuators (plant relays, 0-10V outputs, zone-circuit relay pairs), and the split-system heat-pump parts (hp-odu, hp-idu) with their components. 12 CommandableHeatPump (biconditional: Hydronic.HpCommandNodeName ⇒ hp-odu/hp-idu/hp-ctrl-box with ComponentId, ActorClass HpTwin, handle under hp-boss; every HpTwin node is the declared one); 11's NoActor clause defers to it."
 
   gw.house0.operational.params:
     latest_version: "000"
@@ -501,7 +501,9 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "- Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), optional ZoneCallCircuits (gw1.zone.call.circuit list), TotalStoreTanks, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axioms: Cardinality, CircuitResolution, LearnedNeedsTempChannel. The Siegenthaler-loop flags left this word: plumbed-ness is what a has-sieg layout word means, and use is operational (gw.house0.operational.params UseSiegLoop)."
+        summary: >
+          - Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), optional ZoneCallCircuits (gw1.zone.call.circuit list), TotalStoreTanks, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axioms: Cardinality, CircuitResolution, LearnedNeedsTempChannel. The Siegenthaler-loop flags left this word: plumbed-ness is what a has-sieg layout word means, and use is operational (gw.house0.operational.params UseSiegLoop).
+          - HpCommandNodeName (optional spaceheat.name): the node that takes heat-pump commands under hp-boss; absent = nothing commands the heat pump. The layout words' CommandableHeatPump axiom governs it.
 
   gw.native.gpio.pin:
     latest_version: "000"
@@ -515,7 +517,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Axioms mirror the names tiers: 1 TransactivePowerChannel, 2 BoardResolution, 3 CoreShNodesExistenceAndActorClass (identical wording across layout words), 4 CommandNodesExistenceAndActorClass (n, pico-cycler, hp-boss), 5 RequiredActuators (plant relays incl. the per-tank tank1 element relays + circuit relay binding), 6 RequiredHeatpumpEquipment (hp-odu, hp-ctrl-box with components; a Nolan home is a monobloc), 7 ComponentBinding (every component referenced by exactly one node), 8 RequiredSensing (kind-agnostic names incl. HP and resistive-element power channels), 9 SingleStoreTank. Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records; relay and opto components are board-generic; nodes/channels ride spaceheat.node.gt/302 + data.channel.gt/003."
+        summary: "Axioms mirror the names tiers: 1 TransactivePowerChannel, 2 BoardResolution, 3 CoreShNodesExistenceAndActorClass (identical wording across layout words), 4 CommandNodesExistenceAndActorClass (n, pico-cycler, hp-boss), 5 RequiredActuators (plant relays incl. the per-tank tank1 element relays + circuit relay binding), 6 RequiredHeatpumpEquipment (hp-odu, hp-ctrl-box with components; a Nolan home is a monobloc), 7 ComponentBinding (every component referenced by exactly one node), 8 RequiredSensing (kind-agnostic names incl. HP and resistive-element power channels), 9 SingleStoreTank. Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records; relay and opto components are board-generic; nodes/channels ride spaceheat.node.gt/302 + data.channel.gt/003. 10 CommandableHeatPump (biconditional: Hydronic.HpCommandNodeName ⇒ hp-odu/hp-idu/hp-ctrl-box with ComponentId, ActorClass HpTwin, handle under hp-boss; every HpTwin node is the declared one); 6's NoActor clause defers to it."
 
   gw.nolan.operational.params:
     latest_version: "000"
@@ -1074,7 +1076,9 @@ types:
     versioning_strategy: "literal"
     versions:
       "002":
-        summary: "- ShNodes: spaceheat.node.gt:301 -> 302"
+        summary: >
+          - ShNodes: spaceheat.node.gt:301 -> 302
+          - Axiom 2 ActuatorLeaves: every actuator (Relay / ZeroTenOutputer / HpTwin) is a dotted-handle leaf; every dotted-handle leaf is an actuator or a command node (LocalControl / LeafAlly / PicoCycler / HpBoss / SiegLoop, or a NoActor child of the LocalControl node). gw1.actor.class:013 joins the axiom dependencies.
       "001":
         summary: "- ShNodes: spaceheat.node.gt:301 only (drop the multi-version oneOf; retroactive registration of the wire version the spruce scada emitted from 2026-01-28)"
       "000":

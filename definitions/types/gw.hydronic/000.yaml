@@ -44,6 +44,15 @@ properties:
       Whether "primary-flow" is a measured DataChannel (a meter at the primary
       pump) or a derived sum over the Siegenthaler loop sensors.
 
+  HpCommandNodeName:
+    $ref: "https://schemas.electricity.works/formats/spaceheat.name"
+    description: >
+      The ShNode that takes heat-pump commands under hp-boss: hp-odu when
+      the outdoor unit speaks the wire protocol natively, hp-idu or
+      hp-ctrl-box when its box does. Absent when nothing commands the heat
+      pump (hp-boss dormant). Governed by the layout word's
+      CommandableHeatPump axiom.
+
   Strategy:
     type: string
     description: >

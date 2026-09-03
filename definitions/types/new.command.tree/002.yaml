@@ -62,6 +62,19 @@ x-gridworks:
         otherwise its Name. The set of effective handles SHALL be prefix-closed:
         for every ShNode in ShNodes, each dot-separated prefix of its effective
         handle SHALL also be the effective handle of some ShNode in ShNodes.
+    - number: 2
+      name: "ActuatorLeaves"
+      statement: >
+        Let the effective handle of an ShNode be its Handle if present, otherwise
+        its Name. A leaf is an ShNode whose effective handle contains a dot and is
+        the parent prefix of no other effective handle. An actuator is an ShNode
+        whose ActorClass is "Relay", "ZeroTenOutputer" or "HpTwin". A command node
+        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "PicoCycler",
+        "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
+        effective handle's parent prefix is the effective handle of an ShNode with
+        ActorClass "LocalControl".
+        a. Every actuator SHALL have a dotted effective handle and SHALL be a leaf.
+        b. Every leaf SHALL be an actuator or a command node.
   extended_description: >
     Handle encodes the live command-authority chain. For an ShNode whose Handle
     is "admin.hp-boss.relay6", the prefixes "admin.hp-boss" and "admin" name
@@ -93,6 +106,15 @@ x-gridworks:
     command tree pattern makes after-the-fact debugging more tractable: any action
      -- or refused action -- can be matched against the command tree in force at
     that moment to determine who was authorized to command whom.
+
+    Axiom 2 is the wire-checkable half of the command-forest invariant: the
+    interior of every published tree is command nodes and its leaves are the
+    things they command. A leaf that is a command node rather than an actuator
+    (a LocalControl state waypoint such as "n", or hp-boss with no commandable
+    heat pump declared) is dormant: its handle stays in the tree, inert, and
+    the actor behind it performs no actuation and issues no commands. The tree
+    carries no state, so dormancy is enforced in scada code and asserted by
+    its tests, not by this word.
 
     This version accepts ShNodes at spaceheat.node.gt:302 only. Earlier versions
     accepted a oneOf of several node versions in one payload; that was an early

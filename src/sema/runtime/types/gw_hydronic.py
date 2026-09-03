@@ -3,6 +3,7 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import GwHouse0PrimaryFlowSource
 from sema.runtime.property_format import NonNegativeInt
+from sema.runtime.property_format import SpaceheatName
 from sema.runtime.types.gw1_hvac_zone import Gw1HvacZone
 from sema.runtime.types.gw1_zone_call_circuit import Gw1ZoneCallCircuit
 
@@ -14,6 +15,7 @@ class GwHydronic(SemaType):
     zone_call_circuits: list[Gw1ZoneCallCircuit] | None = None
     total_store_tanks: NonNegativeInt
     primary_flow_source: GwHouse0PrimaryFlowSource
+    hp_command_node_name: SpaceheatName | None = None
     strategy: str
     type_name: Literal["gw.hydronic"] = "gw.hydronic"
     version: Literal["000"] = "000"
