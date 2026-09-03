@@ -2326,7 +2326,7 @@ types:
     owner: gridworks-energy
     versioning_strategy: literal
     description: 'House0-fleet hydronic / flow-topology config: zones, zone-call circuits,
-      store-tank count, primary-flow source, strategy.'
+      store-tank count, primary-flow source.'
     versions:
       '000':
         schema_url: https://schemas.electricity.works/types/gw.hydronic/000
@@ -2340,7 +2340,9 @@ types:
           layout word means, and use is operational (gw.house0.operational.params
           UseSiegLoop). - HpCommandNodeName (optional spaceheat.name): the node that
           takes heat-pump commands under hp-boss; absent = nothing commands the heat
-          pump. The layout words'' CommandableHeatPump axiom governs it.'
+          pump. The layout words'' CommandableHeatPump axiom governs it. - Strategy
+          dropped: the control family is the layout word''s own TypeName (invariant
+          per word, so not a data field; the same rule that retired SiegLoopPlumbed).'
         direct_dependencies:
           structural:
           - gw.house0.primary.flow.source:000

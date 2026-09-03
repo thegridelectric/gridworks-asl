@@ -16,7 +16,6 @@ class GwHydronic(SemaType):
     total_store_tanks: NonNegativeInt
     primary_flow_source: GwHouse0PrimaryFlowSource
     hp_command_node_name: SpaceheatName | None = None
-    strategy: str
     type_name: Literal["gw.hydronic"] = "gw.hydronic"
     version: Literal["000"] = "000"
 

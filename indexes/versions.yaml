@@ -504,6 +504,7 @@ types:
         summary: >
           - Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), optional ZoneCallCircuits (gw1.zone.call.circuit list), TotalStoreTanks, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axioms: Cardinality, CircuitResolution, LearnedNeedsTempChannel. The Siegenthaler-loop flags left this word: plumbed-ness is what a has-sieg layout word means, and use is operational (gw.house0.operational.params UseSiegLoop).
           - HpCommandNodeName (optional spaceheat.name): the node that takes heat-pump commands under hp-boss; absent = nothing commands the heat pump. The layout words' CommandableHeatPump axiom governs it.
+          - Strategy dropped: the control family is the layout word's own TypeName (invariant per word, so not a data field; the same rule that retired SiegLoopPlumbed).
 
   gw.native.gpio.pin:
     latest_version: "000"

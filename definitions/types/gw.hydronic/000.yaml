@@ -6,8 +6,8 @@ type: object
 description: >
   The hydronic / flow-topology configuration of a hydronic space-heating
   layout (House0 and Nolan strategies alike): its zones, zone-call
-  circuits, store-tank count, how primary-loop flow is obtained, and the
-  control strategy. The measured-vs-derived "primary-flow" choice is a
+  circuits, store-tank count, and how primary-loop flow is obtained. The
+  measured-vs-derived "primary-flow" choice is a
   physical-topology fact carried here so the layout states it rather than it
   being inferred from channel presence.
 
@@ -53,11 +53,6 @@ properties:
       pump (hp-boss dormant). Governed by the layout word's
       CommandableHeatPump axiom.
 
-  Strategy:
-    type: string
-    description: >
-      The layout's control strategy label (e.g. "House0").
-
   TypeName:
     const: "gw.hydronic"
 
@@ -68,7 +63,6 @@ required:
   - Zones
   - TotalStoreTanks
   - PrimaryFlowSource
-  - Strategy
   - TypeName
   - Version
 
@@ -83,7 +77,6 @@ examples:
       ],
       "TotalStoreTanks": 3,
       "PrimaryFlowSource": "Measured",
-      "Strategy": "House0",
       "TypeName": "gw.hydronic",
       "Version": "000"
     }
