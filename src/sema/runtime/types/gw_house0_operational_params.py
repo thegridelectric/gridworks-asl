@@ -22,6 +22,7 @@ class GwHouse0OperationalParams(SemaType):
     actuation_authority: Gw1ActuationAuthority
     service_mode: Gw1ServiceMode
     seasonal_storage_mode: Gw1SeasonalStorageMode
+    use_sieg_loop: bool
     cop_curve: CopCurve
     heating_curve: HeatingCurve
     hp_turn_on_minutes: PositiveInt

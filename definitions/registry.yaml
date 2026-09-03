@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-09-02T22:55:00Z"
+  last_updated: "2026-09-03T02:25:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -2568,7 +2568,7 @@ types:
         schema_url: "https://schemas.electricity.works/types/gw.house0.operational.params/000"
         created: "2026-08-13T11:55:00Z"
         status: "staging"
-        summary: "ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify; the layout holds the full GNodes) + CaptureTuningList + ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active) + SeasonalStorageMode + CopCurve + HeatingCurve + HpTurnOnMinutes + HpMaxKwEl + ShortCycleBuffer + LoadOverestimationPercent + OilBoilerBackup + HorizonHours + OnPeakWindows (gw.tou.window with explicit Days). All required — no assumed defaults. Pairs with its layout by family. HpMaxKwEl moved in from scada deployment config; OnPeakWindows added so this word and gw.nolan.operational.params carry identical field sets."
+        summary: "ScadaAlias (the applying Scada's identity — stored/emitted instances self-identify; the layout holds the full GNodes) + CaptureTuningList + ActuationAuthority x ServiceMode (authority dominates; ServiceMode inert outside Active) + SeasonalStorageMode + UseSiegLoop (moved in from gw.hydronic: running the loop is operational) + CopCurve + HeatingCurve + HpTurnOnMinutes + HpMaxKwEl + ShortCycleBuffer + LoadOverestimationPercent + OilBoilerBackup + HorizonHours + OnPeakWindows (gw.tou.window with explicit Days). All required — no assumed defaults. Pairs with its layout by family. HpMaxKwEl moved in from scada deployment config; OnPeakWindows added so this word and gw.nolan.operational.params carry identical field sets."
         direct_dependencies:
           structural:
             - "capture.tuning:000"
@@ -2587,7 +2587,7 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "House0-fleet hydronic / flow-topology config: zones, store-tank count, Siegenthaler-loop topology, primary-flow source, strategy."
+    description: "House0-fleet hydronic / flow-topology config: zones, zone-call circuits, store-tank count, primary-flow source, strategy."
 
     versions:
       "000":
@@ -2595,7 +2595,7 @@ types:
         created: "2026-08-11T17:15:00Z"
         status: "staging"
         summary: >-
-          - Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), optional ZoneCallCircuits (gw1.zone.call.circuit list), TotalStoreTanks, UseSiegLoop, SiegLoopPlumbed, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axioms: SiegLoopControlImpliesPlumbed, Cardinality, CircuitResolution, LearnedNeedsTempChannel.
+          - Typed hydronic block promoted out of gw.house0.layout's freeform Hydronic: Zones (gw1.hvac.zone list), optional ZoneCallCircuits (gw1.zone.call.circuit list), TotalStoreTanks, PrimaryFlowSource (gw.house0.primary.flow.source), Strategy. Axioms: Cardinality, CircuitResolution, LearnedNeedsTempChannel. The Siegenthaler-loop flags left this word: plumbed-ness is what a has-sieg layout word means, and use is operational (gw.house0.operational.params UseSiegLoop).
         direct_dependencies:
           structural:
             - "gw.house0.primary.flow.source:000"

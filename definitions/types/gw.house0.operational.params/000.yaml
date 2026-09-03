@@ -13,7 +13,8 @@ description: >
   Carries the per-channel capture/report tuning (CaptureTuningList) and the
   control and optimization parameters: the actuation authority and service
   mode (authority dominates: ServiceMode is inert unless ActuationAuthority
-  is Active), the seasonal-storage mode, the COP and heating curves, the
+  is Active), the seasonal-storage mode, whether the Siegenthaler loop is
+  actively controlled, the COP and heating curves, the
   heat-pump cycling and load-estimation knobs, and the FLO horizon.
 
 properties:
@@ -48,6 +49,12 @@ properties:
     $ref: "https://schemas.electricity.works/enums/gw1.seasonal.storage.mode/000"
     description: >
       Which thermal stores participate in the current season's operation.
+
+  UseSiegLoop:
+    type: boolean
+    description: >
+      True if the scada actively controls the Siegenthaler loop (runs the
+      SiegLoop and HpBoss actors); false leaves both dormant.
 
   CopCurve:
     $ref: "https://schemas.electricity.works/types/cop.curve/000"
@@ -111,6 +118,7 @@ required:
   - ActuationAuthority
   - ServiceMode
   - SeasonalStorageMode
+  - UseSiegLoop
   - CopCurve
   - HeatingCurve
   - HpTurnOnMinutes
@@ -142,6 +150,7 @@ examples:
       "ActuationAuthority": "Active",
       "ServiceMode": "Heating",
       "SeasonalStorageMode": "AllTanks",
+      "UseSiegLoop": true,
       "CopCurve": {
         "Intercept": 1.02,
         "OatCoeff": 0.0257,
