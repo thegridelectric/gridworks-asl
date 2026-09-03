@@ -31,10 +31,12 @@ properties:
     description: >
       Unique identifier for this emitted layout projection.
 
-  Strategy:
-    type: string
+  HardwareLayoutTypeName:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
     description: >
-      Strategy / manifold variant name used by the running SCADA deployment.
+      TypeName of the layout word the running SCADA loaded (for example
+      gw.house0.layout or gw.nolan.layout): the layout family every consumer
+      of this projection branches on.
 
   ActuationAuthority:
     $ref: "https://schemas.electricity.works/enums/gw1.actuation.authority/000"
@@ -142,7 +144,7 @@ required:
   - FromGNodeAlias
   - MessageCreatedMs
   - MessageId
-  - Strategy
+  - HardwareLayoutTypeName
   - ActuationAuthority
   - ServiceMode
   - SeasonalStorageMode

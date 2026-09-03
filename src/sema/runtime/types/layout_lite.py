@@ -31,7 +31,7 @@ class LayoutLite(SemaType):
     from_g_node_alias: LeftRightDot
     message_created_ms: UTCMilliseconds
     message_id: UUID4Str
-    strategy: str
+    hardware_layout_type_name: LeftRightDot
     actuation_authority: Gw1ActuationAuthority
     service_mode: Gw1ServiceMode
     seasonal_storage_mode: Gw1SeasonalStorageMode

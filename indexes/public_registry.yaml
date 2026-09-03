@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-09-03T02:25:00Z'
+  last_updated: '2026-09-03T11:20:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -3716,7 +3716,11 @@ types:
           003->004). Context-dependent: the embedded components'' DeviceType lives
           on their cac, not the component. - SystemMode -> ActuationAuthority x ServiceMode
           split (Heating -> Active/Heating, Standby -> Standby/Heating, MonitorOnly
-          -> MonitorOnly/Heating; mechanical, not the blocking reason for context).'
+          -> MonitorOnly/Heating; mechanical, not the blocking reason for context).
+          - Strategy (free manifold-variant string) -> HardwareLayoutTypeName (left.right.dot):
+          the loaded layout word''s TypeName is the family; a format, not an enum
+          of layout words, so this word publishes independently of the layout words''
+          status.'
         direct_dependencies:
           structural:
           - data.channel.gt:003
