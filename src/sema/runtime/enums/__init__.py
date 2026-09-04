@@ -6,6 +6,8 @@ from sema.runtime.enums.change_relay_state import ChangeRelayState
 from sema.runtime.enums.change_valve_state import ChangeValveState
 from sema.runtime.enums.change_zone_call_source import ChangeZoneCallSource
 from sema.runtime.enums.day_of_week import DayOfWeek
+from sema.runtime.enums.fis_authorization_decision import FisAuthorizationDecision
+from sema.runtime.enums.fis_authorization_reason import FisAuthorizationReason
 from sema.runtime.enums.fsm_report_type import FsmReportType
 from sema.runtime.enums.g_node_instance_status import GNodeInstanceStatus
 from sema.runtime.enums.g_node_instance_transport import GNodeInstanceTransport
@@ -85,6 +87,8 @@ __all__ = [
     "ChangeValveState",
     "ChangeZoneCallSource",
     "DayOfWeek",
+    "FisAuthorizationDecision",
+    "FisAuthorizationReason",
     "FsmReportType",
     "GNodeInstanceStatus",
     "GNodeInstanceTransport",

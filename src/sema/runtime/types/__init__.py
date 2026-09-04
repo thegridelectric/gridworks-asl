@@ -23,6 +23,9 @@ from sema.runtime.types.electric_meter_component_gt import ElectricMeterComponen
 from sema.runtime.types.electric_meter_device_type_gt import ElectricMeterDeviceTypeGt
 from sema.runtime.types.energy_instruction import EnergyInstruction
 from sema.runtime.types.fis_connect_claims import FisConnectClaims
+from sema.runtime.types.fis_instance_authorization_event import (
+    FisInstanceAuthorizationEvent,
+)
 from sema.runtime.types.flo_params_house0 import FloParamsHouse0
 from sema.runtime.types.fsm_atomic_report import FsmAtomicReport
 from sema.runtime.types.fsm_event import FsmEvent
@@ -219,6 +222,7 @@ __all__ = [
     "ElectricMeterDeviceTypeGt",
     "EnergyInstruction",
     "FisConnectClaims",
+    "FisInstanceAuthorizationEvent",
     "FloParamsHouse0",
     "FsmAtomicReport",
     "FsmEvent",

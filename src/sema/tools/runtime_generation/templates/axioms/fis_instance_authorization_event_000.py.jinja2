@@ -1,0 +1,13 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ fis_instance_authorization_event_000_class_name }}":
+        """
+        Axiom 1: ReasonDeterminesDecision
+        Decision SHALL equal the value the projection table maps Reason to.
+        """
+        expected = self.project(self.reason)
+        if self.decision != expected:
+            raise ValueError(
+                f"Axiom 1 failed: Reason {self.reason.value} maps to Decision "
+                f"{expected.value}, not {self.decision.value}."
+            )
+        return self

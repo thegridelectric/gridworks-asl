@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-09-03T18:10:00Z'
+  last_updated: '2026-09-04T14:40:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -204,6 +204,28 @@ enums:
     schema_url: https://schemas.electricity.works/enums/day.of.week/000
     created: '2026-08-12T22:15:00Z'
     status: staging
+  fis.authorization.decision:
+    latest_version: '000'
+    owner: jessica-millar
+    enum_type: versioned
+    description: Authorization outcome determined by the Fleet Index Service (FIS)
+      for a runtime instance connection attempt.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/fis.authorization.decision/000
+        created: '2026-09-04T14:40:00Z'
+        status: staging
+  fis.authorization.reason:
+    latest_version: '000'
+    owner: jessica-millar
+    enum_type: versioned
+    description: Why the Fleet Index Service (FIS) decided a runtime instance connection
+      attempt as it did; each value implies one fis.authorization.decision.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/fis.authorization.reason/000
+        created: '2026-09-04T14:40:00Z'
+        status: staging
   fsm.report.type:
     owner: gridworks-energy
     enum_type: literal
@@ -1483,6 +1505,28 @@ types:
           - left.right.dot
           - non.empty.string
           - universe.run
+          - uuid4.str
+  fis.instance.authorization.event:
+    latest_version: '000'
+    owner: jessica-millar
+    versioning_strategy: literal
+    description: 'Record of one connect-gate decision by the Fleet Index Service (FIS):
+      whether a runtime instance of a principal was admitted to a run, and why.'
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/fis.instance.authorization.event/000
+        created: '2026-09-04T14:40:00Z'
+        summary: Initial Sema version
+        status: staging
+        direct_dependencies:
+          structural:
+          - fis.authorization.decision:000
+          - fis.authorization.reason:000
+          - g.node.instance.transport:000
+          - left.right.dot
+          - non.empty.string
+          - universe.run
+          - utc.milliseconds
           - uuid4.str
   flo.params.house0:
     latest_version: '007'

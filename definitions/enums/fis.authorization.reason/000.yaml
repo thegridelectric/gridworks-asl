@@ -1,29 +1,59 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/draft/enums/fis.authorization.reason/000"
+$id: "https://schemas.electricity.works/enums/fis.authorization.reason/000"
 
 title: "fis.authorization.reason"
 type: "string"
 description: >
-  Structured reason describing why the Fleet Index Service (FIS)
-  produced a specific authorization decision.
-
-  Reasons provide audit-level diagnostic clarity and are
-  machine-readable.
+  Why the Fleet Index Service (FIS) decided a runtime instance's
+  connection attempt as it did. One value per verdict path of the
+  connect gate; each value implies exactly one fis.authorization.decision.
 
 enum:
-  - "NewInstance"
-  - "IdempotentReconnect"
-  - "SupersededPrevious"
   - "MalformedRequest"
-  - "UnknownGNode"
-  - "InactiveGNode"
+  - "PrincipalNotFound"
+  - "PrincipalSuspended"
+  - "RunOutsideUniverse"
+  - "NotInRegistry"
   - "AliasMismatch"
   - "ClassMismatch"
   - "InstanceRevoked"
-  - "SecurityViolation"
+  - "KillUnconfirmed"
+  - "LeaseRace"
+  - "IdempotentReconnect"
+  - "Superseded"
 
-default: "SecurityViolation"
+default: "MalformedRequest"
 
 x-gridworks:
-  owner: "gridworks-energy"
+  owner: "jessica-millar"
   version: "000"
+  value_descriptions:
+    "MalformedRequest": >
+      The claims could not be decoded, or a required claim was missing.
+    "PrincipalNotFound": >
+      No principal is registered under the authenticated identity.
+    "PrincipalSuspended": >
+      The principal exists but is not active.
+    "RunOutsideUniverse": >
+      The claimed run belongs to a universe this FIS does not serve.
+    "NotInRegistry": >
+      The principal is a GNode the registry mirror does not know, and the
+      registry could not supply it.
+    "AliasMismatch": >
+      The claimed alias is not the registry's current alias for the GNode.
+    "ClassMismatch": >
+      The claimed GNodeClass is not the registry's class for the GNode.
+    "InstanceRevoked": >
+      The instance id was superseded earlier; a revoked instance is denied
+      forever.
+    "KillUnconfirmed": >
+      The predecessor's connections could not be confirmed closed, so the
+      successor was refused (fail closed).
+    "LeaseRace": >
+      A concurrent instance won the lease between the predecessor's
+      revocation and this one's admission.
+    "IdempotentReconnect": >
+      The instance already holds the active lease for this run.
+    "Superseded": >
+      The instance was admitted as the new single writer, any predecessor
+      having been revoked and closed first.

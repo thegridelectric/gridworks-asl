@@ -209,6 +209,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  fis.instance.authorization.event:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   flo.params.house0:
     latest_version: "007"
     versioning_strategy: "literal"
@@ -1505,6 +1512,18 @@ enums:
   day.of.week:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
+    versions:
+      "000": {}
+
+  fis.authorization.decision:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  fis.authorization.reason:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
     versions:
       "000": {}
 

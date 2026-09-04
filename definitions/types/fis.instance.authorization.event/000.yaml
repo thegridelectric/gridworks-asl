@@ -1,27 +1,53 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/draft/types/fis.instance.authorization.event/000"
+$id: "https://schemas.electricity.works/types/fis.instance.authorization.event/000"
 
 title: "fis.instance.authorization.event"
 type: object
 description: >
-  Event emitted by the Fleet Index Service (FIS) recording an
-  authorization decision for a runtime instance attempting to connect
-  to a broker. This event provides an immutable audit record of
-  instance-level authorization outcomes.
+  Record of one connect-gate decision by the Fleet Index Service (FIS):
+  whether a runtime instance of a principal was admitted to a run, and
+  why. Written after the verdict is returned to the broker; it records
+  authority decisions and grants nothing.
 
 properties:
 
   EventId:
     $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      Unique identifier of this record.
 
-  GNodeId:
+  PrincipalId:
     $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      The authenticated identity, as the certificate subject names it: the
+      GNodeId for a GNode, the principal id for a service.
 
-  GNodeAlias:
+  InstanceId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+    description: >
+      The runtime process instance that attempted to connect.
+
+  Run:
+    $ref: "https://schemas.electricity.works/formats/universe.run"
+    description: >
+      The run the instance claimed to join.
+
+  Alias:
     $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      The alias claimed at connect. Present only when the transport
+      carries claims.
 
-  GNodeInstanceId:
-    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+  GNodeClass:
+    $ref: "https://schemas.electricity.works/formats/non.empty.string"
+    description: >
+      The GNodeClass claimed at connect. Present only when the transport
+      carries claims and the principal is a GNode.
+
+  Transport:
+    $ref: "https://schemas.electricity.works/enums/g.node.instance.transport/000"
+    description: >
+      The messaging transport through which the instance connected.
 
   Decision:
     $ref: "https://schemas.electricity.works/enums/fis.authorization.decision/000"
@@ -29,17 +55,10 @@ properties:
   Reason:
     $ref: "https://schemas.electricity.works/enums/fis.authorization.reason/000"
 
-  Transport:
-    $ref: "https://schemas.electricity.works/enums/g.node.instance.transport/000"
-
-  ObservedPeerAddress:
-    $ref: "https://schemas.electricity.works/formats/non.empty.string"
-
-  ConnectionHandle:
-    $ref: "https://schemas.electricity.works/formats/non.empty.string"
-
   DecidedAtUnixMs:
     $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      When the verdict was decided.
 
   TypeName:
     const: "fis.instance.authorization.event"
@@ -49,25 +68,60 @@ properties:
 
 required:
   - EventId
-  - GNodeId
-  - GNodeInstanceId
+  - PrincipalId
+  - InstanceId
+  - Run
+  - Transport
   - Decision
   - Reason
-  - Transport
   - DecidedAtUnixMs
   - TypeName
   - Version
 
 additionalProperties: false
 
+examples:
+  - |
+    {
+      "EventId": "8c1d2f7e-3a4b-4c5d-8e6f-7a8b9c0d1e2f",
+      "PrincipalId": "19ee09df-80ba-437b-b6c1-1eebe9d34801",
+      "InstanceId": "aaaaaaaa-1111-4aaa-8aaa-aaaaaaaaaaaa",
+      "Run": "hw1__1",
+      "Alias": "hw1.isone.me.versant.keene.beech.scada",
+      "GNodeClass": "Scada",
+      "Transport": "RabbitAmqp",
+      "Decision": "Authorized",
+      "Reason": "Superseded",
+      "DecidedAtUnixMs": 1762634100033,
+      "TypeName": "fis.instance.authorization.event",
+      "Version": "000"
+    }
+
 x-gridworks:
   owner: "jessica-millar"
-
+  projection:
+    from: Reason
+    to: Decision
+    table:
+      MalformedRequest: Denied
+      PrincipalNotFound: Denied
+      PrincipalSuspended: Denied
+      RunOutsideUniverse: Denied
+      NotInRegistry: Denied
+      AliasMismatch: Denied
+      ClassMismatch: Denied
+      InstanceRevoked: Denied
+      KillUnconfirmed: Denied
+      LeaseRace: Denied
+      IdempotentReconnect: Authorized
+      Superseded: Authorized
+  axioms:
+    - number: 1
+      name: "ReasonDeterminesDecision"
+      statement: >
+        Decision SHALL equal the value the projection table maps Reason to.
   extended_description: >
-    Authorization events are emitted asynchronously by FIS after
-    evaluating a connection attempt. They provide a durable audit trail
-    of authorization outcomes, including supersession events and
-    denial decisions.
-
-    These events do not grant authority; they record authority decisions.
-    Runtime enforcement occurs at the broker level.
+    One record per connect-gate verdict, whatever the outcome. Enforcement
+    is the broker's verdict at connect time; this record is the audit trail
+    of it, including supersessions and denials. It is held in FIS's own
+    store and read out from there.

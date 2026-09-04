@@ -309,6 +309,20 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  fis.instance.authorization.event:
+    '000':
+      enums:
+      - fis.authorization.decision:000
+      - fis.authorization.reason:000
+      - g.node.instance.transport:000
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - universe.run
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
   flo.params.house0:
     '000':
       enums:
