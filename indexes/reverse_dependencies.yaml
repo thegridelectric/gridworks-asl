@@ -347,11 +347,6 @@ types:
       used_by:
       - gw.house0.layout:000
       - gw.nolan.layout:000
-  i2c.dac.writer.component.gt:
-    '000':
-      used_by:
-      - gw.house0.layout:000
-      - gw.nolan.layout:000
   i2c.expander:
     '000':
       used_by:
@@ -514,11 +509,6 @@ types:
       used_by:
       - report.event:003
   scada.board.component.gt:
-    '000':
-      used_by:
-      - gw.house0.layout:000
-      - gw.nolan.layout:000
-  sim.dac.writer.component.gt:
     '000':
       used_by:
       - gw.house0.layout:000

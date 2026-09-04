@@ -61,14 +61,12 @@ properties:
         - $ref: "https://schemas.electricity.works/types/gpio.sensor.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/gpio.relay.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/i2c.dac.output.component.gt/000"
-        - $ref: "https://schemas.electricity.works/types/i2c.dac.writer.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/i2c.multichannel.dt.relay.component.gt/004"
         - $ref: "https://schemas.electricity.works/types/i2c.relay.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/i2c.thermistor.reader.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/scada.board.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/pico.btu.meter.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/012"
-        - $ref: "https://schemas.electricity.works/types/sim.dac.writer.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/sim.pico.tank.module.component.gt/001"
         - $ref: "https://schemas.electricity.works/types/sim.relay.component.gt/000"
         - $ref: "https://schemas.electricity.works/types/sim.sensor.component.gt/000"
@@ -184,6 +182,9 @@ x-gridworks:
         b. Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
         FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes with
         ActorClass "Relay".
+        c. ShNodes SHALL include a node named "secondary-010v" with ActorClass
+        "ZeroTenOutputer" and a ComponentId equal to the ComponentId of an
+        i2c.dac.output.component.gt in Components.
 
     - number: 6
       name: "RequiredHeatpumpEquipment"

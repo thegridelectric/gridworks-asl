@@ -18,7 +18,6 @@ from sema.runtime.types.hp_device_type_gt import HpDeviceTypeGt
 from sema.runtime.types.hubitat_component_gt import HubitatComponentGt
 from sema.runtime.types.hubitat_poller_component_gt import HubitatPollerComponentGt
 from sema.runtime.types.i2c_dac_output_component_gt import I2cDacOutputComponentGt
-from sema.runtime.types.i2c_dac_writer_component_gt import I2cDacWriterComponentGt
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
@@ -30,7 +29,6 @@ from sema.runtime.types.pico_btu_meter_component_gt import PicoBtuMeterComponent
 from sema.runtime.types.pico_flow_module_component_gt import PicoFlowModuleComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 from sema.runtime.types.scada_board_component_gt import ScadaBoardComponentGt
-from sema.runtime.types.sim_dac_writer_component_gt import SimDacWriterComponentGt
 from sema.runtime.types.sim_pico_tank_module_component_gt import (
     SimPicoTankModuleComponentGt,
 )
@@ -54,7 +52,6 @@ class GwHouse0Layout(SemaType):
         | GpioRelayComponentGt
         | GpioSensorComponentGt
         | I2cDacOutputComponentGt
-        | I2cDacWriterComponentGt
         | I2cMultichannelDtRelayComponentGt
         | I2cRelayComponentGt
         | I2cThermistorReaderComponentGt
@@ -63,7 +60,6 @@ class GwHouse0Layout(SemaType):
         | PicoFlowModuleComponentGt
         | PicoTankModuleComponentGt
         | ScadaBoardComponentGt
-        | SimDacWriterComponentGt
         | SimPicoTankModuleComponentGt
         | SimRelayComponentGt
         | SimSensorComponentGt

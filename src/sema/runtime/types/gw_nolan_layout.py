@@ -15,7 +15,6 @@ from sema.runtime.types.gw_hydronic import GwHydronic
 from sema.runtime.types.hp_control_box_device_type_gt import HpControlBoxDeviceTypeGt
 from sema.runtime.types.hp_device_type_gt import HpDeviceTypeGt
 from sema.runtime.types.i2c_dac_output_component_gt import I2cDacOutputComponentGt
-from sema.runtime.types.i2c_dac_writer_component_gt import I2cDacWriterComponentGt
 from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
     I2cMultichannelDtRelayComponentGt,
 )
@@ -26,7 +25,6 @@ from sema.runtime.types.i2c_thermistor_reader_component_gt import (
 from sema.runtime.types.pico_btu_meter_component_gt import PicoBtuMeterComponentGt
 from sema.runtime.types.pico_tank_module_component_gt import PicoTankModuleComponentGt
 from sema.runtime.types.scada_board_component_gt import ScadaBoardComponentGt
-from sema.runtime.types.sim_dac_writer_component_gt import SimDacWriterComponentGt
 from sema.runtime.types.sim_pico_tank_module_component_gt import (
     SimPicoTankModuleComponentGt,
 )
@@ -49,14 +47,12 @@ class GwNolanLayout(SemaType):
         | GpioSensorComponentGt
         | GpioRelayComponentGt
         | I2cDacOutputComponentGt
-        | I2cDacWriterComponentGt
         | I2cMultichannelDtRelayComponentGt
         | I2cRelayComponentGt
         | I2cThermistorReaderComponentGt
         | ScadaBoardComponentGt
         | PicoBtuMeterComponentGt
         | PicoTankModuleComponentGt
-        | SimDacWriterComponentGt
         | SimPicoTankModuleComponentGt
         | SimRelayComponentGt
         | SimSensorComponentGt
@@ -265,7 +261,9 @@ class GwNolanLayout(SemaType):
         "tank1-bottom-elt-relay", each with ActorClass "Relay". b.
         Hydronic.ZoneCallCircuits SHALL be non-empty, and each circuit's
         FailsafeRelayNode and OpsRelayNode SHALL name a ShNode in ShNodes with
-        ActorClass "Relay".
+        ActorClass "Relay". c. ShNodes SHALL include a node named "secondary-010v" with
+        ActorClass "ZeroTenOutputer" and a ComponentId equal to the ComponentId of an
+        i2c.dac.output.component.gt in Components.
         """
         actor_class_by_name = {
             n.name: str(n.actor_class) for n in (self.sh_nodes or [])
@@ -303,6 +301,28 @@ class GwNolanLayout(SemaType):
         for circuit in circuits:
             relay_or_raise(circuit.failsafe_relay_node, "circuit failsafe relay")
             relay_or_raise(circuit.ops_relay_node, "circuit ops relay")
+        output_node = next(
+            (n for n in (self.sh_nodes or []) if n.name == "secondary-010v"), None
+        )
+        if output_node is None:
+            raise ValueError(
+                "Axiom 5 (RequiredActuators) failed: no ShNode named secondary-010v."
+            )
+        if str(output_node.actor_class) != "ZeroTenOutputer":
+            raise ValueError(
+                "Axiom 5 (RequiredActuators) failed: secondary-010v has ActorClass "
+                f"{output_node.actor_class}, not ZeroTenOutputer."
+            )
+        dac_output_ids = {
+            c.component_id
+            for c in (self.components or [])
+            if isinstance(c, I2cDacOutputComponentGt)
+        }
+        if output_node.component_id not in dac_output_ids:
+            raise ValueError(
+                "Axiom 5 (RequiredActuators) failed: secondary-010v ComponentId "
+                f"{output_node.component_id} is not an i2c.dac.output.component.gt in Components."
+            )
         return self
 
     @model_validator(mode="after")

@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-09-04T14:40:00Z"
+  last_updated: "2026-09-04T14:50:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -2539,7 +2539,6 @@ types:
             - "hubitat.component.gt:000"
             - "hubitat.poller.component.gt:000"
             - "i2c.dac.output.component.gt:000"
-            - "i2c.dac.writer.component.gt:000"
             - "i2c.multichannel.dt.relay.component.gt:004"
             - "i2c.relay.component.gt:000"
             - "i2c.thermistor.reader.component.gt:000"
@@ -2547,7 +2546,6 @@ types:
             - "pico.flow.module.component.gt:001"
             - "pico.tank.module.component.gt:012"
             - "scada.board.component.gt:000"
-            - "sim.dac.writer.component.gt:000"
             - "sim.pico.tank.module.component.gt:001"
             - "sim.relay.component.gt:000"
             - "sim.sensor.component.gt:000"
@@ -2651,14 +2649,12 @@ types:
             - "hp.control.box.device.type.gt:000"
             - "hp.device.type.gt:000"
             - "i2c.dac.output.component.gt:000"
-            - "i2c.dac.writer.component.gt:000"
             - "i2c.multichannel.dt.relay.component.gt:004"
             - "i2c.relay.component.gt:000"
             - "i2c.thermistor.reader.component.gt:000"
             - "pico.btu.meter.component.gt:000"
             - "pico.tank.module.component.gt:012"
             - "scada.board.component.gt:000"
-            - "sim.dac.writer.component.gt:000"
             - "sim.pico.tank.module.component.gt:001"
             - "sim.relay.component.gt:000"
             - "sim.sensor.component.gt:000"
