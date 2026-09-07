@@ -260,12 +260,16 @@ x-gridworks:
       statement: >
         a. The set of CommandInterfaces.ActorName values SHALL equal the set of
         Name values of the nodes in RelayNodes and CommandNodes whose Handle
-        has exactly two dot-separated tokens.
+        does not extend the Handle of any CommandNodes entry (a Handle extends
+        another when it equals that Handle followed by a dot and further
+        tokens).
         b. No two CommandInterfaces entries SHALL share an ActorName.
 
   extended_description: >
-    Axiom 4 is what makes the message the cover of the tree. A node whose
-    Handle is <root>.<Name> is commanded by the root directly and gets an
-    interface; a relay deeper in the tree belongs to the interior node
-    above it and is commanded through that node's interface. DacNodes take
-    an analog value rather than an event and so carry no interface.
+    Axiom 4 is what makes the message the cover of the tree. A node that
+    sits under no interior command node is commanded by the tree's
+    authority directly and gets an interface; a relay under an interior
+    node belongs to it and is commanded through that node's interface.
+    The rule reads the same whichever authority holds the tree, since
+    Handles carry the live tree. DacNodes take an analog value rather
+    than an event and so carry no interface.

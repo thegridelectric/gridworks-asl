@@ -71,14 +71,19 @@
         """
         Axiom 4: CommandInterfacesCoverTheTree
         a. The set of CommandInterfaces.ActorName values SHALL equal the set of Name
-        values of the nodes in RelayNodes and CommandNodes whose Handle has exactly two
-        dot-separated tokens.
+        values of the nodes in RelayNodes and CommandNodes whose Handle does not extend
+        the Handle of any CommandNodes entry (a Handle extends another when it equals
+        that Handle followed by a dot and further tokens).
         b. No two CommandInterfaces entries SHALL share an ActorName.
         """
+        owner_prefixes = [
+            f"{node.handle}." for node in self.command_nodes if node.handle is not None
+        ]
         directly_commanded = {
             node.name
             for node in [*self.relay_nodes, *self.command_nodes]
-            if node.handle is not None and len(str(node.handle).split(".")) == 2
+            if node.handle is not None
+            and not any(str(node.handle).startswith(p) for p in owner_prefixes)
         }
         interface_names = [interface.actor_name for interface in self.command_interfaces]
         if set(interface_names) != directly_commanded:
