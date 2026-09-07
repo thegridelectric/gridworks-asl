@@ -83,6 +83,8 @@ from sema.runtime.types.gw_adc_waveform import GwAdcWaveform
 from sema.runtime.types.gw_channel_gap_stats import GwChannelGapStats
 from sema.runtime.types.gw_channel_jump_stats import GwChannelJumpStats
 from sema.runtime.types.gw_channel_noise_stats import GwChannelNoiseStats
+from sema.runtime.types.gw_command_interface import GwCommandInterface
+from sema.runtime.types.gw_command_transition import GwCommandTransition
 from sema.runtime.types.gw_dispatch_ack import GwDispatchAck
 from sema.runtime.types.gw_dispatch_nack import GwDispatchNack
 from sema.runtime.types.gw_experiment_run import GwExperimentRun
@@ -272,6 +274,8 @@ __all__ = [
     "GwChannelGapStats",
     "GwChannelJumpStats",
     "GwChannelNoiseStats",
+    "GwCommandInterface",
+    "GwCommandTransition",
     "GwDispatchAck",
     "GwDispatchNack",
     "GwExperimentRun",

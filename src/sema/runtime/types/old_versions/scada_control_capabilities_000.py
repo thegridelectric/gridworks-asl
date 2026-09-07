@@ -63,8 +63,10 @@ class ScadaControlCapabilities000(SemaType):
         - RelayNodes[]: inline object -> spaceheat.node.gt:302
         - DacNodes[]: inline object -> spaceheat.node.gt:302
         - ControlChannels[]: inline object -> data.channel.gt:003
-        - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> :004
-          (cac UUID -> DeviceType, adds I2cBus)
+        - I2cRelayComponent dropped; CommandNodes[] (spaceheat.node.gt:302)
+          and CommandInterfaces[] (gw.command.interface:000) added: the
+          message is the cover of the command tree, one interface per node
+          the root commands directly
         - Axioms: add control surface consistency checks
         """
         raise SemaType.upgrade_requires_context(

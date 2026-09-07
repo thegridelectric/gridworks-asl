@@ -5,9 +5,7 @@ from sema.runtime.enums.old_versions.gw1_actor_class_012 import Gw1ActorClass012
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.types.data_channel_gt import DataChannelGt
-from sema.runtime.types.i2c_multichannel_dt_relay_component_gt import (
-    I2cMultichannelDtRelayComponentGt,
-)
+from sema.runtime.types.gw_command_interface import GwCommandInterface
 from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 
 
@@ -18,8 +16,9 @@ class ScadaControlCapabilities(SemaType):
     message_created_ms: UTCMilliseconds
     relay_nodes: list[SpaceheatNodeGt]
     dac_nodes: list[SpaceheatNodeGt]
+    command_nodes: list[SpaceheatNodeGt]
     control_channels: list[DataChannelGt]
-    i2c_relay_component: I2cMultichannelDtRelayComponentGt
+    command_interfaces: list[GwCommandInterface]
     type_name: Literal["scada.control.capabilities"] = "scada.control.capabilities"
     version: Literal["001"] = "001"
 
@@ -29,7 +28,12 @@ class ScadaControlCapabilities(SemaType):
         Axiom 1: ActorClassConsistency
         a. All nodes in RelayNodes SHALL have ActorClass equal to Relay.
         b. All nodes in DacNodes SHALL have ActorClass equal to ZeroTenOutputer.
+        c. No node in CommandNodes SHALL have ActorClass equal to Relay or ZeroTenOutputer.
         """
+        actuator_classes = {
+            Gw1ActorClass012.Relay,
+            Gw1ActorClass012.ZeroTenOutputer,
+        }
         for node in self.relay_nodes:
             if node.actor_class != Gw1ActorClass012.Relay:
                 raise ValueError(
@@ -40,16 +44,22 @@ class ScadaControlCapabilities(SemaType):
                 raise ValueError(
                     "Axiom 1 failed: every dac_nodes actor_class must be ZeroTenOutputer."
                 )
+        for node in self.command_nodes:
+            if node.actor_class in actuator_classes:
+                raise ValueError(
+                    "Axiom 1 failed: command_nodes actor_class must not be Relay or "
+                    "ZeroTenOutputer."
+                )
         return self
 
     @model_validator(mode="after")
     def check_axiom_2(self) -> "ScadaControlCapabilities":
         """
         Axiom 2: HandleTerminalMatchesName
-        For every node in RelayNodes and DacNodes, Handle SHALL be present and its final
-        dot-separated token SHALL equal Name.
+        For every node in RelayNodes, DacNodes and CommandNodes, Handle SHALL be present
+        and its final dot-separated token SHALL equal Name.
         """
-        for node in [*self.relay_nodes, *self.dac_nodes]:
+        for node in [*self.relay_nodes, *self.dac_nodes, *self.command_nodes]:
             if node.handle is None:
                 raise ValueError(
                     "Axiom 2 failed: every control node must have a handle."
@@ -83,31 +93,27 @@ class ScadaControlCapabilities(SemaType):
     @model_validator(mode="after")
     def check_axiom_4(self) -> "ScadaControlCapabilities":
         """
-        Axiom 4: I2cRelayComponentChannelControlNodeConsistency
-        a. The set of ActorName values in I2cRelayComponent.ConfigList SHALL equal the set
-        of RelayNodes.Name values.
-        b. For each relay actor config in I2cRelayComponent.ConfigList, ChannelName SHALL
-        equal the Name of the ControlChannels entry whose AboutNodeName is that relay actor
-        config's ActorName.
+        Axiom 4: CommandInterfacesCoverTheTree
+        a. The set of CommandInterfaces.ActorName values SHALL equal the set of Name
+        values of the nodes in RelayNodes and CommandNodes whose Handle has exactly two
+        dot-separated tokens.
+        b. No two CommandInterfaces entries SHALL share an ActorName.
         """
-        relay_node_names = {node.name for node in self.relay_nodes}
-        config_actor_names = {
-            config.actor_name for config in self.i2c_relay_component.config_list
+        directly_commanded = {
+            node.name
+            for node in [*self.relay_nodes, *self.command_nodes]
+            if node.handle is not None and len(str(node.handle).split(".")) == 2
         }
-        if config_actor_names != relay_node_names:
+        interface_names = [
+            interface.actor_name for interface in self.command_interfaces
+        ]
+        if set(interface_names) != directly_commanded:
             raise ValueError(
-                "Axiom 4 failed: i2c_relay_component config_list actor_name values "
-                "must equal relay_nodes names."
+                "Axiom 4 failed: command_interfaces actor_name values must equal the "
+                "names of the relay and command nodes the root commands directly."
             )
-
-        channel_by_about_node_name = {
-            channel.about_node_name: channel for channel in self.control_channels
-        }
-        for config in self.i2c_relay_component.config_list:
-            channel = channel_by_about_node_name.get(config.actor_name)
-            if channel is None or config.channel_name != channel.name:
-                raise ValueError(
-                    "Axiom 4 failed: every relay config channel_name must match the "
-                    "control channel name for its actor_name."
-                )
+        if len(interface_names) != len(set(interface_names)):
+            raise ValueError(
+                "Axiom 4 failed: command_interfaces actor_name values must be unique."
+            )
         return self

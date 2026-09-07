@@ -496,6 +496,20 @@ types:
       "000":
         summary: "Initial version."
 
+  gw.command.interface:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version."
+
+  gw.command.transition:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial version."
+
   gw.dispatch.ack:
     latest_version: "000"
     versioning_strategy: "literal"
@@ -1250,8 +1264,10 @@ types:
           - RelayNodes[]: inline object -> spaceheat.node.gt:302
           - DacNodes[]: inline object -> spaceheat.node.gt:302
           - ControlChannels[]: inline object -> data.channel.gt:003
-          - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> :004
-            (cac UUID -> DeviceType, adds I2cBus)
+          - I2cRelayComponent dropped; CommandNodes[] (spaceheat.node.gt:302)
+            and CommandInterfaces[] (gw.command.interface:000) added: the
+            message is the cover of the command tree, one interface per node
+            the root commands directly
           - Axioms: add control surface consistency checks
       "000":
         summary: "Initial Sema version"
@@ -1766,6 +1782,12 @@ enums:
     versions:
       "000": {}
 
+  hp.boss.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
   hz.calc.method:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
@@ -1843,6 +1865,12 @@ enums:
       "000": {}
 
   pico.cycler.event:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  pico.cycler.state:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
@@ -1937,6 +1965,12 @@ enums:
   thermostat.kind:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  turn.hp.on.off:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
     versions:
       "000": {}
 

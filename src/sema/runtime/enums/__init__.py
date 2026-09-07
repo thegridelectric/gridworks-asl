@@ -46,6 +46,7 @@ from sema.runtime.enums.gw_market_product_name import GwMarketProductName
 from sema.runtime.enums.gw_scada_cmd_refusal_reason import GwScadaCmdRefusalReason
 from sema.runtime.enums.gw_weather_forecast_fidelity import GwWeatherForecastFidelity
 from sema.runtime.enums.heatcall_source import HeatcallSource
+from sema.runtime.enums.hp_boss_state import HpBossState
 from sema.runtime.enums.hz_calc_method import HzCalcMethod
 from sema.runtime.enums.i2c_adc_channel import I2cAdcChannel
 from sema.runtime.enums.i2c_adc_type import I2cAdcType
@@ -59,6 +60,7 @@ from sema.runtime.enums.market_price_unit import MarketPriceUnit
 from sema.runtime.enums.market_quantity_unit import MarketQuantityUnit
 from sema.runtime.enums.market_type_name import MarketTypeName
 from sema.runtime.enums.pico_cycler_event import PicoCyclerEvent
+from sema.runtime.enums.pico_cycler_state import PicoCyclerState
 from sema.runtime.enums.reboot_picos import RebootPicos
 from sema.runtime.enums.relay_closed_or_open import RelayClosedOrOpen
 from sema.runtime.enums.relay_energization_state import RelayEnergizationState
@@ -72,6 +74,7 @@ from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
 from sema.runtime.enums.temp_calc_method import TempCalcMethod
 from sema.runtime.enums.thermistor_data_method import ThermistorDataMethod
 from sema.runtime.enums.thermostat_kind import ThermostatKind
+from sema.runtime.enums.turn_hp_on_off import TurnHpOnOff
 from sema.runtime.enums.valve_open_or_closed import ValveOpenOrClosed
 from sema.runtime.enums.zone_actuator_kind import ZoneActuatorKind
 from sema.runtime.enums.zone_call_circuit_event import ZoneCallCircuitEvent
@@ -123,6 +126,7 @@ __all__ = [
     "GwScadaCmdRefusalReason",
     "GwWeatherForecastFidelity",
     "HeatcallSource",
+    "HpBossState",
     "HzCalcMethod",
     "I2cAdcChannel",
     "I2cAdcType",
@@ -136,6 +140,7 @@ __all__ = [
     "MarketQuantityUnit",
     "MarketTypeName",
     "PicoCyclerEvent",
+    "PicoCyclerState",
     "RebootPicos",
     "RelayClosedOrOpen",
     "RelayEnergizationState",
@@ -149,6 +154,7 @@ __all__ = [
     "TempCalcMethod",
     "ThermistorDataMethod",
     "ThermostatKind",
+    "TurnHpOnOff",
     "ValveOpenOrClosed",
     "ZoneActuatorKind",
     "ZoneCallCircuitEvent",
