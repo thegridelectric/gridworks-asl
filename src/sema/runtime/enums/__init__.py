@@ -62,6 +62,7 @@ from sema.runtime.enums.relay_energization_state import RelayEnergizationState
 from sema.runtime.enums.relay_open_or_closed import RelayOpenOrClosed
 from sema.runtime.enums.relay_wiring_config import RelayWiringConfig
 from sema.runtime.enums.setpoint_phase import SetpointPhase
+from sema.runtime.enums.single_pico_state import SinglePicoState
 from sema.runtime.enums.spaceheat_make_model import SpaceheatMakeModel
 from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
 from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
@@ -135,6 +136,7 @@ __all__ = [
     "RelayOpenOrClosed",
     "RelayWiringConfig",
     "SetpointPhase",
+    "SinglePicoState",
     "SpaceheatMakeModel",
     "SpaceheatTelemetryName",
     "SpaceheatUnit",

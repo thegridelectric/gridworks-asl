@@ -1205,6 +1205,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/setpoint.phase/000.yaml
+  single.pico.state:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/single.pico.state/000.yaml
   spaceheat.make.model:
     enum_type: versioned
     latest_version: 008

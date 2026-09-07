@@ -1845,6 +1845,12 @@ enums:
     versions:
       "000": {}
 
+  single.pico.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
   spaceheat.make.model:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
