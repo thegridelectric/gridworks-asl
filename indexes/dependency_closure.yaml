@@ -721,6 +721,18 @@ types:
       - left.right.dot
       types: []
       versionless_types: []
+  gw.adc.waveform:
+    '000':
+      enums:
+      - i2c.adc.channel:000
+      - i2c.adc.type:000
+      formats:
+      - left.right.dot
+      - positive.int
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
   gw.channel.gap.stats:
     '000':
       enums: []

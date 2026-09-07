@@ -1,0 +1,142 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://schemas.electricity.works/types/gw.adc.waveform/000"
+
+title: "gw.adc.waveform"
+type: object
+description: >
+  One burst of raw conversions from a single input of an i2c ADC on a terminal
+  asset's board: the chip settings that give the codes their voltage
+  meaning, the wall clock of the first conversion, and a host-timed
+  offset for every code. A burst spans a few cycles of a mains waveform,
+  so a current-transformer channel can be seen as a waveform rather than
+  a single reading.
+
+properties:
+  TaAlias:
+    $ref: "https://schemas.electricity.works/formats/left.right.dot"
+    description: >
+      GNode alias of the terminal asset whose board carries the ADC.
+
+  MessageId:
+    $ref: "https://schemas.electricity.works/formats/uuid4.str"
+
+  MessageCreatedMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Timestamp (UTC milliseconds) at which this message was created by
+      the process that read the chip.
+
+  AdcType:
+    $ref: "https://schemas.electricity.works/enums/i2c.adc.type/000"
+    description: >
+      The converter chip the burst came from.
+
+  I2cAddress:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The chip's address on the board's i2c bus, as a decimal integer.
+      A board may carry several converters of the same type.
+
+  AdcChannel:
+    $ref: "https://schemas.electricity.works/enums/i2c.adc.channel/000"
+    description: >
+      The chip input the burst was read from, single-ended against
+      ground.
+
+  FullScaleMillivolts:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The programmable-gain full scale the chip was set to, in
+      millivolts. A code converts to volts as code times
+      FullScaleMillivolts over 32768, over 1000.
+
+  DataRateHz:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      The conversion rate the chip was configured for, in samples per
+      second. The offsets record when each code was actually taken.
+
+  StartUnixMs:
+    $ref: "https://schemas.electricity.works/formats/utc.milliseconds"
+    description: >
+      Wall clock of the first conversion, as timed on the host.
+
+  SampleOffsetsUs:
+    type: array
+    items:
+      type: integer
+    description: >
+      Microseconds from the first conversion to each code, as timed on
+      the host that read the chip. Positionally paired with Codes.
+
+  Codes:
+    type: array
+    items:
+      type: integer
+    description: >
+      The chip's raw conversion-register values in the order taken: a
+      signed two's-complement sixteen-bit integer per conversion, where
+      32767 is the positive full scale. Volts = code times
+      FullScaleMillivolts over 32768, over 1000. An ADS1015 leaves its
+      twelve bits left-aligned in the same register, so the scale holds.
+
+  TypeName:
+    const: "gw.adc.waveform"
+
+  Version:
+    const: "000"
+
+required:
+  - TaAlias
+  - MessageId
+  - MessageCreatedMs
+  - AdcType
+  - I2cAddress
+  - AdcChannel
+  - FullScaleMillivolts
+  - DataRateHz
+  - StartUnixMs
+  - SampleOffsetsUs
+  - Codes
+  - TypeName
+  - Version
+
+additionalProperties: false
+
+examples:
+  - |
+    {
+      "TaAlias": "d1.bench.honeysuckle.ta",
+      "MessageId": "8f3c6a2e-9c1b-4b7e-a1d2-3e4f5a6b7c8d",
+      "MessageCreatedMs": 1788784502100,
+      "AdcType": "Ads1115",
+      "I2cAddress": 72,
+      "AdcChannel": "P0",
+      "FullScaleMillivolts": 4096,
+      "DataRateHz": 860,
+      "StartUnixMs": 1788784500000,
+      "SampleOffsetsUs": [0, 1163, 2326],
+      "Codes": [13201, 13198, 13205],
+      "TypeName": "gw.adc.waveform",
+      "Version": "000"
+    }
+
+x-gridworks:
+  owner: "gridworks-energy"
+
+  axioms:
+    - number: 1
+      name: "PairedNonEmptyLists"
+      statement: >
+        a. Codes SHALL be non-empty.
+        b. len(SampleOffsetsUs) SHALL equal len(Codes).
+    - number: 2
+      name: "OffsetsAnchoredIncreasing"
+      statement: >
+        a. The first element of SampleOffsetsUs SHALL be 0.
+        b. SampleOffsetsUs SHALL be strictly increasing.
+    - number: 3
+      name: "SixteenBitCodes"
+      statement: >
+        Every element of Codes SHALL be between -32768 and 32767
+        inclusive.

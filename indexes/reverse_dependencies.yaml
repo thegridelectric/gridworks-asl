@@ -769,10 +769,12 @@ enums:
   i2c.adc.channel:
     '000':
       used_by:
+      - gw.adc.waveform:000
       - i2c.thermistor.channel.config:000
   i2c.adc.type:
     '000':
       used_by:
+      - gw.adc.waveform:000
       - i2c.ct.interface.capability:000
       - i2c.thermistor.interface.capability:000
   i2c.dac.channel:
@@ -979,6 +981,7 @@ formats:
     - gridworks.event.comm.response.timeout:001
     - gridworks.event.shutdown:001
     - gridworks.header:001
+    - gw.adc.waveform:000
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
@@ -1178,6 +1181,7 @@ formats:
     - flo.params.house0:005
     - flo.params.house0:006
     - flo.params.house0:007
+    - gw.adc.waveform:000
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
@@ -1348,6 +1352,7 @@ formats:
     - gridworks.event.comm.response.timeout:001
     - gridworks.event.problem:001
     - gridworks.event.shutdown:001
+    - gw.adc.waveform:000
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
@@ -1471,6 +1476,7 @@ formats:
     - gridworks.event.comm.response.timeout:001
     - gridworks.event.problem:001
     - gridworks.event.shutdown:001
+    - gw.adc.waveform:000
     - gw.weather.channel.gt:000
     - gw.weather.forecast.bundle.gt:000
     - gw.weather.forecast.channel.gt:000

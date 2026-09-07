@@ -78,6 +78,7 @@ from sema.runtime.types.gw1_telemetry_name_quantity_projection import (
 from sema.runtime.types.gw1_unit_quantity_projection import Gw1UnitQuantityProjection
 from sema.runtime.types.gw1_zone_call_circuit import Gw1ZoneCallCircuit
 from sema.runtime.types.gw1_zone_thermostat import Gw1ZoneThermostat
+from sema.runtime.types.gw_adc_waveform import GwAdcWaveform
 from sema.runtime.types.gw_channel_gap_stats import GwChannelGapStats
 from sema.runtime.types.gw_channel_jump_stats import GwChannelJumpStats
 from sema.runtime.types.gw_channel_noise_stats import GwChannelNoiseStats
@@ -263,6 +264,7 @@ __all__ = [
     "Gw1UnitQuantityProjection",
     "Gw1ZoneCallCircuit",
     "Gw1ZoneThermostat",
+    "GwAdcWaveform",
     "GwChannelGapStats",
     "GwChannelJumpStats",
     "GwChannelNoiseStats",

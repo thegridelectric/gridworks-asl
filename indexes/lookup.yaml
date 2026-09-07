@@ -297,6 +297,11 @@ types:
   gw:
     versioning_strategy: none
     schema: definitions/types/gw.yaml
+  gw.adc.waveform:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.adc.waveform/000.yaml
   gw.channel.gap.stats:
     latest_version: '000'
     versioning_strategy: literal

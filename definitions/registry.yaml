@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-09-06T12:25:00Z"
+  last_updated: "2026-09-07T13:15:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -2426,6 +2426,27 @@ types:
     direct_dependencies:
       structural:
         - "gridworks.header:001"
+
+  gw.adc.waveform:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "One burst of raw conversions from a single input of an i2c ADC, with the chip, its address, full scale and data rate, the wall clock of the first conversion, and a host-timed offset per code."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.adc.waveform/000"
+        created: "2026-09-07T13:15:00Z"
+        status: "staging"
+        summary: "Initial version."
+        direct_dependencies:
+          structural:
+            - "i2c.adc.channel:000"
+            - "i2c.adc.type:000"
+            - "left.right.dot"
+            - "positive.int"
+            - "utc.milliseconds"
+            - "uuid4.str"
 
   gw.channel.gap.stats:
     latest_version: "000"

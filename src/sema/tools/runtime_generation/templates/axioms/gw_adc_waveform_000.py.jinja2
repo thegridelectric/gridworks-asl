@@ -1,0 +1,50 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ gw_adc_waveform_000_class_name }}":
+        """
+        Axiom 1: PairedNonEmptyLists
+        a. Codes SHALL be non-empty. b. len(SampleOffsetsUs) SHALL equal len(Codes).
+        """
+        if len(self.codes) == 0:
+            raise ValueError("Axiom 1 (PairedNonEmptyLists) failed: Codes must be non-empty.")
+        if len(self.sample_offsets_us) != len(self.codes):
+            raise ValueError(
+                "Axiom 1 (PairedNonEmptyLists) failed: len(SampleOffsetsUs) "
+                f"{len(self.sample_offsets_us)} must equal len(Codes) {len(self.codes)}."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_2(self) -> "{{ gw_adc_waveform_000_class_name }}":
+        """
+        Axiom 2: OffsetsAnchoredIncreasing
+        a. The first element of SampleOffsetsUs SHALL be 0. b. SampleOffsetsUs SHALL be
+        strictly increasing.
+        """
+        offsets = self.sample_offsets_us
+        if offsets and offsets[0] != 0:
+            raise ValueError(
+                "Axiom 2 (OffsetsAnchoredIncreasing) failed: the first "
+                f"SampleOffsetsUs element must be 0, got {offsets[0]}."
+            )
+        for i in range(1, len(offsets)):
+            if offsets[i] <= offsets[i - 1]:
+                raise ValueError(
+                    "Axiom 2 (OffsetsAnchoredIncreasing) failed: SampleOffsetsUs "
+                    f"must be strictly increasing; index {i} ({offsets[i]}) is not "
+                    f"greater than index {i - 1} ({offsets[i - 1]})."
+                )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_3(self) -> "{{ gw_adc_waveform_000_class_name }}":
+        """
+        Axiom 3: SixteenBitCodes
+        Every element of Codes SHALL be between -32768 and 32767 inclusive.
+        """
+        for i, code in enumerate(self.codes):
+            if code < -32768 or code > 32767:
+                raise ValueError(
+                    "Axiom 3 (SixteenBitCodes) failed: Codes must be within "
+                    f"[-32768, 32767]; index {i} is {code}."
+                )
+        return self
