@@ -71,6 +71,19 @@ properties:
     items:
       type: integer
 
+  SimLifeS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Seconds the simulated pico posts readings after each boot before
+      it goes silent. Absent means it never dies on a schedule.
+
+  SimRebootS:
+    $ref: "https://schemas.electricity.works/formats/positive.int"
+    description: >
+      Seconds after the vdc relay closes, following an open, before the
+      simulated pico boots and posts again. Absent means a dead pico
+      stays dead.
+
   SimulatesTypeName:
     const: "pico.tank.module.component.gt"
 
@@ -148,5 +161,9 @@ x-gridworks:
     table is the authority over which instances are currently asserted.
 
     DeviceType values come from the `gw1.device.type` vocabulary; the hardware layout enforces membership.
+
+    SimLifeS and SimRebootS script the simulated pico's liveness (posts, dies,
+    reboots after a vdc power cycle) so the pico-cycler loop can be exercised
+    on a simulated layout.
 
     Simulates `pico.tank.module.component.gt`. Kin: `sim.relay.component.gt`. Kin: `sim.sensor.component.gt`.

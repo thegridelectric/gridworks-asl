@@ -27,6 +27,8 @@ class SimPicoTankModuleComponentGt(SemaType):
     serial_number: str
     async_capture_delta_micro_volts: StrictInt
     sensor_order: list[StrictInt] | None = None
+    sim_life_s: PositiveInt | None = None
+    sim_reboot_s: PositiveInt | None = None
     simulates_type_name: Literal["pico.tank.module.component.gt"] = (
         "pico.tank.module.component.gt"
     )
