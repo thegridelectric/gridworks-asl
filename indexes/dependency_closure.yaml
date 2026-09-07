@@ -33,6 +33,17 @@ types:
       - positive.int
       types: []
       versionless_types: []
+  analog.dispatch:
+    '000':
+      enums: []
+      formats:
+      - handle.name
+      - left.right.dot
+      - spaceheat.name
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
   atn.bid:
     '001':
       enums:
@@ -766,6 +777,25 @@ types:
       - positive.int
       - spaceheat.name
       - utc.milliseconds
+      types: []
+      versionless_types: []
+  gw.dispatch.ack:
+    '000':
+      enums: []
+      formats:
+      - handle.name
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
+  gw.dispatch.nack:
+    '000':
+      enums:
+      - gw.scada.cmd.refusal.reason:000
+      formats:
+      - handle.name
+      - utc.milliseconds
+      - uuid4.str
       types: []
       versionless_types: []
   gw.experiment.run:

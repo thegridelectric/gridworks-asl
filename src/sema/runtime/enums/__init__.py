@@ -43,6 +43,7 @@ from sema.runtime.enums.gw1_unit import Gw1Unit
 from sema.runtime.enums.gw_g_node_class import GwGNodeClass
 from sema.runtime.enums.gw_house0_primary_flow_source import GwHouse0PrimaryFlowSource
 from sema.runtime.enums.gw_market_product_name import GwMarketProductName
+from sema.runtime.enums.gw_scada_cmd_refusal_reason import GwScadaCmdRefusalReason
 from sema.runtime.enums.gw_weather_forecast_fidelity import GwWeatherForecastFidelity
 from sema.runtime.enums.heatcall_source import HeatcallSource
 from sema.runtime.enums.hz_calc_method import HzCalcMethod
@@ -57,6 +58,8 @@ from sema.runtime.enums.log_level import LogLevel
 from sema.runtime.enums.market_price_unit import MarketPriceUnit
 from sema.runtime.enums.market_quantity_unit import MarketQuantityUnit
 from sema.runtime.enums.market_type_name import MarketTypeName
+from sema.runtime.enums.pico_cycler_event import PicoCyclerEvent
+from sema.runtime.enums.reboot_picos import RebootPicos
 from sema.runtime.enums.relay_closed_or_open import RelayClosedOrOpen
 from sema.runtime.enums.relay_energization_state import RelayEnergizationState
 from sema.runtime.enums.relay_open_or_closed import RelayOpenOrClosed
@@ -117,6 +120,7 @@ __all__ = [
     "GwGNodeClass",
     "GwHouse0PrimaryFlowSource",
     "GwMarketProductName",
+    "GwScadaCmdRefusalReason",
     "GwWeatherForecastFidelity",
     "HeatcallSource",
     "HzCalcMethod",
@@ -131,6 +135,8 @@ __all__ = [
     "MarketPriceUnit",
     "MarketQuantityUnit",
     "MarketTypeName",
+    "PicoCyclerEvent",
+    "RebootPicos",
     "RelayClosedOrOpen",
     "RelayEnergizationState",
     "RelayOpenOrClosed",

@@ -31,6 +31,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/ads111x.based.device.type.gt/000.yaml
+  analog.dispatch:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/analog.dispatch/000.yaml
   atn.bid:
     latest_version: '002'
     versioning_strategy: literal
@@ -317,6 +322,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.channel.noise.stats/000.yaml
+  gw.dispatch.ack:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.dispatch.ack/000.yaml
+  gw.dispatch.nack:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.dispatch.nack/000.yaml
   gw.experiment.run:
     latest_version: '000'
     versioning_strategy: literal
@@ -1023,6 +1038,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/gw.market.product.name/000.yaml
+  gw.scada.cmd.refusal.reason:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/gw.scada.cmd.refusal.reason/000.yaml
   gw.weather.forecast.fidelity:
     enum_type: versioned
     latest_version: '000'
@@ -1186,6 +1206,14 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/market.type.name/000.yaml
+  pico.cycler.event:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/pico.cycler.event/000.yaml
+  reboot.picos:
+    enum_type: literal
+    schema: definitions/enums/reboot.picos/000.yaml
   relay.closed.or.open:
     enum_type: literal
     schema: definitions/enums/relay.closed.or.open/000.yaml

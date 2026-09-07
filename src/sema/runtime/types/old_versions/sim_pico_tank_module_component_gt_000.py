@@ -85,7 +85,7 @@ class SimPicoTankModuleComponentGt000(SemaType):
 
     def upgrade(self) -> SimPicoTankModuleComponentGt:
         """
-        - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case); SimulatesVersion 011 -> 012. Context-dependent: the device type lived on the referenced cac, not the component.
+        - ComponentAttributeClassId (cac UUID) -> DeviceType (gw1.device.type value, pascal.case); SimulatesVersion 011 -> 012. Context-dependent: the device type lived on the referenced cac, not the component. Optional SimLifeS / SimRebootS (positive.int seconds) script the simulated pico's liveness.
         """
         raise SemaType.upgrade_requires_context(
             "SimPicoTankModuleComponentGt000 cannot be upgraded to "

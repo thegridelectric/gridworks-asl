@@ -1,0 +1,16 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> Self:
+        """
+        Axiom 1: FromHandleIsBoss
+        FromHandle SHALL be the immediate boss of ToHandle (ToHandle with its last
+        dot-segment removed), unless ToHandle contains "multiplexer".
+        """
+        if "multiplexer" in self.to_handle:
+            return self
+        boss = ".".join(self.to_handle.split(".")[:-1])
+        if boss != self.from_handle:
+            raise ValueError(
+                f"Axiom 1 violated! FromHandle {self.from_handle} is not the "
+                f"immediate boss of ToHandle {self.to_handle}."
+            )
+        return self

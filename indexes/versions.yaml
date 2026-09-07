@@ -24,6 +24,13 @@ types:
       "000":
         summary: "Initial draft (specialized device-type record; per-family successor to the field ads111x.based.cac.gt, keyed by DeviceType)."
 
+  analog.dispatch:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   atn.bid:
     latest_version: "002"
     versioning_strategy: "literal"
@@ -488,6 +495,20 @@ types:
     versions:
       "000":
         summary: "Initial version."
+
+  gw.dispatch.ack:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  gw.dispatch.nack:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
 
   gw.experiment.run:
     latest_version: "000"
@@ -1588,6 +1609,12 @@ enums:
     versions:
       "000": {}
 
+  gw.scada.cmd.refusal.reason:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
   gw.weather.forecast.fidelity:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
@@ -1812,6 +1839,18 @@ enums:
   market.type.name:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  pico.cycler.event:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  reboot.picos:
+    enum_type: "literal"
+    note: "This enum is literal; version 000 is immutable and exclusive."
     versions:
       "000": {}
 

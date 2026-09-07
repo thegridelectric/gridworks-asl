@@ -672,6 +672,10 @@ enums:
     '000':
       used_by:
       - gw.hydronic:000
+  gw.scada.cmd.refusal.reason:
+    '000':
+      used_by:
+      - gw.dispatch.nack:000
   gw.weather.forecast.fidelity:
     '000':
       used_by:
@@ -924,9 +928,12 @@ enums:
 formats:
   handle.name:
     used_by:
+    - analog.dispatch:000
     - fsm.atomic.report:000
     - fsm.atomic.report:001
     - fsm.event:000
+    - gw.dispatch.ack:000
+    - gw.dispatch.nack:000
     - machine.states:000
     - single.machine.state:000
     - spaceheat.node.gt:200
@@ -942,6 +949,7 @@ formats:
     - gw.tou.window:000
   left.right.dot:
     used_by:
+    - analog.dispatch:000
     - atn.bid:001
     - atn.bid:002
     - bid:000
@@ -1246,6 +1254,7 @@ formats:
   spaceheat.name:
     used_by:
     - ads.channel.config:000
+    - analog.dispatch:000
     - capture.tuning:000
     - channel.config:000
     - channel.config:001
@@ -1333,6 +1342,7 @@ formats:
     - synced.readings.bundle:003
   utc.milliseconds:
     used_by:
+    - analog.dispatch:000
     - channel.readings:001
     - channel.readings:002
     - energy.instruction:000
@@ -1356,6 +1366,8 @@ formats:
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
+    - gw.dispatch.ack:000
+    - gw.dispatch.nack:000
     - gw.experiment.run:000
     - gw.readings:000
     - gw.weather.forecast:000
@@ -1430,6 +1442,7 @@ formats:
   uuid4.str:
     used_by:
     - ads111x.based.component.gt:000
+    - analog.dispatch:000
     - channel.readings:001
     - component.attribute.class.gt:001
     - connectivity.edge.gt:000
@@ -1477,6 +1490,8 @@ formats:
     - gridworks.event.problem:001
     - gridworks.event.shutdown:001
     - gw.adc.waveform:000
+    - gw.dispatch.ack:000
+    - gw.dispatch.nack:000
     - gw.weather.channel.gt:000
     - gw.weather.forecast.bundle.gt:000
     - gw.weather.forecast.channel.gt:000

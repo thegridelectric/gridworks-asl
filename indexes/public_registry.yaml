@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-09-07T18:05:00Z'
+  last_updated: '2026-09-07T22:35:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -317,6 +317,17 @@ enums:
         schema_url: https://schemas.electricity.works/enums/gw.market.product.name/000
         created: '2026-06-08T00:00:00Z'
         status: published
+  gw.scada.cmd.refusal.reason:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Why a scada command node refused a command from its boss, carried
+      on gw.dispatch.nack.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/gw.scada.cmd.refusal.reason/000
+        created: '2026-09-07T22:35:00Z'
+        status: staging
   gw.weather.forecast.fidelity:
     latest_version: '000'
     owner: gridworks-energy
@@ -717,6 +728,25 @@ enums:
         schema_url: https://schemas.electricity.works/enums/market.type.name/000
         created: '2022-10-17T16:55:39Z'
         status: published
+  pico.cycler.event:
+    latest_version: '000'
+    owner: gridworks-energy
+    enum_type: versioned
+    description: Events that move the scada's pico-cycler state machine; the entering
+      event of a cycle is what provoked it.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/enums/pico.cycler.event/000
+        created: '2026-09-07T22:35:00Z'
+        status: staging
+  reboot.picos:
+    owner: gridworks-energy
+    enum_type: literal
+    description: 'The pico-cycler''s command vocabulary: a boss may ask it to power-cycle
+      its picos.'
+    schema_url: https://schemas.electricity.works/enums/reboot.picos/000
+    created: '2026-09-07T22:35:00Z'
+    status: staging
   relay.closed.or.open:
     owner: gridworks-energy
     enum_type: literal
@@ -1014,6 +1044,25 @@ types:
           - pascal.case
           - positive.int
           - spaceheat.telemetry.name:007
+  analog.dispatch:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A command from a boss to a node that drives a level rather than a
+      state; the counterpart of fsm.event for analog actuators.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/analog.dispatch/000
+        created: '2026-09-07T22:35:00Z'
+        status: staging
+        summary: Initial Sema version
+        direct_dependencies:
+          structural:
+          - handle.name
+          - left.right.dot
+          - spaceheat.name
+          - utc.milliseconds
+          - uuid4.str
   atn.bid:
     latest_version: '002'
     owner: gridworks-energy
@@ -2282,6 +2331,41 @@ types:
           - positive.int
           - spaceheat.name
           - utc.milliseconds
+  gw.dispatch.ack:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A scada node's reply to its boss that a command was taken; correlated
+      by the command's TriggerId, refusal twin gw.dispatch.nack.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.dispatch.ack/000
+        created: '2026-09-07T22:35:00Z'
+        status: staging
+        summary: Initial Sema version
+        direct_dependencies:
+          structural:
+          - handle.name
+          - utc.milliseconds
+          - uuid4.str
+  gw.dispatch.nack:
+    latest_version: '000'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A scada node's reply to its boss that a command was refused, with
+      the reason; correlated by the command's TriggerId, success twin gw.dispatch.ack.
+    versions:
+      '000':
+        schema_url: https://schemas.electricity.works/types/gw.dispatch.nack/000
+        created: '2026-09-07T22:35:00Z'
+        status: staging
+        summary: Initial Sema version
+        direct_dependencies:
+          structural:
+          - gw.scada.cmd.refusal.reason:000
+          - handle.name
+          - utc.milliseconds
+          - uuid4.str
   gw.experiment.run:
     latest_version: '000'
     owner: gridworks-energy
