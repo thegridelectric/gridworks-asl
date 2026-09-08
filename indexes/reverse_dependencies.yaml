@@ -832,6 +832,10 @@ enums:
       - atn.bid:002
       - bid:000
       - market.product:000
+  pico.board.variant:
+    '000':
+      used_by:
+      - tank.module.params:200
   relay.closed.or.open:
     '000':
       used_by:
@@ -1247,6 +1251,8 @@ formats:
     - spaceheat.node.gt:301
     - spaceheat.node.gt:302
     - synth.channel.gt:000
+    - tank.module.params:110
+    - tank.module.params:200
   positive.int.as.str:
     used_by:
     - gw1.tank.temp.calibration.map:000
@@ -1317,6 +1323,8 @@ formats:
     - synced.readings.bundle:001
     - synced.readings:000
     - synth.channel.gt:000
+    - tank.module.params:110
+    - tank.module.params:200
     - ticklist.hall.report:000
     - ticklist.reed.report:000
   universe.run:

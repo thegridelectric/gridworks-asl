@@ -918,6 +918,12 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/synth.channel.gt/000.yaml
+  tank.module.params:
+    latest_version: '200'
+    versioning_strategy: literal
+    versions:
+      '200': definitions/types/tank.module.params/200.yaml
+      '110': definitions/types/tank.module.params/110.yaml
   ticklist.hall:
     latest_version: '101'
     versioning_strategy: literal
@@ -1206,6 +1212,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/market.type.name/000.yaml
+  pico.board.variant:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/pico.board.variant/000.yaml
   pico.cycler.event:
     enum_type: versioned
     latest_version: '000'

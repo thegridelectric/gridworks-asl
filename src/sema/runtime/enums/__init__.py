@@ -58,6 +58,7 @@ from sema.runtime.enums.log_level import LogLevel
 from sema.runtime.enums.market_price_unit import MarketPriceUnit
 from sema.runtime.enums.market_quantity_unit import MarketQuantityUnit
 from sema.runtime.enums.market_type_name import MarketTypeName
+from sema.runtime.enums.pico_board_variant import PicoBoardVariant
 from sema.runtime.enums.pico_cycler_event import PicoCyclerEvent
 from sema.runtime.enums.reboot_picos import RebootPicos
 from sema.runtime.enums.relay_closed_or_open import RelayClosedOrOpen
@@ -135,6 +136,7 @@ __all__ = [
     "MarketPriceUnit",
     "MarketQuantityUnit",
     "MarketTypeName",
+    "PicoBoardVariant",
     "PicoCyclerEvent",
     "RebootPicos",
     "RelayClosedOrOpen",

@@ -1,0 +1,12 @@
+{
+  "HwUid": "pico_1a2b3c",
+  "ActorNodeName": "buffer",
+  "PicoAB": "c",
+  "CapturePeriodS": 60,
+  "Samples": 1000,
+  "NumSampleAverages": 10,
+  "AsyncCaptureDeltaMicroVolts": 2000,
+  "CaptureOffsetS": 41.5,
+  "TypeName": "tank.module.params",
+  "Version": "110"
+}

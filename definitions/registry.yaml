@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-09-07T22:35:00Z"
+  last_updated: "2026-09-08T00:30:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -795,6 +795,18 @@ enums:
         schema_url: "https://schemas.electricity.works/enums/market.type.name/000"
         created: "2022-10-17T16:55:39Z"
         status: "published"
+
+  pico.board.variant:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "The physical microcontroller board a pico-based sensor module runs on: chip generation and wifi or wired ethernet. Default Unknown."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/pico.board.variant/000"
+        created: "2026-09-08T00:30:00Z"
+        status: "staging"
 
   pico.cycler.event:
     latest_version: "000"
@@ -5513,6 +5525,35 @@ types:
             - "spaceheat.name"
             - "spaceheat.telemetry.name:007"
             - "uuid4.str"
+
+  tank.module.params:
+    latest_version: "200"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "The params handshake between a tank-module pico and its scada: the pico posts its parameters at boot and the scada answers with the values to run with."
+
+    versions:
+      "200":
+        schema_url: "https://schemas.electricity.works/types/tank.module.params/200"
+        created: "2026-09-08T00:30:00Z"
+        status: "staging"
+        summary: >-
+          - PicoBoardVariant: add
+          - MicropythonVersion: add
+        direct_dependencies:
+          structural:
+            - "pico.board.variant:000"
+            - "positive.int"
+            - "spaceheat.name"
+      "110":
+        schema_url: "https://schemas.electricity.works/types/tank.module.params/110"
+        created: "2026-09-08T00:25:00Z"
+        status: "published"
+        summary: "Initial Sema version (registered from the shipped gwsproto TankModuleParams wire shape, version 110)."
+        direct_dependencies:
+          structural:
+            - "positive.int"
+            - "spaceheat.name"
 
   ticklist.hall:
     latest_version: "101"

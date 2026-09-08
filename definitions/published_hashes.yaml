@@ -31,6 +31,10 @@ enums:
   change.heatcall.source: sha256:4089a28148abe7224cbff18fbb74642a777af10fdabb8cd7615cc3a47bbcd50a
   change.relay.pin: sha256:9917b91acdb9edbe686feb6dc6b4b1f0391cd054bbe6f2498a6b320ee59bc2cd
   change.relay.state: sha256:b1e51227bc8f0408e1707da1e232b607f9a297f13e12e4e0f8fa0a9ab3251841
+  fis.authorization.decision:
+    '000': sha256:1b659fa4e9cbdf5ce5f5662ba078e94bce8cd0b48ec423207c1e8bbf63288f7c
+  fis.authorization.reason:
+    '000': sha256:5877ed059fd9caeff77f29a8dc3c6389591f926571af57e60c43c2f0c66e67ca
   fsm.report.type: sha256:6827c748cd5b4118a570c92639bc0ffeeb5fb26bd1e3fc800ac539e6ac93e4cf
   g.node.instance.status:
     '000': sha256:b8eb871eb2017c18efd9ccf187838ed390a86e3116a8c2f9990ef791e48bd067
@@ -109,10 +113,6 @@ enums:
     '001': sha256:b20627885ed36e161aba50aea71ebf9bae27319518c6b8a4330245eba51a7364
   temp.calc.method:
     '000': sha256:d2062d94e196d585c3c3f7ad60ca8165b1980b0a2d5a2f1cf5039d303d179817
-  fis.authorization.decision:
-    '000': sha256:1b659fa4e9cbdf5ce5f5662ba078e94bce8cd0b48ec423207c1e8bbf63288f7c
-  fis.authorization.reason:
-    '000': sha256:5877ed059fd9caeff77f29a8dc3c6389591f926571af57e60c43c2f0c66e67ca
 types:
   atn.bid:
     '001': sha256:6de266f87e83d36a4899862aa169755977c38f84c47850de0c6ab40cdec13214
@@ -142,6 +142,10 @@ types:
     '001': sha256:b3e9b63b0c57fe7165387518bd78a406dc7d930041e70322c4cbd622309b8933
   energy.instruction:
     '000': sha256:47eec0459c841bb3658d96f443631a67d5be36c54d4abf2156cf9d2808665344
+  fis.connect.claims:
+    '000': sha256:be61010ad3e741faedd653011af5c14b474ff360f22557cb6fa37a3f4d90c51d
+  fis.instance.authorization.event:
+    '000': sha256:cf5490dec73e34b6e9167ef71691722696e2bc10d66d7c9f8f72b14f1a34b336
   flo.params.house0:
     '000': sha256:fd526182f9e76a8c2e47f8561d576455c880ffd6ec9939b03436c2c867d23f82
     '001': sha256:5f42db0302a603e6bc6a91803396330320513f2674fb3a3f7879a28144ecd91c
@@ -371,6 +375,8 @@ types:
     '002': sha256:576152faf6832b2c52d986fb8669250725ea0b35512e74918c4eecdb6f2c0e33
   synth.channel.gt:
     '000': sha256:c8d7ac0ad56e4797302e1d4389e143439277a549bfd67f8c322a6d43dffca9bb
+  tank.module.params:
+    '110': sha256:5ab1d5a4a1acec0a7314bf461af370bdf04f55c3a2e82ac857293b0f8053ccaa
   ticklist.hall:
     '101': sha256:06e78b373868c1d4bade376c9bc80d4fb6d74582faa212de5fe4d1a088ea2028
   ticklist.hall.report:
@@ -383,7 +389,3 @@ types:
     '000': sha256:0505741db7f3ba845fe0b7dfb9e5f88eca9f3cc6e9e7510b22f3e73b0103e8fe
   weather.forecast:
     '000': sha256:d5898d35fd8250e8c80811e6df2c90c66cddc316efaf4ca36bc4fdd38c931601
-  fis.connect.claims:
-    '000': sha256:be61010ad3e741faedd653011af5c14b474ff360f22557cb6fa37a3f4d90c51d
-  fis.instance.authorization.event:
-    '000': sha256:cf5490dec73e34b6e9167ef71691722696e2bc10d66d7c9f8f72b14f1a34b336

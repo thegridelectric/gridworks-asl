@@ -191,6 +191,7 @@ from sema.runtime.types.spaceheat_telemetry_quantity_projection import (
 from sema.runtime.types.synced_readings import SyncedReadings
 from sema.runtime.types.synced_readings_bundle import SyncedReadingsBundle
 from sema.runtime.types.synth_channel_gt import SynthChannelGt
+from sema.runtime.types.tank_module_params import TankModuleParams
 from sema.runtime.types.ticklist_hall import TicklistHall
 from sema.runtime.types.ticklist_hall_report import TicklistHallReport
 from sema.runtime.types.ticklist_reed import TicklistReed
@@ -368,6 +369,7 @@ __all__ = [
     "SyncedReadings",
     "SyncedReadingsBundle",
     "SynthChannelGt",
+    "TankModuleParams",
     "TicklistHall",
     "TicklistHallReport",
     "TicklistReed",

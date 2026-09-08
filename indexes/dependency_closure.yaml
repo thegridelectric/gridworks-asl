@@ -3002,6 +3002,22 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  tank.module.params:
+    '110':
+      enums: []
+      formats:
+      - positive.int
+      - spaceheat.name
+      types: []
+      versionless_types: []
+    '200':
+      enums:
+      - pico.board.variant:000
+      formats:
+      - positive.int
+      - spaceheat.name
+      types: []
+      versionless_types: []
   ticklist.hall:
     '101':
       enums: []

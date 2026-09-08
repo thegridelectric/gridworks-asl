@@ -1,0 +1,11 @@
+    def upgrade(self) -> {{ tank_module_params_200_class_name }}:
+        """
+        - PicoBoardVariant: add
+        - MicropythonVersion: add
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ tank_module_params_110_class_name }} cannot be upgraded to "
+            "{{ tank_module_params_200_class_name }} without context: v200 adds "
+            "PicoBoardVariant and MicropythonVersion, which only the posting "
+            "pico knows, and they SHALL NOT be fabricated."
+        )

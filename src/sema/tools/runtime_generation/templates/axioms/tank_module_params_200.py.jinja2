@@ -1,0 +1,11 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ tank_module_params_200_class_name }}":
+        """
+        Axiom 1: PicoABIsAOrB
+        If PicoAB is present it SHALL be "a" or "b".
+        """
+        if self.pico_a_b is not None and self.pico_a_b not in ("a", "b"):
+            raise ValueError(
+                f"Axiom 1: If PicoAB is present it SHALL be a or b, not {self.pico_a_b!r}"
+            )
+        return self
