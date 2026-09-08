@@ -1236,9 +1236,11 @@ types:
         summary: "Historical back-fill from S3 wire evidence (gwproto era). As v002 but FsmActionList (fsm.atomic.report:000) in place of StateList, and FsmReportList is fsm.full.report:000 only."
 
   report.event:
-    latest_version: "003"
+    latest_version: "004"
     versioning_strategy: "literal"
     versions:
+      "004":
+        summary: "- Axioms: reinstate ReportIdentityPropagation, ReportCreatedTimePropagation and ReportSourcePropagation"
       "003":
         summary: >
           - Report: report:002 -> 003

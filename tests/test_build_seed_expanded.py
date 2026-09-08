@@ -49,14 +49,14 @@ def test_include_all_versions_uses_public_versions_only(tmp_path: Path) -> None:
         """
 initial_targets:
   types:
-    report.event:
+    fsm.atomic.report:
       include_all_versions: true
 """,
     )
 
-    assert expanded["initial_targets"] == ["report.event:000", "report.event:002", "report.event:003"]
-    assert set(expanded["worklist"]["types"]["report.event"]) == {"000", "002", "003"}
-    assert "004" not in expanded["worklist"]["types"]["report.event"]
+    assert expanded["initial_targets"] == ["fsm.atomic.report:000", "fsm.atomic.report:001"]
+    assert set(expanded["worklist"]["types"]["fsm.atomic.report"]) == {"000", "001"}
+    assert "002" not in expanded["worklist"]["types"]["fsm.atomic.report"]
 
 
 def test_structured_seed_request_accepts_enum_versions(tmp_path: Path) -> None:

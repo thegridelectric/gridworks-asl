@@ -1,5 +1,4 @@
-from typing import Literal, Self
-from pydantic import model_validator
+from typing import Literal
 from sema.runtime.base import SemaType
 from sema.runtime.enums import GwScadaCmdRefusalReason
 from sema.runtime.property_format import HandleName
@@ -17,18 +16,3 @@ class GwDispatchNack(SemaType):
     unix_time_ms: UTCMilliseconds
     type_name: Literal["gw.dispatch.nack"] = "gw.dispatch.nack"
     version: Literal["000"] = "000"
-
-    @model_validator(mode="after")
-    def check_axiom_1(self) -> Self:
-        """
-        Axiom 1: ToHandleIsBoss
-        ToHandle SHALL be the immediate boss of FromHandle (FromHandle with its last
-        dot-segment removed).
-        """
-        boss = ".".join(self.from_handle.split(".")[:-1])
-        if boss != self.to_handle:
-            raise ValueError(
-                f"Axiom 1 violated! ToHandle {self.to_handle} is not the "
-                f"immediate boss of FromHandle {self.from_handle}."
-            )
-        return self

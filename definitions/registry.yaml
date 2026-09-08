@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-09-08T00:30:00Z"
+  last_updated: "2026-09-08T17:15:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -347,7 +347,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/gw.scada.cmd.refusal.reason/000"
         created: "2026-09-07T22:35:00Z"
-        status: "staging"
+        status: "published"
 
   gw.weather.forecast.fidelity:
     latest_version: "000"
@@ -371,7 +371,7 @@ enums:
       "013":
         schema_url: "https://schemas.electricity.works/enums/gw1.actor.class/013"
         created: "2026-08-12T16:50:00Z"
-        status: "staging"
+        status: "published"
         added_values:
           - "I2cDacWriter"
           - "HpTwin"
@@ -658,7 +658,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/hp.boss.state/000"
         created: "2026-09-07T23:30:00Z"
-        status: "staging"
+        status: "published"
 
   hz.calc.method:
     latest_version: "001"
@@ -830,7 +830,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/pico.cycler.event/000"
         created: "2026-09-07T22:35:00Z"
-        status: "staging"
+        status: "published"
 
   pico.cycler.state:
     latest_version: "000"
@@ -842,7 +842,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/pico.cycler.state/000"
         created: "2026-09-07T23:30:00Z"
-        status: "staging"
+        status: "published"
 
   reboot.picos:
     owner: gridworks-energy
@@ -850,7 +850,7 @@ enums:
     description: "The pico-cycler's command vocabulary: a boss may ask it to power-cycle its picos."
     schema_url: "https://schemas.electricity.works/enums/reboot.picos/000"
     created: "2026-09-07T22:35:00Z"
-    status: "staging"
+    status: "published"
 
   relay.closed.or.open:
     owner: gridworks-energy
@@ -1025,7 +1025,7 @@ enums:
     description: "The heat pump command node's command vocabulary: a boss may ask hp-boss to let the heat pump run or hold it off."
     schema_url: "https://schemas.electricity.works/enums/turn.hp.on.off/000"
     created: "2026-09-07T23:30:00Z"
-    status: "staging"
+    status: "published"
 
   valve.open.or.closed:
     owner: gridworks-energy
@@ -1203,7 +1203,7 @@ types:
       "000":
         schema_url: "https://schemas.electricity.works/types/analog.dispatch/000"
         created: "2026-09-07T22:35:00Z"
-        status: "staging"
+        status: "published"
         summary: "Initial Sema version"
         direct_dependencies:
           structural:
@@ -2629,7 +2629,7 @@ types:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.command.interface/000"
         created: "2026-09-07T23:30:00Z"
-        status: "staging"
+        status: "published"
         summary: "Initial version."
         direct_dependencies:
           structural:
@@ -2654,7 +2654,7 @@ types:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.command.transition/000"
         created: "2026-09-07T23:30:00Z"
-        status: "staging"
+        status: "published"
         summary: "Initial version."
         direct_dependencies:
           structural:
@@ -2670,7 +2670,7 @@ types:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.dispatch.ack/000"
         created: "2026-09-07T22:35:00Z"
-        status: "staging"
+        status: "published"
         summary: "Initial Sema version"
         direct_dependencies:
           structural:
@@ -2682,13 +2682,13 @@ types:
     latest_version: "000"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "A scada node's reply to its boss that a command was refused, with the reason; correlated by the command's TriggerId, success twin gw.dispatch.ack."
+    description: "A scada node's reply to the sender of a command that it was refused, with the reason; correlated by the command's TriggerId, success twin gw.dispatch.ack."
 
     versions:
       "000":
         schema_url: "https://schemas.electricity.works/types/gw.dispatch.nack/000"
         created: "2026-09-07T22:35:00Z"
-        status: "staging"
+        status: "published"
         summary: "Initial Sema version"
         direct_dependencies:
           structural:
@@ -4559,7 +4559,7 @@ types:
       "002":
         schema_url: "https://schemas.electricity.works/types/new.command.tree/002"
         created: "2026-08-12T18:25:00Z"
-        status: "staging"
+        status: "published"
         summary: >-
           - ShNodes: spaceheat.node.gt:301 -> 302
           - Axiom 2 ActuatorLeaves: every actuator (Relay / ZeroTenOutputer / HpTwin) is a dotted-handle leaf; every dotted-handle leaf is an actuator or a command node (LocalControl / LeafAlly / PicoCycler / HpBoss / SiegLoop, or a NoActor child of the LocalControl node). gw1.actor.class:013 joins the axiom dependencies.
@@ -4928,17 +4928,18 @@ types:
             - "uuid4.str"
 
   report.event:
-    latest_version: "003"
+    latest_version: "004"
     owner: gridworks-energy
     versioning_strategy: "literal"
     description: "Event wrapper for a report payload with message tracking metadata."
 
     versions:
       "004":
-        status: "draft"
-        schema_url: "https://schemas.electricity.works/draft/types/report.event/004"
+        status: "published"
+        schema_url: "https://schemas.electricity.works/types/report.event/004"
         created: "2026-05-06T00:00:00Z"
-        summary: "Draft reinstating ReportIdentityPropagation and ReportCreatedTimePropagation axioms."
+        summary: >-
+          - Axioms: reinstate ReportIdentityPropagation, ReportCreatedTimePropagation and ReportSourcePropagation
         direct_dependencies:
           structural:
             - "left.right.dot"
@@ -5013,7 +5014,7 @@ types:
       "001":
         schema_url: "https://schemas.electricity.works/types/scada.control.capabilities/001"
         created: "2026-09-07T23:30:00Z"
-        status: "staging"
+        status: "published"
         summary: >-
           - RelayNodes[]: inline object -> spaceheat.node.gt:302
           - DacNodes[]: inline object -> spaceheat.node.gt:302
@@ -5445,7 +5446,7 @@ types:
       "302":
         schema_url: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
         created: "2026-08-12T18:25:00Z"
-        status: "staging"
+        status: "published"
         summary: >-
           - ActorClass: gw1.actor.class:011 -> 013 (in-place while staging)
           - InPowerMetering: drop (routing is owned by the consuming transactive declaration, not the node)

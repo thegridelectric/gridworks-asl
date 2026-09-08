@@ -1,0 +1,7 @@
+    def upgrade(self) -> {{ report_event_004_class_name }}:
+        """
+        - Axioms: reinstate ReportIdentityPropagation, ReportCreatedTimePropagation and ReportSourcePropagation
+        """
+        data = self.model_dump()
+        data["version"] = "004"
+        return {{ report_event_004_class_name }}.model_validate(data)

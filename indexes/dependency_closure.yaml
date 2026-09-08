@@ -2634,6 +2634,26 @@ types:
       - machine.states:000
       - report:003
       versionless_types: []
+    '004':
+      enums:
+      - fsm.report.type:000
+      - relay.closed.or.open:000
+      - relay.energization.state:000
+      formats:
+      - handle.name
+      - left.right.dot
+      - positive.int
+      - spaceheat.name
+      - utc.milliseconds
+      - utc.seconds
+      - uuid4.str
+      types:
+      - channel.readings:002
+      - fsm.atomic.report:001
+      - fsm.full.report:001
+      - machine.states:000
+      - report:003
+      versionless_types: []
   scada.board.component.gt:
     '000':
       enums: []

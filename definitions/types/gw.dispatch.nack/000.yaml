@@ -4,8 +4,8 @@ $id: "https://schemas.electricity.works/types/gw.dispatch.nack/000"
 title: "gw.dispatch.nack"
 type: object
 description: >
-  A scada node's reply to its boss that a command was refused, with the
-  reason. Sent by the target node direct to the boss that commanded it;
+  A scada node's reply that a command was refused, with the reason. Sent
+  by the target node direct to whoever sent the command, boss or not;
   taken or refused is discriminated by the reply's TypeName (the success
   twin is gw.dispatch.ack), never by inspecting a field. This is the
   reply an operator most needs: a command that was dropped for being
@@ -22,7 +22,8 @@ properties:
   ToHandle:
     $ref: "https://schemas.electricity.works/formats/handle.name"
     description: >
-      The boss that sent it.
+      The refused command's FromHandle: the sender, whether or not it is
+      the node's boss in the live command tree.
 
   TriggerId:
     $ref: "https://schemas.electricity.works/formats/uuid4.str"
@@ -67,9 +68,3 @@ examples:
 
 x-gridworks:
   owner: "gridworks-energy"
-  axioms:
-    - number: 1
-      name: "ToHandleIsBoss"
-      statement: >
-        ToHandle SHALL be the immediate boss of FromHandle (FromHandle with
-        its last dot-segment removed).

@@ -5,7 +5,7 @@ from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UTCMilliseconds
 from sema.runtime.property_format import UUID4Str
 from sema.runtime.types.old_versions.report_002 import Report002
-from sema.runtime.types.report_event import ReportEvent
+from sema.runtime.types.old_versions.report_event_003 import ReportEvent003
 
 
 class ReportEvent002(SemaType):
@@ -50,7 +50,7 @@ class ReportEvent002(SemaType):
             raise ValueError("Axiom 3 failed: src must equal report.from_g_node_alias.")
         return self
 
-    def upgrade(self) -> ReportEvent:
+    def upgrade(self) -> ReportEvent003:
         """
         - Report: report:002 -> 003
         - Axioms: remove former ReportIdentityPropagation and ReportCreatedTimePropagation
@@ -58,4 +58,4 @@ class ReportEvent002(SemaType):
         data = self.model_dump()
         data["report"] = self.report.upgrade()
         data["version"] = "003"
-        return ReportEvent.model_validate(data)
+        return ReportEvent003.model_validate(data)
