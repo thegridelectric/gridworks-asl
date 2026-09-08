@@ -94,7 +94,6 @@ examples:
     {
       "HwUid": "pico_1a2b3c",
       "ActorNodeName": "buffer",
-      "PicoAB": null,
       "CapturePeriodS": 60,
       "Samples": 1000,
       "NumSampleAverages": 10,

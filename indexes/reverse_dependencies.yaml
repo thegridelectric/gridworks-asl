@@ -170,6 +170,14 @@ types:
       used_by:
       - gw.house0.layout:000
       - gw.nolan.layout:000
+  gw.command.interface:
+    '000':
+      used_by:
+      - scada.control.capabilities:001
+  gw.command.transition:
+    '000':
+      used_by:
+      - gw.command.interface:000
   gw.hydronic:
     '000':
       used_by:
@@ -376,7 +384,6 @@ types:
       - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:013
-      - scada.control.capabilities:001
   i2c.mux:
     '000':
       used_by:
@@ -618,6 +625,7 @@ enums:
   change.relay.state:
     '000':
       used_by:
+      - gw.command.interface:000
       - relay.actor.config:001
       - relay.actor.config:002
       - relay.actor.config:003
@@ -764,6 +772,10 @@ enums:
     '002':
       used_by:
       - gw.weather.channel.gt:000
+  hp.boss.state:
+    '000':
+      used_by:
+      - gw.command.interface:000
   hz.calc.method:
     '001':
       used_by:
@@ -836,9 +848,18 @@ enums:
     '000':
       used_by:
       - tank.module.params:200
+  pico.cycler.state:
+    '000':
+      used_by:
+      - gw.command.interface:000
+  reboot.picos:
+    '000':
+      used_by:
+      - gw.command.interface:000
   relay.closed.or.open:
     '000':
       used_by:
+      - gw.command.interface:000
       - machine.states:000
       - relay.actor.config:002
       - relay.actor.config:003
@@ -913,6 +934,10 @@ enums:
       used_by:
       - gw1.zone.call.circuit:000
       - gw1.zone.thermostat:000
+  turn.hp.on.off:
+    '000':
+      used_by:
+      - gw.command.interface:000
   zone.actuator.kind:
     '000':
       used_by:
@@ -997,6 +1022,7 @@ formats:
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
+    - gw.command.interface:000
     - gw.experiment.run:000
     - gw.house0.operational.params:000
     - gw.nolan.operational.params:000
@@ -1076,6 +1102,7 @@ formats:
     - fis.connect.claims:000
     - fis.instance.authorization.event:000
     - gw.channel.noise.stats:000
+    - gw.command.transition:000
     - gw.experiment.run:000
     - gw.weather.channel.gt:000
     - gw.weather.forecast.bundle.gt:000
@@ -1282,6 +1309,7 @@ formats:
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.channel.noise.stats:000
+    - gw.command.interface:000
     - gw.experiment.run:000
     - gw.hydronic:000
     - gw1.hvac.zone:000

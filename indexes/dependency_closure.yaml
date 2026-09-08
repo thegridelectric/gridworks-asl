@@ -779,6 +779,29 @@ types:
       - utc.milliseconds
       types: []
       versionless_types: []
+  gw.command.interface:
+    '000':
+      enums:
+      - change.relay.state:000
+      - hp.boss.state:000
+      - pico.cycler.state:000
+      - reboot.picos:000
+      - relay.closed.or.open:000
+      - turn.hp.on.off:000
+      formats:
+      - left.right.dot
+      - non.empty.string
+      - spaceheat.name
+      types:
+      - gw.command.transition:000
+      versionless_types: []
+  gw.command.transition:
+    '000':
+      enums: []
+      formats:
+      - non.empty.string
+      types: []
+      versionless_types: []
   gw.dispatch.ack:
     '000':
       enums: []
@@ -2645,14 +2668,16 @@ types:
       - gw1.actor.class:012
       - gw1.actor.class:013
       - gw1.quantity:000
+      - hp.boss.state:000
+      - pico.cycler.state:000
+      - reboot.picos:000
       - relay.closed.or.open:000
-      - relay.wiring.config:000
       - spaceheat.telemetry.name:007
+      - turn.hp.on.off:000
       formats:
       - handle.name
       - left.right.dot
       - non.empty.string
-      - pascal.case
       - positive.int
       - spaceheat.name
       - utc.milliseconds
@@ -2660,8 +2685,8 @@ types:
       - uuid4.str
       types:
       - data.channel.gt:003
-      - i2c.multichannel.dt.relay.component.gt:004
-      - relay.actor.config:003
+      - gw.command.interface:000
+      - gw.command.transition:000
       - spaceheat.node.gt:302
       - spaceheat.telemetry.quantity.projection:000
       versionless_types: []

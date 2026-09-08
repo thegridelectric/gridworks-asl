@@ -648,6 +648,18 @@ enums:
     created: "2026-03-27T21:31:00Z"
     status: "published"
 
+  hp.boss.state:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "States of the heat pump command node's state machine, reported through single.machine.state."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/hp.boss.state/000"
+        created: "2026-09-07T23:30:00Z"
+        status: "staging"
+
   hz.calc.method:
     latest_version: "001"
     owner: gridworks-energy
@@ -818,6 +830,18 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/pico.cycler.event/000"
         created: "2026-09-07T22:35:00Z"
+        status: "staging"
+
+  pico.cycler.state:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "States of the scada's pico-cycler state machine, reported through single.machine.state."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/pico.cycler.state/000"
+        created: "2026-09-07T23:30:00Z"
         status: "staging"
 
   reboot.picos:
@@ -994,6 +1018,14 @@ enums:
         created: "2026-08-11T15:55:00Z"
         status: "staging"
 
+
+  turn.hp.on.off:
+    owner: gridworks-energy
+    enum_type: "literal"
+    description: "The heat pump command node's command vocabulary: a boss may ask hp-boss to let the heat pump run or hold it off."
+    schema_url: "https://schemas.electricity.works/enums/turn.hp.on.off/000"
+    created: "2026-09-07T23:30:00Z"
+    status: "staging"
 
   valve.open.or.closed:
     owner: gridworks-energy
@@ -2586,6 +2618,47 @@ types:
             - "positive.int"
             - "spaceheat.name"
             - "utc.milliseconds"
+
+  gw.command.interface:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "The commands one Spaceheat node takes and the states it reports back: event vocabulary, state vocabulary, and the transitions a command asks for."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.command.interface/000"
+        created: "2026-09-07T23:30:00Z"
+        status: "staging"
+        summary: "Initial version."
+        direct_dependencies:
+          structural:
+            - "gw.command.transition:000"
+            - "left.right.dot"
+            - "spaceheat.name"
+          axiom:
+            - "change.relay.state:000"
+            - "hp.boss.state:000"
+            - "pico.cycler.state:000"
+            - "reboot.picos:000"
+            - "relay.closed.or.open:000"
+            - "turn.hp.on.off:000"
+
+  gw.command.transition:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "One command a node takes paired with the state it leads to; the vocabulary is named by the containing command interface."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/gw.command.transition/000"
+        created: "2026-09-07T23:30:00Z"
+        status: "staging"
+        summary: "Initial version."
+        direct_dependencies:
+          structural:
+            - "non.empty.string"
 
   gw.dispatch.ack:
     latest_version: "000"
@@ -4934,24 +5007,26 @@ types:
     latest_version: "001"
     owner: gridworks-energy
     versioning_strategy: "literal"
-    description: "Projection of the SCADA control surface including controllable nodes, state channels, and relay semantic configuration."
+    description: "Projection of the SCADA control surface: the nodes the tree root commands, their state channels, and each node's command interface; the cover of the live command tree."
 
     versions:
       "001":
         schema_url: "https://schemas.electricity.works/types/scada.control.capabilities/001"
-        created: "2026-08-13T16:30:00Z"
+        created: "2026-09-07T23:30:00Z"
         status: "staging"
         summary: >-
           - RelayNodes[]: inline object -> spaceheat.node.gt:302
           - DacNodes[]: inline object -> spaceheat.node.gt:302
           - ControlChannels[]: inline object -> data.channel.gt:003
-          - I2cRelayComponent: i2c.multichannel.dt.relay.component.gt:002 -> :004
-            (cac UUID -> DeviceType, adds I2cBus)
+          - I2cRelayComponent dropped; CommandNodes[] (spaceheat.node.gt:302)
+            and CommandInterfaces[] (gw.command.interface:000) added: the
+            message is the cover of the command tree, one interface per node
+            the root commands directly
           - Axioms: add control surface consistency checks
         direct_dependencies:
           structural:
             - "data.channel.gt:003"
-            - "i2c.multichannel.dt.relay.component.gt:004"
+            - "gw.command.interface:000"
             - "left.right.dot"
             - "spaceheat.node.gt:302"
             - "utc.milliseconds"

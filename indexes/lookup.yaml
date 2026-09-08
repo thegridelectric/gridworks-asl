@@ -322,6 +322,16 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/gw.channel.noise.stats/000.yaml
+  gw.command.interface:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.command.interface/000.yaml
+  gw.command.transition:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/gw.command.transition/000.yaml
   gw.dispatch.ack:
     latest_version: '000'
     versioning_strategy: literal
@@ -1155,6 +1165,11 @@ enums:
   heatcall.source:
     enum_type: literal
     schema: definitions/enums/heatcall.source/000.yaml
+  hp.boss.state:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/hp.boss.state/000.yaml
   hz.calc.method:
     enum_type: versioned
     latest_version: '001'
@@ -1222,6 +1237,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/pico.cycler.event/000.yaml
+  pico.cycler.state:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/pico.cycler.state/000.yaml
   reboot.picos:
     enum_type: literal
     schema: definitions/enums/reboot.picos/000.yaml
@@ -1282,6 +1302,9 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/thermostat.kind/000.yaml
+  turn.hp.on.off:
+    enum_type: literal
+    schema: definitions/enums/turn.hp.on.off/000.yaml
   valve.open.or.closed:
     enum_type: literal
     schema: definitions/enums/valve.open.or.closed/000.yaml
