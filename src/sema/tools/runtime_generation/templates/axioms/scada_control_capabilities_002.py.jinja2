@@ -1,29 +1,5 @@
-from typing import Literal
-from pydantic import model_validator
-from sema.runtime.base import SemaType
-from sema.runtime.enums import Gw1ActorClass
-from sema.runtime.property_format import LeftRightDot
-from sema.runtime.property_format import UTCMilliseconds
-from sema.runtime.types.data_channel_gt import DataChannelGt
-from sema.runtime.types.gw_command_interface import GwCommandInterface
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
-
-
-class ScadaControlCapabilities(SemaType):
-    """Sema: https://schemas.electricity.works/types/scada.control.capabilities/002"""
-
-    from_g_node_alias: LeftRightDot
-    message_created_ms: UTCMilliseconds
-    relay_nodes: list[SpaceheatNodeGt]
-    dac_nodes: list[SpaceheatNodeGt]
-    command_nodes: list[SpaceheatNodeGt]
-    control_channels: list[DataChannelGt]
-    command_interfaces: list[GwCommandInterface]
-    type_name: Literal["scada.control.capabilities"] = "scada.control.capabilities"
-    version: Literal["002"] = "002"
-
     @model_validator(mode="after")
-    def check_axiom_1(self) -> "ScadaControlCapabilities":
+    def check_axiom_1(self) -> "{{ scada_control_capabilities_002_class_name }}":
         """
         Axiom 1: ActorClassConsistency
         a. All nodes in RelayNodes SHALL have ActorClass equal to Relay.
@@ -31,16 +7,16 @@ class ScadaControlCapabilities(SemaType):
         c. No node in CommandNodes SHALL have ActorClass equal to Relay or ZeroTenOutputer.
         """
         actuator_classes = {
-            Gw1ActorClass.Relay,
-            Gw1ActorClass.ZeroTenOutputer,
+            {{ gw1_actor_class_014_class_name }}.Relay,
+            {{ gw1_actor_class_014_class_name }}.ZeroTenOutputer,
         }
         for node in self.relay_nodes:
-            if node.actor_class != Gw1ActorClass.Relay:
+            if node.actor_class != {{ gw1_actor_class_014_class_name }}.Relay:
                 raise ValueError(
                     "Axiom 1 failed: every relay_nodes actor_class must be Relay."
                 )
         for node in self.dac_nodes:
-            if node.actor_class != Gw1ActorClass.ZeroTenOutputer:
+            if node.actor_class != {{ gw1_actor_class_014_class_name }}.ZeroTenOutputer:
                 raise ValueError(
                     "Axiom 1 failed: every dac_nodes actor_class must be ZeroTenOutputer."
                 )
@@ -53,7 +29,7 @@ class ScadaControlCapabilities(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_2(self) -> "ScadaControlCapabilities":
+    def check_axiom_2(self) -> "{{ scada_control_capabilities_002_class_name }}":
         """
         Axiom 2: HandleTerminalMatchesName
         For every node in RelayNodes, DacNodes and CommandNodes, Handle SHALL be present
@@ -71,7 +47,7 @@ class ScadaControlCapabilities(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_3(self) -> "ScadaControlCapabilities":
+    def check_axiom_3(self) -> "{{ scada_control_capabilities_002_class_name }}":
         """
         Axiom 3: AboutNodesAreControlNodes
         The set of ControlChannels.AboutNodeName values SHALL equal the set of
@@ -91,7 +67,7 @@ class ScadaControlCapabilities(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_4(self) -> "ScadaControlCapabilities":
+    def check_axiom_4(self) -> "{{ scada_control_capabilities_002_class_name }}":
         """
         Axiom 4: CommandInterfacesCoverTheTree
         a. The set of CommandInterfaces.ActorName values SHALL equal the set of Name
@@ -111,9 +87,7 @@ class ScadaControlCapabilities(SemaType):
             if node.handle is not None
             and not any(str(node.handle).startswith(p) for p in owner_prefixes)
         }
-        interface_names = [
-            interface.actor_name for interface in self.command_interfaces
-        ]
+        interface_names = [interface.actor_name for interface in self.command_interfaces]
         if set(interface_names) != directly_commanded:
             raise ValueError(
                 "Axiom 4 failed: command_interfaces actor_name values must equal the "

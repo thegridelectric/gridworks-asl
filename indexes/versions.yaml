@@ -567,7 +567,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Axioms mirror the names tiers: 1 TransactivePowerChannel, 2 BoardResolution, 3 CoreShNodesExistenceAndActorClass (identical wording across layout words), 4 CommandNodesExistenceAndActorClass (n, pico-cycler, hp-boss), 5 RequiredActuators (plant relays incl. the per-tank tank1 element relays + circuit relay binding), 6 RequiredHeatpumpEquipment (hp-odu, hp-ctrl-box with components; a Nolan home is a monobloc), 7 ComponentBinding (every component referenced by exactly one node), 8 RequiredSensing (kind-agnostic names incl. HP and resistive-element power channels), 9 SingleStoreTank. Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records; relay and opto components are board-generic; nodes/channels ride spaceheat.node.gt/302 + data.channel.gt/003. 10 CommandableHeatPump (biconditional: Hydronic.HpCommandNodeName ⇒ hp-odu/hp-idu/hp-ctrl-box with ComponentId, ActorClass HpTwin, handle under hp-boss; every HpTwin node is the declared one); 6's NoActor clause defers to it. 11 PrefixClosedHandles + 12 ActuatorLeaves: the layout's authored handles are the initial command tree, so the tree word's two axioms hold here too (identical wording)."
+        summary: "Axioms mirror the names tiers: 1 TransactivePowerChannel, 2 BoardResolution, 3 CoreShNodesExistenceAndActorClass (identical wording across layout words), 4 CommandNodesExistenceAndActorClass (n, five-v-boss, pico-cycler, hp-boss), 5 RequiredActuators (plant relays incl. the per-tank tank1 element relays + circuit relay binding), 6 RequiredHeatpumpEquipment (hp-odu, hp-ctrl-box with components; a Nolan home is a monobloc), 7 ComponentBinding (every component referenced by exactly one node), 8 RequiredSensing (kind-agnostic names incl. HP and resistive-element power channels), 9 SingleStoreTank. Components are the cac-free DeviceType versions; DeviceTypes holds the specialized <family>.device.type.gt records; relay and opto components are board-generic; nodes/channels ride spaceheat.node.gt/303 + data.channel.gt/003. 10 CommandableHeatPump (biconditional: Hydronic.HpCommandNodeName ⇒ hp-odu/hp-idu/hp-ctrl-box with ComponentId, ActorClass HpTwin, handle under hp-boss; every HpTwin node is the declared one); 6's NoActor clause defers to it. 11 PrefixClosedHandles + 12 ActuatorLeaves: the layout's authored handles are the initial command tree, so the tree word's two axioms hold here too (identical wording)."
 
   gw.nolan.operational.params:
     latest_version: "000"
@@ -1047,7 +1047,7 @@ types:
     versions:
       "013":
         summary: >
-          - ShNodes: spaceheat.node.gt:301 -> 302
+          - ShNodes: spaceheat.node.gt:301 -> 303
           - DataChannels: data.channel.gt:002 -> 003
           - TankModuleComponents / FlowModuleComponents / I2cRelayComponent: cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module 011->012, sim.pico.tank.module 000->001, pico.flow.module 000->001, i2c.multichannel.dt.relay 003->004). Context-dependent: the embedded components' DeviceType lives on their cac, not the component.
           - SystemMode -> ActuationAuthority x ServiceMode split (Heating -> Active/Heating, Standby -> Standby/Heating, MonitorOnly -> MonitorOnly/Heating; mechanical, not the blocking reason for context).
@@ -1122,9 +1122,13 @@ types:
         summary: "Initial Sema version"
 
   new.command.tree:
-    latest_version: "002"
+    latest_version: "003"
     versioning_strategy: "literal"
     versions:
+      "003":
+        summary: >
+          - ShNodes: spaceheat.node.gt:302 -> 303
+          - Axiom 2 ActuatorLeaves: FiveVBoss joins the command-node classes
       "002":
         summary: >
           - ShNodes: spaceheat.node.gt:301 -> 302
@@ -1258,9 +1262,14 @@ types:
         summary: "- Initial version. ComponentId, DeviceType (gw1.device.type board kind), optional I2cAddressList (field-chosen addresses, index-aligned with the record's Expanders), DisplayName, HwUid."
 
   scada.control.capabilities:
-    latest_version: "001"
+    latest_version: "002"
     versioning_strategy: "literal"
     versions:
+      "002":
+        summary: >
+          - RelayNodes[], DacNodes[], CommandNodes[]: spaceheat.node.gt:302 -> 303
+          - A node may carry more than one CommandInterfaces entry, one per
+            command vocabulary (five-v-boss: turn.5v.on.off and reboot.picos)
       "001":
         summary: >
           - RelayNodes[]: inline object -> spaceheat.node.gt:302
@@ -1405,9 +1414,11 @@ types:
         summary: "Historical back-fill from S3 wire evidence (gwproto era). As v002 but without LatestStateList (readings only). Authored as the shape carried from 2024-03-06 on; the earlier nested-Snapshot shape under the same version label predates the S3 archive."
 
   spaceheat.node.gt:
-    latest_version: "302"
+    latest_version: "303"
     versioning_strategy: "literal"
     versions:
+      "303":
+        summary: "- ActorClass: gw1.actor.class:013 -> 014 (adds FiveVBoss)"
       "302":
         summary: >
           - ActorClass: gw1.actor.class:011 -> 013 (in-place while staging)
@@ -1584,6 +1595,12 @@ enums:
     versions:
       "000": {}
 
+  five.v.boss.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
   fsm.report.type:
     enum_type: "literal"
     note: "This enum is literal; version 000 is immutable and exclusive."
@@ -1654,6 +1671,9 @@ enums:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:
+      "014":
+        added_values:
+          - "FiveVBoss"
       "013":
         added_values:
           - "I2cDacWriter"
@@ -1982,6 +2002,12 @@ enums:
       "000": {}
 
   thermostat.kind:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  turn.5v.on.off:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

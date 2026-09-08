@@ -130,7 +130,7 @@ class LayoutLite012(SemaType):
 
     def upgrade(self) -> "LayoutLite":
         """
-        - ShNodes: spaceheat.node.gt:301 -> 302
+        - ShNodes: spaceheat.node.gt:301 -> 303
         - DataChannels: data.channel.gt:002 -> 003
         - TankModuleComponents / FlowModuleComponents / I2cRelayComponent: cac-carrying component versions -> cac-free DeviceType versions (pico.tank.module 011->012, sim.pico.tank.module 000->001, pico.flow.module 000->001, i2c.multichannel.dt.relay 003->004). Context-dependent: the embedded components' DeviceType lives on their cac, not the component.
         - SystemMode -> ActuationAuthority x ServiceMode split (Heating -> Active/Heating, Standby -> Standby/Heating, MonitorOnly -> MonitorOnly/Heating; mechanical, not the blocking reason for context).

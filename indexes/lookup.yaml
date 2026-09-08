@@ -732,9 +732,10 @@ types:
     versions:
       '000': definitions/types/market.product/000.yaml
   new.command.tree:
-    latest_version: '002'
+    latest_version: '003'
     versioning_strategy: literal
     versions:
+      '003': definitions/types/new.command.tree/003.yaml
       '002': definitions/types/new.command.tree/002.yaml
       '001': definitions/types/new.command.tree/001.yaml
       '000': definitions/types/new.command.tree/000.yaml
@@ -811,9 +812,10 @@ types:
     versions:
       '000': definitions/types/scada.board.component.gt/000.yaml
   scada.control.capabilities:
-    latest_version: '001'
+    latest_version: '002'
     versioning_strategy: literal
     versions:
+      '002': definitions/types/scada.control.capabilities/002.yaml
       '001': definitions/types/scada.control.capabilities/001.yaml
       '000': definitions/types/scada.control.capabilities/000.yaml
   scada.params:
@@ -900,9 +902,10 @@ types:
       '002': definitions/types/snapshot.spaceheat/002.yaml
       '001': definitions/types/snapshot.spaceheat/001.yaml
   spaceheat.node.gt:
-    latest_version: '302'
+    latest_version: '303'
     versioning_strategy: literal
     versions:
+      '303': definitions/types/spaceheat.node.gt/303.yaml
       '302': definitions/types/spaceheat.node.gt/302.yaml
       '301': definitions/types/spaceheat.node.gt/301.yaml
       '300': definitions/types/spaceheat.node.gt/300.yaml
@@ -1012,6 +1015,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/fis.authorization.reason/000.yaml
+  five.v.boss.state:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/five.v.boss.state/000.yaml
   fsm.report.type:
     enum_type: literal
     schema: definitions/enums/fsm.report.type/000.yaml
@@ -1067,8 +1075,9 @@ enums:
       '000': definitions/enums/gw.weather.forecast.fidelity/000.yaml
   gw1.actor.class:
     enum_type: versioned
-    latest_version: '013'
+    latest_version: '014'
     versions:
+      '014': definitions/enums/gw1.actor.class/014.yaml
       '013': definitions/enums/gw1.actor.class/013.yaml
       '012': definitions/enums/gw1.actor.class/012.yaml
       '011': definitions/enums/gw1.actor.class/011.yaml
@@ -1303,6 +1312,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/thermostat.kind/000.yaml
+  turn.5v.on.off:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/turn.5v.on.off/000.yaml
   turn.hp.on.off:
     enum_type: literal
     schema: definitions/enums/turn.hp.on.off/000.yaml

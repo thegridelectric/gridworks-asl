@@ -1,22 +1,5 @@
-from typing import Literal
-from pydantic import model_validator
-from sema.runtime.base import SemaType
-from sema.runtime.property_format import LeftRightDot
-from sema.runtime.property_format import UTCMilliseconds
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
-
-
-class NewCommandTree(SemaType):
-    """Sema: https://schemas.electricity.works/types/new.command.tree/003"""
-
-    from_g_node_alias: LeftRightDot
-    sh_nodes: list[SpaceheatNodeGt]
-    unix_ms: UTCMilliseconds
-    type_name: Literal["new.command.tree"] = "new.command.tree"
-    version: Literal["003"] = "003"
-
     @model_validator(mode="after")
-    def check_axiom_1(self) -> "NewCommandTree":
+    def check_axiom_1(self) -> "{{ new_command_tree_003_class_name }}":
         """
         Axiom 1: PrefixClosedHandles
         Let the effective handle of an ShNode be its Handle if present, otherwise
@@ -41,7 +24,7 @@ class NewCommandTree(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_2(self) -> "NewCommandTree":
+    def check_axiom_2(self) -> "{{ new_command_tree_003_class_name }}":
         """
         Axiom 2: ActuatorLeaves
         Let the effective handle of an ShNode be its Handle if present, otherwise
@@ -56,14 +39,7 @@ class NewCommandTree(SemaType):
         b. Every leaf SHALL be an actuator or a command node.
         """
         actuator_classes = {"Relay", "ZeroTenOutputer", "HpTwin"}
-        command_classes = {
-            "LocalControl",
-            "LeafAlly",
-            "FiveVBoss",
-            "PicoCycler",
-            "HpBoss",
-            "SiegLoop",
-        }
+        command_classes = {"LocalControl", "LeafAlly", "FiveVBoss", "PicoCycler", "HpBoss", "SiegLoop"}
         by_handle = {
             (node.handle if node.handle is not None else node.name): node
             for node in self.sh_nodes

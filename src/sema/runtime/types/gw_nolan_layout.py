@@ -223,12 +223,18 @@ class GwNolanLayout(SemaType):
         Axiom 4: CommandNodesExistenceAndActorClass
         ShNodes SHALL contain a node with each of the following Name / ActorClass pairs,
         and no additional ShNode with any of these Names SHALL exist: "n" → ActorClass
-        "NoActor" "pico-cycler" → ActorClass "PicoCycler" "hp-boss" → ActorClass
+        "NoActor" "five-v-boss" → ActorClass "FiveVBoss" "pico-cycler" → ActorClass "PicoCycler"
+        "hp-boss" → ActorClass
         "HpBoss" The effective handle of "n" SHALL be "auto.lc.n". (hp-boss is a command
         node in every layout: hp-scada-ops-relay reports to it in all states, dormant
         when no heat pump is commandable.)
         """
-        pairs = (("n", "NoActor"), ("pico-cycler", "PicoCycler"), ("hp-boss", "HpBoss"))
+        pairs = (
+            ("n", "NoActor"),
+            ("five-v-boss", "FiveVBoss"),
+            ("pico-cycler", "PicoCycler"),
+            ("hp-boss", "HpBoss"),
+        )
         nodes = [n for n in (self.sh_nodes or [])]
         for name, actor_class in pairs:
             matches = [n for n in nodes if n.name == name]
@@ -536,8 +542,8 @@ class GwNolanLayout(SemaType):
         its Name. A leaf is an ShNode whose effective handle contains a dot and is
         the parent prefix of no other effective handle. An actuator is an ShNode
         whose ActorClass is "Relay", "ZeroTenOutputer" or "HpTwin". A command node
-        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "PicoCycler",
-        "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
+        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "FiveVBoss",
+        "PicoCycler", "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
         effective handle's parent prefix is the effective handle of an ShNode with
         ActorClass "LocalControl".
         a. Every actuator SHALL have a dotted effective handle and SHALL be a leaf.
@@ -547,6 +553,7 @@ class GwNolanLayout(SemaType):
         command_classes = {
             "LocalControl",
             "LeafAlly",
+            "FiveVBoss",
             "PicoCycler",
             "HpBoss",
             "SiegLoop",

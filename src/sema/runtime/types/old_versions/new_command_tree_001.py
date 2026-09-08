@@ -3,9 +3,9 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UTCMilliseconds
-from sema.runtime.types.new_command_tree import NewCommandTree
+from sema.runtime.types.old_versions.new_command_tree_002 import NewCommandTree002
 from sema.runtime.types.old_versions.spaceheat_node_gt_301 import SpaceheatNodeGt301
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
+from sema.runtime.types.old_versions.spaceheat_node_gt_302 import SpaceheatNodeGt302
 
 
 class NewCommandTree001(SemaType):
@@ -42,18 +42,18 @@ class NewCommandTree001(SemaType):
                     )
         return self
 
-    def upgrade(self) -> NewCommandTree:
+    def upgrade(self) -> NewCommandTree002:
         """
         - ShNodes: spaceheat.node.gt:301 -> 302
         - Axiom 2 ActuatorLeaves: every actuator (Relay / ZeroTenOutputer / HpTwin) is a dotted-handle leaf; every dotted-handle leaf is an actuator or a command node (LocalControl / LeafAlly / PicoCycler / HpBoss / SiegLoop, or a NoActor child of the LocalControl node). gw1.actor.class:013 joins the axiom dependencies.
         """
         data = self.model_dump()
-        lifted: list[SpaceheatNodeGt] = []
+        lifted: list[SpaceheatNodeGt302] = []
         for node in self.sh_nodes:
             current: SemaType = node
-            while not isinstance(current, SpaceheatNodeGt):
+            while not isinstance(current, SpaceheatNodeGt302):
                 current = current.upgrade()
             lifted.append(current)
         data["sh_nodes"] = lifted
         data["version"] = "002"
-        return NewCommandTree.model_validate(data)
+        return NewCommandTree002.model_validate(data)

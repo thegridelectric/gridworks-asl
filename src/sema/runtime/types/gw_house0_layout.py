@@ -163,6 +163,7 @@ class GwHouse0Layout(SemaType):
           "n"           → ActorClass "NoActor"
           "backup"      → ActorClass "NoActor"
           "scada-blind" → ActorClass "NoActor"
+          "five-v-boss" → ActorClass "FiveVBoss"
           "pico-cycler" → ActorClass "PicoCycler"
           "hp-boss"     → ActorClass "HpBoss"
           "sieg-loop"   → ActorClass "SiegLoop"
@@ -176,6 +177,7 @@ class GwHouse0Layout(SemaType):
             "n": "NoActor",
             "backup": "NoActor",
             "scada-blind": "NoActor",
+            "five-v-boss": "FiveVBoss",
             "pico-cycler": "PicoCycler",
             "hp-boss": "HpBoss",
             "sieg-loop": "SiegLoop",
@@ -600,8 +602,8 @@ class GwHouse0Layout(SemaType):
         its Name. A leaf is an ShNode whose effective handle contains a dot and is
         the parent prefix of no other effective handle. An actuator is an ShNode
         whose ActorClass is "Relay", "ZeroTenOutputer" or "HpTwin". A command node
-        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "PicoCycler",
-        "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
+        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "FiveVBoss",
+        "PicoCycler", "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
         effective handle's parent prefix is the effective handle of an ShNode with
         ActorClass "LocalControl".
         a. Every actuator SHALL have a dotted effective handle and SHALL be a leaf.
@@ -611,6 +613,7 @@ class GwHouse0Layout(SemaType):
         command_classes = {
             "LocalControl",
             "LeafAlly",
+            "FiveVBoss",
             "PicoCycler",
             "HpBoss",
             "SiegLoop",

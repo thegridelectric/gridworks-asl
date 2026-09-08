@@ -29,7 +29,7 @@ properties:
   ShNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/303"
     description: >
       List of Spaceheat nodes representing operational roles in the system.
       Keys are SpaceheatName identifiers. Each node corresponds to a functional
@@ -159,6 +159,7 @@ x-gridworks:
         ShNodes SHALL contain a node with each of the following Name / ActorClass pairs, and no
         additional ShNode with any of these Names SHALL exist:
           "n"           → ActorClass "NoActor"
+          "five-v-boss" → ActorClass "FiveVBoss"
           "pico-cycler" → ActorClass "PicoCycler"
           "hp-boss"     → ActorClass "HpBoss"
         The effective handle of "n" SHALL be "auto.lc.n". (hp-boss is a command node in every
@@ -265,8 +266,8 @@ x-gridworks:
         its Name. A leaf is an ShNode whose effective handle contains a dot and is
         the parent prefix of no other effective handle. An actuator is an ShNode
         whose ActorClass is "Relay", "ZeroTenOutputer" or "HpTwin". A command node
-        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "PicoCycler",
-        "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
+        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "FiveVBoss",
+        "PicoCycler", "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
         effective handle's parent prefix is the effective handle of an ShNode with
         ActorClass "LocalControl".
         a. Every actuator SHALL have a dotted effective handle and SHALL be a leaf.

@@ -1,0 +1,7 @@
+    def upgrade(self) -> {{ spaceheat_node_gt_303_class_name }}:
+        """
+        - ActorClass: gw1.actor.class:013 -> 014 (adds FiveVBoss)
+        """
+        data = self.model_dump()
+        data["version"] = "303"
+        return {{ spaceheat_node_gt_303_class_name }}.model_validate(data)

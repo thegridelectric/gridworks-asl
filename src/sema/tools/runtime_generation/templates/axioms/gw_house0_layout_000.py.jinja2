@@ -84,6 +84,7 @@
           "n"           → ActorClass "NoActor"
           "backup"      → ActorClass "NoActor"
           "scada-blind" → ActorClass "NoActor"
+          "five-v-boss" → ActorClass "FiveVBoss"
           "pico-cycler" → ActorClass "PicoCycler"
           "hp-boss"     → ActorClass "HpBoss"
           "sieg-loop"   → ActorClass "SiegLoop"
@@ -97,6 +98,7 @@
             "n": "NoActor",
             "backup": "NoActor",
             "scada-blind": "NoActor",
+            "five-v-boss": "FiveVBoss",
             "pico-cycler": "PicoCycler",
             "hp-boss": "HpBoss",
             "sieg-loop": "SiegLoop",
@@ -510,15 +512,15 @@
         its Name. A leaf is an ShNode whose effective handle contains a dot and is
         the parent prefix of no other effective handle. An actuator is an ShNode
         whose ActorClass is "Relay", "ZeroTenOutputer" or "HpTwin". A command node
-        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "PicoCycler",
-        "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
+        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "FiveVBoss",
+        "PicoCycler", "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
         effective handle's parent prefix is the effective handle of an ShNode with
         ActorClass "LocalControl".
         a. Every actuator SHALL have a dotted effective handle and SHALL be a leaf.
         b. Every leaf SHALL be an actuator or a command node.
         """
         actuator_classes = {"Relay", "ZeroTenOutputer", "HpTwin"}
-        command_classes = {"LocalControl", "LeafAlly", "PicoCycler", "HpBoss", "SiegLoop"}
+        command_classes = {"LocalControl", "LeafAlly", "FiveVBoss", "PicoCycler", "HpBoss", "SiegLoop"}
         by_handle = {
             (node.handle if node.handle is not None else node.name): node
             for node in self.sh_nodes

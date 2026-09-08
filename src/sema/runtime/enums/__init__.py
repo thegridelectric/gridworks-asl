@@ -8,6 +8,7 @@ from sema.runtime.enums.change_zone_call_source import ChangeZoneCallSource
 from sema.runtime.enums.day_of_week import DayOfWeek
 from sema.runtime.enums.fis_authorization_decision import FisAuthorizationDecision
 from sema.runtime.enums.fis_authorization_reason import FisAuthorizationReason
+from sema.runtime.enums.five_v_boss_state import FiveVBossState
 from sema.runtime.enums.fsm_report_type import FsmReportType
 from sema.runtime.enums.g_node_instance_status import GNodeInstanceStatus
 from sema.runtime.enums.g_node_instance_transport import GNodeInstanceTransport
@@ -75,6 +76,7 @@ from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
 from sema.runtime.enums.temp_calc_method import TempCalcMethod
 from sema.runtime.enums.thermistor_data_method import ThermistorDataMethod
 from sema.runtime.enums.thermostat_kind import ThermostatKind
+from sema.runtime.enums.turn_5v_on_off import Turn5vOnOff
 from sema.runtime.enums.turn_hp_on_off import TurnHpOnOff
 from sema.runtime.enums.valve_open_or_closed import ValveOpenOrClosed
 from sema.runtime.enums.zone_actuator_kind import ZoneActuatorKind
@@ -97,6 +99,7 @@ __all__ = [
     "DayOfWeek",
     "FisAuthorizationDecision",
     "FisAuthorizationReason",
+    "FiveVBossState",
     "FsmReportType",
     "GNodeInstanceStatus",
     "GNodeInstanceTransport",
@@ -156,6 +159,7 @@ __all__ = [
     "TempCalcMethod",
     "ThermistorDataMethod",
     "ThermostatKind",
+    "Turn5vOnOff",
     "TurnHpOnOff",
     "ValveOpenOrClosed",
     "ZoneActuatorKind",

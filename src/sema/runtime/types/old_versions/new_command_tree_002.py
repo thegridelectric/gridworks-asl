@@ -3,20 +3,21 @@ from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.property_format import LeftRightDot
 from sema.runtime.property_format import UTCMilliseconds
-from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
+from sema.runtime.types.new_command_tree import NewCommandTree
+from sema.runtime.types.old_versions.spaceheat_node_gt_302 import SpaceheatNodeGt302
 
 
-class NewCommandTree(SemaType):
-    """Sema: https://schemas.electricity.works/types/new.command.tree/003"""
+class NewCommandTree002(SemaType):
+    """Sema: https://schemas.electricity.works/types/new.command.tree/002"""
 
     from_g_node_alias: LeftRightDot
-    sh_nodes: list[SpaceheatNodeGt]
+    sh_nodes: list[SpaceheatNodeGt302]
     unix_ms: UTCMilliseconds
     type_name: Literal["new.command.tree"] = "new.command.tree"
-    version: Literal["003"] = "003"
+    version: Literal["002"] = "002"
 
     @model_validator(mode="after")
-    def check_axiom_1(self) -> "NewCommandTree":
+    def check_axiom_1(self) -> "NewCommandTree002":
         """
         Axiom 1: PrefixClosedHandles
         Let the effective handle of an ShNode be its Handle if present, otherwise
@@ -41,15 +42,15 @@ class NewCommandTree(SemaType):
         return self
 
     @model_validator(mode="after")
-    def check_axiom_2(self) -> "NewCommandTree":
+    def check_axiom_2(self) -> "NewCommandTree002":
         """
         Axiom 2: ActuatorLeaves
         Let the effective handle of an ShNode be its Handle if present, otherwise
         its Name. A leaf is an ShNode whose effective handle contains a dot and is
         the parent prefix of no other effective handle. An actuator is an ShNode
         whose ActorClass is "Relay", "ZeroTenOutputer" or "HpTwin". A command node
-        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "FiveVBoss",
-        "PicoCycler", "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
+        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "PicoCycler",
+        "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
         effective handle's parent prefix is the effective handle of an ShNode with
         ActorClass "LocalControl".
         a. Every actuator SHALL have a dotted effective handle and SHALL be a leaf.
@@ -59,7 +60,6 @@ class NewCommandTree(SemaType):
         command_classes = {
             "LocalControl",
             "LeafAlly",
-            "FiveVBoss",
             "PicoCycler",
             "HpBoss",
             "SiegLoop",
@@ -97,3 +97,14 @@ class NewCommandTree(SemaType):
                         "actuator nor a command node."
                     )
         return self
+
+    def upgrade(self) -> NewCommandTree:
+        """
+        - ShNodes: spaceheat.node.gt:302 -> 303
+        - Axiom 2 ActuatorLeaves: FiveVBoss joins the command-node classes
+        """
+        data = self.model_dump()
+        for node in data["sh_nodes"]:
+            node["version"] = "303"
+        data["version"] = "003"
+        return NewCommandTree.model_validate(data)

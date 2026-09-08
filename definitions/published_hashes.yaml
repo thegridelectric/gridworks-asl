@@ -48,6 +48,8 @@ enums:
     '000': sha256:492ac9defec62dc025adc0dccf8d2198acd9fb22d1c21f56ac33f07c06fbbee2
   gw.market.product.name:
     '000': sha256:b1c91cdca4978f783c836abd6e1e646df2fd940c2cd240cc4f852788e4046324
+  gw.scada.cmd.refusal.reason:
+    '000': sha256:b0ecf6dc537707fc149d5ff96f10764740264799902e5eb236ace7c4906090ca
   gw.weather.forecast.fidelity:
     '000': sha256:aba01cfd92b80487f55a9baaf9228b9086445f3a727c63203d14cb34a7560007
   gw1.actor.class:
@@ -87,6 +89,8 @@ enums:
     '001': sha256:d5c1897ec2006fdf0e8a53c594738efe335c14292674af81911134443b6b75da
     '002': sha256:d12e4b1cdc84c6c018d2466b813c486546525a82774776daab9ae807276f9d33
   heatcall.source: sha256:ebcfcba38a9a0c299e2f68f87a4e3aeb6c4aa109dfd2b82f4dacee951212340b
+  hp.boss.state:
+    '000': sha256:7c83f2c40c71bd2e4b01e2ccd87febf3f77934247e14e26f0a7f342330f5a072
   hz.calc.method:
     '001': sha256:bb80a91e5401b4984e4f68b0639d9371ecbe2b5c46abde78d8e8bf79aa5900eb
   i2c.operation:
@@ -98,6 +102,11 @@ enums:
     '000': sha256:af16ab9e45c4a60c9026b46ae64e004b2bfb3319e5f16a8778780a0e0b0eabae
   market.type.name:
     '000': sha256:8eebaee538a7b5ba69d52ba0ad6439d56ef7014d892dc359fcf04a487a9f1d2b
+  pico.cycler.event:
+    '000': sha256:9154b7a840064c97fd0f7dcee563bdd8d7c99716162adeff187cde5eec514589
+  pico.cycler.state:
+    '000': sha256:8056fb8f0b470a69862583c01f68992d5c4b1d722edde049063a917df68ec6dd
+  reboot.picos: sha256:7a3b4ab84f2e0ee3248f56d193df419d1c566a93d1ca6cd1e113bb36c0f376a7
   relay.closed.or.open: sha256:84aac238f3b62c2fc5f8eaff3ed93c968c01c9928533e11989bc86a1549f6667
   relay.energization.state: sha256:c7bed48839e9740afd960c0a354f57c18fd18ce35f459754877a0d5c12a91a04
   relay.open.or.closed: sha256:c22cf9cde67209cfb4ba1c3dddfe8ba639a5c4bf19c8054aae24946bfe38854a
@@ -114,17 +123,10 @@ enums:
     '001': sha256:b20627885ed36e161aba50aea71ebf9bae27319518c6b8a4330245eba51a7364
   temp.calc.method:
     '000': sha256:d2062d94e196d585c3c3f7ad60ca8165b1980b0a2d5a2f1cf5039d303d179817
-  reboot.picos: sha256:7a3b4ab84f2e0ee3248f56d193df419d1c566a93d1ca6cd1e113bb36c0f376a7
   turn.hp.on.off: sha256:e2e8cea2c30509358ef0713a41dd4fd3168ed705856f0ea8ff6ed0a82edd5b8d
-  gw.scada.cmd.refusal.reason:
-    '000': sha256:b0ecf6dc537707fc149d5ff96f10764740264799902e5eb236ace7c4906090ca
-  hp.boss.state:
-    '000': sha256:7c83f2c40c71bd2e4b01e2ccd87febf3f77934247e14e26f0a7f342330f5a072
-  pico.cycler.event:
-    '000': sha256:9154b7a840064c97fd0f7dcee563bdd8d7c99716162adeff187cde5eec514589
-  pico.cycler.state:
-    '000': sha256:8056fb8f0b470a69862583c01f68992d5c4b1d722edde049063a917df68ec6dd
 types:
+  analog.dispatch:
+    '000': sha256:c8b3a6e411bd7e612fcaf1d824f0707c312eebb8d4092382ca98d1adf1b5e4f1
   atn.bid:
     '001': sha256:6de266f87e83d36a4899862aa169755977c38f84c47850de0c6ab40cdec13214
     '002': sha256:8f93f00ce2f19d2d8dd40d224926fecda4b378d47ae5ac6dee31626adee79679
@@ -226,6 +228,14 @@ types:
     '000': sha256:13163f1f30e486ac8746a662036386dcd05559d68d7aea681fd0014e5ba9b6ac
   gw.channel.noise.stats:
     '000': sha256:d8842c26a3659fc118b007cead6fc275c24c63e0b04684b6d4fab9d057c71e20
+  gw.command.interface:
+    '000': sha256:08b292a559690ff160c85e0da54a541030bbbab5fd2395db02429ae341579667
+  gw.command.transition:
+    '000': sha256:3e6334ffe6b55f0c9115c8f08eb78e373b81b29c507317fb8ea689d149f966e3
+  gw.dispatch.ack:
+    '000': sha256:d6e3d243462366c103f20becc98912922b91f454044a046ff19a04c07fdd35ac
+  gw.dispatch.nack:
+    '000': sha256:a35d69a7acb0a96791ba74ef1f880d1570d74a52577d6581f866de8a024e8b9a
   gw.experiment.run:
     '000': sha256:99b1fec0f628c5d7289908af7714cdf85d441ae5efc03f6acfa411262f983d52
   gw.readings:
@@ -322,7 +332,7 @@ types:
   new.command.tree:
     '000': sha256:701f13cb81b52d44a5ff701490f1bb42185f283b86040c7d94450cd33eddfb80
     '001': sha256:15a6a5d408555d79ebf7157dd1b1a6a72c35be89fa7bf39eef419ae9279940ae
-    '002': sha256:a1aa7e8fe3798615930d7bc393e1b106ad9edba6bf2da0e9ab795c7a0e3b6e3d
+    '002': sha256:dea6feee4f6f2537afcf5b402e1ab3f17f88bd8cf2881c53e41e1626cf9b7cd3
   pico.flow.module.component.gt:
     '000': sha256:53ec624eff03632e8417421cecf2c0b7c02169821f500eb5a1511a4bde3495ab
   pico.tank.module.component.gt:
@@ -404,13 +414,3 @@ types:
     '000': sha256:0505741db7f3ba845fe0b7dfb9e5f88eca9f3cc6e9e7510b22f3e73b0103e8fe
   weather.forecast:
     '000': sha256:d5898d35fd8250e8c80811e6df2c90c66cddc316efaf4ca36bc4fdd38c931601
-  analog.dispatch:
-    '000': sha256:c8b3a6e411bd7e612fcaf1d824f0707c312eebb8d4092382ca98d1adf1b5e4f1
-  gw.command.transition:
-    '000': sha256:3e6334ffe6b55f0c9115c8f08eb78e373b81b29c507317fb8ea689d149f966e3
-  gw.dispatch.ack:
-    '000': sha256:d6e3d243462366c103f20becc98912922b91f454044a046ff19a04c07fdd35ac
-  gw.dispatch.nack:
-    '000': sha256:a35d69a7acb0a96791ba74ef1f880d1570d74a52577d6581f866de8a024e8b9a
-  gw.command.interface:
-    '000': sha256:08b292a559690ff160c85e0da54a541030bbbab5fd2395db02429ae341579667

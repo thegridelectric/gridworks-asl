@@ -174,6 +174,18 @@ the outer type's `<a>` and `<b>` must be lifted via its own `.upgrade()`
 "Nested Upgrades") — a dependency delta in the registry with no matching
 lift in the body is the bug class this coupling exists to catch.
 
+A superseded version must carry an `examples:` block
+(`tests/registry/test_superseded_examples.py`). If the version being
+superseded was published without one, add the example and re-pin its hash:
+
+```bash
+uv run python -m sema.tools.published_hashes --rewrite
+```
+
+The pin is a byte hash of the file, so it trips on the example even though
+the example changes nothing the schema validates. Re-pinning is the
+sanctioned correction for that case, and only that case.
+
 ## Vocabulary Snapshots
 
 Instead of distributing a shared runtime package, Sema produces **self-contained vocabulary snapshots**.

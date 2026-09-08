@@ -1,0 +1,12 @@
+    def upgrade(self) -> {{ scada_control_capabilities_002_class_name }}:
+        """
+        - RelayNodes[], DacNodes[], CommandNodes[]: spaceheat.node.gt:302 -> 303
+        - A node may carry more than one CommandInterfaces entry, one per
+          command vocabulary (five-v-boss: turn.5v.on.off and reboot.picos)
+        """
+        data = self.model_dump()
+        for key in ("relay_nodes", "dac_nodes", "command_nodes"):
+            for node in data[key]:
+                node["version"] = "303"
+        data["version"] = "002"
+        return {{ scada_control_capabilities_002_class_name }}.model_validate(data)

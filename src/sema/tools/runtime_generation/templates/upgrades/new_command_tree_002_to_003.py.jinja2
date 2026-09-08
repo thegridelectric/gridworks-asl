@@ -1,0 +1,10 @@
+    def upgrade(self) -> {{ new_command_tree_003_class_name }}:
+        """
+        - ShNodes: spaceheat.node.gt:302 -> 303
+        - Axiom 2 ActuatorLeaves: FiveVBoss joins the command-node classes
+        """
+        data = self.model_dump()
+        for node in data["sh_nodes"]:
+            node["version"] = "303"
+        data["version"] = "003"
+        return {{ new_command_tree_003_class_name }}.model_validate(data)

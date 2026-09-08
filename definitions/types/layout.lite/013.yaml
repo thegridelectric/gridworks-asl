@@ -83,7 +83,7 @@ properties:
   ShNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/303"
     description: >
       Spaceheat nodes available in the running SCADA context.
 

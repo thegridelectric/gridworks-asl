@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://schemas.electricity.works/types/new.command.tree/002"
+$id: "https://schemas.electricity.works/types/new.command.tree/003"
 
 title: "new.command.tree"
 type: object
@@ -26,7 +26,7 @@ properties:
   ShNodes:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/302"
+      $ref: "https://schemas.electricity.works/types/spaceheat.node.gt/303"
     description: >
       The complete set of SpaceheatNodes that make up the command tree. The
       handle of each node encodes its position in the hierarchy: a node's
@@ -41,7 +41,7 @@ properties:
     const: "new.command.tree"
 
   Version:
-    const: "002"
+    const: "003"
 
 required:
   - FromGNodeAlias
@@ -57,11 +57,11 @@ examples:
     {
       "FromGNodeAlias": "hw1.isone.me.versant.keene.spruce.scada",
       "ShNodes": [
-        {"Name": "s", "ActorClass": "PrimaryScada", "ShNodeId": "8f3c27de-6a41-4bb0-9df2-51b7ac94e203", "TypeName": "spaceheat.node.gt", "Version": "302"}
+        {"Name": "s", "ActorClass": "PrimaryScada", "ShNodeId": "8f3c27de-6a41-4bb0-9df2-51b7ac94e203", "TypeName": "spaceheat.node.gt", "Version": "303"}
       ],
       "UnixMs": 1757366400000,
       "TypeName": "new.command.tree",
-      "Version": "002"
+      "Version": "003"
     }
 
 x-gridworks:
@@ -81,8 +81,8 @@ x-gridworks:
         its Name. A leaf is an ShNode whose effective handle contains a dot and is
         the parent prefix of no other effective handle. An actuator is an ShNode
         whose ActorClass is "Relay", "ZeroTenOutputer" or "HpTwin". A command node
-        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "PicoCycler",
-        "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
+        is an ShNode whose ActorClass is "LocalControl", "LeafAlly", "FiveVBoss",
+        "PicoCycler", "HpBoss" or "SiegLoop", or whose ActorClass is "NoActor" and whose
         effective handle's parent prefix is the effective handle of an ShNode with
         ActorClass "LocalControl".
         a. Every actuator SHALL have a dotted effective handle and SHALL be a leaf.
@@ -129,7 +129,7 @@ x-gridworks:
     carries no state, so dormancy is enforced in scada code and asserted by
     its tests, not by this word.
 
-    This version accepts ShNodes at spaceheat.node.gt:302 only. Earlier versions
+    This version accepts ShNodes at spaceheat.node.gt:303 only. Earlier versions
     accepted a oneOf of several node versions in one payload; that was an early
     lenience accommodating back-dated production traffic, not a pattern to copy
     (see the v000 note).

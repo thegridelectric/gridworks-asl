@@ -79,6 +79,7 @@ types:
       - gw.readings:000
       - layout.lite:013
       - scada.control.capabilities:001
+      - scada.control.capabilities:002
   derived.channel.gt:
     '000':
       used_by:
@@ -174,6 +175,7 @@ types:
     '000':
       used_by:
       - scada.control.capabilities:001
+      - scada.control.capabilities:002
   gw.command.transition:
     '000':
       used_by:
@@ -581,11 +583,15 @@ types:
       - new.command.tree:001
     '302':
       used_by:
+      - new.command.tree:002
+      - scada.control.capabilities:001
+    '303':
+      used_by:
       - gw.house0.layout:000
       - gw.nolan.layout:000
       - layout.lite:013
-      - new.command.tree:002
-      - scada.control.capabilities:001
+      - new.command.tree:003
+      - scada.control.capabilities:002
   spaceheat.telemetry.quantity.projection:
     '000':
       used_by:
@@ -703,10 +709,15 @@ enums:
       - scada.control.capabilities:001
     '013':
       used_by:
-      - gw.house0.layout:000
-      - gw.nolan.layout:000
       - new.command.tree:002
       - spaceheat.node.gt:302
+    '014':
+      used_by:
+      - gw.house0.layout:000
+      - gw.nolan.layout:000
+      - new.command.tree:003
+      - scada.control.capabilities:002
+      - spaceheat.node.gt:303
   gw1.actuation.authority:
     '000':
       used_by:
@@ -970,6 +981,7 @@ formats:
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - spaceheat.node.gt:302
+    - spaceheat.node.gt:303
     - zone.circuit.governance.cmd:000
   hex.char:
     used_by:
@@ -1055,6 +1067,7 @@ formats:
     - new.command.tree:000
     - new.command.tree:001
     - new.command.tree:002
+    - new.command.tree:003
     - relay.actor.config:001
     - relay.actor.config:002
     - relay.actor.config:003
@@ -1068,6 +1081,7 @@ formats:
     - report:003
     - scada.control.capabilities:000
     - scada.control.capabilities:001
+    - scada.control.capabilities:002
     - scada.params:000
     - scada.params:001
     - scada.params:002
@@ -1279,6 +1293,7 @@ formats:
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - spaceheat.node.gt:302
+    - spaceheat.node.gt:303
     - synth.channel.gt:000
     - tank.module.params:110
     - tank.module.params:200
@@ -1350,6 +1365,7 @@ formats:
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - spaceheat.node.gt:302
+    - spaceheat.node.gt:303
     - synced.readings.bundle:001
     - synced.readings:000
     - synth.channel.gt:000
@@ -1428,6 +1444,7 @@ formats:
     - new.command.tree:000
     - new.command.tree:001
     - new.command.tree:002
+    - new.command.tree:003
     - report.event:000
     - report.event:002
     - report.event:003
@@ -1437,6 +1454,7 @@ formats:
     - report:003
     - scada.control.capabilities:000
     - scada.control.capabilities:001
+    - scada.control.capabilities:002
     - scada.params:000
     - scada.params:001
     - scada.params:002
@@ -1608,6 +1626,7 @@ formats:
     - spaceheat.node.gt:300
     - spaceheat.node.gt:301
     - spaceheat.node.gt:302
+    - spaceheat.node.gt:303
     - synth.channel.gt:000
     - weather.forecast:000
     - web.server.component.gt:001
