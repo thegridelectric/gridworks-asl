@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-09-09T02:05:00Z"
+  last_updated: "2026-09-09T16:00:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -931,7 +931,7 @@ enums:
       "000":
         schema_url: "https://schemas.electricity.works/enums/single.pico.state/000"
         created: "2026-09-07T16:45:00Z"
-        status: "staging"
+        status: "published"
 
 
   spaceheat.make.model:

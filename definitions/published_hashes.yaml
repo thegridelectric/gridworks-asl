@@ -124,6 +124,8 @@ enums:
   temp.calc.method:
     '000': sha256:d2062d94e196d585c3c3f7ad60ca8165b1980b0a2d5a2f1cf5039d303d179817
   turn.hp.on.off: sha256:e2e8cea2c30509358ef0713a41dd4fd3168ed705856f0ea8ff6ed0a82edd5b8d
+  single.pico.state:
+    '000': sha256:2146287be9333097f56fec9fcdc2b70c1ccf099a656548ff610006a298f1f031
 types:
   analog.dispatch:
     '000': sha256:c8b3a6e411bd7e612fcaf1d824f0707c312eebb8d4092382ca98d1adf1b5e4f1
