@@ -2947,6 +2947,16 @@ types:
       - utc.milliseconds
       types: []
       versionless_types: []
+  slow.contract.rejection:
+    '000':
+      enums:
+      - ta.validation.state:000
+      formats:
+      - left.right.dot
+      - utc.milliseconds
+      - uuid4.str
+      types: []
+      versionless_types: []
   snapshot.spaceheat:
     '001':
       enums: []
@@ -3094,6 +3104,16 @@ types:
       - left.right.dot
       - positive.int
       - spaceheat.name
+      - uuid4.str
+      types: []
+      versionless_types: []
+  ta.deed:
+    '000':
+      enums:
+      - ta.validation.state:000
+      formats:
+      - left.right.dot
+      - utc.seconds
       - uuid4.str
       types: []
       versionless_types: []

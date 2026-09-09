@@ -894,6 +894,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/single.reading/000.yaml
+  slow.contract.rejection:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/slow.contract.rejection/000.yaml
   snapshot.spaceheat:
     latest_version: '003'
     versioning_strategy: literal
@@ -932,6 +937,11 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/synth.channel.gt/000.yaml
+  ta.deed:
+    latest_version: '000'
+    versioning_strategy: literal
+    versions:
+      '000': definitions/types/ta.deed/000.yaml
   tank.module.params:
     latest_version: '200'
     versioning_strategy: literal
@@ -1297,6 +1307,11 @@ enums:
     latest_version: '001'
     versions:
       '001': definitions/enums/spaceheat.unit/001.yaml
+  ta.validation.state:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/ta.validation.state/000.yaml
   temp.calc.method:
     enum_type: versioned
     latest_version: '000'

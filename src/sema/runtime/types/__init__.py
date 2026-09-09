@@ -185,6 +185,7 @@ from sema.runtime.types.sim_sensor_component_gt import SimSensorComponentGt
 from sema.runtime.types.sim_timestep import SimTimestep
 from sema.runtime.types.single_machine_state import SingleMachineState
 from sema.runtime.types.single_reading import SingleReading
+from sema.runtime.types.slow_contract_rejection import SlowContractRejection
 from sema.runtime.types.snapshot_spaceheat import SnapshotSpaceheat
 from sema.runtime.types.spaceheat_node_gt import SpaceheatNodeGt
 from sema.runtime.types.spaceheat_telemetry_quantity_projection import (
@@ -193,6 +194,7 @@ from sema.runtime.types.spaceheat_telemetry_quantity_projection import (
 from sema.runtime.types.synced_readings import SyncedReadings
 from sema.runtime.types.synced_readings_bundle import SyncedReadingsBundle
 from sema.runtime.types.synth_channel_gt import SynthChannelGt
+from sema.runtime.types.ta_deed import TaDeed
 from sema.runtime.types.tank_module_params import TankModuleParams
 from sema.runtime.types.ticklist_hall import TicklistHall
 from sema.runtime.types.ticklist_hall_report import TicklistHallReport
@@ -367,12 +369,14 @@ __all__ = [
     "SimTimestep",
     "SingleMachineState",
     "SingleReading",
+    "SlowContractRejection",
     "SnapshotSpaceheat",
     "SpaceheatNodeGt",
     "SpaceheatTelemetryQuantityProjection",
     "SyncedReadings",
     "SyncedReadingsBundle",
     "SynthChannelGt",
+    "TaDeed",
     "TankModuleParams",
     "TicklistHall",
     "TicklistHallReport",

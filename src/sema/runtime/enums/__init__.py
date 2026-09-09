@@ -73,6 +73,7 @@ from sema.runtime.enums.single_pico_state import SinglePicoState
 from sema.runtime.enums.spaceheat_make_model import SpaceheatMakeModel
 from sema.runtime.enums.spaceheat_telemetry_name import SpaceheatTelemetryName
 from sema.runtime.enums.spaceheat_unit import SpaceheatUnit
+from sema.runtime.enums.ta_validation_state import TaValidationState
 from sema.runtime.enums.temp_calc_method import TempCalcMethod
 from sema.runtime.enums.thermistor_data_method import ThermistorDataMethod
 from sema.runtime.enums.thermostat_kind import ThermostatKind
@@ -156,6 +157,7 @@ __all__ = [
     "SpaceheatMakeModel",
     "SpaceheatTelemetryName",
     "SpaceheatUnit",
+    "TaValidationState",
     "TempCalcMethod",
     "ThermistorDataMethod",
     "ThermostatKind",

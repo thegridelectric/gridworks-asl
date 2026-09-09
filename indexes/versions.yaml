@@ -1400,6 +1400,13 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  slow.contract.rejection:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
   snapshot.spaceheat:
     latest_version: "003"
     versioning_strategy: "literal"
@@ -1461,6 +1468,13 @@ types:
         summary: "Baseline runtime version (no prior version tracked)."
 
   synth.channel.gt:
+    latest_version: "000"
+    versioning_strategy: "literal"
+    versions:
+      "000":
+        summary: "Initial Sema version"
+
+  ta.deed:
     latest_version: "000"
     versioning_strategy: "literal"
     versions:
@@ -1988,6 +2002,12 @@ enums:
     note: "This enum is versioned; new versions are additive only."
     versions:
       "001": {}
+
+  ta.validation.state:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
 
   temp.calc.method:
     enum_type: "versioned"

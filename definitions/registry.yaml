@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-09-08T21:20:00Z"
+  last_updated: "2026-09-09T02:05:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -998,6 +998,18 @@ enums:
         created: "2024-09-02T15:00:00Z"
         status: "published"
 
+
+  ta.validation.state:
+    latest_version: "000"
+    owner: gridworks-energy
+    enum_type: "versioned"
+    description: "What a TaValidator has vouched for about a terminal asset; carried by ta.deed, UnValidated with no deed."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/enums/ta.validation.state/000"
+        created: "2026-09-09T02:05:00Z"
+        status: "staging"
 
   temp.calc.method:
     latest_version: "000"
@@ -5445,6 +5457,25 @@ types:
             - "spaceheat.name"
             - "utc.milliseconds"
 
+  slow.contract.rejection:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A scada's refusal of an LTN slow dispatch contract offer, carrying the offered ContractId and the scada's ValidationState as the cause."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/slow.contract.rejection/000"
+        created: "2026-09-09T02:05:00Z"
+        status: "staging"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "ta.validation.state:000"
+            - "utc.milliseconds"
+            - "uuid4.str"
+
   snapshot.spaceheat:
     latest_version: "003"
     owner: gridworks-energy
@@ -5674,6 +5705,25 @@ types:
             - "positive.int"
             - "spaceheat.name"
             - "spaceheat.telemetry.name:007"
+            - "uuid4.str"
+
+  ta.deed:
+    latest_version: "000"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "A TaValidator's attestation of a terminal asset: its GNodeId, the alias at issue, and the ValidationState every reader consults."
+
+    versions:
+      "000":
+        schema_url: "https://schemas.electricity.works/types/ta.deed/000"
+        created: "2026-09-09T02:05:00Z"
+        status: "staging"
+        summary: "Initial Sema version"
+        direct_dependencies:
+          structural:
+            - "left.right.dot"
+            - "ta.validation.state:000"
+            - "utc.seconds"
             - "uuid4.str"
 
   tank.module.params:

@@ -926,6 +926,11 @@ enums:
       - maker.api.attribute.gt:000
       - relay.actor.config:001
       - relay.actor.config:002
+  ta.validation.state:
+    '000':
+      used_by:
+      - slow.contract.rejection:000
+      - ta.deed:000
   temp.calc.method:
     '000':
       used_by:
@@ -1093,6 +1098,7 @@ formats:
     - sim.ready:000
     - sim.timestep:000
     - single.machine.state:000
+    - slow.contract.rejection:000
     - snapshot.spaceheat:001
     - snapshot.spaceheat:002
     - snapshot.spaceheat:003
@@ -1100,6 +1106,7 @@ formats:
     - synced.readings.bundle:002
     - synced.readings.bundle:003
     - synth.channel.gt:000
+    - ta.deed:000
     - ticklist.hall.report:000
     - ticklist.reed.report:000
     - weather.forecast:000
@@ -1467,6 +1474,7 @@ formats:
     - sim.timestep:000
     - single.machine.state:000
     - single.reading:000
+    - slow.contract.rejection:000
     - snapshot.spaceheat:001
     - snapshot.spaceheat:002
     - snapshot.spaceheat:003
@@ -1494,6 +1502,7 @@ formats:
     - report:003
     - sim.ready:000
     - sim.timestep:000
+    - ta.deed:000
     - weather.forecast:000
     - weather:000
   uuid4.str:
@@ -1619,6 +1628,7 @@ formats:
     - sim.relay.component.gt:000
     - sim.sensor.component.gt:000
     - sim.timestep:000
+    - slow.contract.rejection:000
     - snapshot.spaceheat:001
     - snapshot.spaceheat:002
     - snapshot.spaceheat:003
@@ -1628,6 +1638,7 @@ formats:
     - spaceheat.node.gt:302
     - spaceheat.node.gt:303
     - synth.channel.gt:000
+    - ta.deed:000
     - weather.forecast:000
     - web.server.component.gt:001
     - zone.circuit.governance.cmd:000
