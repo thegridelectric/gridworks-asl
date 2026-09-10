@@ -821,6 +821,10 @@ enums:
       used_by:
       - dac.output.config:000
       - i2c.dac.channel.config:000
+  i2c.expander.type:
+    '000':
+      used_by:
+      - i2c.expander:000
   i2c.mux.type:
     '000':
       used_by:

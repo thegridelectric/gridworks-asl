@@ -5,7 +5,7 @@ title: "i2c.expander"
 type: object
 description: >
   One I²C GPIO expander on a GridWorks SCADA board: its 1-based index within
-  the board, the board bus it is attached to, and its addressing — either a
+  the board, the board bus it is attached to, its chip model, and its addressing — either a
   fixed I²C address (soldered) or the list of addresses it can be set to in
   the field (DIP switches), with the chosen address recorded on the deployed
   component.
@@ -21,6 +21,11 @@ properties:
     $ref: "https://schemas.electricity.works/formats/pascal.case"
     description: >
       The name of the board bus this expander is attached to.
+  ExpanderType:
+    $ref: "https://schemas.electricity.works/enums/i2c.expander.type/000"
+    description: >
+      The expander chip model, which fixes how the bus is driven to move a
+      relay's bit.
 
   I2cAddress:
     $ref: "https://schemas.electricity.works/formats/non.negative.int"
@@ -46,6 +51,7 @@ properties:
 required:
   - ExpanderIdx
   - I2cBus
+  - ExpanderType
   - TypeName
   - Version
 
@@ -56,6 +62,7 @@ examples:
     {
       "ExpanderIdx": 1,
       "I2cBus": "DefaultBus",
+      "ExpanderType": "Pcf8575",
       "AllowedI2cAddressList": [32, 33, 34, 35, 36, 37, 38, 39],
       "TypeName": "i2c.expander",
       "Version": "000"

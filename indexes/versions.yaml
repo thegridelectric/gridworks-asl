@@ -901,7 +901,7 @@ types:
     versioning_strategy: "literal"
     versions:
       "000":
-        summary: "Initial version (ExpanderIdx, I2cBus, I2cAddress, AllowedI2cAddressList; Axiom 1 AddressSpecification: exactly one of the two address fields)."
+        summary: "Initial version (ExpanderIdx, I2cBus, ExpanderType, I2cAddress, AllowedI2cAddressList; Axiom 1 AddressSpecification: exactly one of the two address fields)."
 
   i2c.multichannel.dt.relay.component.gt:
     latest_version: "004"
@@ -1866,6 +1866,12 @@ enums:
       "000": {}
 
   i2c.dac.vref:
+    enum_type: "versioned"
+    note: "This enum is versioned; new versions are additive only."
+    versions:
+      "000": {}
+
+  i2c.expander.type:
     enum_type: "versioned"
     note: "This enum is versioned; new versions are additive only."
     versions:

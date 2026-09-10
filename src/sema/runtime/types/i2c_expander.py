@@ -1,6 +1,7 @@
 from typing import Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
+from sema.runtime.enums import I2cExpanderType
 from sema.runtime.property_format import NonNegativeInt
 from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import PositiveInt
@@ -11,6 +12,7 @@ class I2cExpander(SemaType):
 
     expander_idx: PositiveInt
     i2c_bus: PascalCase
+    expander_type: I2cExpanderType
     i2c_address: NonNegativeInt | None = None
     allowed_i2c_address_list: list[NonNegativeInt] | None = None
     type_name: Literal["i2c.expander"] = "i2c.expander"

@@ -17,6 +17,7 @@ enum:
   - "SimSamsungAE055FEYMCG"
   - "SimHpOdu"
   - "SimHpIdu"
+  - "SimKridaDoubleRelayBoard16"
 default: "SimSensor"
 x-gridworks:
   owner: "gridworks-energy"
@@ -46,3 +47,8 @@ x-gridworks:
     "SimHpIdu": >
       A non-descript simulated heat-pump indoor unit (the refrigerant-to-water exchanger
       of a split system): inventory only, nothing talks to it.
+    "SimKridaDoubleRelayBoard16": >
+      GridWorks simulated Krida relay panel — the register-level simulation twin of
+      KridaDoubleRelayBoard16. Carries the same board record shape
+      (gw1.scada.device.type.gt), so expander and relay address resolution runs
+      unchanged against simulated PCF8575 ports.

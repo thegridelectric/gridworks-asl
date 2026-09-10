@@ -851,6 +851,7 @@ types:
       - i2c.dac.channel:000
       - i2c.dac.type:000
       - i2c.dac.vref:000
+      - i2c.expander.type:000
       - i2c.mux.type:000
       - relay.closed.or.open:000
       - relay.wiring.config:000
@@ -997,6 +998,7 @@ types:
       - i2c.dac.channel:000
       - i2c.dac.type:000
       - i2c.dac.vref:000
+      - i2c.expander.type:000
       - i2c.mux.type:000
       - relay.closed.or.open:000
       - relay.wiring.config:000
@@ -1235,6 +1237,7 @@ types:
       enums:
       - i2c.adc.type:000
       - i2c.dac.type:000
+      - i2c.expander.type:000
       - i2c.mux.type:000
       - relay.wiring.config:000
       - spaceheat.telemetry.name:007
@@ -1552,7 +1555,8 @@ types:
       versionless_types: []
   i2c.expander:
     '000':
-      enums: []
+      enums:
+      - i2c.expander.type:000
       formats:
       - non.negative.int
       - pascal.case

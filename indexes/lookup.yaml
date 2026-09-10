@@ -1218,6 +1218,11 @@ enums:
     latest_version: '000'
     versions:
       '000': definitions/enums/i2c.dac.vref/000.yaml
+  i2c.expander.type:
+    enum_type: versioned
+    latest_version: '000'
+    versions:
+      '000': definitions/enums/i2c.expander.type/000.yaml
   i2c.mux.type:
     enum_type: versioned
     latest_version: '000'

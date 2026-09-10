@@ -13,6 +13,7 @@
     {
       "ExpanderIdx": 1,
       "I2cBus": "GhostBus",
+      "ExpanderType": "Pcf8575",
       "I2cAddress": 32,
       "TypeName": "i2c.expander",
       "Version": "000"

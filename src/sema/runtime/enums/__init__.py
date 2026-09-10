@@ -54,6 +54,7 @@ from sema.runtime.enums.i2c_adc_type import I2cAdcType
 from sema.runtime.enums.i2c_dac_channel import I2cDacChannel
 from sema.runtime.enums.i2c_dac_type import I2cDacType
 from sema.runtime.enums.i2c_dac_vref import I2cDacVref
+from sema.runtime.enums.i2c_expander_type import I2cExpanderType
 from sema.runtime.enums.i2c_mux_type import I2cMuxType
 from sema.runtime.enums.i2c_operation import I2cOperation
 from sema.runtime.enums.log_level import LogLevel
@@ -138,6 +139,7 @@ __all__ = [
     "I2cDacChannel",
     "I2cDacType",
     "I2cDacVref",
+    "I2cExpanderType",
     "I2cMuxType",
     "I2cOperation",
     "LogLevel",
