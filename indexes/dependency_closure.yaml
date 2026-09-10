@@ -1956,6 +1956,7 @@ types:
       - ha1.params:004
       - i2c.multichannel.dt.relay.component.gt:002
       - pico.flow.module.component.gt:000
+      - pico.tank.module.component.gt:010
       - pico.tank.module.component.gt:011
       - relay.actor.config:002
       - spaceheat.node.gt:200
@@ -1988,6 +1989,7 @@ types:
       - ha1.params:004
       - i2c.multichannel.dt.relay.component.gt:002
       - pico.flow.module.component.gt:000
+      - pico.tank.module.component.gt:010
       - pico.tank.module.component.gt:011
       - relay.actor.config:002
       - spaceheat.node.gt:200

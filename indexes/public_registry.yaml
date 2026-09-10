@@ -4188,6 +4188,7 @@ types:
           - i2c.multichannel.dt.relay.component.gt:002
           - left.right.dot
           - pico.flow.module.component.gt:000
+          - pico.tank.module.component.gt:010
           - pico.tank.module.component.gt:011
           - positive.int
           - spaceheat.node.gt:200
@@ -4207,6 +4208,7 @@ types:
           - i2c.multichannel.dt.relay.component.gt:002
           - left.right.dot
           - pico.flow.module.component.gt:000
+          - pico.tank.module.component.gt:010
           - pico.tank.module.component.gt:011
           - positive.int
           - spaceheat.node.gt:200

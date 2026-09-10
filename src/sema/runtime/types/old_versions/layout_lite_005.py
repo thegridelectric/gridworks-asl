@@ -14,6 +14,9 @@ from sema.runtime.types.old_versions.layout_lite_006 import LayoutLite006
 from sema.runtime.types.old_versions.pico_flow_module_component_gt_000 import (
     PicoFlowModuleComponentGt000,
 )
+from sema.runtime.types.old_versions.pico_tank_module_component_gt_010 import (
+    PicoTankModuleComponentGt010,
+)
 from sema.runtime.types.old_versions.pico_tank_module_component_gt_011 import (
     PicoTankModuleComponentGt011,
 )
@@ -34,7 +37,9 @@ class LayoutLite005(SemaType):
     sh_nodes: list[SpaceheatNodeGt200]
     data_channels: list[DataChannelGt001]
     synth_channels: list[SynthChannelGt]
-    tank_module_components: list[PicoTankModuleComponentGt011]
+    tank_module_components: list[
+        PicoTankModuleComponentGt010 | PicoTankModuleComponentGt011
+    ]
     flow_module_components: list[PicoFlowModuleComponentGt000]
     ha1_params: Ha1Params004
     i2c_relay_component: I2cMultichannelDtRelayComponentGt002

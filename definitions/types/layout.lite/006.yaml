@@ -79,9 +79,14 @@ properties:
   TankModuleComponents:
     type: array
     items:
-      $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"
+      oneOf:
+        - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/010"
+        - $ref: "https://schemas.electricity.works/types/pico.tank.module.component.gt/011"
     description: >
-      Tank module components present in the running deployment.
+      Tank module components present in the running deployment. Deploy-lag
+      union: after pico.tank.module.component.gt:011 arrived (2025-12-05)
+      some houses still emitted v010 tanks under this layout version
+      through 2025-12-12.
 
   FlowModuleComponents:
     type: array

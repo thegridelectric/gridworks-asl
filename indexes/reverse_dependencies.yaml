@@ -465,6 +465,8 @@ types:
     '010':
       used_by:
       - layout.lite:004
+      - layout.lite:005
+      - layout.lite:006
     '011':
       used_by:
       - layout.lite:005
