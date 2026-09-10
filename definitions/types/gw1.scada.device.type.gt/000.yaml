@@ -82,6 +82,13 @@ properties:
       True if the board's relay outputs can be read back at the pins; false
       if relay state is known only by command.
 
+  RelayEnergizedLevel:
+    $ref: "https://schemas.electricity.works/formats/non.negative.int"
+    description: >
+      The expander pin level that energizes a relay's coil on this board: 1
+      on a board whose relay drivers switch on a high pin, 0 on an active-low
+      board, whose relays sit de-energized at the expander's power-on state.
+
   CtAdc:
     $ref: "https://schemas.electricity.works/types/i2c.ct.interface.capability/000"
     description: >
@@ -117,6 +124,7 @@ required:
   - Muxes
   - I2cRelays
   - SupportsPinReadback
+  - RelayEnergizedLevel
   - ThermistorAdcs
   - Dacs
   - TypeName
@@ -131,6 +139,7 @@ examples:
       "DisplayName": "GridWorks relay panel: two 16-channel Krida boards, markings Relay1-Relay32",
       "MinPollPeriodMs": 200,
       "SupportsPinReadback": false,
+      "RelayEnergizedLevel": 0,
       "TelemetryNameList": [
         "RelayState"
       ],
@@ -227,9 +236,16 @@ x-gridworks:
         than the Channels of the mux named by its MuxName.
         c. Every Dacs entry carrying MuxName SHALL have an I2cBus equal to
         that mux's I2cBus.
+    - number: 5
+      name: "RelayEnergizedLevelRange"
+      statement: >
+        RelayEnergizedLevel SHALL be 0 or 1.
   extended_description: >
     Various hardware layouts enforce membership in `gw1.device.type` for the
-    DeviceType (e.g. `Gw108RevB`, `KridaDoubleRelayBoard16`). The
+    DeviceType (e.g. `Gw108RevB`, `KridaDoubleRelayBoard16`). The relay drive
+    polarity is a fact of the board's driver circuit, not of its expander
+    chip, which is why RelayEnergizedLevel sits on the record beside the
+    expanders rather than on i2c.expander.type. The
     record describes what is ALLOWED; per-deployment choices live outside it —
     a DIP-selected expander address on the component's I2cAddressList
     (index-aligned with Expanders), a relay's chosen wiring in the layout's

@@ -2,6 +2,7 @@ from typing import Literal
 from pydantic import model_validator
 from sema.runtime.base import SemaType
 from sema.runtime.enums import SpaceheatTelemetryName
+from sema.runtime.property_format import NonNegativeInt
 from sema.runtime.property_format import PascalCase
 from sema.runtime.property_format import PositiveInt
 from sema.runtime.types.gw_native_gpio_pin import GwNativeGpioPin
@@ -30,6 +31,7 @@ class Gw1ScadaDeviceTypeGt(SemaType):
     muxes: list[I2cMux]
     i2c_relays: list[I2cRelayCapability]
     supports_pin_readback: bool
+    relay_energized_level: NonNegativeInt
     ct_adc: I2cCtInterfaceCapability | None = None
     thermistor_adcs: list[I2cThermistorInterfaceCapability]
     dacs: list[I2cDacCapability]
@@ -140,4 +142,17 @@ class Gw1ScadaDeviceTypeGt(SemaType):
                     f"{dac.dac_name} has I2cBus {dac.i2c_bus} but its mux "
                     f"{dac.mux_name} is on {mux.i2c_bus}."
                 )
+        return self
+
+    @model_validator(mode="after")
+    def check_axiom_5(self) -> "Gw1ScadaDeviceTypeGt":
+        """
+        Axiom 5: RelayEnergizedLevelRange
+        RelayEnergizedLevel SHALL be 0 or 1.
+        """
+        if self.relay_energized_level not in (0, 1):
+            raise ValueError(
+                "Axiom 5 (RelayEnergizedLevelRange) failed: RelayEnergizedLevel "
+                f"{self.relay_energized_level} must be 0 or 1."
+            )
         return self

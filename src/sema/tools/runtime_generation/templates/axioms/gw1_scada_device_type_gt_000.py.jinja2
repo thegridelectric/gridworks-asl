@@ -103,3 +103,16 @@
                     f"{dac.mux_name} is on {mux.i2c_bus}."
                 )
         return self
+
+    @model_validator(mode="after")
+    def check_axiom_5(self) -> "{{ gw1_scada_device_type_gt_000_class_name }}":
+        """
+        Axiom 5: RelayEnergizedLevelRange
+        RelayEnergizedLevel SHALL be 0 or 1.
+        """
+        if self.relay_energized_level not in (0, 1):
+            raise ValueError(
+                "Axiom 5 (RelayEnergizedLevelRange) failed: RelayEnergizedLevel "
+                f"{self.relay_energized_level} must be 0 or 1."
+            )
+        return self

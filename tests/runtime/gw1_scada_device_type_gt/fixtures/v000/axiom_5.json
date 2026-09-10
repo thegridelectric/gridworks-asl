@@ -1,7 +1,7 @@
 {
   "DeviceType": "GridworksScadaGw108",
   "SupportsPinReadback": true,
-  "RelayEnergizedLevel": 1,
+  "RelayEnergizedLevel": 2,
   "BusList": [
     {
       "Name": "DefaultBus",
@@ -10,36 +10,35 @@
       "Version": "000"
     }
   ],
-  "Muxes": [
+  "Expanders": [
     {
-      "MuxName": "DacMux",
+      "ExpanderIdx": 1,
       "I2cBus": "DefaultBus",
-      "I2cAddress": 112,
-      "MuxType": "Tca9548a",
-      "Channels": 8,
-      "TypeName": "i2c.mux",
+      "ExpanderType": "Pcf8575",
+      "I2cAddress": 32,
+      "TypeName": "i2c.expander",
       "Version": "000"
     }
   ],
-  "Dacs": [
+  "I2cRelays": [
     {
-      "DacName": "Zones456",
-      "I2cBus": "DefaultBus",
-      "I2cAddress": 96,
-      "MuxName": "DacMux",
-      "MuxChannel": 9,
-      "DacType": "Mcp4728",
-      "Channels": 4,
-      "TypeName": "i2c.dac.capability",
+      "RelayName": "BufferTop",
+      "ExpanderIdx": 1,
+      "RegisterIndex": 2,
+      "BitIndex": 1,
+      "SupportedWiringConfigs": [
+        "NormallyOpen"
+      ],
+      "TypeName": "i2c.relay.capability",
       "Version": "000"
     }
   ],
   "TelemetryNameList": [],
   "NativeGpioInputs": [],
   "NativeGpioOutputs": [],
-  "Expanders": [],
-  "I2cRelays": [],
+  "Muxes": [],
   "ThermistorAdcs": [],
+  "Dacs": [],
   "TypeName": "gw1.scada.device.type.gt",
   "Version": "000"
 }

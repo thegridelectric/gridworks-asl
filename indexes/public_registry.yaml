@@ -3061,8 +3061,9 @@ types:
         created: '2026-09-10T21:25:00Z'
         status: staging
         summary: Board descriptor (DeviceType, DisplayName, MinPollPeriodMs, TelemetryNameList,
-          NativeGpio, Expanders, Muxes, I2cRelays, SupportsPinReadback, CtAdc, ThermistorAdcs,
-          Dacs; MuxConsistency axiom joins BusMembership / ExpanderMembership / BoardIdentifierUniqueness).
+          NativeGpio, Expanders, Muxes, I2cRelays, SupportsPinReadback, RelayEnergizedLevel,
+          CtAdc, ThermistorAdcs, Dacs; axioms BusMembership / ExpanderMembership /
+          BoardIdentifierUniqueness / MuxConsistency / RelayEnergizedLevelRange).
           The record describes what is allowed; deployment choices (DIP-selected expander
           address, chosen wiring) live on the component and layout.
         direct_dependencies:
@@ -3075,6 +3076,7 @@ types:
           - i2c.mux:000
           - i2c.relay.capability:000
           - i2c.thermistor.interface.capability:000
+          - non.negative.int
           - pascal.case
           - positive.int
           - spaceheat.telemetry.name:007

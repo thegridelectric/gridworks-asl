@@ -1,6 +1,7 @@
 {
   "DeviceType": "GridworksScadaGw108",
   "SupportsPinReadback": true,
+  "RelayEnergizedLevel": 1,
   "BusList": [
     {
       "Name": "DefaultBus",

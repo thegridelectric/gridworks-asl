@@ -1154,6 +1154,7 @@ formats:
     - gw.nolan.operational.params:000
     - gw.weather.channel.gt:000
     - gw.weather.forecast.bundle.gt:000
+    - gw1.scada.device.type.gt:000
     - i2c.bit.address:000
     - i2c.bus:000
     - i2c.ct.interface.capability:000

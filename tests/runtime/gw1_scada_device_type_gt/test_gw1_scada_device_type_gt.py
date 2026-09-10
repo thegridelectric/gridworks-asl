@@ -44,3 +44,9 @@ def test_axiom_4_c_catches_dac_bus_mux_bus_mismatch() -> None:
     payload = json.loads((FIX / "axiom_4_c.json").read_text())
     with pytest.raises(SemaError, match="MuxConsistency"):
         default_codec.from_dict(payload)
+
+
+def test_axiom_5_catches_energized_level_out_of_range() -> None:
+    payload = json.loads((FIX / "axiom_5.json").read_text())
+    with pytest.raises(SemaError, match="Axiom 5"):
+        default_codec.from_dict(payload)
