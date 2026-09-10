@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-09-09T16:00:00Z'
+  last_updated: '2026-09-10T21:15:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -236,7 +236,7 @@ enums:
       '000':
         schema_url: https://schemas.electricity.works/enums/five.v.boss.state/000
         created: '2026-09-08T21:20:00Z'
-        status: staging
+        status: published
   fsm.report.type:
     owner: gridworks-energy
     enum_type: literal
@@ -965,7 +965,7 @@ enums:
       '000':
         schema_url: https://schemas.electricity.works/enums/turn.5v.on.off/000
         created: '2026-09-08T21:20:00Z'
-        status: staging
+        status: published
   turn.hp.on.off:
     owner: gridworks-energy
     enum_type: literal
