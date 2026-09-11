@@ -865,6 +865,7 @@ enums:
   pico.board.variant:
     '000':
       used_by:
+      - async.btu.params:100
       - tank.module.params:200
   pico.cycler.state:
     '000':
@@ -1214,6 +1215,8 @@ formats:
     - web.server.component.gt:001
   positive.float:
     used_by:
+    - async.btu.params:000
+    - async.btu.params:100
     - gw.channel.gap.stats:000
     - gw.channel.jump.stats:000
     - gw.house0.operational.params:000
@@ -1228,6 +1231,8 @@ formats:
     used_by:
     - ads.channel.config:000
     - ads111x.based.device.type.gt:000
+    - async.btu.params:000
+    - async.btu.params:100
     - capture.tuning:000
     - channel.config:000
     - channel.config:001
@@ -1318,6 +1323,8 @@ formats:
     used_by:
     - ads.channel.config:000
     - analog.dispatch:000
+    - async.btu.params:000
+    - async.btu.params:100
     - capture.tuning:000
     - channel.config:000
     - channel.config:001

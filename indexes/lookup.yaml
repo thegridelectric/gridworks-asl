@@ -36,6 +36,12 @@ types:
     versioning_strategy: literal
     versions:
       '000': definitions/types/analog.dispatch/000.yaml
+  async.btu.params:
+    latest_version: '100'
+    versioning_strategy: literal
+    versions:
+      '100': definitions/types/async.btu.params/100.yaml
+      '000': definitions/types/async.btu.params/000.yaml
   atn.bid:
     latest_version: '002'
     versioning_strategy: literal

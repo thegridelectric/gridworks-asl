@@ -31,6 +31,17 @@ types:
       "000":
         summary: "Initial Sema version"
 
+  async.btu.params:
+    latest_version: "100"
+    versioning_strategy: "literal"
+    versions:
+      "100":
+        summary: >
+          - PicoBoardVariant: add
+          - MicropythonVersion: add
+      "000":
+        summary: "Initial Sema version (registered from the shipped gwsproto AsyncBtuParams wire shape, version 000)."
+
   atn.bid:
     latest_version: "002"
     versioning_strategy: "literal"

@@ -1,0 +1,16 @@
+    @model_validator(mode="after")
+    def check_axiom_1(self) -> "{{ async_btu_params_100_class_name }}":
+        """
+        Axiom 1: ReadCtVoltageIffCtChannelName
+        ReadCtVoltage is true iff CtChannelName is present.
+        """
+        truthy = [
+            bool(self.read_ct_voltage),
+            self.ct_channel_name is not None,
+        ]
+        if not (all(truthy) or not any(truthy)):
+            raise ValueError(
+                "Axiom 1: ReadCtVoltage and CtChannelName must either BOTH be "
+                "set/present (True/nonnull) or BOTH be unset/absent."
+            )
+        return self

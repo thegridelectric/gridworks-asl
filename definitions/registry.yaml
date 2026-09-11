@@ -1,6 +1,6 @@
 metadata:
   registry_version: "1.0"
-  last_updated: "2026-09-10T21:25:00Z"
+  last_updated: "2026-09-11T00:30:00Z"
   maintainer: "gridworks-energy"
 
 formats:
@@ -1266,6 +1266,37 @@ types:
             - "spaceheat.name"
             - "utc.milliseconds"
             - "uuid4.str"
+
+  async.btu.params:
+    latest_version: "100"
+    owner: gridworks-energy
+    versioning_strategy: "literal"
+    description: "The params handshake between an async-btu pico and its scada: the pico posts its parameters at boot and the scada answers with the values to run with."
+
+    versions:
+      "100":
+        schema_url: "https://schemas.electricity.works/types/async.btu.params/100"
+        created: "2026-09-11T00:30:00Z"
+        status: "staging"
+        summary: >-
+          - PicoBoardVariant: add
+          - MicropythonVersion: add
+        direct_dependencies:
+          structural:
+            - "pico.board.variant:000"
+            - "positive.float"
+            - "positive.int"
+            - "spaceheat.name"
+      "000":
+        schema_url: "https://schemas.electricity.works/types/async.btu.params/000"
+        created: "2026-09-11T00:25:00Z"
+        status: "published"
+        summary: "Initial Sema version (registered from the shipped gwsproto AsyncBtuParams wire shape, version 000)."
+        direct_dependencies:
+          structural:
+            - "positive.float"
+            - "positive.int"
+            - "spaceheat.name"
 
   atn.bid:
     latest_version: "002"
