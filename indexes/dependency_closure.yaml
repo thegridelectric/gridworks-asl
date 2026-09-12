@@ -44,6 +44,24 @@ types:
       - uuid4.str
       types: []
       versionless_types: []
+  async.btu.params:
+    '000':
+      enums: []
+      formats:
+      - positive.float
+      - positive.int
+      - spaceheat.name
+      types: []
+      versionless_types: []
+    '100':
+      enums:
+      - pico.board.variant:000
+      formats:
+      - positive.float
+      - positive.int
+      - spaceheat.name
+      types: []
+      versionless_types: []
   atn.bid:
     '001':
       enums:
@@ -65,6 +83,13 @@ types:
       - market.slot.name
       types:
       - price.quantity.unitless:001
+      versionless_types: []
+  baseurl.failure.alert:
+    '100':
+      enums: []
+      formats:
+      - spaceheat.name
+      types: []
       versionless_types: []
   bid:
     '000':

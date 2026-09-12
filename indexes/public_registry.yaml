@@ -9,7 +9,7 @@
 
 metadata:
   registry_version: '1.0'
-  last_updated: '2026-09-10T21:25:00Z'
+  last_updated: '2026-09-12T12:30:00Z'
   maintainer: gridworks-energy
 formats:
   handle.name:
@@ -777,7 +777,7 @@ enums:
       '000':
         schema_url: https://schemas.electricity.works/enums/pico.board.variant/000
         created: '2026-09-08T00:30:00Z'
-        status: staging
+        status: published
   pico.cycler.event:
     latest_version: '000'
     owner: gridworks-energy
@@ -1154,6 +1154,36 @@ types:
           - spaceheat.name
           - utc.milliseconds
           - uuid4.str
+  async.btu.params:
+    latest_version: '100'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: 'The params handshake between an async-btu pico and its scada: the
+      pico posts its parameters at boot and the scada answers with the values to run
+      with.'
+    versions:
+      '100':
+        schema_url: https://schemas.electricity.works/types/async.btu.params/100
+        created: '2026-09-11T00:30:00Z'
+        status: published
+        summary: '- PicoBoardVariant: add - MicropythonVersion: add'
+        direct_dependencies:
+          structural:
+          - pico.board.variant:000
+          - positive.float
+          - positive.int
+          - spaceheat.name
+      '000':
+        schema_url: https://schemas.electricity.works/types/async.btu.params/000
+        created: '2026-09-11T00:25:00Z'
+        status: published
+        summary: Initial Sema version (registered from the shipped gwsproto AsyncBtuParams
+          wire shape, version 000).
+        direct_dependencies:
+          structural:
+          - positive.float
+          - positive.int
+          - spaceheat.name
   atn.bid:
     latest_version: '002'
     owner: gridworks-energy
@@ -1190,6 +1220,22 @@ types:
           - market.slot.name
           - price.quantity.unitless:000
           - price.quantity.unitless:001
+  baseurl.failure.alert:
+    latest_version: '100'
+    owner: gridworks-energy
+    versioning_strategy: literal
+    description: A pico's report that its primary scada base URL stopped answering
+      and it has failed over to its backup URL.
+    versions:
+      '100':
+        schema_url: https://schemas.electricity.works/types/baseurl.failure.alert/100
+        created: '2026-09-12T12:30:00Z'
+        status: published
+        summary: Initial Sema version (registered from the shipped pico wire shape,
+          version 100).
+        direct_dependencies:
+          structural:
+          - spaceheat.name
   bid:
     latest_version: '000'
     owner: gridworks-energy
@@ -5477,7 +5523,7 @@ types:
       '200':
         schema_url: https://schemas.electricity.works/types/tank.module.params/200
         created: '2026-09-08T00:30:00Z'
-        status: staging
+        status: published
         summary: '- PicoBoardVariant: add - MicropythonVersion: add'
         direct_dependencies:
           structural:

@@ -1,0 +1,11 @@
+    def upgrade(self) -> {{ async_btu_params_100_class_name }}:
+        """
+        - PicoBoardVariant: add
+        - MicropythonVersion: add
+        """
+        raise SemaType.upgrade_requires_context(
+            "{{ async_btu_params_000_class_name }} cannot be upgraded to "
+            "{{ async_btu_params_100_class_name }} without context: v100 adds "
+            "PicoBoardVariant and MicropythonVersion, which only the posting "
+            "pico knows, and they SHALL NOT be fabricated."
+        )
