@@ -4,6 +4,7 @@ from sema.runtime.types.ads_channel_config import AdsChannelConfig
 from sema.runtime.types.analog_dispatch import AnalogDispatch
 from sema.runtime.types.async_btu_params import AsyncBtuParams
 from sema.runtime.types.atn_bid import AtnBid
+from sema.runtime.types.baseurl_failure_alert import BaseurlFailureAlert
 from sema.runtime.types.bid import Bid
 from sema.runtime.types.capture_tuning import CaptureTuning
 from sema.runtime.types.channel_config import ChannelConfig
@@ -213,6 +214,7 @@ __all__ = [
     "AnalogDispatch",
     "AsyncBtuParams",
     "AtnBid",
+    "BaseurlFailureAlert",
     "Bid",
     "CaptureTuning",
     "ChannelConfig",

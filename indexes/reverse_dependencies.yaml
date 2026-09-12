@@ -1325,6 +1325,7 @@ formats:
     - analog.dispatch:000
     - async.btu.params:000
     - async.btu.params:100
+    - baseurl.failure.alert:100
     - capture.tuning:000
     - channel.config:000
     - channel.config:001

@@ -130,11 +130,14 @@ enums:
   turn.5v.on.off:
     '000': sha256:f75f5eed7fadc0f59bbe2eab98a46fb1ce7180800c0b6149f8cb0ccd3d7c216b
   turn.hp.on.off: sha256:e2e8cea2c30509358ef0713a41dd4fd3168ed705856f0ea8ff6ed0a82edd5b8d
+  pico.board.variant:
+    '000': sha256:793376e9c13e4c9791f5de3a73a2f04905f80b4fd8e488898e99edc4ac56bca2
 types:
   analog.dispatch:
     '000': sha256:c8b3a6e411bd7e612fcaf1d824f0707c312eebb8d4092382ca98d1adf1b5e4f1
   async.btu.params:
     '000': sha256:f47e4ce8d96f41da1ed8b7ea788f76b55b6e3170c942778a18125b64c1ca4864
+    '100': sha256:cb2ba8b40bc010744f772d6c518afa88a998891706a19021ca34b7082ebe5c5e
   atn.bid:
     '001': sha256:6de266f87e83d36a4899862aa169755977c38f84c47850de0c6ab40cdec13214
     '002': sha256:8f93f00ce2f19d2d8dd40d224926fecda4b378d47ae5ac6dee31626adee79679
@@ -410,6 +413,7 @@ types:
     '000': sha256:c8d7ac0ad56e4797302e1d4389e143439277a549bfd67f8c322a6d43dffca9bb
   tank.module.params:
     '110': sha256:5ab1d5a4a1acec0a7314bf461af370bdf04f55c3a2e82ac857293b0f8053ccaa
+    '200': sha256:33b1b2e0edabbca34ea4523d70cb5a5e595243358aa07418de691219adfa80ea
   ticklist.hall:
     '101': sha256:06e78b373868c1d4bade376c9bc80d4fb6d74582faa212de5fe4d1a088ea2028
   ticklist.hall.report:
@@ -422,3 +426,5 @@ types:
     '000': sha256:0505741db7f3ba845fe0b7dfb9e5f88eca9f3cc6e9e7510b22f3e73b0103e8fe
   weather.forecast:
     '000': sha256:d5898d35fd8250e8c80811e6df2c90c66cddc316efaf4ca36bc4fdd38c931601
+  baseurl.failure.alert:
+    '100': sha256:c984d6341e3b65037066cdead1ddb0aa850cb8abcd8112b140b00427eaca29e0

@@ -51,6 +51,13 @@ types:
       "001":
         summary: "Legacy AtomicTNode bid, pre-ltn rename; PqPairs accept price.quantity.unitless 000 or 001."
 
+  baseurl.failure.alert:
+    latest_version: "100"
+    versioning_strategy: "literal"
+    versions:
+      "100":
+        summary: "Initial Sema version (registered from the shipped pico wire shape, version 100)."
+
   bid:
     latest_version: "000"
     versioning_strategy: "literal"

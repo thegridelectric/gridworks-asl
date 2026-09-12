@@ -84,6 +84,13 @@ types:
       types:
       - price.quantity.unitless:001
       versionless_types: []
+  baseurl.failure.alert:
+    '100':
+      enums: []
+      formats:
+      - spaceheat.name
+      types: []
+      versionless_types: []
   bid:
     '000':
       enums:

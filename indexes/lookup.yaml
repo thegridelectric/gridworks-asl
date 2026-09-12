@@ -48,6 +48,11 @@ types:
     versions:
       '002': definitions/types/atn.bid/002.yaml
       '001': definitions/types/atn.bid/001.yaml
+  baseurl.failure.alert:
+    latest_version: '100'
+    versioning_strategy: literal
+    versions:
+      '100': definitions/types/baseurl.failure.alert/100.yaml
   bid:
     latest_version: '000'
     versioning_strategy: literal
